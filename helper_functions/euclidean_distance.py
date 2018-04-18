@@ -3,11 +3,11 @@ import numpy as np
 
 def calculate_distance(points_array):
     """
-    Function for calcultaing euclidian distance between points in n-dimensional space.
+    Function for calcultaing euclidean distance between points in n-dimensional space.
 
     :param points_array: numpy array with points' coordinates where each column indices new dimension and each row is
     a new coordinate set (point)
-    :return: distances - numpy array with euclidian distances between all pairs of points. 
+    :return: distances - numpy array with euclidean distances between all pairs of points.
     
     IMPORTANT! If input array size has x rows (coordinates) then output array size is x(cols) by x(rows) 
     and each row describes distances between coordinate from row(i) with all rows. 
