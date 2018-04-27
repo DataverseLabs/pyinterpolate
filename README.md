@@ -5,6 +5,7 @@ Project pyinterpolate will aggregate GIS spatial interpolation scripts written i
 
 ### Actual scope of work:
 
+- Fit semivariance
 - Simple Kriging function
 - Ordinary Kriging function
 - Tutorial for calculate_distance function
