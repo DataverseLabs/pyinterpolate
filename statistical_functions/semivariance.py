@@ -10,7 +10,8 @@ def calculate_semivariance(points_array, lags, step_size):
     :param lags: array of lags between points
     :param step_size: distance which should be included in the gamma parameter which enhances range of interest
     :return: semivariance: numpy array of pair of lag and semivariance values where
-    semivariance[0] = array([lag(i), semivariance for lag(i)])
+    semivariance[0] = array of lags
+    semivariance[1] = array of lag's values
 
     """
     smv = []
@@ -43,4 +44,4 @@ def calculate_semivariance(points_array, lags, step_size):
 
     semivariance = np.vstack(semivariance)
 
-    return semivariance
+    return semivariance.T

@@ -10,9 +10,10 @@ def calculate_covariance(points_array, lags, step_size):
         :param lags: array of lags between points
         :param step_size: distance which should be included in the gamma parameter which enhances range of interest
         :return: covariance: numpy array of pair of lag and covariance values where
-        covariance[0] = array([lag(i), covariance for lag(i)])
+        covariance[0] = array of lags
+        covariance[1] = array of values for each lag
 
-        """
+    """
     covariance = []
 
     # Calculate distance
@@ -42,4 +43,6 @@ def calculate_covariance(points_array, lags, step_size):
     for i in range(len(lags)):
         output_covariance.append([lags[i], covariance[i]])
 
-    return np.vstack(output_covariance)
+    output_covariance = np.vstack(output_covariance)
+
+    return output_covariance.T

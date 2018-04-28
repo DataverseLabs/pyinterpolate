@@ -3,7 +3,7 @@ Bunch of spatial interpolation scripts written in numpy and Python
 
 Project pyinterpolate will aggregate GIS spatial interpolation scripts written in numpy and Python 3.6.
 
-### Actual scope of work:
+## Actual scope of work:
 
 - Fit semivariance
 - Simple Kriging function
@@ -12,7 +12,7 @@ Project pyinterpolate will aggregate GIS spatial interpolation scripts written i
 
 ---
 
-### Done:
+## Done:
 
 #### calculate_distance(points_array)
 
@@ -43,6 +43,32 @@ IMPORTANT! If input array size has <b>x</b> rows (coordinates) then output array
 * INPUT[1]: lags: array of lags between points
 * INPUT[2]: step_size: distance which should be included in the gamma parameter which enhances range of interest
 * OUTPUT: semivariance: numpy array of pair of lag and semivariance values where semivariance[0] = array([lag(i), semivariance for lag(i)])
+
+-----
+
+### class TheoreticalSemivariogram
+Class for calculating theoretical semivariogram. Class takes two parameters during initialization:
+* INPUT[0]: points_array - analysed points where the last column represents values, typically DEM
+* INPUT[1]: empirical_semivariance - semivariance where first row of array represents lags and the second row represents semivariance's values for given lag
+
+####Available methods:
+#### fit_semivariance(model_type, number_of_ranges=200)
+* INPUT[0]: model_type: 'exponential', 'gaussian', 'linear', 'spherical'
+* INPUT[1]: number_of_ranges: deafult = 200. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.
+* OUTPUT: Theoretical model of semivariance (values only)
+        
+####Static methods:
+* spherical_model(distance, nugget, sill, semivar_range)
+* gaussian_model(distance, nugget, sill, semivar_range)
+* exponential_model(distance, nugget, sill, semivar_range)
+* linear_model(distance, nugget, sill, semivar_range)
+where:
+#### _model(distance, nugget, sill, semivar_range):
+* INPUT[0]: distance: array of ranges from empirical semivariance
+* INPUT[1]: nugget: scalar
+* INPUT[2]: sill: scalar
+* INPUT[3]: semivar_range: scalar, optimal range calculated by fit_semivariance method 
+* OUTPUT: an array of modelled values for given range. Values are calculated based on the chosen model.
 
 -----
 
