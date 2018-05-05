@@ -21,6 +21,8 @@ class TheoreticalSemivariogram:
     def __init__(self, points_array, empirical_semivariance):
         self.points_values = points_array[:, -1]
         self.empirical_semivariance = empirical_semivariance
+        self.theoretical_model = None
+        self.params = None
 
     @staticmethod
     def spherical_model(distance, nugget, sill, semivar_range):
@@ -93,7 +95,6 @@ class TheoreticalSemivariogram:
         :param model_type: 'exponential', 'gaussian', 'linear', 'spherical'
         :param number_of_ranges: deafult = 200. Used to create an array of equidistant ranges between minimal range of
         empirical semivariance and maximum range of empirical semivariance.
-        :return: Theoretical model of semivariance (values only)
         """
 
         # model
@@ -121,5 +122,23 @@ class TheoreticalSemivariogram:
         optimal_range = self.calculate_range(model, ranges, nugget, sill)
 
         # output model
-        output_model = model(self.empirical_semivariance[0], nugget, sill, optimal_range)
+        self.theoretical_model = model
+        self.params = [nugget, sill, optimal_range]
+
+    def calculate_values(self):
+        output_model = self.theoretical_model(self.empirical_semivariance[0],
+                                              self.params[0],
+                                              self.params[1],
+                                              self.params[2])
+        return output_model
+
+    def predict(self, distances):
+        """
+        :param distances: array of distances from points of known locations and values to the point of unknown value
+        :return: model with predicted values
+        """
+        output_model = self.theoretical_model(distances,
+                                              self.params[0],
+                                              self.params[1],
+                                              self.params[2])
         return output_model
