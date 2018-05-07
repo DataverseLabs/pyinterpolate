@@ -6,8 +6,8 @@ Project pyinterpolate will aggregate GIS spatial interpolation scripts written i
 
 ## Actual scope of work:
 
-- Simple Kriging function
 - Tutorial for calculate_distance function
+- Detailed description of theoretical basis of calculate_distance function
 - Fit semivariance: small optimizations (nugget)
 
 ---
@@ -94,6 +94,10 @@ where:
 
 #### ordinary_kriging():
 * OUTPUT: zhat, sigma, w[-1][0], w: [value in unknown location, error, estimated mean, weights]
+
+#### simple_kriging(area_mean):
+* INPUT[0]: area_mean - optional, if not given mean is calculated from points with known values
+* OUTPUT: zhat, sigma, area_mean, w: [value in unknown location, error, mean calculated from the known values, weights]
 
 ---
 
