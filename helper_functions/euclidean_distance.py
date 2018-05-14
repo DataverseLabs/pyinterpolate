@@ -15,30 +15,32 @@ def calculate_distance(points_array):
     the second row is a distance between coordinate(i) and coordinate(1) and so on.
     """
     points_dictionary = {}
+    distances = []
     maximum_length = 5000
     number_of_rows = points_array.shape[0]
-    distances = []
+    try:
+        number_of_cols = points_array.shape[1]
+    except IndexError:
+        number_of_cols = 1
 
-    if len(points_array.shape) == 1:
-        arr = points_array.ravel()
-        if len(arr) > maximum_length:
+    if number_of_cols == 1:
+        if number_of_rows > maximum_length:
             raise ValueError('Please provide array with less than 5000 elements')
         else:
-            points_dictionary[1] = arr
+            points_dictionary[1] = points_array
     else:
-        for i in range(points_array.shape[1]):
+        for i in range(number_of_cols):
             dimension = i + 1
-            arr = (points_array[:, i]).ravel()
-            if len(arr) > maximum_length:
+            if number_of_rows > maximum_length:
                 raise ValueError('Please provide array with less than 5000 elements')
-            points_dictionary[dimension] = arr
+            points_dictionary[dimension] = points_array[:, i]
 
     if len(points_dictionary) == 1:
-        distances = np.subtract.outer(points_dictionary[1], points_dictionary[1]).ravel()
+        distances = np.subtract.outer(points_dictionary[1], points_dictionary[1])
         distances = np.abs(distances)
     elif len(points_dictionary) > 1:
         for key in points_dictionary:
-            dist = np.subtract.outer(points_dictionary[key], points_dictionary[key]).ravel()
+            dist = np.subtract.outer(points_dictionary[key], points_dictionary[key])
             dist = dist ** 2
             if key == 1:
                 distances = dist
