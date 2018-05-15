@@ -49,4 +49,4 @@ def calculate_distance(points_array):
         distances = np.sqrt(distances)
     else:
         raise ValueError('Something is wrong. Did you pass an empty array?')
-    return distances.reshape(number_of_rows, number_of_rows)
+    return distances
