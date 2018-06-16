@@ -1,5 +1,5 @@
 import numpy as np
-from helper_functions.euclidean_distance import calculate_distance
+from ..helper_functions.euclidean_distance import calculate_distance
 
 
 def calculate_semivariance(points_array, lags, step_size):
@@ -29,7 +29,7 @@ def calculate_semivariance(points_array, lags, step_size):
         for i in range(0, len(distances_in_range[0])):
             row_x = distances_in_range[0][i]
             row_x_h = distances_in_range[1][i]
-            g = (points_array[row_x][2] - points_array[row_x_h][2]) ** 2
+            g = (points_array[row_x][-1] - points_array[row_x_h][-1]) ** 2
             gammas.append(g)
         if len(gammas) == 0:
             gamma = 0
