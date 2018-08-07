@@ -13,8 +13,33 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 Requirements
 ------------
 
-> Python 3.6+
+* Python 3.6+
 
-> Numpy 1.14.0+
+* Numpy 1.14.0+
 
-> Matplotlib 2.1.1+
+* Matplotlib 2.1.1+
+
+Package structure
+-----------------
+
+::
+
+ - [ ] Kriging implementation
+        - [X] Distance calculation
+        - [X] Ordinary Kriging
+        - [X] Simple Kriging
+        - [ ] Regression Kriging
+        - [ ] Area-to-Point interpolation
+        - [ ] Area-to-Area interpolation
+        - [ ] Poisson Kriging
+
+ - [ ] Data visualization and interpolation
+        - [ ] 2D point grid
+        - [ ] 2D raster
+
+ - [ ] Tutorials
+        - [X] Distance calculation
+        - [ ] Ordinary Kriging
+        - [ ] Simple Kriging
+        - [ ] Regression Kriging
+        - [ ] Poisson Kriging
