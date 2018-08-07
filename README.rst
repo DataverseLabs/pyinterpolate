@@ -14,5 +14,7 @@ Requirements
 ------------
 
 > Python 3.6+
+
 > Numpy 1.14.0+
+
 > Matplotlib 2.1.1+
