@@ -1,5 +1,5 @@
 import numpy as np
-from .helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
 class Krige:

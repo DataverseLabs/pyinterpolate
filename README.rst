@@ -26,6 +26,8 @@ Package structure
 
  - [ ] Kriging implementation
         - [X] Distance calculation
+        - [X] Empirical semivariogram calculation
+        - [X] Theoretical semivariogram modeling
         - [X] Ordinary Kriging
         - [X] Simple Kriging
         - [ ] Regression Kriging
@@ -34,6 +36,8 @@ Package structure
         - [ ] Poisson Kriging
 
  - [ ] Data visualization and interpolation
+        - [ ] Experimental semivariogram
+        - [ ] Theoretical semivariogram
         - [ ] 2D point grid
         - [ ] 2D raster
 

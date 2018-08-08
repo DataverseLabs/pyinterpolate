@@ -1,5 +1,5 @@
 import numpy as np
-from .helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
 def calculate_covariance(points_array, lags, step_size):

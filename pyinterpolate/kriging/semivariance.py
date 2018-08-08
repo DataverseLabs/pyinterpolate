@@ -1,5 +1,5 @@
 import numpy as np
-from .helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
 def calculate_semivariance(points_array, lags, step_size):
@@ -47,16 +47,3 @@ def calculate_semivariance(points_array, lags, step_size):
     semivariance = np.vstack(semivariance)
 
     return semivariance.T
-
-# if __name__ == '__main__':
-#     # One dimensional
-#
-#     signal = np.fromfile('aami3a.dat', dtype=float)[:720]
-#     signal = (signal / np.max(signal)) * 255
-#     time_array = np.arange(start=0, stop=1, step=1 / len(signal))
-#     known_signal = np.array([time_array, signal]).T
-#
-#     bins = 0.01
-#     ar_lags = np.arange(0, 1, 0.01)
-#
-#     smv = calculate_semivariance(known_signal, ar_lags, bins)
