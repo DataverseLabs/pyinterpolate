@@ -41,6 +41,10 @@ Package structure
         - [ ] 2D point grid
         - [ ] 2D raster
 
+ - [ ] Additional scripts
+        - [X] Read and prepare data
+        - [ ] Space preparation -> under development
+
  - [ ] Tutorials
         - [X] Distance calculation
         - [ ] Ordinary Kriging
