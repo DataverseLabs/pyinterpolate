@@ -1,9 +1,33 @@
 import numpy as np
 
 
+def euclidean_metrics(points, dim):
+    """
+    Function calculates euclidean distance between points in n-dimensional space. Function created for
+    datasets larger than 5000 rows. (It will be re-designed for parallel processing).
+    :param points: numpy array with points' coordinates where each column indices new dimension and each row is
+    a new coordinate set (point)
+    :param dim: dimension of dataset (1 or more than 1)
+    :return: distances_list - numpy array with euclidean distances between all pairs of points.
+    """
+    distances_list = []
+    if dim == 1:
+        for val in points:
+            distances_list.append(np.abs(points - val))
+    else:
+        for row in points:
+            for col in range(0, len(row)):
+                single_dist_col = (points[:, col] - row[col])**2
+                if col == 0:
+                    multiple_distances_sum = single_dist_col
+                else:
+                    multiple_distances_sum = multiple_distances_sum + single_dist_col
+            distances_list.append(np.sqrt(multiple_distances_sum))
+    return np.array(distances_list)
+
 def calculate_distance(points_array):
     """
-    Function for calcultaing euclidean distance between points in n-dimensional space.
+    Function calculates euclidean distance between points in n-dimensional space.
 
     :param points_array: numpy array with points' coordinates where each column indices new dimension and each row is
     a new coordinate set (point)
@@ -14,39 +38,12 @@ def calculate_distance(points_array):
     The first column in row is a distance between coordinate(i) and coordinate(0), 
     the second row is a distance between coordinate(i) and coordinate(1) and so on.
     """
-    points_dictionary = {}
-    distances = []
-    maximum_length = 5000
-    number_of_rows = points_array.shape[0]
+
     try:
         number_of_cols = points_array.shape[1]
     except IndexError:
         number_of_cols = 1
 
-    if number_of_cols == 1:
-        if number_of_rows > maximum_length:
-            raise ValueError('Please provide array with less than 5000 elements')
-        else:
-            points_dictionary[1] = points_array
-    else:
-        for i in range(number_of_cols):
-            dimension = i + 1
-            if number_of_rows > maximum_length:
-                raise ValueError('Please provide array with less than 5000 elements')
-            points_dictionary[dimension] = points_array[:, i]
+    distances = euclidean_metrics(points_array, number_of_cols)
 
-    if len(points_dictionary) == 1:
-        distances = np.subtract.outer(points_dictionary[1], points_dictionary[1])
-        distances = np.abs(distances)
-    elif len(points_dictionary) > 1:
-        for key in points_dictionary:
-            dist = np.subtract.outer(points_dictionary[key], points_dictionary[key])
-            dist = dist ** 2
-            if key == 1:
-                distances = dist
-            else:
-                distances += dist
-        distances = np.sqrt(distances)
-    else:
-        raise ValueError('Something is wrong. Did you pass an empty array?')
     return distances

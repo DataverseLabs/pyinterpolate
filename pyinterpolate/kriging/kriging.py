@@ -36,7 +36,7 @@ class Krige:
         kriging_data = np.c_[self.dataset, s]
         kriging_data = kriging_data[kriging_data[:, -1].argsort()]
         output_data = kriging_data[:number_of_records]
-        self.prepared_data = output_data
+        self.prepared_data = np.array(output_data)
         return output_data
 
     def ordinary_kriging(self):
@@ -86,8 +86,9 @@ class Krige:
 
         k = np.array([self.prepared_data[:, -1]])
         k = k.T
-
+        print(type(self.prepared_data))
         distances = calculate_distance(self.prepared_data[:, :-2])
+        print(type(distances))
 
         predicted = self.model.predict(distances.ravel())
         predicted = np.matrix(predicted.reshape(n, n))
