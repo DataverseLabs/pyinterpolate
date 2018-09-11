@@ -15,7 +15,7 @@ class Krige:
         self.model = semivariogram_model
         self.prepared_data = None
 
-    def prepare_data(self, unknown_position, number_of_records=10):
+    def prepare_data(self, unknown_position, number_of_records=10, verbose=False):
         """
         :param unknown_position: array with position of unknown value (at this point only one location)
         :param number_of_records: number of the closest locations to the unknown position
@@ -37,7 +37,9 @@ class Krige:
         kriging_data = kriging_data[kriging_data[:, -1].argsort()]
         output_data = kriging_data[:number_of_records]
         self.prepared_data = np.array(output_data)
-        return output_data
+        if verbose:
+            print(('Point of position {} prepared for processing').format(
+                unknown_position))
 
     def ordinary_kriging(self):
         """
@@ -67,7 +69,6 @@ class Krige:
         if sigmasq < 0:
             sigma = 0
         else:
-
             sigma = np.sqrt(sigmasq)
         return zhat, sigma, w[-1][0], w
 
@@ -86,9 +87,7 @@ class Krige:
 
         k = np.array([self.prepared_data[:, -1]])
         k = k.T
-        print(type(self.prepared_data))
         distances = calculate_distance(self.prepared_data[:, :-2])
-        print(type(distances))
 
         predicted = self.model.predict(distances.ravel())
         predicted = np.matrix(predicted.reshape(n, n))
