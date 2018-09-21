@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
@@ -14,10 +15,11 @@ class Krige:
         self.dataset = data
         self.model = semivariogram_model
         self.prepared_data = None
+        self.distances = None
 
     def prepare_data(self, unknown_position, number_of_records=10, verbose=False):
         """
-        :param unknown_position: array with position of unknown value (at this point only one location)
+        :param unknown_position: array with position of unknown value
         :param number_of_records: number of the closest locations to the unknown position
         :return output_data: prepared dataset which contains:
         [[known_position_x, known_position_y, value, distance_to_unknown_position], [...]]
@@ -52,9 +54,8 @@ class Krige:
         k = k.T
         k1 = np.matrix(1)
         k = np.concatenate((k, k1), axis=0)
-
+        
         distances = calculate_distance(self.prepared_data[:, :-2])
-
         predicted = self.model.predict(distances.ravel())
         predicted = np.matrix(predicted.reshape(n, n))
         ones = np.matrix(np.ones(n))
@@ -87,8 +88,8 @@ class Krige:
 
         k = np.array([self.prepared_data[:, -1]])
         k = k.T
+        
         distances = calculate_distance(self.prepared_data[:, :-2])
-
         predicted = self.model.predict(distances.ravel())
         predicted = np.matrix(predicted.reshape(n, n))
 
@@ -97,10 +98,49 @@ class Krige:
         zhat = (np.matrix(r) * w)[0, 0]
         zhat += area_mean
         sigmasq = (w.T * k)[0, 0]
-
         if sigmasq < 0:
             sigma = 0
         else:
             sigma = np.sqrt(sigmasq)
 
         return zhat, sigma, area_mean, w
+    
+    @staticmethod
+    def prepare_min_distance(rngs, sf):
+        if rngs[0] < rngs[1]:
+            return sf * rngs[0]
+        else:
+            return sf * rngs[1]
+
+    def create_raster(self, scale_factor, points_list=None):
+        if not points_list:
+            points_list = self.dataset[:][:, :-1]
+            
+        xmax, ymax = points_list.max(axis=0)
+        xmin, ymin = points_list.min(axis=0)
+        x_range = xmax - xmin
+        y_range = ymax - ymin
+        ranges = np.array([x_range, y_range])
+        min_pixel_distance = self.prepare_min_distance(ranges, scale_factor)
+        res_cols = int(math.ceil(ranges[0]/min_pixel_distance))
+        res_rows = int(math.ceil(ranges[1]/min_pixel_distance))
+        raster = np.zeros((res_rows, res_cols))
+        return raster, xmin, xmax, ymin, ymax, min_pixel_distance
+    
+    def interpolate_raster(self, scale_factor=0.01, kriging_type='ordinary', number_of_neighbours=4):
+        raster_data = self.create_raster(scale_factor)
+        raster = raster_data[0]
+        error_mtx = np.zeros(raster.shape)
+        raster_shape = np.shape(raster)
+        for i in range(0, raster_shape[0]):
+            dy = raster_data[4] - raster_data[5] * i
+            for j in range(0, raster_shape[1]):
+                dx = raster_data[1] + raster_data[5] * j
+                self.prepare_data([dx, dy], number_of_records=number_of_neighbours)
+                if kriging_type == 'simple':
+                    s = self.simple_kriging()
+                elif kriging_type == 'ordinary':
+                    s = self.ordinary_kriging()
+                raster[i, j] = s[0]
+                error_mtx[i, j] = s[1]
+        return raster, error_mtx

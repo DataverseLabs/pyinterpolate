@@ -17,6 +17,6 @@ def create_raster(points_list):
     differences = np.array([x_range, y_range])
     min_pixel_distance = prepare_min_distance(differences)
     res_x = int(math.ceil(differences[0]/min_pixel_distance))
-    res_y = int(math.ceil(differences[0]/min_pixel_distance))
+    res_y = int(math.ceil(differences[1]/min_pixel_distance))
     raster = np.zeros((res_y, res_x))
     return raster, xmin, xmax, ymin, ymax, min_pixel_distance
