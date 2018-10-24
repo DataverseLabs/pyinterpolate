@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class TheoreticalSemivariogram:
@@ -142,3 +143,32 @@ class TheoreticalSemivariogram:
                                               self.params[1],
                                               self.params[2])
         return output_model
+
+    def show_experimental_semivariogram(self):
+        """
+        Function shows experimental semivariogram of a given model
+        """
+        plt.figure(figsize=(10, 10))
+        plt.plot(self.empirical_semivariance[0], self.empirical_semivariance[1], color='blue')
+        plt.title('Experimental semivariogram')
+        plt.xlabel('Distance')
+        plt.ylabel('Semivariance')
+        plt.show()
+
+    def show_semivariogram(self):
+        """
+        Function shows experimental and theoretical semivariogram in one plot
+        """
+        if self.theoretical_model is None:
+            raise AttributeError('Theoretical semivariogram is not calculated. \
+            Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
+        else:
+            x = self.calculate_values()
+            plt.figure(figsize=(12, 12))
+            plt.plot(self.empirical_semivariance[0], self.empirical_semivariance[1], color='blue')
+            plt.plot(self.empirical_semivariance[0], x, color='red')
+            plt.legend(['Empirical semivariogram', 'Theoretical semivariogram'])
+            plt.title('Empirical and theoretical semivariogram comparison')
+            plt.xlabel('Distance')
+            plt.ylabel('Semivariance')
+            plt.show()

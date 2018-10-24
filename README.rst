@@ -35,15 +35,15 @@ Package structure
         - [ ] Area-to-Area interpolation
         - [ ] Poisson Kriging
 
- - [ ] Data visualization and interpolation
-        - [ ] Experimental semivariogram
-        - [ ] Theoretical semivariogram
+ - [-] Data visualization and interpolation
+        - [X] Experimental semivariogram
+        - [X] Experimental and Theoretical semivariogram
         - [ ] 2D point grid
         - [ ] 2D raster
 
- - [ ] Additional scripts
+ - [X] Additional scripts
         - [X] Read and prepare data
-        - [ ] Space preparation -> under development
+        - [X] Interpolation results as a matrix
 
  - [ ] Tutorials
         - [X] Distance calculation

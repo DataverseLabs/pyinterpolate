@@ -20,3 +20,11 @@ def create_raster(points_list):
     res_y = int(math.ceil(differences[1]/min_pixel_distance))
     raster = np.zeros((res_y, res_x))
     return raster, xmin, xmax, ymin, ymax, min_pixel_distance
+
+
+if __name__ == '__main__':
+    from pyinterpolate.kriging.helper_functions.read_data import read_data
+    pts = read_data('../../../data/gorzow_dem_10p.dat', sep=',')
+
+    z = create_raster(pts[:, :-1])
+    print(z[2] - z[1], z[4] - z[3])
