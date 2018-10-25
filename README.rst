@@ -24,7 +24,7 @@ Package structure
 
 ::
 
- - [ ] Kriging implementation
+ - [-] Kriging implementation
         - [X] Distance calculation
         - [X] Empirical semivariogram calculation
         - [X] Theoretical semivariogram modeling
@@ -32,14 +32,14 @@ Package structure
         - [X] Simple Kriging
         - [ ] Regression Kriging
         - [ ] Area-to-Point interpolation
-        - [ ] Area-to-Area interpolation
+        - [-] Area-to-Area interpolation
         - [ ] Poisson Kriging
 
- - [-] Data visualization and interpolation
+ - [X] Data visualization and interpolation
         - [X] Experimental semivariogram
         - [X] Experimental and Theoretical semivariogram
-        - [ ] 2D point grid
-        - [ ] 2D raster
+        - [X] 2D point grid
+        - [X] 2D raster
 
  - [X] Additional scripts
         - [X] Read and prepare data
@@ -47,7 +47,12 @@ Package structure
 
  - [ ] Tutorials
         - [X] Distance calculation
-        - [ ] Ordinary Kriging
+        - [-] Ordinary Kriging
         - [ ] Simple Kriging
         - [ ] Regression Kriging
         - [ ] Poisson Kriging
+
+Bugs
+====
+
+- [-] Negative values in estimated error variance in ordinary kriging: https://github.com/szymon-datalions/pyinterpolate/issues/3

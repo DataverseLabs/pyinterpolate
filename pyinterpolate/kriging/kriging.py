@@ -1,5 +1,6 @@
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
@@ -16,6 +17,8 @@ class Krige:
         self.model = semivariogram_model
         self.prepared_data = None
         self.distances = None
+        self.interpolated_raster = None
+        self.interpolated_error_matrix = None
 
     def prepare_data(self, unknown_position, number_of_records=10, verbose=False):
         """
@@ -113,6 +116,14 @@ class Krige:
             return sf * rngs[1]
 
     def create_raster(self, scale_factor, points_list=None):
+        """
+        Method creates canvas raster for interpolated values. Canvas is created based on the edge points
+        of the known area.
+        :param scale_factor: Scale factor is multiplied by a smaller distance from width or height of
+        a raster. This gives one unit (pixel width / height) of a created map. Scale factor must be a fraction.
+        :param points_list: Points with known values (x, y)
+        :return: 2D matrix of zeros of optimal size for a given points cloud
+        """
         if not points_list:
             points_list = self.dataset[:][:, :-1]
             
@@ -127,7 +138,20 @@ class Krige:
         raster = np.zeros((res_rows, res_cols))
         return raster, xmin, xmax, ymin, ymax, min_pixel_distance
     
-    def interpolate_raster(self, scale_factor=0.01, kriging_type='ordinary', number_of_neighbours=4):
+    def interpolate_raster(self, scale_factor=0.01, kriging_type='ordinary', number_of_neighbours=4,
+                           update_model=False):
+        """
+        Interpolate raster of the size calculated from the distance between the top-left and bottom-down points
+        from the points of known values. Pixel size is a smaller dimension from the two maximum distance dimensions
+        multiplied by the scale factor (scale factor must be a fraction).
+        :param scale_factor: Scale factor is multiplied by a smaller distance from width or height of
+        a raster. This gives one unit (pixel width / height) of a created map. Scale factor must be a fraction.
+        :param kriging_type: 'ordinary' or 'simple' Kriging
+        :param number_of_neighbours: how many neighbouring points are spatially correlated with the unknown point
+        :param update_model: If True then class object stores interpolated matrix and error matrix
+        :return: [numpy 2D array (matrix) of interpolated values,
+        numpy 2D array (matrix) of the estimated variance error]
+        """
         raster_data = self.create_raster(scale_factor)
         raster = raster_data[0]
         error_mtx = np.zeros(raster.shape)
@@ -143,4 +167,48 @@ class Krige:
                     s = self.ordinary_kriging()
                 raster[i, j] = s[0]
                 error_mtx[i, j] = s[1]
+        if update_model:
+            self.interpolate_raster = raster
+            self.interpolated_error_matrix = error_mtx
         return raster, error_mtx
+
+    ##### VISUALIZATION METHODS #####
+
+    def show_known_points(self):
+        """
+        Function shows known points distribution.
+        """
+        plt.figure(figsize=(10, 10))
+        plt.scatter(self.dataset[:, 0], self.dataset[:, 1], s=0.01)
+        plt.title('Distribution of points with known values')
+        plt.show()
+
+    def show_results(self, values_matrix=None):
+        """
+        Function shows interpolated results.
+        :param values_matrix: if values matrix is not given then it is assumed that object instance has this
+        matrix stored
+        """
+        plt.figure(figsize=(10, 10))
+        if values_matrix is None:
+            plt.imshow(self.interpolated_raster, cmap="magma")
+        else:
+            plt.imshow(values_matrix, cmap='magma')
+        plt.title('Interpolated values')
+        plt.colorbar()
+        plt.show()
+
+    def show_error_matrix(self, error_matrix=None):
+        """
+        Function shows interpolated results.
+        :param error_matrix: if error matrix is not given then it is assumed that object instance has this
+        matrix stored
+        """
+        plt.figure(figsize=(10, 10))
+        if error_matrix is None:
+            plt.imshow(self.interpolated_error_matrix, cmap="magma")
+        else:
+            plt.imshow(error_matrix, cmap='magma')
+        plt.title('Error matrix')
+        plt.colorbar()
+        plt.show()
