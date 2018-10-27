@@ -168,9 +168,10 @@ class Krige:
                 raster[i, j] = s[0]
                 error_mtx[i, j] = s[1]
         if update_model:
-            self.interpolate_raster = raster
+            self.interpolated_raster = raster
             self.interpolated_error_matrix = error_mtx
-        return raster, error_mtx
+        else:
+            return raster, error_mtx
 
     ##### VISUALIZATION METHODS #####
 

@@ -112,9 +112,9 @@ class TheoreticalSemivariogram:
 
         # nugget / check if this is true
         if self.empirical_semivariance[0][0] != 0:
-            nugget = 0.0
-        else:
             nugget = self.empirical_semivariance[0][0]
+        else:
+            nugget = self.empirical_semivariance[0][1]
 
         # range
         minrange = self.empirical_semivariance[0][1]

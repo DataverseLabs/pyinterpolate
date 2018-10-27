@@ -48,7 +48,7 @@ Package structure
  - [ ] Tutorials
         - [X] Distance calculation
         - [-] Ordinary Kriging
-        - [ ] Simple Kriging
+        - [-] Simple Kriging
         - [ ] Regression Kriging
         - [ ] Poisson Kriging
 
