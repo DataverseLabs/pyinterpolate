@@ -44,6 +44,7 @@ Package structure
  - [X] Additional scripts
         - [X] Read and prepare data
         - [X] Interpolation results as a matrix
+        - [X] False administrative units development
 
  - [ ] Tutorials
         - [X] Distance calculation
@@ -56,3 +57,8 @@ Bugs
 ====
 
 - [-] Negative values in estimated error variance in ordinary kriging: https://github.com/szymon-datalions/pyinterpolate/issues/3
+
+Issues
+======
+
+- [-] Complete documentation and description of "Random geographical units" class
