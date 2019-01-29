@@ -10,13 +10,25 @@ class TheoreticalSemivariogram:
     represents semivariance's values for given lag
 
     Available methods:
-    * fit_semivariance(model_type, number_of_ranges=200)
+    * predict(distances) - method predicts value of the unknown point based on the chosen model
+    * fit_semivariance(model_type, number_of_ranges=200) - returns given model
+    * find_optimal_model(weight_function, number_of_ranges=200) - returns optimal model for given 
+    experimental semivariogram
 
     Static methods:
     * spherical_model(distance, nugget, sill, semivar_range)
     * gaussian_model(distance, nugget, sill, semivar_range)
     * exponential_model(distance, nugget, sill, semivar_range)
     * linear_model(distance, nugget, sill, semivar_range)
+    
+    Additional methods:
+    * calculate_base_error() - calculates mean squared difference between exmperimental semivariogram
+    and "flat line" of zero values
+    
+    Data visualization methods:
+    * show_experimental_semivariogram() - shows semivariogram which is a part of the class object's 
+    instance
+    * show_semivariogram() - shows experimental semivariogram with theoretical model (if it was calculated)
     """
 
     def __init__(self, points_array, empirical_semivariance):
@@ -82,20 +94,11 @@ class TheoreticalSemivariogram:
                      (nugget + sill))
         return x
 
-    def calculate_range(self, model, ranges, nugget, sill):
-        errors = []
-        for r in ranges:
-            x = (self.empirical_semivariance[1] - model(self.empirical_semivariance[0], nugget, sill, r))
-            x = x ** 2
-            errors.append(np.mean(x))
-        optimal_rg = ranges[np.argmin(errors)]
-        return optimal_rg
-
     def fit_semivariance(self, model_type, number_of_ranges=200):
         """
         :param model_type: 'exponential', 'gaussian', 'linear', 'spherical'
-        :param number_of_ranges: deafult = 200. Used to create an array of equidistant ranges between minimal range of
-        empirical semivariance and maximum range of empirical semivariance.
+        :param number_of_ranges: deafult = 200. Used to create an array of equidistant ranges 
+        between minimal range of empirical semivariance and maximum range of empirical semivariance.
         """
 
         # model
@@ -112,7 +115,7 @@ class TheoreticalSemivariogram:
 
         # nugget / check if this is true
         if self.empirical_semivariance[0][0] != 0:
-            nugget = self.empirical_semivariance[0][0]
+            nugget = 0
         else:
             nugget = self.empirical_semivariance[0][1]
 
@@ -125,6 +128,74 @@ class TheoreticalSemivariogram:
         # output model
         self.theoretical_model = model
         self.params = [nugget, sill, optimal_range]
+        
+    def find_optimal_model(self, weighted=False, number_of_ranges=200):
+        """
+        :param weighted: default=False. If True then each lag is weighted by:
+                                        sqrt(N(h))/gamma_{exp}(h)
+                                        where:
+                                        N(h) - number of point pairs in a given range,
+                                        gamma_{exp}(h) - value of experimental semivariogram for
+                                        a given range.
+        :param number_of_ranges: deafult = 200. Used to create an array of equidistant ranges 
+        between minimal range of empirical semivariance and maximum range of empirical semivariance.
+        """
+        
+        # models
+        models = {
+            'spherical': self.spherical_model,
+            'gaussian': self.gaussian_model,
+            'exponential': self.exponential_model,
+            'linear': self.linear_model,
+        }
+        
+        # calculate base error for flat line
+        base_error = self.calculate_base_error()
+
+        # sill
+        sill = np.var(self.points_values)
+
+        # nugget / check if this is true
+        if self.empirical_semivariance[0][0] != 0:
+            nugget = 0
+        else:
+            nugget = self.empirical_semivariance[0][1]
+
+        # range
+        minrange = self.empirical_semivariance[0][1]
+        maxrange = self.empirical_semivariance[0][-1]
+        ranges = np.linspace(minrange, maxrange, number_of_ranges)
+        
+        # search for the best model
+        model_name = 'null'
+        for model in models:
+            optimal_range = self.calculate_range(models[model], ranges, nugget, sill)
+            
+            # output model
+            params = [nugget, sill, optimal_range]
+            if not weighted:
+                model_error = self.calculate_model_error(models[model], params)
+            else:
+                model_error = self.calculate_model_error(models[model], params, True)
+            print('Model: {}, error value: {}'.format(model, model_error))
+            if model_error < base_error:
+                base_error = model_error
+                self.theoretical_model = models[model]
+                self.params = params
+                model_name = model
+                print(model_name)
+                
+        # print output
+        print('########## Chosen model: {} ##########'.format(model_name))
+        
+    def calculate_range(self, model, ranges, nugget, sill):
+        errors = []
+        for r in ranges:
+            x = (self.empirical_semivariance[1] - model(self.empirical_semivariance[0], nugget, sill, r))
+            x = x ** 2
+            errors.append(np.mean(x))
+        optimal_rg = ranges[np.argmin(errors)]
+        return optimal_rg
 
     def calculate_values(self):
         output_model = self.theoretical_model(self.empirical_semivariance[0],
@@ -132,10 +203,37 @@ class TheoreticalSemivariogram:
                                               self.params[1],
                                               self.params[2])
         return output_model
+    
+    def calculate_base_error(self):
+        """
+        Method calculates base error as a squared difference between experimental semivariogram and
+        a "flat line" on the x-axis (only zeros)
+        """
+        n = len(self.empirical_semivariance[1])
+        zeros = np.zeros(n)
+        error = np.mean((self.empirical_semivariance[1].astype(np.int) - zeros)**2)
+        return error
+    
+    def calculate_model_error(self, model, parameters, weight=False):
+        if not weight:
+            error = self.empirical_semivariance[1] - model(self.empirical_semivariance[0],
+                                                           parameters[0],
+                                                           parameters[1],
+                                                           parameters[2])
+        else:
+            nh = np.sqrt(self.empirical_semivariance[2])
+            vals = self.empirical_semivariance[1]
+            error = nh/vals * (vals - model(self.empirical_semivariance[0],
+                                            parameters[0],
+                                            parameters[1],
+                                            parameters[2]))**2
+        error = np.mean(error.astype(np.int))
+        return error
 
     def predict(self, distances):
         """
-        :param distances: array of distances from points of known locations and values to the point of unknown value
+        :param distances: array of distances from points of known locations and values to the point of 
+        unknown value
         :return: model with predicted values
         """
         output_model = self.theoretical_model(distances,

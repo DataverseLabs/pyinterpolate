@@ -12,6 +12,7 @@ def calculate_semivariance(points_array, lags, step_size):
     :return: semivariance: numpy array of pair of lag and semivariance values where
     semivariance[0] = array of lags
     semivariance[1] = array of lag's values
+    semivariance[2] = array of number of points in each lag
 
     """
     smv = []
@@ -37,12 +38,12 @@ def calculate_semivariance(points_array, lags, step_size):
             gamma = 0
         else:
             gamma = np.sum(gammas) / (2 * len(gammas))
-        smv.append(gamma)
+        smv.append([gamma, len(gammas)])
 
     # Selecting semivariances
     for i in range(len(lags)):
-        if smv[i] > 0:
-            semivariance.append([lags[i], smv[i]])
+        if smv[i][0] > 0:
+            semivariance.append([lags[i], smv[i][0], smv[i][1]])
 
     semivariance = np.vstack(semivariance)
 
