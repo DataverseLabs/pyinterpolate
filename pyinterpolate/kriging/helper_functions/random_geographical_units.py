@@ -8,7 +8,7 @@ class RandomGeographicalUnits:
     def __init__(self, width=100, height=100, number_of_areas=8):
 
         # Base data frame
-        self.generated_data = {}
+        self.data = {}
 
         # Base matrix
         self.mtx = np.zeros(shape=(height, width))
@@ -50,6 +50,12 @@ class RandomGeographicalUnits:
         for idx, val in enumerate(self.areas_counts):
             coordinates = np.where(self.divided_area == idx + 1)
             coordinates = np.column_stack(coordinates)
+            
+            coordinates_with_rates = []
+            # Add rates to coordinates
+            for coord in coordinates:
+                coordinates_with_rates.append([coord[0], coord[1], self.population_area[coord[0], coord[1]]])
+            
             centroid = np.mean(coordinates, axis=0)
             centroid = [centroid[0], centroid[1]]
             centroids.append(centroid)
@@ -59,12 +65,12 @@ class RandomGeographicalUnits:
             rates[self.divided_area == idx + 1] = r
 
             # Update data dictionary
-            self.generated_data[idx + 1] = []
-            self.generated_data[idx + 1].append({'coordinates': coordinates})
-            self.generated_data[idx + 1].append({'centroid': centroid})
-            self.generated_data[idx + 1].append({'population': population_at_area})
-            self.generated_data[idx + 1].append({'cases': val})
-            self.generated_data[idx + 1].append({'rates': r})
+            self.data[idx + 1] = {}
+            self.data[idx + 1]['coordinates'] = coordinates_with_rates
+            self.data[idx + 1]['centroid'] = centroid
+            self.data[idx + 1]['population'] = population_at_area
+            self.data[idx + 1]['cases'] = val
+            self.data[idx + 1]['rates'] = r
 
         return areas, rates, np.asarray(centroids)
 
