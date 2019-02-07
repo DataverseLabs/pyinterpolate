@@ -1,3 +1,5 @@
+import sys
+
 import math
 import numpy as np
 import matplotlib.pyplot as plt
@@ -5,6 +7,47 @@ from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_
 
 
 class Krige:
+    """
+    Class for kriging interpolation of the unknown values in a given location (position). Class takes two arguments
+    during the initialization:
+    data - list of known points and their values,
+    semivariogram_model - semivariogram model calculated with the TheoreticalSemivariogram class.
+    
+    Available methods:
+    * prepare_data(unknown_position, number_of_records, verbose) - method prepares data and it is necessary to run it before
+    the kriging interpolation,
+    * ordinary_kriging(test_for_anomalies=True) - method performs ordinary kriging interpolation on the prepared dataset of
+    unknown points and if parameter test_for_anomalies is set to True then method monitor output for the negative values and
+    inform user about it when negative value occur,
+    * simple_kriging(area_mean=None, test_for_anomalies=True) - method performs simple kriging interpolation 
+    on the prepared dataset of unknown points and if parameter test_for_anomalies is set to True then method monitor 
+    output for the negative values and sinform user about it when negative values occur,
+    * interpolate_raster(scale_factor=0.01, kriging_type='ordinary', number_of_neighbours=4, update_model=False) - method
+    for interpolation of a raster based on the grid limited by the extreme points from the known values, it may be used
+    instead of kriging interpolation methods for fast visualization of the data over a surface,
+    * create_raster(scale_factor, points_list=None) - method creates canvas (numpy array) for interpolation.
+    
+    Static methods:
+    * prepare_min_distance(rng, sf) - helper method for create_raster method. It is used to find limits of the canvas.
+    
+    Data visualization methods:
+    * show_known_points() - method shows scatterplot of known points locations,
+    * show_results(values_matrix=None) - method shows interpolated surface. If numpy array matrix is not given then method
+    takes interpolated raster from the class instance (it must be calculated with the interpolate_raster method),
+    * show_error_matrix(error_matrix=None) - method shows interpolated error surface. If numpy array matrix is not 
+    given then method takes error raster from the class instance (it must be calculated with the interpolate_raster method).
+    
+    Example how to prepare model:
+    
+    model = Krige(data, semivariogram)
+    model.interpolate_raster(scale_factor=0.01,
+                         kriging_type='ordinary',
+                         number_of_neighbours=10,
+                         update_model=True)
+    model.show_results()
+    model.show_error_matrix()
+    
+    """
 
     def __init__(self, data, semivariogram_model):
         """
@@ -46,7 +89,7 @@ class Krige:
             print(('Point of position {} prepared for processing').format(
                 unknown_position))
 
-    def ordinary_kriging(self):
+    def ordinary_kriging(self, test_for_anomalies=True):
         """
         To run kriging operation prepare_data method should be invoked first
         :return zhat, sigma, w[-1][0], w:
@@ -69,6 +112,20 @@ class Krige:
 
         w = np.linalg.solve(predicted, k)
         zhat = (np.matrix(self.prepared_data[:, -2] * w[:-1])[0, 0])
+        
+        # Test for negative values
+        if test_for_anomalies:
+            if zhat < 0:
+                user_input_message = 'Estimated value is below zero and it is set to: {}. Continue? \
+                (Type <y> if yes or <n> if no)\n'.format(zhat)
+                if user_input_message is 'y':
+                    print('Program is running...')
+                else:
+                    sys.exit('Program is terminated. Try different semivariogram model. (Did you use gaussian model? \
+                             If so then try to use simpler models like linear or exponential) and/or analyze your data \
+                             for any clusters which may affect the final estimation')
+                    
+        
         sigmasq = (w.T * k)[0, 0]
         if sigmasq < 0:
             sigma = 0
@@ -76,7 +133,7 @@ class Krige:
             sigma = np.sqrt(sigmasq)
         return zhat, sigma, w[-1][0], w
 
-    def simple_kriging(self, area_mean=None):
+    def simple_kriging(self, area_mean=None, test_for_anomalies=True):
         """
         To run kriging operation prepare_data method should be invoked first
         :param area_mean: optional, if not given mean is calculated from points with known values
@@ -100,6 +157,19 @@ class Krige:
         r = self.prepared_data[:, -2] - area_mean
         zhat = (np.matrix(r) * w)[0, 0]
         zhat += area_mean
+        
+        # Test for negative values
+        if test_for_anomalies:
+            if zhat < 0:
+                user_input_message = 'Estimated value is below zero and it is set to: {}. Continue? \
+                (Type <y> if yes or <n> if no)\n'.format(zhat)
+                if user_input_message is 'y':
+                    print('Program is running...')
+                else:
+                    sys.exit('Program is terminated. Try different semivariogram model. (Did you use gaussian model? \
+                             If so then try to use simpler models like linear or exponential) and/or analyze your data \
+                             for any clusters which may affect the final estimation')
+        
         sigmasq = (w.T * k)[0, 0]
         if sigmasq < 0:
             sigma = 0

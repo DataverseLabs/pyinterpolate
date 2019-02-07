@@ -44,7 +44,7 @@ class TheoreticalSemivariogram:
         :param nugget: scalar
         :param sill: scalar
         :param semivar_range: optimal range calculated by fit_semivariance method
-        :return x: an array of modelled values for given range. Values are calculated based on the spherical model.
+        :return x: an array of modeled values for given range. Values are calculated based on the spherical model.
         """
 
         x = np.where((distance <= semivar_range),
@@ -60,7 +60,7 @@ class TheoreticalSemivariogram:
         :param nugget: scalar
         :param sill: scalar
         :param semivar_range: optimal range calculated by fit_semivariance method
-        :return x: an array of modelled values for given range. Values are calculated based on the gaussian model.
+        :return x: an array of modeled values for given range. Values are calculated based on the gaussian model.
         """
 
         x = nugget + sill * (1 - np.exp(-distance * distance / (semivar_range ** 2)))
@@ -73,7 +73,7 @@ class TheoreticalSemivariogram:
         :param nugget: scalar
         :param sill: scalar
         :param semivar_range: optimal range calculated by fit_semivariance method
-        :return x: an array of modelled values for given range. Values are calculated based on the exponential model.
+        :return x: an array of modeled values for given range. Values are calculated based on the exponential model.
         """
 
         x = nugget + sill * (1 - np.exp(-distance / semivar_range))
@@ -86,7 +86,7 @@ class TheoreticalSemivariogram:
         :param nugget: scalar
         :param sill: scalar
         :param semivar_range: optimal range calculated by fit_semivariance method
-        :return x: an array of modelled values for given range. Values are calculated based on the linear model.
+        :return x: an array of modeled values for given range. Values are calculated based on the linear model.
         """
 
         x = np.where((distance <= semivar_range),
@@ -216,10 +216,10 @@ class TheoreticalSemivariogram:
     
     def calculate_model_error(self, model, parameters, weight=False):
         if not weight:
-            error = self.empirical_semivariance[1] - model(self.empirical_semivariance[0],
+            error = np.abs(self.empirical_semivariance[1] - model(self.empirical_semivariance[0],
                                                            parameters[0],
                                                            parameters[1],
-                                                           parameters[2])
+                                                           parameters[2]))
         else:
             nh = np.sqrt(self.empirical_semivariance[2])
             vals = self.empirical_semivariance[1]
