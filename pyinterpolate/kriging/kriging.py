@@ -22,6 +22,7 @@ class Krige:
     * simple_kriging(area_mean=None, test_for_anomalies=True) - method performs simple kriging interpolation 
     on the prepared dataset of unknown points and if parameter test_for_anomalies is set to True then method monitor 
     output for the negative values and sinform user about it when negative values occur,
+    * normalize_weights(weights, estimated_value) - method for negative weights removal from the weight matrix.
     * interpolate_raster(scale_factor=0.01, kriging_type='ordinary', number_of_neighbours=4, update_model=False) - method
     for interpolation of a raster based on the grid limited by the extreme points from the known values, it may be used
     instead of kriging interpolation methods for fast visualization of the data over a surface,
@@ -88,6 +89,82 @@ class Krige:
         if verbose:
             print(('Point of position {} prepared for processing').format(
                 unknown_position))
+            
+    def normalize_weights(self, weights, estimated_value, kriging_type):
+        """
+        Algorithm for weight normalization to remove negative weights of the points which are
+        clustering. Derived from Deutsch, C.V., Correcting for negative weights in
+        ordinary kriging, Computers & Geosciences, Vol. 22, No. 7, pp. 765-773, 1996.
+        
+        :param: weights - weights matrix calculated with "normal" kriging procedure,
+        :param: estimated_value - value estimated for a given, unknown point.
+        :return: weight_matrix - normalized weight matrix where negative weights are removed and
+        matrix is scalled to give a sum of all elements equal to 1.
+        """
+        
+        if kriging_type == 'ord':
+            weight_matrix = weights[:-1].copy()
+            output_matrix = weights[:-1].copy()
+        elif kriging_type == 'sim':
+            weight_matrix = weights.copy()
+            output_matrix = weights.copy()
+        else:
+            print('You did not choose any kriging type. Chosen type: <sim> - simple kriging.')
+            weight_matrix = weights.copy()
+            output_matrix = weights.copy()
+        
+        ###### Calculate average covariance between the location being ######
+        ###### estimated and the locations with negative weights       ######
+        
+        locs = np.argwhere(weight_matrix < 0)  # Check where weights are below 0.0
+        locs = locs[:, 0]
+        
+        # Calculate covariance between those points and unknown point
+        if len(locs) >= 1:
+            C = []
+            mu = 0
+            for i in locs:
+                c = estimated_value * self.prepared_data[i, 2]
+                mu = mu + estimated_value + self.prepared_data[i, 2]
+                C.append(c)
+                output_matrix[i, 0] = 0
+            mu = mu / len(C)
+            cov = np.sum(C) / len(C) - mu*mu
+
+            ###### Calculate absolute magnitude of the negative weights #####
+
+            w = weight_matrix[weight_matrix < 0]
+            w = w.T
+            magnitude = np.sum(np.abs(w)) / len(w)
+
+            ###### Test values greater than 0 and check if they need to be
+            ###### rescaled to 0 ######
+
+            ###### if weight > 0 and Covariance between unknown point and known
+            ###### point is less than the average covariance between the location
+            ###### being estimated and the locations with negative weights and
+            ###### and weight is less than absolute magnitude of the negative 
+            ###### weights then set weight to zero #####
+
+            positive_locs = np.argwhere(weight_matrix > 0)  # Check where weights are greater than 0.0
+            positive_locs = positive_locs[:, 0]
+
+            for j in positive_locs:
+                cov_est = (estimated_value * self.prepared_data[j, 2]) / 2
+                mu = (estimated_value + self.prepared_data[j, 2]) / 2
+                cov_est = cov_est - mu*mu
+                if cov_est < cov:
+                    if weight_matrix[j, 0] < magnitude:
+                        output_matrix[j, 0] = 0
+
+            ###### Normalize weight matrix to get a sum of all elements equal to 1 ######
+
+            output_matrix = output_matrix / np.sum(output_matrix)
+
+            return output_matrix
+        else:
+            return weights
+        
 
     def ordinary_kriging(self, test_for_anomalies=True):
         """
@@ -125,7 +202,8 @@ class Krige:
                              If so then try to use simpler models like linear or exponential) and/or analyze your data \
                              for any clusters which may affect the final estimation')
                     
-        
+        estimated_weights = self.normalize_weights(w, zhat, 'ord')
+        zhat = (np.matrix(self.prepared_data[:, -2] * w[:-1])[0, 0])
         sigmasq = (w.T * k)[0, 0]
         if sigmasq < 0:
             sigma = 0
@@ -170,6 +248,9 @@ class Krige:
                              If so then try to use simpler models like linear or exponential) and/or analyze your data \
                              for any clusters which may affect the final estimation')
         
+        w = self.normalize_weights(w, zhat, 'sim')
+        zhat = (np.matrix(r) * w)[0, 0]
+        zhat += area_mean
         sigmasq = (w.T * k)[0, 0]
         if sigmasq < 0:
             sigma = 0
