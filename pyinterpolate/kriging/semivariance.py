@@ -48,3 +48,42 @@ def calculate_semivariance(points_array, lags, step_size):
     semivariance = np.vstack(semivariance)
 
     return semivariance.T
+
+
+def calculate_inblock_semivariance(blocks_dict):
+    """
+    Function calculates semivariance of points inside a block (area).
+    :param blocks_dict: block dictionary in the minimal form: {block id: 
+                                                                {'coordinates': [[x0, y0, val0],
+                                                                                 [x1, y1, val1],
+                                                                                 [x.., y.., val..]]
+                                                                }
+                                                              }
+    :return: updated block dictionary with new key 'semivariance' and mean variance per area
+    """
+    semivariance = []
+    
+    blocks = list(blocks_dict.keys())
+
+    for block in blocks:
+        
+        points_array = np.asarray(blocks_dict[block]['coordinates'])
+        
+        # Calculate semivariance
+        number_of_points = len(points_array)
+        p_squared = number_of_points**2
+        
+        for point1 in points_array:
+            variances = []
+            for point2 in points_array:
+                v = point1[-1] - point2[-1]
+                v = (v**2)
+                variances.append(v)
+            variance = np.sum(variances) / (2 * len(variances))
+            semivariance.append(variance)
+        
+        semivar = np.sum(semivariance) / p_squared
+        
+        blocks_dict[block]['semivariance'] = semivar
+
+    return blocks_dict
