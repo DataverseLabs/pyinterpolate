@@ -91,23 +91,23 @@ def block_to_block_distances(areas, interpretation='dict'):
     :return distances:
     
     if interporetation == 'dict':
-    [
-        {'unit 0 ID': {
+    {
+        'unit 0 ID': {
             'unit 0 ID': distance to unit 0,
             'unit n ID': distance to unit n,
             }
-        },
-        {'unit n ID': {
+        ,
+        'unit n ID': {
             'unit 0 ID': distance to unit 0,
             'unit n ID': distance to unit n,
             }
-        },
-        {'unit z ID': {
+        ,
+        'unit z ID': {
             'unit 0 ID': distance to unit 0,
             'unit n ID': distance to unit n,
             }
-        }
-    ]
+        
+    }
     
     if interpretation == 'list':
     [
@@ -120,25 +120,29 @@ def block_to_block_distances(areas, interpretation='dict'):
     
     if interpretation == 'dict':
         print('Selected data: dict type')  # Inform which type of data structure has been chosen
-        list_of_distance_dicts = []
+        distance_dicts = {}
         for key_a in areas.keys():
-            unit_dict_id = key_a
-            unit_dict = {key_a: {}}
+            distance_dicts[key_a] = {}
             for key_b in areas.keys():
-                block_1 = areas[key_a]['coordinates']
-                block_2 = areas[key_b]['coordinates']
-                distance = calculate_block_to_block_distance(block_1, block_2)
-                unit_dict[key_a][key_b] = distance
-            list_of_distance_dicts.append(unit_dict)
-        return list_of_distance_dicts
+                if key_a == key_b:
+                    distance_dicts[key_a][key_b] = 0
+                else:
+                    block_1 = areas[key_a]['coordinates']
+                    block_2 = areas[key_b]['coordinates']
+                    distance = calculate_block_to_block_distance(block_1, block_2)
+                    distance_dicts[key_a][key_b] = distance
+        return distance_dicts
     
     elif interpretation == 'list':
         print('Selected data: list of value lists type')  # Inform which type of data structure has been chosen
         list_of_grouped_distances = []
-        for layer_a in areas:
+        for i, layer_a in enumerate(areas):
             layer_x = []
-            for layer_b in areas:
-                distance = calculate_block_to_block_distance(layer_a, layer_b)
+            for j, layer_b in enumerate(areas):
+                if i == j:
+                    distance = 0
+                else:
+                    distance = calculate_block_to_block_distance(layer_a, layer_b)
                 layer_x.append(distance)
             list_of_grouped_distances.append(layer_x)
         return list_of_grouped_distances
