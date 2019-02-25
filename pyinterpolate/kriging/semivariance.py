@@ -88,6 +88,7 @@ def calculate_inblock_semivariance(blocks_dict):
 
     return blocks_dict
 
+
 def _prepare_lags(ids_list, distances_between_blocks, lags, step):
     """
     Function prepares blocks and distances - creates dict in the form:
@@ -122,33 +123,35 @@ def _calculate_average_semivariance_for_a_lag(sorted_areas, blocks):
     :param blocks: dict with key 'semivariance' pointing the in-block semivariance of a given area
     
     OUTPUT:
-    :return: dict with list of {area: [[lag, semivariance], [lag_x, semivariance_x], [..., ...]]
+    :return: list with semivariances for each lag [[lag, semivariance], [next lag, next semivariance], ...]
     """
     
     areas_ids = list(blocks.keys())
     
     lags_ids = list(sorted_areas[areas_ids[0]].keys())
     
-    semivars = {}
+    semivars_and_lags = []
     
-    for a_id in areas_ids:
-        semivars[a_id] = []
-        base_semivariance = blocks[a_id]['semivariance']
-        smv = 0
-        for l_id in lags_ids:
+    for l_id in lags_ids:
+        lag = sorted_areas[areas_ids[0]][l_id]
+        semivar = 0
+        for a_id in areas_ids:
+            base_semivariance = blocks[a_id]['semivariance']
             neighbour_areas = sorted_areas[a_id][l_id]
             no_of_areas = len(neighbour_areas)
             if no_of_areas == 0:
-                semivars[a_id].append([l_id, 0])
+                semivar += 0
             else:
-                s = 1 / (2 * no_of_areas)
+                s = 1 / (no_of_areas)
                 semivars_sum = 0
                 for area in neighbour_areas:
                     semivars_sum += base_semivariance + blocks[area]['semivariance']
                 semivars_sum = s * semivars_sum
-                semivars[a_id].append([l_id, semivars_sum])
-    
-    return semivars
+                semivar += semivars_sum
+                semivar = semivar / 2
+        semivars_and_lags.append([l_id, semivar])
+    return semivars_and_lags
+
 
 def calculate_mean_semivariance_between_blocks(blocks, lags, step):
     """
