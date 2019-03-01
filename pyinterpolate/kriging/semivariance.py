@@ -186,3 +186,70 @@ def calculate_mean_semivariance_between_blocks(blocks, lags, step):
     smvs = _calculate_average_semivariance_for_a_lag(sorted_areas, updated_blocks)
     
     return smvs
+
+
+#### SECTION UNDER DEVELOPMENT ####
+
+def _calculate_semivariance_block_pair(block_a_data, block_b_data):
+    a_len = len(block_a_data)
+    b_len = len(block_b_data)
+    pa_pah = a_len * b_len
+    semivariance = []
+    for point1 in block_a_data:
+        variances = []
+        for point2 in block_b_data:
+            smv = point1[-1] - point2[-1]
+            smv = smv**2
+            variances.append(smv)
+        variance = np.sum(variances) / (2 * len(variances))
+        semivariance.append(variance)
+    semivar = np.sum(semivariance) / pa_pah
+    return semivar
+        
+            
+def calculate_between_blocks_semivariances(blocks):
+    """Function calculates semivariance between all pairs of blocks and updates blocks dictionary with new key:
+    'block-to-block semivariance' and value as a list where [[distance to another block, semivariance], ]
+    
+    INPUT:
+    :param blocks: dictionary with a list of all blocks,
+    
+    OUTPUT:
+    :return: updated dictionary with new key:
+    'block-to-block semivariance' and the value as a list: [[distance to another block, semivariance], ]
+    """
+    
+    bb = blocks.copy()
+    
+    blocks_ids = list(bb.keys())
+    
+    for first_block_id in blocks_ids:
+        bb[first_block_id]['block-to-block semivariance'] = []
+        for second_block_id in blocks_ids:
+            if first_block_id == second_block_id:
+                pass
+            else:
+                distance = calculate_block_to_block_distance(bb[first_block_id]['coordinates'],
+                                                             bb[second_block_id]['coordinates'])
+                smv = _calculate_semivariance_block_pair(bb[first_block_id]['coordinates'],
+                                                  bb[second_block_id]['coordinates'])
+                bb[first_block_id]['block-to-block semivariance'].append([distance, smv])
+                
+    return bb
+
+
+def calculate_general_block_to_block_semivariogram(blocks, lags, step):
+    blocks_ids = list(blocks.keys())
+    semivariogram = []
+    for lag in lags:
+        semivars = []
+        for block in blocks_ids:
+            v = 0
+            for val in blocks[block]['block-to-block semivariance']:
+                if (val[0] > lag and val[0] <= lag + step):
+                    v = v + val[1]
+            semivars.append(v)
+        l = len(semivars)
+        s = np.sum(semivars) / l
+        semivariogram.append([lag, s])
+    return semivariogram
