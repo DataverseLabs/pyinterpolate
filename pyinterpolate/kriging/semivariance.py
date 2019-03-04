@@ -1,5 +1,5 @@
 import numpy as np
-from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance, calculate_block_to_block_distance
 
 
 def calculate_semivariance(points_array, lags, step_size):
@@ -19,7 +19,12 @@ def calculate_semivariance(points_array, lags, step_size):
     semivariance = []
 
     # Calculate distance
-    distance_array = calculate_distance(points_array[:, 0:-1])
+    try:
+        distance_array = calculate_distance(points_array[:, 0:-1])
+    except TypeError:
+        points_array = np.asarray(points_array)
+        print('Given points array has been transformed into numpy array to calculate distance')
+        distance_array = calculate_distance(points_array[:, 0:-1])
 
     # Calculate semivariances
     for h in lags:
