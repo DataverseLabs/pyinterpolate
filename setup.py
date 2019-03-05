@@ -33,7 +33,7 @@ setup(
     ],
     keywords='Kriging Poisson Interpolation',
     packages=find_packages(exclude=['data', 'docs', 'tests', 'tutorials']),
-    install_requires=['pip==18.1', 'numpy==1.16.0', 'matplotlib==3.0.2'],
+    install_requires=[],
     project_urls={
         'Bug Reports': 'https://github.com/szymon-datalions/pyinterpolate/issues',
         'Sponsor page': 'http://datalions.eu/',
