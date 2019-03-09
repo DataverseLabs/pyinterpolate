@@ -8,7 +8,7 @@ from geopandas.tools import sjoin
 
 # Custom scripts
 from pyinterpolate.kriging.semivariance_base import Semivariance
-from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance, block_to_block_distances
 
 
 class ArealSemivariance(Semivariance):
@@ -24,7 +24,8 @@ class ArealSemivariance(Semivariance):
         self.pop_step = population_step_size
 
         self.inblock_population = None  # variable updated by blocks_semivariance() method
-        self.inblock_semivariances = None  # variable updated by blocks_semivariance() method
+        self.ids = None  # variable updated by blocks_semivariance() method
+        self.blocks_dict = None  # variable updated by blocks_semivariance() method
 
 
     def blocks_semivariance(self):
@@ -47,7 +48,7 @@ class ArealSemivariance(Semivariance):
         """
 
         within_block_semivariogram = self._calculate_mean_semivariance_between_blocks()
-        print(within_block_semivariogram)
+        return within_block_semivariogram
 
 
     def _calculate_mean_semivariance_between_blocks(self):
@@ -62,22 +63,30 @@ class ArealSemivariance(Semivariance):
         """
 
         # calculate inblock semivariance
-        updated_blocks = self._calculate_inblock_semivariance()
+        print('Start of the inblock semivariance calculation')
+        self.inblock_semivariances = self._calculate_inblock_semivariance()
+        print('Inblock semivariance calculated successfully')
+        
+        # calculate distance between blocks
+        print('Start of the distances between blocks calculations')
+        distances_between_blocks = block_to_block_distances(self.blocks_dict)
+        print('Distances between blocks calculated successfully')
+        
+        # prepare blocks and distances - creates dict in the form:
+        # {area_id: {lag: [areas in a given lag (ids)]}}
+        
+        print('Block to block Semivariance calculation process start...')
+        print('Sorting areas by distance')
+        # ranges and step from the parent class
+        sorted_areas = self._prepare_lags(distances_between_blocks)
+        print('Sort complete')
+        
+        
+        # Now calculate semivariances for each area / lag
+        
+        smvs = self._calculate_average_semivariance_for_a_lag(sorted_areas)
 
-        # # calculate distance between blocks
-        # distances_between_blocks = calculate_block_to_block_distance(updated_blocks)
-        #
-        # # prepare blocks and distances - creates dict in the form:
-        # # {area_id: {lag: [areas in a given lag (ids)]}}
-        # areas_list = list(updated_blocks.keys())
-        #
-        # sorted_areas = _prepare_lags(areas_list, distances_between_blocks, lags, step)
-        #
-        # # Now calculate semivariances for each area / lag
-        #
-        # smvs = _calculate_average_semivariance_for_a_lag(sorted_areas, updated_blocks)
-
-        return 0
+        return smvs
 
     def _calculate_inblock_semivariance(self):
         """
@@ -94,30 +103,101 @@ class ArealSemivariance(Semivariance):
             population_centroids = population_centroids.to_crs(areas.crs)
 
         joined_population_points = sjoin(population_centroids, areas, how='left')
-        joined_population_points = joined_population_points.dropna(axis=1)
+        joined_population_points = joined_population_points.dropna(axis=0)
         self.inblock_population = joined_population_points
         print('Inblock population points updated')
+        
+        ids = joined_population_points[self.id_field].unique()
+        self.ids = list(ids)
 
-        ids = joined_population_points[self.id_field]
-
-        # Semivariance calculation
-        semivariances = []
+        # Semivariance calculation and creation of dictionary with needed values
+        block_dict = {}
         for single_id in ids:
+            
+            block_dict[single_id] = {'coordinates': 0}  # preparation of self.block_dict variable
+            
             # DATA PROCESSING INTO ARRAY
             block_points = joined_population_points[joined_population_points[self.id_field] == single_id]
 
-            points_array = super()._get_posx_posy(block_points, self.val_col, dropna=False)
+            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False)
+            block_dict[single_id]['coordinates'] = points_array  # update block_dict
 
             # Calculate semivariance
             number_of_points = len(points_array)
             p_squared = number_of_points ** 2
 
             distances = calculate_distance(points_array)
-            semivariance = super()._calculate_semivars(self.pop_lags, self.pop_step, points_array, distances)
+            try:
+                semivariance = super()._calculate_semivars(self.pop_lags, self.pop_step, points_array, distances)
+                semivar = np.sum(semivariance[1, :]) / p_squared
+            except ValueError:
+                semivar = 0
+            block_dict[single_id]['inblock semivariance'] = semivar
+        self.blocks_dict = block_dict
 
-            semivar = np.sum(semivariance[1, :]) / p_squared
-            semivariances.append([ids, semivar])
+        return block_dict
+    
+    
+    def _prepare_lags(self, distances_between_blocks):
+        """
+        Function prepares blocks and distances - creates dict in the form:
+        {area_id: {lag: [areas in a given lag (ids)]}}
+        """
 
-        df = pd.DataFrame(semivariances, columns=[super().id_field, 'inblock semivariance'])
+        dbb = distances_between_blocks
 
-        return df
+        sorted_areas = {}
+
+        for area in self.ids:
+            sorted_areas[area] = {}
+            for lag in self.ranges:
+                sorted_areas[area][lag] = []
+                for nb in self.ids:
+                    if (dbb[area][nb] > lag) and (dbb[area][nb] < lag + self.step):
+                        sorted_areas[area][lag].append(nb)
+                    else:
+                        pass
+        return sorted_areas
+
+
+    def _calculate_average_semivariance_for_a_lag(self, sorted_areas):
+        """
+        Function calculates average semivariance for each lag.
+        yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
+        y(va, va) and y(va+h, va+h) are estimated according to the function calculate_inblock_semivariance, and h
+        are estimated according to the block_to_block_distances function.
+
+        INPUT:
+        :param sorted_areas: dict in the form {area_id: {lag: [area_ids_within_lag]}}
+        :param blocks: dict with key 'semivariance' pointing the in-block semivariance of a given area
+
+        OUTPUT:
+        :return: list with semivariances for each lag [[lag, semivariance], [next lag, next semivariance], ...]
+        """
+
+        areas_ids = self.ids
+
+        lags_ids = list(sorted_areas[areas_ids[0]].keys())
+        bb = self.blocks_dict
+
+        semivars_and_lags = []
+
+        for l_id in lags_ids:
+            lag = sorted_areas[areas_ids[0]][l_id]
+            semivar = 0
+            for a_id in areas_ids:
+                base_semivariance = bb[a_id]['inblock semivariance']
+                neighbour_areas = sorted_areas[a_id][l_id]
+                no_of_areas = len(neighbour_areas)
+                if no_of_areas == 0:
+                    semivar += 0
+                else:
+                    s = 1 / (no_of_areas)
+                    semivars_sum = 0
+                    for area in neighbour_areas:
+                        semivars_sum += base_semivariance + bb[area]['inblock semivariance']
+                    semivars_sum = s * semivars_sum
+                    semivar += semivars_sum
+                    semivar = semivar / 2
+            semivars_and_lags.append([l_id, semivar])
+        return semivars_and_lags

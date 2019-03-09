@@ -33,6 +33,7 @@ class Semivariance:
 
         """
         self.areal_data = areal_data_file
+        self.geodataframe = gpd.read_file(areal_data_file)
         
         self.ranges = lags
         self.step = step_size
@@ -142,21 +143,24 @@ class Semivariance:
         :return centroids_and_vals: numpy array in the form of [[coordinate x,
                                                                  coordinate y,
                                                                  value of a given area]]"""
-        gdf = gpd.read_file(self.areal_data)
 
-        centroids_and_vals = self._get_posx_posy(gdf, data_column, dropna=True)
+        centroids_and_vals = self._get_posx_posy(self.geodataframe, data_column, areal=True, dropna=True)
 
         return centroids_and_vals
 
 
-    def _get_posx_posy(self, geo_df, value_column_name, dropna=False):
+    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False):
         geo_dataframe = geo_df.copy()
 
         col_x = 'centroid_pos_x'
         col_y = 'centroid_pos_y'
-
-        geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.centroid.x)
-        geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.centroid.y)
+        
+        if areal:
+            geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.centroid.x)
+            geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.centroid.y)
+        else:
+            geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.x)
+            geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.y)
 
         columns_to_hold = [col_x, col_y, value_column_name]
         columns = list(geo_dataframe.columns)
@@ -176,76 +180,7 @@ class Semivariance:
         pos_and_vals = np.asarray(geo_dataframe.values)
         return pos_and_vals
 
-#
-#
-#
-# def _prepare_lags(ids_list, distances_between_blocks, lags, step):
-#     """
-#     Function prepares blocks and distances - creates dict in the form:
-#     {area_id: {lag: [areas in a given lag (ids)]}}
-#     """
-#
-#     dbb = distances_between_blocks
-#
-#     sorted_areas = {}
-#
-#     for area in ids_list:
-#         sorted_areas[area] = {}
-#         for lag in lags:
-#             sorted_areas[area][lag] = []
-#             for nb in ids_list:
-#                 if (dbb[area][nb] > lag) and (dbb[area][nb] < lag + step):
-#                     sorted_areas[area][lag].append(nb)
-#                 else:
-#                     pass
-#     return sorted_areas
-#
-#
-# def _calculate_average_semivariance_for_a_lag(sorted_areas, blocks):
-#     """
-#     Function calculates average semivariance for each lag.
-#     yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
-#     y(va, va) and y(va+h, va+h) are estimated according to the function calculate_inblock_semivariance, and h
-#     are estimated according to the block_to_block_distances function.
-#
-#     INPUT:
-#     :param sorted_areas: dict in the form {area_id: {lag: [area_ids_within_lag]}}
-#     :param blocks: dict with key 'semivariance' pointing the in-block semivariance of a given area
-#
-#     OUTPUT:
-#     :return: list with semivariances for each lag [[lag, semivariance], [next lag, next semivariance], ...]
-#     """
-#
-#     areas_ids = list(blocks.keys())
-#
-#     lags_ids = list(sorted_areas[areas_ids[0]].keys())
-#
-#     semivars_and_lags = []
-#
-#     for l_id in lags_ids:
-#         lag = sorted_areas[areas_ids[0]][l_id]
-#         semivar = 0
-#         for a_id in areas_ids:
-#             base_semivariance = blocks[a_id]['semivariance']
-#             neighbour_areas = sorted_areas[a_id][l_id]
-#             no_of_areas = len(neighbour_areas)
-#             if no_of_areas == 0:
-#                 semivar += 0
-#             else:
-#                 s = 1 / (no_of_areas)
-#                 semivars_sum = 0
-#                 for area in neighbour_areas:
-#                     semivars_sum += base_semivariance + blocks[area]['semivariance']
-#                 semivars_sum = s * semivars_sum
-#                 semivar += semivars_sum
-#                 semivar = semivar / 2
-#         semivars_and_lags.append([l_id, semivar])
-#     return semivars_and_lags
-#
-#
-#
-#
-#
+
 # #### SECTION UNDER DEVELOPMENT ####
 #
 # def _calculate_semivariance_block_pair(block_a_data, block_b_data):
