@@ -24,7 +24,9 @@ class ArealSemivariance(Semivariance):
         self.pop_step = population_step_size
 
         self.inblock_population = None  # variable updated by blocks_semivariance() method
+        self.distances = None  # variable updated by blocks_semivariance() method
         self.ids = None  # variable updated by blocks_semivariance() method
+        self.areas_by_lags = None  # variable updated by blocks_semivariance() method
         self.blocks_dict = None  # variable updated by blocks_semivariance() method
 
 
@@ -47,16 +49,18 @@ class ArealSemivariance(Semivariance):
                  semivariance[2] = array of number of points in each lag
         """
 
-        within_block_semivariogram = self._calculate_mean_semivariance_between_blocks()
+        within_block_semivariogram = self.calculate_mean_semivariance_between_blocks()
         return within_block_semivariogram
 
 
-    def _calculate_mean_semivariance_between_blocks(self):
+    def calculate_mean_semivariance_between_blocks(self, distances_between_blocks=False):
         """
         Function calculates average semivariance between blocks separated by a vector h according to the equation:
         yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
         y(va, va) and y(va+h, va+h) are estimated according to the function calculate_inblock_semivariance, and h
         are estimated according to the block_to_block_distances function.
+        INPUT:
+        :param distances_between_blocks: if True then self.distances will be used instead of the new calculations
 
         OUTPUT:
         :return: list of [[lag, semivariance], [lag_x, semivariance_x], [..., ...]]
@@ -68,9 +72,15 @@ class ArealSemivariance(Semivariance):
         print('Inblock semivariance calculated successfully')
         
         # calculate distance between blocks
-        print('Start of the distances between blocks calculations')
-        distances_between_blocks = block_to_block_distances(self.blocks_dict)
-        print('Distances between blocks calculated successfully')
+        if not distances_between_blocks:
+            print('Start of the distances between blocks calculations')
+            distances_between_blocks = block_to_block_distances(self.blocks_dict)
+            self.distances = distances_between_blocks
+            print('Distances between blocks calculated successfully')
+        else:
+            print('Distances between blocks calculated')
+            distances_between_blocks = self.distances
+            
         
         # prepare blocks and distances - creates dict in the form:
         # {area_id: {lag: [areas in a given lag (ids)]}}
@@ -79,6 +89,7 @@ class ArealSemivariance(Semivariance):
         print('Sorting areas by distance')
         # ranges and step from the parent class
         sorted_areas = self._prepare_lags(distances_between_blocks)
+        self.areas_by_lags = sorted_areas
         print('Sort complete')
         
         
