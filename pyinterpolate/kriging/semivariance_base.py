@@ -87,7 +87,7 @@ class Semivariance:
 
                             ###### PRIVATE METHODS ######
 
-    def _calculate_semivars(self, lags, step_size, points_array, distances_array):
+    def _calculate_semivars(self, lags, step_size, points_array, distances_array, rate=None):
         """Method calculates semivariance.
 
         INPUT:
@@ -113,8 +113,12 @@ class Semivariance:
             for i in range(0, len(distances_in_range[0])):
                 row_x = distances_in_range[0][i]
                 row_x_h = distances_in_range[1][i]
-                gp1 = points_array[row_x][-1]
-                gp2 = points_array[row_x_h][-1]
+                if rate is not None:
+                    gp1 = rate[0]
+                    gp2 = rate[1]
+                else:
+                    gp1 = points_array[row_x][-1]
+                    gp2 = points_array[row_x_h][-1]
                 g = (gp1 - gp2) ** 2
                 gammas.append(g)
             if len(gammas) == 0:
@@ -150,6 +154,22 @@ class Semivariance:
 
 
     def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False):
+        """Function prepares array for distances calculation from the centroids of areal blocks
+        
+        INPUT:
+        :param geo_df: dataframe with spatial data - areas or set of points,
+        :param value_column_name: name of the column with value which is passed as the last column of the
+        output array,
+        :param areal: default it is True. If data is areal type then centroids of area's are computed
+        otherwise geometry column should store a Points,
+        :param dropna: default is False. If True then all areas (points) of unknown coordinates or values
+        are dropped from the analysis.
+        
+        OUTPUT:
+        :return pos_and_vals: numpy array of the form [[coordinate x1, coordinate y1, value1],
+                                                       [coordinate x2, coordinate y2, value2],
+                                                       [...., ...., ....],]
+        """
         geo_dataframe = geo_df.copy()
 
         col_x = 'centroid_pos_x'
@@ -179,70 +199,3 @@ class Semivariance:
 
         pos_and_vals = np.asarray(geo_dataframe.values)
         return pos_and_vals
-
-
-# #### SECTION UNDER DEVELOPMENT ####
-#
-# def _calculate_semivariance_block_pair(block_a_data, block_b_data):
-#     a_len = len(block_a_data)
-#     b_len = len(block_b_data)
-#     pa_pah = a_len * b_len
-#     semivariance = []
-#     for point1 in block_a_data:
-#         variances = []
-#         for point2 in block_b_data:
-#             smv = point1[-1] - point2[-1]
-#             smv = smv**2
-#             variances.append(smv)
-#         variance = np.sum(variances) / (2 * len(variances))
-#         semivariance.append(variance)
-#     semivar = np.sum(semivariance) / pa_pah
-#     return semivar
-#
-#
-# def calculate_between_blocks_semivariances(blocks):
-#     """Function calculates semivariance between all pairs of blocks and updates blocks dictionary with new key:
-#     'block-to-block semivariance' and value as a list where [[distance to another block, semivariance], ]
-#
-#     INPUT:
-#     :param blocks: dictionary with a list of all blocks,
-#
-#     OUTPUT:
-#     :return: updated dictionary with new key:
-#     'block-to-block semivariance' and the value as a list: [[distance to another block, semivariance], ]
-#     """
-#
-#     bb = blocks.copy()
-#
-#     blocks_ids = list(bb.keys())
-#
-#     for first_block_id in blocks_ids:
-#         bb[first_block_id]['block-to-block semivariance'] = []
-#         for second_block_id in blocks_ids:
-#             if first_block_id == second_block_id:
-#                 pass
-#             else:
-#                 distance = calculate_block_to_block_distance(bb[first_block_id]['coordinates'],
-#                                                              bb[second_block_id]['coordinates'])
-#                 smv = _calculate_semivariance_block_pair(bb[first_block_id]['coordinates'],
-#                                                   bb[second_block_id]['coordinates'])
-#                 bb[first_block_id]['block-to-block semivariance'].append([distance, smv])
-#
-#     return bb
-#
-#
-# def calculate_general_block_to_block_semivariogram(blocks, lags, step):
-#     blocks_ids = list(blocks.keys())
-#     semivariogram = []
-#     for lag in lags:
-#         semivars = []
-#         for block in blocks_ids:
-#             v = 0
-#             for val in blocks[block]['block-to-block semivariance']:
-#                 if (val[0] > lag and val[0] <= lag + step):
-#                     v = v + val[1]
-#             semivars.append(v)
-#         l = len(semivars)
-#         s = np.sum(semivars) / l
-#         semivariogram.append([lag, s])
-#     return semivariogram
