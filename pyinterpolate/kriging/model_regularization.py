@@ -21,7 +21,7 @@ def calculate_semivariogram_deviation(data_based_semivariogram, theoretically_re
     array_length = len(data_based_semivariogram)
     
     if array_length == len(theoretically_regularized_semivariogram):
-        if (data_based_semivariogram[:, 0] == theoretically_regularized_semivariogram[:, 0]).any()
+        if ((data_based_semivariogram[:, 0] == theoretically_regularized_semivariogram[:, 0]).any()):
             print('Start of deviation calculation')
             deviation = np.abs(theoretically_regularized_semivariogram[:, 1] - data_based_semivariogram[:, 1])
             deviation = deviation / data_based_semivariogram[:, 1]
