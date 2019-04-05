@@ -3,11 +3,9 @@ import numpy as np
 
 # spatial libraries
 import geopandas as gpd
-from geopandas.tools import sjoin
 
 # pyinterpolate scripts
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
-from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_block_to_block_distance
 
 
 class Semivariance:
@@ -43,14 +41,13 @@ class Semivariance:
         self.centroids = None  # variable updated by the centroids_semivariance() method
         self.point_support_semivariance = None  # variable updated by the centroids_semivariance() method
 
-                            ###### BASE METHODS ######
-
     def centroids_semivariance(self, lags=None, step_size=None, update=True, data_column='DATA'):
         """
         Function calculates semivariance of areal centroids and their values.
         :param lags: array of lags between points
         :param step_size: distance which should be included in the gamma parameter which enhances range of interest
         :param update: if True then class centroids and point_support_semivariance variables will be updated
+        :param data_column: string with a name of column containing data values
         :return: semivariance: numpy array of pair of lag and semivariance values where
                  semivariance[0] = array of lags
                  semivariance[1] = array of lag's values
@@ -85,9 +82,8 @@ class Semivariance:
 
         return semivariance
 
-                            ###### PRIVATE METHODS ######
-
-    def _calculate_semivars(self, lags, step_size, points_array, distances_array, rate=None):
+    @staticmethod
+    def _calculate_semivars(lags, step_size, points_array, distances_array, rate=None):
         """Method calculates semivariance.
 
         INPUT:
@@ -134,7 +130,6 @@ class Semivariance:
 
         semivariance = np.vstack(semivariance)
         return semivariance.T
-
     
     def _centroids_from_shp(self, data_column):
         """Method calculates centroids of areas from the given polygon file and returns numpy array with coordinates
@@ -152,8 +147,8 @@ class Semivariance:
 
         return centroids_and_vals
 
-
-    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False):
+    @staticmethod
+    def _get_posx_posy(geo_df, value_column_name, areal=True, dropna=False):
         """Function prepares array for distances calculation from the centroids of areal blocks
         
         INPUT:
