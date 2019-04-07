@@ -72,7 +72,7 @@ class Semivariance:
             centroids = np.asarray(centroids)
             print('Given points array has been transformed into numpy array to calculate distance')
             distance_array = calculate_distance(centroids[:, 0:-1])
-            
+
         semivariance = self._calculate_semivars(lags, step_size, centroids, distance_array)
         
         # Update object
@@ -129,7 +129,7 @@ class Semivariance:
                 semivariance.append([lags[i], smv[i][0], smv[i][1]])
 
         semivariance = np.vstack(semivariance)
-        return semivariance.T
+        return semivariance
     
     def _centroids_from_shp(self, data_column):
         """Method calculates centroids of areas from the given polygon file and returns numpy array with coordinates
@@ -174,8 +174,13 @@ class Semivariance:
             geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.centroid.x)
             geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.centroid.y)
         else:
-            geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.x)
-            geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.y)
+            try:
+                geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.x)
+                geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.y)
+            except AttributeError:
+                geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _[0].x)
+                geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _[0].y)
+            
 
         columns_to_hold = [col_x, col_y, value_column_name]
         columns = list(geo_dataframe.columns)
