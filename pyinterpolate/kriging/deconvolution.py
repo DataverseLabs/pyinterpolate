@@ -1,5 +1,7 @@
+# Base libraries
+import numpy as np
+
 # Pyinterpolate libraries
-from pyinterpolate.kriging.model_regularization import calculate_semivariogram_deviation
 from pyinterpolate.kriging.semivariance_areal import ArealSemivariance
 from pyinterpolate.kriging.semivariance_base import Semivariance
 
@@ -37,16 +39,12 @@ def calculate_semivariogram_deviation(data_based_semivariogram, theoretically_re
         raise ValueError('Length of data based semivariogram is different than length of theoretical semivariogram')
 
 
-# Pyinterpolate libraries
-from pyinterpolate.kriging.model_regularization import calculate_semivariogram_deviation
-from pyinterpolate.kriging.semivariance_areal import ArealSemivariance
-from pyinterpolate.kriging.semivariance_base import Semivariance
-
-
 class DeconvolutedModel:
     """Class is a pipeline for deconvolution of areal data"""
 
     def __init__(self):
+        
+        # Models
         self.initial_point_support_model = None
         self.optimal_point_support_model = None
         self.optimal_regularized_model = None
@@ -59,6 +57,10 @@ class DeconvolutedModel:
         self.difference_statistics_ratio = 1
         self.difference_statistics_limit = 0.01
         self.difference_statistics_decrease_number = 3
+        
+        # Areal Semivariance models
+        self.within_block_semivariogram = None
+        self.semivariogram_between_blocks = None
 
 
     def regularize(self, areal_data_file, areal_lags, areal_step_size, data_column,
@@ -79,6 +81,8 @@ class DeconvolutedModel:
         
         # Regularized Model
         regularized = areal_semivariance.blocks_semivariance()
+        self.within_block_semivariogram = areal_semivariance.within_block_semivariogram
+        self.semivariogram_between_blocks = areal_semivariance.semivariogram_between_blocks
         self.optimal_regularized_model = regularized
         
         # Deviation
