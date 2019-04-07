@@ -25,9 +25,9 @@ class DeconvolutedModel:
                  population_data_file, population_value_column, population_lags, population_step_size,
                  id_column_name):
 
-        areal_semivariance = ArealSemivariance(areal_data_file, areal_lags, areal_step_size, data_column,
+        areal_semivariance = ArealSemivariance2(areal_data_file, areal_lags, areal_step_size, data_column,
                  population_data_file, population_value_column, population_lags, population_step_size,
                  id_column_name)
 
-        areal_semivariance.calculate_general_block_to_block_semivariogram()
-        return areal_semivariance
+        regularized = areal_semivariance.blocks_semivariance()
+        return regularized

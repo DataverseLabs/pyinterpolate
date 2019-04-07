@@ -54,9 +54,10 @@ class ArealSemivariance(Semivariance):
             within_block_semivariogram = self.calculate_mean_semivariance_between_blocks()
 
         if not semivariogram_between_blocks:
-            semivariogram_between_blocks = self._calculate_between_blocks_semivariances()
+            semivariogram_between_blocks = self.calculate_general_block_to_block_semivariogram()
 
         blocks_semivar = semivariogram_between_blocks
+
         blocks_semivar[:, 1] = blocks_semivar[:, 1] - within_block_semivariogram[:, 1]
         self.block_semivariogram = blocks_semivar
 
@@ -294,4 +295,4 @@ class ArealSemivariance(Semivariance):
             semivariogram.append([lag, average])
         print('End of block to block semivariogram calculation')
         self.semivariogram_between_blocks = semivariogram
-        return semivariogram
+        return np.asarray(semivariogram)
