@@ -146,7 +146,7 @@ class ArealSemivariance(Semivariance):
             # DATA PROCESSING INTO ARRAY
             block_points = joined_population_points[joined_population_points[self.id_field] == single_id]
 
-            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False)
+            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False, points_type=True)
             block_dict[single_id]['coordinates'] = points_array  # update block_dict
             block_dict[single_id]['rate'] = (areas[self.data_col][areas[self.id_field] == single_id]).values[0]
 

@@ -21,7 +21,6 @@ class Semivariance:
 
            Calculation methods of the class:
            C1. centroids_semivariance(lags=self.lags, step_size=self.step_size)
-           C2. blocks_semivariance(lags=self.lags, step_size=self.step_size)
 
            Visualization methods of the class:
 
@@ -150,7 +149,7 @@ class Semivariance:
 
         return centroids_and_vals
 
-    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False):
+    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False, points_type=False):
         """Function prepares array for distances calculation from the centroids of areal blocks
         
         INPUT:
@@ -198,10 +197,12 @@ class Semivariance:
 
         # set order of columns
         geo_dataframe = geo_dataframe[columns_to_hold]
-        self.geodataframe = geo_dataframe.copy()
-        geo_dataframe.set_index(self.id_field, inplace=True)
-        geodict = geo_dataframe.to_dict(orient='index')
-        self.g_dict = geodict.copy()
+        
+        if not points_type:
+            self.geodataframe = geo_dataframe.copy()
+            geo_dataframe.set_index(self.id_field, inplace=True)
+            geodict = geo_dataframe.to_dict(orient='index')
+            self.g_dict = geodict.copy()
 
         pos_and_vals = np.asarray(geo_dataframe.values)
         return pos_and_vals
