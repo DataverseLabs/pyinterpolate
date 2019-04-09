@@ -149,3 +149,48 @@ def block_to_block_distances(areas, interpretation='dict'):
         
     else:
         print('Selected data type not available. You may choose dict or list type. Please look into a docstring.')
+
+def centroid_blocks_distances(areas):
+    """
+    Function returns distances between all blocks passed to it.
+    Function has two parameters:
+    :param areas: dictionary with areas (where each area has unique ID and key 'coordinates' with coordinates
+    and values in the form [x, y, val]) or 3D list where each layer represents different area
+    :param interpretation: 'dict' if areas are dictionary with multiple areas or list if list of coordinates
+    is given as an input
+    :return distances:
+    {
+        'unit 0 ID': {
+            'unit 0 ID': distance to unit 0,
+            'unit n ID': distance to unit n,
+            }
+        ,
+        'unit n ID': {
+            'unit 0 ID': distance to unit 0,
+            'unit n ID': distance to unit n,
+            }
+        ,
+        'unit z ID': {
+            'unit 0 ID': distance to unit 0,
+            'unit n ID': distance to unit n,
+            }
+        
+    }
+    
+    """
+    print('Centroid distances calculation: process starts')
+    distance_dicts = {}
+    for key_a in areas.keys():
+        distance_dicts[key_a] = {}
+        for key_b in areas.keys():
+            if key_a == key_b:
+                distance_dicts[key_a][key_b] = 0
+            else:
+                block_1_x = areas[key_a]['centroid_pos_x']
+                block_2_x = areas[key_b]['centroid_pos_x']
+                block_1_y = areas[key_a]['centroid_pos_y']
+                block_2_y = areas[key_b]['centroid_pos_y']
+                distance = (block_1_x - block_2_x)**2 + (block_1_y - block_2_y)**2
+                distance = np.sqrt(distance)
+                distance_dicts[key_a][key_b] = distance
+    return distance_dicts

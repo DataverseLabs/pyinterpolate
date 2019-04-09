@@ -61,6 +61,10 @@ class DeconvolutedModel:
         # Areal Semivariance models
         self.within_block_semivariogram = None
         self.semivariogram_between_blocks = None
+        
+        # Additional
+        self.centroid_distances = None
+        self.areal_distances = None
 
 
     def regularize(self, areal_data_file, areal_lags, areal_step_size, data_column,
@@ -76,11 +80,13 @@ class DeconvolutedModel:
                                           step_size=population_step_size,
                                           id_field=id_column_name)
         self.initial_point_support_model = centroids_semivar.centroids_semivariance(data_column='LB RATES 2')
+        self.centroid_distances = centroids_semivar.distances
         self.optimal_point_support_model = self.initial_point_support_model.copy()
         
         
         # Regularized Model
         regularized = areal_semivariance.blocks_semivariance()
+        self.areal_distances = areal_semivariance.areal_distances
         self.within_block_semivariogram = areal_semivariance.within_block_semivariogram
         self.semivariogram_between_blocks = areal_semivariance.semivariogram_between_blocks
         self.optimal_regularized_model = regularized

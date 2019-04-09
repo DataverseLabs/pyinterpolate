@@ -35,11 +35,13 @@ class Semivariance:
         
         self.ranges = lags
         self.step = step_size
-        
+
         self.id_field = id_field
 
         self.centroids = None  # variable updated by the centroids_semivariance() method
+        self.distances_dict = None  # variable updated by the centroids_semivariance() method
         self.point_support_semivariance = None  # variable updated by the centroids_semivariance() method
+        self.g_dict = {}
 
     def centroids_semivariance(self, lags=None, step_size=None, update=True, data_column='DATA'):
         """
@@ -67,12 +69,13 @@ class Semivariance:
         
         # Calculate distances
         try:
-            distance_array = calculate_distance(centroids[:, 0:-1])
+            distance_array = calculate_distance(centroids[:, 0:2])
         except TypeError:
             centroids = np.asarray(centroids)
             print('Given points array has been transformed into numpy array to calculate distance')
-            distance_array = calculate_distance(centroids[:, 0:-1])
-
+            distance_array = calculate_distance(centroids[:, 0:2])
+        
+        self.distances = distance_array.copy()
         semivariance = self._calculate_semivars(lags, step_size, centroids, distance_array)
         
         # Update object
@@ -113,8 +116,8 @@ class Semivariance:
                     gp1 = rate[0]
                     gp2 = rate[1]
                 else:
-                    gp1 = points_array[row_x][-1]
-                    gp2 = points_array[row_x_h][-1]
+                    gp1 = points_array[row_x][2]
+                    gp2 = points_array[row_x_h][2]
                 g = (gp1 - gp2) ** 2
                 gammas.append(g)
             if len(gammas) == 0:
@@ -147,8 +150,7 @@ class Semivariance:
 
         return centroids_and_vals
 
-    @staticmethod
-    def _get_posx_posy(geo_df, value_column_name, areal=True, dropna=False):
+    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False):
         """Function prepares array for distances calculation from the centroids of areal blocks
         
         INPUT:
@@ -180,9 +182,9 @@ class Semivariance:
             except AttributeError:
                 geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _[0].x)
                 geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _[0].y)
-            
 
-        columns_to_hold = [col_x, col_y, value_column_name]
+
+        columns_to_hold = [col_x, col_y, value_column_name, self.id_field]
         columns = list(geo_dataframe.columns)
 
         # remove rows with nan
@@ -196,6 +198,10 @@ class Semivariance:
 
         # set order of columns
         geo_dataframe = geo_dataframe[columns_to_hold]
+        self.geodataframe = geo_dataframe.copy()
+        geo_dataframe.set_index(self.id_field, inplace=True)
+        geodict = geo_dataframe.to_dict(orient='index')
+        self.g_dict = geodict.copy()
 
         pos_and_vals = np.asarray(geo_dataframe.values)
         return pos_and_vals

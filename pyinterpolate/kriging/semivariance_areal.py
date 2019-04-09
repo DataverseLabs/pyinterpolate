@@ -24,7 +24,7 @@ class ArealSemivariance(Semivariance):
         self.data_col = data_column
 
         self.inblock_population = None  # variable updated by blocks_semivariance() method
-        self.distances = None  # variable updated by blocks_semivariance() method
+        self.areal_distances = None  # variable updated by blocks_semivariance() method
         self.ids = None  # variable updated by blocks_semivariance() method
         self.blocks_dict = None  # variable updated by blocks_semivariance() method
         self.inblock_semivariances = None  # variable updated by blocks_semivariance() method
@@ -94,7 +94,7 @@ class ArealSemivariance(Semivariance):
         if not distances:
             print('Start of the distances between blocks calculations')
             distances_between_blocks = block_to_block_distances(self.blocks_dict)
-            self.distances = distances_between_blocks
+            self.areal_distances = distances_between_blocks
             print('Distances between blocks calculated successfully and updated')
         else:
             print('Distances between blocks given')
@@ -264,7 +264,7 @@ class ArealSemivariance(Semivariance):
                 if first_block_id == second_block_id:
                     pass
                 else:
-                    distance = self.distances[first_block_id][second_block_id]
+                    distance = self.areal_distances[first_block_id][second_block_id]
 
                     first_block_coordinates = bb[first_block_id]['coordinates']
                     second_block_coordinates = bb[second_block_id]['coordinates']
