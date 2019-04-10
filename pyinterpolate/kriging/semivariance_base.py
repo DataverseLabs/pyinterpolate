@@ -65,15 +65,15 @@ class Semivariance:
 
         # Calculate centroids positions
         centroids = self._centroids_from_shp(data_column)
-        
+
         # Calculate distances
         try:
-            distance_array = calculate_distance(centroids[:, 0:2])
+            distance_array = calculate_distance(centroids)
         except TypeError:
             centroids = np.asarray(centroids)
             print('Given points array has been transformed into numpy array to calculate distance')
-            distance_array = calculate_distance(centroids[:, 0:2])
-        
+            distance_array = calculate_distance(centroids)
+
         self.distances = distance_array.copy()
         semivariance = self._calculate_semivars(lags, step_size, centroids, distance_array)
         
@@ -129,6 +129,8 @@ class Semivariance:
         for i in range(len(lags)):
             if smv[i][0] > 0:
                 semivariance.append([lags[i], smv[i][0], smv[i][1]])
+            else:
+                semivariance.append([lags[i], 0, 0])
 
         semivariance = np.vstack(semivariance)
         return semivariance

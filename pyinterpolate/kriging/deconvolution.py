@@ -81,7 +81,7 @@ class DeconvolutedModel:
                  id_column_name)
         
         # Point support model
-        centroids_semivar = Semivariance(areal_data_file, lags=areal_lags,
+        centroids_semivar = Semivariance2(areal_data_file, lags=areal_lags,
                                           step_size=areal_step_size,
                                           id_field=id_column_name)
         self.initial_point_support_model = centroids_semivar.centroids_semivariance(data_column='LB RATES 2')
