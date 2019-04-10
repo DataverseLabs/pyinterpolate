@@ -1,9 +1,14 @@
 # Base libraries
 import numpy as np
+import pandas as pd
+
+# Data vizualization libraries
+import matplotlib.pyplot as plt
 
 # Pyinterpolate libraries
 from pyinterpolate.kriging.semivariance_areal import ArealSemivariance
 from pyinterpolate.kriging.semivariance_base import Semivariance
+from pyinterpolate.kriging.helper_functions.euclidean_distance import centroid_blocks_distances
 
 
 def calculate_semivariogram_deviation(data_based_semivariogram, theoretically_regularized_semivariogram):
@@ -76,11 +81,11 @@ class DeconvolutedModel:
                  id_column_name)
         
         # Point support model
-        centroids_semivar = Semivariance(areal_data_file, lags=population_lags,
-                                          step_size=population_step_size,
+        centroids_semivar = Semivariance(areal_data_file, lags=areal_lags,
+                                          step_size=areal_step_size,
                                           id_field=id_column_name)
         self.initial_point_support_model = centroids_semivar.centroids_semivariance(data_column='LB RATES 2')
-        self.centroid_distances = centroids_semivar.distances
+        self.centroid_distances = centroid_blocks_distances(centroids_semivar.g_dict)
         self.optimal_point_support_model = self.initial_point_support_model.copy()
         
         
@@ -96,3 +101,31 @@ class DeconvolutedModel:
         self.optimal_difference_statistics = deviation
         
         return self.optimal_point_support_model, self.optimal_regularized_model
+    
+    
+    # Data visualization methods
+    
+    def show_distances(self, centroids=None, weights=None):
+        
+        if not centroids:
+            x = pd.DataFrame.from_dict(self.centroid_distances, orient='index')
+            x.sort_index(inplace=True)
+            x.sort_index(axis=1, inplace=True)
+            x = (x.values).ravel()
+            centroids = np.where(x>0, np.log(x), 0)
+            centroids[centroids == 0] = np.nan
+            
+        if not weights:
+            y = pd.DataFrame.from_dict(self.areal_distances, orient='index')
+            y.sort_index(inplace=True)
+            y.sort_index(axis=1, inplace=True)
+            y = (y.values).ravel()
+            weights = np.where(y>0, np.log(y), 0)
+            weights[weights == 0] = np.nan
+        
+        plt.figure(figsize=(12, 12))
+        plt.scatter(x=centroids, y=weights, s=3, alpha=0.8)
+        plt.title("Population-weighted distances")
+        plt.xlabel("Log10 (block distance)")
+        plt.ylabel("Log10 (Euclidean distance)")
+        plt.plot()
