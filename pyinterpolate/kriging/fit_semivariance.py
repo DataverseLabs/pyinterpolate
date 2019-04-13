@@ -62,7 +62,6 @@ class TheoreticalSemivariogram:
         :param semivar_range: optimal range calculated by fit_semivariance method
         :return x: an array of modeled values for given range. Values are calculated based on the gaussian model.
         """
-
         x = nugget + sill * (1 - np.exp(-distance * distance / (semivar_range ** 2)))
         return x
 
@@ -75,7 +74,6 @@ class TheoreticalSemivariogram:
         :param semivar_range: optimal range calculated by fit_semivariance method
         :return x: an array of modeled values for given range. Values are calculated based on the exponential model.
         """
-
         x = nugget + sill * (1 - np.exp(-distance / semivar_range))
         return x
 
@@ -191,14 +189,14 @@ class TheoreticalSemivariogram:
     def calculate_range(self, model, ranges, nugget, sill):
         errors = []
         for r in ranges:
-            x = (self.empirical_semivariance[1] - model(self.empirical_semivariance[0], nugget, sill, r))
+            x = (self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0], nugget, sill, r))
             x = x ** 2
             errors.append(np.mean(x))
         optimal_rg = ranges[np.argmin(errors)]
         return optimal_rg
 
     def calculate_values(self):
-        output_model = self.theoretical_model(self.empirical_semivariance[0],
+        output_model = self.theoretical_model(self.empirical_semivariance[:, 0],
                                               self.params[0],
                                               self.params[1],
                                               self.params[2])
@@ -209,21 +207,21 @@ class TheoreticalSemivariogram:
         Method calculates base error as a squared difference between experimental semivariogram and
         a "flat line" on the x-axis (only zeros)
         """
-        n = len(self.empirical_semivariance[1])
+        n = len(self.empirical_semivariance[:, 1])
         zeros = np.zeros(n)
-        error = np.mean((self.empirical_semivariance[1].astype(np.int) - zeros)**2)
+        error = np.mean((self.empirical_semivariance[:, 1].astype(np.int) - zeros)**2)
         return error
     
     def calculate_model_error(self, model, parameters, weight=False):
         if not weight:
-            error = np.abs(self.empirical_semivariance[1] - model(self.empirical_semivariance[0],
+            error = np.abs(self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
                                                            parameters[0],
                                                            parameters[1],
                                                            parameters[2]))
         else:
-            nh = np.sqrt(self.empirical_semivariance[2])
-            vals = self.empirical_semivariance[1]
-            error = nh/vals * (vals - model(self.empirical_semivariance[0],
+            nh = np.sqrt(self.empirical_semivariance[:, 2])
+            vals = self.empirical_semivariance[:, 1]
+            error = nh/vals * (vals - model(self.empirical_semivariance[:, 0],
                                             parameters[0],
                                             parameters[1],
                                             parameters[2]))**2
@@ -236,6 +234,7 @@ class TheoreticalSemivariogram:
         unknown value
         :return: model with predicted values
         """
+        
         output_model = self.theoretical_model(distances,
                                               self.params[0],
                                               self.params[1],
@@ -247,7 +246,7 @@ class TheoreticalSemivariogram:
         Function shows experimental semivariogram of a given model
         """
         plt.figure(figsize=(10, 10))
-        plt.plot(self.empirical_semivariance[0], self.empirical_semivariance[1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
         plt.title('Experimental semivariogram')
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
@@ -263,8 +262,8 @@ class TheoreticalSemivariogram:
         else:
             x = self.calculate_values()
             plt.figure(figsize=(12, 12))
-            plt.plot(self.empirical_semivariance[0], self.empirical_semivariance[1], color='blue')
-            plt.plot(self.empirical_semivariance[0], x, color='red')
+            plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+            plt.plot(self.empirical_semivariance[:, 0], x, color='red')
             plt.legend(['Empirical semivariogram', 'Theoretical semivariogram'])
             plt.title('Empirical and theoretical semivariogram comparison')
             plt.xlabel('Distance')

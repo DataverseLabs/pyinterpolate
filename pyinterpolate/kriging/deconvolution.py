@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 # Pyinterpolate libraries
 from pyinterpolate.kriging.semivariance_areal import ArealSemivariance
 from pyinterpolate.kriging.semivariance_base import Semivariance
+from pyinterpolate.kriging.fit_semivariance import TheoreticalSemivariogram
 from pyinterpolate.kriging.helper_functions.euclidean_distance import centroid_blocks_distances
 
 
@@ -50,6 +51,7 @@ class DeconvolutedModel:
     def __init__(self):
         
         # Models
+        self.experimental_point_support = None
         self.initial_point_support_model = None
         self.optimal_point_support_model = None
         self.optimal_regularized_model = None
@@ -81,13 +83,19 @@ class DeconvolutedModel:
                  id_column_name)
         
         # Point support model
-        centroids_semivar = Semivariance2(areal_data_file, lags=areal_lags,
+        centroids_semivar = Semivariance(areal_data_file, lags=areal_lags,
                                           step_size=areal_step_size,
                                           id_field=id_column_name)
-        self.initial_point_support_model = centroids_semivar.centroids_semivariance(data_column='LB RATES 2')
+        self.experimental_point_support = centroids_semivar.centroids_semivariance(data_column='LB RATES 2')
         self.centroid_distances = centroid_blocks_distances(centroids_semivar.g_dict)
-        self.optimal_point_support_model = self.initial_point_support_model.copy()
         
+        # Initial and optimal point support models
+        
+        theoretical_model = TheoreticalSemivariogram(centroids_semivar.centroids,
+                                                    self.experimental_point_support)
+        optimal_model = theoretical_model.find_optimal_model(weighted=True, number_of_ranges=100)
+        
+        self.optimal_point_support_model = theoretical_model
         
         # Regularized Model
         regularized = areal_semivariance.blocks_semivariance()
@@ -97,7 +105,7 @@ class DeconvolutedModel:
         self.optimal_regularized_model = regularized
         
         # Deviation
-        deviation = calculate_semivariogram_deviation(self.optimal_point_support_model, regularized)
+        deviation = calculate_semivariogram_deviation(self.experimental_point_support, regularized)
         self.optimal_difference_statistics = deviation
         
         return self.optimal_point_support_model, self.optimal_regularized_model
