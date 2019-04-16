@@ -111,15 +111,15 @@ class TheoreticalSemivariogram:
         # sill
         sill = np.var(self.points_values)
 
-        # nugget / check if this is true
-        if self.empirical_semivariance[0][0] != 0:
-            nugget = 0
+        # nugget
+        if self.empirical_semivariance[:, 0][0] != 0:
+            nugget = self.empirical_semivariance[:, 0][0]
         else:
-            nugget = self.empirical_semivariance[0][1]
+            nugget = 0
 
         # range
-        minrange = self.empirical_semivariance[0][1]
-        maxrange = self.empirical_semivariance[0][-1]
+        minrange = self.empirical_semivariance[:, 0][1]
+        maxrange = self.empirical_semivariance[:, 0][-1]
         ranges = np.linspace(minrange, maxrange, number_of_ranges)
         optimal_range = self.calculate_range(model, ranges, nugget, sill)
 
@@ -147,21 +147,21 @@ class TheoreticalSemivariogram:
             'linear': self.linear_model,
         }
         
-        # calculate base error for flat line
+        # calculate base error for a flat line
         base_error = self.calculate_base_error()
 
         # sill
         sill = np.var(self.points_values)
 
-        # nugget / check if this is true
-        if self.empirical_semivariance[0][0] != 0:
-            nugget = 0
+        # nugget
+        if self.empirical_semivariance[:, 0][0] != 0:
+            nugget = self.empirical_semivariance[:, 0][0]
         else:
-            nugget = self.empirical_semivariance[0][1]
+            nugget = 0
 
         # range
-        minrange = self.empirical_semivariance[0][1]
-        maxrange = self.empirical_semivariance[0][-1]
+        minrange = self.empirical_semivariance[:, 0][1]
+        maxrange = self.empirical_semivariance[:, 0][-1]
         ranges = np.linspace(minrange, maxrange, number_of_ranges)
         
         # search for the best model
@@ -175,13 +175,14 @@ class TheoreticalSemivariogram:
                 model_error = self.calculate_model_error(models[model], params)
             else:
                 model_error = self.calculate_model_error(models[model], params, True)
+
             print('Model: {}, error value: {}'.format(model, model_error))
+
             if model_error < base_error:
                 base_error = model_error
                 self.theoretical_model = models[model]
                 self.params = params
                 model_name = model
-                print(model_name)
                 
         # print output
         print('########## Chosen model: {} ##########'.format(model_name))
@@ -209,23 +210,21 @@ class TheoreticalSemivariogram:
         """
         n = len(self.empirical_semivariance[:, 1])
         zeros = np.zeros(n)
-        error = np.mean((self.empirical_semivariance[:, 1].astype(np.int) - zeros)**2)
+        error = np.mean((self.empirical_semivariance[:, 1] - zeros)**2)
         return error
     
-    def calculate_model_error(self, model, parameters, weight=False):
+    def calculate_model_error(self, model, par, weight=False):
         if not weight:
             error = np.abs(self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
-                                                           parameters[0],
-                                                           parameters[1],
-                                                           parameters[2]))
+                                                           par[0],
+                                                           par[1],
+                                                           par[2]))
         else:
             nh = np.sqrt(self.empirical_semivariance[:, 2])
             vals = self.empirical_semivariance[:, 1]
-            error = nh/vals * (vals - model(self.empirical_semivariance[:, 0],
-                                            parameters[0],
-                                            parameters[1],
-                                            parameters[2]))**2
-        error = np.mean(error.astype(np.int))
+            error = nh/vals * np.abs(vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2]))
+
+        error = np.mean(error)
         return error
 
     def predict(self, distances):

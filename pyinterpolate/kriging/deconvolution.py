@@ -93,7 +93,8 @@ class DeconvolutedModel:
         
         theoretical_model = TheoreticalSemivariogram(centroids_semivar.centroids,
                                                     self.experimental_point_support)
-        optimal_model = theoretical_model.find_optimal_model(weighted=True, number_of_ranges=100)
+
+        theoretical_model.find_optimal_model(weighted=False, number_of_ranges=100)
         
         self.optimal_point_support_model = theoretical_model
         
