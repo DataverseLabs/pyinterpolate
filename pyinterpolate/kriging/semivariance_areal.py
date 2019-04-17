@@ -12,11 +12,13 @@ from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_
 
 class ArealSemivariance(Semivariance):
 
-    def __init__(self, areal_data_file, areal_lags, areal_step_size, data_column,
+    def __init__(self, model,
+                 areal_data_file, areal_lags, areal_step_size, data_column,
                  population_data_file, population_value_column, population_lags, population_step_size,
                  id_column_name):
         super().__init__(areal_data_file, areal_lags, areal_step_size, id_column_name)
 
+        self.semivariance_model = model
         self.population = population_data_file
         self.val_col = population_value_column
         self.pop_lags = population_lags
@@ -32,6 +34,20 @@ class ArealSemivariance(Semivariance):
         self.semivariogram_between_blocks = None
         self.block_semivariogram = None
 
+    def calculate_semivariances(self, distances):
+        """Method predicts semivariance at a given distance. Method uses semivariance_model which is
+        initialized with the class itself.
+
+        INPUT:
+        :param distances: list of distances between points.
+
+        OUTPUT:
+        :return predictions: list of semivariances for a given distances list.
+        """
+
+        predictions = self.semivariance_model.predict(distances)
+        return predictions
+
     def blocks_semivariance(self, within_block_semivariogram=None, semivariogram_between_blocks=None):
         """Function calculates regularized point support semivariogram in the form given in:
         Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units,
@@ -43,6 +59,12 @@ class ArealSemivariance(Semivariance):
         gamma_h(v, v) - arithmetical average of within-block semivariogram
 
         INPUT:
+        :param within_block_semivariogram: mean semivariance between the blocks:
+        yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
+        y(va, va) and y(va+h, va+h) are the inblock semivariances of block a and block a+h separated
+        by the distance h weighted by the inblock population.
+        :param semivariogram_between_blocks: semivariance between all blocks calculated from the theoretical
+        model.
 
         OUTPUT:
         :return: semivariance: numpy array of pair of lag and semivariance values where
@@ -57,8 +79,7 @@ class ArealSemivariance(Semivariance):
             semivariogram_between_blocks = self.calculate_general_block_to_block_semivariogram()
 
         blocks_semivar = semivariogram_between_blocks
-
-        blocks_semivar[:, 1] = blocks_semivar[:, 1] - within_block_semivariogram[:, 1]
+        blocks_semivar[:, 1] = np.abs(semivariogram_between_blocks[:, 1] - within_block_semivariogram[:, 1])
         self.block_semivariogram = blocks_semivar
 
         return blocks_semivar
@@ -146,7 +167,8 @@ class ArealSemivariance(Semivariance):
             # DATA PROCESSING INTO ARRAY
             block_points = joined_population_points[joined_population_points[self.id_field] == single_id]
 
-            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False, points_type=True)
+            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False,
+                                                  points_type=True)
             block_dict[single_id]['coordinates'] = points_array  # update block_dict
             block_dict[single_id]['rate'] = (areas[self.data_col][areas[self.id_field] == single_id]).values[0]
 
@@ -156,8 +178,11 @@ class ArealSemivariance(Semivariance):
 
             distances = calculate_distance(points_array)
             try:
-                semivariance = super()._calculate_semivars(self.pop_lags, self.pop_step, points_array, distances)
-                semivar = np.sum(semivariance[1, :]) / p_squared
+                semivariance = self.calculate_semivariances(distances)
+                try:
+                    semivar = np.sum(semivariance[1, :]) / p_squared
+                except IndexError:
+                    semivar = np.sum(semivariance[0][0]) / p_squared
             except ValueError:
                 print('Area: {}, Value error, semivariance set to 0'.format(single_id))
                 semivar = 0
@@ -228,8 +253,7 @@ class ArealSemivariance(Semivariance):
 
     # XXXXXXXXXXXXXXXXXXXX BLOCK-BLOCK SEMIVARIOGRAM PART XXXXXXXXXXXXXXXXXXXX
 
-    @staticmethod
-    def _calculate_semivariance_block_pair(block_a_data, block_b_data):
+    def _calculate_semivariance_block_pair(self, block_a_data, block_b_data):
         a_len = len(block_a_data)
         b_len = len(block_b_data)
         pa_pah = a_len * b_len
@@ -237,8 +261,9 @@ class ArealSemivariance(Semivariance):
         for point1 in block_a_data:
             variances = []
             for point2 in block_b_data:
-                smv = point1[-1] - point2[-1]
-                smv = smv ** 2
+                smv = self.semivariance_model.predict(
+                    np.sqrt((point1[0] - point2[0]) ** 2 + (point1[1] - point2[1]) ** 2)
+                )
                 variances.append(smv)
             variance = np.sum(variances) / (2 * len(variances))
             semivariance.append(variance)
