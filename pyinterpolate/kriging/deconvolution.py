@@ -53,10 +53,10 @@ class DeconvolutedModel:
         # Models
         self.base_point_support = None
         self.experimental_point_support = None
-        self.initial_point_support_model = None
         self.optimal_point_support_model = None
         self.optimal_regularized_model = None
         self.optimal_difference_statistics = None
+        self.temp_point_support_model = None
         self.weights = 0
 
         # Loop parameters
@@ -93,8 +93,10 @@ class DeconvolutedModel:
         theoretical_model.find_optimal_model(weighted=True, number_of_ranges=100)
 
         self.optimal_point_support_model = theoretical_model
+        self.sill_of_areal_data = theoretical_model.params[1]
+
         values_from_base = theoretical_model.calculate_values()
-        self.base_point_support = values_from_base
+        self.base_point_support = values_from_base.T
 
         # Areal
 
@@ -114,7 +116,35 @@ class DeconvolutedModel:
         deviation = calculate_semivariogram_deviation(self.experimental_point_support, regularized)
         self.optimal_difference_statistics = deviation
 
+        # Rescale
+        print('Rescaling procedure starts')
+        t = self.rescale()
+
         return self.optimal_point_support_model, self.optimal_regularized_model
+
+    def rescale(self):
+        """Function rescales the optimal point support model and creates new experimental values for
+        each lag based on the equation:
+        gamma{1}(h) = gamma{opt}(h) x w{1}(h) with:
+        w{1}(h) = 1 + [(gamma{exp-v}(h) - gamma{opt-v}(h)) / (s{exp}^2 * sqrt(iter)),
+        s{exp}^2 - sill of the point support model,
+        iter - number of iteration of the algorithm
+
+        OUTPUT:
+        :return rescalled_point_support_semivariogram: numpy array of the form [[lag, semivariance],
+                                                                                [lag_x, semivariance_x],
+                                                                                [..., ...]
+                                                                               ]
+        """
+        y_opt = self.base_point_support
+        s = self.sill_of_areal_data**2
+        y_v_opt = self.optimal_regularized_model
+        i = self.iteration_number
+
+        w = 1 + (y_opt - y_v_opt[:, 1]) / (s * np.sqrt(i))
+        rescalled = 0
+
+        return 0
 
     # Data visualization methods
 
