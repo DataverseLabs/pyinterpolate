@@ -116,9 +116,24 @@ class DeconvolutedModel:
         deviation = calculate_semivariogram_deviation(self.experimental_point_support, regularized)
         self.optimal_difference_statistics = deviation
 
-        # Rescale
-        print('Rescaling procedure starts')
-        t = self.rescale()
+        # Model fitting loop
+        while self.iteration_number < 20:
+            self.iteration_number = self.iteration_number + 1
+
+            # Rescale
+            print('Rescaling procedure starts, iteration number: {}'.format(self.iteration_number))
+
+            t = self.rescale()
+            print('Model rescaled')
+            print('Fitting of a rescalled model')
+
+            print('Fit complete')
+            print('Regularization of the rescalled model')
+
+            print('Regularization complete')
+            print('Difference statistic computation')
+            
+
 
         return self.optimal_point_support_model, self.optimal_regularized_model
 
@@ -136,15 +151,19 @@ class DeconvolutedModel:
                                                                                 [..., ...]
                                                                                ]
         """
+
         y_opt = self.base_point_support
         s = self.sill_of_areal_data**2
         y_v_opt = self.optimal_regularized_model
         i = self.iteration_number
 
         w = 1 + (y_opt - y_v_opt[:, 1]) / (s * np.sqrt(i))
-        rescalled = 0
+        self.weights = w.copy()
+        rescalled = y_v_opt.copy()
+        rescalled[:, 1] = y_opt * w
+        self.temp_point_support_model = rescalled
 
-        return 0
+        return rescalled
 
     # Data visualization methods
 
