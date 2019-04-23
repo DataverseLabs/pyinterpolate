@@ -54,18 +54,6 @@ class TheoreticalSemivariogram:
         return x
 
     @staticmethod
-    def gaussian_model(distance, nugget, sill, semivar_range):
-        """
-        :param distance: array of ranges from empirical semivariance
-        :param nugget: scalar
-        :param sill: scalar
-        :param semivar_range: optimal range calculated by fit_semivariance method
-        :return x: an array of modeled values for given range. Values are calculated based on the gaussian model.
-        """
-        x = nugget + sill * (1 - np.exp(-distance * distance / (semivar_range ** 2)))
-        return x
-
-    @staticmethod
     def exponential_model(distance, nugget, sill, semivar_range):
         """
         :param distance: array of ranges from empirical semivariance
@@ -102,7 +90,6 @@ class TheoreticalSemivariogram:
         # model
         models = {
             'spherical': self.spherical_model,
-            'gaussian': self.gaussian_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
         }
@@ -142,7 +129,6 @@ class TheoreticalSemivariogram:
         # models
         models = {
             'spherical': self.spherical_model,
-            'gaussian': self.gaussian_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
         }
