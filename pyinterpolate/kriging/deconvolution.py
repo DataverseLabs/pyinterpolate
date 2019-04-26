@@ -1,6 +1,5 @@
 # Base libraries
 import numpy as np
-import pandas as pd
 
 # Data vizualization libraries
 import matplotlib.pyplot as plt
@@ -35,6 +34,7 @@ class RegularizedModel:
         self.weight_change = False  # Value changed in the main loop (points 6 to 8)
         self.weight = None  # Value updated in the rescale method (point 6 of the main function).
         self.iteration = 0  # Number of iterations
+        self.deviation_weight = 1
 
         # Print params
         self.class_name = "\nDeconvolution:"
@@ -64,10 +64,10 @@ class RegularizedModel:
 
         centroids = semivar.centroids.copy()
 
-        theoretical_model = TheoreticalSemivariogram(centroids,
+        theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
                                                      self.experimental_semivariogram_of_areal_data)
 
-        theoretical_model.find_optimal_model(weighted=True, number_of_ranges=100)
+        theoretical_model.find_optimal_model(weighted=True, number_of_ranges=32)
         self.sill_of_areal_data = theoretical_model.params[1]
 
         print(self.complete)
@@ -117,7 +117,7 @@ class RegularizedModel:
 
         print(self.complete)
 
-        while self.iteration < 3:
+        while self.iteration < 30:
 
             # 6. For each lag compute experimental values for the new point support semivariogram through a rescaling
             #    of the optimal point support model
@@ -138,11 +138,10 @@ class RegularizedModel:
             print(self.class_name)
             print('Computation of experimental semivariogram of rescalled data...')
 
-            print(centroids)
-            theoretical_model = TheoreticalSemivariogram(centroids,
+            theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
                                                          self.rescalled_point_support_semivariogram)
 
-            theoretical_model.find_optimal_model(weighted=True, number_of_ranges=100)
+            theoretical_model.find_optimal_model(weighted=True, number_of_ranges=32)
             temp_optimal_point_support_model = theoretical_model
             temp_sill_of_areal_data = theoretical_model.params[1]
 
@@ -160,17 +159,21 @@ class RegularizedModel:
 
             # Regularized Model
             regularized = areal_semivariance.blocks_semivariance()
+            plt.figure()
+            plt.plot(regularized[:, 0], regularized[:, 1])
+            plt.show()
 
             print(self.complete)
 
             # 9. Compute the difference statistcs for the new model and decide what to do next
 
             print(self.class_name)
-            print('Difference statistics calcultaion...')
+            print('Difference statistics calculation...')
 
             deviation = self.calculate_deviation(regularized[:, 1], self.data_based_values)
 
-            if deviation < self.optimal_deviation:
+            if deviation <= self.optimal_deviation:
+                self.deviation_weight = 1 / (np.log(self.optimal_deviation - deviation + 0.01) * 2)
                 self.optimal_point_support_model = temp_optimal_point_support_model
                 self.optimal_deviation = deviation
                 self.sill_of_areal_data = temp_sill_of_areal_data
@@ -210,8 +213,8 @@ class RegularizedModel:
         """
         self.iteration = self.iteration + 1
         i = np.sqrt(self.iteration)
-        s = self.sill_of_areal_data**2
-        c = s * i
+        s = self.sill_of_areal_data
+        c = s * i * self.deviation_weight
 
         y_opt_h = self.optimal_point_support_model.predict(self.optimal_regularized_model[:, 0])
         y_exp_v_h = self.data_based_values
@@ -252,6 +255,8 @@ class RegularizedModel:
 
         if len(regularized_model) == L:
             print('Start of deviation calculation')
+            print(regularized_model)
+            print(data_based_model)
             deviation = np.abs(regularized_model - data_based_model)
             deviation = np.divide(deviation,
                                   data_based_model,

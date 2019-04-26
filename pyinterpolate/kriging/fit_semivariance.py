@@ -32,7 +32,7 @@ class TheoreticalSemivariogram:
     """
 
     def __init__(self, points_array, empirical_semivariance):
-        self.points_values = points_array[:, -1]
+        self.points_values = points_array
         self.empirical_semivariance = empirical_semivariance
         self.theoretical_model = None
         self.params = None
@@ -208,7 +208,11 @@ class TheoreticalSemivariogram:
         else:
             nh = np.sqrt(self.empirical_semivariance[:, 2])
             vals = self.empirical_semivariance[:, 1]
-            error = nh/vals * np.abs(vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2]))
+            nh_divided_by_vals = np.divide(nh,
+                                  vals,
+                                  out=np.zeros_like(nh),
+                                  where=vals != 0)
+            error = nh_divided_by_vals * np.abs(vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2]))
 
         error = np.mean(error)
         return error
