@@ -13,7 +13,7 @@ from pyinterpolate.kriging.fit_semivariance import TheoreticalSemivariogram
 class RegularizedModel:
     """Class serves as the deconvolution model for an areal data"""
 
-    def __init__(self):
+    def __init__(self, scaling_factor=2, d_statistics_change=0.1, ranges=32, loop_limit=20, min_no_loops=None):
 
         # Class models
         self.experimental_semivariogram_of_areal_data = None  # Model updated in the point 1a
@@ -28,6 +28,12 @@ class RegularizedModel:
         self.final_optimal_point_support = None
 
         # Class parameters
+        self.ranges = ranges
+        self.scaling_factor = scaling_factor
+        self.loop_limit = loop_limit
+        self.min_no_loops = min_no_loops
+        self.d_stat_change = d_statistics_change
+
         self.sill_of_areal_data = None  # Value updated in the point 1b
         self.initial_deviation = None  # Value updated in the point 4
         self.optimal_deviation = None  # Value updated in the point 5
@@ -35,14 +41,18 @@ class RegularizedModel:
         self.weight = None  # Value updated in the rescale method (point 6 of the main function).
         self.iteration = 0  # Number of iterations
         self.deviation_weight = 1
+        self.deviation_change = 1
 
         # Print params
         self.class_name = "\nDeconvolution:"
         self.complete = "Process complete!"
 
     def regularize_model(self, areal_data_file, areal_lags, areal_step_size, data_column,
-                   population_data_file, population_value_column, population_lags, population_step_size,
-                   id_column_name):
+                         population_data_file, population_value_column, population_lags, population_step_size,
+                         id_column_name):
+
+        # Setting up local variables from the while loop:
+        regularized = []
 
         # 1a. Compute experimental semivariogram of areal data y_v_h
 
@@ -67,7 +77,7 @@ class RegularizedModel:
         theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
                                                      self.experimental_semivariogram_of_areal_data)
 
-        theoretical_model.find_optimal_model(weighted=True, number_of_ranges=32)
+        theoretical_model.find_optimal_model(weighted=True, number_of_ranges=self.ranges)
         self.sill_of_areal_data = theoretical_model.params[1]
 
         print(self.complete)
@@ -117,7 +127,9 @@ class RegularizedModel:
 
         print(self.complete)
 
-        while self.iteration < 30:
+        while self.iteration < self.loop_limit or (
+                self.iteration < self.min_no_loops and self.deviation_change < self.d_stat_change
+        ):
 
             # 6. For each lag compute experimental values for the new point support semivariogram through a rescaling
             #    of the optimal point support model
@@ -141,7 +153,7 @@ class RegularizedModel:
             theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
                                                          self.rescalled_point_support_semivariogram)
 
-            theoretical_model.find_optimal_model(weighted=True, number_of_ranges=32)
+            theoretical_model.find_optimal_model(weighted=True, number_of_ranges=self.ranges)
             temp_optimal_point_support_model = theoretical_model
             temp_sill_of_areal_data = theoretical_model.params[1]
 
@@ -173,8 +185,9 @@ class RegularizedModel:
             deviation = self.calculate_deviation(regularized[:, 1], self.data_based_values)
 
             if deviation <= self.optimal_deviation:
-                self.deviation_weight = 1 / (np.log(self.optimal_deviation - deviation + 0.01) * 2)
+                self.deviation_weight = 1 / (np.log(self.optimal_deviation - deviation + 0.01) * self.scaling_factor)
                 self.optimal_point_support_model = temp_optimal_point_support_model
+                self.deviation_change = 1 - ((self.optimal_deviation - deviation) / self.optimal_deviation)
                 self.optimal_deviation = deviation
                 self.sill_of_areal_data = temp_sill_of_areal_data
                 self.weight_change = False
@@ -237,7 +250,6 @@ class RegularizedModel:
 
         return rescalled
 
-
     @staticmethod
     def calculate_deviation(regularized_model, data_based_model):
         """Function calculates deviation between experimental and theoretical semivariogram
@@ -251,18 +263,16 @@ class RegularizedModel:
             :return deviation: scalar which describes deviation between semivariograms.
         """
 
-        L = len(data_based_model)
+        data_based_model_len = len(data_based_model)
 
-        if len(regularized_model) == L:
+        if len(regularized_model) == data_based_model_len:
             print('Start of deviation calculation')
-            print(regularized_model)
-            print(data_based_model)
             deviation = np.abs(regularized_model - data_based_model)
             deviation = np.divide(deviation,
                                   data_based_model,
                                   out=np.zeros_like(deviation),
                                   where=data_based_model != 0)
-            deviation = sum(deviation) / L
+            deviation = sum(deviation) / data_based_model_len
             print('Calculated deviation is:', deviation)
             return deviation
         else:
