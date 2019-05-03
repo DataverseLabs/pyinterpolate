@@ -51,6 +51,18 @@ class RegularizedModel:
                          population_data_file, population_value_column, population_lags, population_step_size,
                          id_column_name):
 
+        """Method regularizes given areal model based on the:
+        a) data with areal counts of some variable,
+        b) data with population units and counts (divided per area),
+
+        Based on the experimental semivariogram of areal centroids and population units function performs
+        deconvolution and returns theoretical model for given areas.
+
+        Method is described in: Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular
+        Geographical Units, Mathematical Geology 40(1), 101-128, 2008.
+
+        """
+
         # Setting up local variables from the while loop:
         regularized = []
 
@@ -208,7 +220,7 @@ class RegularizedModel:
         print('Models set')
         print(self.complete)
 
-        return self.final_regularized, self.final_optimal_point_support
+        return self.optimal_point_support_model
 
     def rescale(self):
         """Function rescales the optimal point support model and creates new experimental values for
