@@ -140,7 +140,7 @@ class RegularizedModel:
         print(self.complete)
 
         while self.iteration < self.loop_limit or (
-                self.iteration < self.min_no_loops and self.deviation_change < self.d_stat_change
+                self.iteration > self.min_no_loops and self.deviation_change < self.d_stat_change
         ):
 
             # 6. For each lag compute experimental values for the new point support semivariogram through a rescaling
@@ -237,15 +237,14 @@ class RegularizedModel:
                                                                                ]
         """
         self.iteration = self.iteration + 1
-        i = np.sqrt(self.iteration)
-        s = self.sill_of_areal_data
-        c = s * i * self.deviation_weight
-
         y_opt_h = self.optimal_point_support_model.predict(self.optimal_regularized_model[:, 0])
-        y_exp_v_h = self.data_based_values
-        y_opt_v_h = self.optimal_regularized_model
 
         if not self.weight_change:
+            i = np.sqrt(self.iteration)
+            s = self.sill_of_areal_data
+            c = s * i * self.deviation_weight
+            y_exp_v_h = self.data_based_values
+            y_opt_v_h = self.optimal_regularized_model
             w = 1 + (y_exp_v_h - y_opt_v_h[:, 1]) / c
         else:
             w = 1 + (self.weight - 1) / 2
@@ -253,8 +252,7 @@ class RegularizedModel:
         self.weight = w.copy()
 
         if self.rescalled_point_support_semivariogram is None:
-            rescalled = self.experimental_semivariogram_of_areal_data.copy()  # must have 3 dims - the last dim is num
-                                                                              # of lags
+            rescalled = self.experimental_semivariogram_of_areal_data.copy()  # must have 3 dims
         else:
             rescalled = self.rescalled_point_support_semivariogram.copy()
 
