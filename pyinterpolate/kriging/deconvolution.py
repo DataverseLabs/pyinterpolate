@@ -37,8 +37,10 @@ class RegularizedModel:
         self.sill_of_areal_data = None  # Value updated in the point 1b
         self.initial_deviation = None  # Value updated in the point 4
         self.optimal_deviation = None  # Value updated in the point 5
+        self.deviations = [] # Value updated iteratively in the point 5
         self.weight_change = False  # Value changed in the main loop (points 6 to 8)
-        self.weight = None  # Value updated in the rescale method (point 6 of the main function).
+        self.weight = None  # Value updated in the rescale method (point 6 of the main function)
+        self.weights = []  # Value updated iteratively in the rescale method (point 6 of the main function)
         self.iteration = 0  # Number of iterations
         self.deviation_weight = 1
         self.deviation_change = 1
@@ -54,13 +56,10 @@ class RegularizedModel:
         """Method regularizes given areal model based on the:
         a) data with areal counts of some variable,
         b) data with population units and counts (divided per area),
-
         Based on the experimental semivariogram of areal centroids and population units function performs
         deconvolution and returns theoretical model for given areas.
-
         Method is described in: Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular
         Geographical Units, Mathematical Geology 40(1), 101-128, 2008.
-
         """
 
         # Setting up local variables from the while loop:
@@ -136,6 +135,7 @@ class RegularizedModel:
         self.optimal_point_support_model = self.initial_point_support_model
         self.optimal_regularized_model = self.theoretically_regularized_model
         self.optimal_deviation = self.initial_deviation
+        self.deviations.append(self.optimal_deviation)
 
         print(self.complete)
 
@@ -195,6 +195,7 @@ class RegularizedModel:
             print('Difference statistics calculation...')
 
             deviation = self.calculate_deviation(regularized[:, 1], self.data_based_values)
+            self.deviations.append(deviation)
 
             if deviation <= self.optimal_deviation:
                 self.deviation_weight = 1 / (np.log(self.optimal_deviation - deviation + 0.01) * self.scaling_factor)
@@ -229,7 +230,6 @@ class RegularizedModel:
             w(h) = 1 + [(y_exp_v(h) - y_opt_v(h) / (s^2 * sqrt(iter))]
             s = sill of the model y_exp_v
             iter = iteration number
-
         OUTPUT:
         :return rescalled_point_support_semivariogram: numpy array of the form [[lag, semivariance],
                                                                                 [lag_x, semivariance_x],
@@ -250,6 +250,7 @@ class RegularizedModel:
             w = 1 + (self.weight - 1) / 2
 
         self.weight = w.copy()
+        self.weights.append(self.weight)
 
         if self.rescalled_point_support_semivariogram is None:
             rescalled = self.experimental_semivariogram_of_areal_data.copy()  # must have 3 dims
@@ -264,11 +265,9 @@ class RegularizedModel:
     def calculate_deviation(regularized_model, data_based_model):
         """Function calculates deviation between experimental and theoretical semivariogram
             over given lags.
-
             INPUT:
             :param regularized_model: array of the values generated for the regularized model,
             :param data_based_model: array of modeled values generated from the theoretical model,
-
             OUTPUT:
             :return deviation: scalar which describes deviation between semivariograms.
         """
@@ -299,7 +298,7 @@ class RegularizedModel:
                  linestyle='-.')
         plt.legend(['Empirical semivariogram', 'Theoretical semivariogram',
                     'Regularized semivariogram, iteration {}'.format(self.iteration)])
-        plt.title('Semivariograms comparison')
+        plt.title('Semivariograms comparison. Deviation value: {}'.format(self.optimal_deviation))
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
         plt.show()
