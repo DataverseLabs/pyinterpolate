@@ -8,6 +8,60 @@ import geopandas as gpd
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
+def calculate_semivariance(data, lags, step_size):
+    """Function calculates semivariance of a given set of points.
+    
+    INPUT:
+    :param data: array of coordinates and their values,
+    :param lags: array of lags between points,
+    :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
+    
+    OUTPUT:
+    :return: semivariance: numpy array of pair of lag and semivariance values where
+             semivariance[0] = array of lags
+             semivariance[1] = array of lag's values
+             semivariance[2] = array of number of points in each lag.
+             
+    WARNING:
+    Function will be deprecated in the final version of the library. Its properties will be covered by the
+    Semivariance class object."""
+    
+    distances_array = calculate_distance(data[:, :-1])
+    smv = []
+    semivariance = []
+
+    # Calculate semivariances
+    for h in lags:
+        gammas = []
+        distances_in_range = np.where(
+            np.logical_and(
+                np.greater_equal(distances_array, h - step_size), np.less_equal(distances_array, h + step_size)))
+        for i in range(0, len(distances_in_range[0])):
+            row_x = distances_in_range[0][i]
+            row_x_h = distances_in_range[1][i]
+            gp1 = data[row_x][2]
+            gp2 = data[row_x_h][2]
+            g = (gp1 - gp2) ** 2
+            gammas.append(g)
+        if len(gammas) == 0:
+            gamma = 0
+        else:
+            gamma = np.sum(gammas) / (2 * len(gammas))
+        smv.append([gamma, len(gammas)])
+
+    # Selecting semivariances
+    for i in range(len(lags)):
+        if smv[i][0] > 0:
+            semivariance.append([lags[i], smv[i][0], smv[i][1]])
+        else:
+            semivariance.append([lags[i], 0, 0])
+
+    semivariance = np.vstack(semivariance)
+    return semivariance
+    
+    
+
+
 class Semivariance:
 
     def __init__(self, areal_data_file, lags=None, step_size=None, id_field='ID'):
