@@ -97,17 +97,25 @@ class Distances:
             n(u_s) - population size in the cell u_s
         """
 
-        sum_pa_pb = 0
-        distance = 0
+        a_shape = area_block_1.shape[0]
+        b_shape = area_block_2.shape[0]
 
-        for a_row in area_block_1:
-            for b_row in area_block_2:
-                weight = a_row[-1] * b_row[-1]
-                sum_pa_pb = sum_pa_pb + weight
-                partial_distance = self._calculate(a_row, b_row)
-                distance = distance + weight * partial_distance
-        distance = distance / sum_pa_pb
-        return distance
+        Ax = area_block_1[:, 0].reshape(1, a_shape)
+        Bx = area_block_2[:, 0].reshape(b_shape, 1)
+        dx = Ax - Bx
+
+        Ay = area_block_1[:, 1].reshape(1, a_shape)
+        By = area_block_2[:, 1].reshape(b_shape, 1)
+        dy = Ay - By
+
+        Aval = area_block_1[:, -1].reshape(1, a_shape)
+        Bval = area_block_2[:, -1].reshape(b_shape, 1)
+        w = Aval * Bval
+
+        dist = np.sqrt(dx ** 2 + dy ** 2)
+        wdist = dist * w
+        single_dist = np.sum(wdist) / np.sum(w)
+        return single_dist
 
     def calculate_distance_between_blocks(self, areas=None, interpretation='dict'):
         """

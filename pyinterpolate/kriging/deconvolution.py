@@ -13,7 +13,13 @@ from pyinterpolate.kriging.fit_semivariance import TheoreticalSemivariogram
 class RegularizedModel:
     """Class serves as the deconvolution model for an areal data"""
 
-    def __init__(self, scaling_factor=2, d_statistics_change=0.1, ranges=32, loop_limit=20, min_no_loops=None):
+    def __init__(self, scaling_factor=2,
+                 d_statistics_change=0.1,
+                 ranges=32,
+                 loop_limit=20,
+                 min_no_loops=0,
+                 number_of_loops_with_const_mean=5,
+                 mean_diff=0.01):
 
         # Class models
         self.experimental_semivariogram_of_areal_data = None  # Model updated in the point 1a
@@ -30,9 +36,22 @@ class RegularizedModel:
         # Class parameters
         self.ranges = ranges
         self.scaling_factor = scaling_factor
-        self.loop_limit = loop_limit
+
         self.min_no_loops = min_no_loops
+        if self.min_no_loops > 0:
+            if loop_limit < self.min_no_loops:
+                warning_loops = 'WARNING: Loop limit is smaller than minimum number of loops,' \
+                                'minimum number of loops set to loop limit'
+                print(warning_loops)
+                self.min_no_loops = loop_limit
+        else:
+            self.min_no_loops = loop_limit
+
+        self.loop_limit = loop_limit
         self.d_stat_change = d_statistics_change
+        self.no_of_iters_const_mean = number_of_loops_with_const_mean  # Number of iterations with constant d-stat mean
+        self.mean_vals_d_stat = []
+        self.mean_diff = mean_diff
 
         self.sill_of_areal_data = None  # Value updated in the point 1b
         self.initial_deviation = None  # Value updated in the point 4
@@ -48,6 +67,49 @@ class RegularizedModel:
         # Print params
         self.class_name = "\nDeconvolution:"
         self.complete = "Process complete!"
+
+    def _check_loops_status(self):
+        """Method checks model loop's statistics to stop iteration after certain events occurs"""
+
+        # Check loop limit
+        if self.iteration < self.loop_limit:
+            loop_limit = False
+        else:
+            loop_limit = True
+
+        # Check minimum number of iterations
+        if self.iteration < self.min_no_loops:
+            min_loops = False
+        else:
+            min_loops = True
+
+        # Check loop limit and min no of loops
+        if loop_limit and min_loops:
+            loop_arg = True
+        else:
+            loop_arg = False
+
+        print('')
+        print('>> Iteration:', self.iteration)
+        print('')
+        return loop_arg
+
+    def _check_optimizer(self):
+        # Function checks if analysis is not in local optimum
+
+        if len(self.deviations) % self.no_of_iters_const_mean == 0:
+            d_stat_mean = np.mean(self.deviations[-self.no_of_iters_const_mean:])
+            self.mean_vals_d_stat.append(d_stat_mean)
+            print('D stat mean:', d_stat_mean)
+            if len(self.mean_vals_d_stat) > 1:
+                if np.abs(self.mean_vals_d_stat[-1] - self.mean_vals_d_stat[-2]) < self.mean_diff:
+                    print('Constant mean of deviation value, iteration stopped.', self.mean_diff)
+                    return True
+        else:
+            return False
+
+        return False
+
 
     def regularize_model(self, areal_data_file, areal_lags, areal_step_size, data_column,
                          population_data_file, population_value_column, population_lags, population_step_size,
@@ -139,9 +201,8 @@ class RegularizedModel:
 
         print(self.complete)
 
-        while self.iteration < self.loop_limit or (
-                self.iteration > self.min_no_loops and self.deviation_change < self.d_stat_change
-        ):
+        loop_test = False
+        while not(loop_test):
 
             # 6. For each lag compute experimental values for the new point support semivariogram through a rescaling
             #    of the optimal point support model
@@ -208,6 +269,13 @@ class RegularizedModel:
                 self.weight_change = True
 
             print(self.complete)
+
+            # Internal checking
+            loop_test_loops = self._check_loops_status()
+            loop_test_opt = self._check_optimizer()
+            loop_test_d = self.deviation_change < self.d_stat_change
+            print(loop_test_loops, loop_test_opt, loop_test_d)
+            loop_test = loop_test_loops or loop_test_opt or loop_test_d
 
         print(self.class_name)
         print('\n')
