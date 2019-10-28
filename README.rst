@@ -16,11 +16,15 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 Requirements
 ------------
 
-* Python 3.6+
+* Python 3.7+
 
-* Numpy 1.14.0+
+* Numpy 1.17.3+
 
-* Matplotlib 2.1.1+
+* Pandas 0.25.2+
+
+* GeoPandas 0.6.1+
+
+* Matplotlib 3.1.1+
 
 Package structure
 -----------------

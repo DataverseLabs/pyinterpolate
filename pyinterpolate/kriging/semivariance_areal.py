@@ -2,6 +2,7 @@
 import numpy as np
 
 # Spatial libraries
+import pyproj
 import geopandas as gpd
 from geopandas.tools import sjoin
 
@@ -147,7 +148,7 @@ class ArealSemivariance(Semivariance):
         population_centroids = gpd.read_file(self.population)
 
         # Match population centroid points with areas
-        if areas.crs['init'] != population_centroids.crs['init']:
+        if not pyproj.Proj(areas.crs).is_exact_same(pyproj.Proj(population_centroids.crs)):
             population_centroids = population_centroids.to_crs(areas.crs)
 
         joined_population_points = sjoin(population_centroids, areas, how='left')

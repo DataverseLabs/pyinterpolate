@@ -6,6 +6,7 @@ import geopandas as gpd
 
 # pyinterpolate scripts
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
+from pyinterpolate.kriging.helper_functions.get_centroids import get_centroids
 
 
 def calculate_semivariance(data, lags, step_size):
@@ -118,7 +119,8 @@ class Semivariance:
             step_size = self.step
 
         # Calculate centroids positions
-        centroids = self._centroids_from_shp(data_column)
+        centroids = get_centroids(self.geodataframe, data_column, self.id_field, areal=True, dropna=True)
+        # TODO: centroids = self._centroids_from_shp(data_column)
 
         # Calculate distances
         try:
