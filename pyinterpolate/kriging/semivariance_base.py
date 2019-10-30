@@ -120,15 +120,14 @@ class Semivariance:
 
         # Calculate centroids positions
         centroids = get_centroids(self.geodataframe, data_column, self.id_field, areal=True, dropna=True)
-        # TODO: centroids = self._centroids_from_shp(data_column)
 
         # Calculate distances
         try:
-            distance_array = calculate_distance(centroids)
+            distance_array = calculate_distance(centroids[:, :-2])
         except TypeError:
             centroids = np.asarray(centroids)
             print('Given points array has been transformed into numpy array to calculate distance')
-            distance_array = calculate_distance(centroids)
+            distance_array = calculate_distance(centroids[:, :-2])
 
         self.distances = distance_array.copy()
         semivariance = self._calculate_semivars(lags, step_size, centroids, distance_array)
@@ -190,77 +189,3 @@ class Semivariance:
 
         semivariance = np.vstack(semivariance)
         return semivariance
-    
-    def _centroids_from_shp(self, data_column):
-        """Method calculates centroids of areas from the given polygon file and returns numpy array with coordinates
-        and values for each centroid
-
-        INPUT:
-        :param data_column: Column with data values (usually rates)
-
-        OUTPUT:
-        :return centroids_and_vals: numpy array in the form of [[coordinate x,
-                                                                 coordinate y,
-                                                                 value of a given area]]"""
-
-        centroids_and_vals = self._get_posx_posy(self.geodataframe, data_column, areal=True, dropna=True)
-
-        return centroids_and_vals
-
-    def _get_posx_posy(self, geo_df, value_column_name, areal=True, dropna=False, points_type=False):
-        """Function prepares array for distances calculation from the centroids of areal blocks
-        
-        INPUT:
-        :param geo_df: dataframe with spatial data - areas or set of points,
-        :param value_column_name: name of the column with value which is passed as the last column of the
-        output array,
-        :param areal: default it is True. If data is areal type then centroids of area's are computed
-        otherwise geometry column should store a Points,
-        :param dropna: default is False. If True then all areas (points) of unknown coordinates or values
-        are dropped from the analysis.
-        
-        OUTPUT:
-        :return pos_and_vals: numpy array of the form [[coordinate x1, coordinate y1, value1],
-                                                       [coordinate x2, coordinate y2, value2],
-                                                       [...., ...., ....],]
-        """
-        geo_dataframe = geo_df.copy()
-
-        col_x = 'centroid_pos_x'
-        col_y = 'centroid_pos_y'
-        
-        if areal:
-            geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.centroid.x)
-            geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.centroid.y)
-        else:
-            try:
-                geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _.x)
-                geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _.y)
-            except AttributeError:
-                geo_dataframe[col_x] = geo_dataframe['geometry'].apply(lambda _: _[0].x)
-                geo_dataframe[col_y] = geo_dataframe['geometry'].apply(lambda _: _[0].y)
-
-
-        columns_to_hold = [col_x, col_y, value_column_name, self.id_field]
-        columns = list(geo_dataframe.columns)
-
-        # remove rows with nan
-        if dropna:
-            geo_dataframe.dropna(axis=0, inplace=True)
-
-        # remove unwanted columns
-        for col in columns:
-            if col not in columns_to_hold:
-                geo_dataframe.drop(labels=col, axis=1, inplace=True)
-
-        # set order of columns
-        geo_dataframe = geo_dataframe[columns_to_hold]
-        
-        if not points_type:
-            self.geodataframe = geo_dataframe.copy()
-            geo_dataframe.set_index(self.id_field, inplace=True)
-            geodict = geo_dataframe.to_dict(orient='index')
-            self.g_dict = geodict.copy()
-
-        pos_and_vals = np.asarray(geo_dataframe.values)
-        return pos_and_vals

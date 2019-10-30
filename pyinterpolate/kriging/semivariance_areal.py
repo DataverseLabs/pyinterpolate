@@ -9,6 +9,7 @@ from geopandas.tools import sjoin
 # Custom scripts
 from pyinterpolate.kriging.semivariance_base import Semivariance
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance, block_to_block_distances
+from pyinterpolate.kriging.helper_functions.get_centroids import get_centroids
 
 
 class ArealSemivariance(Semivariance):
@@ -168,8 +169,8 @@ class ArealSemivariance(Semivariance):
             # DATA PROCESSING INTO ARRAY
             block_points = joined_population_points[joined_population_points[self.id_field] == single_id]
 
-            points_array = super()._get_posx_posy(block_points, self.val_col, areal=False, dropna=False,
-                                                  points_type=True)
+            points_array = get_centroids(block_points, self.val_col, self.id_field, areal=False, dropna=False)
+            points_array = points_array[:, :-1]
             block_dict[single_id]['coordinates'] = points_array  # update block_dict
             block_dict[single_id]['rate'] = (areas[self.data_col][areas[self.id_field] == single_id]).values[0]
 
