@@ -16,7 +16,7 @@ def get_centroids(geodataframe, value_col_name, id_col_name, areal=True, dropna=
        OUTPUT:
         :return pos_and_vals: numpy array of the form [[coordinate x1, coordinate y1, value1, area_id],
                                                        [coordinate x2, coordinate y2, value2, area_id],
-                                                       [...., ...., ....],]
+                                                       [...., ...., ...., ....],]
     """
     
     gdf = geodataframe.copy()

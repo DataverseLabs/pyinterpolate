@@ -164,6 +164,8 @@ class TheoreticalSemivariogram:
 
             print('Model: {}, error value: {}'.format(model, model_error))
 
+            # TODO: Check errors below 0
+
             if model_error < base_error:
                 base_error = model_error
                 self.theoretical_model = models[model]
@@ -196,7 +198,7 @@ class TheoreticalSemivariogram:
         """
         n = len(self.empirical_semivariance[:, 1])
         zeros = np.zeros(n)
-        error = np.mean((self.empirical_semivariance[:, 1] - zeros)**2)
+        error = np.mean(np.abs(self.empirical_semivariance[:, 1] - zeros))
         return error
     
     def calculate_model_error(self, model, par, weight=False):
@@ -212,7 +214,8 @@ class TheoreticalSemivariogram:
                                   vals,
                                   out=np.zeros_like(nh),
                                   where=vals != 0)
-            error = nh_divided_by_vals * np.abs(vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2]))
+            error = np.abs(nh_divided_by_vals *
+                           (vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2])))
 
         error = np.mean(error)
         return error

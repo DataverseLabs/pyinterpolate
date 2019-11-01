@@ -147,7 +147,7 @@ class RegularizedModel:
 
         centroids = semivar.centroids.copy()
 
-        theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
+        theoretical_model = TheoreticalSemivariogram(centroids[:, -2],
                                                      self.experimental_semivariogram_of_areal_data)
 
         theoretical_model.find_optimal_model(weighted=True, number_of_ranges=self.ranges)
@@ -223,7 +223,7 @@ class RegularizedModel:
             print(self.class_name)
             print('Computation of experimental semivariogram of rescalled data...')
 
-            theoretical_model = TheoreticalSemivariogram(centroids[:, -1],
+            theoretical_model = TheoreticalSemivariogram(centroids[:, -2],
                                                          self.rescalled_point_support_semivariogram)
 
             theoretical_model.find_optimal_model(weighted=True, number_of_ranges=self.ranges)
@@ -304,6 +304,9 @@ class RegularizedModel:
                                                                                 [..., ...]
                                                                                ]
         """
+
+        # TODO: weight control to avoid oscillations in the deviation value (e.g. from 0.2 to 0.6 - upwards)
+
         self.iteration = self.iteration + 1
         y_opt_h = self.optimal_point_support_model.predict(self.optimal_regularized_model[:, 0])
 
