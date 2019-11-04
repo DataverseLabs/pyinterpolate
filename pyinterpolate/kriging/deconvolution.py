@@ -56,12 +56,11 @@ class RegularizedModel:
         self.sill_of_areal_data = None  # Value updated in the point 1b
         self.initial_deviation = None  # Value updated in the point 4
         self.optimal_deviation = None  # Value updated in the point 5
-        self.deviations = [] # Value updated iteratively in the point 5
+        self.deviations = []  # Value updated iteratively in the point 5
         self.weight_change = False  # Value changed in the main loop (points 6 to 8)
         self.weight = None  # Value updated in the rescale method (point 6 of the main function)
         self.weights = []  # Value updated iteratively in the rescale method (point 6 of the main function)
         self.iteration = 0  # Number of iterations
-        self.deviation_weight = 1
         self.deviation_change = 1
 
         # Print params
@@ -109,7 +108,6 @@ class RegularizedModel:
             return False
 
         return False
-
 
     def regularize_model(self, areal_data_file, areal_lags, areal_step_size, data_column,
                          population_data_file, population_value_column, population_lags, population_step_size,
@@ -202,7 +200,7 @@ class RegularizedModel:
         print(self.complete)
 
         loop_test = False
-        while not(loop_test):
+        while not loop_test:
 
             # 6. For each lag compute experimental values for the new point support semivariogram through a rescaling
             #    of the optimal point support model
@@ -258,8 +256,7 @@ class RegularizedModel:
             deviation = self.calculate_deviation(regularized[:, 1], self.data_based_values)
             self.deviations.append(deviation)
 
-            if deviation <= self.optimal_deviation:
-                self.deviation_weight = 1 / (np.log(self.optimal_deviation - deviation + 0.01) * self.scaling_factor)
+            if deviation < self.optimal_deviation:
                 self.optimal_point_support_model = temp_optimal_point_support_model
                 self.deviation_change = 1 - ((self.optimal_deviation - deviation) / self.optimal_deviation)
                 self.optimal_deviation = deviation
@@ -305,20 +302,18 @@ class RegularizedModel:
                                                                                ]
         """
 
-        # TODO: weight control to avoid oscillations in the deviation value (e.g. from 0.2 to 0.6 - upwards)
-
         self.iteration = self.iteration + 1
         y_opt_h = self.optimal_point_support_model.predict(self.optimal_regularized_model[:, 0])
 
         if not self.weight_change:
             i = np.sqrt(self.iteration)
             s = self.sill_of_areal_data
-            c = s * i * self.deviation_weight
+            c = s * i
             y_exp_v_h = self.data_based_values
             y_opt_v_h = self.optimal_regularized_model
             w = 1 + (y_exp_v_h - y_opt_v_h[:, 1]) / c
         else:
-            w = 1 + (self.weight - 1) / 2
+            w = 1 + ((self.weight - 1) / 2)
 
         self.weight = w.copy()
         self.weights.append(self.weight)

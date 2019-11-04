@@ -39,7 +39,7 @@ Package structure
         - [X] Simple Kriging
         - [ ] Regression Kriging
         - [ ] Area-to-Point interpolation
-        - [-] Area-to-Area interpolation
+        - [ ] Area-to-Area interpolation
         - [ ] Poisson Kriging
 
  - [X] Data visualization and interpolation
@@ -52,9 +52,11 @@ Package structure
         - [X] Read and prepare data
         - [X] Interpolation results as a matrix
         - [X] False administrative units development
+        - [X] Get areal centroids
 
  - [ ] Tutorials
         - [X] Distance calculation
+        - [X] Semivariance Regularization
         - [-] Ordinary Kriging
         - [-] Simple Kriging
         - [ ] Regression Kriging

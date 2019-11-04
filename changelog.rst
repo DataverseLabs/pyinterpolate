@@ -6,6 +6,20 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+04.11.2019 1 p.m. CET:
+-----------------------
+
+version 0.1.8.1.b
+
+* Improvement: Deviation and weight calculation algorithm corrected in RegularizeModel class
+
+* Updated Tutorial: Semivariogram Regularization
+
+* Updated readme
+
+-----
+
+
 01.11.2019 11 a.m. CET:
 -----------------------
 
