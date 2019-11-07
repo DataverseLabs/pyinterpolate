@@ -96,7 +96,7 @@ class TheoreticalSemivariogram:
         model = models[model_type]
 
         # sill
-        sill = np.var(self.points_values)
+        sill = np.var(self.points_values[:, -1])
 
         # nugget
         if self.empirical_semivariance[:, 0][0] != 0:
@@ -137,7 +137,7 @@ class TheoreticalSemivariogram:
         base_error = self.calculate_base_error()
 
         # sill
-        sill = np.var(self.points_values)
+        sill = np.var(self.points_values[:, -1])
 
         # nugget
         if self.empirical_semivariance[:, 0][0] != 0:

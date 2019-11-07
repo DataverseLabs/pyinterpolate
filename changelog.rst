@@ -6,6 +6,16 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+07.11.2019 3 p.m. CET:
+----------------------
+
+version 0.1.8.1.c
+
+* Bug: sill calculation in fit_semivariance module (TheoreticalSemivariogram.fit_semivariance())
+
+* Development: Poisson Kriging class (still not usable)
+
+
 04.11.2019 1 p.m. CET:
 -----------------------
 
