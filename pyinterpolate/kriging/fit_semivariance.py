@@ -20,11 +20,11 @@ class TheoreticalSemivariogram:
     * gaussian_model(distance, nugget, sill, semivar_range)
     * exponential_model(distance, nugget, sill, semivar_range)
     * linear_model(distance, nugget, sill, semivar_range)
-    
+
     Additional methods:
     * calculate_base_error() - calculates mean squared difference between exmperimental semivariogram
     and "flat line" of zero values
-    
+
     Data visualization methods:
     * show_experimental_semivariogram() - shows semivariogram which is a part of the class object's 
     instance
@@ -113,7 +113,7 @@ class TheoreticalSemivariogram:
         # output model
         self.theoretical_model = model
         self.params = [nugget, sill, optimal_range]
-        
+
     def find_optimal_model(self, weighted=False, number_of_ranges=200):
         """
         :param weighted: default=False. If True then each lag is weighted by:
@@ -125,14 +125,14 @@ class TheoreticalSemivariogram:
         :param number_of_ranges: deafult = 200. Used to create an array of equidistant ranges 
         between minimal range of empirical semivariance and maximum range of empirical semivariance.
         """
-        
+
         # models
         models = {
             'spherical': self.spherical_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
         }
-        
+
         # calculate base error for a flat line
         base_error = self.calculate_base_error()
 
@@ -149,12 +149,12 @@ class TheoreticalSemivariogram:
         minrange = self.empirical_semivariance[:, 0][1]
         maxrange = self.empirical_semivariance[:, 0][-1]
         ranges = np.linspace(minrange, maxrange, number_of_ranges)
-        
+
         # search for the best model
         model_name = 'null'
         for model in models:
             optimal_range = self.calculate_range(models[model], ranges, nugget, sill)
-            
+
             # output model
             params = [nugget, sill, optimal_range]
             if not weighted:
@@ -171,10 +171,10 @@ class TheoreticalSemivariogram:
                 self.theoretical_model = models[model]
                 self.params = params
                 model_name = model
-                
+
         # print output
         print('########## Chosen model: {} ##########'.format(model_name))
-        
+
     def calculate_range(self, model, ranges, nugget, sill):
         errors = []
         for r in ranges:
@@ -190,7 +190,7 @@ class TheoreticalSemivariogram:
                                               self.params[1],
                                               self.params[2])
         return output_model
-    
+
     def calculate_base_error(self):
         """
         Method calculates base error as a squared difference between experimental semivariogram and
@@ -200,20 +200,20 @@ class TheoreticalSemivariogram:
         zeros = np.zeros(n)
         error = np.mean(np.abs(self.empirical_semivariance[:, 1] - zeros))
         return error
-    
+
     def calculate_model_error(self, model, par, weight=False):
         if not weight:
             error = np.abs(self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
-                                                           par[0],
-                                                           par[1],
-                                                           par[2]))
+                                                                     par[0],
+                                                                     par[1],
+                                                                     par[2]))
         else:
             nh = np.sqrt(self.empirical_semivariance[:, 2])
             vals = self.empirical_semivariance[:, 1]
             nh_divided_by_vals = np.divide(nh,
-                                  vals,
-                                  out=np.zeros_like(nh),
-                                  where=vals != 0)
+                                           vals,
+                                           out=np.zeros_like(nh),
+                                           where=vals != 0)
             error = np.abs(nh_divided_by_vals *
                            (vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2])))
 
@@ -226,7 +226,7 @@ class TheoreticalSemivariogram:
         unknown value
         :return: model with predicted values
         """
-        
+
         output_model = self.theoretical_model(distances,
                                               self.params[0],
                                               self.params[1],

@@ -6,6 +6,16 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+13.11.2019 6:30 p.m. CET:
+-------------------------
+
+version 0.1.8.2
+
+* Development: Poisson Kriging class (not recommended to use but is possible to perform oridnary kriging with weighted distances. Covariance / semivariance calculations still need to be included.
+
+-----
+
+
 07.11.2019 3 p.m. CET:
 ----------------------
 
@@ -15,6 +25,7 @@ version 0.1.8.1.c
 
 * Development: Poisson Kriging class (still not usable)
 
+-----
 
 04.11.2019 1 p.m. CET:
 -----------------------

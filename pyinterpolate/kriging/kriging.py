@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 
 
+# TODO: remove np.matrix structures
 class Krige:
     """
     Class for kriging interpolation of the unknown values in a given location (position). Class takes two arguments
@@ -201,15 +202,25 @@ class Krige:
                     sys.exit('Program is terminated. Try different semivariogram model. (Did you use gaussian model? \
                              If so then try to use simpler models like linear or exponential) and/or analyze your data \
                              for any clusters which may affect the final estimation')
-                    
-        estimated_weights = self.normalize_weights(w, zhat, 'ord')
-        zhat = (np.matrix(self.prepared_data[:, -2] * w[:-1])[0, 0])
-        sigmasq = (w.T * k)[0, 0]
-        if sigmasq < 0:
-            sigma = 0
+
+        if np.any(w < 0):
+
+            # Normalize weights
+            normalized_w = self.normalize_weights(w, zhat, 'ord')
+            zhat = (np.matrix(self.prepared_data[:, -2] * normalized_w)[0, 0])
+            sigmasq = (w.T * k)[0, 0]
+            if sigmasq < 0:
+                sigma = 0
+            else:
+                sigma = np.sqrt(sigmasq)
+            return zhat, sigma, w[-1][0], normalized_w
         else:
-            sigma = np.sqrt(sigmasq)
-        return zhat, sigma, w[-1][0], w
+            sigmasq = (w.T * k)[0, 0]
+            if sigmasq < 0:
+                sigma = 0
+            else:
+                sigma = np.sqrt(sigmasq)
+            return zhat, sigma, w[-1][0], w
 
     def simple_kriging(self, area_mean=None, test_for_anomalies=True):
         """
@@ -247,10 +258,14 @@ class Krige:
                     sys.exit('Program is terminated. Try different semivariogram model. (Did you use gaussian model? \
                              If so then try to use simpler models like linear or exponential) and/or analyze your data \
                              for any clusters which may affect the final estimation')
-        
-        w = self.normalize_weights(w, zhat, 'sim')
-        zhat = (np.matrix(r) * w)[0, 0]
-        zhat += area_mean
+
+        if np.any(w < 0):
+            #Normalize weights
+
+            w = self.normalize_weights(w, zhat, 'sim')
+            zhat = (np.matrix(r) * w)[0, 0]
+            zhat += area_mean
+
         sigmasq = (w.T * k)[0, 0]
         if sigmasq < 0:
             sigma = 0
