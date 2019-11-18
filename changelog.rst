@@ -9,6 +9,20 @@ Changes by date
 13.11.2019 6:30 p.m. CET:
 -------------------------
 
+version 0.1.9
+
+* Development: Poisson Kriging class - centroid based PK.
+
+* Development: Weighted Semivariance calculations.
+
+* Development: Data Preparation for centroid based PK.
+
+-----
+
+
+13.11.2019 6:30 p.m. CET:
+-------------------------
+
 version 0.1.8.2
 
 * Development: Poisson Kriging class (not recommended to use but is possible to perform oridnary kriging with weighted distances. Covariance / semivariance calculations still need to be included.

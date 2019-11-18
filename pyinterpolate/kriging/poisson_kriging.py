@@ -1,15 +1,12 @@
 import numpy as np
-import geopandas as gpd
-from geopandas.tools import sjoin
-import pyproj
 
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_distance
 from pyinterpolate.kriging.helper_functions.euclidean_distance import block_to_block_distances
 from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_block_to_block_distance
-from pyinterpolate.kriging.helper_functions.get_centroids import get_centroids
 
 
-# TODO: remove matrix structures
+# TODO: remove matrix data structures
+
 class PKrige:
     """
     Class for Poisson Kriging, Area-to-area (ATA) and Area-to-Point (ATP) Poisson Kriging interpolation of
@@ -33,53 +30,45 @@ class PKrige:
 
     """
 
-    def __init__(self, counties_data, population_data, semivariogram_model,
-                 areal_id_col_name, areal_val_name, population_val_col_name):
+    def __init__(self):
         """
-        :param counties_data: address to dataset with areal data (polygons),
-        :param population_data: address to dataset with point data (centroids),
-        :param semivariogram_model: deconvoluted semivariogram,
-        :param areal_id_col_name: id column name of areal data,
-        :param areal_val_name: value column name of areal data,
-        :param population_val_col_name: value column name of population data,
+        Class for calculation of poisson kriging
 
         """
-        self.model = semivariogram_model
-        self.counties_dataset = gpd.read_file(counties_data)
-        self.population_dataset = gpd.read_file(population_data)
-        self.joined_datasets = self._join_datasets()
-        self.id_col = areal_id_col_name
-        self.val_col = areal_val_name
-        self.pop_col = population_val_col_name
-        self.total_population_per_unit = self._get_tot_population(self.id_col,
-                                                                  self.pop_col)
-        self.centroids_of_areal_data = self._get_areal_centroids(self.counties_dataset,
-                                                                 self.val_col,
-                                                                 self.id_col)
+        self.model = None
+        self.joined_datasets = None
+        self.id_col = None
+        self.val_col = None
+        self.pop_col = None
+        self.total_population_per_unit = None
+        self.centroids_of_areal_data = None
         self.prepared_data = None
-        self.global_mean = self.counties_dataset[self.val_col].mean()  # Only for test purposes
-
         self.unknown_area_id = None
 
         # Parameters
         self.lags = None
         self.step = None
-        self.max_no_of_observations = None
+        self.min_no_of_observations = None
         self.max_search_radius = None
 
     # Data preparation functions
 
-    def set_params(self,
-                   lags_number,
-                   lag_step_size,
-                   max_no_of_observations,
-                   search_radius
-                   ):
-        # Function sets class parameters
+    def set_params(self, model,
+                   joined_datasets, population_series, centroids_dataset,
+                   id_col, val_col, pop_col,
+                   lags_number, lag_step_size,
+                   min_no_of_observations, search_radius):
 
+        self.model = model
+        self.joined_datasets = joined_datasets
+        self.total_population_per_unit = population_series
+        self.centroids_of_areal_data = centroids_dataset
+        self.id_col = id_col
+        self.val_col = val_col
+        self.pop_col = pop_col
         self.lags = lags_number
         self.step = lag_step_size
-        self.max_no_of_observations = max_no_of_observations
+        self.min_no_of_observations = min_no_of_observations
         self.max_search_radius = search_radius
         print('Parameters have been set')
 
@@ -141,10 +130,21 @@ class PKrige:
         # sort by distance
         kriging_data = kriging_data[kriging_data[:, -1].argsort()]
 
-        # set output by number of neighbours
-        # TODO: account for a distance
+        # set output by distance params
 
-        output_data = kriging_data[:self.max_no_of_observations]
+        # search radius
+
+        max_search_pos = np.argmax(kriging_data[:, -1] > self.max_search_radius)
+        output_data = kriging_data[:max_search_pos]
+
+        # check number of observations
+
+        if len(output_data) < self.min_no_of_observations:
+            output_data = kriging_data[:self.min_no_of_observations]
+            print('Dataset has been set based on the minimum number of observations')
+
+        # set final dataset
+
         self.prepared_data = np.array(output_data)
 
         if verbose:
@@ -153,7 +153,6 @@ class PKrige:
 
         return output_data
 
-    # TODO: include weighted areal semivariance / covariance
     def normalize_weights(self, weights, estimated_value, kriging_type):
         """
         Algorithm for weight normalization to remove negative weights of the points which are
@@ -230,49 +229,6 @@ class PKrige:
             return weights
 
     # Data processing private class methods
-
-    def _join_datasets(self):
-        """Function perform left join of two spatial datasets. Method is useful when someone is interested in
-        the relation between point spatial data (population centroids) and polygons containing those points
-        (counties).
-
-        Both geodataframes must have the same coordinate reference system (crs). Test is performed before join.
-        If crs is not the same then population centroids are transformed.
-
-        OUTPUT:
-        :return df: geodataframe of points with column indicating index from the counties geodataframe.
-        """
-
-        # Check crs
-        if not pyproj.Proj(self.counties_dataset.crs).is_exact_same(pyproj.Proj(self.population_dataset.crs)):
-            population = self.population_dataset.to_crs(self.counties_dataset.crs)
-            df = sjoin(population, self.counties_dataset, how='left')
-        else:
-            df = sjoin(self.population_dataset, self.counties_dataset, how='left')
-        return df
-
-    def _get_tot_population(self, area_id_col, population_val_col):
-        """Function calculate total population per administrative unit and returns dataframe with
-        area index | sum of population
-
-        INPUT:
-        :param area_id_col: name of the id column from counties dataset,
-        :param population_val_col: name of the column with population values in the population dataset.
-
-        OUTPUT:
-        :return tot_pop_series: series with total population per area.
-        """
-        tot_pop = self.joined_datasets.groupby([area_id_col]).sum()
-        tot_pop_series = tot_pop[population_val_col]
-        return tot_pop_series
-
-    @staticmethod
-    def _get_areal_centroids(counties, vals, ids):
-        """Function get centroids and remove nan values from the dataset"""
-
-        c = get_centroids(counties, vals, ids)
-        c = c[~np.isnan(c).any(axis=1)]
-        return c
 
     def _calculate_weighted_distances(self, unknown_area_id):
         """Function calculates weighted distances between unknown area and known areas"""
@@ -351,6 +307,7 @@ class PKrige:
 
             sigmasq = (w.T * k_array)[0, 0]
             if sigmasq < 0:
+                print(sigmasq)
                 sigma = 0
             else:
                 sigma = np.sqrt(sigmasq)
@@ -386,7 +343,7 @@ class PKrige:
         k1 = np.matrix(1)
         k = np.concatenate((k, k1), axis=0)
 
-        predicted=None
+        predicted = None
 
         if pk_type == 'centroid':
 
@@ -422,13 +379,16 @@ class PKrige:
         prediction = self._predict_value(predicted, k, vals_of_neigh_areas)
         return prediction
 
-    # Temporary functions
+    # Population-based weights array (for m' parameter)
 
     def calculate_weight_arr(self):
-        # Function used to create temp rates means - test purposes only
 
         vals_of_neigh_areas = self.prepared_data[:, 2]
         pop_of_neigh_areas = self.prepared_data[:, 4]
 
-        weights_arr = np.mean(vals_of_neigh_areas) / pop_of_neigh_areas
-        return np.diag(weights_arr)
+        weighted = np.sum(vals_of_neigh_areas * pop_of_neigh_areas)
+        weights_arr = weighted / np.sum(pop_of_neigh_areas)
+        w = np.ones(shape=vals_of_neigh_areas.shape)
+        w = (weights_arr * w) / pop_of_neigh_areas
+        return np.diag(w)
+
