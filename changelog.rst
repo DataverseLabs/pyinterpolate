@@ -6,6 +6,22 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+04.12.2019 11:30 a.m. CET:
+-------------------------
+
+version 0.1.9.a
+
+* Issue: nan-val removal from the dataset (PKData class). Preserving dataset with NAN's as the initial dataset.
+
+* Issue: nan-val removal from joined datasets (PKData class).
+
+* Issue: Poisson Kriging - point retrieval issue.
+
+* Developement: Fit Semivariance returns optimal model (before it updated class instance only).
+
+-----
+
+
 13.11.2019 6:30 p.m. CET:
 -------------------------
 

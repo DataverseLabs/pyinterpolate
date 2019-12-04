@@ -40,7 +40,7 @@ Package structure
         - [ ] Regression Kriging
         - [ ] Area-to-Point interpolation
         - [ ] Area-to-Area interpolation
-        - [ ] Poisson Kriging
+        - [X] Poisson Kriging - centroid based approach
 
  - [X] Data visualization and interpolation
         - [X] Experimental semivariogram
@@ -61,13 +61,19 @@ Package structure
         - [-] Simple Kriging
         - [ ] Regression Kriging
         - [ ] Poisson Kriging
+        - [ ] Why I have obtained negative weights?
 
 Bugs
 ====
 
-- [-] Negative values in estimated error variance in ordinary kriging: https://github.com/szymon-datalions/pyinterpolate/issues/3
 
 Issues
 ======
 
 - [-] Complete documentation and description of "Random geographical units" class
+
+
+Closed cases
+============
+
+- [-] Negative values in estimated error variance in ordinary kriging: https://github.com/szymon-datalions/pyinterpolate/issues/3

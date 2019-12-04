@@ -13,10 +13,21 @@ class PKData:
 
     def __init__(self, counties_data, population_data,
                  areal_id_col_name, areal_val_name,
+                 areal_nan_val,
                  population_val_col_name):
-        self.counties_dataset = gpd.read_file(counties_data)
+        self.initial_dataset = gpd.read_file(counties_data)
+
+        # Remove rows with nan value from the dataset
+        self.counties_dataset = self.initial_dataset[
+            self.initial_dataset[areal_val_name] != areal_nan_val]
+
         self.population_dataset = gpd.read_file(population_data)
         self.joined_datasets = self._join_datasets()
+
+        # Clear joined dataset from nans
+        self.joined_datasets = self.joined_datasets[
+            self.joined_datasets['index_right'].notna()]
+
         self.id_col = areal_id_col_name
         self.val_col = areal_val_name
         self.pop_col = population_val_col_name

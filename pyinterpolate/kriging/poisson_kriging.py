@@ -268,11 +268,14 @@ class PKrige:
                 raise ValueError(
                     "Minimum 1 id must be provided to prepare data"
                 )
+        try:
+            new_d['px'] = new_d['geometry'].apply(lambda v: v[0].x)
+            new_d['py'] = new_d['geometry'].apply(lambda v: v[0].y)
+        except TypeError:
+            new_d['px'] = new_d['geometry'].apply(lambda v: v.x)
+            new_d['py'] = new_d['geometry'].apply(lambda v: v.y)
 
-        new_d['px'] = new_d['geometry'].apply(lambda v: v[0].x)
-        new_d['py'] = new_d['geometry'].apply(lambda v: v[0].y)
-
-        new_dict = (new_d.groupby('IDx')
+        new_dict = (new_d.groupby(self.id_col)
                     .apply(lambda v:
                            {'coordinates': list(map(list, zip(v['px'], v['py'], v['TOT'])))})
                     .to_dict())
