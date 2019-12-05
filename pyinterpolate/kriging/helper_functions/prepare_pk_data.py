@@ -1,5 +1,4 @@
 import numpy as np
-import geopandas as gpd
 from geopandas.tools import sjoin
 import pyproj
 
@@ -8,20 +7,50 @@ from pyinterpolate.kriging.helper_functions.get_centroids import get_centroids
 
 class PKData:
     """
-    Class instance represents data prepared for Poisson Kriging
+    Class to prepare data for Poisson Kriging.
+
+    INPUT PARAMETERS:
+    :param counties_data: geodataframe object created with geopandas which contains polygons and respective rates,
+    :param population data: geodataframe objected created with geopandas which contains points and population values,
+    :param areal_id_col_name: string with the id column name from counties_data geodataframe,
+    :param areal_val_name: string with the rate column name from counties_data geodataframe,
+    :param areal_nan_val: value of the NaN value inside the dataset,
+    :param population_val_col_name: string with the population counts column name from population_data geodataframe.
+
+    ATTRIBUTES:
+        initial_dataset: geodataframe from counties_data parameter,
+        counties_dataset: geodataframe derived from the initial_dataset without rows with NaN values,
+        population_dataset: geodataframe from population_data parameter,
+        joined_datasets: geodataframe with joined counties (areal) and population data, points not assigned to
+            any counties are dropped,
+        id_col: areal id column name from areal_id_col_name parameter,
+        val_col: areal rate column name from areal_val_name parameter,
+        pop_col: population values column name from population_val_column_name parameter,
+        total_population_per_unit: pandas Series with index derived from the counties_dataset geodataframe and
+            sums of population per area,
+        centroids_of_areal_data: numpy array of values [point x, point y, value, area id].
+
+    PRIVATE METHODS:
+        _join_datasets(self): method performs sjoin on yhe areal and population datasets (it groups points of
+            population into respective areas' polygons).
+        _get_tot_population(self, area_id_col, population_val_col): metod calculates total population per area.
+
+    STATIC METHODS:
+        get_areal_centroids(counties, vals, ids): method gets centroids from the respective polygons and returns
+            numpy array with [centroid position x, centroid position y, rate, area id].
     """
 
     def __init__(self, counties_data, population_data,
                  areal_id_col_name, areal_val_name,
                  areal_nan_val,
                  population_val_col_name):
-        self.initial_dataset = gpd.read_file(counties_data)
+        self.initial_dataset = counties_data
 
         # Remove rows with nan value from the dataset
         self.counties_dataset = self.initial_dataset[
             self.initial_dataset[areal_val_name] != areal_nan_val]
 
-        self.population_dataset = gpd.read_file(population_data)
+        self.population_dataset = population_data
         self.joined_datasets = self._join_datasets()
 
         # Clear joined dataset from nans
@@ -33,9 +62,9 @@ class PKData:
         self.pop_col = population_val_col_name
         self.total_population_per_unit = self._get_tot_population(self.id_col,
                                                                   self.pop_col)
-        self.centroids_of_areal_data = self._get_areal_centroids(self.counties_dataset,
-                                                                 self.val_col,
-                                                                 self.id_col)
+        self.centroids_of_areal_data = self.get_areal_centroids(self.counties_dataset,
+                                                                self.val_col,
+                                                                self.id_col)
 
     def _join_datasets(self):
         """Function perform left join of two spatial datasets. Method is useful when someone is interested in
@@ -73,7 +102,7 @@ class PKData:
         return tot_pop_series
 
     @staticmethod
-    def _get_areal_centroids(counties, vals, ids):
+    def get_areal_centroids(counties, vals, ids):
         """Function get centroids and remove nan values from the dataset"""
 
         c = get_centroids(counties, vals, ids)

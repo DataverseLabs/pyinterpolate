@@ -174,7 +174,7 @@ class TheoreticalSemivariogram:
 
         # print output
         print('########## Chosen model: {} ##########'.format(model_name))
-        return models[model]
+        return model_name
 
     def calculate_range(self, model, ranges, nugget, sill):
         errors = []

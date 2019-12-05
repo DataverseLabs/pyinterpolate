@@ -6,6 +6,20 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+05.12.2019 8:00 p.m. CET:
+-------------------------
+
+version 0.1.10
+
+* Development: docstring for PKData class.
+
+* Development: PKData class gets geodataframes instead of their paths (Open Closed Principle).
+
+* Development: Big update of the prediction methods in Poisson Kriging class...
+
+-----
+
+
 04.12.2019 11:30 a.m. CET:
 -------------------------
 

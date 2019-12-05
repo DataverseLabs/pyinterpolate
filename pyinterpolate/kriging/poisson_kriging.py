@@ -7,7 +7,7 @@ from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_
 
 # TODO: remove matrix data structures
 
-class PKrige:
+class PKrige2:
     """
     Class for Poisson Kriging, Area-to-area (ATA) and Area-to-Point (ATP) Poisson Kriging interpolation of
     the unknown values in a given location (position). Class takes two arguments during the initialization:
@@ -72,50 +72,41 @@ class PKrige:
         self.max_search_radius = search_radius
         print('Parameters have been set')
 
-    def prepare_data(self, unknown_area_id, weighted=False, verbose=False):
+    def prepare_prediction_data(self, unknown_areal_data_row, unknown_areal_data_centroid,
+                                weighted=False, verbose=False):
         """
-        :param unknown_area_id: id of the area with unknown value,
+        Function prepares data from unknown locations for Poisson Kriging.
+        :param unknown_areal_data: PKData object (row) with areal and population data.
         :param weighted: distances weighted by population (True) or not (False),
         :param verbose: if True then method informs about the successful operation.
-        :return output_data: prepared dataset which contains:
-        [[known_position_x, known_position_y, value, area id, distance_to_unknown_position], [...]]
+        :return prediction: prepared dataset which contains:
+        [[x, y, value, known_area_id, distance_to_unknown_position], [...]],
         """
 
-        # Simple Poisson Kriging (with centroid-based approach)
+        areal_id = unknown_areal_data_centroid[0][-1]
 
-        self.unknown_area_id = unknown_area_id
-
-        # Get unknown area centroid
-
-        centroid_pos = self.centroids_of_areal_data[
-            self.centroids_of_areal_data[:, -1] == unknown_area_id]
-
-        cx_cy = centroid_pos[0][:2]
-
+        cx_cy = unknown_areal_data_centroid[0][:2]
         r = np.array([cx_cy])
-        known_centroids = self.centroids_of_areal_data[
-            self.centroids_of_areal_data[:, -1] != unknown_area_id]
+        known_centroids = self.centroids_of_areal_data
         kc = known_centroids[:, :2]
 
         # Build set for Poisson Kriging
 
         if weighted:
-            weighted_distances = self._calculate_weighted_distances(unknown_area_id)
-
+            weighted_distances = self._calculate_weighted_distances(unknown_areal_data_row,
+                                                                    areal_id)
             s = []
             for wd in weighted_distances:
-                for kc in known_centroids:
-                    if wd[1] in kc:
+                for k in known_centroids:
+                    if wd[1] in k:
                         s.append(wd[0])
                         break
                     else:
                         pass
-
             s = np.array(s).T
 
             kriging_data = np.c_[known_centroids, s]  # [coo_x, coo_y, val, id, weighted_dist_to_unkn]
         else:
-
             distances_array = np.zeros(kc.shape)
             for i in range(0, r.shape[1]):
                 distances_array[:, i] = (kc[:, i] - r[:, i]) ** 2
@@ -145,13 +136,9 @@ class PKrige:
 
         # set final dataset
 
-        self.prepared_data = np.array(output_data)
-
+        self.prepared_data = output_data
         if verbose:
-            print('Centroid of area id {} prepared for processing').format(
-                unknown_area_id)
-
-        return output_data
+            print('Predictions data prepared')
 
     def normalize_weights(self, weights, estimated_value, kriging_type):
         """
@@ -230,14 +217,13 @@ class PKrige:
 
     # Data processing private class methods
 
-    def _calculate_weighted_distances(self, unknown_area_id):
+    def _calculate_weighted_distances(self, unknown_area, unknown_area_id):
         """Function calculates weighted distances between unknown area and known areas"""
 
-        dist_dict = self._prepare_distances_dict()
+        dist_dict = self._prepare_distances_dict(unknown_area)
         base_area = dist_dict[unknown_area_id]
         base_area_list = base_area['coordinates']
         other_keys = list(dist_dict.keys())
-        other_keys.remove(unknown_area_id)
 
         weighted_distances = []
         for k in other_keys:
@@ -247,27 +233,13 @@ class PKrige:
             weighted_distances.append([dist, k])
         return weighted_distances
 
-    def _prepare_distances_dict(self, check_all=True, list_of_idx=None):
+    def _prepare_distances_dict(self, unknown_area):
         """Function prepares dict with distances for weighted distance calculation
         between areas"""
 
-        if list_of_idx is None:
-            list_of_idx = []
-        if check_all:
-            # Copy all values
-            new_d = self.joined_datasets.copy()
-        else:
-            # Copy selected values
-            if len(list_of_idx) >= 1:
-                new_d = self.joined_datasets[
-                    self.joined_datasets[self.id_col].isin(
-                        list_of_idx
-                    )
-                ].copy()
-            else:
-                raise ValueError(
-                    "Minimum 1 id must be provided to prepare data"
-                )
+        new_d = self.joined_datasets.copy()
+        new_d.append(unknown_area)
+
         try:
             new_d['px'] = new_d['geometry'].apply(lambda v: v[0].x)
             new_d['py'] = new_d['geometry'].apply(lambda v: v[0].y)
@@ -394,4 +366,3 @@ class PKrige:
         w = np.ones(shape=vals_of_neigh_areas.shape)
         w = (weights_arr * w) / pop_of_neigh_areas
         return np.diag(w)
-
