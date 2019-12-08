@@ -6,6 +6,21 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+08.12.2019 4:00 p.m. CET:
+--------------------------
+
+version 0.1.11
+
+* Development: Calculation of prediction error (new function in helper functions) and minor bugs removal.
+
+* New requirement: Descartes module for spatial data plotting.
+
+* Issue: minor changes in poisson_kriging module.
+
+-----
+
+
+
 05.12.2019 8:00 p.m. CET:
 -------------------------
 

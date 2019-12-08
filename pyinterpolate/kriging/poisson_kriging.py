@@ -7,7 +7,7 @@ from pyinterpolate.kriging.helper_functions.euclidean_distance import calculate_
 
 # TODO: remove matrix data structures
 
-class PKrige2:
+class PKrige:
     """
     Class for Poisson Kriging, Area-to-area (ATA) and Area-to-Point (ATP) Poisson Kriging interpolation of
     the unknown values in a given location (position). Class takes two arguments during the initialization:
@@ -132,7 +132,8 @@ class PKrige2:
 
         if len(output_data) < self.min_no_of_observations:
             output_data = kriging_data[:self.min_no_of_observations]
-            print('Dataset has been set based on the minimum number of observations')
+            # TODO: info to the app logs
+            # print('Dataset has been set based on the minimum number of observations')
 
         # set final dataset
 
@@ -238,7 +239,7 @@ class PKrige2:
         between areas"""
 
         new_d = self.joined_datasets.copy()
-        new_d.append(unknown_area)
+        new_d = new_d.append(unknown_area, ignore_index=True)
 
         try:
             new_d['px'] = new_d['geometry'].apply(lambda v: v[0].x)

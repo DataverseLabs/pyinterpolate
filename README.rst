@@ -3,6 +3,13 @@ PyInterpolate
 
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies.
 
+Status
+------
+
+Pyinterpolate is still a pre-release version. It is used by the Data Lions company in the project Tick-Borne Disease Detector for the European Space Agency but we do not recommend to use all library functions.
+The most stable part is Kriging (Ordinary and Simple) and semivariogram calculations.
+
+
 Bibliography
 ------------
 

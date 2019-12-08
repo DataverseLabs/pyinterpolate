@@ -26,14 +26,14 @@ setup(
     author_email='s.molinski@datalions.eu',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Intended Audience :: GIS specialists',
+        'Intended Audience :: GIS specialists, Data Scientists',
         'Topic :: Geoinformatics :: Spatial Interpolation',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     keywords='Kriging Poisson Interpolation',
     packages=find_packages(exclude=['data', 'docs', 'tests', 'tutorials']),
-    install_requires=['matplotlib', 'numpy', 'pandas', 'geopandas'],
+    install_requires=['matplotlib', 'numpy', 'pandas', 'geopandas', 'descartes'],
     project_urls={
         'Bug Reports': 'https://github.com/szymon-datalions/pyinterpolate/issues',
         'Sponsor page': 'http://datalions.eu/',
