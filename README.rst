@@ -13,7 +13,7 @@ Status
 - Semivariogram deconvolution module,
 - Area-to-area and Area-to-point Poisson Kriging modules.
 
-**Planned release date is: 2020-07-01 (just after academic year).**
+**Release date is: 2020-08-31**
 
 Pyinterpolate is still a pre-release version. It is used by the Data Lions company in the project Tick-Borne Disease Detector for the European Space Agency but we do not recommend to use all library functions.
 The most stable part is Kriging (Ordinary and Simple) and semivariogram calculations.
