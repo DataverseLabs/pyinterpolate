@@ -13,7 +13,7 @@ Pre-Beta version: package is tested and the main structure is preserved but futu
 Setup
 -----
 
-Setup is described in the file SETUP.md
+Setup is described in the file SETUP.md: https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md
 
 Commercial and scientific projects where library has been used
 --------------------------------------------------------------
@@ -23,7 +23,7 @@ Commercial and scientific projects where library has been used
 Community
 ---------
 
-Join our community in Dicord: https://discord.gg/3EMuRkj
+Join our community in Discord: https://discord.gg/3EMuRkj
 
 
 Bibliography
