@@ -15,21 +15,6 @@ with open(path.join(here, '__init__.py'), 'r') as f:
     init_py = f.read()
 version = re.search("__version__ = '(.*)'", init_py).groups()[0]
 
-# system dependencies
-mac_and_linux = ['descartes==1.1.0', 'geopandas==0.7.0', 'matplotlib==3.2.1', 'numpy==1.18.3',
-                 'pyproj==2.6.0', 'scipy==1.4.1', 'shapely==1.7.0']
-only_mac = ['fiona==1.8.13.post1', 'rtree==0.9.4']
-only_linux = ['fiona==1.8', 'rtree>=0.8,<0.9']
-
-def get_requirements():
-    system_value = sys.platform
-    if 'linux' in sys.platform:
-        return mac_and_linux.extend(only_linux)  # Linux systems
-    elif 'darwin' in sys.platform:
-        return mac_and_linux.extend(only_mac)  # Mac OS
-    else:
-        raise OSError('System: {} not in a setup list'.format(sys.platform))
-
 setup(
     name='pyinterpolate',
     version=version,
@@ -46,10 +31,16 @@ setup(
     ],
     keywords='Kriging Spatial Analysis Ordinary Kriging Simple Kriging Poisson Kriging',
     packages=find_packages(exclude=['data', 'tests', 'tutorials', 'new_concepts']),
-    install_requires=get_requirements(),
+    install_requires=['descartes==1.1.0', 'geopandas==0.7.0', 'matplotlib==3.2.1', 'numpy==1.18.3',
+                      'pyproj==2.6.0', 'scipy==1.4.1', 'shapely==1.7.0',
+		      'fiona==1.8.13.post1; sys_platform=="darwin"', 
+                      'rtree==0.9.4; sys_platform=="darwin"',
+		      'fiona==1.8; sys_platform=="linux"',
+                      'rtree>=0.8,<0.9; sys_platform=="linux"'],
     project_urls={
+	'Webpage': 'https://pyinterpolate.com',
         'Bug Reports': 'https://github.com/szymon-datalions/pyinterpolate/issues',
-        'Sponsor page': 'http://datalions.eu/',
+        'Sponsor page': 'https://datalions.eu/',
         'Source': 'https://github.com/szymon-datalions/pyinterpolate/',
     },
 )
