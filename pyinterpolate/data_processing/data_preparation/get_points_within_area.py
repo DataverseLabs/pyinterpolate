@@ -4,6 +4,31 @@ import pyproj
 from geopandas.tools import sjoin
 
 
+def _check_columns(areal_dataframe, areal_id, points_val, points_dataframe):
+    """
+    Function checks if both dataframes has the same id and/or value columns to prevent program from errors.
+    :param areal_dataframe: (GeoDataFrame),
+    :param areal_id: (string) name of the areal id column name,
+    :param points_val: (string) name of the points value column name,
+    :param points_dataframe: (GeoDataFrame).
+    
+    :return areal_df, points_df: If areal_id column name is in points_dataframe then points_dataframe column
+        name is changed with prefix pts_; If points_val column name is in areal_dataframe then areal_dataframe
+        column name is changed with prefix a_. Otherwise function returns original dataframes.
+    """
+    
+    areal_columns = areal_dataframe.columns
+    point_columns = points_dataframe.columns
+    
+    if areal_id in point_columns:
+        points_dataframe.drop(areal_id, axis=1, inplace=True)
+        
+    if points_val in areal_columns:
+        areal_dataframe.drop(points_val, axis=1, inplace=True)
+    
+    return areal_dataframe, points_dataframe
+
+
 def get_points_within_area(area_shapefile, points_shapefile, dropna=True,
                            areal_id_col_name=None, points_val_col_name=None,
                            points_geometry_col_name='geometry',
@@ -24,6 +49,10 @@ def get_points_within_area(area_shapefile, points_shapefile, dropna=True,
 
     areal_data = gpd.read_file(area_shapefile)
     points_data = gpd.read_file(points_shapefile)
+
+    # Test if both files have the same columns
+
+    areal_data, points_data = _check_columns(areal_data, areal_id_col_name, points_val_col_name, points_data)
 
     # Test if areal data has the same projection as points data
     # Match centroid points with areas
