@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 from scipy.spatial.distance import cdist
 
 

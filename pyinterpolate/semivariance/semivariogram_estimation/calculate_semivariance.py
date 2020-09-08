@@ -1,5 +1,7 @@
 import numpy as np
 
+from tqdm import tqdm
+
 from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
 
@@ -33,7 +35,7 @@ def calculate_semivariance(data, lags, step_size):
     semivariance = []
 
     # Calculate semivariances
-    for h in lags:
+    for h in tqdm(lags):
         distances_in_range = select_values_in_range(distances, h, step_size)
         sem = (data[distances_in_range[0], 2] - data[distances_in_range[1], 2]) ** 2
         if len(sem) == 0:
@@ -41,8 +43,8 @@ def calculate_semivariance(data, lags, step_size):
         else:
             sem_value = np.sum(sem) / (2 * len(sem))
         semivariance.append([h, sem_value, len(sem)])
-
     semivariance = np.vstack(semivariance)
+    
     return semivariance
 
 
@@ -104,7 +106,7 @@ def calculate_weighted_semivariance(data, lags, step_size):
     semivariance = []
 
     # Calculate semivariances
-    for idx, h in enumerate(lags):
+    for idx, h in tqdm(enumerate(lags)):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
         # Weights
