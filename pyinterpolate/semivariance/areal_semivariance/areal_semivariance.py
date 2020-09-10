@@ -128,7 +128,7 @@ class ArealSemivariance:
             self.between_blocks_semivariogram = between_blocks_semivariogram
 
         regularized_semivariogram = self.between_blocks_semivariogram.copy()
-        regularized_semivariogram[:, 1] = np.abs(
+        regularized_semivariogram[:, 1] = (
             self.between_blocks_semivariogram[:, 1] - self.within_block_semivariogram[:, 1]
         )
 
