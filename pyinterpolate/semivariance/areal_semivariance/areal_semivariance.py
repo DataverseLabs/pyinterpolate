@@ -128,9 +128,15 @@ class ArealSemivariance:
             self.between_blocks_semivariogram = between_blocks_semivariogram
 
         regularized_semivariogram = self.between_blocks_semivariogram.copy()
-        regularized_semivariogram[:, 1] = np.abs(
+        regularized_semivariogram[:, 1] = (
             self.between_blocks_semivariogram[:, 1] - self.within_block_semivariogram[:, 1]
         )
+
+        # CHECK VALUES BELOW 0
+
+        for idx, row in enumerate(regularized_semivariogram):
+            if row[1] < 0:
+                regularized_semivariogram[idx, 1] = 0
 
         self.regularized_semivariogram = regularized_semivariogram.copy()
 
@@ -211,6 +217,7 @@ class ArealSemivariance:
             print('Semivariance between blocks for a given lags calculated')
             print('Calculation of the mean semivariance for a given lag')
         semivariogram = []
+
         for areal_lag in self.areal_lags:
             dists_and_semivars = blocks[0].copy().flatten()
             smvs = []

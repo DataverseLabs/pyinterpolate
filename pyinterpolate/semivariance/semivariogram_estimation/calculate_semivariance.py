@@ -106,7 +106,7 @@ def calculate_weighted_semivariance(data, lags, step_size):
     semivariance = []
 
     # Calculate semivariances
-    for idx, h in tqdm(enumerate(lags)):
+    for idx, h in enumerate(tqdm(lags)):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
         # Weights
