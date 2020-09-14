@@ -236,7 +236,7 @@ class RegularizedSemivariogram:
         # Initialize areal semivariance object
         areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                areal_points_data, areal_points_lags, areal_points_step_size,
-                                               weighted_semivariance=self.weighted_semivariance)
+                                               weighted_semivariance=self.weighted_semivariance, verbose=self.verbose)
 
         # Regularize semivariogram of areal data
         self.theoretically_regularized_model = areal_semivariance.regularize_semivariogram(
@@ -303,7 +303,8 @@ class RegularizedSemivariogram:
 
             areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                    areal_points_data, areal_points_lags, areal_points_step_size,
-                                                   weighted_semivariance=self.weighted_semivariance)
+                                                   weighted_semivariance=self.weighted_semivariance,
+                                                   verbose=self.verbose)
             self.areal_semivariance_models = areal_semivariance
 
             regularized = areal_semivariance.regularize_semivariogram(

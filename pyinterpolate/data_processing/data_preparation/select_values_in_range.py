@@ -5,8 +5,6 @@ def select_values_in_range(data, lag, step_size):
     """Function selects set of values which are greater than (lag - step size) and
     lesser than (lag + step size)."""
 
-    step_size = step_size / 2
-
     # Check if numpy array is given
     if type(data) != np.ndarray:
         data = np.array(data)

@@ -1,5 +1,6 @@
 import numpy as np
 from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from tqdm import tqdm
 
 
 def block_pair_semivariance(block_a, block_b, semivariogram_model):
@@ -66,31 +67,49 @@ def calculate_block_to_block_semivariance(points_within_area, distances_between_
                           ...]
         output_array[1]: [id A, id B, id ...]
     """
-    bb_semivariances = []
-
     blocks_ids = distances_between_blocks[1]
 
     if type(points_within_area) == list:
         points_within_area = np.array(points_within_area)
 
-    for first_idx, first_block_id in enumerate(blocks_ids):
-        block_to_block_semivariance = []
+    block_pairs_smvs = dict()
+
+    for first_idx, first_block_id in enumerate(tqdm(blocks_ids)):
+        first_block_points = points_within_area[points_within_area[:, 0] == first_block_id]
+
         for second_idx, second_block_id in enumerate(blocks_ids):
+
+            pair = (first_idx, second_idx)
+
             if first_block_id == second_block_id:
-                block_to_block_semivariance.append([0, 0])
+                block_pairs_smvs[pair] = [0, 0]
             else:
-                # Select distance from the first selected block to the second selected block
-                distance = distances_between_blocks[0][first_idx, second_idx]
 
-                # Select coordinates of the block centroids
-                first_block_points = points_within_area[points_within_area[:, 0] == first_block_id]
-                second_block_points = points_within_area[points_within_area[:, 0] == second_block_id]
+                # CHECK IF SEMIVAR IS NOT ACTUALLY CALCULATED
 
-                # Calculate semivariance between blocks
-                semivariance = block_pair_semivariance(first_block_points[0][1], second_block_points[0][1],
-                                                       semivariogram_model)
-                block_to_block_semivariance.append([distance, semivariance])
-        bb_semivariances.append(block_to_block_semivariance)
+                rev_pair = (second_idx, first_idx)
 
-    output_array = np.array([bb_semivariances, blocks_ids])
+                if (rev_pair in block_pairs_smvs.keys()) and (pair not in block_pairs_smvs.keys()):
+                    block_pairs_smvs[pair] = block_pairs_smvs[rev_pair]
+                else:
+                    # Select distance from the first selected block to the second selected block
+                    distance = distances_between_blocks[0][first_idx, second_idx]
+
+                    # Select coordinates of the block centroids
+                    second_block_points = points_within_area[points_within_area[:, 0] == second_block_id]
+
+                    # Calculate semivariance between blocks
+                    semivariance = block_pair_semivariance(first_block_points[0][1], second_block_points[0][1],
+                                                           semivariogram_model)
+                    block_pairs_smvs[pair] = [distance, semivariance]
+
+    # Generate output array
+    block_to_block_semivariance = []
+    for fidx, block_id in enumerate(blocks_ids):
+        semivars = []
+        for sidx, block_id_2 in enumerate(blocks_ids):
+            semivars.append(block_pairs_smvs[(fidx, sidx)])
+        block_to_block_semivariance.append(semivars)
+
+    output_array = np.array([block_to_block_semivariance, blocks_ids])
     return output_array
