@@ -1,5 +1,4 @@
 import geopandas as gpd
-import numpy as np
 from pyinterpolate.data_processing.data_transformation.get_areal_centroids import get_centroids
 
 

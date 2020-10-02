@@ -1,4 +1,4 @@
-from pyinterpolate.data_processing import set_areal_weights
+from pyinterpolate.data_processing.data_preparation.set_areal_weights import set_areal_weights
 import numpy as np
 
 
@@ -6,12 +6,12 @@ def test_set_areal_weighs():
 
     rows_no = 4
     data_array_1 = np.random.random(size=(rows_no, 5))
-    ids_data_arrays = np.random.randint(low=1, high=100, size=(rows_no,))
-    data_array_1[:, 0] = ids_data_arrays
+    ids_range = np.arange(0, rows_no)
+    data_array_1[:, 0] = ids_range
 
     da2 = []
     sums = []
-    for pt in ids_data_arrays:
+    for pt in ids_range:
         x = np.random.random(size=(rows_no * 8, 3))
         row = [pt, x]
         summed = np.sum(x[:, -1])

@@ -1,5 +1,5 @@
 import numpy as np
-from pyinterpolate.data_processing.data_transformation import prepare_kriging_data
+from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_kriging_data
 
 
 def test_prepare_kriging_data():

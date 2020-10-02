@@ -18,6 +18,3 @@ from pyinterpolate.data_processing.data_preparation.read_data import read_point_
 
 # Import data visulization functions
 from pyinterpolate.data_visualization import interpolate_raster
-
-# Import sample data
-from sample_data.data import SampleData
