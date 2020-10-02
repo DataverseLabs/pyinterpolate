@@ -62,33 +62,38 @@ def calculate_average_semivariance(between_block_distances,
 
     avg_semivars = []
     for distance_lag in tqdm(grouped_distances):
-        avg_sem = []
-        for idx in range(0, len(areas_list)):
-            # Select internal semivariance of base area for chosen lag
-            base_area_id = areas_list[idx]
-            base_inblock_semivariance = semivariance_within_block_points[semivariance_within_block_points[:, 0] == base_area_id][0][1]
-            # Check all distances in search radius
-            neighbours_list = distance_lag[1][idx][0][0]
-            no_of_areas = len(neighbours_list)
-            # Skip if no neighbours
-            if no_of_areas == 0:
-                pass
-            else:
-                # Check if one neighbor
-                # If so, check if this is the same area as base area
-                # Calculate average semivariance from given area
 
-                for neighbour in neighbours_list:
-                    n_id = between_block_distances[1][neighbour]
-                    n_semivar = semivariance_within_block_points[semivariance_within_block_points[:, 0] == n_id][0][1]
-                    avg_sem.append((n_semivar + base_inblock_semivariance))
-
-        if len(avg_sem) == 0:
-            avg_sem = 0
+        # Check if it is 0 lag
+        if distance_lag[0] == 0:
+            avg_semivars.append([0, 0])
         else:
-            avg_sem = 0.5 * (np.mean(avg_sem))
+            avg_sem = []
+            for idx in range(0, len(areas_list)):
+                # Select internal semivariance of base area for chosen lag
+                base_area_id = areas_list[idx]
+                base_inblock_semivariance = semivariance_within_block_points[semivariance_within_block_points[:, 0] == base_area_id][0][1]
+                # Check all distances in search radius
+                neighbours_list = distance_lag[1][idx][0][0]
+                no_of_areas = len(neighbours_list)
+                # Skip if no neighbours
+                if no_of_areas == 0:
+                    pass
+                else:
+                    # Check if one neighbor
+                    # If so, check if this is the same area as base area
+                    # Calculate average semivariance from given area
 
-        # Append average semivariance for given lag
-        avg_semivars.append([distance_lag[0], avg_sem])
+                    for neighbour in neighbours_list:
+                        n_id = between_block_distances[1][neighbour]
+                        n_semivar = semivariance_within_block_points[semivariance_within_block_points[:, 0] == n_id][0][1]
+                        avg_sem.append((n_semivar + base_inblock_semivariance))
+
+            if len(avg_sem) == 0:
+                avg_sem = 0
+            else:
+                avg_sem = 0.5 * (np.mean(avg_sem))
+
+            # Append average semivariance for given lag
+            avg_semivars.append([distance_lag[0], avg_sem])
 
     return np.array(avg_semivars)
