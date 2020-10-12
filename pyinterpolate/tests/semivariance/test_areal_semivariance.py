@@ -24,11 +24,8 @@ def test_areal_semivariance():
     total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
     max_range = min(total_bounds_x, total_bounds_y)
-    step_size = max_range / 10
-    point_step_size = step_size / 100
-
+    step_size = max_range / 8
     lags = np.arange(0, max_range, step_size * 2)
-    point_lags = np.arange(0, max_range / 100, point_step_size * 2)
 
     areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
     points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
@@ -36,10 +33,10 @@ def test_areal_semivariance():
 
     # Set areal semivariance class
     areal_semivariance = ArealSemivariance(areal_data_prepared, lags, step_size,
-                                           points_in_area, point_lags, point_step_size)
+                                           points_in_area)
     output = areal_semivariance.regularize_semivariogram()
     test_d = output[:, 1].astype(np.int)
-    correct_output = np.array([0, 0, 0, 144, 159])
+    correct_output = np.array([0, 0, 245, 205])
     assert (test_d == correct_output).all()
 
 

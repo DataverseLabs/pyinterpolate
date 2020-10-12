@@ -1,3 +1,5 @@
+# THIS CLASS IS DEPRECATED AND WILL BE REMOVED IN THE NEXT UPDATE
+
 # Base libraries
 import numpy as np
 

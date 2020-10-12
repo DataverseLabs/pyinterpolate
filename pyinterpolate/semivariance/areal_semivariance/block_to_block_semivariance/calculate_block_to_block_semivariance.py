@@ -35,7 +35,7 @@ def block_pair_semivariance(block_a, block_b, semivariogram_model):
 
 def calculate_block_to_block_semivariance(points_within_area, distances_between_blocks, semivariogram_model):
     """
-    Function calculates semivariances between all blocks passed into it based on the points (rectangles) and their
+    Function calculates semivariances between all blocks passed into it based on the points and their
     values inside the blocks.
 
     :param points_within_area: (numpy array) with area id and points and respective values inside area:

@@ -1,5 +1,5 @@
-from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_inblock_semivariance\
-    import calculate_inblock_semivariance
+from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_semivariance_within_blocks\
+    import calculate_semivariance_within_blocks
 
 import numpy as np
 import geopandas as gpd
@@ -9,7 +9,7 @@ from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance 
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
 
-def test_calculate_inblock_semivariance():
+def test_calculate_semivariance_within_blocks():
     # Data prepration
     areal_dataset = 'sample_data/test_areas_pyinterpolate.shp'
     subset = 'sample_data/test_points_pyinterpolate.shp'
@@ -48,7 +48,7 @@ def test_calculate_inblock_semivariance():
 
     # Get centroids to calculate experimental semivariance
 
-    inblock_semivariance = calculate_inblock_semivariance(points_in_area, ts)
+    inblock_semivariance = calculate_semivariance_within_blocks(points_in_area, ts)
     inblock_semivariance = np.array(inblock_semivariance)
 
     data_point = inblock_semivariance[inblock_semivariance[:, 0] == 1][0]
@@ -56,4 +56,4 @@ def test_calculate_inblock_semivariance():
 
 
 if __name__ == '__main__':
-    test_calculate_inblock_semivariance()
+    test_calculate_semivariance_within_blocks()

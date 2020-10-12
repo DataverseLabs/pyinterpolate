@@ -35,7 +35,7 @@ class TheoreticalSemivariogram:
     * show_semivariogram() - shows experimental semivariogram with theoretical model (if it was calculated)
     """
 
-    def __init__(self, points_array=None, empirical_semivariance=None, verbose=True):
+    def __init__(self, points_array=None, empirical_semivariance=None, verbose=False):
         """
         :param points_array: (numpy array) [point x, point y, value] (optional if model parameters are imported)
         :param empirical_semivariance: (numpy array) array of pair of lag and semivariance values where
@@ -120,7 +120,7 @@ class TheoreticalSemivariogram:
         """
         :param model_type: 'exponential', 'gaussian', 'linear', 'spherical'
         :param number_of_ranges: deafult = 16. Used to create an array of equidistant ranges
-        between minimal range of empirical semivariance and maximum range of empirical semivariance.
+            between minimal range of empirical semivariance and maximum range of empirical semivariance.
         :return (model_type, model parameters)
         """
 
