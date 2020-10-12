@@ -28,10 +28,6 @@ def test_regularize_semivariogram():
     step_size = max_range / 4
     lags = np.arange(0, max_range, step_size * 2)
 
-    maximum_point_range = max_range / 10
-    step_size_points = step_size / 10
-    lags_points = np.arange(0, maximum_point_range, step_size_points * 2)
-
     areal_data_prepared = prepare_areal_shapefile(areal_dataset, areal_id, areal_val)
     points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=areal_id,
                                             points_val_col_name=points_val)
@@ -43,11 +39,10 @@ def test_regularize_semivariogram():
     # Transform
     reg_mod.transform()
 
-    regularized_smv = np.array([[0, 0],
-                                [1, 120]])
-    test_output = (reg_mod.optimal_regularized_model).astype(np.int)
+    regularized_smv = np.array([0, 120])
+    test_output = (reg_mod.final_optimal_model).astype(np.int)
 
-    assert (test_output == regularized_smv[:, 1]).all()
+    assert (test_output == regularized_smv).all()
 
 
 if __name__ == '__main__':
