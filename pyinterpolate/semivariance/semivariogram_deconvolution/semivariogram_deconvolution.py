@@ -1,3 +1,5 @@
+# THIS CLASS IS DEPRECATED AND WILL BE REMOVED IN THE NEXT UPDATE
+
 # Base libraries
 import numpy as np
 
@@ -70,6 +72,7 @@ class RegularizedSemivariogram:
         self.optimal_point_support_model = None  # Values updated in the point 5
         self.optimal_regularized_model = None  # Values updated in the point 5
         self.rescalled_point_support_semivariogram = None  # Values updated in the point 6
+        self.areal_semivariance_models = None  # Model updated in the step 8
 
         self.final_regularized = None
         self.final_optimal_point_support = None
@@ -235,7 +238,7 @@ class RegularizedSemivariogram:
         # Initialize areal semivariance object
         areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                areal_points_data, areal_points_lags, areal_points_step_size,
-                                               weighted_semivariance=self.weighted_semivariance)
+                                               weighted_semivariance=self.weighted_semivariance, verbose=self.verbose)
 
         # Regularize semivariogram of areal data
         self.theoretically_regularized_model = areal_semivariance.regularize_semivariogram(
@@ -302,7 +305,9 @@ class RegularizedSemivariogram:
 
             areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                    areal_points_data, areal_points_lags, areal_points_step_size,
-                                                   weighted_semivariance=self.weighted_semivariance)
+                                                   weighted_semivariance=self.weighted_semivariance,
+                                                   verbose=self.verbose)
+            self.areal_semivariance_models = areal_semivariance
 
             regularized = areal_semivariance.regularize_semivariogram(
                 empirical_semivariance=self.experimental_semivariogram_of_areal_data,

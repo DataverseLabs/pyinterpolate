@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
 
 
@@ -30,10 +31,15 @@ def group_distances(distances_arrays, lags, step_size):
     return grouped_lags
 
 
-def calculate_average_semivariance(between_block_distances, inblock_semivariances,
+def calculate_average_semivariance(between_block_distances,
+                                   semivariance_within_block_points,
                                    lags, step_size):
     """
     Function calculates average within-block semivariance between blocks.
+
+    gamma_h(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [gamma(va, va) + gamma(va_h, va_h)]
+
+
     :param between_block_distances: distances_arrays: (arrays)
         array[0] - list of distances between blocks,
         array[1] - list of blocks ids.
@@ -44,7 +50,7 @@ def calculate_average_semivariance(between_block_distances, inblock_semivariance
                     distances[id N to id A, id N to id B, id N to id N]
                 ],
         array[1]: [id A, id B, id N]
-    :param inblock_semivariances: (numpy array) [area_id, inblock_semivariance]
+    :param semivariance_within_block_points: (numpy array) [area_id, within block semivariance]
     :param lags: (array) lags between values,
     :param step_size: (float) step size between lags,
     :return average_semivariance: (array) [lag, average semivariance]
@@ -55,27 +61,34 @@ def calculate_average_semivariance(between_block_distances, inblock_semivariance
     # Select distances per lag
 
     avg_semivars = []
-    for distance_lag in grouped_distances:
+    for distance_lag in tqdm(grouped_distances):
         avg_sem = []
         for idx in range(0, len(areas_list)):
             # Select internal semivariance of base area for chosen lag
             base_area_id = areas_list[idx]
-            base_inblock_semivariance = inblock_semivariances[inblock_semivariances[:, 0] == base_area_id][0][1]
+            base_inblock_semivariance = semivariance_within_block_points[semivariance_within_block_points[:, 0] == base_area_id][0][1]
             # Check all distances in search radius
             neighbours_list = distance_lag[1][idx][0][0]
             no_of_areas = len(neighbours_list)
             # Skip if no neighbours
-            semivars_sum = 0
-            if no_of_areas > 0:
+            if no_of_areas == 0:
+                pass
+            else:
+                # Check if one neighbor
+                # If so, check if this is the same area as base area
                 # Calculate average semivariance from given area
-                constant_div = 1 / (2 * no_of_areas)
+
                 for neighbour in neighbours_list:
                     n_id = between_block_distances[1][neighbour]
-                    n_semivar = inblock_semivariances[inblock_semivariances[:, 0] == n_id][0][1]
-                    semivars_sum = semivars_sum + (n_semivar + base_inblock_semivariance) / 2
-                semivars_sum = constant_div * semivars_sum
-            avg_sem.append(semivars_sum)
-        avg_sem = np.mean(avg_sem)
+                    n_semivar = semivariance_within_block_points[semivariance_within_block_points[:, 0] == n_id][0][1]
+                    avg_sem.append((n_semivar + base_inblock_semivariance))
+
+        if len(avg_sem) == 0:
+            avg_sem = 0
+        else:
+            avg_sem = 0.5 * (np.mean(avg_sem))
+
         # Append average semivariance for given lag
         avg_semivars.append([distance_lag[0], avg_sem])
+
     return np.array(avg_semivars)

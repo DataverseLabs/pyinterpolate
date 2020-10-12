@@ -5,9 +5,7 @@ from pyinterpolate.kriging.areal_poisson_kriging.areal_kriging import ArealKrigi
 from pyinterpolate.kriging.point_kriging import kriging as point_kriging
 
 # Import semivariance operations
-from pyinterpolate.semivariance.semivariogram_deconvolution import semivariogram_deconvolution as deconvolution
-from pyinterpolate.semivariance.semivariogram_deconvolution.semivariogram_deconvolution import \
-    RegularizedSemivariogram
+from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
 from pyinterpolate.semivariance.semivariogram_estimation import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_fit import fit_semivariance
 
@@ -18,6 +16,3 @@ from pyinterpolate.data_processing.data_preparation.read_data import read_point_
 
 # Import data visulization functions
 from pyinterpolate.data_visualization import interpolate_raster
-
-# Import sample data
-from sample_data.data import SampleData

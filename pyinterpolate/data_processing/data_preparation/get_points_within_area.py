@@ -29,18 +29,21 @@ def _check_columns(areal_dataframe, areal_id, points_val, points_dataframe):
     return areal_dataframe, points_dataframe
 
 
-def get_points_within_area(area_shapefile, points_shapefile, dropna=True,
-                           areal_id_col_name=None, points_val_col_name=None,
+def get_points_within_area(area_shapefile,
+                           points_shapefile,
+                           areal_id_col_name,
+                           points_val_col_name,
+                           dropna=True,
                            points_geometry_col_name='geometry',
                            nans_to_zero=True):
     """
     Function prepares points data for further processing.
     :param area_shapefile: (string) areal data shapefile address,
     :param points_shapefile: (string) points data shapefile address,
-    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points).
     :param areal_id_col_name: (string) name of the column with id, if None then function uses index column,
     :param points_val_col_name: (string) name of the value column of each point, if None then first column other than
         points_geometry_col_name is used,
+    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points).
     :param points_geometry_col_name: (string) default 'geometry',
     :param nans_to_zero: (bool) if true then all nan value is casted to 0,
     :return: output_points_within_area (numpy array) [area_id, [point_position_x, point_position_y, value]]
