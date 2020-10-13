@@ -20,23 +20,40 @@ class RegularizedSemivariogram:
     Class performs deconvolution of semivariogram of areal data.
 
         METHODS:
-        regularize_model: method regularizes given areal model based on the:
+
+        - regularize_model: method regularizes given areal model based on the:
             a) data with areal counts of some variable,
             b) data with population units and counts (divided per area),
             Based on the experimental semivariogram of areal centroids and population units function performs
             deconvolution and returns theoretical model for given areas.
             Method is described in: Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular
             Geographical Units, Mathematical Geology 40(1), 101-128, 2008.,
-        rescale: function rescales the optimal point support model and creates new experimental values for
+        - rescale: function rescales the optimal point support model and creates new experimental values for
             each lag,
-        calculate_deviation: function calculates deviation between experimental and theoretical semivariogram
+        - calculate_deviation: function calculates deviation between experimental and theoretical semivariogram
             over given lags,
-        show_semivariograms: function shows experimental semivariogram, theoretical semivariogram and regularized
+        - show_semivariograms: function shows experimental semivariogram, theoretical semivariogram and regularized
             semivariogram,
-        show_deviation: plot of changes of deviation over time,
-        _check_loops_status: method checks model loop's statistics to stop iteration after certain events occurs,
-        _check_optimizer: function checks if analysis is not in local optimum.
+        - show_deviation: plot of changes of deviation over time,
+        - _check_loops_status: method checks model loop's statistics to stop iteration after certain events occurs,
+        - _check_optimizer: function checks if analysis is not in local optimum.
 
+        PARAMETERS WHICH CONTROL CLASS:
+
+        All parameters control behavior of the algorithm.
+
+        :param d_statistics_change: (float) min change of deviation, if change is smaller then algorithm is stopped,
+        :param ranges:(int) numberof ranges to search for optimal model,
+        :param loop_limit: (int) max number of algorithm iterations,
+        :param min_no_loops: (int) min number of loops,
+        :param number_of_loops_with_const_mean: (int) number of times when devaition is not changing or change is very
+            small (mean_diff parameter).
+        :param mean_diff: (float) difference between deviations between the loops, if smaller than parameter
+            then algorithm is stopped. This situation must occur number_of_loops_with_const_mean times to invoke
+            stop.
+        :param weighted_semivariance: (bool) if False then each distance is treated equally when calculating
+            theoretical semivariance; if True then semivariances closer to the point have more weight,
+        :param verbose: (bool) if True then all messages are printed, otherwise nothing.
     """
 
     def __init__(self,
@@ -50,6 +67,7 @@ class RegularizedSemivariogram:
                  verbose=True):
         """
         All parameters control behavior of the algorithm.
+
         :param d_statistics_change: (float) min change of deviation, if change is smaller then algorithm is stopped,
         :param ranges:(int) numberof ranges to search for optimal model,
         :param loop_limit: (int) max number of algorithm iterations,

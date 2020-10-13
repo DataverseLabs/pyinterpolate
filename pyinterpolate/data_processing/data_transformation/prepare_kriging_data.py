@@ -5,12 +5,17 @@ from pyinterpolate.data_processing.data_preparation.set_areal_weights import get
 
 
 def prepare_kriging_data(unknown_position, data_array, number_of_neighbours=10):
-    """
+    """Function prepares data for kriging (prediction of unknown value).
+
+    INPUT:
+
     :param unknown_position: array with position of unknown value,
     :param data_array: array with known positions and their values,
-    :param number_of_neighbours: number of the closest locations to the unknown position
-    :return output_data: prepared dataset which contains:
-    [[known_position_x, known_position_y, value, distance_to_unknown_position], [...]]
+    :param number_of_neighbours: number of the closest locations to the unknown position.
+
+    OUTPUT:
+    :return: prepared array with dataset which contains:
+        [[known_position_x, known_position_y, value, distance_to_unknown_position], [...]]
     """
 
     # Distances to unknown point
@@ -33,20 +38,26 @@ def prepare_poisson_kriging_data(unknown_area, points_within_unknown_area,
                                  weighted=False):
     """
     Function prepares data for centroid based Poisson Kriging.
+
+    INPUT:
+
     :param unknown_area: (numpy array) unknown area in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y]
+        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y],
     :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
-        [area_id, [point_position_x, point_position_y, value]]
+        [area_id, [point_position_x, point_position_y, value]],
     :param known_areas: (numpy array) array of known areas in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location]
+        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
     :param points_within_known_areas: (numpy array) array of points and their values within the given area:
-        [[area_id, [point_position_x, point_position_y, value]], ...]
+        [[area_id, [point_position_x, point_position_y, value]], ...],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
-        smaller than number_of_neighbours parameter then additional neighbours are included up to number of neighbors).
-    :param weighted: (bool) distances weighted by population (True) or not (False),
-    :return output_data: (numpy array) array of distances from known locations to the unknown location:
-        [id (known), coo_x, coo_y, val, dist_to_unknown, sum_of_vals_within_area]
+        smaller than number_of_neighbours parameter then additional neighbours are included up to number of neighbors),
+    :param weighted: (bool) distances weighted by population (True) or not (False).
+
+    OUTPUT:
+
+    :return: (numpy array) array of distances from known locations to the unknown location:
+        [id (known), coo_x, coo_y, val, dist_to_unknown, sum_of_vals_within_area].
     """
 
     # Prepare data
@@ -123,17 +134,23 @@ def prepare_ata_data(points_within_unknown_area,
                      number_of_neighbours, max_search_radius):
     """
     Function prepares data for Area to Area Poisson Kriging.
+
+    INPUT:
+
     :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
-        [area_id, [point_position_x, point_position_y, value of point]]
+        [area_id, [point_position_x, point_position_y, value of point]],
     :param known_areas: (numpy array) array of known areas in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location]
+        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
     :param points_within_known_areas: (numpy array) array of points and their values within the given area:
-        [[area_id, [point_position_x, point_position_y, value of point]], ...]
+        [[area_id, [point_position_x, point_position_y, value of point]], ...],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
         smaller than number_of_neighbours parameter then additional neighbours are included up to number of neighbors).
-    :return output_data: (numpy array) array of distances from known locations to the unknown location:
-        [id (known), areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value]
+
+    OUTPUT:
+
+    :return output_data: (numpy array) array of distances from known locations to the unknown location: [id (known),
+        areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value].
     """
 
     # Initialize set
@@ -193,15 +210,16 @@ def prepare_ata_data(points_within_unknown_area,
 def prepare_ata_known_areas(list_of_points_of_known_areas):
     """
     Function prepares known areas data for prediction.
-    :param list_of_points_of_known_areas: (numpy array) list of all areas' points and their values used for
-        the prediction,
+
+    INPUT:
+
+    :param list_of_points_of_known_areas: (numpy array) list of all areas' points and their values used for the
+        prediction.
+
+    OUTPUT:
+
     :return: (numpy array) list of arrays with areas and distances between them:
-        [id base,
-            [
-                id other,
-                [base point value, other point value,  distance between points]
-            ]
-        ]
+        [id base, [id other, [base point value, other point value,  distance between points]]].
     """
     all_distances_list = []
     for pt1 in list_of_points_of_known_areas:
@@ -229,9 +247,15 @@ def prepare_ata_known_areas(list_of_points_of_known_areas):
 
 def prepare_distances_list_unknown_area(unknown_area_points):
     """
-    Function prepares distances list of unknown (single) area
-    :param unknown_area_points: [pt x, pt y, val]
-    :return: [point value 1, point value 2,  distance between points]
+    Function prepares distances list of unknown (single) area.
+
+    INPUT:
+
+    :param unknown_area_points: [pt x, pt y, val].
+
+    OUTPUT:
+
+    :return: [point value 1, point value 2,  distance between points].
     """
     dists = calc_point_to_point_distance(unknown_area_points[:, :-1])
     vals = unknown_area_points[:, -1]
@@ -242,11 +266,17 @@ def prepare_distances_list_unknown_area(unknown_area_points):
 
 def _merge_point_val_and_distances(unknown_point_val, known_vals, distances_array):
     """
-    Function prepares array of point values and respective distances for Poisson Kriging calculations
+    Function prepares array of point values and respective distances for Poisson Kriging calculations.
+
+    INPUT:
+
     :param unknown_point_val: (float) unknown point value,
     :param known_vals: (numpy array) list of unknown area point values,
-    :param distances_array: (numpy array) distances from unknown area point to known area points,
-    :return output_arr: (numpy array) array of [unknown point value, [known points values, distance between points]]
+    :param distances_array: (numpy array) distances from unknown area point to known area points.
+
+    OUTPUT:
+
+    :return output_arr: (numpy array) array of [unknown point value, [known points values, distance between points]].
     """
     distances_array = distances_array[:, 0]
     otp = np.array([list(x) for x in zip(known_vals, distances_array)])
@@ -259,17 +289,23 @@ def prepare_atp_data(points_within_unknown_area,
                      number_of_neighbours, max_search_radius):
     """
     Function prepares data for Area to Point Poisson Kriging.
+
+    INPUT:
+
     :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
-        [area_id, [point_position_x, point_position_y, value of point]]
+        [area_id, [point_position_x, point_position_y, value of point]],
     :param known_areas: (numpy array) array of known areas in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location]
+        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
     :param points_within_known_areas: (numpy array) array of points and their values within the given area:
-        [[area_id, [point_position_x, point_position_y, value of point]], ...]
+        [[area_id, [point_position_x, point_position_y, value of point]], ...],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
         smaller than number_of_neighbours parameter then additional neighbours are included up to number of neighbors).
+
+    OUTPUT:
+
     :return output_data: (numpy array) array of distances from known locations to the unknown location:
-        [id (known), areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value]
+        [id (known), areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value].
     """
 
     # Initialize set

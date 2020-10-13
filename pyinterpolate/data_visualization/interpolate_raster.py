@@ -82,11 +82,17 @@ def update_interpolation_matrix(rows_coords, cols_coords, kriging_model, no_of_n
 def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_model=None):
     """
     Function interpolates raster from data points using ordinary kriging.
-    :param data: (numpy array / list) [coordinate x, coordinate y, value]
+
+    INPUT:
+
+    :param data: (numpy array / list) [coordinate x, coordinate y, value],
     :param dim: (int) number of pixels (points) of a larger dimension (it could be width or height),
     :param number_of_neighbors: (int) default=16, number of points used to interpolate data,
     :param semivariogram_model: (TheoreticalSemivariance) default=None, Theoretical Semivariogram model,
         if not provided then it is estimated from a given dataset.
+
+    OUTPUT:
+
     :return: (numpy arrays) [numpy array of interpolated values, numpy array of interpolation errors],
         and list of properties [pixel size, min x, max x, min y, max y]
     """
@@ -124,16 +130,3 @@ def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_mode
                                                                k, number_of_neighbors, True)
 
     return [kriged_matrix, kriged_errors], props
-
-
-if __name__ == '__main__':
-    a = np.array([[1, 1, 30],
-                  [1, 2, 6],
-                  [2, 3, 4],
-                  [9, 9, 1],
-                  [2, 9, 12]])
-    print(a.shape)
-    b = interpolate_raster(a, 100, 2, None)
-
-    show_data(b[0][0])
-    show_data(b[0][1])

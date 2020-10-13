@@ -8,26 +8,31 @@ from pyinterpolate.data_processing.data_preparation.select_values_in_range impor
 
 def calculate_semivariance(data, lags, step_size):
     """Function calculates semivariance of a given set of points.
+
         Equation for calculation is:
 
             semivariance = 1 / (2 * N) * SUM(i=1, N) [z(x_i + h) - z(x_i)]^2
 
         where:
-            N - number of observation pairs,
-            h - distance (lag),
-            z(x_i) - value at location z_i,
-            (x_i + h) - location at a distance h from x_i.
+
+            - N - number of observation pairs,
+            - h - distance (lag),
+            - z(x_i) - value at location z_i,
+            - (x_i + h) - location at a distance h from x_i.
 
         INPUT:
+
         :param data: array of coordinates and their values,
         :param lags: array of lags between points,
         :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
 
         OUTPUT:
-        :return: semivariance: numpy array of pair of lag and semivariance values where
-                 semivariance[0] = array of lags
-                 semivariance[1] = array of lag's values
-                 semivariance[2] = array of number of points in each lag.
+
+        :return: semivariance: numpy array of pair of lag and semivariance values where:
+
+            - semivariance[0] = array of lags,
+            - semivariance[1] = array of lag's values,
+            - semivariance[2] = array of number of points in each lag.
     """
 
     distances = calc_point_to_point_distance(data[:, :-1])
@@ -63,34 +68,31 @@ def calculate_weighted_semivariance(data, lags, step_size):
         Equation for calculation is:
 
         s(h) = [1 / (2 * SUM(a=1, N(h)) (n(u_a) * n(u_a + h)) /...
-                                      / (n(u_a) + n(u_a + h))
-                    )
-               ] * SUM(a=1, N(h)) {
-
-               [(n(u_a) * n(u_a + h)) / (n(u_a) + n(u_a + h))] *...
-               * [(z(u_a) - z(u_a + h))^2] - m'
-
-               }
+                    / (n(u_a) + n(u_a + h)))] *...
+                    * SUM(a=1, N(h)) {[(n(u_a) * n(u_a + h)) / (n(u_a) + n(u_a + h))] * [(z(u_a) - z(u_a + h))^2] - m'}
 
         where:
 
-        s(h) - Semivariogram of the risk,
-        n(u_a) - size of the population at risk in the unit a,
-        z(u_a) - mortality rate at the unit a,
-        u_a + h - area at the distance (h) from the analyzed area,
-        m' - population weighted mean of rates.
+        - s(h) - Semivariogram of the risk,
+        - n(u_a) - size of the population at risk in the unit a,
+        - z(u_a) - mortality rate at the unit a,
+        - u_a + h - area at the distance (h) from the analyzed area,
+        - m' - population weighted mean of rates.
 
         INPUT:
+
         :param data: (numpy array) [coordinate x, coordinate y, value, weight],
         :param lags: (array) of lags [lag1, lag2, lag...]
         :param step_size: step size of search radius.
 
 
         OUTPUT:
-        :return: semivariance: numpy array of pair of lag and semivariance values where
-                 semivariance[0] = array of lags
-                 semivariance[1] = array of lag's values
-                 semivariance[2] = array of number of points in each lag.
+
+        :return: semivariance: numpy array of pair of lag and semivariance values where:
+
+            - semivariance[0] = array of lags
+            - semivariance[1] = array of lag's values
+            - semivariance[2] = array of number of points in each lag.
     """
 
     # TEST: test if any 0-weight is inside the dataset

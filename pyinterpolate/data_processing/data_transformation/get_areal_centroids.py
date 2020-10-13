@@ -1,11 +1,13 @@
 def get_centroids(polygon):
-    """Function prepares array for distances calculation from the centroids of areal blocks
+    """Function prepares array for distances calculation from the centroids of areal blocks.
 
-       INPUT:
-        :param polygon: geometry object (polygon).
+    INPUT:
 
-       OUTPUT:
-        :return centroid_position: (tuple) centroid position for a given area.
+    :param polygon: geometry object (polygon).
+
+    OUTPUT:
+
+    :return: centroid position (tuple) centroid position for a given area.
     """
 
     centroid_position_x = polygon.centroid.x
