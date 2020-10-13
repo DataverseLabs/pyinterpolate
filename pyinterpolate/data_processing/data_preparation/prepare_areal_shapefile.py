@@ -9,15 +9,19 @@ def prepare_areal_shapefile(areal_file_address,
                             value_column_name=None,
                             geometry_column_name='geometry',
                             dropnans=True):
-    """
-    Function prepares areal shapefile for processing and transforms it into numpy array. Function returns
-    two lists.
+    """Function prepares areal shapefile for processing and transforms it into numpy array. Function returns two lists.
+
+    INPUT:
+
     :param areal_file_address: (string) path to the shapefile with areal data,
     :param id_column_name: (string) id column name, if not provided then index column is treated as the id,
     :param value_column_name: (string) value column name, if not provided then all values are set to nan,
     :param geometry_column_name: (string) default is 'geometry',
-    :param dropnans: (bool) if true then rows with nans are dropped,
-    :return: areal_array: (numpy array) [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
+    :param dropnans: (bool) if true then rows with nans are dropped.
+
+    OUTPUT:
+
+    :return: areal_array (numpy array) [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
     """
 
     # Test if value column name is None and dropnans is True

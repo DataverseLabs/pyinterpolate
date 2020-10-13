@@ -12,20 +12,29 @@ class Krige:
     known_points - array of known values [x, y, val]
 
     Available methods:
-    * ordinary_kriging - ordinary kriging of unknown point value,
-    * simple_kriging - simple kriging of unknown point value.
 
-    Method may raise value error if estimated value is below 0. You may use try: statement to overwrite
-    those values with some constant or NaN or you could use different semivariogram model. Sometimes this problem
-    is related to the input data, especially clusters of points. In this case aggregate those clusters
-    and then estimate semivariogram and perform kriging.
+    - ordinary_kriging - ordinary kriging of unknown point value,
+    - simple_kriging - simple kriging of unknown point value.
 
+    Method may raise value error if estimated value is below 0. You may use try: statement to overwrite those values
+        with some constant or NaN or you could use different semivariogram model. Sometimes this problem is related to
+        the input data, especially clusters of points. In this case aggregate those clusters and then estimate
+        semivariogram and perform kriging.
+
+    INITLIALIZATION PARAMS:
+
+    :param semivariogram_model: semivariogram model returned by TheoreticalSemivariogram class
+    :param known_points: dataset with known values and locations. Each column should represent different dimension and
+        the last column represents values example: [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]].
     """
 
     def __init__(self, semivariogram_model, known_points):
         """
+        INPUT:
+
         :param semivariogram_model: semivariogram model returned by TheoreticalSemivariogram class
         :param known_points: dataset with known values and locations
+
         Each column should represent different dimension and the last column represents values
         example: [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]]
         """
@@ -37,18 +46,24 @@ class Krige:
     def ordinary_kriging(self, unknown_location, number_of_neighbours, test_anomalies=True):
         """
         Function predicts value at unknown location.
+
+        INPUT:
+
         :param unknown_location: (tuple) position of unknown location,
         :param number_of_neighbours: (int) number of the closest locations to the unknown position which should be
             included in the modeling,
-        :param test_anomalies: (bool) check if weights are negative,
-        :return model_output: (array)
+        :param test_anomalies: (bool) check if weights are negative.
+
+        OUTPUT:
+
+        :return:
             for ordinary kriging:
-                zhat, sigma, w[-1][0], w:
-                [value in unknown location, error, estimated mean, weights]
+
+                - zhat, sigma, w[-1][0], w == [value in unknown location, error, estimated mean, weights]
 
             for simple kriging:
-                zhat, sigma, area_mean, w
-                [value in unknown location, error, mean, weights]
+
+                - zhat, sigma, area_mean, w == [value in unknown location, error, mean, weights]
         """
 
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,
@@ -95,21 +110,27 @@ class Krige:
     def simple_kriging(self, unknown_location, number_of_neighbours, mu=None, test_anomalies=True):
         """
         Function predicts value at unknown location.
+
+        INPUT:
+
         :param unknown_location: (tuple) position of unknown location,
         :param number_of_neighbours: (int) number of the closest locations to the unknown position which should be
             included in the modeling,
         :param mu: (float) global mean which should be known before processing. If not given then it is calculated
             from the sample but then it may cause a relative large errors (this mean is expectation of the random field,
             so without knowledge of the ongoing processes it is unknown).
-        :param test_anomalies: (bool) check if weights are negative,
-        :return model_output: (array)
+        :param test_anomalies: (bool) check if weights are negative.
+
+        OUTPUT:
+
+        :return:
             for ordinary kriging:
-                zhat, sigma, w[-1][0], w:
-                [value in unknown location, error, estimated mean, weights]
+
+                - zhat, sigma, w[-1][0], w == [value in unknown location, error, estimated mean, weights]
 
             for simple kriging:
-                zhat, sigma, area_mean, w
-                [value in unknown location, error, mean, weights]
+
+                - zhat, sigma, area_mean, w == [value in unknown location, error, mean, weights]
         """
 
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,

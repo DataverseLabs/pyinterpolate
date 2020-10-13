@@ -18,17 +18,20 @@ class RegularizedSemivariogram:
     Units, Mathematical Geology 40(1), 101-128, 2008.
 
     Class works as follow:
+
     - initialize your object (no parameters),
     - then use fit() method to build initial point support model,
     - the use transform() method to perform semivariogram regularization.
 
     Class public methods:
 
-    - fit() - fits areal data and point support data into a model, initialize experimental semivariogram,
-              theoretical semivariogram model, regularized point support model and deviation.
-    - transform() - performs semivariogram regularization, which is an iterative process.
-    - show_semivariograms() - plots experimental semivariogram of areal data, theoretical curve of areal data,
-                              regularized model values and regularized model theoretical curve.
+    fit() - fits areal data and point support data into a model, initialize experimental semivariogram,
+    theoretical semivariogram model, regularized point support model and deviation.
+
+    transform() - performs semivariogram regularization, which is an iterative process.
+
+    show_semivariograms() - plots experimental semivariogram of areal data, theoretical curve of areal data,
+    regularized model values and regularized model theoretical curve.
     """
 
     def __init__(self):
@@ -97,9 +100,13 @@ class RegularizedSemivariogram:
         """
         Function regularizes semivariogram with ArealSemivariance class.
 
+        INPUT:
+
         :param empirical_semivariance: experimental values of semivariance as an array of the form:
             [[column with lags, column with values, column with number of points within lag]],
         :param semivariance_model: TheoreticalSemivariance model,
+
+        OUTPUT:
 
         :return: regularized semivariance values (array).
         """
@@ -123,10 +130,12 @@ class RegularizedSemivariogram:
         Function calculates deviation between experimental and theoretical semivariogram over given lags.
 
         INPUT:
+
         :param regularized_model: (numpy array) array of the values generated for the regularized model,
         :param theoretical_model: (TheoreticalSemivariance) theoretical model of data,
 
         OUTPUT:
+
         :return deviation: (float) scalar which describes deviation between semivariograms.
         """
 
@@ -143,14 +152,20 @@ class RegularizedSemivariogram:
         return deviation
 
     def _rescale_optimal_point_support(self):
-        """Function rescales the optimal point support model and creates new experimental values for
-        each lag based on the equation:
+        """Function rescales the optimal point support model and creates new experimental values for each lag based on
+            the equation:
+
             y(1)(h) = y_opt(h) x w(h)
+
             w(h) = 1 + [(y_exp_v(h) - y_opt_v(h) / (s^2 * sqrt(iter))]
-            s = sill of the model y_exp_v
-            iter = iteration number
+
+            where:
+
+            - s = sill of the model y_exp_v
+            - iter = iteration number
 
         OUTPUT:
+
         :return rescalled_point_support_semivariogram: (numpy array) of the form [[lag, semivariance, number of points]]
         """
         lags = self.areal_lags
@@ -279,11 +294,12 @@ class RegularizedSemivariogram:
         Function transofrms fitted data and performs semivariogram regularziation iterative procedure.
 
         INPUT:
+
         :param max_iters: maximum number of iterations,
         :param min_deviation_ratio: minimum ration between deviation and initial deviation (D(i) / D(0)) below each
             algorithm is stopped,
         :param min_diff_decrease: minimum absolute difference between new and optimal deviation divided by optimal
-            deviation: |D(i) - D(opt)| / D(opt). If it is recorded n times (controled by the min_diff_d_stat_reps
+            deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by the min_diff_d_stat_reps
             param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
             min_diff_d_stat is fulfilled.

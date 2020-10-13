@@ -7,12 +7,14 @@ def calc_point_to_point_distance(points_a, points_b=None):
     """Function calculates distances between all points in the given array.
 
     INPUT:
-    :param points_a: (numpy array) or Python list of lists of coordinates,
-    :param points_b: default (None) if None then distances between all points grouped in matrix points_a are
-        calculated. If points_b is provided it must be the same type as point_b.
+
+    :param points_a: array of points coordinates,
+    :param points_b: array of points coordinates, default is None. If None then distance between all points in points_a
+        is calculated.
 
     OUTPUT:
-    :return distances: numpy array of distances between all coordinates."""
+
+    :return: numpy array of distances between all coordinates."""
 
     if points_b is None:
         distances = cdist(points_a, points_a, 'euclidean')
@@ -23,21 +25,18 @@ def calc_point_to_point_distance(points_a, points_b=None):
 
 def _calculate_block_to_block_distance(area_block_1, area_block_2):
     """
-        Function calculates distance between two blocks based on how they are divided (into a population blocks)
-        :param area_block_1: set of coordinates of each population block in the form:
-        [
-            [coordinate x 0, coordinate y 0, value 0],
-            [...],
-            [coordinate x n, coordinate y n, value n]
-        ]
-        :param area_block_2: the same set of coordinates as area_block_1
-        :return distance: function return weighted block to block distance
+    Function calculates distance between two blocks based on how they are divided (into a population blocks).
 
-        Equation: Dist(v_a, v_b) = 1 / (SUM_to(Pa), SUM_to(Pb) n(u_s) * n(u_si)) *
+    :param area_block_1: set of coordinates of each population block in the form [x, y, value],
+    :param area_block_2: the same set of coordinates as area_block_1.
+
+    :return distance: weighted array of block to block distance.
+
+    Equation: Dist(v_a, v_b) = 1 / (SUM_to(Pa), SUM_to(Pb) n(u_s) * n(u_si)) *
         * SUM_to(Pa), SUM_to(Pb) n(u_s) * n(u_si) ||u_s - u_si||
-        where:
-        Pa and Pb: number of points u_s and u_si used to discretize the two units v_a and v_b
-        n(u_s) - population size in the cell u_s
+    where:
+    Pa and Pb: number of points u_s and u_si used to discretize the two units v_a and v_b
+    n(u_s) - population size in the cell u_s
     """
 
     if type(area_block_1) is list:
@@ -65,30 +64,20 @@ def _calculate_block_to_block_distance(area_block_1, area_block_2):
 
 
 def calc_block_to_block_distance(areas):
-    """Function calculates distances between blocks based on the population points within the block.
+    """
+    Function calculates distances between blocks based on the population points within the block.
 
     INPUT:
-    :param areas: numpy array or Python list of lists of areal id's and coordinates per each id:
-    [
-        [area_id_1,
-        [[coor_x1, coor_y1, val1],
-          [coor_x2, coor_y2, val2],
-          [coor_x999, coor_y999, val999]]
-        ],
 
-        [next area...]
-    ]
+    :param areas: numpy array or Python list of lists of areal id's and coordinates per each id [area id, [x, y, val]].
 
     OUTPUT:
-    :return areal_distances: tuple with matrix with areal distances (0) and ids of each row of distances (1):
 
-    (
-        [[dist(id0:id0), dist(id0:id1), ..., dist(id0:id999)],
-        ...,
-        [dist(id999:id0), dist(id999:id1), ..., dist(id999:id999)]],
+    :return: areal distances - tuple with matrix with areal distances (0) and ids of each row of distances (1):
 
-        [id0, id1, ..., id999]
-    )
+    (0): [[dist(id0:id0), ..., dist(id0:id99)], ..., [dist(id99:id0), ..., dist(id99:id99)]]
+
+    (1): [id0, id1, ..., id999]
 
     """
 

@@ -8,11 +8,17 @@ def get_total_value_of_area(areal_points):
 def set_areal_weights(areal_data, areal_points):
     """
     Function prepares array for weighted semivariance calculation.
+
+    INPUT:
+
     :param areal_data: (numpy array) array of areas in the form:
-            [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value]
+        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value],
     :param areal_points: (numpy array) array of points within areas in the form:
-            [area_id, [point_position_x, point_position_y, value]]
-    :return weighted_semivariance_input: (numpy array) array of points
+        [area_id, [point_position_x, point_position_y, value]].
+
+    OUTPUT:
+
+    :return: (numpy array) array of weighted points.
     """
 
     weighted_semivariance_input = []

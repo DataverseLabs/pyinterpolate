@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance &#8212; pyinterpolate 0.2 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.calculations.distances.calculate_distances</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.data_processing.data_preparation.select_values_in_range</span> <span class="kn">import</span> <span class="n">select_values_in_range</span>
+
+
+<div class="viewcode-block" id="calculate_semivariance"><a class="viewcode-back" href="../../../../index.html#pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance.calculate_semivariance">[docs]</a><span class="k">def</span> <span class="nf">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lags</span><span class="p">,</span> <span class="n">step_size</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates semivariance of a given set of points.</span>
+
+<span class="sd">        Equation for calculation is:</span>
+
+<span class="sd">            semivariance = 1 / (2 * N) * SUM(i=1, N) [z(x_i + h) - z(x_i)]^2</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">            - N - number of observation pairs,</span>
+<span class="sd">            - h - distance (lag),</span>
+<span class="sd">            - z(x_i) - value at location z_i,</span>
+<span class="sd">            - (x_i + h) - location at a distance h from x_i.</span>
+
+<span class="sd">        INPUT:</span>
+
+<span class="sd">        :param data: array of coordinates and their values,</span>
+<span class="sd">        :param lags: array of lags between points,</span>
+<span class="sd">        :param step_size: distance which should be included in the gamma parameter which enhances range of interest.</span>
+
+<span class="sd">        OUTPUT:</span>
+
+<span class="sd">        :return: semivariance: numpy array of pair of lag and semivariance values where:</span>
+
+<span class="sd">            - semivariance[0] = array of lags,</span>
+<span class="sd">            - semivariance[1] = array of lag&#39;s values,</span>
+<span class="sd">            - semivariance[2] = array of number of points in each lag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">semivariance</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Calculate semivariances</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">lags</span><span class="p">):</span>
+        <span class="n">distances_in_range</span> <span class="o">=</span> <span class="n">select_values_in_range</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+        <span class="n">sem</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sem</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sem_value</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sem_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sem</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">sem</span><span class="p">))</span>
+        <span class="n">semivariance</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">sem_value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sem</span><span class="p">)])</span>
+    <span class="n">semivariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">semivariance</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">semivariance</span></div>
+
+
+<div class="viewcode-block" id="calculate_weighted_semivariance"><a class="viewcode-back" href="../../../../index.html#pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance.calculate_weighted_semivariance">[docs]</a><span class="k">def</span> <span class="nf">calculate_weighted_semivariance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lags</span><span class="p">,</span> <span class="n">step_size</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates weighted semivariance following Monestiez et al.:</span>
+
+<span class="sd">        A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Comparison of model based geostatistical methods</span>
+<span class="sd">        in ecology: application to fin whale spatial distribution in northwestern Mediterranean Sea.</span>
+<span class="sd">        In Geostatistics Banff 2004 Volume 2. Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands,</span>
+<span class="sd">        Kluwer Academic Publishers; 2005:777-786.</span>
+
+<span class="sd">        B. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Geostatistical modelling of spatial distribution</span>
+<span class="sd">        of Balenoptera physalus in the northwestern Mediterranean Sea from sparse count data and heterogeneous</span>
+<span class="sd">        observation efforts. Ecological Modelling 2006 in press.</span>
+
+<span class="sd">        Equation for calculation is:</span>
+
+<span class="sd">        s(h) = [1 / (2 * SUM(a=1, N(h)) (n(u_a) * n(u_a + h)) /...</span>
+<span class="sd">                    / (n(u_a) + n(u_a + h)))] *...</span>
+<span class="sd">                    * SUM(a=1, N(h)) {[(n(u_a) * n(u_a + h)) / (n(u_a) + n(u_a + h))] * [(z(u_a) - z(u_a + h))^2] - m&#39;}</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - s(h) - Semivariogram of the risk,</span>
+<span class="sd">        - n(u_a) - size of the population at risk in the unit a,</span>
+<span class="sd">        - z(u_a) - mortality rate at the unit a,</span>
+<span class="sd">        - u_a + h - area at the distance (h) from the analyzed area,</span>
+<span class="sd">        - m&#39; - population weighted mean of rates.</span>
+
+<span class="sd">        INPUT:</span>
+
+<span class="sd">        :param data: (numpy array) [coordinate x, coordinate y, value, weight],</span>
+<span class="sd">        :param lags: (array) of lags [lag1, lag2, lag...]</span>
+<span class="sd">        :param step_size: step size of search radius.</span>
+
+
+<span class="sd">        OUTPUT:</span>
+
+<span class="sd">        :return: semivariance: numpy array of pair of lag and semivariance values where:</span>
+
+<span class="sd">            - semivariance[0] = array of lags</span>
+<span class="sd">            - semivariance[1] = array of lag&#39;s values</span>
+<span class="sd">            - semivariance[2] = array of number of points in each lag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># TEST: test if any 0-weight is inside the dataset</span>
+
+    <span class="n">_test_weights</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># Calculate distance</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># Prepare semivariance arrays</span>
+    <span class="n">smv</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">semivariance</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Calculate semivariances</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">lags</span><span class="p">)):</span>
+        <span class="n">distances_in_range</span> <span class="o">=</span> <span class="n">select_values_in_range</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+
+        <span class="c1"># Weights</span>
+        <span class="n">weight1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="n">weight2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">weight1</span> <span class="o">*</span> <span class="n">weight2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">weight1</span> <span class="o">+</span> <span class="n">weight2</span><span class="p">)</span>
+        <span class="n">weights_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="c1"># Values</span>
+        <span class="n">val1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">val2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">]</span>
+
+        <span class="c1"># Weighted mean of values</span>
+        <span class="n">weighted_mean</span> <span class="o">=</span> <span class="p">((</span><span class="n">weight1</span> <span class="o">*</span> <span class="n">val1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">weight2</span> <span class="o">*</span> <span class="n">val2</span><span class="p">))</span> <span class="o">/</span> <span class="n">weights_sum</span>
+
+        <span class="n">sem</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="n">distances_in_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">sem_value</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">sem</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weighted_mean</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">weights_sum</span><span class="p">))</span>
+        <span class="n">smv</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">sem_value</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">sem</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">smv</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">semivariance</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">smv</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">smv</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">semivariance</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">semivariance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">semivariance</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">semivariance</span></div>
+
+
+<span class="k">def</span> <span class="nf">_test_weights</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="mi">0</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;One or more of weights in dataset is set to 0, this may cause errors in the calculations&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Szymon Molinski.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
