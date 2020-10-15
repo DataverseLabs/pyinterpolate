@@ -79,11 +79,12 @@ High level overview:
 Development
 ===========
 
-- poisson kriging tutorials,
 - inverse distance weighting,
-- documentation
+- point cloud variograms,
+- semivariogram params management,
+- semivariogram regularization with epidemiological data tutorial
 
 Known Bugs
 ==========
 
-- 
+- (still) not detected!

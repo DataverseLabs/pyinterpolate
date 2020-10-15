@@ -4,8 +4,8 @@ from pyinterpolate.calculations.distances.calculate_distances import calc_block_
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
-from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_inblock_semivariance\
-    import calculate_inblock_semivariance
+from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_semivariance_within_blocks\
+    import calculate_semivariance_within_blocks
 from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_average_semivariance\
     import calculate_average_semivariance
 from pyinterpolate.semivariance.areal_semivariance.block_to_block_semivariance.\
@@ -13,13 +13,26 @@ from pyinterpolate.semivariance.areal_semivariance.block_to_block_semivariance.\
 
 
 class ArealSemivariance:
-    """Class for Areal Semivariance object which is used for the semivariogram deconvolution"""
+    """Class for Areal Semivariance object which is used for the semivariogram deconvolution.
+
+    INITIALIZATION PARAMS:
+
+    param areal_data: (numpy array / list of lists) [area_id, area_geometry, centroid coordinate x,
+        centroid coordinate y, value],
+    :param areal_lags: (numpy array / list of lists) - array of lags (ranges of search),
+    :param areal_step_size: (float) step size for search radius,
+    :param areal_points_data: (numpy array / list of lists)
+        [area_id, [point_position_x, point_position_y, value]]
+    :param weighted_semivariance: (bool) if False then each distance is treated equally when calculating
+        theoretical semivariance; if True then semivariances closer to the point have more weight,
+    :param verbose: (bool) if True then all messages are printed, otherwise nothing.
+    """
 
     def __init__(self, areal_data, areal_lags, areal_step_size,
-                 areal_points_data, areal_points_lags, areal_points_step_size,
-                 weighted_semivariance=False, verbose=False):
+                 areal_points_data, weighted_semivariance=False, verbose=False):
 
         """
+        INPUT:
 
         :param areal_data: (numpy array / list of lists)
             [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value],
@@ -27,8 +40,6 @@ class ArealSemivariance:
         :param areal_step_size: (float) step size for search radius,
         :param areal_points_data: (numpy array / list of lists)
             [area_id, [point_position_x, point_position_y, value]]
-        :param areal_points_lags: (numpy array / list of lists) - array of lags (ranges of search),
-        :param areal_points_step_size: (float) step size for search radius.
         :param weighted_semivariance: (bool) if False then each distance is treated equally when calculating
             theoretical semivariance; if True then semivariances closer to the point have more weight,
         :param verbose: (bool) if True then all messages are printed, otherwise nothing.
@@ -40,8 +51,6 @@ class ArealSemivariance:
         self.areal_lags = areal_lags
         self.areal_ss = areal_step_size
         self.within_area_points = areal_points_data
-        self.points_lags = areal_points_lags
-        self.points_ss = areal_points_step_size
         self.weighted_semivariance = weighted_semivariance
 
         # Semivariogram models
@@ -74,15 +83,18 @@ class ArealSemivariance:
     def regularize_semivariogram(self, within_block_semivariogram=None, between_blocks_semivariogram=None,
                                  empirical_semivariance=None, theoretical_semivariance_model=None):
         """Function calculates regularized point support semivariogram in the form given in:
+
         Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units,
-        Mathematical Geology 40(1), 101-128, 2008
+            Mathematical Geology 40(1), 101-128, 2008
 
         Function has the form: gamma_v(h) = gamma(v, v_h) - gamma_h(v, v) where:
-        gamma_v(h) - regularized semivariogram,
-        gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h,
-        gamma_h(v, v) - arithmetical average of within-block semivariogram
+
+        - gamma_v(h) - regularized semivariogram,
+        - gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h,
+        - gamma_h(v, v) - arithmetical average of within-block semivariogram
 
         INPUT:
+
         :param within_block_semivariogram: mean semivariance between the blocks:
             yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
             y(va, va) and y(va+h, va+h) are the inblock semivariances of block a and block a+h separated
@@ -96,10 +108,12 @@ class ArealSemivariance:
             from areal centroids and empirical semivariance.
 
         OUTPUT:
-        :return: semivariance: numpy array of pair of lag and semivariance values where
-                 semivariance[0] = array of lags
-                 semivariance[1] = array of lag's values
-                 semivariance[2] = array of number of points in each lag
+
+        :return: semivariance: numpy array of pair of lag and semivariance values where:
+
+            - semivariance[0] = array of lags
+            - semivariance[1] = array of lag's values
+            - semivariance[2] = array of number of points in each lag
         """
 
         # SET SEMIVARIANCES
@@ -128,9 +142,15 @@ class ArealSemivariance:
             self.between_blocks_semivariogram = between_blocks_semivariogram
 
         regularized_semivariogram = self.between_blocks_semivariogram.copy()
-        regularized_semivariogram[:, 1] = np.abs(
+        regularized_semivariogram[:, 1] = (
             self.between_blocks_semivariogram[:, 1] - self.within_block_semivariogram[:, 1]
         )
+
+        # CHECK VALUES BELOW 0
+
+        for idx, row in enumerate(regularized_semivariogram):
+            if row[1] < 0:
+                regularized_semivariogram[idx, 1] = 0
 
         self.regularized_semivariogram = regularized_semivariogram.copy()
 
@@ -141,29 +161,32 @@ class ArealSemivariance:
     def calculate_mean_semivariance_between_blocks(self, distances=None):
         """
         Function calculates average semivariance between blocks separated by a vector h according to the equation:
+
         yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
-        y(va, va) and y(va+h, va+h) are estimated according to the function calculate_inblock_semivariance, and h
-        are estimated according to the block_to_block_distances function.
+
+        - y(va, va) and y(va+h, va+h) are estimated according to the function calculate_semivariance_within_blocks,
+        - h are estimated according to the block_to_block_distances function.
 
         INPUT:
+
         :param distances: if given then this step of calculation is skipped
 
         OUTPUT:
+
         :return: [s, d]
-                s - semivariances in the form: list of [[lag, semivariance], [lag_x, semivariance_x], [..., ...]]
-                if distances:
-                d - distances between blocks (dict) in the form: {area_id: {other_area_id: distance,
-                                                                            other_area_id: distance,}}
-                else:
-                d = 0
+
+                - s - semivariances in the form: list of [[lag, semivariance], [lag_x, semivariance_x], [..., ...]]
+                - if distances: d - distances between blocks (dict) in the form: {area_id: {other_area_id: distance,
+                    other_area_id: distance,}}
+                - else: d = 0.
         """
 
         # Calculate inblock semivariance
         if self.verbose:
             print('Start of the inblock semivariance calculation')
         # Pass numpy array with [area id, [points within area and their values]] and semivariogram model
-        self.inblock_semivariance = np.array(calculate_inblock_semivariance(self.within_area_points,
-                                                                            self.theoretical_semivariance_model))
+        self.inblock_semivariance = np.array(calculate_semivariance_within_blocks(self.within_area_points,
+                                                                                  self.theoretical_semivariance_model))
         if self.verbose:
             print('Inblock semivariance calculated successfully')
 
@@ -190,9 +213,11 @@ class ArealSemivariance:
         """
         Function calculates semivariance between areas based on their division into smaller blocks. It is
             gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.
+
+        OUTPUT:
+
         :return semivariogram: (array) Semivariances between blocks for a given lags based on the inblock division into
-            smaller blocks. It is numpy array of the form
-            [[lag, semivariance], [next lag, other semivariance], [...]]
+            smaller blocks. It is numpy array of the form [[lag, semivariance], [next lag, other semivariance], [...]].
         """
         # Check if distances are calculated
         if self.distances_between_blocks is None:
@@ -211,6 +236,7 @@ class ArealSemivariance:
             print('Semivariance between blocks for a given lags calculated')
             print('Calculation of the mean semivariance for a given lag')
         semivariogram = []
+
         for areal_lag in self.areal_lags:
             dists_and_semivars = blocks[0].copy().flatten()
             smvs = []
@@ -243,7 +269,7 @@ class ArealSemivariance:
 
     def show_semivariograms(self):
         """
-        Function shows semiavriograms calculated with the method.
+        Function shows semivariograms calculated with the class.
         """
         plt.figure(figsize=(12, 12))
         plt.plot(self.experimental_semivariogram[:, 0], self.experimental_semivariogram[:, 1],

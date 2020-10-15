@@ -4,26 +4,64 @@ import pyproj
 from geopandas.tools import sjoin
 
 
-def get_points_within_area(area_shapefile, points_shapefile, dropna=True,
-                           areal_id_col_name=None, points_val_col_name=None,
+def _check_columns(areal_dataframe, areal_id, points_val, points_dataframe):
+    """
+    Function checks if both dataframes has the same id and/or value columns to prevent program from errors.
+    :param areal_dataframe: (GeoDataFrame),
+    :param areal_id: (string) name of the areal id column name,
+    :param points_val: (string) name of the points value column name,
+    :param points_dataframe: (GeoDataFrame).
+    
+    :return areal_df, points_df: If areal_id column name is in points_dataframe then points_dataframe column
+        name is changed with prefix pts_; If points_val column name is in areal_dataframe then areal_dataframe
+        column name is changed with prefix a_. Otherwise function returns original dataframes.
+    """
+    
+    areal_columns = areal_dataframe.columns
+    point_columns = points_dataframe.columns
+    
+    if areal_id in point_columns:
+        points_dataframe.drop(areal_id, axis=1, inplace=True)
+        
+    if points_val in areal_columns:
+        areal_dataframe.drop(points_val, axis=1, inplace=True)
+    
+    return areal_dataframe, points_dataframe
+
+
+def get_points_within_area(area_shapefile,
+                           points_shapefile,
+                           areal_id_col_name,
+                           points_val_col_name,
+                           dropna=True,
                            points_geometry_col_name='geometry',
                            nans_to_zero=True):
     """
     Function prepares points data for further processing.
+
+    INPUT:
+
     :param area_shapefile: (string) areal data shapefile address,
     :param points_shapefile: (string) points data shapefile address,
-    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points).
     :param areal_id_col_name: (string) name of the column with id, if None then function uses index column,
     :param points_val_col_name: (string) name of the value column of each point, if None then first column other than
         points_geometry_col_name is used,
+    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points).
     :param points_geometry_col_name: (string) default 'geometry',
     :param nans_to_zero: (bool) if true then all nan value is casted to 0,
+
+    OUTPUT:
+
     :return: output_points_within_area (numpy array) [area_id, [point_position_x, point_position_y, value]]
     """
     output_points_within_area = []
 
     areal_data = gpd.read_file(area_shapefile)
     points_data = gpd.read_file(points_shapefile)
+
+    # Test if both files have the same columns
+
+    areal_data, points_data = _check_columns(areal_data, areal_id_col_name, points_val_col_name, points_data)
 
     # Test if areal data has the same projection as points data
     # Match centroid points with areas

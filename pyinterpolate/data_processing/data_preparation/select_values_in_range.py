@@ -2,8 +2,18 @@ import numpy as np
 
 
 def select_values_in_range(data, lag, step_size):
-    """Function selects set of values which are greater than (lag - step size) and
-    lesser than (lag + step size)."""
+    """Function selects set of values which are greater than (lag - step size) and lesser than (lag + step size).
+
+    INPUT:
+
+    :param data: array of distances,
+    :param lag: (float) lag from which areas are included,
+    :param step_size: (float) step from lag to include in the analysis.
+
+    OUTPUT:
+
+    :return: array mask with distances within specified radius.
+    """
 
     # Check if numpy array is given
     if type(data) != np.ndarray:

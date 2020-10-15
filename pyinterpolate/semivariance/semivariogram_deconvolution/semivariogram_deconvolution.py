@@ -1,3 +1,5 @@
+# THIS CLASS IS DEPRECATED AND WILL BE REMOVED IN THE NEXT UPDATE
+
 # Base libraries
 import numpy as np
 
@@ -18,23 +20,40 @@ class RegularizedSemivariogram:
     Class performs deconvolution of semivariogram of areal data.
 
         METHODS:
-        regularize_model: method regularizes given areal model based on the:
+
+        - regularize_model: method regularizes given areal model based on the:
             a) data with areal counts of some variable,
             b) data with population units and counts (divided per area),
             Based on the experimental semivariogram of areal centroids and population units function performs
             deconvolution and returns theoretical model for given areas.
             Method is described in: Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular
             Geographical Units, Mathematical Geology 40(1), 101-128, 2008.,
-        rescale: function rescales the optimal point support model and creates new experimental values for
+        - rescale: function rescales the optimal point support model and creates new experimental values for
             each lag,
-        calculate_deviation: function calculates deviation between experimental and theoretical semivariogram
+        - calculate_deviation: function calculates deviation between experimental and theoretical semivariogram
             over given lags,
-        show_semivariograms: function shows experimental semivariogram, theoretical semivariogram and regularized
+        - show_semivariograms: function shows experimental semivariogram, theoretical semivariogram and regularized
             semivariogram,
-        show_deviation: plot of changes of deviation over time,
-        _check_loops_status: method checks model loop's statistics to stop iteration after certain events occurs,
-        _check_optimizer: function checks if analysis is not in local optimum.
+        - show_deviation: plot of changes of deviation over time,
+        - _check_loops_status: method checks model loop's statistics to stop iteration after certain events occurs,
+        - _check_optimizer: function checks if analysis is not in local optimum.
 
+        PARAMETERS WHICH CONTROL CLASS:
+
+        All parameters control behavior of the algorithm.
+
+        :param d_statistics_change: (float) min change of deviation, if change is smaller then algorithm is stopped,
+        :param ranges:(int) numberof ranges to search for optimal model,
+        :param loop_limit: (int) max number of algorithm iterations,
+        :param min_no_loops: (int) min number of loops,
+        :param number_of_loops_with_const_mean: (int) number of times when devaition is not changing or change is very
+            small (mean_diff parameter).
+        :param mean_diff: (float) difference between deviations between the loops, if smaller than parameter
+            then algorithm is stopped. This situation must occur number_of_loops_with_const_mean times to invoke
+            stop.
+        :param weighted_semivariance: (bool) if False then each distance is treated equally when calculating
+            theoretical semivariance; if True then semivariances closer to the point have more weight,
+        :param verbose: (bool) if True then all messages are printed, otherwise nothing.
     """
 
     def __init__(self,
@@ -48,6 +67,7 @@ class RegularizedSemivariogram:
                  verbose=True):
         """
         All parameters control behavior of the algorithm.
+
         :param d_statistics_change: (float) min change of deviation, if change is smaller then algorithm is stopped,
         :param ranges:(int) numberof ranges to search for optimal model,
         :param loop_limit: (int) max number of algorithm iterations,
@@ -70,6 +90,7 @@ class RegularizedSemivariogram:
         self.optimal_point_support_model = None  # Values updated in the point 5
         self.optimal_regularized_model = None  # Values updated in the point 5
         self.rescalled_point_support_semivariogram = None  # Values updated in the point 6
+        self.areal_semivariance_models = None  # Model updated in the step 8
 
         self.final_regularized = None
         self.final_optimal_point_support = None
@@ -235,7 +256,7 @@ class RegularizedSemivariogram:
         # Initialize areal semivariance object
         areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                areal_points_data, areal_points_lags, areal_points_step_size,
-                                               weighted_semivariance=self.weighted_semivariance)
+                                               weighted_semivariance=self.weighted_semivariance, verbose=self.verbose)
 
         # Regularize semivariogram of areal data
         self.theoretically_regularized_model = areal_semivariance.regularize_semivariogram(
@@ -302,7 +323,9 @@ class RegularizedSemivariogram:
 
             areal_semivariance = ArealSemivariance(areal_data, areal_lags, areal_step_size,
                                                    areal_points_data, areal_points_lags, areal_points_step_size,
-                                                   weighted_semivariance=self.weighted_semivariance)
+                                                   weighted_semivariance=self.weighted_semivariance,
+                                                   verbose=self.verbose)
+            self.areal_semivariance_models = areal_semivariance
 
             regularized = areal_semivariance.regularize_semivariogram(
                 empirical_semivariance=self.experimental_semivariogram_of_areal_data,

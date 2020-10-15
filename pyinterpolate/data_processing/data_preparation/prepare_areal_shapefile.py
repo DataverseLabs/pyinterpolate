@@ -4,26 +4,38 @@ import geopandas as gpd
 from pyinterpolate.data_processing.data_transformation.get_areal_centroids import get_centroids
 
 
-def prepare_areal_shapefile(areal_file_address, id_column_name=None, value_coulmn_name=None,
-                            geometry_column_name='geometry', dropnans=True):
-    """
-    Function prepares areal shapefile for processing and transforms it into numpy array. Function returns
-    two lists.
+def prepare_areal_shapefile(areal_file_address,
+                            id_column_name=None,
+                            value_column_name=None,
+                            geometry_column_name='geometry',
+                            dropnans=True):
+    """Function prepares areal shapefile for processing and transforms it into numpy array. Function returns two lists.
+
+    INPUT:
+
     :param areal_file_address: (string) path to the shapefile with areal data,
     :param id_column_name: (string) id column name, if not provided then index column is treated as the id,
-    :param value_coulmn_name: (string) value column name, if not provided then all values are set to nan,
+    :param value_column_name: (string) value column name, if not provided then all values are set to nan,
     :param geometry_column_name: (string) default is 'geometry',
-    :param dropnans: (bool) if true then rows with nans are dropped,
-    :return: areal_array: (numpy array) [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
+    :param dropnans: (bool) if true then rows with nans are dropped.
+
+    OUTPUT:
+
+    :return: areal_array (numpy array) [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
     """
+
+    # Test if value column name is None and dropnans is True
+    if (value_column_name is None) and dropnans:
+        raise TypeError('You cannot leave value_column_name as None and set dropnans to True because function '
+                        'will return empty list')
 
     shapefile = gpd.read_file(areal_file_address)
     cols_to_hold = list()
 
     # Prepare index column
     if id_column_name is None:
-        shapefile['id'] = shapefile.index
-        cols_to_hold.append('id')
+        shapefile['id_generated'] = shapefile.index
+        cols_to_hold.append('id_generated')
     else:
         cols_to_hold.append(id_column_name)
 
@@ -31,11 +43,11 @@ def prepare_areal_shapefile(areal_file_address, id_column_name=None, value_coulm
     cols_to_hold.append(geometry_column_name)
 
     # Prepare value column
-    if value_coulmn_name is None:
-        shapefile['vals'] = np.nan
-        cols_to_hold.append('vals')
+    if value_column_name is None:
+        shapefile['vals_generated'] = np.nan
+        cols_to_hold.append('vals_generated')
     else:
-        cols_to_hold.append(value_coulmn_name)
+        cols_to_hold.append(value_column_name)
 
     # Remove unwanted columns
     gdf = shapefile.copy()
