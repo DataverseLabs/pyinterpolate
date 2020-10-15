@@ -76,6 +76,10 @@ High level overview:
     - [x] **semivariance** - calculate semivariance, fit semivariograms and regularize semivariogram,
     - [x] **tutorials** - tutorials (Basic, Intermediate and Advanced)
 
+Functions documentation
+-----------------------
+Pyinterpolate [https://pyinterpolate.readthedocs.io/en/latest/]
+
 Development
 ===========
 
