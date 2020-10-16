@@ -19,7 +19,7 @@ def test_get_centroids():
     assert int(centroid[1]) == 52
 
     # Test type
-    assert type(centroid) == tuple
+    assert isinstance(centroid, tuple)
 
 
 if __name__ == '__main__':

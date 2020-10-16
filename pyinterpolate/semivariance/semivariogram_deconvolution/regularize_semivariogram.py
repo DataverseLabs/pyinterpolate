@@ -191,30 +191,27 @@ class RegularizedSemivariogram:
         return rescalled, w
 
     def _check_deviation_ratio(self):
-        if self.deviation_ratio <= self.min_deviation_ratio:
-            return True
-        else:
-            return False
+        return bool(self.deviation_ratio <= self.min_deviation_ratio)
 
     def _check_loop_limit(self):
-        if self.iter >= self.max_iters:
-            return True
-        else:
-            return False
+        return bool(self.iter >= self.max_iters)
 
     def _check_diff_d_stat(self):
         if self.diff_decrease < self.min_diff_decrease:
+
             if self.const_d_stat_reps >= self.min_diff_decrease_reps:
                 return True
-            else:
-                self.const_d_stat_reps += 1
-                return False
+
+            self.const_d_stat_reps += 1
+            return False
+
         else:
             if self.const_d_stat_reps >= 1:
+
                 self.const_d_stat_reps = self.const_d_stat_reps - 1
                 return False
-            else:
-                return False
+
+            return False
 
     def _check_algorithm(self):
         t1 = self._check_deviation_ratio()  # Default False
@@ -394,10 +391,11 @@ class RegularizedSemivariogram:
         """
         Function exports final regularized model parameters into specified csv file.
         """
+        
         if self.final_theoretical_model is None:
             raise RuntimeError('You cannot export any model if you not transform data.')
-        else:
-            self.final_theoretical_model.export_model(filename)
+        
+        self.final_theoretical_model.export_model(filename)
 
     def show_baseline_semivariograms(self):
         """

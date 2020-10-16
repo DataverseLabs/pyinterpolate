@@ -99,7 +99,7 @@ def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_mode
 
     # Set dimension
 
-    if type(data) is list:
+    if isinstance(data, list):
         data = np.array(data)
 
     cols_coords, rows_coords, props = _set_dims(data[:, 0], data[:, 1], dim)

@@ -63,9 +63,8 @@ def calculate_average_semivariance(between_block_distances,
     avg_semivars = []
     for distance_lag in tqdm(grouped_distances):
         avg_sem = []
-        for idx in range(0, len(areas_list)):
+        for idx, base_area_id in enumerate(areas_list):
             # Select internal semivariance of base area for chosen lag
-            base_area_id = areas_list[idx]
             base_inblock_semivariance = semivariance_within_block_points[semivariance_within_block_points[:, 0] == base_area_id][0][1]
             # Check all distances in search radius
             neighbours_list = distance_lag[1][idx][0][0]

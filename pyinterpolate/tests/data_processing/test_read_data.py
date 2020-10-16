@@ -7,7 +7,7 @@ def test_read_data():
     data = read_point_data(path_to_the_data, 'txt')
 
     # Check if data type is ndarray
-    check_ndarray = type(data) is np.ndarray
+    check_ndarray = isinstance(data, np.ndarray)
 
     assert check_ndarray
 
