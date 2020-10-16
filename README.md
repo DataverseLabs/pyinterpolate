@@ -1,3 +1,5 @@
+![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest)
+
 PyInterpolate
 =============
 
