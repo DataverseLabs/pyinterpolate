@@ -205,13 +205,12 @@ class RegularizedSemivariogram:
             self.const_d_stat_reps += 1
             return False
 
-        else:
-            if self.const_d_stat_reps >= 1:
+        if self.const_d_stat_reps >= 1:
 
-                self.const_d_stat_reps = self.const_d_stat_reps - 1
-                return False
-
+            self.const_d_stat_reps = self.const_d_stat_reps - 1
             return False
+
+        return False
 
     def _check_algorithm(self):
         t1 = self._check_deviation_ratio()  # Default False
