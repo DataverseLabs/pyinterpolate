@@ -49,11 +49,11 @@ class ArealKriging:
             l3 = "'atp' - area to point poisson kriging."
             message = l1 + l2 + l3
             raise TypeError(message)
-        else:
-            self.k_func = kriging_types[self.ktype](self.semivar_model,
-                                                    self.areal_data_known,
-                                                    self.point_counts_within_area)
-            self.reg_model = kriging_types[self.ktype]
+
+        self.k_func = kriging_types[self.ktype](self.semivar_model,
+                                                self.areal_data_known,
+                                                self.point_counts_within_area)
+        self.reg_model = kriging_types[self.ktype]
 
         self.regularized = None  # Regularized
 

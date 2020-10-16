@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# TODO: class SemivarianceModels
 class TheoreticalSemivariogram:
     """
     Class for calculating theoretical semivariogram. Class takes two parameters during initialization:
@@ -409,18 +408,18 @@ class TheoreticalSemivariogram:
         if self.theoretical_model is None:
             raise AttributeError('Theoretical semivariogram is not calculated. \
             Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
-        else:
-            x = self.calculate_values()
-            plt.figure(figsize=(12, 12))
-            plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
-            plt.plot(self.empirical_semivariance[:, 0], x, color='red')
-            plt.legend(['Empirical semivariogram', 'Theoretical semivariogram - {} model'.format(
-                self.chosen_model_name
-            )])
-            title_text = 'Empirical and theoretical semivariogram comparison, model error ={:.2f}'.format(
-                self.model_error
-            )
-            plt.title(title_text)
-            plt.xlabel('Distance')
-            plt.ylabel('Semivariance')
-            plt.show()
+        
+        x = self.calculate_values()
+        plt.figure(figsize=(12, 12))
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], x, color='red')
+        plt.legend(['Empirical semivariogram', 'Theoretical semivariogram - {} model'.format(
+            self.chosen_model_name
+        )])
+        title_text = 'Empirical and theoretical semivariogram comparison, model error ={:.2f}'.format(
+            self.model_error
+        )
+        plt.title(title_text)
+        plt.xlabel('Distance')
+        plt.ylabel('Semivariance')
+        plt.show()

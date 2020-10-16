@@ -16,7 +16,7 @@ def select_values_in_range(data, lag, step_size):
     """
 
     # Check if numpy array is given
-    if type(data) != np.ndarray:
+    if not isinstance(data, np.ndarray):
         data = np.array(data)
 
     greater_than = lag - step_size

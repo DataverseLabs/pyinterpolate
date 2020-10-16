@@ -16,5 +16,5 @@ def read_point_data(path, data_type):
     if data_type == 'txt':
         data_arr = np.loadtxt(path, delimiter=',')
         return data_arr
-    else:
-        raise ValueError('Data type not supported')
+    
+    raise ValueError('Data type not supported')

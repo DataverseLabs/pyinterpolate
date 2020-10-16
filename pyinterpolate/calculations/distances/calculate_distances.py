@@ -39,9 +39,10 @@ def _calculate_block_to_block_distance(area_block_1, area_block_2):
     n(u_s) - population size in the cell u_s
     """
 
-    if type(area_block_1) is list:
+    if isinstance(area_block_1, list):
         area_block_1 = np.array(area_block_1)
-    if type(area_block_2) is list:
+    
+    if isinstance(area_block_2, list):
         area_block_2 = np.array(area_block_2)
 
     a_shape = area_block_1.shape[0]
