@@ -1,3 +1,5 @@
+import unittest
+import os
 import numpy as np
 import geopandas as gpd
 from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
@@ -8,61 +10,65 @@ from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance 
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
 
-def test_centroid_based_kriging():
-    areal_dataset = 'sample_data/test_areas_pyinterpolate.shp'
-    subset = 'sample_data/test_points_pyinterpolate.shp'
+class TestCentroidBasedKriging(unittest.TestCase):
 
-    a_id = 'id'
-    areal_val = 'value'
-    points_val = 'value'
+    def test_centroid_based_kriging(self):
+        my_dir = os.path.dirname(__file__)
 
-    # Get maximum range and set step size
+        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
 
-    gdf = gpd.read_file(areal_dataset)
+        a_id = 'id'
+        areal_val = 'value'
+        points_val = 'value'
 
-    total_bounds = gdf.geometry.total_bounds
-    total_bounds_x = np.abs(total_bounds[2] - total_bounds[0])
-    total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
+        # Get maximum range and set step size
 
-    max_range = min(total_bounds_x, total_bounds_y)
-    step_size = max_range / 10
+        gdf = gpd.read_file(areal_dataset)
 
-    lags = np.arange(0, max_range, step_size * 2)
+        total_bounds = gdf.geometry.total_bounds
+        total_bounds_x = np.abs(total_bounds[2] - total_bounds[0])
+        total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
-    areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
-    points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
-                                            points_val_col_name=points_val)
+        max_range = min(total_bounds_x, total_bounds_y)
+        step_size = max_range / 10
 
-    # Get one area as unknown
-    unknown_area_id = [1]
+        lags = np.arange(0, max_range, step_size * 2)
 
-    u_area = areal_data_prepared[areal_data_prepared[:, 0] == unknown_area_id][0]
-    u_points = points_in_area[points_in_area[:, 0] == unknown_area_id][0]
+        areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
+        points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
+                                                points_val_col_name=points_val)
 
-    k_areas = areal_data_prepared[areal_data_prepared[:, 0] != unknown_area_id]
-    k_points = points_in_area[points_in_area[:, 0] != unknown_area_id]
+        # Get one area as unknown
+        unknown_area_id = [1]
 
-    # Semivariance deconvolution
+        u_area = areal_data_prepared[areal_data_prepared[:, 0] == unknown_area_id][0]
+        u_points = points_in_area[points_in_area[:, 0] == unknown_area_id][0]
 
-    semivar_modeling_data = set_areal_weights(k_areas, k_points)
-    smv_model = calculate_weighted_semivariance(semivar_modeling_data, lags, step_size)
+        k_areas = areal_data_prepared[areal_data_prepared[:, 0] != unknown_area_id]
+        k_points = points_in_area[points_in_area[:, 0] != unknown_area_id]
 
-    semivariogram = TheoreticalSemivariogram(k_areas[:, 2:], smv_model)
+        # Semivariance deconvolution
 
-    semivariogram.find_optimal_model()
+        semivar_modeling_data = set_areal_weights(k_areas, k_points)
+        smv_model = calculate_weighted_semivariance(semivar_modeling_data, lags, step_size)
 
-    # Poisson Kriging
+        semivariogram = TheoreticalSemivariogram(k_areas[:, 2:], smv_model)
 
-    search_radius = max_range / 2
-    number_of_observations = 3
+        semivariogram.find_optimal_model()
 
-    pkc = CentroidPoissonKriging(semivariogram_model=semivariogram,
-                                 known_areas=k_areas,
-                                 known_areas_points=k_points)
-    d = pkc.predict(u_area, u_points, number_of_observations, search_radius, True)
+        # Poisson Kriging
 
-    assert int(d[0]) == 122
+        search_radius = max_range / 2
+        number_of_observations = 3
+
+        pkc = CentroidPoissonKriging(semivariogram_model=semivariogram,
+                                     known_areas=k_areas,
+                                     known_areas_points=k_points)
+        d = pkc.predict(u_area, u_points, number_of_observations, search_radius, True)
+
+        self.assertEqual(int(d[0]), 122, "Int of first value should be equal to 122")
 
 
 if __name__ == '__main__':
-    test_centroid_based_kriging()
+    unittest.main()

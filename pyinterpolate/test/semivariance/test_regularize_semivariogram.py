@@ -1,3 +1,5 @@
+import unittest
+import os
 import numpy as np
 import geopandas as gpd
 from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
@@ -5,45 +7,51 @@ from pyinterpolate.data_processing.data_preparation.get_points_within_area impor
 from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
 
 
-def test_regularize_semivariogram():
-    reg_mod = RegularizedSemivariogram()
+class TestRegularizeSemivariogram(unittest.TestCase):
 
-    # Data prepration
-    areal_dataset = 'sample_data/test_areas_pyinterpolate.shp'
-    subset = 'sample_data/test_points_pyinterpolate.shp'
+    def test_regularize_semivariogram(self):
+        reg_mod = RegularizedSemivariogram()
 
-    areal_id = 'id'
-    areal_val = 'value'
-    points_val = 'value'
+        # Data prepration
+        my_dir = os.path.dirname(__file__)
 
-    # Get maximum range and set step size
+        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
 
-    gdf = gpd.read_file(areal_dataset)
+        areal_id = 'id'
+        areal_val = 'value'
+        points_val = 'value'
 
-    total_bounds = gdf.geometry.total_bounds
-    total_bounds_x = np.abs(total_bounds[2] - total_bounds[0])
-    total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
+        # Get maximum range and set step size
 
-    max_range = min(total_bounds_x, total_bounds_y)
-    step_size = max_range / 4
-    lags = np.arange(0, max_range, step_size * 2)
+        gdf = gpd.read_file(areal_dataset)
 
-    areal_data_prepared = prepare_areal_shapefile(areal_dataset, areal_id, areal_val)
-    points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=areal_id,
-                                            points_val_col_name=points_val)
+        total_bounds = gdf.geometry.total_bounds
+        total_bounds_x = np.abs(total_bounds[2] - total_bounds[0])
+        total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
-    # Fit
+        max_range = min(total_bounds_x, total_bounds_y)
+        step_size = max_range / 4
+        lags = np.arange(0, max_range, step_size * 2)
 
-    reg_mod.fit(areal_data_prepared, lags, step_size, points_in_area)
+        areal_data_prepared = prepare_areal_shapefile(areal_dataset, areal_id, areal_val)
+        points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=areal_id,
+                                                points_val_col_name=points_val)
 
-    # Transform
-    reg_mod.transform()
+        # Fit
 
-    regularized_smv = np.array([0, 120])
-    test_output = (reg_mod.final_optimal_model).astype(np.int)
+        reg_mod.fit(areal_data_prepared, lags, step_size, points_in_area)
 
-    assert (test_output == regularized_smv).all()
+        # Transform
+        reg_mod.transform()
+
+        regularized_smv = np.array([0, 120])
+        test_output = (reg_mod.final_optimal_model).astype(np.int)
+
+        check = (test_output == regularized_smv).all()
+
+        self.assertTrue(check, "Output should be equal to [0, 120]")
 
 
 if __name__ == '__main__':
-    test_regularize_semivariogram()
+    unittest.main()
