@@ -1,4 +1,4 @@
-![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest)
+![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Build Status](https://travis-ci.com/szymon-datalions/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
 
 PyInterpolate
 =============
@@ -9,7 +9,7 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Status
 ------
 
-Pre-Beta version: package is tested and the main structure is preserved but future changes are very likely to occur. Look into projects and issues tab to learn more.
+Beta version: package is tested and the main structure is preserved but future changes are very likely to occur.
 
 
 Setup

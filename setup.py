@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 3.7.6',
     ],
     keywords='Kriging Spatial Analysis Ordinary Kriging Simple Kriging Poisson Kriging',
-    packages=find_packages(exclude=['data', 'tests', 'tutorials', 'new_concepts']),
+    packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts']),
 
     install_requires=['descartes==1.1.0', 'geopandas==0.7.0', 'matplotlib==3.2.1', 'numpy==1.18.3', 'tqdm==4.47.0',
                       'pyproj==2.6.0', 'scipy==1.4.1', 'shapely==1.7.0',
