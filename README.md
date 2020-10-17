@@ -9,7 +9,7 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Status
 ------
 
-Pre-Beta version: package is tested and the main structure is preserved but future changes are very likely to occur. Look into projects and issues tab to learn more.
+Beta version: package is tested and the main structure is preserved but future changes are very likely to occur.
 
 
 Setup
