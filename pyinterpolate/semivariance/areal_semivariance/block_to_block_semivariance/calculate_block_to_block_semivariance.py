@@ -69,7 +69,7 @@ def calculate_block_to_block_semivariance(points_within_area, distances_between_
     """
     blocks_ids = distances_between_blocks[1]
 
-    if type(points_within_area) == list:
+    if isinstance(points_within_area, list):
         points_within_area = np.array(points_within_area)
 
     block_pairs_smvs = dict()

@@ -20,7 +20,7 @@ class KrigingComparison:
         :param search_radius: (float) minimal search radius to looking for neighbors,
         :param ranges_of_observations: (int) how many neihbors include in analysis,
         :param training_set_frac: (float in range 0-1) how many values set as a "known points",
-        :param iters: (int) number tests (more tests == more accurate RMSE)
+        :param iters: (int) number test (more test == more accurate RMSE)
         """
 
         self.semivariance = theoretical_semivariogram
