@@ -18,10 +18,11 @@ version = re.search("__version__ = '(.*)'", init_py).groups()[0]
 setup(
     name='pyinterpolate',
     version=version,
-    description='Kriging interpolation Python module',
+    description='Spatial interpolation Python module',
     url='https://github.com/szymon-datalions/pyinterpolate',
-    author='Szymon Moliński | Data Lions',
-    author_email='s.molinski@datalions.eu',
+    download_url='https://github.com/szymon-datalions/pyinterpolate/archive/v0.2.tar.gz',
+    author='Szymon Moliński',
+    author_email='simon@ml-gis-service.com',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: GIS specialists, Data Scientists, Geostatisticans',
@@ -29,7 +30,7 @@ setup(
         'License :: OSI Approved :: BSD 3-Clause "New" or "Revised" License',
         'Programming Language :: Python :: 3.7.6',
     ],
-    keywords='Kriging Spatial Analysis Ordinary Kriging Simple Kriging Poisson Kriging',
+    keywords=['Spatial interpolation', 'Kriging', 'Area Kriging', 'Block Kriging', 'Poisson Kriging', 'Geostatistics'],
     packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts']),
 
     install_requires=['descartes==1.1.0', 'geopandas==0.7.0', 'matplotlib==3.2.1', 'numpy==1.18.3', 'tqdm==4.47.0',
