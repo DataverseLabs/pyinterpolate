@@ -15,7 +15,11 @@ Beta version: package is tested and the main structure is preserved but future c
 Setup
 -----
 
-Setup is described in the file SETUP.md: https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md
+Setup by pip: pip install pyinterpolate / Python 3.7 is required!
+
+Manual setup is described in the file SETUP.md: https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md We pointed there most common problems related to third-party packages.
+
+
 
 Commercial and scientific projects where library has been used
 --------------------------------------------------------------
@@ -80,7 +84,9 @@ High level overview:
 
 Functions documentation
 -----------------------
-Pyinterpolate [https://pyinterpolate.readthedocs.io/en/latest/]
+
+Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
+
 
 Development
 ===========
@@ -89,6 +95,7 @@ Development
 - point cloud variograms,
 - semivariogram params management,
 - semivariogram regularization with epidemiological data tutorial
+
 
 Known Bugs
 ==========
