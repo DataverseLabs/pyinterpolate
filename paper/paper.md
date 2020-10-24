@@ -7,7 +7,7 @@ tags:
   - Kriging
   - Semivariogram Deconvolution
 authors:
-  - name: Szymon Molinski
+  - name: Szymon Moliński
     orcid: 0000-0003-3525-2104
     affiliation: 1
 affiliations:
