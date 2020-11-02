@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to pyinterpolate’s documentation! &#8212; pyinterpolate 0.2 documentation</title>
+    <title>Pyinterpolate &#8212; Pyinterpolate 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -31,13 +31,50 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-pyinterpolate-s-documentation">
-<h1>Welcome to pyinterpolate’s documentation!<a class="headerlink" href="#welcome-to-pyinterpolate-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pyinterpolate">
+<h1>Pyinterpolate<a class="headerlink" href="#pyinterpolate" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>PyInterpolate</strong> is designed as the Python library for geostatistics. It’s role is to provide access to spatial statistics tools used in a wide range of studies. If you’re:</p>
+<ul class="simple">
+<li><p><strong>GIS expert,</strong></p></li>
+<li><p><strong>geologist,</strong></p></li>
+<li><p><strong>mining engineer,</strong></p></li>
+<li><p><strong>ecologist,</strong></p></li>
+<li><p><strong>public health specialist,</strong></p></li>
+<li><p><strong>data scientist.</strong></p></li>
+</ul>
+<p>Then this package may be useful for you. You could use it for:</p>
+<ul class="simple">
+<li><p>spatial interpolation and spatial prediction,</p></li>
+<li><p>alone or with machine learning libraries,</p></li>
+<li><p>for point and areal datasets.</p></li>
+</ul>
+<p>Package was tested in commercial and research projects:</p>
+<ul class="simple">
+<li><p>Tick-borne Disease Detector (prediction of areas of infection risk), research project funded by the <em>European Space Agency</em>,</p></li>
+<li><p>commercial project related to the prediction of demand for specific flu medications,</p></li>
+<li><p>commercial project related to the large-scale infrastructure maintenance.</p></li>
+</ul>
+<p>Pyinterpolate allows you to perform:</p>
+<ul class="simple">
+<li><p><em>Ordinary Kriging</em> and <em>Simple Kriging</em> (spatial interpolation from points),</p></li>
+<li><p><em>Centroid-based Kriging</em> of Polygons (spatial interpolation from blocks and areas),</p></li>
+<li><p><em>Area-to-area</em> and <em>Area-to-point</em> Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).</p></li>
+</ul>
+<p>The example how <em>Area-to-point</em> Poisson Kriging works with epidemiological data. Top figure shows disease rates over areas and bottom figure shows exact population at risk.</p>
+<p><strong>Before deconvolution - our variable is aggregated over large area, it’s hard to decide how to deal with it:</strong></p>
+<img alt="Choropleth map of areas." src="_images/before_reg_400.png" />
+<p><strong>After deconvolution - our variable is deconvoluted based on the relation to the process at a finer grid:</strong></p>
+<img alt="Map deconvoluted into point representation." src="_images/after_reg_400.png" />
+<p>In the future new interpolation techniques will be introduced in the package.</p>
+</div>
+<div class="section" id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 </div>
-</div>
 <div class="section" id="module-pyinterpolate.calculations.distances.calculate_distances">
-<span id="calculate-distances"></span><h1>Calculate Distances<a class="headerlink" href="#module-pyinterpolate.calculations.distances.calculate_distances" title="Permalink to this headline">¶</a></h1>
+<span id="calculate-distances"></span><h3>Calculate Distances<a class="headerlink" href="#module-pyinterpolate.calculations.distances.calculate_distances" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="pyinterpolate.calculations.distances.calculate_distances.calc_block_to_block_distance">
 <code class="sig-prename descclassname">pyinterpolate.calculations.distances.calculate_distances.</code><code class="sig-name descname">calc_block_to_block_distance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">areas</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/calculations/distances/calculate_distances.html#calc_block_to_block_distance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.calculations.distances.calculate_distances.calc_block_to_block_distance" title="Permalink to this definition">¶</a></dt>
@@ -82,7 +119,7 @@ is calculated.</p></li>
 
 </div>
 <div class="section" id="module-pyinterpolate.data_processing.data_preparation.get_points_within_area">
-<span id="data-processing"></span><h1>Data Processing<a class="headerlink" href="#module-pyinterpolate.data_processing.data_preparation.get_points_within_area" title="Permalink to this headline">¶</a></h1>
+<span id="data-processing"></span><h3>Data Processing<a class="headerlink" href="#module-pyinterpolate.data_processing.data_preparation.get_points_within_area" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="pyinterpolate.data_processing.data_preparation.get_points_within_area.get_points_within_area">
 <code class="sig-prename descclassname">pyinterpolate.data_processing.data_preparation.get_points_within_area.</code><code class="sig-name descname">get_points_within_area</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">area_shapefile</span></em>, <em class="sig-param"><span class="n">points_shapefile</span></em>, <em class="sig-param"><span class="n">areal_id_col_name</span></em>, <em class="sig-param"><span class="n">points_val_col_name</span></em>, <em class="sig-param"><span class="n">dropna</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">points_geometry_col_name</span><span class="o">=</span><span class="default_value">'geometry'</span></em>, <em class="sig-param"><span class="n">nans_to_zero</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/data_processing/data_preparation/get_points_within_area.html#get_points_within_area"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.data_processing.data_preparation.get_points_within_area.get_points_within_area" title="Permalink to this definition">¶</a></dt>
@@ -158,7 +195,7 @@ points_geometry_col_name is used,</p></li>
 
 </div>
 <div class="section" id="module-pyinterpolate.data_processing.data_transformation.get_areal_centroids">
-<span id="data-transformation"></span><h1>Data Transformation<a class="headerlink" href="#module-pyinterpolate.data_processing.data_transformation.get_areal_centroids" title="Permalink to this headline">¶</a></h1>
+<span id="data-transformation"></span><h3>Data Transformation<a class="headerlink" href="#module-pyinterpolate.data_processing.data_transformation.get_areal_centroids" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="pyinterpolate.data_processing.data_transformation.get_areal_centroids.get_centroids">
 <code class="sig-prename descclassname">pyinterpolate.data_processing.data_transformation.get_areal_centroids.</code><code class="sig-name descname">get_centroids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">polygon</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/data_processing/data_transformation/get_areal_centroids.html#get_centroids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.data_processing.data_transformation.get_areal_centroids.get_centroids" title="Permalink to this definition">¶</a></dt>
@@ -328,7 +365,7 @@ smaller than number_of_neighbours parameter then additional neighbours are inclu
 
 </div>
 <div class="section" id="module-pyinterpolate.data_visualization.interpolate_raster">
-<span id="data-visualization"></span><h1>Data Visualization<a class="headerlink" href="#module-pyinterpolate.data_visualization.interpolate_raster" title="Permalink to this headline">¶</a></h1>
+<span id="data-visualization"></span><h3>Data Visualization<a class="headerlink" href="#module-pyinterpolate.data_visualization.interpolate_raster" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="pyinterpolate.data_visualization.interpolate_raster.interpolate_raster">
 <code class="sig-prename descclassname">pyinterpolate.data_visualization.interpolate_raster.</code><code class="sig-name descname">interpolate_raster</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">number_of_neighbors</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">semivariogram_model</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/data_visualization/interpolate_raster.html#interpolate_raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.data_visualization.interpolate_raster.interpolate_raster" title="Permalink to this definition">¶</a></dt>
@@ -356,7 +393,7 @@ and list of properties [pixel size, min x, max x, min y, max y]</p>
 
 </div>
 <div class="section" id="module-pyinterpolate.kriging.areal_poisson_kriging.areal_kriging">
-<span id="kriging-areal-kriging"></span><h1>Kriging - Areal Kriging<a class="headerlink" href="#module-pyinterpolate.kriging.areal_poisson_kriging.areal_kriging" title="Permalink to this headline">¶</a></h1>
+<span id="kriging-areal-kriging"></span><h3>Kriging - Areal Kriging<a class="headerlink" href="#module-pyinterpolate.kriging.areal_poisson_kriging.areal_kriging" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyinterpolate.kriging.areal_poisson_kriging.areal_kriging.ArealKriging">
 <em class="property">class </em><code class="sig-prename descclassname">pyinterpolate.kriging.areal_poisson_kriging.areal_kriging.</code><code class="sig-name descname">ArealKriging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">semivariogram_model</span></em>, <em class="sig-param"><span class="n">known_areas</span></em>, <em class="sig-param"><span class="n">known_areas_points</span></em>, <em class="sig-param"><span class="n">kriging_type</span><span class="o">=</span><span class="default_value">'ata'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/kriging/areal_poisson_kriging/areal_kriging.html#ArealKriging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.kriging.areal_poisson_kriging.areal_kriging.ArealKriging" title="Permalink to this definition">¶</a></dt>
@@ -436,7 +473,7 @@ neighbors),</p></li>
 
 <span class="target" id="module-pyinterpolate.kriging.areal_poisson_kriging.centroid_based.centroid_poisson_kriging"></span></div>
 <div class="section" id="module-pyinterpolate.kriging.point_kriging.kriging">
-<span id="kriging-point-kriging"></span><h1>Kriging - Point Kriging<a class="headerlink" href="#module-pyinterpolate.kriging.point_kriging.kriging" title="Permalink to this headline">¶</a></h1>
+<span id="kriging-point-kriging"></span><h3>Kriging - Point Kriging<a class="headerlink" href="#module-pyinterpolate.kriging.point_kriging.kriging" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyinterpolate.kriging.point_kriging.kriging.Krige">
 <em class="property">class </em><code class="sig-prename descclassname">pyinterpolate.kriging.point_kriging.kriging.</code><code class="sig-name descname">Krige</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">semivariogram_model</span></em>, <em class="sig-param"><span class="n">known_points</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/kriging/point_kriging/kriging.html#Krige"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.kriging.point_kriging.kriging.Krige" title="Permalink to this definition">¶</a></dt>
@@ -542,7 +579,7 @@ so without knowledge of the ongoing processes it is unknown).</p></li>
 
 </div>
 <div class="section" id="module-pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram">
-<span id="semivariance-semivariogram-deconvolution"></span><h1>Semivariance - Semivariogram Deconvolution<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram" title="Permalink to this headline">¶</a></h1>
+<span id="semivariance-semivariogram-deconvolution"></span><h3>Semivariance - Semivariogram Deconvolution<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram.RegularizedSemivariogram">
 <em class="property">class </em><code class="sig-prename descclassname">pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram.</code><code class="sig-name descname">RegularizedSemivariogram</code><a class="reference internal" href="_modules/pyinterpolate/semivariance/semivariogram_deconvolution/regularize_semivariogram.html#RegularizedSemivariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram.RegularizedSemivariogram" title="Permalink to this definition">¶</a></dt>
@@ -632,7 +669,7 @@ min_diff_d_stat is fulfilled.</p></li>
 
 </div>
 <div class="section" id="module-pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance">
-<span id="semivariance-semivariogram-estimation"></span><h1>Semivariance - Semivariogram Estimation<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance" title="Permalink to this headline">¶</a></h1>
+<span id="semivariance-semivariogram-estimation"></span><h3>Semivariance - Semivariogram Estimation<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance" title="Permalink to this headline">¶</a></h3>
 <dl class="py function">
 <dt id="pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance.calculate_semivariance">
 <code class="sig-prename descclassname">pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance.</code><code class="sig-name descname">calculate_semivariance</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">lags</span></em>, <em class="sig-param"><span class="n">step_size</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/semivariance/semivariogram_estimation/calculate_semivariance.html#calculate_semivariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance.calculate_semivariance" title="Permalink to this definition">¶</a></dt>
@@ -725,7 +762,7 @@ observation efforts. Ecological Modelling 2006 in press.</p>
 
 </div>
 <div class="section" id="module-pyinterpolate.semivariance.semivariogram_fit.fit_semivariance">
-<span id="semivariance-fit-semivariogram"></span><h1>Semivariance - Fit Semivariogram<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_fit.fit_semivariance" title="Permalink to this headline">¶</a></h1>
+<span id="semivariance-fit-semivariogram"></span><h3>Semivariance - Fit Semivariogram<a class="headerlink" href="#module-pyinterpolate.semivariance.semivariogram_fit.fit_semivariance" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt id="pyinterpolate.semivariance.semivariogram_fit.fit_semivariance.TheoreticalSemivariogram">
 <em class="property">class </em><code class="sig-prename descclassname">pyinterpolate.semivariance.semivariogram_fit.fit_semivariance.</code><code class="sig-name descname">TheoreticalSemivariogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">points_array</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">empirical_semivariance</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.html#TheoreticalSemivariogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyinterpolate.semivariance.semivariogram_fit.fit_semivariance.TheoreticalSemivariogram" title="Permalink to this definition">¶</a></dt>
@@ -936,13 +973,15 @@ between minimal range of empirical semivariance and maximum range of empirical s
 </dd></dl>
 
 </div>
+</div>
 <div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+</div>
 </div>
 
 
@@ -952,7 +991,7 @@ between minimal range of empirical semivariance and maximum range of empirical s
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="#">pyinterpolate</a></h1>
+<h1 class="logo"><a href="#">Pyinterpolate</a></h1>
 
 
 
@@ -993,7 +1032,7 @@ between minimal range of empirical semivariance and maximum range of empirical s
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Szymon Molinski.
+      &copy;2020, Szymon Moliński.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
