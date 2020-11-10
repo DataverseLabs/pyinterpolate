@@ -1,0 +1,111 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Introduction"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**PyInterpolate** is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. If you're:"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "- **GIS expert,**\n",
+    "- **geologist,**\n",
+    "- **mining engineer,**\n",
+    "- **ecologist,**\n",
+    "- **public health specialist,**\n",
+    "- **data scientist.**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Then this package may be useful for you. You could use it for:\n",
+    "\n",
+    "- spatial interpolation and spatial prediction,\n",
+    "- alone or with machine learning libraries,\n",
+    "- for point and areal datasets.\n",
+    "\n",
+    "Package was tested in commercial and research projects:\n",
+    "\n",
+    "- Tick-borne Disease Detector (prediction of areas of infection risk), research project funded by the *European Space Agency*,\n",
+    "- commercial project related to the prediction of demand for specific flu medications,\n",
+    "- commercial project related to the large-scale infrastructure maintenance.\n",
+    "\n",
+    "Pyinterpolate allows you to perform:\n",
+    "\n",
+    "- *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),\n",
+    "- *Centroid-based Kriging* of Polygons (spatial interpolation from blocks and areas),\n",
+    "- *Area-to-area* and *Area-to-point* Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).\n",
+    "\n",
+    "The example how *Area-to-point* Poisson Kriging works with epidemiological data. Top figure shows disease rates over areas and bottom figure shows exact population at risk."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**Before deconvolution - our variable is aggregated over large area, it's hard to decide how to deal with it:**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "![Choropleth map of areas](images/before_reg_400.png)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "**After deconvolution - our variable is deconvoluted based on the relation to the process at a finer grid:**"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "![Map deconvoluted into point representation](images/after_reg_400.png)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The best way of learning is to follow tutorials, but you may read full documentation of the package or try to experiment alone."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.8"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
