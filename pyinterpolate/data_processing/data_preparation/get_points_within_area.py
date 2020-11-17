@@ -43,16 +43,16 @@ def get_points_within_area(area_shapefile,
 
     :param area_shapefile: (string) areal data shapefile address,
     :param points_shapefile: (string) points data shapefile address,
-    :param areal_id_col_name: (string) name of the column with id, if None then function uses index column,
-    :param points_val_col_name: (string) name of the value column of each point, if None then first column other than
-        points_geometry_col_name is used,
-    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points).
-    :param points_geometry_col_name: (string) default 'geometry',
-    :param nans_to_zero: (bool) if true then all nan value is casted to 0,
+    :param areal_id_col_name: (string) name of the column with id of areas,
+    :param points_val_col_name: (string) name of the value column of each point,
+    :param dropna: (bool) if True then rows with NaN are deleted (areas without any points),
+    :param points_geometry_col_name: (string) default is 'geometry' as in GeoPandas GeoDataFrames,
+    :param nans_to_zero: (bool) if True then all NaN values are casted to 0.
 
     OUTPUT:
 
-    :return: output_points_within_area (numpy array) [area_id, [point_position_x, point_position_y, value]]
+    :return: output_points_within_area (numpy array) of area id and array with point coordinates and values
+        [area_id, [point_position_x, point_position_y, value]]
     """
     output_points_within_area = []
 
