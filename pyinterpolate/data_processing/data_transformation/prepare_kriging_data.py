@@ -9,13 +9,13 @@ def prepare_kriging_data(unknown_position, data_array, number_of_neighbours=10):
 
     INPUT:
 
-    :param unknown_position: array with position of unknown value,
-    :param data_array: array with known positions and their values,
-    :param number_of_neighbours: number of the closest locations to the unknown position.
+    :param unknown_position: (numpy array) position of unknown value,
+    :param data_array: (numpy array) known positions and their values,
+    :param number_of_neighbours: (int) number of the closest locations to the unknown position.
 
     OUTPUT:
-    :return: prepared array with dataset which contains:
-        [[known_position_x, known_position_y, value, distance_to_unknown_position], [...]]
+    :return: (numpy array) dataset with position, value and distance to the unknown point:
+        [[x, y, value, distance to unknown position], [...]]
     """
 
     # Distances to unknown point
@@ -42,13 +42,13 @@ def prepare_poisson_kriging_data(unknown_area, points_within_unknown_area,
     INPUT:
 
     :param unknown_area: (numpy array) unknown area in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y],
-    :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
+        [area_id, polygon, centroid x, centroid y],
+    :param points_within_unknown_area: (numpy array) points and their values within the given area:
         [area_id, [point_position_x, point_position_y, value]],
-    :param known_areas: (numpy array) array of known areas in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
-    :param points_within_known_areas: (numpy array) array of points and their values within the given area:
-        [[area_id, [point_position_x, point_position_y, value]], ...],
+    :param known_areas: (numpy array) known areas in the form:
+        [area_id, polygon, centroid x, centroid y, aggregated value],
+    :param points_within_known_areas: (numpy array) points and their values within the given area:
+        [area_id, [point_position_x, point_position_y, value]],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
         smaller than number_of_neighbours parameter then additional neighbours are included up to number of neighbors),
@@ -56,8 +56,8 @@ def prepare_poisson_kriging_data(unknown_area, points_within_unknown_area,
 
     OUTPUT:
 
-    :return: (numpy array) array of distances from known locations to the unknown location:
-        [id (known), coo_x, coo_y, val, dist_to_unknown, sum_of_vals_within_area].
+    :return: (numpy array) distances from known locations to the unknown location:
+        [id_known, coordinate x, coordinate y, value, distance to unknown, aggregated points values within an area].
     """
 
     # Prepare data
@@ -137,11 +137,11 @@ def prepare_ata_data(points_within_unknown_area,
 
     INPUT:
 
-    :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
+    :param points_within_unknown_area: (numpy array) points and their values within the unknown area:
         [area_id, [point_position_x, point_position_y, value of point]],
-    :param known_areas: (numpy array) array of known areas in the form:
+    :param known_areas: (numpy array) known areas in the form:
         [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
-    :param points_within_known_areas: (numpy array) array of points and their values within the given area:
+    :param points_within_known_areas: (numpy array) points and their values within the given area:
         [[area_id, [point_position_x, point_position_y, value of point]], ...],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
@@ -149,7 +149,7 @@ def prepare_ata_data(points_within_unknown_area,
 
     OUTPUT:
 
-    :return output_data: (numpy array) array of distances from known locations to the unknown location: [id (known),
+    :return output_data: (numpy array) distances from known locations to the unknown location: [id (known),
         areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value].
     """
 
@@ -292,11 +292,11 @@ def prepare_atp_data(points_within_unknown_area,
 
     INPUT:
 
-    :param points_within_unknown_area: (numpy array) array of points and their values within the given area:
+    :param points_within_unknown_area: (numpy array) points and their values within the given area:
         [area_id, [point_position_x, point_position_y, value of point]],
-    :param known_areas: (numpy array) array of known areas in the form:
+    :param known_areas: (numpy array) known areas in the form:
         [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value at specific location],
-    :param points_within_known_areas: (numpy array) array of points and their values within the given area:
+    :param points_within_known_areas: (numpy array) points and their values within the given area:
         [[area_id, [point_position_x, point_position_y, value of point]], ...],
     :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
     :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
@@ -304,8 +304,17 @@ def prepare_atp_data(points_within_unknown_area,
 
     OUTPUT:
 
-    :return output_data: (numpy array) array of distances from known locations to the unknown location:
-        [id (known), areal value - count, [known_point_1 value, unknown_point_1 value, distance_1], total point value].
+    :return output_data: (numpy array) distances from known locations to the unknown location:
+        [
+            id_known,
+            areal value - count,
+            [
+                unknown point value,
+                [known point values, distance],
+            total point value count
+            ],
+            [array of unknown area points coordinates]
+        ]
     """
 
     # Initialize set

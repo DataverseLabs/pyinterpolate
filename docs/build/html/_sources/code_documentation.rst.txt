@@ -12,3 +12,5 @@ Package modules:
 
    code_documentation/distances
    code_documentation/data preparation
+   code_documentation/data transformation
+   code_documentation/data visualization

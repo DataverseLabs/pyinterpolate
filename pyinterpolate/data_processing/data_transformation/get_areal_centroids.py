@@ -3,11 +3,11 @@ def get_centroids(polygon):
 
     INPUT:
 
-    :param polygon: geometry object (polygon).
+    :param polygon: (shapely Polygon).
 
     OUTPUT:
 
-    :return: centroid position (tuple) centroid position for a given area.
+    :return: (tuple) centroid position (x, y) for a given area.
     """
 
     centroid_position_x = polygon.centroid.x
