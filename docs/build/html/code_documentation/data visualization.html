@@ -14,9 +14,11 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contribution to Pyinterpolate" href="../contribution.html" />
+    <link rel="next" title="Kriging module" href="kriging.html" />
     <link rel="prev" title="Data transformation module" href="data%20transformation.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -42,7 +44,10 @@
 </ul>
 <div class="section" id="interpolate_raster">
 <h2>interpolate_raster<a class="headerlink" href="#interpolate_raster" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_visualization</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_visualization</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+                                                                       <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                                                       <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                                                       <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function interpolates raster from data points using ordinary kriging.</p>
@@ -99,7 +104,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../code_documentation.html">Documentation</a><ul>
       <li>Previous: <a href="data%20transformation.html" title="previous chapter">Data transformation module</a></li>
-      <li>Next: <a href="../contribution.html" title="next chapter">Contribution to Pyinterpolate</a></li>
+      <li>Next: <a href="kriging.html" title="next chapter">Kriging module</a></li>
   </ul></li>
   </ul></li>
 </ul>

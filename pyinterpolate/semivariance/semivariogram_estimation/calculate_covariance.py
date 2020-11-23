@@ -17,13 +17,13 @@ def calculate_covariance(data, lags, step_size):
             - h - distance (lag),
             - z(x_i) - value at location z_i,
             - (x_i + h) - location at a distance h from x_i,
-            - u - mean observation at a given lag distance.
+            - u -mean of observations at a given lag distance.
 
         INPUT:
 
-        :param data: array of coordinates and their values,
-        :param lags: array of lags between points,
-        :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
+        :param data: (numpy array) coordinates and their values,
+        :param lags: (numpy array) lags between points,
+        :param step_size: (float) distance between lags within each points are included in the calculations.
 
         OUTPUT:
 

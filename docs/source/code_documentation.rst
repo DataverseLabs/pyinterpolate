@@ -14,3 +14,6 @@ Package modules:
    code_documentation/data preparation
    code_documentation/data transformation
    code_documentation/data visualization
+   code_documentation/kriging
+   code_documentation/misc
+   code_documentation/semivariance

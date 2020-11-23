@@ -14,6 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data transformation module" href="data%20transformation.html" />
@@ -46,7 +48,9 @@
 </ul>
 <div class="section" id="get_points_within_area">
 <h2>get_points_within_area<a class="headerlink" href="#get_points_within_area" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">get_points_within_area</span><span class="o">.</span><span class="n">get_points_within_area</span><span class="p">(</span><span class="n">area_shapefile</span><span class="p">,</span> <span class="n">points_shapefile</span><span class="p">,</span> <span class="n">areal_id_col_name</span><span class="p">,</span> <span class="n">points_val_col_name</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">points_geometry_col_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">nans_to_zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">get_points_within_area</span><span class="o">.</span><span class="n">get_points_within_area</span><span class="p">(</span>
+    <span class="n">area_shapefile</span><span class="p">,</span> <span class="n">points_shapefile</span><span class="p">,</span> <span class="n">areal_id_col_name</span><span class="p">,</span> <span class="n">points_val_col_name</span><span class="p">,</span>
+    <span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">points_geometry_col_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">nans_to_zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares points data for further processing.</p>
@@ -70,10 +74,13 @@
 <span class="p">]</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 </div>
 <div class="section" id="prepare_areal_shapefile">
 <h2>prepare_areal_shapefile<a class="headerlink" href="#prepare_areal_shapefile" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">prepare_areal_shapefile</span><span class="o">.</span><span class="n">prepare_areal_shapefile</span><span class="p">(</span><span class="n">areal_file_address</span><span class="p">,</span> <span class="n">id_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">geometry_column_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">dropnans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">prepare_areal_shapefile</span><span class="o">.</span><span class="n">prepare_areal_shapefile</span><span class="p">(</span>
+    <span class="n">areal_file_address</span><span class="p">,</span> <span class="n">id_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">geometry_column_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">dropnans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares areal shapefile for processing and transforms it into <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>. Function returns two lists.</p>
@@ -92,6 +99,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 </div>
 <div class="section" id="read_point_data">
 <h2>read_point_data<a class="headerlink" href="#read_point_data" title="Permalink to this headline">¶</a></h2>
@@ -108,10 +116,12 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of coordinates and their values.</p></li>
 </ul>
+<hr class="docutils" />
 </div>
 <div class="section" id="select_values_in_range">
 <h2>select_values_in_range<a class="headerlink" href="#select_values_in_range" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">select_values_in_range</span><span class="o">.</span><span class="n">select_values_in_range</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">select_values_in_range</span><span class="o">.</span><span class="n">select_values_in_range</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">lag</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function selects set of values which are greater than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">-</span> <span class="pre">step</span> <span class="pre">size</span></code>) and lesser than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">+</span> <span class="pre">step</span> <span class="pre">size</span></code>).</p>
@@ -125,10 +135,12 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> mask with distances within specified radius.</p></li>
 </ul>
+<hr class="docutils" />
 </div>
 <div class="section" id="set_areal_weights">
 <h2>set_areal_weights<a class="headerlink" href="#set_areal_weights" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">set_areal_weights</span><span class="o">.</span><span class="n">set_areal_weights</span><span class="p">(</span><span class="n">areal_data</span><span class="p">,</span> <span class="n">areal_points</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_preparation</span><span class="o">.</span><span class="n">set_areal_weights</span><span class="o">.</span><span class="n">set_areal_weights</span><span class="p">(</span><span class="n">areal_data</span><span class="p">,</span>
+                                                                                   <span class="n">areal_points</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares array for <em>weighted semivariance</em> calculation.</p>

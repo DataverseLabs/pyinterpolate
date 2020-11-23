@@ -14,6 +14,8 @@
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data visualization module" href="data%20visualization.html" />
@@ -58,10 +60,12 @@
 <ul class="simple">
 <li><p>(<code class="docutils literal notranslate"><span class="pre">tuple</span></code>) centroid position (x, y) for a given area.</p></li>
 </ul>
+<hr class="docutils" />
 </div>
 <div class="section" id="prepare_kriging_data">
 <h2>prepare_kriging_data<a class="headerlink" href="#prepare_kriging_data" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="p">(</span><span class="n">unknown_position</span><span class="p">,</span> <span class="n">data_array</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="p">(</span>
+    <span class="n">unknown_position</span><span class="p">,</span> <span class="n">data_array</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares data for kriging (prediction of unknown value).</p>
@@ -81,10 +85,14 @@
 <span class="p">]</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 </div>
 <div class="section" id="prepare_poisson_kriging_data">
 <h2>prepare_poisson_kriging_data<a class="headerlink" href="#prepare_poisson_kriging_data" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_poisson_kriging_data</span><span class="p">(</span><span class="n">unknown_area</span><span class="p">,</span> <span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_poisson_kriging_data</span><span class="p">(</span>
+    <span class="n">unknown_area</span><span class="p">,</span> <span class="n">points_within_unknown_area</span><span class="p">,</span>
+    <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares data for centroid based Poisson Kriging.</p>
@@ -131,10 +139,13 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">id_known</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">distance</span> <span class="n">to</span> <span class="n">unknown</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">points</span> <span class="n">values</span> <span class="n">within</span> <span class="n">an</span> <span class="n">area</span><span class="p">]</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 </div>
 <div class="section" id="prepare_ata_data">
 <h2>prepare_ata_data<a class="headerlink" href="#prepare_ata_data" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_ata_data</span><span class="p">(</span><span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_ata_data</span><span class="p">(</span>
+    <span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares data for Area to Area Poisson Kriging.</p>
@@ -179,10 +190,13 @@
 <span class="p">]</span>
 </pre></div>
 </div>
+<hr class="docutils" />
 </div>
 <div class="section" id="prepare_atp_data">
 <h2>prepare_atp_data<a class="headerlink" href="#prepare_atp_data" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_atp_data</span><span class="p">(</span><span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_atp_data</span><span class="p">(</span>
+    <span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function prepares data for Area to Area Poisson Kriging.</p>
