@@ -1,8 +1,8 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.data_processing.data_preparation.read_data import read_point_data
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.io.read_data import read_point_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
@@ -12,7 +12,7 @@ class TestFitSemivariance(unittest.TestCase):
 
     def test_fit_semivariance(self):
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, 'sample_data/poland_dem_gorzow_wielkopolski')
+        path = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
 
         dataset = read_point_data(path, 'txt')
         new_col = np.arange(1, len(dataset) + 1)
@@ -55,7 +55,7 @@ class TestFitSemivariance(unittest.TestCase):
         fake_theoretical_smv.chosen_model_name = fmn
 
         my_dir = os.path.dirname(__file__)
-        file_path = os.path.join(my_dir, 'sample_data/mock_model.csv')
+        file_path = os.path.join(my_dir, '../sample_data/mock_model.csv')
         fake_theoretical_smv.export_model(file_path)
 
         # Clear model paramas and name

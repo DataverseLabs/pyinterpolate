@@ -1,5 +1,5 @@
 import numpy as np
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from tqdm import tqdm
 
 

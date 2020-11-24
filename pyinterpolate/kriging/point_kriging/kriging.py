@@ -1,12 +1,12 @@
 import numpy as np
 
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_kriging_data
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.prepare_kriging_data import prepare_kriging_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 
 
 class Krige:
     """
-    Class for kriging interpolation of the unknown values in a given location (position). Class takes two arguments
+    Class for kriging interpolation of the unknown values at a given location (position). Class takes two arguments
     during the initialization:
     semivariogram_model - semivariogram model,
     known_points - array of known values [x, y, val]
@@ -16,9 +16,9 @@ class Krige:
     - ordinary_kriging - ordinary kriging of unknown point value,
     - simple_kriging - simple kriging of unknown point value.
 
-    Method may raise value error if estimated value is below 0. You may use try: statement to overwrite those values
+    Class methods may raise ValueError if estimated value is below 0. You may use try: ... except: ... statement to overwrite those values
         with some constant or NaN or you could use different semivariogram model. Sometimes this problem is related to
-        the input data, especially clusters of points. In this case aggregate those clusters and then estimate
+        the input data, especially to the clustered groups of points. In this case aggregate those clusters and then estimate
         semivariogram and perform kriging.
 
     INITLIALIZATION PARAMS:
@@ -32,10 +32,8 @@ class Krige:
         """
         INPUT:
 
-        :param semivariogram_model: semivariogram model returned by TheoreticalSemivariogram class
-        :param known_points: dataset with known values and locations
-
-        Each column should represent different dimension and the last column represents values
+        :param semivariogram_model: (TheoreticalSemivariogram) Theoretical Semivariogram used for data interpolation,
+        :param known_points: (numpy array) dataset with known values and locations. Each column should represent different dimension and the last column represents values
         example: [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]]
         """
 
@@ -45,7 +43,7 @@ class Krige:
 
     def ordinary_kriging(self, unknown_location, number_of_neighbours, test_anomalies=True):
         """
-        Function predicts value at unknown location.
+        Function predicts value at unknown location with Ordinary Kriging technique.
 
         INPUT:
 
@@ -56,14 +54,8 @@ class Krige:
 
         OUTPUT:
 
-        :return:
-            for ordinary kriging:
-
-                - zhat, sigma, w[-1][0], w == [value in unknown location, error, estimated mean, weights]
-
-            for simple kriging:
-
-                - zhat, sigma, area_mean, w == [value in unknown location, error, mean, weights]
+        :return: predicted, error, estimated mean, weights
+            [value_in_unknown_location, error, estimated_mean, weights]
         """
 
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,
@@ -109,7 +101,7 @@ class Krige:
 
     def simple_kriging(self, unknown_location, number_of_neighbours, mu=None, test_anomalies=True):
         """
-        Function predicts value at unknown location.
+        Function predicts value at unknown location with Simple Kriging technique.
 
         INPUT:
 
@@ -118,19 +110,13 @@ class Krige:
             included in the modeling,
         :param mu: (float) global mean which should be known before processing. If not given then it is calculated
             from the sample but then it may cause a relative large errors (this mean is expectation of the random field,
-            so without knowledge of the ongoing processes it is unknown).
+            so without knowledge of the ongoing processes it is unknown),
         :param test_anomalies: (bool) check if weights are negative.
 
         OUTPUT:
 
-        :return:
-            for ordinary kriging:
-
-                - zhat, sigma, w[-1][0], w == [value in unknown location, error, estimated mean, weights]
-
-            for simple kriging:
-
-                - zhat, sigma, area_mean, w == [value in unknown location, error, mean, weights]
+        :return: predicted, error, mean, weights:
+            [value_in_unknown_location, error, mean, weights]
         """
 
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,

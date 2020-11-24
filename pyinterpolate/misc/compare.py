@@ -7,20 +7,25 @@ from pyinterpolate.kriging.point_kriging.kriging import Krige
 
 
 class KrigingComparison:
+    """
+    Class compares different areal kriging models and techniques.
+    """
 
     def __init__(self, theoretical_semivariogram, areas, points, search_radius, ranges_of_observations,
                  training_set_frac=0.8, iters=20):
         """
 
-        :param theoretical_semivariogram: (Theoretical Semivariogram) Theoretical Semivariogram class object,
-        :param areas: (numpy array) array of areas in the form:
-            [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value]
-        :param points: (numpy array) array of points within areas in the form:
+        INITIALIZATION PARAMS:
+
+        :param theoretical_semivariogram: (TheoreticalSemivariogram) modeled semivariogram,
+        :param areas: (numpy array) areas in the form:
+            [area_id, polygon, centroid x, centroid y, value]
+        :param points: (numpy array) points within areas in the form:
             [area_id, [point_position_x, point_position_y, value]]
         :param search_radius: (float) minimal search radius to looking for neighbors,
-        :param ranges_of_observations: (int) how many neihbors include in analysis,
+        :param ranges_of_observations: (int) how many neighbors include in analysis,
         :param training_set_frac: (float in range 0-1) how many values set as a "known points",
-        :param iters: (int) number test (more test == more accurate RMSE)
+        :param iters: (int) number of tests (more tests == more accurate Root Mean Squared Error of comparisons).
         """
 
         self.semivariance = theoretical_semivariogram
@@ -141,6 +146,9 @@ class KrigingComparison:
         return np.mean(o_pred), np.mean(s_pred)
 
     def run_tests(self):
+        """
+        Method compares area-to-area, area-to-point and centroid based area Poisson Kriging.
+        """
         for number_of_obs in self.ranges:
             pk_evals = []
             ck_evals = []
