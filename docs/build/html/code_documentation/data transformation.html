@@ -1,0 +1,326 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data transformation module &#8212; Pyinterpolate 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data visualization module" href="data%20visualization.html" />
+    <link rel="prev" title="Data preparation module" href="data%20preparation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="Data-transformation-module">
+<h1>Data transformation module<a class="headerlink" href="#Data-transformation-module" title="Permalink to this headline">¶</a></h1>
+<p>Available methods:</p>
+<ul class="simple">
+<li><p>get_centroids: prepares array for distances calculation from the centroids of areal blocks,</p></li>
+<li><p>prepare_kriging_data: prepares data for kriging (prediction of unknown value),</p></li>
+<li><p>prepare_poisson_kriging_data: prepares data for centroid based Poisson Kriging,</p></li>
+<li><p>prepare_ata_data: prepares data for Area to Area Poisson Kriging,</p></li>
+<li><p>prepare_atp_data: prepares data for Area to Point Poisson Kriging.</p></li>
+</ul>
+<div class="section" id="get_areal_centroids">
+<h2>get_areal_centroids<a class="headerlink" href="#get_areal_centroids" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">get_areal_centroids</span><span class="o">.</span><span class="n">get_centroids</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares array for distances calculation from the centroids of areal blocks.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>polygon</strong>: (<code class="docutils literal notranslate"><span class="pre">shapely</span> <span class="pre">Polygon</span></code>).</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">tuple</span></code>) centroid position (x, y) for a given area.</p></li>
+</ul>
+<hr class="docutils" />
+</div>
+<div class="section" id="prepare_kriging_data">
+<h2>prepare_kriging_data<a class="headerlink" href="#prepare_kriging_data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="p">(</span>
+    <span class="n">unknown_position</span><span class="p">,</span> <span class="n">data_array</span><span class="p">,</span> <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares data for kriging (prediction of unknown value).</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>unknown_position</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) position of unknown value,</p></li>
+<li><p><strong>data_array</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) known positions and their values,</p></li>
+<li><p><strong>number_of_neighbours</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) number of the closest locations to the unknown position.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) dataset with position, value and distance to the unknown point:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">distance</span> <span class="n">to</span> <span class="n">unknown</span> <span class="n">position</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="prepare_poisson_kriging_data">
+<h2>prepare_poisson_kriging_data<a class="headerlink" href="#prepare_poisson_kriging_data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_poisson_kriging_data</span><span class="p">(</span>
+    <span class="n">unknown_area</span><span class="p">,</span> <span class="n">points_within_unknown_area</span><span class="p">,</span>
+    <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares data for centroid based Poisson Kriging.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>unknown_area</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) unknown area in the form:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>points_within_unknown_area</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the given area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) known areas in the form:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>points_within_known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the given area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>number_of_neighbours</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) minimum number of neighbours to include in the algorithm,</p></li>
+<li><p><strong>max_search_radius</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors),</p></li>
+<li><p><strong>weighted</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) distances weighted by process or point measurements within area (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or not (<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">id_known</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">distance</span> <span class="n">to</span> <span class="n">unknown</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">points</span> <span class="n">values</span> <span class="n">within</span> <span class="n">an</span> <span class="n">area</span><span class="p">]</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="prepare_ata_data">
+<h2>prepare_ata_data<a class="headerlink" href="#prepare_ata_data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_ata_data</span><span class="p">(</span>
+    <span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares data for Area to Area Poisson Kriging.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>points_within_unknown_area</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the unknown area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span> <span class="n">of</span> <span class="n">point</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) known areas in the form:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>points_within_known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the given area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span><span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span> <span class="n">of</span> <span class="n">point</span><span class="p">]]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>number_of_neighbours</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) minimum number of neighbours to include in the algorithm,</p></li>
+<li><p><strong>max_search_radius</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">id_known</span><span class="p">,</span>
+    <span class="n">areal</span> <span class="n">value</span> <span class="o">-</span> <span class="n">count</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">known_point_1</span> <span class="n">value</span><span class="p">,</span> <span class="n">unknown_point_1</span> <span class="n">value</span><span class="p">,</span> <span class="n">distance_1</span><span class="p">],</span>
+    <span class="n">total</span> <span class="n">point</span> <span class="n">value</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="prepare_atp_data">
+<h2>prepare_atp_data<a class="headerlink" href="#prepare_atp_data" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_processing</span><span class="o">.</span><span class="n">data_transformation</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="o">.</span><span class="n">prepare_atp_data</span><span class="p">(</span>
+    <span class="n">points_within_unknown_area</span><span class="p">,</span> <span class="n">known_areas</span><span class="p">,</span> <span class="n">points_within_known_areas</span><span class="p">,</span>
+    <span class="n">number_of_neighbours</span><span class="p">,</span> <span class="n">max_search_radius</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares data for Area to Area Poisson Kriging.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>points_within_unknown_area</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the unknown area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span> <span class="n">of</span> <span class="n">point</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) known areas in the form:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>points_within_known_areas</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) points and their values within the given area:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span><span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span> <span class="n">of</span> <span class="n">point</span><span class="p">]]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>number_of_neighbours</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) minimum number of neighbours to include in the algorithm,</p></li>
+<li><p><strong>max_search_radius</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">id_known</span><span class="p">,</span>
+    <span class="n">areal</span> <span class="n">value</span> <span class="o">-</span> <span class="n">count</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="n">unknown</span> <span class="n">point</span> <span class="n">value</span><span class="p">,</span>
+        <span class="p">[</span><span class="n">known</span> <span class="n">point</span> <span class="n">values</span><span class="p">,</span> <span class="n">distance</span><span class="p">],</span>
+    <span class="n">total</span> <span class="n">point</span> <span class="n">value</span> <span class="n">count</span>
+    <span class="p">],</span>
+    <span class="p">[</span><span class="n">array</span> <span class="n">of</span> <span class="n">unknown</span> <span class="n">area</span> <span class="n">points</span> <span class="n">coordinates</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../code_documentation.html">Documentation</a><ul>
+      <li>Previous: <a href="data%20preparation.html" title="previous chapter">Data preparation module</a></li>
+      <li>Next: <a href="data%20visualization.html" title="next chapter">Data visualization module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/code_documentation/data transformation.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

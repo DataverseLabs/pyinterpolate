@@ -11,14 +11,14 @@ def set_areal_weights(areal_data, areal_points):
 
     INPUT:
 
-    :param areal_data: (numpy array) array of areas in the form:
+    :param areal_data: (numpy array) of areas in the form:
         [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value],
-    :param areal_points: (numpy array) array of points within areas in the form:
+    :param areal_points: (numpy array) of points within areas in the form:
         [area_id, [point_position_x, point_position_y, value]].
 
     OUTPUT:
 
-    :return: (numpy array) array of weighted points.
+    :return: (numpy array) of weighted points.
     """
 
     weighted_semivariance_input = []

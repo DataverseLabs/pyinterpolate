@@ -22,9 +22,9 @@ def calculate_semivariance(data, lags, step_size):
 
         INPUT:
 
-        :param data: array of coordinates and their values,
-        :param lags: array of lags between points,
-        :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
+        :param data: (numpy array) coordinates and their values,
+        :param lags: (numpy array) lags between points,
+        :param step_size: (float) distance between lags within each points are included in the calculations.
 
         OUTPUT:
 
@@ -81,9 +81,10 @@ def calculate_weighted_semivariance(data, lags, step_size):
 
         INPUT:
 
-        :param data: (numpy array) [coordinate x, coordinate y, value, weight],
-        :param lags: (array) of lags [lag1, lag2, lag...]
-        :param step_size: step size of search radius.
+        :param data: (numpy array) coordinates and their values and weights:
+            [coordinate x, coordinate y, value, weight],
+        :param lags: (numpy array) lags between points,
+        :param step_size: (float) distance between lags within each points are included in the calculations.
 
 
         OUTPUT:

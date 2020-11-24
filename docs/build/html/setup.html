@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setup &#8212; Pyinterpolate 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="Setup">
+<h1>Setup<a class="headerlink" href="#Setup" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pip-package-installation">
+<h2>pip package installation<a class="headerlink" href="#pip-package-installation" title="Permalink to this headline">¶</a></h2>
+<p>To install last stable version of the package use pip package manager. <strong>Recommended way of installing Python packages is to create</strong><a class="reference external" href="https://docs.python.org/3/library/venv.html">Virtual Environment</a> and install everything inside it, we encourage you to do so. Navigate to the directory where you’d like to install package and type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
+</pre></div>
+</div>
+<p>If there are no errors you may use package.</p>
+</div>
+<div class="section" id="Problem-with-libspatialindex_c.so">
+<h2>Problem with libspatialindex_c.so<a class="headerlink" href="#Problem-with-libspatialindex_c.so" title="Permalink to this headline">¶</a></h2>
+<p>There is a chance that your system doesn’t have <strong>libspatialindex_c.so</strong> file. You must install it from a terminal.</p>
+<p>Linux installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libspatialindex</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>MacOS installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">spatialindex</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Manual-installation-of-the-newest-version">
+<h2>Manual installation of the newest version<a class="headerlink" href="#Manual-installation-of-the-newest-version" title="Permalink to this headline">¶</a></h2>
+<p>If you are interested in the newest version of package from <strong>main</strong> or <strong>dev</strong> branch then you should install it manually. To do so download package from the repository, move to the package directory and type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">./</span>
+</pre></div>
+</div>
+<p>As with pip installation we recommend use of Virtual Environments.</p>
+</div>
+<div class="section" id="I’d-like-to-use-Jupyter-Notebooks,-what-should-I-do?">
+<h2>I’d like to use Jupyter Notebooks, what should I do?<a class="headerlink" href="#I’d-like-to-use-Jupyter-Notebooks,-what-should-I-do?" title="Permalink to this headline">¶</a></h2>
+<p>If you use conda environment you may use Jupyter Notebooks and you are not obligated to create Virtual Environment - you’ll be working in conda environment. To run pyinterpolate with Jupyter Notebooks you must create environment for it and install everything from the conda environment.</p>
+<div class="section" id="Step-1:">
+<h3>Step 1:<a class="headerlink" href="#Step-1:" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="p">[</span><span class="n">NAME</span> <span class="n">OF</span> <span class="n">YOUR</span> <span class="n">ENV</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Step-2:">
+<h3>Step 2:<a class="headerlink" href="#Step-2:" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="p">[</span><span class="n">NAME</span> <span class="n">OF</span> <span class="n">YOUR</span> <span class="n">ENV</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Step-3:">
+<h3>Step 3:<a class="headerlink" href="#Step-3:" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.7</span> <span class="n">pip</span> <span class="n">notebook</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Step-4:">
+<h3>Step 4:<a class="headerlink" href="#Step-4:" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="More-questions?">
+<h2>More questions?<a class="headerlink" href="#More-questions?" title="Permalink to this headline">¶</a></h2>
+<p>Don’t be scared to ask - create request in <a class="reference external" href="https://github.com/szymon-datalions/pyinterpolate/issues">Issues</a>. We will do our best to simlify installation or help with it.</p>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pip-package-installation">pip package installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Problem-with-libspatialindex_c.so">Problem with libspatialindex_c.so</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Manual-installation-of-the-newest-version">Manual installation of the newest version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#I’d-like-to-use-Jupyter-Notebooks,-what-should-I-do?">I’d like to use Jupyter Notebooks, what should I do?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Step-1:">Step 1:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-2:">Step 2:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-3:">Step 3:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Step-4:">Step 4:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#More-questions?">More questions?</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="introduction.html" title="previous chapter">Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/setup.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

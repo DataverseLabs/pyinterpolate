@@ -13,15 +13,18 @@ def prepare_areal_shapefile(areal_file_address,
 
     INPUT:
 
-    :param areal_file_address: (string) path to the shapefile with areal data,
+    :param areal_file_address: (string) path to the shapefile with area data,
     :param id_column_name: (string) id column name, if not provided then index column is treated as the id,
-    :param value_column_name: (string) value column name, if not provided then all values are set to nan,
-    :param geometry_column_name: (string) default is 'geometry',
-    :param dropnans: (bool) if true then rows with nans are dropped.
+    :param value_column_name: (string) value column name, if not provided then all values are set to NaN,
+    :param geometry_column_name: (string) default is 'geometry' as in GeoPandas GeoDataFrames,
+    :param dropnans: (bool) if True then rows with NaN are dropped.
 
     OUTPUT:
 
-    :return: areal_array (numpy array) [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
+    :return: areal_array (numpy array) of area id, area geometry, coordinate of centroid x, coordinate of centroid y,
+        value:
+
+        [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
     """
 
     # Test if value column name is None and dropnans is True

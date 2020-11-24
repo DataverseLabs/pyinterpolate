@@ -6,14 +6,15 @@ from pyinterpolate.kriging.areal_poisson_kriging.area_to_point.atp_poisson_krigi
 
 
 class ArealKriging:
-    """Class perform areal kriging of areal semivariogram with point support data.
+    """
+    Class performs kriging of areas semivariogram with point support data.
 
     INITIALIZATION PARAMS:
 
-    :param semivariogram_model: (Theoretical Semivariogram) Theoretical Semivariogram used for data interpolation,
-    :param known_areas: (numpy array) array of areas in the form:
-        [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value]
-    :param known_areas_points: (numpy array) array of points within areas in the form:
+    :param semivariogram_model: (TheoreticalSemivariogram) Theoretical Semivariogram used for data interpolation,
+    :param known_areas: (numpy array) areas in the form:
+        [area_id, polygon, centroid x, centroid y, value]
+    :param known_areas_points: (numpy array) points within areas in the form:
         [area_id, [point_position_x, point_position_y, value]],
     :param kriging_type: (string) default 'ata'; 'ata' - area to area poisson kriging,
         'atp' - area to point poisson kriging.
@@ -22,8 +23,8 @@ class ArealKriging:
     def __init__(self, semivariogram_model, known_areas, known_areas_points, kriging_type='ata'):
         """
         :param semivariogram_model: (Theoretical Semivariogram) Theoretical Semivariogram used for data interpolation,
-        :param known_areas: (numpy array) array of areas in the form:
-            [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value]
+        :param known_areas: (numpy array) areas in the form:
+            [area_id, polygon, centroid x, centroid y, value]
         :param known_areas_points: (numpy array) array of points within areas in the form:
             [area_id, [point_position_x, point_position_y, value]],
         :param kriging_type: (string) default 'ata'.
@@ -63,17 +64,17 @@ class ArealKriging:
 
         INPUT:
 
-        :param unknown_area_points: (numpy array) array of points within an unknown area in the form:
+        :param unknown_area_points: (numpy array) points within an unknown area in the form:
             [area_id, [point_position_x, point_position_y, value]],
         :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
         :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
-            smaller than number_of_neighbours parameter then additional neighbours are included up to number of
-            neighbors).
+            smaller than number_of_neighbours parameter then additional neighbours are included up to
+            the number_of_neighbors).
 
         OUTPUT:
 
         :return: prediction, error, estimated mean, weights:
-            [value in unknown location, error, estimated mean, weights].
+            [value_in_unknown_location, error, estimated_mean, weights].
         """
 
         prediction = self.k_func.predict(unknown_area_points,
@@ -144,19 +145,19 @@ class ArealKriging:
     def regularize_data(self, number_of_neighbours, s_radius, data_crs="EPSG:4326"):
         """
         Function regularizes whole dataset and creates new values and error maps based on the kriging type.
-            If chosen type is area to area then function returns geopandas dataframe with area id, areal geometry,
+            If chosen type is area to area then function returns Geopandas GeoDataFrame with area id, areal geometry,
             estimated value, estimated prediction error, RMSE of prediction.
-            If chosen type is area to point then function returns geopandas dataframe with area id, point coordinates,
+            If chosen type is area to point then function returns Geopandas GeoDataFrame with area id, point coordinates,
             estimated value, estimated prediction error, RMSE of areal prediction.
 
-        Function do not predict unknown values, areas with NaN's are skipped.
+        Function do not predict unknown values, areas with NaN are skipped.
 
         INPUT:
 
         :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
         :param s_radius: (float) maximum search radius (if number of neighbours within this search radius is
-            smaller than number_of_neighbours parameter then additional neighbours are included up to number of
-            neighbors),
+            smaller than number_of_neighbours parameter then additional neighbours are included up to
+            number_of_neighbours),
         :param data_crs: (string) data crs, look into: https://geopandas.org/projections.html
 
         OUTPUT:

@@ -93,8 +93,8 @@ def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_mode
 
     OUTPUT:
 
-    :return: (numpy arrays) [numpy array of interpolated values, numpy array of interpolation errors],
-        and list of properties [pixel size, min x, max x, min y, max y]
+    :return: (numpy array) [numpy array of interpolated values, numpy array of interpolation errors,
+        [pixel size, min x, max x, min y, max y]]
     """
 
     # Set dimension
