@@ -1,7 +1,7 @@
 import numpy as np
 
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_ata_known_areas
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_atp_data
+from pyinterpolate.transform.prepare_kriging_data import prepare_ata_known_areas
+from pyinterpolate.transform.prepare_kriging_data import prepare_atp_data
 
 
 class WeightedBlock2BlockSemivariance:

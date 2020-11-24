@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from pyinterpolate.calculations.distances.calculate_distances import calc_block_to_block_distance
+from pyinterpolate.distance.calculate_distances import calc_block_to_block_distance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
@@ -97,11 +97,11 @@ class ArealSemivariance:
 
         INPUT:
 
-        :param within_block_semivariogram: mean semivariance between the blocks:
+        :param within_block_semivariogram: (numpy array) mean semivariance between the blocks:
             yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
             y(va, va) and y(va+h, va+h) are the inblock semivariances of block a and block a+h separated
                 by the distance h weighted by the inblock population.
-        :param between_blocks_semivariogram: semivariance between all blocks calculated from the theoretical model,
+        :param between_blocks_semivariogram: (numpy array) semivariance between all blocks calculated from the theoretical model,
         :param empirical_semivariance: (numpy array) empirical semivariance between area centroids, default=None, if
             None is provided then empirical semivariance is computed by the _calculate_empirical_semivariance
             method from area centroids,
@@ -201,7 +201,7 @@ class ArealSemivariance:
                 print('Distances between blocks have been calculated')
         else:
             if self.verbose:
-                print('Distances between blocks are provided, calculations skipped, model parameters updated')
+                print('Distances between blocks are provided, distance skipped, model parameters updated')
             self.distances_between_blocks = distances
 
         # Calc average semivariance

@@ -1,8 +1,8 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.data_processing.data_preparation.read_data import read_point_data
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.io.read_data import read_point_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
 
@@ -11,7 +11,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 
     def test_calculate_semivariance(self):
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, 'sample_data/poland_dem_gorzow_wielkopolski')
+        path = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
 
         dataset = read_point_data(path, 'txt')
 
@@ -32,7 +32,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 
     def test_calculate_weighted_semivariance(self):
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, 'sample_data/poland_dem_gorzow_wielkopolski')
+        path = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
 
         dataset = read_point_data(path, 'txt')
         new_col = np.arange(1, len(dataset) + 1)
