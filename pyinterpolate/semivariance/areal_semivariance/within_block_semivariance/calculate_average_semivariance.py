@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
+from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
 
 def group_distances(distances_arrays, lags, step_size):

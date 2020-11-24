@@ -7,7 +7,7 @@ from pyinterpolate.kriging.areal_poisson_kriging.area_to_point.atp_poisson_krigi
 
 class ArealKriging:
     """
-    Class performs kriging of areas semivariogram with point support data.
+    Class performs kriging of areas with point support data within those polygons.
 
     INITIALIZATION PARAMS:
 
@@ -16,7 +16,7 @@ class ArealKriging:
         [area_id, polygon, centroid x, centroid y, value]
     :param known_areas_points: (numpy array) points within areas in the form:
         [area_id, [point_position_x, point_position_y, value]],
-    :param kriging_type: (string) default 'ata'; 'ata' - area to area poisson kriging,
+    :param kriging_type: (str) default 'ata'; 'ata' - area to area poisson kriging,
         'atp' - area to point poisson kriging.
     """
 
@@ -60,7 +60,7 @@ class ArealKriging:
 
     def predict(self, unknown_area_points, number_of_neighbours, max_search_radius):
         """
-        Function predicts areal value in a unknown location based on the area-to-area or area-to-point Poisson Kriging.
+        Function predicts area value in an unknown location based on the area-to-area or area-to-point Poisson Kriging.
 
         INPUT:
 
@@ -142,7 +142,7 @@ class ArealKriging:
 
         return output_rows
 
-    def regularize_data(self, number_of_neighbours, s_radius, data_crs="EPSG:4326"):
+    def regularize_data(self, number_of_neighbours, max_search_radius, data_crs="EPSG:4326"):
         """
         Function regularizes whole dataset and creates new values and error maps based on the kriging type.
             If chosen type is area to area then function returns Geopandas GeoDataFrame with area id, areal geometry,
@@ -155,10 +155,10 @@ class ArealKriging:
         INPUT:
 
         :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
-        :param s_radius: (float) maximum search radius (if number of neighbours within this search radius is
+        :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
             smaller than number_of_neighbours parameter then additional neighbours are included up to
             number_of_neighbours),
-        :param data_crs: (string) data crs, look into: https://geopandas.org/projections.html
+        :param data_crs: (str) data crs, look into: https://geopandas.org/projections.html
 
         OUTPUT:
 
@@ -168,7 +168,7 @@ class ArealKriging:
 
         list_of_vals = []
         for a_id in areas_ids:
-            prediction_rows = self._get_prediction_row(a_id, number_of_neighbours, s_radius)
+            prediction_rows = self._get_prediction_row(a_id, number_of_neighbours, max_search_radius)
 
             # Add id and geometry into a list
 

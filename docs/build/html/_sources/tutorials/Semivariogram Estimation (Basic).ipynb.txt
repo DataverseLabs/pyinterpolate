@@ -47,7 +47,7 @@
     "\n",
     "from pyinterpolate import read_point_data\n",
     "from pyinterpolate import calculate_semivariance  # experimental semivariogram\n",
-    "from pyinterpolate import fit_semivariance  # theoretical models"
+    "from pyinterpolate import TheoreticalSemivariogram  # theoretical models"
    ]
   },
   {
@@ -113,7 +113,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 20/20 [00:07<00:00,  2.66it/s]\n"
+      "100%|██████████| 20/20 [00:05<00:00,  3.51it/s]\n"
      ]
     }
    ],
@@ -125,9 +125,7 @@
     "data_lags = np.arange(0, max_range, search_radius * 2)\n",
     "\n",
     "\n",
-    "exp_semivar = calculate_semivariance.calculate_semivariance(data=dem,\n",
-    "                                                           lags=data_lags,\n",
-    "                                                           step_size=search_radius)"
+    "exp_semivar = calculate_semivariance(data=dem, lags=data_lags, step_size=search_radius)"
    ]
   },
   {
@@ -183,7 +181,7 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 16/16 [00:05<00:00,  2.85it/s]\n"
+      "100%|██████████| 16/16 [00:04<00:00,  3.22it/s]\n"
      ]
     },
     {
@@ -207,9 +205,7 @@
     "data_lags = np.arange(0, max_range, search_radius * 2)\n",
     "\n",
     "\n",
-    "exp_semivar = calculate_semivariance.calculate_semivariance(data=dem,\n",
-    "                                                           lags=data_lags,\n",
-    "                                                           step_size=search_radius)\n",
+    "exp_semivar = calculate_semivariance(data=dem, lags=data_lags, step_size=search_radius)\n",
     "\n",
     "# Plot experimental semivariogram #2\n",
     "\n",
@@ -229,8 +225,7 @@
    "source": [
     "# Fit different semivariogram models into experimental data\n",
     "\n",
-    "baseline_model = fit_semivariance.TheoreticalSemivariogram(points_array=dem,\n",
-    "                                                          empirical_semivariance=exp_semivar)\n",
+    "baseline_model = TheoreticalSemivariogram(points_array=dem, empirical_semivariance=exp_semivar)\n",
     "number_of_ranges = len(data_lags)  # The same number of ranges as experimental semivariogram"
    ]
   },
@@ -452,7 +447,7 @@
    "metadata": {},
    "outputs": [],
    "source": [
-    "other_model = fit_semivariance.TheoreticalSemivariogram()\n",
+    "other_model = TheoreticalSemivariogram()\n",
     "\n",
     "# import model parameters\n",
     "other_model.import_model('semivariogram_calculation_model.csv')"
@@ -497,13 +492,6 @@
    "source": [
     "other_model.chosen_model_name"
    ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "metadata": {},
-   "outputs": [],
-   "source": []
   }
  ],
  "metadata": {

@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.data_processing.data_preparation.get_points_within_area import get_points_within_area
+from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io.get_points_within_area import get_points_within_area
 from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
 
 
@@ -15,8 +15,8 @@ class TestRegularizeSemivariogram(unittest.TestCase):
         # Data prepration
         my_dir = os.path.dirname(__file__)
 
-        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
-        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
+        areal_dataset = os.path.join(my_dir, '../sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, '../sample_data/test_points_pyinterpolate.shp')
 
         areal_id = 'id'
         areal_val = 'value'

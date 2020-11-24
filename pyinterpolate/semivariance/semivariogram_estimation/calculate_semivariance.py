@@ -2,8 +2,8 @@ import numpy as np
 
 from tqdm import tqdm
 
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
 
 def calculate_semivariance(data, lags, step_size):
@@ -24,7 +24,7 @@ def calculate_semivariance(data, lags, step_size):
 
         :param data: (numpy array) coordinates and their values,
         :param lags: (numpy array) lags between points,
-        :param step_size: (float) distance between lags within each points are included in the calculations.
+        :param step_size: (float) distance between lags within each points are included in the distance.
 
         OUTPUT:
 
@@ -84,7 +84,7 @@ def calculate_weighted_semivariance(data, lags, step_size):
         :param data: (numpy array) coordinates and their values and weights:
             [coordinate x, coordinate y, value, weight],
         :param lags: (numpy array) lags between points,
-        :param step_size: (float) distance between lags within each points are included in the calculations.
+        :param step_size: (float) distance between lags within each points are included in the distance.
 
 
         OUTPUT:
@@ -140,4 +140,4 @@ def calculate_weighted_semivariance(data, lags, step_size):
 
 def _test_weights(arr):
     if 0 in arr:
-        print('One or more of weights in dataset is set to 0, this may cause errors in the calculations')
+        print('One or more of weights in dataset is set to 0, this may cause errors in the distance')

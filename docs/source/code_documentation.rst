@@ -10,10 +10,10 @@ Package modules:
 .. toctree::
    :maxdepth: 2
 
-   code_documentation/distances
-   code_documentation/data preparation
-   code_documentation/data transformation
-   code_documentation/data visualization
-   code_documentation/kriging
-   code_documentation/misc
+   code_documentation/io
+   code_documentation/transform
+   code_documentation/distance
    code_documentation/semivariance
+   code_documentation/kriging
+   code_documentation/viz
+   code_documentation/misc

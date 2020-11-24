@@ -6,9 +6,9 @@ from pyinterpolate.kriging.areal_poisson_kriging.area_to_area.ata_poisson_krigin
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
-from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.data_processing.data_preparation.get_points_within_area import get_points_within_area
-from pyinterpolate.data_processing.data_preparation.set_areal_weights import set_areal_weights
+from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io.get_points_within_area import get_points_within_area
+from pyinterpolate.transform.set_areal_weights import set_areal_weights
 
 
 class TestAreaToAreaPoissonKriging(unittest.TestCase):
@@ -17,8 +17,8 @@ class TestAreaToAreaPoissonKriging(unittest.TestCase):
 
         my_dir = os.path.dirname(__file__)
 
-        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
-        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
+        areal_dataset = os.path.join(my_dir, '../sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, '../sample_data/test_points_pyinterpolate.shp')
 
         a_id = 'id'
         areal_val = 'value'

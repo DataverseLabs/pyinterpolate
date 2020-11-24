@@ -1,7 +1,7 @@
 import numpy as np
 
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_kriging_data
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.prepare_kriging_data import prepare_kriging_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 
 
 class Krige:
@@ -33,7 +33,7 @@ class Krige:
         INPUT:
 
         :param semivariogram_model: (TheoreticalSemivariogram) Theoretical Semivariogram used for data interpolation,
-        :param known_points: dataset with known values and locations. Each column should represent different dimension and the last column represents values
+        :param known_points: (numpy array) dataset with known values and locations. Each column should represent different dimension and the last column represents values
         example: [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]]
         """
 

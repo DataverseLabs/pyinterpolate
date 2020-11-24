@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Semivariance module &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <title>semivariance module &#8212; Pyinterpolate 0.2.0 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -18,8 +18,8 @@
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Contribution to Pyinterpolate" href="../contribution.html" />
-    <link rel="prev" title="Misc module" href="misc.html" />
+    <link rel="next" title="kriging module" href="kriging.html" />
+    <link rel="prev" title="distance module" href="distance.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -36,8 +36,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="Semivariance-module">
-<h1>Semivariance module<a class="headerlink" href="#Semivariance-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="semivariance-module">
+<h1>semivariance module<a class="headerlink" href="#semivariance-module" title="Permalink to this headline">¶</a></h1>
 <p>Available classes and functions:</p>
 <ul class="simple">
 <li><p>ArealSemivariance: Class calculates semivariance of areas for Poisson Kriging (area to area and area to point),</p></li>
@@ -48,26 +48,30 @@
 <li><p>TheoreticalSemivariogram: Class calculates theoretical semivariogram.</p></li>
 </ul>
 <div class="section" id="ArealSemivariance">
-<h2>ArealSemivariance<a class="headerlink" href="#ArealSemivariance" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">ArealSemivariance</span></code><a class="headerlink" href="#ArealSemivariance" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="Class-initialization">
 <h3>Class initialization<a class="headerlink" href="#Class-initialization" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">areal_semivariance</span><span class="o">.</span><span class="n">areal_semivariance</span><span class="o">.</span><span class="n">ArealSemivariance</span><span class="p">(</span>
-    <span class="n">areal_data</span><span class="p">,</span> <span class="n">areal_lags</span><span class="p">,</span> <span class="n">areal_step_size</span><span class="p">,</span> <span class="n">areal_points_data</span><span class="p">,</span>
-    <span class="n">weighted_semivariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">ArealSemivariance</span><span class="p">(</span>
+    <span class="n">areal_data</span><span class="p">,</span>
+    <span class="n">areal_lags</span><span class="p">,</span>
+    <span class="n">areal_step_size</span><span class="p">,</span>
+    <span class="n">areal_points_data</span><span class="p">,</span>
+    <span class="n">weighted_semivariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Class calculates semivariance of areas for Poisson Kriging (area to area and area to point).</p>
 <p>INITIALIZATION PARAMS:</p>
 <ul class="simple">
-<li><p><strong>areal_data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> / <code class="docutils literal notranslate"><span class="pre">list</span></code>)</p></li>
+<li><p><strong>areal_data</strong>: (<em>numpy array</em> / <em>list</em>)</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span><span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_lags</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> / <code class="docutils literal notranslate"><span class="pre">list</span></code>) - array of lags (ranges of search),</p></li>
-<li><p><strong>areal_step_size</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) step size for search radius,</p></li>
-<li><p><strong>areal_points_data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> / <code class="docutils literal notranslate"><span class="pre">list</span></code>)</p></li>
+<li><p><strong>areal_lags</strong>: (<em>numpy array</em> / <em>list</em>) - array of lags (ranges of search),</p></li>
+<li><p><strong>areal_step_size</strong>: (<em>float</em>) step size for search radius,</p></li>
+<li><p><strong>areal_points_data</strong>: (<em>numpy array</em> / <em>list</em>)</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -76,8 +80,8 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>weighted_semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) if <code class="docutils literal notranslate"><span class="pre">False</span></code> then each distance is treated equally when calculating theoretical semivariance; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then semivariances closer to the point of origin have more weight,</p></li>
-<li><p><strong>verbose</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all messages are printed, otherwise nothing.</p></li>
+<li><p><strong>weighted_semivariance</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">False</span></code> then each distance is treated equally when calculating theoretical semivariance; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then semivariances closer to the point of origin have more weight,</p></li>
+<li><p><strong>verbose</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all messages are printed, otherwise nothing.</p></li>
 </ul>
 </div>
 <div class="section" id="Class-public-methods:">
@@ -88,12 +92,14 @@
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="ArealSemivariance.regularize_semivariogram">
-<h3>ArealSemivariance.regularize_semivariogram<a class="headerlink" href="#ArealSemivariance.regularize_semivariogram" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ArealSemivariance</span><span class="o">.</span><span class="n">regularize_semivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">within_block_semivariogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                           <span class="n">between_blocks_semivariogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                           <span class="n">empirical_semivariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                           <span class="n">theoretical_semivariance_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="section" id="ArealSemivariance.regularize_semivariogram()">
+<h3><code class="docutils literal notranslate"><span class="pre">ArealSemivariance.regularize_semivariogram()</span></code><a class="headerlink" href="#ArealSemivariance.regularize_semivariogram()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ArealSemivariance</span><span class="o">.</span><span class="n">regularize_semivariogram</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">within_block_semivariogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">between_blocks_semivariogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">empirical_semivariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">theoretical_semivariance_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates regularized point support semivariogram in the form given in:</p>
@@ -111,28 +117,28 @@
 </ul>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>within_block_semivariogram</strong>: mean semivariance between the blocks:</p></li>
+<li><p><strong>within_block_semivariogram</strong>: (<em>numpy array</em>) mean semivariance between the blocks:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\gamma_{h}(v, v) = \frac{1}{2*N(h)} \sum^{N(h)}_{a=1} [\gamma(v\alpha, v\alpha) + \gamma(v\alpha+h, v\alpha+h)]\]</div>
 <p>where:</p>
 <p><span class="math notranslate nohighlight">\(\gamma(v\alpha, v\alpha)\)</span> and <span class="math notranslate nohighlight">\(\gamma(v\alpha+h, v\alpha+h)\)</span> are the inblock semivariances of block <span class="math notranslate nohighlight">\(\alpha\)</span> and block <span class="math notranslate nohighlight">\(\alpha+h\)</span> separated by the distance <span class="math notranslate nohighlight">\(h\)</span> weighted by the inblock population.</p>
 <ul class="simple">
-<li><p><strong>between_blocks_semivariogram</strong>: semivariance between all blocks calculated from the theoretical model,</p></li>
-<li><p><strong>empirical_semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) empirical semivariance between area centroids, <code class="docutils literal notranslate"><span class="pre">default=None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then empirical semivariance is computed by the <code class="docutils literal notranslate"><span class="pre">_calculate_empirical_semivariance</span></code> method from area centroids,</p></li>
-<li><p><strong>theoretical_semivariance_model</strong>: (<code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code>) theoretical semivariance model from <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariance</span></code> class, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then theoretical model is derived from area centroids and empirical semivariance.</p></li>
+<li><p><strong>between_blocks_semivariogram</strong>: (<em>numpy array</em>) semivariance between all blocks calculated from the theoretical model,</p></li>
+<li><p><strong>empirical_semivariance</strong>: (<em>numpy array</em>) empirical semivariance between area centroids, <code class="docutils literal notranslate"><span class="pre">default=None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then empirical semivariance is computed by the <code class="docutils literal notranslate"><span class="pre">_calculate_empirical_semivariance</span></code> method from area centroids,</p></li>
+<li><p><strong>theoretical_semivariance_model</strong>: (<em>TheoreticalSemivariogram</em>) theoretical semivariance model from <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariance</span></code> class, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then theoretical model is derived from area centroids and empirical semivariance.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><strong>semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arrays</span></code>) of lag, semivariance values and number of areas within lag where:</p></li>
+<li><p><strong>semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) of lag, semivariance values and number of areas within lag where:</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[0]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lags</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[1]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lag's</span> <span class="pre">values</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[2]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">points</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">lag</span></code>.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="ArealSemivariance.show_semivariograms">
-<h3>ArealSemivariance.show_semivariograms<a class="headerlink" href="#ArealSemivariance.show_semivariograms" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="ArealSemivariance.show_semivariograms()">
+<h3><code class="docutils literal notranslate"><span class="pre">ArealSemivariance.show_semivariograms()</span></code><a class="headerlink" href="#ArealSemivariance.show_semivariograms()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ArealSemivariance</span><span class="o">.</span><span class="n">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -141,10 +147,10 @@
 </div>
 </div>
 <div class="section" id="RegularizedSemivariogram">
-<h2>RegularizedSemivariogram<a class="headerlink" href="#RegularizedSemivariogram" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram</span></code><a class="headerlink" href="#RegularizedSemivariogram" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id1">
 <h3>Class initialization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">semivariogram_deconvolution</span><span class="o">.</span><span class="n">regularize_semivariogram</span><span class="o">.</span><span class="n">RegularizedSemivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">RegularizedSemivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Class performs deconvolution of semivariogram of areal data. Whole procedure is based on the iterative process described in:</p>
@@ -154,8 +160,9 @@
 <p>Class works as follow:</p>
 <ul class="simple">
 <li><p>initialize your object (no parameters),</p></li>
-<li><p>then use fit() method to build initial point support model,</p></li>
-<li><p>then use transform() method to perform semivariogram regularization.</p></li>
+<li><p>then use <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method to build initial point support model,</p></li>
+<li><p>then use <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method to perform semivariogram regularization,</p></li>
+<li><p>save semivariogram model with <code class="docutils literal notranslate"><span class="pre">export_model()</span></code> method.</p></li>
 </ul>
 </div>
 <div class="section" id="id2">
@@ -169,24 +176,30 @@
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="RegularizedSemivariogram.fit">
-<h3>RegularizedSemivariogram.fit<a class="headerlink" href="#RegularizedSemivariogram.fit" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">areal_data</span><span class="p">,</span> <span class="n">areal_lags</span><span class="p">,</span> <span class="n">areal_step_size</span><span class="p">,</span> <span class="n">point_support_data</span><span class="p">,</span>
-                             <span class="n">ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">weighted_lags</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="section" id="RegularizedSemivariogram.fit()">
+<h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.fit()</span></code><a class="headerlink" href="#RegularizedSemivariogram.fit()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                             <span class="n">areal_data</span><span class="p">,</span>
+                             <span class="n">areal_lags</span><span class="p">,</span>
+                             <span class="n">areal_step_size</span><span class="p">,</span>
+                             <span class="n">point_support_data</span><span class="p">,</span>
+                             <span class="n">ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                             <span class="n">weighted_lags</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function fits area and point support data to the initial regularized models.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>areal_data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) areal data prepared with the function <code class="docutils literal notranslate"><span class="pre">prepare_areal_shapefile()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>in the form:</p></li>
+<li><p><strong>areal_data</strong>: (<em>numpy array</em>) areal data prepared with the function <code class="docutils literal notranslate"><span class="pre">prepare_areal_shapefile()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>in the form:</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_lags</strong>: (<code class="docutils literal notranslate"><span class="pre">list</span></code> / <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) lags between each distance between areas,</p></li>
-<li><p><strong>areal_step_size</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) step size between each lag, usually it is a half of distance between lags,</p></li>
-<li><p><strong>point_support_data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) point support data prepared with the function <code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> in the form:</p></li>
+<li><p><strong>areal_lags</strong>: (<em>list</em> / <em>numpy array</em>) lags between each distance between areas,</p></li>
+<li><p><strong>areal_step_size</strong>: (<em>float</em>) step size between each lag, usually it is a half of distance between lags,</p></li>
+<li><p><strong>point_support_data</strong>: (<em>numpy array</em>) point support data prepared with the function <code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> in the form:</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -195,17 +208,18 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>ranges</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) number of ranges to test during semivariogram fitting. More steps == more accurate <em>nugget</em> and <em>range</em> prediction, but longer calculations,</p></li>
-<li><p><strong>weighted_lags</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) lags weighted by number of points; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags) have larger weights and semivariogram is modeled to better fit to those lags,</p></li>
-<li><p><strong>store_models</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then experimental, regularized and theoretical models are stored in lists after each iteration. It is important for a debugging process.</p></li>
+<li><p><strong>ranges</strong>: (<em>int</em>) number of ranges to test during semivariogram fitting. More steps == more accurate <em>nugget</em> and <em>range</em> prediction, but longer calculations,</p></li>
+<li><p><strong>weighted_lags</strong>: (<em>bool</em>) lags weighted by number of points; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags) have larger weights and semivariogram is modeled to better fit to those lags,</p></li>
+<li><p><strong>store_models</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then experimental, regularized and theoretical models are stored in lists after each iteration. It is important for a debugging process.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <p>None, class is updating its internal parameters. Usually after fitting you should perform regularization with <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="RegularizedSemivariogram.transform">
-<h3>RegularizedSemivariogram.transform<a class="headerlink" href="#RegularizedSemivariogram.transform" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+<div class="section" id="RegularizedSemivariogram.transform()">
+<h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.transform()</span></code><a class="headerlink" href="#RegularizedSemivariogram.transform()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">max_iters</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
                                    <span class="n">min_deviation_ratio</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
                                    <span class="n">min_diff_decrease</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
                                    <span class="n">min_diff_decrease_reps</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
@@ -214,39 +228,40 @@
 <p>Function transofrms fitted data and performs semivariogram regularization iterative procedure.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>max_iters</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) maximum number of iterations,</p></li>
-<li><p><strong>min_deviation_ratio</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each algorithm is stopped,</p></li>
-<li><p><strong>min_diff_decrease</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) minimum absolute difference between new and optimal deviation divided by optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded <code class="docutils literal notranslate"><span class="pre">n</span></code> times (controled by the <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat_reps</span></code> param) then algorithm is stopped,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">min_diff_decrease_reps</span></code>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) number of iterations when algorithm is stopped if condition <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat</span></code> is fulfilled.</p></li>
+<li><p><strong>max_iters</strong>: (<em>int</em>) maximum number of iterations,</p></li>
+<li><p><strong>min_deviation_ratio</strong>: (<em>float</em>) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each algorithm is stopped,</p></li>
+<li><p><strong>min_diff_decrease</strong>: (<em>float</em>) minimum absolute difference between new and optimal deviation divided by optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded <code class="docutils literal notranslate"><span class="pre">n</span></code> times (controled by the <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat_reps</span></code> param) then algorithm is stopped,</p></li>
+<li><p><strong>min_diff_decrease_reps</strong>: (<em>int</em>) number of iterations when algorithm is stopped if condition <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat</span></code> is fulfilled.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <p>None, class is updating its internal parameters. Usually after transforming you should export your theoretical model with <code class="docutils literal notranslate"><span class="pre">export_regularized_model()</span></code> method.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="RegularizedSemivariogram.export_regularized_model">
-<h3>RegularizedSemivariogram.export_regularized_model<a class="headerlink" href="#RegularizedSemivariogram.export_regularized_model" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">export_regularized_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<div class="section" id="RegularizedSemivariogram.export_regularized_model()">
+<h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.export_regularized_model()</span></code><a class="headerlink" href="#RegularizedSemivariogram.export_regularized_model()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">export_regularized_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                                  <span class="n">filename</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function exports final regularized model parameters into specified csv file.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>filename</strong>: (<code class="docutils literal notranslate"><span class="pre">str</span></code>) filename for model parameters (nugget, sill, range, model type).</p></li>
+<li><p><strong>filename</strong>: (<em>str</em>) filename for model parameters (nugget, sill, range, model type).</p></li>
 </ul>
 <p>OUTPUT:</p>
 <p>Method saves regularized model into csv file.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="RegularizedSemivariogram.show_baseline_semivariograms">
-<h3>RegularizedSemivariogram.show_baseline_semivariograms<a class="headerlink" href="#RegularizedSemivariogram.show_baseline_semivariograms" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="RegularizedSemivariogram.show_baseline_semivariograms()">
+<h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.show_baseline_semivariograms()</span></code><a class="headerlink" href="#RegularizedSemivariogram.show_baseline_semivariograms()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">show_baseline_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function shows experimental semivariogram, initial theoretical semivariogram and initial regularized semivariogram after <code class="docutils literal notranslate"><span class="pre">fit()</span></code> operation.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="RegularizedSemivariogram.show_semivariograms">
-<h3>RegularizedSemivariogram.show_semivariograms<a class="headerlink" href="#RegularizedSemivariogram.show_semivariograms" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="RegularizedSemivariogram.show_semivariograms()">
+<h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.show_semivariograms()</span></code><a class="headerlink" href="#RegularizedSemivariogram.show_semivariograms()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -254,10 +269,12 @@
 <hr class="docutils" />
 </div>
 </div>
-<div class="section" id="calculate_covariance">
-<h2>calculate_covariance<a class="headerlink" href="#calculate_covariance" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">semivariogram_estimation</span><span class="o">.</span><span class="n">calculate_covariance</span><span class="o">.</span><span class="n">calculate_covariance</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">lags</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<div class="section" id="calculate_covariance()">
+<h2><code class="docutils literal notranslate"><span class="pre">calculate_covariance()</span></code><a class="headerlink" href="#calculate_covariance()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_covariance</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">lags</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates covariance of a given set of points.</p>
@@ -272,9 +289,9 @@
 <p><span class="math notranslate nohighlight">\(u\)</span> - mean of observations at a given lag distance.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) coordinates and their values,</p></li>
-<li><p><strong>lags</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
+<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -285,10 +302,12 @@
 <p><code class="docutils literal notranslate"><span class="pre">covariance[2]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">points</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">lag</span></code>.</p>
 <hr class="docutils" />
 </div>
-<div class="section" id="calculate_semivariance">
-<h2>calculate_semivariance<a class="headerlink" href="#calculate_semivariance" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">semivariogram_estimation</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span>
-    <span class="n">data</span><span class="p">,</span> <span class="n">lags</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<div class="section" id="calculate_semivariance()">
+<h2><code class="docutils literal notranslate"><span class="pre">calculate_semivariance()</span></code><a class="headerlink" href="#calculate_semivariance()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">lags</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates semivariance of a given set of points.</p>
@@ -302,9 +321,9 @@
 <p><span class="math notranslate nohighlight">\((x_{i} + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_{i}\)</span>,</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) coordinates and their values,</p></li>
-<li><p><strong>lags</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
+<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -315,9 +334,12 @@
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[2]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">points</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">lag</span></code>.</p>
 <hr class="docutils" />
 </div>
-<div class="section" id="calculate_weighted_semivariance">
-<h2>calculate_weighted_semivariance<a class="headerlink" href="#calculate_weighted_semivariance" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">semivariogram_estimation</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="o">.</span><span class="n">calculate_weighted_semivariance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lags</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+<div class="section" id="calculate_weighted_semivariance()">
+<h2><code class="docutils literal notranslate"><span class="pre">calculate_weighted_semivariance()</span></code><a class="headerlink" href="#calculate_weighted_semivariance()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_weighted_semivariance</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">lags</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates weighted semivariance following <em>Monestiez et al.</em>:</p>
@@ -345,14 +367,14 @@
 <p><span class="math notranslate nohighlight">\(m'\)</span> - population weighted mean of rates.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) coordinates and their values and weights:</p></li>
+<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>lags</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<code class="docutils literal notranslate"><span class="pre">float</span></code>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -364,11 +386,14 @@
 <hr class="docutils" />
 </div>
 <div class="section" id="TheoreticalSemivariogram">
-<h2>TheoreticalSemivariogram<a class="headerlink" href="#TheoreticalSemivariogram" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code><a class="headerlink" href="#TheoreticalSemivariogram" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id3">
 <h3>Class initialization<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">semivariogram_fit</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">(</span>
-    <span class="bp">self</span><span class="p">,</span> <span class="n">points_array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">empirical_semivariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">points_array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">empirical_semivariance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Class calculates theoretical semivariogram.</p>
@@ -381,8 +406,8 @@
 </div>
 <p>INITIALIZATION PARAMS:</p>
 <ul class="simple">
-<li><p><strong>points_array</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) analysed points where the last column is representing values, typically x, y, value,</p></li>
-<li><p><strong>empirical_semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) semivariance where first row of array represents lags and the second row represents semivariance’s values for given lag.</p></li>
+<li><p><strong>points_array</strong>: (<em>numpy array</em>) analysed points where the last column is representing values, typically x, y, value,</p></li>
+<li><p><strong>empirical_semivariance</strong>: (<em>numpy array</em>) semivariance where first row of array represents lags and the second row represents semivariance’s values for given lag.</p></li>
 </ul>
 </div>
 <div class="section" id="id4">
@@ -397,16 +422,19 @@
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.fit_semivariance">
-<h3>TheoreticalSemivariogram.fit_semivariance<a class="headerlink" href="#TheoreticalSemivariogram.fit_semivariance" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_type</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<div class="section" id="TheoreticalSemivariogram.fit_semivariance()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.fit_semivariance()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.fit_semivariance()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model_type</span><span class="p">,</span>
+    <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Method fits experimental points into chosen semivariance model type.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>model_type</strong>: (<code class="docutils literal notranslate"><span class="pre">str</span></code>) ‘exponential’, ‘gaussian’, ‘linear’, ‘spherical’,</p></li>
-<li><p><strong>number_of_ranges</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) deafult = 16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p></li>
+<li><p><strong>model_type</strong>: (<em>str</em>) ‘exponential’, ‘gaussian’, ‘linear’, ‘spherical’,</p></li>
+<li><p><strong>number_of_ranges</strong>: (<em>int</em>) deafult = 16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -414,21 +442,24 @@
 </ul>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.find_optimal_model">
-<h3>TheoreticalSemivariogram.find_optimal_model<a class="headerlink" href="#TheoreticalSemivariogram.find_optimal_model" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<div class="section" id="TheoreticalSemivariogram.find_optimal_model()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.find_optimal_model()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.find_optimal_model()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Method fits experimental points into all available models and choose one with the lowest error.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>weighted</strong>: (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) default=<code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each lag is weighted by:</p></li>
+<li><p><strong>weighted</strong>: (<em>bool</em>) default=<code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each lag is weighted by:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\frac{\sqrt{N(h)}}{\gamma_{experimental}(h)}\]</div>
 <p>where:</p>
 <p><span class="math notranslate nohighlight">\(N(h)\)</span> - number of point pairs in a given range,</p>
-<p><span class="math notranslate nohighlight">\(\gamma_{experimental}(h)\)</span> - value of experimental semivariogram for <span class="math notranslate nohighlight">\(h\)</span>. - <strong>number_of_ranges</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) default=16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p>
+<p><span class="math notranslate nohighlight">\(\gamma_{experimental}(h)\)</span> - value of experimental semivariogram for <span class="math notranslate nohighlight">\(h\)</span>. - <strong>number_of_ranges</strong>: (<em>int</em>) default=16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p>
 <p>OUTPUT:</p>
 <ul class="simple">
 <li><p>model_type</p></li>
@@ -436,32 +467,34 @@
 <p>Function updates class parameters with model properties.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.export_model">
-<h3>TheoreticalSemivariogram.export_model<a class="headerlink" href="#TheoreticalSemivariogram.export_model" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<div class="section" id="TheoreticalSemivariogram.export_model()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.export_model()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.export_model()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                      <span class="n">filename</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function exports semivariance model to the csv file. Columns of csv file are: name, nugget, sill, range.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.import_model">
-<h3>TheoreticalSemivariogram.import_model<a class="headerlink" href="#TheoreticalSemivariogram.import_model" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+<div class="section" id="TheoreticalSemivariogram.import_model()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.import_model()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.import_model()" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                      <span class="n">filename</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function imports semivariance model and updates it’s parameters (model name, nugget, sill, range).</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.show_experimental_semivariogram">
-<h3>TheoreticalSemivariogram.show_experimental_semivariogram<a class="headerlink" href="#TheoreticalSemivariogram.show_experimental_semivariogram" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="TheoreticalSemivariogram.show_experimental_semivariogram()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.show_experimental_semivariogram()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.show_experimental_semivariogram()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">show_experimental_semivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function shows experimental semivariogram of a given model.</p>
 </div>
 <hr class="docutils" />
-<div class="section" id="TheoreticalSemivariogram.show_semivariogram">
-<h3>TheoreticalSemivariogram.show_semivariogram<a class="headerlink" href="#TheoreticalSemivariogram.show_semivariogram" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="TheoreticalSemivariogram.show_semivariogram()">
+<h3><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram.show_semivariogram()</span></code><a class="headerlink" href="#TheoreticalSemivariogram.show_semivariogram()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">TheoreticalSemivariogram</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -501,8 +534,8 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../code_documentation.html">Documentation</a><ul>
-      <li>Previous: <a href="misc.html" title="previous chapter">Misc module</a></li>
-      <li>Next: <a href="../contribution.html" title="next chapter">Contribution to Pyinterpolate</a></li>
+      <li>Previous: <a href="distance.html" title="previous chapter">distance module</a></li>
+      <li>Next: <a href="kriging.html" title="next chapter">kriging module</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -533,7 +566,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

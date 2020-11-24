@@ -6,16 +6,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ordinary and Simple Kriging - tutorial &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
+    <link rel="prev" title="Semivariogram calculation - tutorial" href="Semivariogram%20Estimation%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -37,21 +41,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -152,7 +170,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -218,6 +236,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -298,8 +317,8 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_point_data</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>  <span class="c1"># experimental semivariogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">fit_semivariance</span>  <span class="c1"># theoretical models</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">point_kriging</span>  <span class="c1"># kriging models</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalSemivariogram</span>  <span class="c1"># theoretical models</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Krige</span>  <span class="c1"># kriging models</span>
 </pre></div>
 </div>
 </div>
@@ -366,9 +385,7 @@ div.rendered_html tbody tr:hover {
 <span class="n">max_range</span> <span class="o">=</span> <span class="mf">0.32</span>
 <span class="n">data_lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">search_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span>
-                                                            <span class="n">lags</span><span class="o">=</span><span class="n">data_lags</span><span class="p">,</span>
-                                                            <span class="n">step_size</span><span class="o">=</span><span class="n">search_radius</span><span class="p">)</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">data_lags</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">search_radius</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -377,7 +394,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 16/16 [00:02&lt;00:00,  6.27it/s]
+100%|██████████| 16/16 [00:02&lt;00:00,  7.24it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -410,8 +427,7 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Fit different semivariogram models into experimental data</span>
 
-<span class="n">semivar</span> <span class="o">=</span> <span class="n">fit_semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">(</span><span class="n">points_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span>
-                                                          <span class="n">empirical_semivariance</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">)</span>
+<span class="n">semivar</span> <span class="o">=</span> <span class="n">TheoreticalSemivariogram</span><span class="p">(</span><span class="n">points_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">empirical_semivariance</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">)</span>
 <span class="n">number_of_ranges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_lags</span><span class="p">)</span>  <span class="c1"># The same number of ranges as experimental semivariogram</span>
 
 <span class="n">semivar</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">(</span><span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
@@ -424,7 +440,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;linear&#39;
+&#39;spherical&#39;
 </pre></div></div>
 </div>
 </div>
@@ -439,7 +455,7 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Set Kriging model</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">point_kriging</span><span class="o">.</span><span class="n">Krige</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">known_points</span><span class="o">=</span><span class="n">train_set</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Krige</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">known_points</span><span class="o">=</span><span class="n">train_set</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -460,7 +476,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[15.1152409  52.56208568 34.47701645]
+[ 15.11563642  52.75044908 106.60320282]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -498,20 +514,20 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(34.47701644897462, 5.456123358049346, -2.1006249129701348e-15, array([ 1.00000000e+00, -2.30229416e-16,  9.47454241e-17,  1.44940169e-17,
-        9.74186352e-16, -5.56626075e-16, -4.44185832e-16, -4.98587680e-16,
-       -9.79479767e-17,  3.61745889e-16, -6.76316939e-16,  6.62746047e-16,
-        3.84746307e-16, -9.81410160e-16, -1.84064209e-16,  1.09452968e-15,
-       -2.10062491e-15]))
+(106.60320281982419, 5.169445928157583, 3.477769639671757e-16, array([ 1.00000000e+00,  2.68484614e-17,  2.37167974e-16, -2.47593875e-16,
+        7.37832088e-17,  1.30269925e-16, -6.25378807e-17, -1.92596565e-16,
+        1.08274375e-17,  1.10101140e-16,  2.05623354e-18, -1.85192802e-16,
+        2.31518898e-16,  1.57871836e-17,  9.35210889e-17, -1.90385896e-16,
+        3.47776964e-16]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(34.47701644897461, 5.456123358049346, 40.9509380348875, array([ 1.00000000e+00, -4.40962952e-16,  2.88461979e-16,  8.20463217e-17,
-        2.88879620e-18, -1.56222275e-17,  7.39690708e-18, -2.68649427e-17,
-       -6.49676546e-18,  1.48774835e-17,  5.83806965e-17,  1.41618893e-17,
-       -1.66849581e-17, -2.65957599e-18, -3.78124343e-18, -9.43807014e-18]))
+(106.60320281982422, 5.169445928157584, 40.9509380348875, array([ 1.00000000e+00, -3.02632581e-16,  5.53521272e-16, -2.34057932e-16,
+        1.62785507e-17,  6.35354435e-18, -1.57402451e-18,  3.38856811e-18,
+        5.51581921e-18,  6.63064782e-18, -1.74276873e-17,  2.03401087e-17,
+        1.16996138e-17, -3.85462472e-18,  5.00728826e-19, -5.45832357e-17]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -614,19 +630,19 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 2.9053005021955727
+RMSE: 1.5289025423545013
 
 Number of neighbors: 8
-RMSE: 2.0543581795008805
+RMSE: 1.779127873052147
 
 Number of neighbors: 16
-RMSE: 2.0640200506994972
+RMSE: 1.7625997157642104
 
 Number of neighbors: 32
-RMSE: 2.180801258485211
+RMSE: 1.7917378107895416
 
 Number of neighbors: 64
-RMSE: 2.1661721126427693
+RMSE: 1.7939123585007621
 
 </pre></div></div>
 </div>
@@ -687,19 +703,19 @@ RMSE: 2.1661721126427693
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 2.8864711470112283
+RMSE: 1.3546882068309145
 
 Number of neighbors: 8
-RMSE: 2.329940765266734
+RMSE: 2.1431114892170626
 
 Number of neighbors: 16
-RMSE: 2.155939367118492
+RMSE: 1.8823398752648473
 
 Number of neighbors: 32
-RMSE: 2.2007309150572567
+RMSE: 1.8090665750005854
 
 Number of neighbors: 64
-RMSE: 2.170338535208515
+RMSE: 1.7964499830790999
 
 </pre></div></div>
 </div>
@@ -738,15 +754,23 @@ low but for the others it is extremely large.</p>
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Semivariogram%20Estimation%20%28Basic%29.html" title="previous chapter">Semivariogram calculation - tutorial</a></li>
+      <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -776,7 +800,7 @@ low but for the others it is extremely large.</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

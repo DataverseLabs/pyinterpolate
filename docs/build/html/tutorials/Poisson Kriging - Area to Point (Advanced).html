@@ -6,16 +6,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Poisson Kriging - Area to Point Kriging &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Documentation" href="../code_documentation.html" />
+    <link rel="prev" title="Poisson Kriging - Area to Area Kriging" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -37,21 +41,35 @@
 /* CSS for nbsphinx extension */
 
 /* remove conflicting styling from Sphinx themes */
-div.nbinput.container,
-div.nbinput.container div.prompt,
-div.nbinput.container div.input_area,
-div.nbinput.container div[class*=highlight],
-div.nbinput.container div[class*=highlight] pre,
-div.nboutput.container,
-div.nboutput.container div.prompt,
-div.nboutput.container div.output_area,
-div.nboutput.container div[class*=highlight],
-div.nboutput.container div[class*=highlight] pre {
-    background: none;
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
     border: none;
-    padding: 0 0;
+    padding: 0;
     margin: 0;
     box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
 }
 
 /* avoid gaps between output lines */
@@ -152,7 +170,7 @@ div.nboutput.container div.output_area {
 div.nbinput.container div.input_area {
     border: 1px solid #e0e0e0;
     border-radius: 2px;
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
 }
 
 /* override MathJax center alignment in output cells */
@@ -218,6 +236,7 @@ div.nboutput.container div.output_area.rendered_html,
 div.nboutput.container div.output_area > div.output_javascript,
 div.nboutput.container div.output_area:not(.rendered_html) > img{
     padding: 5px;
+    margin: 0;
 }
 
 /* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
@@ -310,7 +329,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">prepare_areal_shapefile</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">get_points_within_area</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">fit_semivariance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalSemivariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">ArealKriging</span>
 </pre></div>
 </div>
@@ -354,7 +373,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x116ea9d50&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fccf9cf44d0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -377,7 +396,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">fit_semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
+<span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalSemivariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
 <span class="n">semivariogram</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span><span class="s1">&#39;regularized_semivariogram.csv&#39;</span><span class="p">)</span>  <span class="c1"># Load regularized semivariogram</span>
 </pre></div>
 </div>
@@ -556,15 +575,23 @@ div.rendered_html tbody tr:hover {
 
 
 <h3>Navigation</h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" title="previous chapter">Poisson Kriging - Area to Area Kriging</a></li>
+      <li>Next: <a href="../code_documentation.html" title="next chapter">Documentation</a></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
@@ -594,7 +621,7 @@ div.rendered_html tbody tr:hover {
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

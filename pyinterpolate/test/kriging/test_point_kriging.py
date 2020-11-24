@@ -1,12 +1,11 @@
 import unittest
-import os
 import numpy as np
 
 from pyinterpolate.kriging.point_kriging.kriging import Krige
 
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 
 
 class SetKrigingModel:

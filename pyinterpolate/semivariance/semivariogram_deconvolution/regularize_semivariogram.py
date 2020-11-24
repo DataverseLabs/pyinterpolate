@@ -21,7 +21,8 @@ class RegularizedSemivariogram:
 
     - initialize your object (no parameters),
     - then use fit() method to build initial point support model,
-    - then use transform() method to perform semivariogram regularization.
+    - then use transform() method to perform semivariogram regularization,
+    - save semivariogram model with export_model() method.
 
     Class public methods:
 
@@ -240,7 +241,7 @@ class RegularizedSemivariogram:
         :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(), where data is
             a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
         :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
-            and range prediction, but longer calculations,
+            and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
             of each model is weighted by number of points for each lag. In practice it means that more reliable data
             (lags) have larger weights and semivariogram is modeled to better fit to those lags,

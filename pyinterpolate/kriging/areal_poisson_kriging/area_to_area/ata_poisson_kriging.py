@@ -1,8 +1,8 @@
 import numpy as np
 
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_ata_known_areas
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_ata_data
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_distances_list_unknown_area
+from pyinterpolate.transform.prepare_kriging_data import prepare_ata_known_areas
+from pyinterpolate.transform.prepare_kriging_data import prepare_ata_data
+from pyinterpolate.transform.prepare_kriging_data import prepare_distances_list_unknown_area
 
 
 class WeightedBlock2BlockSemivariance:
@@ -143,7 +143,7 @@ class AtAPoissonKriging:
 
         zhat = self.prepared_data[:, 1].dot(w[:-1])
 
-        # Calculate error TODO Check if it calculations are more stable or not with smv_inblock_unknown
+        # Calculate error TODO Check if it distance are more stable or not with smv_inblock_unknown
         dists_unknown_inblock = prepare_distances_list_unknown_area(unknown_location_points[1])
         smv_inblock_unknown = self.block_to_block_smv.calculate_average_semivariance([dists_unknown_inblock])
 

@@ -1,7 +1,7 @@
 import numpy as np
 
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_poisson_kriging_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.prepare_kriging_data import prepare_poisson_kriging_data
 
 
 class CentroidPoissonKriging:
@@ -26,7 +26,7 @@ class CentroidPoissonKriging:
 
         self.prepared_data = None
 
-    def predict(self, unknown_location, unknown_location_points,
+    def predict(self, unknown_area, unknown_area_points,
                 number_of_neighbours, max_search_radius, weighted,
                 test_anomalies=True):
         """
@@ -34,9 +34,9 @@ class CentroidPoissonKriging:
 
         INPUT:
 
-        :param unknown_location: (numpy array) unknown area data in the form:
+        :param unknown_area: (numpy array) unknown area data in the form:
             [area_id, polygon, centroid x, centroid y]
-        :param unknown_location_points: (numpy array) points within an unknown area in the form:
+        :param unknown_area_points: (numpy array) points within an unknown area in the form:
             [area_id, [point_position_x, point_position_y, value]]
         :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
         :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
@@ -48,11 +48,11 @@ class CentroidPoissonKriging:
         OUTPUT:
 
         :return: prediction, error, estimated mean, weights:
-            [value_in_unknown_location, error, estimated_mean, weights]
+            [value_in_unknown_area, error, estimated_mean, weights]
         """
 
         self.prepared_data = prepare_poisson_kriging_data(
-            unknown_area=unknown_location, points_within_unknown_area=unknown_location_points,
+            unknown_area=unknown_area, points_within_unknown_area=unknown_area_points,
             known_areas=self.known_areas, points_within_known_areas=self.known_areas_points,
             number_of_neighbours=number_of_neighbours, max_search_radius=max_search_radius,
             weighted=weighted
