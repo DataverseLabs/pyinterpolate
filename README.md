@@ -3,7 +3,28 @@
 PyInterpolate
 =============
 
-PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies.
+PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
+
+If you’re:
+
+- GIS expert,
+- geologist,
+- mining engineer,
+- ecologist,
+- public health specialist,
+- data scientist.
+
+Then this package may be useful for you. You could use it for:
+
+- spatial interpolation and spatial prediction,
+- alone or with machine learning libraries,
+- for point and areal datasets.
+
+Pyinterpolate allows you to perform:
+
+1. Ordinary Kriging and Simple Kriging (spatial interpolation from points),
+2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
+3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
 
 
 Status
@@ -15,7 +36,7 @@ Beta version: package is tested and the main structure is preserved but future c
 Setup
 -----
 
-Setup by pip: pip install pyinterpolate / Python 3.7 is required!
+Setup by pip: pip install pyinterpolate / **Python 3.7** is required!
 
 Manual setup is described in the file SETUP.md: https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md We pointed there most common problems related to third-party packages.
 
@@ -25,6 +46,8 @@ Commercial and scientific projects where library has been used
 --------------------------------------------------------------
 
 * Tick-Borne Disease Detector (Data Lions company) for the European Space Agency (2019-2020).
+* B2C project related to the prediction of demand for specific flu medications,
+* B2G project related to the large-scale infrastructure maintenance.
 
 Community
 ---------
@@ -74,9 +97,10 @@ High level overview:
 ::
 
  - [ ] pyinterpolate
-    - [x] **calculations** - distance calculation
-    - [x] **data_processing** - preparation of spatial data and data processing tasks,
-    - [x] **data visualization** - interpolation of smooth surfaces as rasters,
+    - [x] **distance** - distance calculation
+    - [x] **io** - reads and prepares input spatial datasets,
+    - [x] **transform** - transforms spatial datasets,
+    - [x] **viz** - interpolation of smooth surfaces from points into rasters,
     - [x] **kriging** - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,
     - [x] **misc** - compare different kriging techniques,
     - [x] **semivariance** - calculate semivariance, fit semivariograms and regularize semivariogram,
@@ -92,9 +116,8 @@ Development
 ===========
 
 - inverse distance weighting,
-- point cloud variograms,
-- semivariogram params management,
-- semivariogram regularization with epidemiological data tutorial
+- semivariogram analysis and visualization methods,
+- see Projects page of this repository!
 
 
 Known Bugs

@@ -1,18 +1,21 @@
 # Import Kriging operations
 
-from pyinterpolate.kriging.areal_poisson_kriging.centroid_based.centroid_poisson_kriging import CentroidPoissonKriging
-from pyinterpolate.kriging.areal_poisson_kriging.areal_kriging import ArealKriging
-from pyinterpolate.kriging.point_kriging import kriging as point_kriging
+from pyinterpolate.kriging import CentroidPoissonKriging
+from pyinterpolate.kriging import ArealKriging
+from pyinterpolate.kriging import Krige
 
 # Import semivariance operations
-from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
-from pyinterpolate.semivariance.semivariogram_estimation import calculate_semivariance
-from pyinterpolate.semivariance.semivariogram_fit import fit_semivariance
+from pyinterpolate.semivariance import RegularizedSemivariogram
+from pyinterpolate.semivariance import calculate_semivariance, calculate_covariance, calculate_weighted_semivariance
+from pyinterpolate.semivariance import TheoreticalSemivariogram
 
 # Import data preparation functions
-from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.data_processing.data_preparation.get_points_within_area import get_points_within_area
-from pyinterpolate.data_processing.data_preparation.read_data import read_point_data
+from pyinterpolate.io import prepare_areal_shapefile
+from pyinterpolate.io import get_points_within_area
+from pyinterpolate.io import read_point_data
 
 # Import data visulization functions
-from pyinterpolate.data_visualization import interpolate_raster
+from pyinterpolate.viz import interpolate_raster, show_data
+
+# Misc
+from pyinterpolate.misc import KrigingComparison

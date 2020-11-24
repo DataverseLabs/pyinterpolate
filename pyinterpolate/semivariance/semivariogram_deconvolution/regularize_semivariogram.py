@@ -21,7 +21,8 @@ class RegularizedSemivariogram:
 
     - initialize your object (no parameters),
     - then use fit() method to build initial point support model,
-    - the use transform() method to perform semivariogram regularization.
+    - then use transform() method to perform semivariogram regularization,
+    - save semivariogram model with export_model() method.
 
     Class public methods:
 
@@ -30,8 +31,13 @@ class RegularizedSemivariogram:
 
     transform() - performs semivariogram regularization, which is an iterative process.
 
-    show_semivariograms() - plots experimental semivariogram of areal data, theoretical curve of areal data,
-    regularized model values and regularized model theoretical curve.
+    export_regularized_model() - Function exports final regularized model parameters into specified csv file.
+
+    show_baseline_semivariograms() - Function shows experimental semivariogram, initial theoretical semivariogram and
+        initial regularized semivariogram after fit() operation.
+
+    show_semivariograms() - plots experimental semivariogram of area data, theoretical curve of area data,
+        regularized model values and regularized model theoretical curve.
     """
 
     def __init__(self):
@@ -224,18 +230,18 @@ class RegularizedSemivariogram:
     def fit(self, areal_data, areal_lags, areal_step_size,
             point_support_data, ranges=16, weighted_lags=True, store_models=False):
         """
-        Function fits areal and point support data to the initial regularized models.
+        Function fits area and point support data to the initial regularized models.
 
         INPUT:
 
-        :param areal_data: areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array
-            in the form: [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value],
-        :param areal_lags: list of lags between each distance,
-        :param areal_step_size: step size between each lag, usually it is a half of distance between lags,
-        :param point_support_data: point support data prepared with the function get_points_within_area(), where data is
+        :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array
+            in the form: [area_id, area_geometry, centroid x, centroid y, value],
+        :param areal_lags: (list / numpy array) lags between each distance between areas,
+        :param areal_step_size: (float) step size between each lag, usually it is a half of distance between lags,
+        :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(), where data is
             a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
         :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
-            and range prediction, but longer calculations,
+            and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
             of each model is weighted by number of points for each lag. In practice it means that more reliable data
             (lags) have larger weights and semivariogram is modeled to better fit to those lags,
@@ -287,14 +293,14 @@ class RegularizedSemivariogram:
 
     def transform(self, max_iters=25, min_deviation_ratio=0.01, min_diff_decrease=0.01, min_diff_decrease_reps=3):
         """
-        Function transofrms fitted data and performs semivariogram regularziation iterative procedure.
+        Function transofrms fitted data and performs semivariogram regularization iterative procedure.
 
         INPUT:
 
-        :param max_iters: maximum number of iterations,
-        :param min_deviation_ratio: minimum ration between deviation and initial deviation (D(i) / D(0)) below each
+        :param max_iters: (int) maximum number of iterations,
+        :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each
             algorithm is stopped,
-        :param min_diff_decrease: minimum absolute difference between new and optimal deviation divided by optimal
+        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by optimal
             deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by the min_diff_d_stat_reps
             param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
@@ -389,6 +395,10 @@ class RegularizedSemivariogram:
     def export_regularized_model(self, filename):
         """
         Function exports final regularized model parameters into specified csv file.
+
+        INPUT:
+
+        :param filename: (str) filename for model parameters (nugget, sill, range, model type).
         """
         
         if self.final_theoretical_model is None:
@@ -399,7 +409,7 @@ class RegularizedSemivariogram:
     def show_baseline_semivariograms(self):
         """
         Function shows experimental semivariogram, initial theoretical semivariogram and
-        initial regularized semivariogram after fit() operation.
+            initial regularized semivariogram after fit() operation.
         """
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
@@ -416,7 +426,7 @@ class RegularizedSemivariogram:
     def show_semivariograms(self):
         """
         Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
-        semivariogram regularization.
+            semivariogram regularization with transform() method.
         """
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
