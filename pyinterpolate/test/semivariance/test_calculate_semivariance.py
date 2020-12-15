@@ -21,9 +21,8 @@ class TestCalculateSemivariance(unittest.TestCase):
         maximum_range = np.max(distances)
         number_of_divisions = 10
         step_size = maximum_range / number_of_divisions
-        lags = np.arange(0, maximum_range, step_size)
 
-        gamma = calculate_semivariance(dataset, lags, step_size)
+        gamma = calculate_semivariance(dataset, step_size, maximum_range)
 
         output_int = [115, 258, 419, 538, 572, 547, 530, 563, 613, 583]
 
@@ -47,9 +46,8 @@ class TestCalculateSemivariance(unittest.TestCase):
         maximum_range = np.max(distances)
         number_of_divisions = 10
         step_size = maximum_range / number_of_divisions
-        lags = np.arange(0, maximum_range, step_size)
 
-        gamma_w = calculate_weighted_semivariance(dataset_weights, lags, step_size)
+        gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
 
         output_int = [105, 237, 385, 497, 526, 491, 454, 460, 499, 464]
 

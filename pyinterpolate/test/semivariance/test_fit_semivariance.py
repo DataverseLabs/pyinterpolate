@@ -27,12 +27,11 @@ class TestFitSemivariance(unittest.TestCase):
         maximum_range = np.max(distances)
         number_of_divisions = 10
         step_size = maximum_range / number_of_divisions
-        lags = np.arange(0, maximum_range, step_size)
 
         # Calculate weighted and non-weighted semivariance
 
-        gamma_w = calculate_weighted_semivariance(dataset_weights, lags, step_size)
-        gamma_non = calculate_semivariance(dataset, lags, step_size)
+        gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
+        gamma_non = calculate_semivariance(dataset, step_size, maximum_range)
 
         # Fit semivariance - find optimal models
         t_non_weighted = TheoreticalSemivariogram(dataset, gamma_non)

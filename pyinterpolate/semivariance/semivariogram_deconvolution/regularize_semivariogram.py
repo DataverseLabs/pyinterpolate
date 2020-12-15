@@ -227,7 +227,7 @@ class RegularizedSemivariogram:
 
         return cond
 
-    def fit(self, areal_data, areal_lags, areal_step_size,
+    def fit(self, areal_data, areal_step_size, max_areal_range,
             point_support_data, ranges=16, weighted_lags=True, store_models=False):
         """
         Function fits area and point support data to the initial regularized models.
@@ -236,8 +236,8 @@ class RegularizedSemivariogram:
 
         :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array
             in the form: [area_id, area_geometry, centroid x, centroid y, value],
-        :param areal_lags: (list / numpy array) lags between each distance between areas,
         :param areal_step_size: (float) step size between each lag, usually it is a half of distance between lags,
+        :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
         :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(), where data is
             a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
         :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
@@ -251,7 +251,7 @@ class RegularizedSemivariogram:
 
         # Update data class params
         self.areal_data = areal_data
-        self.areal_lags = areal_lags
+        self.areal_lags = np.arange(0, areal_step_size, max_areal_range)
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
         self.ranges = ranges
@@ -265,8 +265,8 @@ class RegularizedSemivariogram:
 
         self.experimental_semivariogram_of_areal_data = calculate_semivariance(
             areal_centroids,
-            areal_lags,
-            areal_step_size
+            areal_step_size,
+            max_areal_range
         )
 
         # Compute theoretical semivariogram of areal data from areal centroids

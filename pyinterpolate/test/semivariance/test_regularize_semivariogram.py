@@ -32,7 +32,6 @@ class TestRegularizeSemivariogram(unittest.TestCase):
 
         max_range = min(total_bounds_x, total_bounds_y)
         step_size = max_range / 4
-        lags = np.arange(0, max_range, step_size * 2)
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, areal_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=areal_id,
@@ -40,7 +39,7 @@ class TestRegularizeSemivariogram(unittest.TestCase):
 
         # Fit
 
-        reg_mod.fit(areal_data_prepared, lags, step_size, points_in_area)
+        reg_mod.fit(areal_data_prepared, step_size, max_range, points_in_area)
 
         # Transform
         reg_mod.transform()

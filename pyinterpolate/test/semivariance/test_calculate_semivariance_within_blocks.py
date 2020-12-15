@@ -35,8 +35,6 @@ class TestCalculateSemivarianceWithinBlocks(unittest.TestCase):
         max_range = min(total_bounds_x, total_bounds_y)
         step_size = max_range / 4
 
-        lags = np.arange(0, max_range, step_size * 2)
-
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
@@ -45,7 +43,7 @@ class TestCalculateSemivarianceWithinBlocks(unittest.TestCase):
         areal_centroids = areal_data_prepared[:, 2:]
         areal_centroids = np.array([[x[0], x[1], x[2]] for x in areal_centroids])
 
-        gamma = calculate_semivariance(areal_centroids, lags, step_size)
+        gamma = calculate_semivariance(areal_centroids, step_size, max_range)
 
         # Get theoretical semivariogram model
         ts = TheoreticalSemivariogram(areal_centroids, gamma)

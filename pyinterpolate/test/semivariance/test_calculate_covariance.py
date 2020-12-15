@@ -20,9 +20,8 @@ class TestCalculateCovariance(unittest.TestCase):
         maximum_range = np.max(distances)
         number_of_divisions = 10
         step_size = maximum_range / number_of_divisions
-        lags = np.arange(0, maximum_range, step_size)
 
-        gamma = calculate_covariance(dataset, lags, step_size)
+        gamma = calculate_covariance(dataset, step_size, maximum_range)
 
         output_int = [368, 197, 19,  0,  0,  0,  0,  0,  0,  0]
 

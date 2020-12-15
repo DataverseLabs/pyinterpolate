@@ -16,6 +16,8 @@ def select_values_in_range(data, lag, step_size):
     :return: numpy array mask with distances within specified radius.
     """
 
+    step_size = step_size / 2
+
     # Check if numpy array is given
     if not isinstance(data, np.ndarray):
         data = np.array(data)
