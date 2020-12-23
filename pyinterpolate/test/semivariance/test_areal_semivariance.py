@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.io.get_points_within_area import get_points_within_area
-from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
 
 from pyinterpolate.semivariance.areal_semivariance.areal_semivariance import ArealSemivariance
 

@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.io.get_points_within_area import get_points_within_area
-from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
 from pyinterpolate.semivariance.areal_semivariance.areal_semivariance import ArealSemivariance
 
 from pyinterpolate.semivariance.areal_semivariance.block_to_block_semivariance.calculate_block_to_block_semivariance\
@@ -34,22 +34,19 @@ class TestCalculateBlock2BlockSemivariance(unittest.TestCase):
         max_range = min(total_bounds_x, total_bounds_y)
         step_size = max_range / 4
 
-        lags = np.arange(0, max_range, step_size * 2)
-
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
 
         # Set areal semivariance class
-        areal_semivariance = ArealSemivariance(areal_data_prepared, lags, step_size,
-                                               points_in_area)
+        areal_semivariance = ArealSemivariance(areal_data_prepared, step_size, max_range, points_in_area)
         areal_semivariance.regularize_semivariogram()
         blocks = calculate_block_to_block_semivariance(areal_semivariance.within_area_points,
                                                        areal_semivariance.distances_between_blocks,
                                                        areal_semivariance.theoretical_semivariance_model)
         test_block = np.array(blocks[0][0])
         mean_semivariance = int(np.mean(test_block[:, 1]))
-        self.assertEqual(mean_semivariance, 208, "Average semivariance should be 208 (decimal part)")
+        self.assertEqual(mean_semivariance, 212, "Average semivariance should be 212 (decimal part)")
 
 
 if __name__ == '__main__':

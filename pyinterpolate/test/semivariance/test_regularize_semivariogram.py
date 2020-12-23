@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.io.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
 from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
 
 
@@ -38,18 +38,17 @@ class TestRegularizeSemivariogram(unittest.TestCase):
                                                 points_val_col_name=points_val)
 
         # Fit
-
         reg_mod.fit(areal_data_prepared, step_size, max_range, points_in_area)
 
         # Transform
         reg_mod.transform()
 
-        regularized_smv = np.array([0, 120])
+        regularized_smv = np.array([0, 0, 140, 148])
         test_output = (reg_mod.final_optimal_model).astype(np.int)
 
         check = (test_output == regularized_smv).all()
 
-        self.assertTrue(check, "Output should be equal to [0, 120]")
+        self.assertTrue(check, "Output should be equal to [0, 0, 140, 148]")
 
 
 if __name__ == '__main__':

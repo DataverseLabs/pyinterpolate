@@ -1,6 +1,6 @@
 import unittest
 import os
-from pyinterpolate.io import get_points_within_area
+from pyinterpolate.io_ops import get_points_within_area
 
 
 class TestGetPoints(unittest.TestCase):

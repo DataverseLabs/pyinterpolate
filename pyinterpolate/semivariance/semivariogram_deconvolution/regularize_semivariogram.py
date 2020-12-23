@@ -93,7 +93,7 @@ class RegularizedSemivariogram:
 
         # Data
         self.areal_data = None
-        self.areal_lags = None
+        self.areal_max_range = None
         self.areal_step_size = None
         self.point_support_data = None
 
@@ -119,8 +119,8 @@ class RegularizedSemivariogram:
 
         # Initialize areal semivariance object
         areal_semivariance = ArealSemivariance(self.areal_data,
-                                               self.areal_lags,
                                                self.areal_step_size,
+                                               self.areal_max_range,
                                                self.point_support_data,
                                                weighted_semivariance=self.weight_error_lags)
 
@@ -145,7 +145,7 @@ class RegularizedSemivariogram:
         :return deviation: (float) scalar which describes deviation between semivariograms.
         """
 
-        lags = self.areal_lags
+        lags = self.experimental_semivariogram_of_areal_data[:, 0]
         theoretical_values = theoretical_model.predict(lags)
         regularized_values = regularized_model
 
@@ -174,7 +174,7 @@ class RegularizedSemivariogram:
 
         :return rescalled_point_support_semivariogram: (numpy array) of the form [[lag, semivariance, number of points]]
         """
-        lags = self.areal_lags
+        lags = self.experimental_semivariogram_of_areal_data[:, 0]
 
         y_opt_h = self.optimal_theoretical_model.predict(lags)
 
@@ -251,7 +251,7 @@ class RegularizedSemivariogram:
 
         # Update data class params
         self.areal_data = areal_data
-        self.areal_lags = np.arange(0, areal_step_size, max_areal_range)
+        self.areal_max_range = max_areal_range
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
         self.ranges = ranges
