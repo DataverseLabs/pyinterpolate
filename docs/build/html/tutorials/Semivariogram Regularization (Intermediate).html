@@ -12,7 +12,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -321,7 +320,7 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.io</span> <span class="kn">import</span> <span class="n">prepare_areal_shapefile</span><span class="p">,</span> <span class="n">get_points_within_area</span>  <span class="c1"># Prepare data</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.io_ops</span> <span class="kn">import</span> <span class="n">prepare_areal_shapefile</span><span class="p">,</span> <span class="n">get_points_within_area</span>  <span class="c1"># Prepare data</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>  <span class="c1"># Experimental semivariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">RegularizedSemivariogram</span>  <span class="c1"># Semivariogram regularization class</span>
 
@@ -412,7 +411,7 @@ True
       <th>0</th>
       <td>915</td>
       <td>podkarpackie</td>
-      <td>powiat ropczycko-sędziszowski</td>
+      <td>powiat ropczycko-sÄdziszowski</td>
       <td>3</td>
       <td>74198</td>
       <td>0.040432</td>
@@ -422,7 +421,7 @@ True
       <th>1</th>
       <td>710</td>
       <td>mazowieckie</td>
-      <td>powiat łosicki</td>
+      <td>powiat Åosicki</td>
       <td>6</td>
       <td>31335</td>
       <td>0.191479</td>
@@ -432,7 +431,7 @@ True
       <th>2</th>
       <td>718</td>
       <td>mazowieckie</td>
-      <td>powiat piaseczyński</td>
+      <td>powiat piaseczyÅski</td>
       <td>15</td>
       <td>182076</td>
       <td>0.082383</td>
@@ -452,7 +451,7 @@ True
       <th>4</th>
       <td>730</td>
       <td>mazowieckie</td>
-      <td>powiat szydłowiecki</td>
+      <td>powiat szydÅowiecki</td>
       <td>4</td>
       <td>39938</td>
       <td>0.100155</td>
@@ -565,7 +564,7 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([915, &lt;shapely.geometry.polygon.Polygon object at 0x119b8f910&gt;,
+array([915, &lt;shapely.geometry.polygon.Polygon object at 0x7fc632d10250&gt;,
        689225.7862175289, 245704.52509337224, 3], dtype=object)
 </pre></div></div>
 </div>
@@ -648,6 +647,7 @@ array([1112.0,
 <div class="section" id="2)-Set-semivariogram-parameters.">
 <h2>2) Set semivariogram parameters.<a class="headerlink" href="#2)-Set-semivariogram-parameters." title="Permalink to this headline">¶</a></h2>
 <p>Now we must set parameters for areal semivariogram AND point semivariogram. It is very important to understand data well to set them properly, that’s why you should always check experimental semivariograms of those datasets to understand how data behaves. We do it for prepared areal and point datasets.</p>
+<p>From the practical point of view area semivariogram analysis is more important because we pass into semivariogram regularization parameters of step size and maximum search radius. But we check point’s semivariogram too. It is analytical step, to check if spatial process whoch we are using for semivariogram deconvolution is proper, as example if semivariogram shows exponential function then our process will not be properly modeled.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -657,13 +657,10 @@ array([1112.0,
 <span class="c1"># before you find optimal parameters</span>
 
 <span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">160000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">8000</span>
-<span class="n">lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maximum_range</span><span class="p">,</span> <span class="n">step_size</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mi">16000</span>
 
 <span class="n">dt</span> <span class="o">=</span> <span class="n">areal_data_prepared</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span>  <span class="c1"># x, y, val</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span>
-                                                           <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span>
-                                                           <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">)</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
 
 <span class="c1"># Plot experimental semivariogram</span>
 
@@ -676,19 +673,11 @@ array([1112.0,
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 10/10 [00:00&lt;00:00, 635.25it/s]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_14_1.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_14_1.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_14_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_14_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -711,14 +700,11 @@ array([1112.0,
     <span class="k">return</span> <span class="n">a</span>
 
 <span class="n">maximum_point_range</span> <span class="o">=</span> <span class="mi">40000</span>
-<span class="n">step_size_points</span> <span class="o">=</span> <span class="mi">4000</span>
-<span class="n">lags_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maximum_point_range</span><span class="p">,</span> <span class="n">step_size_points</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">step_size_points</span> <span class="o">=</span> <span class="mi">8000</span>
 
 
 <span class="n">pt</span> <span class="o">=</span> <span class="n">build_point_array</span><span class="p">(</span><span class="n">points_in_area</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># x, y, val</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span>
-                                                           <span class="n">lags</span><span class="o">=</span><span class="n">lags_points</span><span class="p">,</span>
-                                                           <span class="n">step_size</span><span class="o">=</span><span class="n">step_size_points</span><span class="p">)</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size_points</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_point_range</span><span class="p">)</span>
 
 <span class="c1"># Plot experimental semivariogram</span>
 
@@ -731,24 +717,16 @@ array([1112.0,
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 5/5 [00:06&lt;00:00,  1.34s/it]
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_15_1.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_15_1.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_15_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_15_0.png" />
 </div>
 </div>
 <div class="section" id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>After few adjustements we have prepared semivariogram parameters for areal and point support data. The next step is to create RegularizedSemivariogram model. We have mutiple parameters to choose and at the beginning it is hard to find the best fit, so try to avoid multiple loops because it is a time-consuming operation.</p>
+<p>After few adjustements we have prepared semivariogram parameters for area and point support data. The next step is to create <code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram</span></code> model. We have mutiple parameters to choose and at the beginning it is hard to find the best fit, so try to avoid multiple loops because it is a time-consuming operation.</p>
 <p>The program is designed to first <strong>fit()</strong> the model and later to <strong>transform()</strong> it.</p>
 <p>When you <strong>fit()</strong> a model you have multiple parameters to control: * areal_data: areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array in the form: [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value], * areal_lags: list of lags between each distance, * areal_step_size: step size between each lag, usually it is a half of distance between lags, * point_support_data: point support data prepared with the function
 get_points_within_area(), where data is a numpy array in the form: [area_id, [point_position_x, point_position_y, value]], * ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget and range prediction, but longer calculations, * weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags)
@@ -774,8 +752,27 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maximum_range</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
+       128000, 144000])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">areal_data</span><span class="o">=</span><span class="n">areal_data_prepared</span><span class="p">,</span>
-            <span class="n">areal_lags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span> <span class="n">areal_step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+            <span class="n">areal_step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_areal_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">,</span>
             <span class="n">point_support_data</span><span class="o">=</span><span class="n">points_in_area</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">weighted_lags</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -785,15 +782,14 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 10/10 [00:00&lt;00:00, 547.47it/s]
-100%|██████████| 320/320 [00:00&lt;00:00, 6124.50it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 62.75it/s]
-100%|██████████| 320/320 [09:06&lt;00:00,  1.71s/it]
+100%|██████████| 320/320 [00:00&lt;00:00, 6585.05it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 81.68it/s]
+100%|██████████| 320/320 [04:27&lt;00:00,  1.20it/s]
 </pre></div></div>
 </div>
 <p>Probably something is wrong with our model and it is not well regularized by the algorithm. This may mean that our data is not spatially corellated (e.g. number of accidencts and population at risk are not correlated in space). We can check initial semivariograms to test this assumption.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -817,14 +813,14 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_20_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_20_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_21_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_21_0.png" />
 </div>
 </div>
 <p>There’s a large relative difference between regularized semivariance and theoretical semivariogram of areal data. What’s more important: sill is reached approx. at 25 km distance… So there is a problem of scale: spatial correlation potentially exists but at much smaller scales than we are able to observe.</p>
 <p>Anyway, we perfom the rest of tutorial with this dataset*.</p>
 <p>(*) New tutorials with different datasets and scenarios will be released in November / December 2020.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -837,18 +833,18 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 320/320 [00:00&lt;00:00, 5763.58it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 64.16it/s]
-100%|██████████| 320/320 [08:30&lt;00:00,  1.60s/it]
-100%|██████████| 320/320 [00:00&lt;00:00, 6677.53it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 63.59it/s]
-100%|██████████| 320/320 [08:35&lt;00:00,  1.61s/it]
-100%|██████████| 320/320 [00:00&lt;00:00, 10371.03it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 64.19it/s]
-100%|██████████| 320/320 [07:23&lt;00:00,  1.39s/it]
-100%|██████████| 320/320 [00:00&lt;00:00, 6494.33it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 62.80it/s]
-100%|██████████| 320/320 [08:37&lt;00:00,  1.62s/it]
+100%|██████████| 320/320 [00:00&lt;00:00, 6991.42it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 87.95it/s]
+100%|██████████| 320/320 [04:35&lt;00:00,  1.16it/s]
+100%|██████████| 320/320 [00:00&lt;00:00, 7183.41it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 84.83it/s]
+100%|██████████| 320/320 [04:26&lt;00:00,  1.20it/s]
+100%|██████████| 320/320 [00:00&lt;00:00, 6632.00it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 108.84it/s]
+100%|██████████| 320/320 [04:24&lt;00:00,  1.21it/s]
+100%|██████████| 320/320 [00:00&lt;00:00, 6975.72it/s]
+100%|██████████| 10/10 [00:00&lt;00:00, 84.16it/s]
+100%|██████████| 320/320 [04:29&lt;00:00,  1.19it/s]
 </pre></div></div>
 </div>
 <p><strong>NOTE:</strong></p>
@@ -860,7 +856,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <h3>Clarification:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Process is fully automatic but we can check how it baheaved through each iteration. We can analyze deviation change (most important variable, mean absolute difference between regularized and theoretical models) with build-in method but if you are more interested in the algorithm stability you can analyze weight change over each iteration too.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -876,15 +872,15 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_24_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_24_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" />
 </div>
 </div>
 </div>
 <div class="section" id="id4">
 <h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Deviation is worse than initial deviation after the first step of regularization and then it sharply decrease. It means that our problem is not best suited for Poisson Kriging - we should see decrease of deviation from the beginning. The reason of this fact will be better visible in semivariograms comparison in the cell below.</p>
+<p>Deviation is better than initial deviation after the first step of regularization and then it doesn’t change. It means that our problem is not best suited for Poisson Kriging - we should see decrease of deviation from the beginning up to the end. The reason of this fact will be better visible in semivariograms comparison in the cell below.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -904,7 +900,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_26_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_26_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" />
 </div>
 </div>
 <div class="section" id="NOTE:">
@@ -915,7 +911,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <span id="id5"></span><h4>NOTE:<a class="headerlink" href="#note-1" title="Permalink to this headline">¶</a></h4>
 <p>The most important part is to compare semivariograms! You can see that Optimized Model is equal to Initial Semivariogram of areal data: our model is not better than normal kriging of areal centroids.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -927,7 +923,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_28_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_28_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_29_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_29_0.png" />
 </div>
 </div>
 </div>
@@ -941,7 +937,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="section" id="5)-Export-semivariogram-to-text-file">
 <h2>5) Export semivariogram to text file<a class="headerlink" href="#5)-Export-semivariogram-to-text-file" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -951,15 +947,6 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <span class="c1"># parameters are stored for other tasks.</span>
 
 <span class="n">reg_mod</span><span class="o">.</span><span class="n">export_regularized_model</span><span class="p">(</span><span class="s1">&#39;regularized_model.csv&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
 </pre></div>
 </div>
 </div>
@@ -1029,7 +1016,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

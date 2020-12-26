@@ -6,8 +6,8 @@ from pyinterpolate.kriging.areal_poisson_kriging.area_to_point.atp_poisson_krigi
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 
-from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.io.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
 from pyinterpolate.transform.set_areal_weights import set_areal_weights
 
 class TestAreaToPointPoissonKriging(unittest.TestCase):
@@ -32,8 +32,6 @@ class TestAreaToPointPoissonKriging(unittest.TestCase):
         max_range = min(total_bounds_x, total_bounds_y)
         step_size = max_range / 10
 
-        lags = np.arange(0, max_range, step_size * 2)
-
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
@@ -49,7 +47,7 @@ class TestAreaToPointPoissonKriging(unittest.TestCase):
         # Semivariance deconvolution
 
         semivar_modeling_data = set_areal_weights(k_areas, k_points)
-        smv_model = calculate_weighted_semivariance(semivar_modeling_data, lags, step_size)
+        smv_model = calculate_weighted_semivariance(semivar_modeling_data, step_size, max_range)
 
         semivariogram = TheoreticalSemivariogram(k_areas[:, 2:], smv_model)
 

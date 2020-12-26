@@ -1,7 +1,7 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.io import prepare_areal_shapefile
+from pyinterpolate.io_ops import prepare_areal_shapefile
 
 
 class TestPrepareArealShapefile(unittest.TestCase):

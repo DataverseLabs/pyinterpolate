@@ -1,7 +1,7 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.io import read_point_data
+from pyinterpolate.io_ops import read_point_data
 
 
 class TestReadData(unittest.TestCase):

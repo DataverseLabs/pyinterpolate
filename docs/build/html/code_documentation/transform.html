@@ -12,14 +12,13 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="distance module" href="distance.html" />
-    <link rel="prev" title="io module" href="io.html" />
+    <link rel="prev" title="io_ops module" href="io_ops.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -276,15 +275,13 @@
     <span class="n">step_size</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Function selects set of values which are greater than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">-</span> <span class="pre">step</span> <span class="pre">size</span></code>) and lesser than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">+</span> <span class="pre">step</span> <span class="pre">size</span></code>).</p>
+<p>Function selects set of values which are greater than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">-</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">/</span> <span class="pre">2</span></code>) and smaller or equal than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">+</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">/</span> <span class="pre">2</span></code>).</p>
 <p>INPUT:</p>
 <ul class="simple">
 <li><p><strong>data</strong>: (<em>numpy array</em>) distances,</p></li>
 <li><p><strong>lag</strong>: (<em>float</em>) lag within areas are included,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) step between lags. Usually it is constant in each iteration and it is:</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) step between lags.</p></li>
 </ul>
-<div class="math notranslate nohighlight">
-\[0.5 * lag\]</div>
 <p>OUTPUT:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> mask with distances within specified radius.</p></li>
@@ -350,7 +347,7 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../code_documentation.html">Documentation</a><ul>
-      <li>Previous: <a href="io.html" title="previous chapter">io module</a></li>
+      <li>Previous: <a href="io_ops.html" title="previous chapter">io_ops module</a></li>
       <li>Next: <a href="distance.html" title="next chapter">distance module</a></li>
   </ul></li>
   </ul></li>
@@ -382,7 +379,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

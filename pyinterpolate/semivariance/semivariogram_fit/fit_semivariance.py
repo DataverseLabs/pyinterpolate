@@ -189,7 +189,7 @@ class TheoreticalSemivariogram:
         # model error
         self.model_error = self.calculate_model_error(model, self.params)
 
-        return (model_type, self.params)
+        return model_type, self.params
 
     def find_optimal_model(self, weighted=False, number_of_ranges=16):
         """

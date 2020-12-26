@@ -20,7 +20,7 @@ class ArealSemivariance:
 
     :param areal_data: (numpy array / list) [area_id, area_geometry, centroid x,
         centroid y, value],
-    :param areal_lags: (numpy array / list) - array of lags (ranges of search),
+    :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
     :param areal_step_size: (float) step size for search radius,
     :param areal_points_data: (numpy array / list of lists)
         [area_id, [point_position_x, point_position_y, value]]
@@ -29,7 +29,7 @@ class ArealSemivariance:
     :param verbose: (bool) if True then all messages are printed, otherwise nothing.
     """
 
-    def __init__(self, areal_data, areal_lags, areal_step_size,
+    def __init__(self, areal_data, areal_step_size, max_areal_range,
                  areal_points_data, weighted_semivariance=False, verbose=False):
 
         """
@@ -37,8 +37,8 @@ class ArealSemivariance:
 
         :param areal_data: (numpy array / list of lists)
             [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value],
-        :param areal_lags: (numpy array / list of lists) - array of lags (ranges of search),
         :param areal_step_size: (float) step size for search radius,
+        :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
         :param areal_points_data: (numpy array / list of lists)
             [area_id, [point_position_x, point_position_y, value]]
         :param weighted_semivariance: (bool) if False then each distance is treated equally when calculating
@@ -49,8 +49,9 @@ class ArealSemivariance:
         # Initial data
         self.areal_dataset = areal_data
         self.areal_centroids = self.areal_dataset[:, 2:]
-        self.areal_lags = areal_lags
+        self.areal_lags = np.arange(0, max_areal_range, areal_step_size)
         self.areal_ss = areal_step_size
+        self.areal_max_range = max_areal_range
         self.within_area_points = areal_points_data
         self.weighted_semivariance = weighted_semivariance
 
@@ -69,7 +70,7 @@ class ArealSemivariance:
     def _calculate_empirical_semivariance(self):
         """Method calculates theoretical semivariance between areal centroids
         :return gamma: (float) semivariance between areal centroids."""
-        gamma = calculate_semivariance(self.areal_centroids, self.areal_lags, self.areal_ss)
+        gamma = calculate_semivariance(self.areal_centroids,  self.areal_ss, self.areal_max_range)
         return gamma
 
     def _calculate_theoretical_semivariance(self):
@@ -101,7 +102,8 @@ class ArealSemivariance:
             yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
             y(va, va) and y(va+h, va+h) are the inblock semivariances of block a and block a+h separated
                 by the distance h weighted by the inblock population.
-        :param between_blocks_semivariogram: (numpy array) semivariance between all blocks calculated from the theoretical model,
+        :param between_blocks_semivariogram: (numpy array) semivariance between all blocks calculated from the
+            theoretical model,
         :param empirical_semivariance: (numpy array) empirical semivariance between area centroids, default=None, if
             None is provided then empirical semivariance is computed by the _calculate_empirical_semivariance
             method from area centroids,

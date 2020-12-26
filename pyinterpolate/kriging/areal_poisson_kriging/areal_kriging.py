@@ -147,8 +147,8 @@ class ArealKriging:
         Function regularizes whole dataset and creates new values and error maps based on the kriging type.
             If chosen type is area to area then function returns Geopandas GeoDataFrame with area id, areal geometry,
             estimated value, estimated prediction error, RMSE of prediction.
-            If chosen type is area to point then function returns Geopandas GeoDataFrame with area id, point coordinates,
-            estimated value, estimated prediction error, RMSE of areal prediction.
+            If chosen type is area to point then function returns Geopandas GeoDataFrame with area id, point
+                coordinates, estimated value, estimated prediction error, RMSE of areal prediction.
 
         Function do not predict unknown values, areas with NaN are skipped.
 

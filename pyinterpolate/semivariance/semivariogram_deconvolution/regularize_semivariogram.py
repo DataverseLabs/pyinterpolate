@@ -93,7 +93,7 @@ class RegularizedSemivariogram:
 
         # Data
         self.areal_data = None
-        self.areal_lags = None
+        self.areal_max_range = None
         self.areal_step_size = None
         self.point_support_data = None
 
@@ -119,8 +119,8 @@ class RegularizedSemivariogram:
 
         # Initialize areal semivariance object
         areal_semivariance = ArealSemivariance(self.areal_data,
-                                               self.areal_lags,
                                                self.areal_step_size,
+                                               self.areal_max_range,
                                                self.point_support_data,
                                                weighted_semivariance=self.weight_error_lags)
 
@@ -145,7 +145,7 @@ class RegularizedSemivariogram:
         :return deviation: (float) scalar which describes deviation between semivariograms.
         """
 
-        lags = self.areal_lags
+        lags = self.experimental_semivariogram_of_areal_data[:, 0]
         theoretical_values = theoretical_model.predict(lags)
         regularized_values = regularized_model
 
@@ -174,7 +174,7 @@ class RegularizedSemivariogram:
 
         :return rescalled_point_support_semivariogram: (numpy array) of the form [[lag, semivariance, number of points]]
         """
-        lags = self.areal_lags
+        lags = self.experimental_semivariogram_of_areal_data[:, 0]
 
         y_opt_h = self.optimal_theoretical_model.predict(lags)
 
@@ -227,19 +227,19 @@ class RegularizedSemivariogram:
 
         return cond
 
-    def fit(self, areal_data, areal_lags, areal_step_size,
+    def fit(self, areal_data, areal_step_size, max_areal_range,
             point_support_data, ranges=16, weighted_lags=True, store_models=False):
         """
         Function fits area and point support data to the initial regularized models.
 
         INPUT:
 
-        :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array
-            in the form: [area_id, area_geometry, centroid x, centroid y, value],
-        :param areal_lags: (list / numpy array) lags between each distance between areas,
+        :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is
+            a numpy array in the form: [area_id, area_geometry, centroid x, centroid y, value],
         :param areal_step_size: (float) step size between each lag, usually it is a half of distance between lags,
-        :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(), where data is
-            a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
+        :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
+        :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(),
+            where data is a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
         :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
             and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
@@ -251,7 +251,7 @@ class RegularizedSemivariogram:
 
         # Update data class params
         self.areal_data = areal_data
-        self.areal_lags = areal_lags
+        self.areal_max_range = max_areal_range
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
         self.ranges = ranges
@@ -265,8 +265,8 @@ class RegularizedSemivariogram:
 
         self.experimental_semivariogram_of_areal_data = calculate_semivariance(
             areal_centroids,
-            areal_lags,
-            areal_step_size
+            areal_step_size,
+            max_areal_range
         )
 
         # Compute theoretical semivariogram of areal data from areal centroids
@@ -298,11 +298,11 @@ class RegularizedSemivariogram:
         INPUT:
 
         :param max_iters: (int) maximum number of iterations,
-        :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each
-            algorithm is stopped,
-        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by optimal
-            deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by the min_diff_d_stat_reps
-            param) then algorithm is stopped,
+        :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below
+            each algorithm is stopped,
+        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by
+            optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
+            the min_diff_d_stat_reps param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
             min_diff_d_stat is fulfilled.
         """

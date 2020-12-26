@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.io.get_points_within_area import get_points_within_area
-from pyinterpolate.io.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
 from pyinterpolate.semivariance.areal_semivariance.areal_semivariance import ArealSemivariance
 from pyinterpolate.semivariance.areal_semivariance.within_block_semivariance.calculate_average_semivariance\
     import calculate_average_semivariance
@@ -32,17 +32,14 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
         total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
         max_range = min(total_bounds_x, total_bounds_y)
-        step_size = max_range / 4
-
-        lags = np.arange(0, max_range, step_size * 2)
+        step_size = max_range / 2
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
 
         # Set areal semivariance class
-        areal_semivariance = ArealSemivariance(areal_data_prepared, lags, step_size,
-                                               points_in_area)
+        areal_semivariance = ArealSemivariance(areal_data_prepared, step_size, max_range, points_in_area)
         areal_semivariance.regularize_semivariogram()
         avg_semi = calculate_average_semivariance(areal_semivariance.distances_between_blocks,
                                                   areal_semivariance.inblock_semivariance, areal_semivariance.areal_lags,
@@ -51,6 +48,7 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
 
         desired_output = np.array([[0, 111], [1, 111]])
         test_vals = (data_test_vals == desired_output)
+        print(data_test_vals)
         self.assertTrue(test_vals.all(), "Output should be [[0, 111], [1, 111]]")
 
 
