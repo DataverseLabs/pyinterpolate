@@ -12,7 +12,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -372,7 +371,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="2)-Set-Semivariogram-model">
 <h2>2) Set Semivariogram model<a class="headerlink" href="#2)-Set-Semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>More about semivariogram modeling in tutorial about Semivariogram calculation: [url]</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
@@ -383,19 +382,10 @@ div.rendered_html tbody tr:hover {
 
 <span class="n">search_radius</span> <span class="o">=</span> <span class="mf">0.01</span>
 <span class="n">max_range</span> <span class="o">=</span> <span class="mf">0.32</span>
-<span class="n">data_lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">search_radius</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="n">data_lags</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">search_radius</span><span class="p">)</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">search_radius</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 16/16 [00:02&lt;00:00,  7.24it/s]
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -428,7 +418,7 @@ div.rendered_html tbody tr:hover {
 <span></span><span class="c1"># Fit different semivariogram models into experimental data</span>
 
 <span class="n">semivar</span> <span class="o">=</span> <span class="n">TheoreticalSemivariogram</span><span class="p">(</span><span class="n">points_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">empirical_semivariance</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">)</span>
-<span class="n">number_of_ranges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_lags</span><span class="p">)</span>  <span class="c1"># The same number of ranges as experimental semivariogram</span>
+<span class="n">number_of_ranges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">)</span>  <span class="c1"># The same number of ranges as experimental semivariogram</span>
 
 <span class="n">semivar</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">(</span><span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
 </pre></div>
@@ -476,7 +466,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[ 15.11563642  52.75044908 106.60320282]
+[15.11563642 52.70449669 48.72597885]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -514,20 +504,20 @@ div.rendered_html tbody tr:hover {
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(106.60320281982419, 5.169445928157583, 3.477769639671757e-16, array([ 1.00000000e+00,  2.68484614e-17,  2.37167974e-16, -2.47593875e-16,
-        7.37832088e-17,  1.30269925e-16, -6.25378807e-17, -1.92596565e-16,
-        1.08274375e-17,  1.10101140e-16,  2.05623354e-18, -1.85192802e-16,
-        2.31518898e-16,  1.57871836e-17,  9.35210889e-17, -1.90385896e-16,
-        3.47776964e-16]))
+(48.72597885131836, 3.390598011445001, 2.9878489242298765e-15, array([ 1.00000000e+00,  6.91218918e-17, -1.89866644e-16, -1.08226020e-15,
+        1.32067636e-15,  7.11595164e-17,  2.56145669e-16, -2.72042876e-16,
+       -1.04224311e-16, -2.35749216e-16,  4.29501799e-16,  1.09878898e-16,
+       -3.74479758e-17, -3.11022819e-16,  2.97266996e-16, -2.93436744e-16,
+        2.98784892e-15]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(106.60320281982422, 5.169445928157584, 40.9509380348875, array([ 1.00000000e+00, -3.02632581e-16,  5.53521272e-16, -2.34057932e-16,
-        1.62785507e-17,  6.35354435e-18, -1.57402451e-18,  3.38856811e-18,
-        5.51581921e-18,  6.63064782e-18, -1.74276873e-17,  2.03401087e-17,
-        1.16996138e-17, -3.85462472e-18,  5.00728826e-19, -5.45832357e-17]))
+(48.72597885131835, 3.390598011445001, 40.9509380348875, array([ 1.00000000e+00,  1.77633206e-16, -2.09711473e-16, -1.17123593e-15,
+        1.46900170e-15, -7.15728973e-17,  5.72546787e-16, -2.75135377e-16,
+       -1.36336614e-17, -2.64257671e-16, -8.93976095e-17, -1.80495159e-17,
+        6.99591976e-18,  2.73135677e-17, -1.37030821e-18,  1.61860402e-17]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -630,19 +620,19 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 1.5289025423545013
+RMSE: 0.04181709123790611
 
 Number of neighbors: 8
-RMSE: 1.779127873052147
+RMSE: 0.010716787307032405
 
 Number of neighbors: 16
-RMSE: 1.7625997157642104
+RMSE: 0.04080792356459284
 
 Number of neighbors: 32
-RMSE: 1.7917378107895416
+RMSE: 0.03468908509384505
 
 Number of neighbors: 64
-RMSE: 1.7939123585007621
+RMSE: 0.03735457253794294
 
 </pre></div></div>
 </div>
@@ -667,7 +657,8 @@ RMSE: 1.7939123585007621
         <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span>
             <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-            <span class="n">mu</span><span class="o">=</span><span class="n">mean_areal</span>
+            <span class="n">mu</span><span class="o">=</span><span class="n">mean_areal</span><span class="p">,</span>
+            <span class="n">test_anomalies</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">mse</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
@@ -703,19 +694,19 @@ RMSE: 1.7939123585007621
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 1.3546882068309145
+RMSE: 0.8332726149683296
 
 Number of neighbors: 8
-RMSE: 2.1431114892170626
+RMSE: 0.6082229711138396
 
 Number of neighbors: 16
-RMSE: 1.8823398752648473
+RMSE: 0.1064266056887746
 
 Number of neighbors: 32
-RMSE: 1.8090665750005854
+RMSE: 0.0044511286400208405
 
 Number of neighbors: 64
-RMSE: 1.7964499830790999
+RMSE: 0.02970655581301429
 
 </pre></div></div>
 </div>
@@ -800,7 +791,7 @@ low but for the others it is extremely large.</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

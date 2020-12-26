@@ -3,13 +3,14 @@ import numpy as np
 
 def select_values_in_range(data, lag, step_size):
     """
-    Function selects set of values which are greater than (lag - step size) and lesser than (lag + step size).
+    Function selects set of values which are greater than (lag - step size / 2) and smaller or equal than
+        (lag + step size / 2).
 
     INPUT:
 
     :param data: (numpy array) distances,
     :param lag: (float) lag within areas are included,
-    :param step_size: (float) step between lags. Usually it is constant in each iteration and it is (0.5 * lag).
+    :param step_size: (float) step between lags.
 
     OUTPUT:
 

@@ -12,7 +12,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -53,8 +52,8 @@
 <h3>Class initialization<a class="headerlink" href="#Class-initialization" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">ArealSemivariance</span><span class="p">(</span>
     <span class="n">areal_data</span><span class="p">,</span>
-    <span class="n">areal_lags</span><span class="p">,</span>
     <span class="n">areal_step_size</span><span class="p">,</span>
+    <span class="n">max_areal_range</span><span class="p">,</span>
     <span class="n">areal_points_data</span><span class="p">,</span>
     <span class="n">weighted_semivariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -69,8 +68,8 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_lags</strong>: (<em>numpy array</em> / <em>list</em>) - array of lags (ranges of search),</p></li>
 <li><p><strong>areal_step_size</strong>: (<em>float</em>) step size for search radius,</p></li>
+<li><p><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</p></li>
 <li><p><strong>areal_points_data</strong>: (<em>numpy array</em> / <em>list</em>)</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
@@ -180,8 +179,8 @@
 <h3><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram.fit()</span></code><a class="headerlink" href="#RegularizedSemivariogram.fit()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">RegularizedSemivariogram</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">areal_data</span><span class="p">,</span>
-                             <span class="n">areal_lags</span><span class="p">,</span>
                              <span class="n">areal_step_size</span><span class="p">,</span>
+                             <span class="n">max_areal_range</span><span class="p">,</span>
                              <span class="n">point_support_data</span><span class="p">,</span>
                              <span class="n">ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
                              <span class="n">weighted_lags</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -197,8 +196,8 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_lags</strong>: (<em>list</em> / <em>numpy array</em>) lags between each distance between areas,</p></li>
 <li><p><strong>areal_step_size</strong>: (<em>float</em>) step size between each lag, usually it is a half of distance between lags,</p></li>
+<li><p><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</p></li>
 <li><p><strong>point_support_data</strong>: (<em>numpy array</em>) point support data prepared with the function <code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> in the form:</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
@@ -273,8 +272,8 @@
 <h2><code class="docutils literal notranslate"><span class="pre">calculate_covariance()</span></code><a class="headerlink" href="#calculate_covariance()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_covariance</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
-    <span class="n">lags</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="p">)</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates covariance of a given set of points.</p>
@@ -290,8 +289,8 @@
 <p>INPUT:</p>
 <ul class="simple">
 <li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
-<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -306,8 +305,8 @@
 <h2><code class="docutils literal notranslate"><span class="pre">calculate_semivariance()</span></code><a class="headerlink" href="#calculate_semivariance()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_semivariance</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
-    <span class="n">lags</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="p">)</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates semivariance of a given set of points.</p>
@@ -322,8 +321,8 @@
 <p>INPUT:</p>
 <ul class="simple">
 <li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
-<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -338,8 +337,8 @@
 <h2><code class="docutils literal notranslate"><span class="pre">calculate_weighted_semivariance()</span></code><a class="headerlink" href="#calculate_weighted_semivariance()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_weighted_semivariance</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
-    <span class="n">lags</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="p">)</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Function calculates weighted semivariance following <em>Monestiez et al.</em>:</p>
@@ -373,8 +372,8 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>lags</strong>: (<em>numpy array</em>) lags between points,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations.</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
@@ -566,7 +565,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

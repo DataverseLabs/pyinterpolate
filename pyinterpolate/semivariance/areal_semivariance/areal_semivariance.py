@@ -20,7 +20,7 @@ class ArealSemivariance:
 
     :param areal_data: (numpy array / list) [area_id, area_geometry, centroid x,
         centroid y, value],
-    :param areal_lags: (numpy array / list) - array of lags (ranges of search),
+    :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
     :param areal_step_size: (float) step size for search radius,
     :param areal_points_data: (numpy array / list of lists)
         [area_id, [point_position_x, point_position_y, value]]
@@ -102,7 +102,8 @@ class ArealSemivariance:
             yh(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)], where:
             y(va, va) and y(va+h, va+h) are the inblock semivariances of block a and block a+h separated
                 by the distance h weighted by the inblock population.
-        :param between_blocks_semivariogram: (numpy array) semivariance between all blocks calculated from the theoretical model,
+        :param between_blocks_semivariogram: (numpy array) semivariance between all blocks calculated from the
+            theoretical model,
         :param empirical_semivariance: (numpy array) empirical semivariance between area centroids, default=None, if
             None is provided then empirical semivariance is computed by the _calculate_empirical_semivariance
             method from area centroids,

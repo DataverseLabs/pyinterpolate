@@ -12,7 +12,6 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -324,7 +323,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -332,14 +331,14 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.io</span> <span class="kn">import</span> <span class="n">prepare_areal_shapefile</span><span class="p">,</span> <span class="n">get_points_within_area</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.io_ops</span> <span class="kn">import</span> <span class="n">prepare_areal_shapefile</span><span class="p">,</span> <span class="n">get_points_within_area</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">TheoreticalSemivariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging</span> <span class="kn">import</span> <span class="n">CentroidPoissonKriging</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -360,7 +359,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -372,12 +371,12 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f32d8a84f50&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf256a2a50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -396,7 +395,7 @@ div.rendered_html tbody tr:hover {
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>In this step we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regulariztion along with the Poisson Kriging but it is a very long process and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -410,7 +409,7 @@ div.rendered_html tbody tr:hover {
 <h2>3) Prepare training and test data<a class="headerlink" href="#3)-Prepare-training-and-test-data" title="Permalink to this headline">¶</a></h2>
 <p>We simply remove 10% of random ID’s from areal dataset (the same for points) and create four arrays: two training arrays with areal and point geometry and values and two test arrays with the same categories of data.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -466,7 +465,7 @@ div.rendered_html tbody tr:hover {
 tutorial.</p>
 <p>Your work with Poisson Kriging (or Kriging) will be usually the same: - prepare training and test data, - use training data to prepare semivariogram model, - test different hyperparameters with a test set to find optimal number of neighbors which are affecting your area of analysis, - forecast into unknown areas OR perform data smoothing.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -500,7 +499,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -516,7 +515,7 @@ tutorial.</p>
 <h2>5) Analyze Forecast Bias and Root Mean Squared Error of prediction<a class="headerlink" href="#5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction" title="Permalink to this headline">¶</a></h2>
 <p>The last step is analysis of errors. We plot two histograms: of forecast bias and of root mean squared error then we calculate base statistics of a dataset.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -527,12 +526,12 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x11906e750&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf255e6d50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -543,7 +542,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -552,12 +551,12 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x11b46f910&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf25385f10&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -568,7 +567,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -577,7 +576,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -615,70 +614,61 @@ tutorial.</p>
     </tr>
     <tr>
       <th>mean</th>
-      <td>8.500000</td>
-      <td>9.81250</td>
-      <td>1.312500</td>
-      <td>5.312500</td>
+      <td>9.781250</td>
+      <td>7.28125</td>
+      <td>-2.500000</td>
+      <td>5.187500</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>4.607147</td>
-      <td>8.94585</td>
-      <td>8.866164</td>
-      <td>7.159192</td>
+      <td>4.850902</td>
+      <td>3.87077</td>
+      <td>6.344924</td>
+      <td>4.351029</td>
     </tr>
     <tr>
       <th>min</th>
       <td>4.000000</td>
       <td>2.00000</td>
-      <td>-13.000000</td>
+      <td>-21.000000</td>
       <td>0.000000</td>
     </tr>
     <tr>
       <th>25%</th>
       <td>6.000000</td>
-      <td>4.00000</td>
-      <td>-3.000000</td>
-      <td>1.000000</td>
+      <td>5.00000</td>
+      <td>-5.250000</td>
+      <td>2.000000</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>8.000000</td>
-      <td>6.50000</td>
-      <td>-1.000000</td>
-      <td>3.000000</td>
+      <td>9.000000</td>
+      <td>7.00000</td>
+      <td>-2.000000</td>
+      <td>4.000000</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>10.000000</td>
-      <td>11.25000</td>
-      <td>1.500000</td>
-      <td>6.000000</td>
+      <td>10.750000</td>
+      <td>10.25000</td>
+      <td>1.250000</td>
+      <td>7.250000</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>29.000000</td>
-      <td>37.00000</td>
-      <td>28.000000</td>
-      <td>28.000000</td>
+      <td>25.000000</td>
+      <td>18.00000</td>
+      <td>9.000000</td>
+      <td>21.000000</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <ol class="arabic simple">
-<li><p><strong>Forecast Bias</strong> histogram shows tendency towards positive values. This indicates that our model underestimate missing values.</p></li>
-<li><p><strong>Root Mean Squared Error</strong> histogram is skewed towards the 0. Unfortunatelely our predictions have few outliers (75% of error values above 6). The mean error is close to 5 units (accidents) and it is ok when we compare real dataset mean to the mean error.</p></li>
+<li><p><strong>Forecast Bias</strong> histogram shows tendency towards negative values. But this is probably due to the large negative outliers presence.</p></li>
+<li><p><strong>Root Mean Squared Error</strong> histogram is skewed towards the 0. Unfortunatelely our predictions have few outliers (75% of error values above 7). The mean error is close to 5 units (accidents) and it is ok when we compare real dataset mean to the mean error.</p></li>
 </ol>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 
@@ -745,7 +735,7 @@ tutorial.</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

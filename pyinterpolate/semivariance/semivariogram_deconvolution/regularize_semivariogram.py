@@ -234,12 +234,12 @@ class RegularizedSemivariogram:
 
         INPUT:
 
-        :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is a numpy array
-            in the form: [area_id, area_geometry, centroid x, centroid y, value],
+        :param areal_data: (numpy array) areal data prepared with the function prepare_areal_shapefile(), where data is
+            a numpy array in the form: [area_id, area_geometry, centroid x, centroid y, value],
         :param areal_step_size: (float) step size between each lag, usually it is a half of distance between lags,
         :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
-        :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(), where data is
-            a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
+        :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(),
+            where data is a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
         :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
             and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
@@ -298,11 +298,11 @@ class RegularizedSemivariogram:
         INPUT:
 
         :param max_iters: (int) maximum number of iterations,
-        :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each
-            algorithm is stopped,
-        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by optimal
-            deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by the min_diff_d_stat_reps
-            param) then algorithm is stopped,
+        :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below
+            each algorithm is stopped,
+        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by
+            optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
+            the min_diff_d_stat_reps param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
             min_diff_d_stat is fulfilled.
         """
