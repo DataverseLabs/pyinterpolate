@@ -98,7 +98,7 @@ High level overview:
 
  - [ ] pyinterpolate
     - [x] **distance** - distance calculation
-    - [x] **io** - reads and prepares input spatial datasets,
+    - [x] **io_ops** - reads and prepares input spatial datasets,
     - [x] **transform** - transforms spatial datasets,
     - [x] **viz** - interpolation of smooth surfaces from points into rasters,
     - [x] **kriging** - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,

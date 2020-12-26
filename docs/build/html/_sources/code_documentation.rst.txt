@@ -10,7 +10,7 @@ Package modules:
 .. toctree::
    :maxdepth: 2
 
-   code_documentation/io
+   code_documentation/io_ops
    code_documentation/transform
    code_documentation/distance
    code_documentation/semivariance

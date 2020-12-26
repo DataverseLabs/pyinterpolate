@@ -1,12 +1,10 @@
 import numpy as np
 
-from tqdm import tqdm
-
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
 
-def calculate_semivariance(data, lags, step_size):
+def calculate_semivariance(data, step_size, max_range):
     """Function calculates semivariance of a given set of points.
 
         Equation for calculation is:
@@ -23,8 +21,8 @@ def calculate_semivariance(data, lags, step_size):
         INPUT:
 
         :param data: (numpy array) coordinates and their values,
-        :param lags: (numpy array) lags between points,
-        :param step_size: (float) distance between lags within each points are included in the distance.
+        :param step_size: (float) step size of circle within radius are analyzed points,
+        :param max_range: (float) maximum range of analysis.
 
         OUTPUT:
 
@@ -39,8 +37,10 @@ def calculate_semivariance(data, lags, step_size):
 
     semivariance = []
 
+    lags = np.arange(0, max_range, step_size)
+
     # Calculate semivariances
-    for h in tqdm(lags):
+    for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         sem = (data[distances_in_range[0], 2] - data[distances_in_range[1], 2]) ** 2
         if len(sem) == 0:
@@ -53,7 +53,7 @@ def calculate_semivariance(data, lags, step_size):
     return semivariance
 
 
-def calculate_weighted_semivariance(data, lags, step_size):
+def calculate_weighted_semivariance(data, step_size, max_range):
     """Function calculates weighted semivariance following Monestiez et al.:
 
         A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Comparison of model based geostatistical methods
@@ -83,8 +83,8 @@ def calculate_weighted_semivariance(data, lags, step_size):
 
         :param data: (numpy array) coordinates and their values and weights:
             [coordinate x, coordinate y, value, weight],
-        :param lags: (numpy array) lags between points,
-        :param step_size: (float) distance between lags within each points are included in the distance.
+        :param step_size: (float) step size of circle within radius are analyzed points,
+        :param max_range: (float) maximum range of analysis.
 
 
         OUTPUT:
@@ -108,8 +108,10 @@ def calculate_weighted_semivariance(data, lags, step_size):
     smv = []
     semivariance = []
 
+    lags = np.arange(0, max_range, step_size)
+
     # Calculate semivariances
-    for idx, h in enumerate(tqdm(lags)):
+    for idx, h in enumerate(lags):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
         # Weights

@@ -26,9 +26,8 @@ class SetSemivariogramModel:
         distances = calc_point_to_point_distance(self.data[:, :-1])
         maximum_range = np.max(distances)
         step_size = maximum_range / self.steps
-        lags = np.arange(0, maximum_range, step_size)
 
-        self.semivariance = calculate_semivariance(self.data, lags, step_size)
+        self.semivariance = calculate_semivariance(self.data, step_size, maximum_range)
         self.theoretical_semivariance = TheoreticalSemivariogram(self.data, self.semivariance)
         self.theoretical_semivariance.find_optimal_model(number_of_ranges=self.steps)
 
