@@ -7,7 +7,11 @@ def _check_if_coordinates_are_unique(data):
     """
     Function checks if coordinates are unique in a given dataset. If not, the Warning is logged into output stream.
     """
-    unique_values = np.unique(data, axis=0)
+
+    if isinstance(data, list):
+        data = np.array(data)
+        
+    unique_values = np.unique(data.astype(np.float), axis=0)
     no_of_obs = len(data)
     no_of_uniqs = len(unique_values)
     if no_of_uniqs < no_of_obs:
