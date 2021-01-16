@@ -154,7 +154,7 @@ A world of advice is to use Virtual Environment for the installation.
 Tests and contribution
 ------------------------
 
-All tests are grouped in `test` directory. To run them you must have installed `unittest` package. More about test and contribution are here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
+All tests are grouped in `test` directory. To run them you must have installed `unittest` package. More about test and contribution is here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
 
 
 
