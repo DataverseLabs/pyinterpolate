@@ -86,7 +86,9 @@ print(squared_error)
 >> 48.72
 ```
 
-With **pyinterpolate** you are able to rerieve point support model from area aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency:
+With **pyinterpolate** you are able to retrieve point support model from areal aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. It was done with Area-to-Point Poisson Kriging technique from package. Countries along the world presents infections as areal sums to protect privacy of infected people. But this kind of representaion introduces bias to the decision-making process. To overcome this bias you may use Poisson Kriging. Areal aggregates of COVID-19 infection rate are transformed to new point support semivariogram created from population density blocks. As output we get population at risk map:
+
+![Covid-19 infection risk in Poland for 14th April, 2020.](deconvoluted_risk_areas.jpg  "Covid-19 infection risk in Poland for 14th April, 2020.")
 
 
 
