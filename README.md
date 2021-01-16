@@ -1,7 +1,7 @@
 ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Build Status](https://travis-ci.com/szymon-datalions/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
 
 PyInterpolate
-=============
+========
 
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
 
@@ -26,6 +26,69 @@ Pyinterpolate allows you to perform:
 2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
 3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
 
+How it works
+--------------
+
+Package allows o perform multiple spatial interpolation tasks. The flow of analysis is usually the same for each interpolation method:
+
+**[1.]** Read and prepare data.
+
+```python
+from pyinterpolate.io import read_point_data
+
+point_data = read_point_data('xyz_txt_file.txt')
+```
+
+**[2.]** Analyze data, Semivariance calculation.
+
+```python
+from pyinterpolate.semivariance import calculate_semivariance
+
+search_radius = 0.01
+max_range = 0.32
+
+experimental_semivariogram = calculate_semivariance(
+	data=point_data,
+	step_size=search_radius,
+	max_range=max_range)
+```
+
+**[3.]** Data transformation, theoretical semivariogram.
+
+```python
+from pyinterpolate.semivariance import TheoreticalSemivariogram
+semivar = TheoreticalSemivariogram(points_array=point_data, empirical_semivariance=experimental_semivariogram)
+number_of_ranges = 32
+
+semivar.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+```
+
+**[4.]** Interpolation.
+
+```python
+from pyinterpolate.kriging import Krige
+
+model = Krige(semivariogram_model=semivar, known_points=point_data)
+unknown_point = (12.1, -5.9)
+
+ok_pred = model.ordinary_kriging(unknown_location=unknown_point, number_of_neighbours=32)
+```
+
+**[5.]** Error and uncertainty analysis.
+
+```python
+real_val = 10  # Some real, known observation at a given point
+squared_error = (real_val - ok_pred[0])**2
+print(squared_error)
+```
+
+```bash
+>> 48.72
+```
+
+With **pyinterpolate** you are able to rerieve point support model from area aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency:
+
+
 
 Status
 ------
@@ -38,7 +101,59 @@ Setup
 
 Setup by pip: pip install pyinterpolate / **Python 3.7** is required!
 
-Manual setup is described in the file SETUP.md: https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md We pointed there most common problems related to third-party packages.
+Detailed instructions how to setup package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed there most common problems related to third-party packages.
+
+You may follow those setup steps to create conda environment with package for your tests:
+
+### Recommended - conda installation
+
+[1.] First install system dependencies to use package (```libspatialindex_c.so```):
+
+LINUX:
+
+```
+sudo apt install libspatialindex-dev
+```
+
+MAC OS:
+
+```
+brew install spatialindex
+```
+
+[2.] Next step is to create conda enviornment with Python 3.7, pip and notebook packages and activate your environment:
+
+```
+conda env create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
+```
+
+```
+conda activate [YOUR NAME]
+```
+
+[3.] In the next step install **pyinterpolate** and its dependencies with ```pip```:
+
+```
+pip install pyinterpolate
+```
+
+[4.] You are ready to use the package!
+
+### pip installation
+
+With **Python==3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+
+```
+pip install pyinterpolate
+```
+
+A world of advice is to use Virtual Environment for the installation.
+
+Tests
+------
+
+All tests are grouped in ```test``` directory. To run them you must have installed ```unittest``` package.
+
 
 
 
@@ -94,8 +209,6 @@ Package structure
 
 High level overview:
 
-::
-
  - [ ] pyinterpolate
     - [x] **distance** - distance calculation
     - [x] **io_ops** - reads and prepares input spatial datasets,
@@ -113,7 +226,7 @@ Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
 
 
 Development
-===========
+------------------
 
 - inverse distance weighting,
 - semivariogram analysis and visualization methods,
@@ -121,6 +234,6 @@ Development
 
 
 Known Bugs
-==========
+-----------------
 
 - (still) not detected!
