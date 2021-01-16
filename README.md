@@ -151,10 +151,10 @@ pip install pyinterpolate
 
 A world of advice is to use Virtual Environment for the installation.
 
-Tests
-------
+Tests and contribution
+------------------------
 
-All tests are grouped in ```test``` directory. To run them you must have installed ```unittest``` package.
+All tests are grouped in `test` directory. To run them you must have installed `unittest` package. More about test and contribution are here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
 
 
 
@@ -169,7 +169,7 @@ Commercial and scientific projects where library has been used
 Community
 ---------
 
-Join our community in Discord: https://discord.gg/3EMuRkj
+Join our community in Discord: [Discord Server PyInterpolate](https://discord.gg/3EMuRkj)
 
 
 Bibliography
