@@ -10,6 +10,7 @@ Available tutorials:
 .. toctree::
    :maxdepth: 1
 
+   tutorials/Variogram Point Cloud (Basic)
    tutorials/Semivariogram Estimation (Basic)
    tutorials/Ordinary and Simple Kriging (Basic)
    tutorials/Semivariogram Regularization (Intermediate)

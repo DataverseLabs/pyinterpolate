@@ -44,6 +44,10 @@
 <li><p>calculate_covariance: Function calculates covariance of a given set of points,</p></li>
 <li><p>calculate_semivariance: Function calculates semivariance of a given set of points,</p></li>
 <li><p>calculate_weighted_semivariance: Function calculates weighted semivariance,</p></li>
+<li><p>build_variogram_point_cloud: Function creates OrderedDict with lags and variances between points within specific lag,</p></li>
+<li><p>show_variogram_cloud: function shows boxplots of lags and squared differences between ponts’ values within specific lag,</p></li>
+<li><p>calc_semivariance_from_pt_cloud: based on Point Cloud semivariogram is calculated,</p></li>
+<li><p>remove_outliers: removes outliers from point cloud variogram,</p></li>
 <li><p>TheoreticalSemivariogram: Class calculates theoretical semivariogram.</p></li>
 </ul>
 <div class="section" id="ArealSemivariance">
@@ -384,6 +388,82 @@
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[2]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">points</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">lag</span></code>.</p>
 <hr class="docutils" />
 </div>
+<div class="section" id="build_variogram_point_cloud()">
+<h2><code class="docutils literal notranslate"><span class="pre">build_variogram_point_cloud()</span></code><a class="headerlink" href="#build_variogram_point_cloud()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">build_variogram_point_cloud</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function calculates variogram point cloud of a given set of points for a given set of distances. Variogram is calculated as a squared difference of each point against other point within range specified by step_size parameter.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<em>OrderedDict</em>) variogram_cloud - dict with pairs {lag: list of squared differences}.</p></li>
+</ul>
+<hr class="docutils" />
+</div>
+<div class="section" id="show_variogram_cloud()">
+<h2><code class="docutils literal notranslate"><span class="pre">show_variogram_cloud()</span></code><a class="headerlink" href="#show_variogram_cloud()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">show_variogram_cloud</span><span class="p">(</span>
+    <span class="n">variogram_cloud</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function shows boxplots of variogram lags. It is especially useful when you want to check outliers in your dataset.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>variogram_cloud</strong>: (<em>OrderedDict</em>) lags and halved squared differences between points,</p></li>
+<li><p><strong>figsize</strong>: (<em>tuple</em>), default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+</ul>
+<hr class="docutils" />
+</div>
+<div class="section" id="calc_semivariance_from_pt_cloud()">
+<h2><code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code><a class="headerlink" href="#calc_semivariance_from_pt_cloud()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calc_semivariance_from_pt_cloud</span><span class="p">(</span>
+    <span class="n">pt_cloud_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function calculates experimental semivariogram from point cloud variogram.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>pt_cloud_dict</strong>: (<em>OrderedDict</em>) {lag: [values]}.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<em>numpy array</em>) [lag, semivariance, number of points].</p></li>
+</ul>
+<hr class="docutils" />
+</div>
+<div class="section" id="remove_outliers()">
+<h2><code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code><a class="headerlink" href="#remove_outliers()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span>
+                                           <span class="n">std_dist</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function removes outliers from each lag and returns dict without those values.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>data_dict</strong>: (<em>OrderedDict</em>) with {lag: list of values},</p></li>
+<li><p><strong>std_dist</strong>: (<em>float</em>) number of standard deviations from the mean within values are passed.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<em>OrderedDict</em>) {lag: [values]}.</p></li>
+</ul>
+<hr class="docutils" />
+</div>
 <div class="section" id="TheoreticalSemivariogram">
 <h2><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code><a class="headerlink" href="#TheoreticalSemivariogram" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="id3">
@@ -565,7 +645,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
