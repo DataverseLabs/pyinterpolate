@@ -54,13 +54,13 @@ def show_variogram_cloud(variogram_cloud, figsize=None):
     :param figsize: (tuple) figure size (width, height).
     """
     if figsize is None:
-        figsie = (14, 6)
+        figsize = (14, 6)
 
     data = [x for x in variogram_cloud.values()]
     fig, ax = plt.subplots(figsize=figsize)
     ax.boxplot(data)
-    xtickNames = plt.setp(ax, xticklabels=variogram_cloud.keys())
-    plt.setp(xtickNames, rotation=45, fontsize=8)
+    xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
+    plt.setp(xtick_names, rotation=45, fontsize=8)
     plt.show()
 
 
@@ -203,3 +203,52 @@ def calculate_weighted_semivariance(data, step_size, max_range):
 def _test_weights(arr):
     if 0 in arr:
         print('One or more of weights in dataset is set to 0, this may cause errors in the distance')
+
+
+def calc_semivariance_from_pt_cloud(pt_cloud_dict):
+    """
+    Function calculates experimental semivariogram from point cloud variogram.
+
+    INPUT:
+
+    :param pt_cloud_dict: (OrderedDict) {lag: [values]}
+
+    OUTPUT:
+    :return: (numpy array) [lag, semivariance, number of points]
+    """
+    experimental_semivariogram = []
+    for k in pt_cloud_dict.keys():
+        experimental_semivariogram.append([k, np.mean(pt_cloud_dict[k]), len(pt_cloud_dict[k])])
+    experimental_semivariogram = np.array(experimental_semivariogram)
+    return experimental_semivariogram
+
+
+def remove_outliers(data_dict, std_dist=2.):
+    """Function removes outliers from each lag and returns dict without those values.
+
+    INPUT:
+
+    :param data_dict: (Ordered Dict) with {lag: list of values},
+    :param std_dist: (float) number of standard deviations from the mean within values are passed.
+
+    OUTPUT:
+
+    :returns: (OrderedDict) {lag: [values]}"""
+
+    output = OrderedDict()
+
+    for lag in data_dict.keys():
+        if isinstance(data_dict[lag], list):
+            dd = np.array(data_dict[lag])
+        else:
+            dd = data_dict[lag].copy()
+
+        mean_ = np.mean(dd)
+        std_ = np.std(dd)
+        upper_boundary = mean_ + std_dist * std_
+        lower_boundary = mean_ - std_dist * std_
+
+        vals = dd[(dd < upper_boundary) & (dd > lower_boundary)]
+        output[lag] = vals
+
+    return output
