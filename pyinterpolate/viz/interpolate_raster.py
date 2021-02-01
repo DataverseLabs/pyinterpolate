@@ -112,13 +112,11 @@ def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_mode
         maximum_range = np.max(distances)
         number_of_divisions = 100
         step_size = maximum_range / number_of_divisions
-        lags = np.arange(0, maximum_range, step_size)
 
-        semivariance = calculate_semivariance(data, lags, step_size)
+        semivariance = calculate_semivariance(data, step_size, maximum_range)
 
         ts = TheoreticalSemivariogram(data, semivariance, False)
         ts.find_optimal_model(False, number_of_neighbors)
-
     else:
         ts = semivariogram_model
 
