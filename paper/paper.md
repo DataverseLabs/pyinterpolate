@@ -39,7 +39,6 @@ The most similar and most important package is **PyKrige** [@benjamin_murphy_202
 
 **R programming language** offers **gstat** package for spatial interpolation and spatial modeling [@PEBESMA2004683]. Package is designed for variogram modelling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid package for Kriging and spatial interpolation and has the largest number of methods to perform spatial modelling. The main difference between gstat and pyinterpolate is availability of area-to-point Poisson Kriging based on the algorithm proposed by Goovaerts [bibliografia] in the latter.
 
-
 # Spatial Interpolation
 
 Kriging, which is baseline of the Pyinterpolate package, is an estimation method that gives the best unbiased linear estimates of point values or block averages [@Armstrong:1998]. Kriging minimizes variance of a dataset with missing values. Baseline technique is the Ordinary Kriging where value at unknown location $\hat{z}$ is estimated as a linear combination of $K$ neighbors with value $z$ and weights $\lambda$ assigned to those neighbors (1).
@@ -70,13 +69,43 @@ where $z_{x_{i}}$ is a value at location $x_{i}$ and $z_{(x_{i} + h)}$ is a valu
 
 After estimation of experimental semivariogram theoretical models are fitted to the experimental curve and this with the lowest error is used as a model semivariance in (3). There are few basic types of semivariogram models: linear, spherical, exponential and gaussian. \autoref{fig7} shows semivariogram models fitted to the experimental curves and those are initial semivariogram of areal data (red curve) and optimized theoretical point support model (black dotted curve).
 
-Prediction steps in spatial interpolation are generally the same for point and areal datasets. User should perform semivariogram analysis, e.g: analysis of semivariance in the function of a distance. Then researcher or algorithm chooses theoretical model which best fits semivariogram. This model is used to predict values at unknown locations. Areal data interpolation, especially transformation from areal aggregates into point support maps, requires deconvolution of areal semivariogram (\autoref{fig7} shows outputs of this process). This is automatic process which can be performed without prior knowledge of kriging and spatial statistics. The last step is Kriging itself. Poisson Kriging is especially useful for counts over areas. On the other spectrum is Ordinary Kriging which is an universal technique which works well with multiple point data sources. Predicted data is stored as a _DataFrame_ known from the Pandas and GeoPandas Python packages. Pyinterpolate allows users to transform given point data into regular numpy array grid for visualization purposes and to perform large-scale comparison of different kriging techniques prediction output.
+Prediction steps in spatial interpolation are generally the same for point and areal datasets. User should perform semivariogram analysis, e.g: analysis of semivariance in the function of a distance. Then researcher or algorithm chooses theoretical model which best fits semivariogram. This model is used to predict values at unknown locations. Areal data interpolation, especially transformation from areal aggregates into point support maps, requires deconvolution of areal semivariogram (\autoref{fig5} shows outputs of this process). This is automatic process which can be performed without prior knowledge of kriging and spatial statistics. The last step is Kriging itself. Poisson Kriging is especially useful for counts over areas. On the other spectrum is Ordinary Kriging which is an universal technique which works well with multiple point data sources. Predicted data is stored as a _DataFrame_ known from the Pandas and GeoPandas Python packages. Pyinterpolate allows users to transform given point data into regular numpy array grid for visualization purposes and to perform large-scale comparison of different kriging techniques prediction output.
 
-\autoref{fig8} and \autoref{fig9} show one realization of choropleth map for epidemiological study before and after regularization and Area-to-Point Poisson Kriging transformation where we get rid of a visual bias.
+\autoref{fig6} and \autoref{fig7} show one realization of choropleth map for epidemiological study before regularization and point support population-at-risk after regularization with Area-to-Point Poisson Kriging.
 
 # Structure of package
 
+Pyinterpolate is designed from seven modules and they cover all operations needed to perform spatial interpolation: from file read, data processing and transformation, semivariogram fit to kriging interpolation. \autoref{fig1} shows package structure.
 
+![Structure of Pyinterpolate package.\label{fig1}](fig1.png)
+
+Modules follow data processing and modeling steps. The first module is **io_ops** which reads point data from text files and areal or point data from shapefiles, then changes data structure for further processing. **Transform** module is responsible for all tasks related to changes in data structure during program execution. Sample tasks are:
+
+- finding centroids of areal data,
+- building masks of points within lag.
+
+Functions for distance calculation between points and between areas (blocks) are grouped within **distance** module. **Semivariance** is most complex part of Pyinterpolate package. It has three special classes:
+
+-	```TheoreticalSemivariogram```: class for theoretical semivariance model calculations and storage,
+-	```ArealSemivariance```: class for areal semivariance models calculations and storage,
+-	```RegularizedSemivariogram```: class which performs semivariogram regularization and stores regularized semivariogram.
+
+**Semivariance** module has other functions important for spatial analysis: 
+
+- function for experimental semivariance / covariance calculation, 
+- weighted semivariance estimation,
+- variogram cloud preparation, 
+- outliers removal.
+
+**Kriging** module contains three main types of models:
+
+-	```ArealKriging```: for *area-to-area* and *area-to-point* Poisson Kriging,
+-	```CentroidPoissonKriging```: for Poisson Kriging of areal centroids,
+-	```Krige```: for ordinary and simple kriging of points.
+
+```ArealKriging``` and ```CentroidPoissonKriging``` models are derived from [@biblio], simple Kriging and ordinary Kriging models are based on [@ biblio].
+
+Package has two special functions in **viz** and **misc** module. **Viz** module has ```interpolate_raster()``` function for creation of rasterized numpy array of evenly spaced points (visualization purpose). **Misc** module offers special function for automatic comparison of multiple Kriging models on the same dataset (area-to-area Poisson Kriging, Centroid-based Poisson Kriging, Ordinary Kriging, Simple Kriging). Evaluation metric of this method is an average root mean squared error over multiple random divisions of passed dataset.
 
 # Example use case: Breast Cancer Rate in Pennsylvania State
 
@@ -84,15 +113,14 @@ Package logic follows typical pipeline:
 
 1. Read and prepare data.
 2. Analyze and test semivariance of points or areas.
-3. Create theoretical semivariogram or regularize one.
-4. Build Kriging model.
-5. Predict.
+3. Create theoretical semivariogram or regularize areal aggregated values.
+4. Build Kriging model and export output.
 
-We go through it point by point to demonstrate package capabilities. Breast cancer rates are taken from Incidence Rate Report for Pennsylvania by County [@cancerData]. These are rates of all stages of a breast cancer in all races and all ages, mean for 2013-2017, Age-adjusted rates multiplied by 100,000. These rates are merged with Pennsylvania counties shapefile downloaded from the Pennsylvania Spatial Data Access portal [@pennSpatial]. Population centroids are retrived from the Centers of Population for the 2010 Census Blocks  [@popCensus]. Breast cancer affects only females but for this example we include whole population for an area. Raw and transformed datasets are available in dedicated Github repository [@paperRepo].
+We go through it point by point to demonstrate package capabilities. Breast cancer rates are taken from Incidence Rate Report for Pennsylvania by County [@cancerData]. These are rates of all stages of a breast cancer in all races and all ages, mean for 2013-2017, Age-adjusted rates multiplied by 100,000. These rates are merged with Pennsylvania counties shapefile downloaded from the Pennsylvania Spatial Data Access portal [@pennSpatial]. Population centroids are retrived from the Centers of Population for the 2010 Census Blocks [@popCensus]. Breast cancer affects only females but for this example we include whole population for an area. Raw and transformed datasets are available in dedicated Github repository [@paperRepo].
 
-Our work is to perform Area-to-Point Poisson Kriging on this dataset and transform areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Those two steps are divided into five smaller steps.
+Our work is to perform Area-to-Point Poisson Kriging on this dataset and transform areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**.
 
-1. Read and prepare data.
+## 1. Read and prepare data
 
 ```python
 import numpy as np
@@ -145,9 +173,9 @@ array(
 dtype=object)
 ```
 
-2. Analyze and test semivariance of points or areas.
+## 2. Analyze and test semivariance of points or areas
 
-Before Kriging we must create semivariogram model of our data. In the case of areal data we must check semivariance of areal centroids \autoref{fig4} and we should check semivariance of point support \autoref{fig5} to be sure that process is spatially correlated at every level.
+Before Kriging we must create semivariogram model of our data. In the case of areal data we must check semivariance of areal centroids \autoref{fig2} and we should check semivariance of point support \autoref{fig3} to be sure that process is spatially correlated at every level.
 
 ```python
 maximum_range = 3.5
@@ -166,7 +194,7 @@ plt.ylabel('Semivariance')
 plt.show()
 ```
 
-![Experimental semivariogram of areal centroids.\label{fig4}](fig4.png)
+![Experimental semivariogram of areal centroids.\label{fig2}](fig2.png)
 
 ```python
 def build_point_array(points):
@@ -197,13 +225,13 @@ plt.ylabel('Semivariance')
 plt.show()
 ```
 
-![Experimental semivariogram of point support.\label{fig5}](fig5.png)
+![Experimental semivariogram of point support.\label{fig3}](fig3.png)
 
 Both semivariograms shows spatial correlation in a dataset and both may be modeled with theoretical functions. We can go to the next step.
 
-3. Create theoretical semivariogram or regularize one.
+## 3. Create theoretical semivariogram or regularize areal aggregated values
 
-Semivariogram modeling is fully automated and best model is selected based on the lowest error between chosen model type (*spherical*, *linear*, *gaussian* or *exponential*) and experimental semivariogram. More complex is deconvolution of areal semivariogram described in [@Goovaerts:2007] which is performed in this example. Semivariogram deconvolution is a two-step process. In a first step of regularization all types of semivariograms are prepared for processing. In second step areal semivariogram is regularized in an interatve procedure, which is a time consuming process, which directly depends on the number of points of the support. Whole process could be enclosed in one procedure but due to the time required for procedure it is better to separate initial prepration and iterative regularization steps. We can check experimental semivariogram and theoretical model of areal data along with first output of regularization to be sure that our process can be modeled with spatial correlation analysis. \autoref{fig6} presents initial (baseline) semivariograms and \autoref{fig7} shows those after regularization. After procedure we are able to export model for the Kriging procedure.
+Semivariogram modeling is fully automated and best model is selected based on the lowest error between chosen model type (*spherical*, *linear*, *gaussian* or *exponential*) and experimental semivariogram. More complex is deconvolution of areal semivariogram described in [@Goovaerts:2007] which is performed in this example. Semivariogram deconvolution is a two-step process. In a first step of regularization all types of semivariograms are prepared for processing. In second step areal semivariogram is regularized in an interatve procedure, which is a time consuming process, which directly depends on the number of points of the support. Whole process could be enclosed in one procedure but due to the time required for procedure it is better to separate initial prepration and iterative regularization steps. We can check experimental semivariogram and theoretical model of areal data along with first output of regularization to be sure that our process can be modeled with spatial correlation analysis. \autoref{fig4} presents initial (baseline) semivariograms and \autoref{fig5} shows those after regularization. After procedure we are able to export model for the Kriging procedure.
 
 ```python
 reg_mod = RegularizedSemivariogram()
@@ -231,24 +259,24 @@ plt.ylabel('Semivariance')
 plt.show()
 ```
 
-![Semivariograms after fit procedure.\label{fig6}](fig6.png)
+![Semivariograms after fit procedure.\label{fig4}](fig4.png)
 
 ```python
 reg_mod.transform(max_iters=15)
 reg_mod.show_semivariograms()
 ```
 
-![Semivariograms after regularization.\label{fig7}](fig7.png)
+![Semivariograms after regularization.\label{fig5}](fig5.png)
 
 ```python
 reg_mod.export_regularized_model('regularized_model.csv')
 ```
 
-4. Build Kriging model.
+## 4. Build Kriging model and export output
 
-With theoretical semivariogram we are able to model data with Kriging. In this example we create Poisson Kriging model to estimate population at risk at level of population centroids [@popCensus]. Map of Breast Cancer rates and population centroids shows that there are clusters of points but we leave them without declustering and perform analysis on this dataset \autoref{fig8}.
+With theoretical semivariogram we are able to model data with Kriging. In this example we create Poisson Kriging model to estimate population at risk at level of population centroids [@popCensus]. Map of Breast Cancer rates and population centroids shows that there are clusters of points but we leave them without declustering and perform analysis on this dataset \autoref{fig6}.
 
-![Breast cancer incidence rates in Pennsylvania state with population at risk points.\label{fig8}](fig8.png)
+![Breast cancer incidence rates in Pennsylvania state with population at risk points.\label{fig6}](fig6.png)
 
 Area to point Poisson Kriging requires us to know semivariogram model and to assign number of closest neighbors and max radius of neighbors search.
 
@@ -273,7 +301,7 @@ smoothed_area = kriging_model.regularize_data(number_of_neighbours=number_of_obs
                                              data_crs=gdf_crs)
 ```
 
-Whole process may take a while, especially if we have many support points. Method ```regularize_data()``` returns *GeoDataFrame* object with ```[id, geometry, estimated value, estimated prediction error, rmse]``` columns. We may plot output with *matplotlib* and check **population at risk** map \autoref{fig9}. Finally, point support map may be saved as a shapefile.
+Whole process may take a while, especially if we have many support points. Method ```regularize_data()``` returns *GeoDataFrame* object with ```[id, geometry, estimated value, estimated prediction error, rmse]``` columns. We may plot output with *matplotlib* and check **population at risk** map \autoref{fig7}. Finally, point support map may be saved as a shapefile.
 
 ```python
 smoothed_area.plot(column='estimated value', cmap='Spectral_r', legend=True, figsize=fs)
@@ -281,7 +309,8 @@ smoothed_area.plot(column='estimated value', cmap='Spectral_r', legend=True, fig
 smoothed_area.to_file('smoothed_output.shp')
 ```
 
-![Breast cancer population at risk map in Pennsylvania state.\label{fig9}](fig9.png)
+![Breast cancer population at risk map in Pennsylvania state.\label{fig7}](fig7.png)
+
 
 
 # References
