@@ -2,8 +2,8 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.data_processing.data_preparation.get_points_within_area import get_points_within_area
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
 from pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram import RegularizedSemivariogram
 
 
@@ -15,8 +15,8 @@ class TestRegularizeSemivariogram(unittest.TestCase):
         # Data prepration
         my_dir = os.path.dirname(__file__)
 
-        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
-        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
+        areal_dataset = os.path.join(my_dir, '../sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, '../sample_data/test_points_pyinterpolate.shp')
 
         areal_id = 'id'
         areal_val = 'value'
@@ -32,25 +32,23 @@ class TestRegularizeSemivariogram(unittest.TestCase):
 
         max_range = min(total_bounds_x, total_bounds_y)
         step_size = max_range / 4
-        lags = np.arange(0, max_range, step_size * 2)
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, areal_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=areal_id,
                                                 points_val_col_name=points_val)
 
         # Fit
-
-        reg_mod.fit(areal_data_prepared, lags, step_size, points_in_area)
+        reg_mod.fit(areal_data_prepared, step_size, max_range, points_in_area)
 
         # Transform
         reg_mod.transform()
 
-        regularized_smv = np.array([0, 120])
+        regularized_smv = np.array([0, 0, 140, 148])
         test_output = (reg_mod.final_optimal_model).astype(np.int)
 
         check = (test_output == regularized_smv).all()
 
-        self.assertTrue(check, "Output should be equal to [0, 120]")
+        self.assertTrue(check, "Output should be equal to [0, 0, 140, 148]")
 
 
 if __name__ == '__main__':

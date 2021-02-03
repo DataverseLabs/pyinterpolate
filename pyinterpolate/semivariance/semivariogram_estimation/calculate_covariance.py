@@ -1,10 +1,10 @@
 import numpy as np
 
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
 
-def calculate_covariance(data, lags, step_size):
+def calculate_covariance(data, step_size, max_range):
     """Function calculates covariance of a given set of points.
 
         Equation for calculation is:
@@ -17,13 +17,13 @@ def calculate_covariance(data, lags, step_size):
             - h - distance (lag),
             - z(x_i) - value at location z_i,
             - (x_i + h) - location at a distance h from x_i,
-            - u - mean observation at a given lag distance.
+            - u -mean of observations at a given lag distance.
 
         INPUT:
 
-        :param data: array of coordinates and their values,
-        :param lags: array of lags between points,
-        :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
+        :param data: (numpy array) coordinates and their values,
+        :param step_size: (float) step size of circle within radius are analyzed points,
+        :param max_range: (float) maximum range of analysis.
 
         OUTPUT:
 
@@ -39,6 +39,8 @@ def calculate_covariance(data, lags, step_size):
     # Get only upper diagonal of distances, rest set to -1
     covar = []
     covariance = []
+
+    lags = np.arange(0, max_range, step_size)
 
     for idx, h in enumerate(lags):
         distances_in_range = select_values_in_range(distances, h, step_size)

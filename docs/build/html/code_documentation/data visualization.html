@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data visualization module &#8212; Pyinterpolate 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Kriging module" href="kriging.html" />
+    <link rel="prev" title="Data transformation module" href="data%20transformation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="Data-visualization-module">
+<h1>Data visualization module<a class="headerlink" href="#Data-visualization-module" title="Permalink to this headline">¶</a></h1>
+<p>Available methods:</p>
+<ul class="simple">
+<li><p>interpolate_raster: interpolates raster from data points using ordinary kriging.</p></li>
+</ul>
+<div class="section" id="interpolate_raster">
+<h2>interpolate_raster<a class="headerlink" href="#interpolate_raster" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">data_visualization</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="o">.</span><span class="n">interpolate_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+                                                                       <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                                                                       <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                                                       <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function interpolates raster from data points using ordinary kriging.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>data</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> / <code class="docutils literal notranslate"><span class="pre">list</span></code>) <code class="docutils literal notranslate"><span class="pre">[coordinate</span> <span class="pre">x,</span> <span class="pre">coordinate</span> <span class="pre">y,</span> <span class="pre">value]</span></code>,</p></li>
+<li><p><strong>dim</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) number of pixels (points) of a larger dimension (it could be width or height),</p></li>
+<li><p><strong>number_of_neighbors</strong>: (<code class="docutils literal notranslate"><span class="pre">int</span></code>) default=16, number of points used to interpolate data,</p></li>
+<li><p><strong>semivariogram_model</strong>: (<code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariance</span></code> object) default=<code class="docutils literal notranslate"><span class="pre">None</span></code>, Theoretical Semivariogram model, if not provided then it is estimated from a given dataset.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>)</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">numpy</span> <span class="n">array</span> <span class="n">of</span> <span class="n">interpolated</span> <span class="n">values</span><span class="p">,</span>
+    <span class="n">numpy</span> <span class="n">array</span> <span class="n">of</span> <span class="n">interpolation</span> <span class="n">errors</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">pixel</span> <span class="n">size</span><span class="p">,</span> <span class="n">min_x</span><span class="p">,</span> <span class="n">max_x</span><span class="p">,</span> <span class="n">min_y</span><span class="p">,</span> <span class="n">max_y</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../code_documentation.html">Documentation</a><ul>
+      <li>Previous: <a href="data%20transformation.html" title="previous chapter">Data transformation module</a></li>
+      <li>Next: <a href="kriging.html" title="next chapter">Kriging module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/code_documentation/data visualization.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

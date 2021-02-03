@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>io_ops module &#8212; Pyinterpolate 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="transform module" href="transform.html" />
+    <link rel="prev" title="Documentation" href="../code_documentation.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="io_ops-module">
+<h1>io_ops module<a class="headerlink" href="#io_ops-module" title="Permalink to this headline">¶</a></h1>
+<p>Available methods:</p>
+<ul class="simple">
+<li><p>get_points_within_area: prepares points data for further processing,</p></li>
+<li><p>prepare_areal_shapefile: prepares areal shapefile for processing and transforms it into numpy array,</p></li>
+<li><p>read_point_data: reads data and converts it into numpy array.</p></li>
+</ul>
+<div class="section" id="get_points_within_area()">
+<h2><code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code><a class="headerlink" href="#get_points_within_area()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">get_points_within_area</span><span class="p">(</span>
+    <span class="n">area_shapefile</span><span class="p">,</span>
+    <span class="n">points_shapefile</span><span class="p">,</span>
+    <span class="n">areal_id_col_name</span><span class="p">,</span>
+    <span class="n">points_val_col_name</span><span class="p">,</span>
+    <span class="n">dropna</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">points_geometry_col_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+    <span class="n">nans_to_zero</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares points data for further processing.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>area_shapefile</strong>: (<em>str</em>) areal data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</p></li>
+<li><p><strong>points_shapefile</strong>: (<em>str</em>) points data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</p></li>
+<li><p><strong>areal_id_col_name</strong>: (<em>str</em>) name of the column with id of areas,</p></li>
+<li><p><strong>points_val_col_name</strong>: (<em>str</em>) name of the value column of each point,</p></li>
+<li><p><strong>dropna</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are deleted (areas without any points),</p></li>
+<li><p><strong>points_geometry_col_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</p></li>
+<li><p><strong>nans_to_zero</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are casted to 0.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id and array with point coordinates and values:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
+    <span class="n">area_id</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="prepare_areal_shapefile()">
+<h2><code class="docutils literal notranslate"><span class="pre">prepare_areal_shapefile()</span></code><a class="headerlink" href="#prepare_areal_shapefile()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">prepare_areal_shapefile</span><span class="p">(</span>
+    <span class="n">areal_file_address</span><span class="p">,</span>
+    <span class="n">id_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">value_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">geometry_column_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+    <span class="n">dropnans</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function prepares areal shapefile for processing and transforms it into <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>. Function returns two lists.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>areal_file_address</strong>: (<em>str</em>) path to the shapefile with area data,</p></li>
+<li><p><strong>id_column_name</strong>: (<em>str</em>) id column name, if not provided then index column is treated as the id,</p></li>
+<li><p><strong>value_column_name</strong>: (<em>str</em>) value column name, if not provided then all values are set to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>,</p></li>
+<li><p><strong>geometry_column_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</p></li>
+<li><p><strong>dropnans</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are dropped.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id, area geometry, coordinate of centroid x, coordinate of centroid y, value:</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="read_point_data()">
+<h2><code class="docutils literal notranslate"><span class="pre">read_point_data()</span></code><a class="headerlink" href="#read_point_data()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_point_data</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">data_type</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function reads data from a text file and converts it into <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>path</strong>: (<em>str</em>) path to the file,</p></li>
+<li><p><strong>data_type</strong>: (<em>str</em>) data type, available types: <code class="docutils literal notranslate"><span class="pre">'txt'</span></code> for txt files.</p></li>
+</ul>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of coordinates and their values.</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../code_documentation.html">Documentation</a><ul>
+      <li>Previous: <a href="../code_documentation.html" title="previous chapter">Documentation</a></li>
+      <li>Next: <a href="transform.html" title="next chapter">transform module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/code_documentation/io_ops.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

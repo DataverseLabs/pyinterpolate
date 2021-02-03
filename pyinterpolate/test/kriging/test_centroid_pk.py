@@ -2,9 +2,9 @@ import unittest
 import os
 import numpy as np
 import geopandas as gpd
-from pyinterpolate.data_processing.data_preparation.prepare_areal_shapefile import prepare_areal_shapefile
-from pyinterpolate.data_processing.data_preparation.get_points_within_area import get_points_within_area
-from pyinterpolate.data_processing.data_preparation.set_areal_weights import set_areal_weights
+from pyinterpolate.io_ops.prepare_areal_shapefile import prepare_areal_shapefile
+from pyinterpolate.io_ops.get_points_within_area import get_points_within_area
+from pyinterpolate.transform.set_areal_weights import set_areal_weights
 from pyinterpolate.kriging.areal_poisson_kriging.centroid_based.centroid_poisson_kriging import CentroidPoissonKriging
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
@@ -15,8 +15,8 @@ class TestCentroidBasedKriging(unittest.TestCase):
     def test_centroid_based_kriging(self):
         my_dir = os.path.dirname(__file__)
 
-        areal_dataset = os.path.join(my_dir, 'sample_data/test_areas_pyinterpolate.shp')
-        subset = os.path.join(my_dir, 'sample_data/test_points_pyinterpolate.shp')
+        areal_dataset = os.path.join(my_dir, '../sample_data/test_areas_pyinterpolate.shp')
+        subset = os.path.join(my_dir, '../sample_data/test_points_pyinterpolate.shp')
 
         a_id = 'id'
         areal_val = 'value'
@@ -31,9 +31,7 @@ class TestCentroidBasedKriging(unittest.TestCase):
         total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
         max_range = min(total_bounds_x, total_bounds_y)
-        step_size = max_range / 10
-
-        lags = np.arange(0, max_range, step_size * 2)
+        step_size = max_range / 4
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
@@ -51,7 +49,7 @@ class TestCentroidBasedKriging(unittest.TestCase):
         # Semivariance deconvolution
 
         semivar_modeling_data = set_areal_weights(k_areas, k_points)
-        smv_model = calculate_weighted_semivariance(semivar_modeling_data, lags, step_size)
+        smv_model = calculate_weighted_semivariance(semivar_modeling_data, step_size, max_range)
 
         semivariogram = TheoreticalSemivariogram(k_areas[:, 2:], smv_model)
 
@@ -67,7 +65,7 @@ class TestCentroidBasedKriging(unittest.TestCase):
                                      known_areas_points=k_points)
         d = pkc.predict(u_area, u_points, number_of_observations, search_radius, True)
 
-        self.assertEqual(int(d[0]), 122, "Int of first value should be equal to 122")
+        self.assertEqual(int(d[0]), 123, "Int of first value should be equal to 123")
 
 
 if __name__ == '__main__':

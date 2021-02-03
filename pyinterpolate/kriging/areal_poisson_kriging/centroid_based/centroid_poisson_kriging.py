@@ -1,20 +1,21 @@
 import numpy as np
 
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.data_processing.data_transformation.prepare_kriging_data import prepare_poisson_kriging_data
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.prepare_kriging_data import prepare_poisson_kriging_data
 
 
 class CentroidPoissonKriging:
 
     def __init__(self, semivariogram_model, known_areas, known_areas_points):
         """
+        Class performs centroid-based Poisson Kriging of areas.
 
-        :param semivariogram_model: (TheoreticalSemivariance object) Semivariogram modńel fitted to the
+        :param semivariogram_model: (TheoreticalSemivariance object) Semivariogram model fitted to the
             TheoreticalSemivariance class,
-        :param known_areas: (numpy array) array of areas in the form:
-            [area_id, areal_polygon, centroid coordinate x, centroid coordinate y, value]
+        :param known_areas: (numpy array) areas in the form:
+            [area_id, polygon, centroid x, centroid y, value]
         :param known_areas_points: (numpy array) array of points within areas in the form:
-            [area_id, [point_position_x, point_position_y, value]]
+            [area_id, [point_position_x, point_position_y, value]],
         """
 
         self.model = semivariogram_model
@@ -25,27 +26,33 @@ class CentroidPoissonKriging:
 
         self.prepared_data = None
 
-    def predict(self, unknown_location, unknown_location_points,
+    def predict(self, unknown_area, unknown_area_points,
                 number_of_neighbours, max_search_radius, weighted,
                 test_anomalies=True):
         """
-        Function predicts areal value in a unknown location based on the centroid-based Poisson Kriging
-        :param unknown_location: (numpy array) array of unknown area in the form:
-            [area_id, areal_polygon, centroid coordinate x, centroid coordinate y]
-        :param unknown_location_points: (numpy array) array of points within an unknown area in the form:
+        Function predicts areal value in a unknown location based on the centroid-based Poisson Kriging.
+
+        INPUT:
+
+        :param unknown_area: (numpy array) unknown area data in the form:
+            [area_id, polygon, centroid x, centroid y]
+        :param unknown_area_points: (numpy array) points within an unknown area in the form:
             [area_id, [point_position_x, point_position_y, value]]
         :param number_of_neighbours: (int) minimum number of neighbours to include in the algorithm,
         :param max_search_radius: (float) maximum search radius (if number of neighbours within this search radius is
-            smaller than number_of_neighbours parameter then additional neighbours are included up to number of
-            neighbors).
+            smaller than number_of_neighbours parameter then additional neighbours are included up to
+            the number_of_neighbours).
         :param weighted: (bool) distances weighted by population (True) or not (False),
-        :param test_anomalies: (bool) check if weights are negative,
+        :param test_anomalies: (bool) check if weights are negative.
+
+        OUTPUT:
+
         :return: prediction, error, estimated mean, weights:
-            [value in unknown location, error, estimated mean, weights]
+            [value_in_unknown_area, error, estimated_mean, weights]
         """
 
         self.prepared_data = prepare_poisson_kriging_data(
-            unknown_area=unknown_location, points_within_unknown_area=unknown_location_points,
+            unknown_area=unknown_area, points_within_unknown_area=unknown_area_points,
             known_areas=self.known_areas, points_within_known_areas=self.known_areas_points,
             number_of_neighbours=number_of_neighbours, max_search_radius=max_search_radius,
             weighted=weighted

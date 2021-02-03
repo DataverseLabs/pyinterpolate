@@ -7,16 +7,19 @@ import matplotlib.pyplot as plt
 
 class TheoreticalSemivariogram:
     """
-    Class for calculating theoretical semivariogram. Class takes two parameters during initialization:
-    points_array - analysed points where the last column is representing values, typically DEM
-    empirical_semivariance - semivariance where first row of array represents lags and the second row
-    represents semivariance's values for given lag
+    Class calculates theoretical semivariogram. Class takes two parameters during initialization:
+
+        points_array - (numpy array) analysed points where the last column is representing values, typically x, y,
+            value,
+        empirical_semivariance - (numpy array) semivariance where first row of array represents lags and the second row
+            represents semivariance's values for given lag.
 
     Available methods:
 
     - predict() - method predicts value of the unknown point based on the chosen model,
-    - fit_semivariance() - returns given model,
-    - find_optimal_model() - returns optimal model for given experimental semivariogram.
+    - fit_semivariance() - Method fits experimental points into chosen semivariance model type,
+    - find_optimal_model() - Method fits experimental points into all available models and choose one with the lowest
+        error.
 
     Available theoretical models:
 
@@ -141,11 +144,12 @@ class TheoreticalSemivariogram:
 
     def fit_semivariance(self, model_type, number_of_ranges=16):
         """
+        Method fits experimental points into chosen semivariance model type.
 
         INPUT:
 
-        :param model_type: 'exponential', 'gaussian', 'linear', 'spherical',
-        :param number_of_ranges: deafult = 16. Used to create an array of equidistant ranges
+        :param model_type: (str) 'exponential', 'gaussian', 'linear', 'spherical',
+        :param number_of_ranges: (int) deafult = 16. Used to create an array of equidistant ranges
             between minimal range of empirical semivariance and maximum range of empirical semivariance.
 
         OUTPUT:
@@ -185,14 +189,16 @@ class TheoreticalSemivariogram:
         # model error
         self.model_error = self.calculate_model_error(model, self.params)
 
-        return (model_type, self.params)
+        return model_type, self.params
 
     def find_optimal_model(self, weighted=False, number_of_ranges=16):
         """
 
+        Method fits experimental points into all available models and choose one with the lowest error.
+
         INPUT:
 
-        :param weighted: default=False. If True then each lag is weighted by:
+        :param weighted: (bool) default=False. If True then each lag is weighted by:
 
             sqrt(N(h))/gamma_{exp}(h)
 
@@ -200,7 +206,7 @@ class TheoreticalSemivariogram:
 
             - N(h) - number of point pairs in a given range, gamma_{exp}(h) - value of experimental semivariogram for h.
 
-        :param number_of_ranges: deafult = 16. Used to create an array of equidistant ranges
+        :param number_of_ranges: (int) default=16. Used to create an array of equidistant ranges
             between minimal range of empirical semivariance and maximum range of empirical semivariance.
         """
 
@@ -341,7 +347,8 @@ class TheoreticalSemivariogram:
         return output_model
 
     def export_model(self, filename):
-        """Function exports semivariance model to the csv file with columns:
+        """
+        Function exports semivariance model to the csv file with columns:
 
         - name: [model name],
         - nugget: [value],
@@ -365,7 +372,9 @@ class TheoreticalSemivariogram:
             print("I/O error, provided path is not valid")
 
     def import_model(self, filename):
-        """Function imports semivariance model and updates it's parameters"""
+        """
+
+        Function imports semivariance model and updates it's parameters (model name, nugget, sill, range)."""
 
         models = {
             'spherical': self.spherical_model,

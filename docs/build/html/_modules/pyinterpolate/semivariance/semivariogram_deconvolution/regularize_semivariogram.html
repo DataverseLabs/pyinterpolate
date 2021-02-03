@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram &#8212; pyinterpolate 0.2 documentation</title>
+    <title>pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram &#8212; Pyinterpolate 0.2.0 documentation</title>
     <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -225,30 +225,26 @@
         <span class="k">return</span> <span class="n">rescalled</span><span class="p">,</span> <span class="n">w</span>
 
     <span class="k">def</span> <span class="nf">_check_deviation_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviation_ratio</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_ratio</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deviation_ratio</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_ratio</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_check_loop_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iters</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_check_diff_d_stat</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff_decrease</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_diff_decrease</span><span class="p">:</span>
+
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_diff_decrease_reps</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">-</span> <span class="mi">1</span>
-                <span class="k">return</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">const_d_stat_reps</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="nf">_check_algorithm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_deviation_ratio</span><span class="p">()</span>  <span class="c1"># Default False</span>
@@ -428,10 +424,11 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function exports final regularized model parameters into specified csv file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;You cannot export any model if you not transform data.&#39;</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="RegularizedSemivariogram.show_baseline_semivariograms"><a class="viewcode-back" href="../../../../index.html#pyinterpolate.semivariance.semivariogram_deconvolution.regularize_semivariogram.RegularizedSemivariogram.show_baseline_semivariograms">[docs]</a>    <span class="k">def</span> <span class="nf">show_baseline_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -481,7 +478,7 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../../../../index.html">pyinterpolate</a></h1>
+<h1 class="logo"><a href="../../../../index.html">Pyinterpolate</a></h1>
 
 
 
@@ -524,7 +521,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Szymon Molinski.
+      &copy;2020, Szymon Moliński.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>

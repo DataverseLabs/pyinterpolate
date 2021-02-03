@@ -1,4 +1,4 @@
-# Contribution to Pyinterpolate
+# Contribution to PyInterpolate
 
 We love your input! We want to make contributing to this project as easy and transparent as possible, whether it's:
 
@@ -10,15 +10,17 @@ We love your input! We want to make contributing to this project as easy and tra
 
 ## Where should I start?
 
-Here, on Github! We use github to host code, to track issues and feature requests, as well as accept pull requests. We have Discord server too and it's available here:
+Here, on Github! We use github to host code, to track issues and feature requests, as well as accept pull requests. We have Discord server too and it's available here. It's the fastest way to communicate with package maintainers.
 
-> https://discord.gg/3EMuRkj
+### **[Discord Server](https://discord.gg/3EMuRkj)**
+
+---
 
 ## We Use [Github Flow](https://guides.github.com/introduction/flow/index.html), So All Code Changes Happen Through Pull Requests
 Pull requests are the best way to propose changes to the codebase (we use [Github Flow](https://guides.github.com/introduction/flow/index.html)). We actively welcome your pull requests:
 
-1. Fork the repo and create your branch from `dev` or from 'master' (preferably 'dev').
-2. If you've added code that should be tested, add tests in the test package.
+1. Fork the repo and create your branch from `dev` or from `main` (preferably `dev`).
+2. If you've added code that should be tested, add tests in the `test` package. We use Python's `unittest` package to perform testing.
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.
 5. Make sure your code lints.

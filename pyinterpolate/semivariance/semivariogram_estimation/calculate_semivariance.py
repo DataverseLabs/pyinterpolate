@@ -1,12 +1,70 @@
+from collections import OrderedDict
+
 import numpy as np
 
-from tqdm import tqdm
+from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
-from pyinterpolate.calculations.distances.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.data_processing.data_preparation.select_values_in_range import select_values_in_range
+import matplotlib.pyplot as plt
 
 
-def calculate_semivariance(data, lags, step_size):
+def build_variogram_point_cloud(data, step_size, max_range):
+    """
+    Function calculates variogram point cloud of a given set of points for
+        a given set of distances. Variogram is calculated as a squared difference
+        of each point against other point within range specified by step_size
+        parameter. 
+
+    INPUT:
+
+    :param data: (numpy array) coordinates and their values,
+    :param step_size: (float) step size of circle within radius are analyzed points,
+    :param max_range: (float) maximum range of analysis.
+
+    OUTPUT:
+
+    :return: variogram_cloud - dict with pairs {lag: list of squared differences}.
+    """
+
+    distances = calc_point_to_point_distance(data[:, :-1])
+    lags = np.arange(0, max_range, step_size)
+    variogram_cloud = OrderedDict()
+
+    # Calculate squared differences
+    # They are halved to be compatibile with semivariogram
+
+    for h in lags:
+        distances_in_range = select_values_in_range(distances, h, step_size)
+        sem = (data[distances_in_range[0], 2] - data[distances_in_range[1], 2]) ** 2
+        sem = sem / 2
+        variogram_cloud[h] = sem
+
+    return variogram_cloud
+
+
+def show_variogram_cloud(variogram_cloud, figsize=None):
+    """
+    Function shows boxplots of variogram lags. It is especially useful when
+        you want to check outliers in your dataset.
+
+    INPUT:
+
+    :param variogram_cloud: (OrderedDict) lags and halved squared differences between
+       points,
+    :param figsize: (tuple) figure size (width, height).
+    """
+    if figsize is None:
+        figsize = (14, 6)
+
+    data = [x for x in variogram_cloud.values()]
+    fig, ax = plt.subplots(figsize=figsize)
+    ax.boxplot(data)
+    xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
+    plt.setp(xtick_names, rotation=45, fontsize=8)
+    plt.show()
+
+
+def calculate_semivariance(data, step_size, max_range):
     """Function calculates semivariance of a given set of points.
 
         Equation for calculation is:
@@ -22,9 +80,9 @@ def calculate_semivariance(data, lags, step_size):
 
         INPUT:
 
-        :param data: array of coordinates and their values,
-        :param lags: array of lags between points,
-        :param step_size: distance which should be included in the gamma parameter which enhances range of interest.
+        :param data: (numpy array) coordinates and their values,
+        :param step_size: (float) step size of circle within radius are analyzed points,
+        :param max_range: (float) maximum range of analysis.
 
         OUTPUT:
 
@@ -39,8 +97,10 @@ def calculate_semivariance(data, lags, step_size):
 
     semivariance = []
 
+    lags = np.arange(0, max_range, step_size)
+
     # Calculate semivariances
-    for h in tqdm(lags):
+    for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         sem = (data[distances_in_range[0], 2] - data[distances_in_range[1], 2]) ** 2
         if len(sem) == 0:
@@ -53,7 +113,7 @@ def calculate_semivariance(data, lags, step_size):
     return semivariance
 
 
-def calculate_weighted_semivariance(data, lags, step_size):
+def calculate_weighted_semivariance(data, step_size, max_range):
     """Function calculates weighted semivariance following Monestiez et al.:
 
         A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Comparison of model based geostatistical methods
@@ -81,9 +141,10 @@ def calculate_weighted_semivariance(data, lags, step_size):
 
         INPUT:
 
-        :param data: (numpy array) [coordinate x, coordinate y, value, weight],
-        :param lags: (array) of lags [lag1, lag2, lag...]
-        :param step_size: step size of search radius.
+        :param data: (numpy array) coordinates and their values and weights:
+            [coordinate x, coordinate y, value, weight],
+        :param step_size: (float) step size of circle within radius are analyzed points,
+        :param max_range: (float) maximum range of analysis.
 
 
         OUTPUT:
@@ -107,8 +168,10 @@ def calculate_weighted_semivariance(data, lags, step_size):
     smv = []
     semivariance = []
 
+    lags = np.arange(0, max_range, step_size)
+
     # Calculate semivariances
-    for idx, h in enumerate(tqdm(lags)):
+    for idx, h in enumerate(lags):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
         # Weights
@@ -139,4 +202,53 @@ def calculate_weighted_semivariance(data, lags, step_size):
 
 def _test_weights(arr):
     if 0 in arr:
-        print('One or more of weights in dataset is set to 0, this may cause errors in the calculations')
+        print('One or more of weights in dataset is set to 0, this may cause errors in the distance')
+
+
+def calc_semivariance_from_pt_cloud(pt_cloud_dict):
+    """
+    Function calculates experimental semivariogram from point cloud variogram.
+
+    INPUT:
+
+    :param pt_cloud_dict: (OrderedDict) {lag: [values]}
+
+    OUTPUT:
+    :return: (numpy array) [lag, semivariance, number of points]
+    """
+    experimental_semivariogram = []
+    for k in pt_cloud_dict.keys():
+        experimental_semivariogram.append([k, np.mean(pt_cloud_dict[k]), len(pt_cloud_dict[k])])
+    experimental_semivariogram = np.array(experimental_semivariogram)
+    return experimental_semivariogram
+
+
+def remove_outliers(data_dict, std_dist=2.):
+    """Function removes outliers from each lag and returns dict without those values.
+
+    INPUT:
+
+    :param data_dict: (Ordered Dict) with {lag: list of values},
+    :param std_dist: (float) number of standard deviations from the mean within values are passed.
+
+    OUTPUT:
+
+    :returns: (OrderedDict) {lag: [values]}"""
+
+    output = OrderedDict()
+
+    for lag in data_dict.keys():
+        if isinstance(data_dict[lag], list):
+            dd = np.array(data_dict[lag])
+        else:
+            dd = data_dict[lag].copy()
+
+        mean_ = np.mean(dd)
+        std_ = np.std(dd)
+        upper_boundary = mean_ + std_dist * std_
+        lower_boundary = mean_ - std_dist * std_
+
+        vals = dd[(dd < upper_boundary) & (dd > lower_boundary)]
+        output[lag] = vals
+
+    return output

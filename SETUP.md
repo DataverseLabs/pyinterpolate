@@ -4,15 +4,14 @@ Installation
 Package is working with linux and mac os systems. To install it download package and open it in the terminal then type:
 
 ```
-pip install ./
+pip install pyinterpolate
 ```
 
-This command runs **setup.py** file inside package and install requirements from the list provided there. Currently it is
-the only way to install a package.
+This command runs **setup.py** file inside package and install requirements from the list provided there.
 
 *****
 
-> I'd like to run Jupyter Notebooks, what should I do?
+_I'd like to run Jupyter Notebooks, what should I do?_
 
 *****
 
@@ -40,14 +39,14 @@ conda install -c conda-forge python=3.7 pip notebook
 #### Step 4:
 
 ```
-pip install ./
+pip install pyinterpolate
 ```
 
 Now you are able to run library from conda notebooks.
 
 *****
 
-> libspatialindex_c.so dependency error
+_libspatialindex_c.so dependency error_
 
 *****
 
@@ -68,8 +67,8 @@ brew install spatialindex
 
 *****
 
-> Do you plan to simplify installation?
+_How to install package with virtual environment?_
 
 *****
 
-Answer is: yes, we do. Check status in Issues tab in the project Github.
+Coming soon...
