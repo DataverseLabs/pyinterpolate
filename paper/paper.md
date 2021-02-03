@@ -108,7 +108,11 @@ We go through it point by point to demonstrate package capabilities.
 
 ## Dataset
 
-Breast cancer rates are taken from Incidence Rate Report for Pennsylvania by County [@cancerData]. These are rates of all stages of a breast cancer in all races and all ages, mean for 2013-2017, Age-adjusted rates multiplied by 100,000. The rates are merged with Pennsylvania counties shapefile downloaded from the Pennsylvania Spatial Data Access portal [@pennSpatial]. Population centroids are retrived from the U.S. Census Blocks 2010 [@popCensus]. Breast cancer affects only females but for this example but whole population for an area wa included in the example. Raw and transformed datasets are available in dedicated Github repository [@paperRepo].
+Breast cancer rates are taken from Incidence Rate Report for Pennsylvania by County [@cancerData]. These are age-adjusted rates multiplied by 100,000 for period 2013-2017. 
+
+Raw rates are joined to Pennsylvania counties shapefile downloaded from the Pennsylvania Spatial Data Access portal [@pennSpatial].
+
+Population centroids are retrived from the U.S. Census Blocks 2010 [@popCensus]. Breast cancer affects only females but for this example but whole population for an area wa included in the example. Raw and transformed datasets are available in dedicated Github repository [@paperRepo].
 
 Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Code for this part is available in Github repository [@paperRepo].
 
@@ -128,7 +132,9 @@ Both semivariograms shows spatial correlation in a dataset and both may be model
 
 ## 3. Create theoretical semivariogram or regularize areal aggregated values
 
-Semivariogram modeling is fully automated and best model is selected based on the lowest error between chosen model type (*spherical*, *linear*, *gaussian* or *exponential*) and experimental semivariogram. Deconvolution of areal semivariogram is more complex problem and it's algorithm is described in [@Goovaerts:2007].  Semivariogram deconvolution is a two-step process. In a first step of regularization all types of semivariograms are prepared for processing. In second step areal semivariogram is regularized in an interatve procedure, which is a time consuming process. Calculation time directly depends on the number of points of the support. Whole process could be enclosed in one procedure but due to the time required for iterative fitting of a new point support semivariogram it is better to separate initial prepration and regularization steps. Experimental semivariogram and theoretical model of areal data along with first output of regularization may be checked before the main loop to be sure that process can be modeled with Kriging method. \autoref{fig4} presents initial (baseline) semivariograms and \autoref{fig5} shows those after regularization. After procedure we are able to export model for the Poisson Kriging.
+Semivariogram modeling is fully automated and best model is selected based on the lowest error between chosen model type (*spherical*, *linear*, *gaussian* or *exponential*) and experimental semivariogram. Deconvolution of areal semivariogram is more complex problem and it's algorithm is described in [@Goovaerts:2007].  Pyinterpolate implementation divides semivariogram regularization into two parts. First part is initial preparation of a data and development of the first optimized theoretical model. In a second step areal semivariogram is regularized in a loop. It is a time consuming process. Computation time directly depends on the number of points of the support. 
+
+Experimental semivariogram and theoretical model of areal data along with first output of regularization may be checked before the main loop to be sure that process can be modeled with Kriging method. \autoref{fig4} presents initial (baseline) semivariograms and \autoref{fig5} shows those after regularization. After procedure we are able to export model for the Poisson Kriging.
 
 ![Semivariograms after fit procedure.\label{fig4}](fig4.png)
 
@@ -142,7 +148,7 @@ With theoretical semivariogram we are able to model data with Kriging. Poisson K
 
 Area to point Poisson Kriging requires us to know semivariogram model and to assign number of closest neighbors and max radius of neighbors search.
 
-Whole process may take a while, especially if there are many support points. Method ```regularize_data()``` returns *GeoDataFrame* object with ```[id, geometry, estimated value, estimated prediction error, rmse]``` columns. It may be plotted with *matplotlib* and as a result **population at risk** map \autoref{fig7} is generated. Finally, point support map may be saved as a shapefile.
+Whole process may take a while, especially if there are many support points. Method ```regularize_data()``` returns *GeoDataFrame* object with ```[id, geometry, estimated value, estimated prediction error, rmse]``` columns. It may be plotted with *matplotlib* and as a result **population at risk** map is generated \autoref{fig7}. Finally, point support map may be saved as a shapefile.
 
 ![Breast cancer population at risk map in Pennsylvania state.\label{fig7}](fig7.png)
 
