@@ -302,12 +302,12 @@ div.rendered_html tbody tr:hover {
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>To start this tutorial it is required to understand concepts in the <strong>Ordinary and Simple Kriging</strong> and <strong>Semivariogram Regularization</strong> tutorials.</p>
 <p>Poisson Kriging technique is used to model spatial count data. We are analyzing special case where data is counted over areas. Those areas may have irregular shapes and sizes beacuse they represent administrative regions.</p>
-<p>In this tutorial we try to predict number of car accidents in unknown areas based on the areal accidents count and the population density grid in Poland:</p>
+<p>In this tutorial we try to predict rates of Breast Cancer in Pennsylvania counties. Along with areal data we use U.S. Census 2010 data for population blocks.</p>
 <blockquote>
-<div><p>Road accidents data is stored in the shapefile in folder ‘sample_data/areal_data/road_accidents.shp’</p>
+<div><p>Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/breast_cancer_rate_per_area_2.shp</span></code>.</p>
 </div></blockquote>
 <blockquote>
-<div><p>Population blocks data is stored in the shapefile in folder ‘sample_data/population_data/population_centroids_poland.shp’</p>
+<div><p>Population blocks data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/population_data/population_blocks.shp</span></code></p>
 </div></blockquote>
 <p>Even if our areal data has units with irregular shapes and sizes but for the case of this tutorial we assume that each region may be represented by its centroid. This is huge simplification but in some cases it could be taken into account.</p>
 <p>Centroid-based Poisson Kriging is much faster than Area-to-Area or Area-to-Point Poisson Kriging and for some applications it may be desired property.</p>
@@ -323,7 +323,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -338,16 +338,16 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/road_accidents.shp&#39;</span>
-<span class="n">point_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/population_centroids_poland.shp&#39;</span>
+<span></span><span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/breast_cancer_rate_per_area_2.shp&#39;</span>
+<span class="n">point_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/population_blocks.shp&#39;</span>
 
-<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;ID&#39;</span>
-<span class="n">areal_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;deaths&#39;</span>
-<span class="n">points_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;TOT&#39;</span>
+<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">areal_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="n">points_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;POPULATION&#39;</span>
 
 
 <span class="n">areal_data</span> <span class="o">=</span> <span class="n">prepare_areal_shapefile</span><span class="p">(</span><span class="n">areal_data_file</span><span class="p">,</span>
@@ -359,24 +359,24 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Lets take a look into a map of areal counts</span>
 
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">areal_data_file</span><span class="p">)</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;deaths&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf256a2a50&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe05908a250&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -395,12 +395,12 @@ div.rendered_html tbody tr:hover {
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>In this step we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regulariztion along with the Poisson Kriging but it is a very long process and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalSemivariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
-<span class="n">semivariogram</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span><span class="s1">&#39;regularized_semivariogram.csv&#39;</span><span class="p">)</span>  <span class="c1"># Load regularized semivariogram</span>
+<span class="n">semivariogram</span><span class="o">.</span><span class="n">import_model</span><span class="p">(</span><span class="s1">&#39;regularized_model.csv&#39;</span><span class="p">)</span>  <span class="c1"># Load regularized semivariogram</span>
 </pre></div>
 </div>
 </div>
@@ -409,7 +409,7 @@ div.rendered_html tbody tr:hover {
 <h2>3) Prepare training and test data<a class="headerlink" href="#3)-Prepare-training-and-test-data" title="Permalink to this headline">¶</a></h2>
 <p>We simply remove 10% of random ID’s from areal dataset (the same for points) and create four arrays: two training arrays with areal and point geometry and values and two test arrays with the same categories of data.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -457,20 +457,24 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="4)-Predict-values-at-unknown-locations-and-calculate-forecast-bias-and-root-mean-squared-error">
 <h2>4) Predict values at unknown locations and calculate forecast bias and root mean squared error<a class="headerlink" href="#4)-Predict-values-at-unknown-locations-and-calculate-forecast-bias-and-root-mean-squared-error" title="Permalink to this headline">¶</a></h2>
 <p>Do you know scikit-learn’s fit-predict-transform estimation procedure? With Kriging it is more complicated because we are fitting semivariogram model to data and we pass this fitted model into kriging estimator. That’s why package with <em>TheoreticalSemivariogram()</em> class is named <strong>fit_semivariance</strong>. You may start work with predictions with fitted semivariogram model. Centroid-based Poisson Kriging takes three arguments during initialization:</p>
-<p>=&gt; semivariogram model (fitted semivariogram model), =&gt; known areas (training set), =&gt; known points (training set).</p>
+<p>=&gt; semivariogram model (fitted semivariogram model),</p>
+<p>=&gt; known areas (training set),</p>
+<p>=&gt; known points (training set).</p>
 <p>After initilization you may perform prediction. This process requires you to control three hyperparameters:</p>
-<p>=&gt; <strong>number of observations</strong> (the most important parameter - how many neighbors are affecting your area of analysis), =&gt; minimum <strong>search radius</strong> (minimum search radius for analysis from your area of interest, if there are less areas than number of observations then the new, next closest neighbors are included in the analysis), =&gt; <strong>weighted</strong> by population? (bool parameter, if True then distances are weighted by population between points - default is True for Poisson Kriging).</p>
+<p>=&gt; <strong>number of observations</strong> (the most important parameter - how many neighbors are affecting your area of analysis),</p>
+<p>=&gt; minimum <strong>search radius</strong> (minimum search radius for analysis from your area of interest, if there are less areas than number of observations then the new, next closest neighbors are included in the analysis),</p>
+<p>=&gt; <strong>weighted</strong> by population? (bool parameter, if True then distances are weighted by population between points - default is True for Poisson Kriging).</p>
 <p>Why <strong>radius</strong> parameter is less important than <strong>number of observations</strong>? It is a tradeoff between mathemtical accuracy and reality. Usually your areas of interest have different shapes and sizes and with very large county and small search radius from the centroid you may not find any neighbour!</p>
 <p>Algorithm in the cell below iteratively picks one area from the test set and perform prediction. Then forecast bias which is difference between real and predicted value is calculated. Forecast Bias is useful to understand if our algorithm predictions are too low or too high (under- or overestimation). The next parameter is Root Mean Squared Error. This kind of measure tells us more about outliers and very large differences between predictions and real values. We will see it in the last part of
 tutorial.</p>
 <p>Your work with Poisson Kriging (or Kriging) will be usually the same: - prepare training and test data, - use training data to prepare semivariogram model, - test different hyperparameters with a test set to find optimal number of neighbors which are affecting your area of analysis, - forecast into unknown areas OR perform data smoothing.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">number_of_obs</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">radius</span> <span class="o">=</span> <span class="mi">40000</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="mi">4</span>
 
 <span class="n">kriging_model</span> <span class="o">=</span> <span class="n">CentroidPoissonKriging</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram</span><span class="p">,</span>
                                        <span class="n">known_areas</span><span class="o">=</span><span class="n">ar_train</span><span class="p">,</span>
@@ -499,7 +503,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -515,7 +519,7 @@ tutorial.</p>
 <h2>5) Analyze Forecast Bias and Root Mean Squared Error of prediction<a class="headerlink" href="#5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction" title="Permalink to this headline">¶</a></h2>
 <p>The last step is analysis of errors. We plot two histograms: of forecast bias and of root mean squared error then we calculate base statistics of a dataset.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -526,12 +530,12 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf255e6d50&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe05724f590&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -542,7 +546,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -551,12 +555,12 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7faf25385f10&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fe057316090&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -567,7 +571,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -576,7 +580,7 @@ tutorial.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -607,68 +611,70 @@ tutorial.</p>
   <tbody>
     <tr>
       <th>count</th>
-      <td>32.000000</td>
-      <td>32.00000</td>
-      <td>32.000000</td>
-      <td>32.000000</td>
+      <td>7.000000</td>
+      <td>7.000000</td>
+      <td>7.000000</td>
+      <td>7.000000</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>9.781250</td>
-      <td>7.28125</td>
-      <td>-2.500000</td>
-      <td>5.187500</td>
+      <td>187.571429</td>
+      <td>132.928571</td>
+      <td>-54.642857</td>
+      <td>78.528571</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>4.850902</td>
-      <td>3.87077</td>
-      <td>6.344924</td>
-      <td>4.351029</td>
+      <td>127.761310</td>
+      <td>7.929211</td>
+      <td>132.947344</td>
+      <td>118.169168</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>4.000000</td>
-      <td>2.00000</td>
-      <td>-21.000000</td>
-      <td>0.000000</td>
+      <td>111.000000</td>
+      <td>123.100000</td>
+      <td>-323.900000</td>
+      <td>6.500000</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>6.000000</td>
-      <td>5.00000</td>
-      <td>-5.250000</td>
-      <td>2.000000</td>
+      <td>117.000000</td>
+      <td>128.100000</td>
+      <td>-67.850000</td>
+      <td>12.400000</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>9.000000</td>
-      <td>7.00000</td>
-      <td>-2.000000</td>
-      <td>4.000000</td>
+      <td>124.000000</td>
+      <td>131.400000</td>
+      <td>11.400000</td>
+      <td>19.100000</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>10.750000</td>
-      <td>10.25000</td>
-      <td>1.250000</td>
-      <td>7.250000</td>
+      <td>198.500000</td>
+      <td>137.800000</td>
+      <td>16.250000</td>
+      <td>87.700000</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>25.000000</td>
-      <td>18.00000</td>
-      <td>9.000000</td>
-      <td>21.000000</td>
+      <td>447.000000</td>
+      <td>144.200000</td>
+      <td>33.200000</td>
+      <td>323.900000</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <ol class="arabic simple">
-<li><p><strong>Forecast Bias</strong> histogram shows tendency towards negative values. But this is probably due to the large negative outliers presence.</p></li>
-<li><p><strong>Root Mean Squared Error</strong> histogram is skewed towards the 0. Unfortunatelely our predictions have few outliers (75% of error values above 7). The mean error is close to 5 units (accidents) and it is ok when we compare real dataset mean to the mean error.</p></li>
+<li><p><strong>Forecast Bias</strong> histogram shows tendency towards negative values due to the two large predictions which overestimated real infection rate. Standard Deviation of Forecast Bias is large but you must have in mind that we test only 7 values per scenario and one or two outliers have large impact on the final result.</p></li>
+<li><p><strong>Root Mean Squared Error</strong> histogram is skewed towards the 0. Unfortunatelely our predictions have outliers (75% of error values above 87). The mean error is close to 78 cases per area which is 50% of a mean of real observations… and it’s too much. Model is not performing well.</p></li>
 </ol>
+<p>Those results are not decisive. Our sample is very small and output could be related to very unfortunate sampling over areas. The good idea is to repeat experiment multiple times with other samples and average results to find out how well model is performing.</p>
+<hr class="docutils" />
 </div>
 </div>
 
