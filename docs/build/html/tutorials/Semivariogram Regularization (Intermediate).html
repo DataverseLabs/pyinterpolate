@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Poisson Kriging - centroid based approach - tutorial" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" />
-    <link rel="prev" title="Ordinary and Simple Kriging - tutorial" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" />
+    <link rel="prev" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -302,12 +302,12 @@ div.rendered_html tbody tr:hover {
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we learn how to regularize semivariogram of areal dataset of irregular polygons. Procedure is described here: (1) Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008.</p>
 <p>The main idea is to retrieve point support semivariogram from semivariogram of areal data with blocks of different shapes and sizes. It is the case in mining industry, where blocks of aggregates are deconvoluted into smaller units and in the epidemiology, where data is usually aggregated over big administrative units, or in ecology, where observations of species are aggregated over areas or time windows.</p>
-<p>In this tutorial we use areal data of road accidents per county in Poland along with the point support data of population smaller support blocks.</p>
+<p>In this tutorial we use areal data of Breast Cancer incidence rates in Pennsylvania counties and U.S. Census 2010 data for population blocks.</p>
 <blockquote>
-<div><p>Road accidents data is stored in the shapefile in folder ‘sample_data/areal_data/road_accidents.shp’</p>
+<div><p>Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/breast_cancer_rate_per_area_2.shp</span></code>.</p>
 </div></blockquote>
 <blockquote>
-<div><p>Population blocks data is stored in the shapefile in folder ‘sample_data/population_data/population_centroids_poland.shp’</p>
+<div><p>Population blocks data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/population_data/population_blocks.shp</span></code></p>
 </div></blockquote>
 </div>
 <div class="section" id="Import-packages">
@@ -336,8 +336,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">areal_data</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/road_accidents.shp&#39;</span>
-<span class="n">point_data</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/population_centroids_poland.shp&#39;</span>
+<span></span><span class="n">areal_data</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/breast_cancer_rate_per_area_2.shp&#39;</span>
+<span class="n">point_data</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/population_blocks.shp&#39;</span>
 
 <span class="c1"># The important thing before analysis is to check if crs of areal data and point data are the same</span>
 
@@ -397,65 +397,47 @@ True
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ID</th>
-      <th>VOIVOD</th>
-      <th>NAME</th>
-      <th>deaths</th>
-      <th>inh</th>
+      <th>name</th>
       <th>rate</th>
+      <th>id</th>
       <th>geometry</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>915</td>
-      <td>podkarpackie</td>
-      <td>powiat ropczycko-sÄdziszowski</td>
-      <td>3</td>
-      <td>74198</td>
-      <td>0.040432</td>
-      <td>POLYGON ((692305.365 260282.248, 692313.646 26...</td>
+      <td>bradford</td>
+      <td>129.0</td>
+      <td>0</td>
+      <td>POLYGON ((-76.14569 41.99885, -76.14364 41.977...</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>710</td>
-      <td>mazowieckie</td>
-      <td>powiat Åosicki</td>
-      <td>6</td>
-      <td>31335</td>
-      <td>0.191479</td>
-      <td>POLYGON ((753920.175 497017.076, 753918.822 49...</td>
+      <td>bucks</td>
+      <td>140.9</td>
+      <td>1</td>
+      <td>POLYGON ((-75.19130 40.58570, -75.19156 40.585...</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>718</td>
-      <td>mazowieckie</td>
-      <td>powiat piaseczyÅski</td>
-      <td>15</td>
-      <td>182076</td>
-      <td>0.082383</td>
-      <td>POLYGON ((644442.384 473992.041, 644345.678 47...</td>
+      <td>tioga</td>
+      <td>127.4</td>
+      <td>2</td>
+      <td>POLYGON ((-77.17156 41.99967, -77.16142 41.999...</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>727</td>
-      <td>mazowieckie</td>
-      <td>powiat sierpecki</td>
-      <td>7</td>
-      <td>52559</td>
-      <td>0.133184</td>
-      <td>POLYGON ((534236.749 555932.727, 534235.027 55...</td>
+      <td>union</td>
+      <td>118.0</td>
+      <td>3</td>
+      <td>POLYGON ((-76.91306 40.88454, -76.91356 40.884...</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>730</td>
-      <td>mazowieckie</td>
-      <td>powiat szydÅowiecki</td>
+      <td>venango</td>
+      <td>126.0</td>
       <td>4</td>
-      <td>39938</td>
-      <td>0.100155</td>
-      <td>POLYGON ((625514.215 384549.238, 625545.119 38...</td>
+      <td>POLYGON ((-79.98155 41.51290, -79.98149 41.512...</td>
     </tr>
   </tbody>
 </table>
@@ -497,58 +479,94 @@ True
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>TOT</th>
+      <th>STATEFP</th>
+      <th>COUNTYFP</th>
+      <th>TRACTCE</th>
+      <th>BLKGRPCE</th>
+      <th>POPULATION</th>
+      <th>LATITUDE</th>
+      <th>LONGITUDE</th>
       <th>geometry</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>POINT (445700.430 775061.580)</td>
+      <td>42</td>
+      <td>1</td>
+      <td>30101</td>
+      <td>1</td>
+      <td>2580</td>
+      <td>40.015805</td>
+      <td>-77.081172</td>
+      <td>POINT (-77.08117 40.01581)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>13</td>
-      <td>POINT (449649.816 774784.622)</td>
+      <td>42</td>
+      <td>1</td>
+      <td>30102</td>
+      <td>1</td>
+      <td>1136</td>
+      <td>39.940818</td>
+      <td>-76.995904</td>
+      <td>POINT (-76.99590 39.94082)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1270</td>
-      <td>POINT (454573.872 774546.994)</td>
+      <td>42</td>
+      <td>1</td>
+      <td>30102</td>
+      <td>2</td>
+      <td>2434</td>
+      <td>39.980590</td>
+      <td>-77.035933</td>
+      <td>POINT (-77.03593 39.98059)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>95</td>
-      <td>POINT (457672.822 774072.742)</td>
+      <td>42</td>
+      <td>1</td>
+      <td>30102</td>
+      <td>3</td>
+      <td>2210</td>
+      <td>39.929089</td>
+      <td>-77.057235</td>
+      <td>POINT (-77.05724 39.92909)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0</td>
-      <td>POINT (425378.686 772864.038)</td>
+      <td>42</td>
+      <td>1</td>
+      <td>30200</td>
+      <td>1</td>
+      <td>3202</td>
+      <td>40.000254</td>
+      <td>-77.137559</td>
+      <td>POINT (-77.13756 40.00025)</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Column TOT is interesting from our perspective</span>
 <span class="c1"># Now prepare data for further processing</span>
 
-<span class="n">areal_id</span> <span class="o">=</span> <span class="s1">&#39;ID&#39;</span>
-<span class="n">areal_val</span> <span class="o">=</span> <span class="s1">&#39;deaths&#39;</span>
-<span class="n">points_val</span> <span class="o">=</span> <span class="s1">&#39;TOT&#39;</span>
+<span class="n">areal_id</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">areal_val</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="n">points_val</span> <span class="o">=</span> <span class="s1">&#39;POPULATION&#39;</span>
 
 <span class="n">areal_data_prepared</span> <span class="o">=</span> <span class="n">prepare_areal_shapefile</span><span class="p">(</span><span class="n">areal_data</span><span class="p">,</span> <span class="n">areal_id</span><span class="p">,</span> <span class="n">areal_val</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -559,13 +577,13 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([915, &lt;shapely.geometry.polygon.Polygon object at 0x7fc632d10250&gt;,
-       689225.7862175289, 245704.52509337224, 3], dtype=object)
+array([0, &lt;shapely.geometry.polygon.Polygon object at 0x7f9102f9d6d0&gt;,
+       -76.51541607859876, 41.78864564848121, 129.0], dtype=object)
 </pre></div></div>
 </div>
 <div class="section" id="Clarification:">
@@ -573,7 +591,7 @@ array([915, &lt;shapely.geometry.polygon.Polygon object at 0x7fc632d10250&gt;,
 <p>Every areal dataset is passed as an array of:</p>
 <p>[area id, area geometry (polygon), areal centroid x (lon), areal centroid y (lat), value]</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -583,7 +601,7 @@ array([915, &lt;shapely.geometry.polygon.Polygon object at 0x7fc632d10250&gt;,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -594,47 +612,68 @@ array([915, &lt;shapely.geometry.polygon.Polygon object at 0x7fc632d10250&gt;,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([1112.0,
-       array([[4.49649816e+05, 7.74784622e+05, 1.30000000e+01],
-       [4.54573872e+05, 7.74546994e+05, 1.27000000e+03],
-       [4.57672822e+05, 7.74072742e+05, 9.50000000e+01],
-       [4.34132306e+05, 7.73217942e+05, 5.81000000e+02],
-       [4.39115084e+05, 7.73011892e+05, 1.99000000e+02],
-       [4.44027632e+05, 7.72564517e+05, 7.50000000e+02],
-       [4.48983771e+05, 7.71947376e+05, 2.57400000e+03],
-       [4.53943595e+05, 7.71324042e+05, 1.21200000e+03],
-       [4.58775918e+05, 7.70575412e+05, 6.34600000e+03],
-       [4.33469881e+05, 7.68864048e+05, 1.92600000e+03],
-       [4.43389339e+05, 7.67616758e+05, 1.94300000e+03],
-       [4.48349167e+05, 7.66993362e+05, 1.99000000e+03],
-       [4.53309065e+05, 7.66370130e+05, 2.74500000e+03],
-       [4.58269037e+05, 7.65747062e+05, 2.90200000e+03],
-       [4.73064428e+05, 7.63569749e+05, 6.22000000e+02],
-       [4.76799027e+05, 7.61514013e+05, 0.00000000e+00],
-       [4.42754940e+05, 7.62662657e+05, 9.23000000e+02],
-       [4.47714840e+05, 7.62039366e+05, 9.29000000e+02],
-       [4.52674811e+05, 7.61416236e+05, 1.46600000e+03],
-       [4.57634855e+05, 7.60793269e+05, 2.32700000e+03],
-       [4.62363515e+05, 7.59981791e+05, 1.23400000e+04],
-       [4.65584380e+05, 7.58641509e+05, 3.46000000e+02],
-       [4.78479221e+05, 7.59743463e+05, 2.72900000e+03],
-       [4.82357689e+05, 7.57078158e+05, 6.19000000e+02],
-       [4.52040835e+05, 7.56462359e+05, 5.94000000e+02],
-       [4.57000951e+05, 7.55839493e+05, 1.32600000e+03],
-       [4.61961143e+05, 7.55216784e+05, 6.74400000e+03],
-       [4.65921996e+05, 7.54103558e+05, 1.03800000e+03],
-       [4.83759055e+05, 7.54175233e+05, 0.00000000e+00],
-       [4.86606609e+05, 7.51932609e+05, 6.58000000e+02],
-       [4.61327585e+05, 7.50263124e+05, 3.34800000e+03],
-       [4.66280631e+05, 7.49636244e+05, 5.72400000e+03],
-       [4.69447296e+05, 7.47858411e+05, 2.22000000e+02],
-       [4.87526826e+05, 7.48594231e+05, 3.25900000e+03],
-       [4.65654714e+05, 7.44687123e+05, 3.94770000e+04]])], dtype=object)
+array([57.0,
+       array([[ -77.081172,   40.015805, 2580.      ],
+       [ -76.995904,   39.940818, 1136.      ],
+       [ -77.035933,   39.98059 , 2434.      ],
+       [ -77.057235,   39.929089, 2210.      ],
+       [ -77.137559,   40.000254, 3202.      ],
+       [ -77.160354,   39.95907 , 2298.      ],
+       [ -77.318327,   39.973414, 2251.      ],
+       [ -77.240078,   39.985105, 1905.      ],
+       [ -77.406954,   39.915855, 1446.      ],
+       [ -77.298505,   39.923503,  979.      ],
+       [ -77.307547,   39.878509, 1289.      ],
+       [ -77.360488,   39.873705, 1312.      ],
+       [ -77.412175,   39.880362,  803.      ],
+       [ -77.227283,   39.926149, 2179.      ],
+       [ -77.26064 ,   39.921269, 1588.      ],
+       [ -77.173147,   39.868602, 1455.      ],
+       [ -77.144613,   39.894567, 1310.      ],
+       [ -77.197063,   39.839027, 2163.      ],
+       [ -77.119613,   39.84048 , 2646.      ],
+       [ -77.106559,   39.807127, 2047.      ],
+       [ -77.133681,   39.808798, 1800.      ],
+       [ -76.978816,   39.935873, 1521.      ],
+       [ -77.021869,   39.900686, 2189.      ],
+       [ -76.99146 ,   39.885828, 1407.      ],
+       [ -76.991111,   39.861894, 2334.      ],
+       [ -77.061948,   39.86404 , 1752.      ],
+       [ -77.05219 ,   39.868851, 1810.      ],
+       [ -77.038619,   39.857219, 2831.      ],
+       [ -77.063652,   39.842697,  907.      ],
+       [ -77.027236,   39.816071, 1781.      ],
+       [ -77.024943,   39.802265, 1358.      ],
+       [ -77.015872,   39.805741, 1680.      ],
+       [ -77.005054,   39.802861, 2125.      ],
+       [ -77.033649,   39.794506, 3179.      ],
+       [ -77.186341,   39.75204 , 1892.      ],
+       [ -77.180639,   39.79953 , 1778.      ],
+       [ -77.103434,   39.737394, 2700.      ],
+       [ -77.048888,   39.750129, 3148.      ],
+       [ -77.092351,   39.742506, 2699.      ],
+       [ -77.084641,   39.746572, 1735.      ],
+       [ -77.243604,   39.858199, 2324.      ],
+       [ -77.270967,   39.835409, 1651.      ],
+       [ -77.254646,   39.814023,  918.      ],
+       [ -77.247134,   39.765904, 1269.      ],
+       [ -77.234276,   39.835615, 2139.      ],
+       [ -77.22914 ,   39.83533 , 1176.      ],
+       [ -77.237274,   39.831159, 1244.      ],
+       [ -77.236135,   39.827837, 1041.      ],
+       [ -77.235265,   39.822907,  793.      ],
+       [ -77.226393,   39.830304, 1227.      ],
+       [ -77.325282,   39.82366 ,  943.      ],
+       [ -77.297636,   39.754058,  831.      ],
+       [ -77.388552,   39.744591, 3260.      ],
+       [ -77.355943,   39.761226, 1853.      ],
+       [ -77.405762,   39.817622, 1231.      ],
+       [ -77.396045,   39.771022, 1648.      ]])], dtype=object)
 </pre></div></div>
 </div>
 </div>
@@ -649,15 +688,15 @@ array([1112.0,
 <p>Now we must set parameters for areal semivariogram AND point semivariogram. It is very important to understand data well to set them properly, that’s why you should always check experimental semivariograms of those datasets to understand how data behaves. We do it for prepared areal and point datasets.</p>
 <p>From the practical point of view area semivariogram analysis is more important because we pass into semivariogram regularization parameters of step size and maximum search radius. But we check point’s semivariogram too. It is analytical step, to check if spatial process whoch we are using for semivariogram deconvolution is proper, as example if semivariogram shows exponential function then our process will not be properly modeled.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Check experimental semivariogram of areal data - this cell may be run multiple times</span>
 <span class="c1"># before you find optimal parameters</span>
 
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">160000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">16000</span>
+<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mf">0.2</span>
 
 <span class="n">dt</span> <span class="o">=</span> <span class="n">areal_data_prepared</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">:]</span>  <span class="c1"># x, y, val</span>
 <span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
@@ -681,7 +720,7 @@ array([1112.0,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -699,8 +738,8 @@ array([1112.0,
 
     <span class="k">return</span> <span class="n">a</span>
 
-<span class="n">maximum_point_range</span> <span class="o">=</span> <span class="mi">40000</span>
-<span class="n">step_size_points</span> <span class="o">=</span> <span class="mi">8000</span>
+<span class="n">maximum_point_range</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">step_size_points</span> <span class="o">=</span> <span class="mf">0.1</span>
 
 
 <span class="n">pt</span> <span class="o">=</span> <span class="n">build_point_array</span><span class="p">(</span><span class="n">points_in_area</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># x, y, val</span>
@@ -739,7 +778,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 <div class="section" id="3)-Regularize-semivariogram">
 <h2>3) Regularize semivariogram<a class="headerlink" href="#3)-Regularize-semivariogram" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -748,26 +787,7 @@ have larger weights and semivariogram is modeled to better fit to those lags, * 
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">maximum_range</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
-       128000, 144000])
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -782,14 +802,13 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 320/320 [00:00&lt;00:00, 6585.05it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 81.68it/s]
-100%|██████████| 320/320 [04:27&lt;00:00,  1.20it/s]
+100%|██████████| 67/67 [00:00&lt;00:00, 594.51it/s]
+100%|██████████| 20/20 [00:00&lt;00:00, 980.89it/s]
+100%|██████████| 67/67 [01:25&lt;00:00,  1.28s/it]
 </pre></div></div>
 </div>
-<p>Probably something is wrong with our model and it is not well regularized by the algorithm. This may mean that our data is not spatially corellated (e.g. number of accidencts and population at risk are not correlated in space). We can check initial semivariograms to test this assumption.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -813,14 +832,12 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_21_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_21_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_19_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_19_0.png" />
 </div>
 </div>
-<p>There’s a large relative difference between regularized semivariance and theoretical semivariogram of areal data. What’s more important: sill is reached approx. at 25 km distance… So there is a problem of scale: spatial correlation potentially exists but at much smaller scales than we are able to observe.</p>
-<p>Anyway, we perfom the rest of tutorial with this dataset*.</p>
-<p>(*) New tutorials with different datasets and scenarios will be released in November / December 2020.</p>
+<p>There’s a large relative difference between regularized semivariance and theoretical semivariogram of areal data. What’s more important: sill is reached approx. at 1 degree distance… So there is a problem of scale: spatial correlation potentially exists but at much smaller scales than we are able to observe and we lost some information near the origin.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -833,18 +850,18 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 320/320 [00:00&lt;00:00, 6991.42it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 87.95it/s]
-100%|██████████| 320/320 [04:35&lt;00:00,  1.16it/s]
-100%|██████████| 320/320 [00:00&lt;00:00, 7183.41it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 84.83it/s]
-100%|██████████| 320/320 [04:26&lt;00:00,  1.20it/s]
-100%|██████████| 320/320 [00:00&lt;00:00, 6632.00it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 108.84it/s]
-100%|██████████| 320/320 [04:24&lt;00:00,  1.21it/s]
-100%|██████████| 320/320 [00:00&lt;00:00, 6975.72it/s]
-100%|██████████| 10/10 [00:00&lt;00:00, 84.16it/s]
-100%|██████████| 320/320 [04:29&lt;00:00,  1.19it/s]
+100%|██████████| 67/67 [00:00&lt;00:00, 514.94it/s]
+100%|██████████| 20/20 [00:00&lt;00:00, 866.65it/s]
+100%|██████████| 67/67 [01:26&lt;00:00,  1.29s/it]
+100%|██████████| 67/67 [00:00&lt;00:00, 935.73it/s]
+100%|██████████| 20/20 [00:00&lt;00:00, 701.84it/s]
+100%|██████████| 67/67 [02:02&lt;00:00,  1.83s/it]
+100%|██████████| 67/67 [00:00&lt;00:00, 394.32it/s]
+100%|██████████| 20/20 [00:00&lt;00:00, 770.16it/s]
+100%|██████████| 67/67 [02:27&lt;00:00,  2.21s/it]
+100%|██████████| 67/67 [00:00&lt;00:00, 937.93it/s]
+100%|██████████| 20/20 [00:00&lt;00:00, 764.00it/s]
+100%|██████████| 67/67 [02:01&lt;00:00,  1.81s/it]
 </pre></div></div>
 </div>
 <p><strong>NOTE:</strong></p>
@@ -856,7 +873,7 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <h3>Clarification:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>Process is fully automatic but we can check how it baheaved through each iteration. We can analyze deviation change (most important variable, mean absolute difference between regularized and theoretical models) with build-in method but if you are more interested in the algorithm stability you can analyze weight change over each iteration too.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -872,15 +889,15 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_23_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_23_0.png" />
 </div>
 </div>
 </div>
 <div class="section" id="id4">
 <h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Deviation is better than initial deviation after the first step of regularization and then it doesn’t change. It means that our problem is not best suited for Poisson Kriging - we should see decrease of deviation from the beginning up to the end. The reason of this fact will be better visible in semivariograms comparison in the cell below.</p>
+<p>Deviation between regularized semivariogram and theoretical model is smaller with each step which is a good sign that our algorithm works properlly. We’ve performed only five iterations and we may expect that deviation drops later too.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -900,18 +917,18 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_25_0.png" />
 </div>
 </div>
 <div class="section" id="NOTE:">
 <h4>NOTE:<a class="headerlink" href="#NOTE:" title="Permalink to this headline">¶</a></h4>
-<p>Weights are smaller with each iteration. It is normal behavior of algorithm. Unfortunately, weights should start from the 1 and then they should be smaller.</p>
+<p>Weights are smaller with each iteration. It is normal behavior of algorithm.</p>
 </div>
 <div class="section" id="note-1">
 <span id="id5"></span><h4>NOTE:<a class="headerlink" href="#note-1" title="Permalink to this headline">¶</a></h4>
 <p>The most important part is to compare semivariograms! You can see that Optimized Model is equal to Initial Semivariogram of areal data: our model is not better than normal kriging of areal centroids.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -923,21 +940,22 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_29_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_29_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" src="../_images/tutorials_Semivariogram_Regularization_(Intermediate)_27_0.png" />
 </div>
 </div>
 </div>
 </div>
 <div class="section" id="id6">
 <h3>Clarification:<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
-<p>Experimental semivariogram is a semivariogram of areal centroids. Then theoretical semivariogram is used to describe empirical semivariogram. Regularization process is to find semivariogram close enough to the theoretical semivariogram, which describes ongoing process with the new support (in this case with population units). You may see that experimental semivariogram has exponential growth near the origin. It means that areas are not spatially corellated.</p>
+<p>Experimental semivariogram is a semivariogram of areal centroids. Then theoretical semivariogram is used to describe this experimental (empirical) semivariogram. Regularization process is to find semivariogram close enough to the theoretical semivariogram, which describes ongoing process with the new support (in this case with population units). You may see that experimental semivariogram has exponential growth near the origin. It could mean that in this scale of analysis we lost some
+information.</p>
 <p>Anyway, we can store this regularized semivariogram properties for the further analysis and Kriging and we will perform it, even with the parameters which are not well fitted to the data.</p>
 </div>
 </div>
 <div class="section" id="5)-Export-semivariogram-to-text-file">
 <h2>5) Export semivariogram to text file<a class="headerlink" href="#5)-Export-semivariogram-to-text-file" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -950,6 +968,7 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 </pre></div>
 </div>
 </div>
+<hr class="docutils" />
 </div>
 </div>
 
@@ -984,7 +1003,7 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" title="previous chapter">Ordinary and Simple Kriging - tutorial</a></li>
+      <li>Previous: <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="previous chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
       <li>Next: <a href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" title="next chapter">Poisson Kriging - centroid based approach - tutorial</a></li>
   </ul></li>
   </ul></li>
@@ -1016,7 +1035,7 @@ array([     0,  16000,  32000,  48000,  64000,  80000,  96000, 112000,
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

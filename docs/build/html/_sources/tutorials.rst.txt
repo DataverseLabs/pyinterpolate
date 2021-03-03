@@ -10,8 +10,10 @@ Available tutorials:
 .. toctree::
    :maxdepth: 1
 
+   tutorials/Variogram Point Cloud (Basic)
    tutorials/Semivariogram Estimation (Basic)
    tutorials/Ordinary and Simple Kriging (Basic)
+   tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate)
    tutorials/Semivariogram Regularization (Intermediate)
    tutorials/Poisson Kriging - Centroid Based (Advanced)
    tutorials/Poisson Kriging - Area to Area (Advanced)

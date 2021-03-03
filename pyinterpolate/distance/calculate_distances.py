@@ -1,5 +1,24 @@
+import logging
 import numpy as np
 from scipy.spatial.distance import cdist
+
+
+def _check_if_coordinates_are_unique(data):
+    """
+    Function checks if coordinates are unique in a given dataset. If not, the Warning is logged into output stream.
+    """
+
+    if isinstance(data, list):
+        data = np.array(data)
+        
+    unique_values = np.unique(data.astype(np.float), axis=0)
+    no_of_obs = len(data)
+    no_of_uniqs = len(unique_values)
+    if no_of_uniqs < no_of_obs:
+        logging.warning(f'Your dataset has observation taken at the same place. Number of observations: {no_of_obs}, '
+                        f'Number of unique coordinates in a dataset: {no_of_uniqs}.\nFurther processing may cause '
+                        'unexpected behavior which can influence your analysis.'
+                        '\nYou may get wrong impression of a nugget effect. Clean your data before processing.')
 
 
 def calc_point_to_point_distance(points_a, points_b=None):
@@ -8,16 +27,19 @@ def calc_point_to_point_distance(points_a, points_b=None):
     INPUT:
 
     :param points_a: (numpy array) points coordinates,
-    :param points_b: (numpy array) points coordinates, default is None. If None then distance between all points in points_a
-        is calculated.
+    :param points_b: (numpy array) points coordinates, default is None. If None then distance between all points in
+        points_a is calculated.
 
     OUTPUT:
 
     :return: numpy array of distances between all coordinates."""
 
+    t = _check_if_coordinates_are_unique(points_a)  # Test redundant observations
+
     if points_b is None:
         distances = cdist(points_a, points_a, 'euclidean')
     else:
+        t = _check_if_coordinates_are_unique(points_b)  # Test redundant observations
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
 
@@ -73,7 +95,7 @@ def calc_block_to_block_distance(areas):
 
     OUTPUT:
 
-    :return: areal distances - tuple of arrays with matrix with areal distances (0) and ids of each row of distances (1):
+    :return: areal distances - tuple of arrays with matrix with areal distances and ids of each row of distances:
 
     (0): [[dist(id0:id0), ..., dist(id0:id99)], ..., [dist(id99:id0), ..., dist(id99:id99)]]
 

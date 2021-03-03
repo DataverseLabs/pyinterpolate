@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Ordinary and Simple Kriging - tutorial" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" />
-    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+    <link rel="prev" title="Variogram Point Cloud - tutorial" href="Variogram%20Point%20Cloud%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -306,7 +306,7 @@ div.rendered_html tbody tr:hover {
 <li><p>perform point Kriging (ordinary or simple),</p></li>
 <li><p>regularize semivariogram of areal data.</p></li>
 </ul>
-<p>We use DEM data which is stored in a file ‘sample_data/poland_dem_gorzow_wielkopolski’. You may import it directly from the library with <strong>SampleData</strong> class and it is our preferred method of doing it.</p>
+<p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
 </div>
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
@@ -319,7 +319,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.io</span> <span class="kn">import</span> <span class="n">read_point_data</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.io_ops</span> <span class="kn">import</span> <span class="n">read_point_data</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>  <span class="c1"># experimental semivariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">TheoreticalSemivariogram</span>  <span class="c1"># theoretical models</span>
 </pre></div>
@@ -693,7 +693,7 @@ library</em>).</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="../tutorials.html" title="previous chapter">Tutorials</a></li>
+      <li>Previous: <a href="Variogram%20Point%20Cloud%20%28Basic%29.html" title="previous chapter">Variogram Point Cloud - tutorial</a></li>
       <li>Next: <a href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" title="next chapter">Ordinary and Simple Kriging - tutorial</a></li>
   </ul></li>
   </ul></li>
@@ -725,7 +725,7 @@ library</em>).</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
