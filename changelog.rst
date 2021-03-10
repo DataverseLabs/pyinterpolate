@@ -6,6 +6,15 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+2021-03-10
+----------
+
+**version 0.2.2.post2**
+
+* directional semivariograms methods, docs and tests added,
+* check if points are within elliptical area around point of interest method, docs and tests added,
+* broken dependency in `README.md` corrected.
+
 2021-03-02
 ----------
 

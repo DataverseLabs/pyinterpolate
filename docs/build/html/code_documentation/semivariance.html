@@ -44,6 +44,7 @@
 <li><p>calculate_covariance: Function calculates covariance of a given set of points,</p></li>
 <li><p>calculate_semivariance: Function calculates semivariance of a given set of points,</p></li>
 <li><p>calculate_weighted_semivariance: Function calculates weighted semivariance,</p></li>
+<li><p>calculate_directional_semivariogram: Function calculates semivariogram within specified ellipse,</p></li>
 <li><p>build_variogram_point_cloud: Function creates OrderedDict with lags and variances between points within specific lag,</p></li>
 <li><p>show_variogram_cloud: function shows boxplots of lags and squared differences between ponts’ values within specific lag,</p></li>
 <li><p>calc_semivariance_from_pt_cloud: based on Point Cloud semivariogram is calculated,</p></li>
@@ -388,6 +389,55 @@
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[2]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">points</span> <span class="pre">in</span> <span class="pre">each</span> <span class="pre">lag</span></code>.</p>
 <hr class="docutils" />
 </div>
+<div class="section" id="calculate_directional_semivariogram()">
+<h2><code class="docutils literal notranslate"><span class="pre">calculate_directional_semivariogram()</span></code><a class="headerlink" href="#calculate_directional_semivariogram()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">calculate_directional_semivariogram</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Function calculates directional semivariogram of points. Semivariance is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[semivariance = \frac{1}{2N} * \sum_{i=1}^{N} [z(x_{i} + h) - z(x_{i})]^{2}\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observation pairs,</p></li>
+<li><p><span class="math notranslate nohighlight">\(h\)</span> - distance (lag),</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_{i})\)</span> - value at location <span class="math notranslate nohighlight">\(z_{i}\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\((x_{i} + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_{i}\)</span>.</p></li>
+</ul>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>data</strong>: (<a href="#id3"><span class="problematic" id="id4">*</span></a>numpy array8) coordinates and their values,</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis,</p></li>
+<li><p><strong>direction</strong>: (<em>float</em>) direction of semivariogram, values from 0 to 360 degrees:</p></li>
+</ul>
+<p>– 0 or 180: is NS direction,</p>
+<p>– 90 or 270 is EW direction,</p>
+<p>– 30 or 210 is NE-SW direction,</p>
+<p>– 120 or 300 is NW-SE direction,</p>
+<ul class="simple">
+<li><p>tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[(tolerance * step\_size)\]</div>
+<p>and major axis (pointed in NS direction):</p>
+<div class="math notranslate nohighlight">
+\[((1 - tolerance) * step\_size)\]</div>
+<p>and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional semivariogram.</p>
+<p>OUTPUT:</p>
+<ul class="simple">
+<li><p>(<em>numpy array</em>) <strong>semivariance</strong> - array of pair of lag and semivariance values where:</p></li>
+</ul>
+<p>– semivariance[0] = array of lags;</p>
+<p>– semivariance[1] = array of lag’s values;</p>
+<p>– semivariance[2] = array of number of points in each lag.</p>
+<hr class="docutils" />
+</div>
 <div class="section" id="build_variogram_point_cloud()">
 <h2><code class="docutils literal notranslate"><span class="pre">build_variogram_point_cloud()</span></code><a class="headerlink" href="#build_variogram_point_cloud()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">build_variogram_point_cloud</span><span class="p">(</span>
@@ -466,8 +516,8 @@
 </div>
 <div class="section" id="TheoreticalSemivariogram">
 <h2><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code><a class="headerlink" href="#TheoreticalSemivariogram" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
-<h3>Class initialization<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h3>Class initialization<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">points_array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -477,10 +527,10 @@
 </div>
 <p>Class calculates theoretical semivariogram.</p>
 <p>Available theoretical models:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">spherical_model</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">semivar_range</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">gaussian_model</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">semivar_range</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">exponential_model</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">semivar_range</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">linear_model</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">semivar_range</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>- spherical_model(distance, nugget, sill, semivar_range)
+- gaussian_model(distance, nugget, sill, semivar_range)
+- exponential_model(distance, nugget, sill, semivar_range)
+- linear_model(distance, nugget, sill, semivar_range)
 </pre></div>
 </div>
 <p>INITIALIZATION PARAMS:</p>
@@ -489,8 +539,8 @@
 <li><p><strong>empirical_semivariance</strong>: (<em>numpy array</em>) semivariance where first row of array represents lags and the second row represents semivariance’s values for given lag.</p></li>
 </ul>
 </div>
-<div class="section" id="id4">
-<h3>Class public methods:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Class public methods:<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><strong>fit_semivariance</strong>: Method fits experimental points into chosen semivariance model type,</p></li>
 <li><p><strong>find_optimal_model</strong>: Method fits experimental points into all available models and choose one with the lowest error,</p></li>
@@ -645,7 +695,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

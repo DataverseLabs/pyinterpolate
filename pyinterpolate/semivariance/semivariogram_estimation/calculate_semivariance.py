@@ -3,7 +3,7 @@ from collections import OrderedDict
 import numpy as np
 
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
-from pyinterpolate.transform.select_values_in_range import select_values_in_range
+from pyinterpolate.transform.select_values_in_range import select_values_in_range, check_points_within_ellipse
 
 import matplotlib.pyplot as plt
 
@@ -256,3 +256,94 @@ def remove_outliers(data_dict, std_dist=2.):
         output[lag] = vals
 
     return output
+
+
+def calculate_directional_semivariogram(data, step_size, max_range, direction=0, tolerance=0.1):
+    """
+    Function calculates directional semivariogram of points.
+
+    Semivariance is calculated as:
+
+    semivar = 1/2*N SUM(from i=1 to N){[z(x_i + h) - z(x_i)]^2}
+
+    where:
+    N - number of observation pairs,
+    h - distance (lag),
+    z(xi) - value at location zi,
+    (xi+h) - location at a distance h from xi.
+
+    INPUT:
+
+    :param data: (numpy array) coordinates and their values,
+    :param step_size: (float) distance between lags within each points are included in the calculations,
+    :param max_range: (float) maximum range of analysis,
+    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
+        0 or 180: is NS direction,
+        90 or 270 is EW direction,
+        30 or 210 is NE-SW direction,
+        120 or 300 is NW-SE direction,
+    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
+        is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle
+        given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
+        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
+        of a size:
+
+        (tolerance * step_size)
+
+        and major axis (pointed in NS direction):
+
+        ((1 - tolerance) * step_size)
+
+        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+        semivariogram.
+
+    OUTPUT:
+
+    :return: (numpy array) semivariance - array of pair of lag and semivariance values where:
+
+    semivariance[0] = array of lags;
+    semivariance[1] = array of lag's values;
+    semivariance[2] = array of number of points in each lag.
+
+    """
+
+    if isinstance(data, list):
+        data = np.array(data)
+
+    if tolerance <= 0 or tolerance > 1:
+        raise ValueError('Parameter tolerance should be set in the range (0, 1] to avoid undefined behavior')
+
+    if direction < 0 or direction > 360:
+        raise ValueError('Parameter direction should be set in range [0, 360].')
+
+    if tolerance == 1:
+
+        semivariances = calculate_semivariance(data, step_size, max_range)
+        return semivariances
+    else:
+        angle = (np.pi / 180) * direction
+        lags = np.arange(0, max_range, step_size)
+
+        semivariances = [[0, 0, 0]]  # First, zero lag
+
+        previous_lag = 0
+        for lag in lags[1:]:
+            semivars_per_lag = []
+            for point in data:
+                mask = check_points_within_ellipse(point, data, lag, previous_lag, angle, tolerance)
+
+                pts_in_range = data[mask, -1]
+
+                # Calculate semivars
+
+                if len(pts_in_range) > 0:
+                    semivars = (pts_in_range - point[-1]) ** 2
+                    semivars_per_lag.extend(semivars)
+                else:
+                    semivars_per_lag.append(0)
+
+            semivariance = np.mean(semivars_per_lag) / 2
+            semivariances.append([lag, semivariance, len(semivars_per_lag)])
+            previous_lag = lag
+
+        return np.array(semivariances)
