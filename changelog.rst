@@ -6,9 +6,13 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
-00.00.2029 00:00 p.m. CE(S)T:
---------------------------
+2021-03-02
+----------
 
-version 0.2
+**version 0.2.2.post1**
 
-* BETA RELEASE
+* variogram point cloud methods, tutorials, docs and tests added,
+* updated tutorials and baseline datasets to show examples with spatial correlation,
+* updated `README.md`: contribution, example, sample image,
+* data is tested against duplicates (points with the same coordinates),
+* removed bug in `interpolate_raster()` method.
