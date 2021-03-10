@@ -256,3 +256,210 @@ def remove_outliers(data_dict, std_dist=2.):
         output[lag] = vals
 
     return output
+
+
+def check_points_within_ellipse(origin_point: np.array, other_points: np.array, step_size: float,
+                                last_step_size: float, angle: float, tolerance: float):
+    """
+    Function check which points from other points are within point range described as an ellipse with
+        center in point, semi-major axis of length step_size and semi-minor axis of length
+        step_size * tolerance and angle of semi-major axis calculated as angle of direction from
+        NS axis of a dataset.
+
+    INPUT:
+
+    :param origin_point: (numpy array) single point coordinates,
+    :param other_points: (numpy array),
+    :param step_size: (float) current distance between lags within each points are included in the calculations,
+    :param last_step_size: (float) last distance between lags within each points are included in the calculations,
+    :param angle: (float) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.
+    :param tolerance: (float) value in range 0-1 normalized to [0 : 0.5] to select tolerance of semivariogram. If
+        tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate
+        system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance
+        is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance
+        and minor axis of a size:
+
+        (tolerance * step_size)
+
+        and major axis (pointed in NS direction):
+
+        ((1 - tolerance) * step_size)
+
+        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+        semivariogram.
+
+    ROTATED ELLIPSE EQUATION:
+
+        part_a = (cos(A) * (x - h) + sin(A) * (y - k))**2
+        part_b = (sin(A) * (x - h) + cos(A) * (y - k))**2
+
+        full equation:
+
+            part_a / r_x**2 + part_b / r_y**2 <= 1
+
+        then point is inside ellipse.
+
+    OUTPUT:
+
+    :return: (numpy array) boolean array of points within distance from a given point.
+    """
+
+    rx_base = (step_size * tolerance) ** 2
+    ry_base = (step_size * (1 - tolerance)) ** 2
+
+    rx_prev = (last_step_size * tolerance) ** 2
+    ry_prev = (last_step_size * (1 - tolerance)) ** 2
+
+    bool_mask = []
+
+    for point in other_points:
+
+        try:
+            is_origin = (point == origin_point).all()
+        except AttributeError:
+            is_origin = point == origin_point
+
+        if is_origin:
+            bool_mask.append(False)
+        else:
+            if ry_base == 0:
+                part_a_base = 0
+                part_a_previous = 0
+            else:
+                part_a_x = (point[1] - origin_point[1]) * np.cos(angle)
+                part_a_y = (point[0] - origin_point[0]) * np.sin(angle)
+
+                # Points within base
+                part_a_base = (part_a_x + part_a_y) ** 2 / ry_base
+
+                # Points within previous ellipse
+                part_a_previous = (part_a_x + part_a_y) ** 2 / ry_prev
+
+            if rx_base == 0:
+                part_b_base = 0
+                part_b_previous = 0
+            else:
+                part_b_x = (point[1] - origin_point[1]) * np.sin(angle)
+                part_b_y = (point[0] - origin_point[0]) * np.cos(angle)
+
+                # Points within base
+                part_b_base = (part_b_x + part_b_y) ** 2 / rx_base
+
+                # Points within previous ellipse
+                part_b_previous = (part_b_x + part_b_y) ** 2 / rx_prev
+
+            # Points within base
+            test_value_base = part_a_base + part_b_base
+
+            # Points within previous ellipse
+            test_value_prev = part_a_previous + part_b_previous
+
+            if last_step_size == 0:
+                # This is the first step of analysis
+                if test_value_base <= 1:
+                    bool_mask.append(True)
+                else:
+                    bool_mask.append(False)
+            else:
+                # Second and next steps of analysis
+
+                # If point is within big ellipse and it is not in the previous ellipse
+                if test_value_base <= 1 and test_value_prev > 1:
+                    bool_mask.append(True)
+                else:
+                    bool_mask.append(False)
+
+    return np.array(bool_mask)
+
+
+def calculate_directional_semivariogram(data, step_size, max_range, direction=0, tolerance=0.1):
+    """
+    Function calculates directional semivariogram of points.
+
+    Semivariance is calculated as:
+
+    semivar = 1/2*N SUM(from i=1 to N){[z(x_i + h) - z(x_i)]^2}
+
+    where:
+    N - number of observation pairs,
+    h - distance (lag),
+    z(xi) - value at location zi,
+    (xi+h) - location at a distance h from xi.
+
+    INPUT:
+
+    data: (numpy array) coordinates and their values,
+    step_size: (float) distance between lags within each points are included in the calculations,
+    max_range: (float) maximum range of analysis,
+    direction: (float) direction of semivariogram, values from 0 to 360 degrees:
+        0 or 180: is NS direction,
+        90 or 270 is EW direction,
+        30 or 210 is NE-SW direction,
+        120 or 300 is NW-SE direction,
+    tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance is 0 then
+        points must be placed at a single line with beginning in the origin of coordinate system and angle
+        given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
+        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
+        of a size:
+
+        (tolerance * step_size)
+
+        and major axis (pointed in NS direction):
+
+        ((1 - tolerance) * step_size)
+
+        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+        semivariogram.
+
+    OUTPUT:
+
+    (numpy array) semivariance - array of pair of lag and semivariance values where:
+
+    semivariance[0] = array of lags;
+    semivariance[1] = array of lag's values;
+    semivariance[2] = array of number of points in each lag.
+
+    """
+
+    if isinstance(data, list):
+        data = np.array(data)
+
+    # TODO: tolerance not 0 and not 1, larger than 0 and smaller than 1
+
+    if tolerance <= 0 or tolerance > 1:
+        raise ValueError('Parameter tolerance should be set in the range (0, 1] to avoid undefined behavior')
+
+    if direction < 0 or direction > 360:
+        raise ValueError('Parameter direction should be set in range [0, 360].')
+
+    if tolerance == 1:
+
+        semivariances = calculate_semivariance(data, step_size, max_range)
+        return semivariances
+    else:
+        angle = (np.pi / 180) * direction
+        lags = np.arange(0, max_range, step_size)
+
+        semivariances = [[0, 0, 0]]  # First, zero lag
+
+        previous_lag = 0
+        for lag in lags[1:]:
+            semivars_per_lag = []
+            for point in data:
+                mask = check_points_within_ellipse(point, data, lag, previous_lag, angle, tolerance)
+
+                pts_in_range = data[mask, -1]
+
+                # Calculate semivars
+
+                if len(pts_in_range) > 0:
+                    semivars = (pts_in_range - point[-1]) ** 2
+                    semivars_per_lag.extend(semivars)
+                else:
+                    semivars_per_lag.append(0)
+
+            semivariance = np.mean(semivars_per_lag) / 2
+            semivariances.append([lag, semivariance, len(semivars_per_lag)])
+            previous_lag = lag
+
+        return np.array(semivariances)
