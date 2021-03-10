@@ -13,6 +13,7 @@
     "- calculate_covariance: Function calculates covariance of a given set of points,\n",
     "- calculate_semivariance: Function calculates semivariance of a given set of points,\n",
     "- calculate_weighted_semivariance: Function calculates weighted semivariance,\n",
+    "- calculate_directional_semivariogram: Function calculates semivariogram within specified ellipse,\n",
     "- build_variogram_point_cloud: Function creates OrderedDict with lags and variances between points within specific lag,\n",
     "- show_variogram_cloud: function shows boxplots of lags and squared differences between ponts' values within specific lag,\n",
     "- calc_semivariance_from_pt_cloud: based on Point Cloud semivariogram is calculated,\n",
@@ -462,6 +463,89 @@
    "source": [
     "***"
    ]
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "## ```calculate_directional_semivariogram()```\n",
+    "\n",
+    "```python\n",
+    "pyinterpolate.semivariance.calculate_directional_semivariogram(\n",
+    "    data,\n",
+    "    step_size,\n",
+    "    max_range,\n",
+    "    direction=0,\n",
+    "    tolerance=0.1)\n",
+    "```\n",
+    "\n",
+    "Function calculates directional semivariogram of points. Semivariance is calculated as:\n",
+    "\n",
+    "$$semivariance = \\frac{1}{2N} * \\sum_{i=1}^{N} [z(x_{i} + h) - z(x_{i})]^{2}$$\n",
+    "\n",
+    "where:\n",
+    "\n",
+    "- $N$ - number of observation pairs,\n",
+    "- $h$ - distance (lag),\n",
+    "- $z(x_{i})$ - value at location $z_{i}$,\n",
+    "- $(x_{i} + h)$ - location at a distance $h$ from $x_{i}$.\n",
+    "\n",
+    "INPUT:\n",
+    "\n",
+    "- **data**: (*numpy array8) coordinates and their values,\n",
+    "- **step_size**: (*float*) distance between lags within each points are included in the calculations,\n",
+    "- **max_range**: (*float*) maximum range of analysis,\n",
+    "- **direction**: (*float*) direction of semivariogram, values from 0 to 360 degrees:\n",
+    "\n",
+    "-- 0 or 180: is NS direction,\n",
+    "\n",
+    "-- 90 or 270 is EW direction,\n",
+    "\n",
+    "-- 30 or 210 is NE-SW direction,\n",
+    "\n",
+    "-- 120 or 300 is NW-SE direction,\n",
+    "\n",
+    "- tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance\n",
+    "is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle\n",
+    "given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated\n",
+    "from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis\n",
+    "of a size:\n",
+    "\n",
+    "$$(tolerance * step\\_size)$$\n",
+    "\n",
+    "and major axis (pointed in NS direction):\n",
+    "\n",
+    "$$((1 - tolerance) * step\\_size)$$\n",
+    "\n",
+    "and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional semivariogram.\n",
+    "\n",
+    "OUTPUT:\n",
+    "\n",
+    "- (*numpy array*) **semivariance** - array of pair of lag and semivariance values where:\n",
+    "\n",
+    "-- semivariance[0] = array of lags;\n",
+    "\n",
+    "-- semivariance[1] = array of lag's values;\n",
+    "\n",
+    "-- semivariance[2] = array of number of points in each lag."
+   ],
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   }
+  },
+  {
+   "cell_type": "markdown",
+   "source": [
+    "***"
+   ],
+   "metadata": {
+    "collapsed": false,
+    "pycharm": {
+     "name": "#%% md\n"
+    }
+   }
   },
   {
    "cell_type": "markdown",
