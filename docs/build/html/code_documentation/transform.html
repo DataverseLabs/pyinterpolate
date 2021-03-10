@@ -39,6 +39,7 @@
 <h1>transform module<a class="headerlink" href="#transform-module" title="Permalink to this headline">¶</a></h1>
 <p>Available methods:</p>
 <ul class="simple">
+<li><p>check_points_within_ellipse: checks if points are grouped within specified ellipse for directional semivariograms,</p></li>
 <li><p>get_centroids: gets position x and y of polygon centroid,</p></li>
 <li><p>prepare_kriging_data: prepares data for kriging - array of point position, value and distance to an unknown point,</p></li>
 <li><p>prepare_poisson_kriging_data: prepares data for centroid based Poisson Kriging,</p></li>
@@ -47,6 +48,50 @@
 <li><p>select_values_in_range: selects set of values which are greater than (lag - step size) and lesser than (lag + step size),</p></li>
 <li><p>set_areal_weights: prepares array for weighted semivariance calculation.</p></li>
 </ul>
+<hr class="docutils" />
+<div class="section" id="check_points_within_ellipse()">
+<h2><code class="docutils literal notranslate"><span class="pre">check_points_within_ellipse()</span></code><a class="headerlink" href="#check_points_within_ellipse()" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">check_points_within_ellipse</span><span class="p">(</span>
+    <span class="n">origin_point</span><span class="p">,</span>
+    <span class="n">other_points</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="p">,</span>
+    <span class="n">last_step_size</span><span class="p">,</span>
+    <span class="n">angle</span><span class="p">,</span>
+    <span class="n">tolerance</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Function checks which points from other points are within point range described as an ellipse with center in an <code class="docutils literal notranslate"><span class="pre">origin_point</span></code>, semi-major axis of length <code class="docutils literal notranslate"><span class="pre">step_size</span></code> and semi-minor axis of length <code class="docutils literal notranslate"><span class="pre">step_size</span> <span class="pre">*</span> <span class="pre">tolerance</span></code> and angle of semi-major axis calculated as <code class="docutils literal notranslate"><span class="pre">angle</span></code> of direction from NS (0 radian angle) axis of a dataset.</p>
+<p>INPUT:</p>
+<ul class="simple">
+<li><p><strong>origin_point</strong>: (<em>numpy array</em>) single point coordinates,</p></li>
+<li><p><strong>other_points</strong>: (<em>numpy array</em>),</p></li>
+<li><p><strong>step_size</strong>: (<em>float</em>) current distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>last_step_size</strong>: (<em>float</em>) last distance between lags within each points are included in the calculations,</p></li>
+<li><p><strong>angle</strong>: (<em>float</em>) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.</p></li>
+<li><p><strong>tolerance</strong>: (<em>float</em>) value in range 0-1 normalized to <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">:</span> <span class="pre">0.5]</span></code> to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[(tolerance * step\_size)\]</div>
+<p>and major axis (pointed in NS direction):</p>
+<div class="math notranslate nohighlight">
+\[((1 - tolerance) * step\_size)\]</div>
+<p>and baseline point at a center of ellipse. <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates omnidirectional semivariogram.</p>
+<div class="section" id="ROTATED-ELLIPSE-EQUATION:">
+<h3>ROTATED ELLIPSE EQUATION:<a class="headerlink" href="#ROTATED-ELLIPSE-EQUATION:" title="Permalink to this headline">¶</a></h3>
+<div class="math notranslate nohighlight">
+\[part_a = [cos(A) * (x - h) + sin(A) * (y - k)]^2\]</div>
+<div class="math notranslate nohighlight">
+\[part_b = [sin(A) * (x - h) + cos(A) * (y - k)]^2\]</div>
+<p>and if:</p>
+<div class="math notranslate nohighlight">
+\[\frac{part_a}{r_x^2} + \frac{part_b}{r_y^2} &lt;= 1\]</div>
+<p>then point is inside ellipse.</p>
+<p>OUTPUT:</p>
+<p>(<em>numpy array</em>) boolean array of <strong>points within ellipse with center in origin point</strong>.</p>
+<hr class="docutils" />
+</div>
+</div>
 <div class="section" id="get_centroids()">
 <h2><code class="docutils literal notranslate"><span class="pre">get_centroids()</span></code><a class="headerlink" href="#get_centroids()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">get_centroids</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
@@ -59,7 +104,7 @@
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">tuple</span></code>) centroid position (x, y) for a given area.</p></li>
+<li><p>(<em>tuple</em>) centroid position (x, y) for a given area.</p></li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -379,7 +424,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

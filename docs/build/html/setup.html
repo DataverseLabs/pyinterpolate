@@ -13,8 +13,6 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
@@ -40,7 +38,7 @@
 <div class="section" id="pip-package-installation">
 <h2>pip package installation<a class="headerlink" href="#pip-package-installation" title="Permalink to this headline">¶</a></h2>
 <p>To install last stable version of the package use pip package manager. <strong>Recommended way of installing Python packages is to create</strong><a class="reference external" href="https://docs.python.org/3/library/venv.html">Virtual Environment</a> and install everything inside it, we encourage you to do so. Navigate to the directory where you’d like to install package and type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install pyinterpolate
 </pre></div>
 </div>
 <p>If there are no errors you may use package.</p>
@@ -49,18 +47,18 @@
 <h2>Problem with libspatialindex_c.so<a class="headerlink" href="#Problem-with-libspatialindex_c.so" title="Permalink to this headline">¶</a></h2>
 <p>There is a chance that your system doesn’t have <strong>libspatialindex_c.so</strong> file. You must install it from a terminal.</p>
 <p>Linux installation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libspatialindex</span><span class="o">-</span><span class="n">dev</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sudo apt install libspatialindex-dev
 </pre></div>
 </div>
 <p>MacOS installation:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">spatialindex</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>brew install spatialindex
 </pre></div>
 </div>
 </div>
 <div class="section" id="Manual-installation-of-the-newest-version">
 <h2>Manual installation of the newest version<a class="headerlink" href="#Manual-installation-of-the-newest-version" title="Permalink to this headline">¶</a></h2>
 <p>If you are interested in the newest version of package from <strong>main</strong> or <strong>dev</strong> branch then you should install it manually. To do so download package from the repository, move to the package directory and type:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">./</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install ./
 </pre></div>
 </div>
 <p>As with pip installation we recommend use of Virtual Environments.</p>
@@ -70,25 +68,25 @@
 <p>If you use conda environment you may use Jupyter Notebooks and you are not obligated to create Virtual Environment - you’ll be working in conda environment. To run pyinterpolate with Jupyter Notebooks you must create environment for it and install everything from the conda environment.</p>
 <div class="section" id="Step-1:">
 <h3>Step 1:<a class="headerlink" href="#Step-1:" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="p">[</span><span class="n">NAME</span> <span class="n">OF</span> <span class="n">YOUR</span> <span class="n">ENV</span><span class="p">]</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda create -n [NAME OF YOUR ENV]
 </pre></div>
 </div>
 </div>
 <div class="section" id="Step-2:">
 <h3>Step 2:<a class="headerlink" href="#Step-2:" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="p">[</span><span class="n">NAME</span> <span class="n">OF</span> <span class="n">YOUR</span> <span class="n">ENV</span><span class="p">]</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda activate [NAME OF YOUR ENV]
 </pre></div>
 </div>
 </div>
 <div class="section" id="Step-3:">
 <h3>Step 3:<a class="headerlink" href="#Step-3:" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.7</span> <span class="n">pip</span> <span class="n">notebook</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>conda install -c conda-forge python=3.7 pip notebook
 </pre></div>
 </div>
 </div>
 <div class="section" id="Step-4:">
 <h3>Step 4:<a class="headerlink" href="#Step-4:" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install pyinterpolate
 </pre></div>
 </div>
 </div>
@@ -160,7 +158,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
