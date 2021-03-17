@@ -6,6 +6,13 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+XXXX-XX-XX
+----------
+
+**version 0.2.3**
+
+* more parameters to store (and access) in TheoreticalSemivariogram class
+
 2021-03-10
 ----------
 

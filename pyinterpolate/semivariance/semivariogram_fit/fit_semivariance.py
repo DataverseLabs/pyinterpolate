@@ -2,6 +2,7 @@ import csv
 from operator import itemgetter
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -353,13 +354,15 @@ class TheoreticalSemivariogram:
         - name: [model name],
         - nugget: [value],
         - sill: [value],
-        - range: [value]"""
+        - range: [value],
+        - model_error: [value]"""
 
         model_parameters = {
             'name': self.chosen_model_name,
             'nugget': self.params[0],
             'sill': self.params[1],
             'range': self.params[2],
+            'model_error': self.model_error
         }
 
         csv_cols = list(model_parameters.keys())
@@ -374,7 +377,8 @@ class TheoreticalSemivariogram:
     def import_model(self, filename):
         """
 
-        Function imports semivariance model and updates it's parameters (model name, nugget, sill, range)."""
+        Function imports semivariance model and updates it's parameters
+        (model name, nugget, sill, range, model error)."""
 
         models = {
             'spherical': self.spherical_model,
@@ -383,7 +387,7 @@ class TheoreticalSemivariogram:
             'gaussian': self.gaussian_model,
         }
 
-        csv_cols = ['name', 'nugget', 'sill', 'range']
+        csv_cols = ['name', 'nugget', 'sill', 'range', 'model_error']
         try:
             with open(filename, 'r') as semivar_csv:
                 reader = csv.DictReader(semivar_csv, fieldnames=csv_cols)
@@ -391,6 +395,10 @@ class TheoreticalSemivariogram:
                 for row in reader:
                     self.params = [float(row['nugget']), float(row['sill']), float(row['range'])]
                     self.chosen_model_name = row['name']
+                    if row['model_error']:
+                        self.model_error = float(row['model_error'])
+                    else:
+                        self.model_error = None
                     try:
                         self.theoretical_model = models[self.chosen_model_name]
                     except KeyError:
@@ -398,6 +406,36 @@ class TheoreticalSemivariogram:
                                        'exponential, linear.')
         except IOError:
             print("I/O error, provided path is not valid")
+
+    def export_semivariance(self, filename):
+        """
+        Function exports empirical and theoretical semivariance models into csv file.
+
+        INPUT:
+
+        :param filename: (str) Path to the csv file to be stored.
+        """
+
+        if self.theoretical_model is None:
+            raise RuntimeError('Theoretical semivariogram is not calculated. \
+            Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
+
+        if not isinstance(filename, str):
+            raise ValueError('Given path is not a string type')
+
+        if not filename.endswith('.csv'):
+            filename = filename + '.csv'
+
+        # Create DataFrame to export
+        cols = ['lag', 'experimental', 'theoretical']
+        theo_values = self.calculate_values()
+        dt = {
+            'lag': self.empirical_semivariance[:, 0],
+            'experimental': self.empirical_semivariance[:, 1],
+            'theoretical': theo_values
+        }
+        df = pd.DataFrame.from_dict(dt, orient='columns')
+        df.to_csv(filename, index=False)
 
     def show_experimental_semivariogram(self):
         """
@@ -415,7 +453,7 @@ class TheoreticalSemivariogram:
         Function shows experimental and theoretical semivariogram in one plot.
         """
         if self.theoretical_model is None:
-            raise AttributeError('Theoretical semivariogram is not calculated. \
+            raise RuntimeError('Theoretical semivariogram is not calculated. \
             Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
         
         x = self.calculate_values()
