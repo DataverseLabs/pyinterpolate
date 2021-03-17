@@ -78,7 +78,8 @@ class TestFitSemivariance(unittest.TestCase):
         gamma = calculate_semivariance(self.dataset, self.step_size, self.max_range)
         theo_model = TheoreticalSemivariogram(self.dataset, gamma)
         theo_model.find_optimal_model(number_of_ranges=8)
-        filepath = '../sample_data/test_semivariance_export.csv'
+        my_dir = os.path.dirname(__file__)
+        filepath = os.path.join(my_dir, '../sample_data/test_semivariance_export.csv')
         theo_model.export_semivariance(filepath)
         df = pd.read_csv(filepath)
 
