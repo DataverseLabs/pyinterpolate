@@ -395,7 +395,10 @@ class TheoreticalSemivariogram:
                 for row in reader:
                     self.params = [float(row['nugget']), float(row['sill']), float(row['range'])]
                     self.chosen_model_name = row['name']
-                    self.model_error = float(row['model_error'])
+                    if row['model_error']:
+                        self.model_error = float(row['model_error'])
+                    else:
+                        self.model_error = None
                     try:
                         self.theoretical_model = models[self.chosen_model_name]
                     except KeyError:
@@ -404,7 +407,7 @@ class TheoreticalSemivariogram:
         except IOError:
             print("I/O error, provided path is not valid")
 
-    def export_semivariances(self, filename):
+    def export_semivariance(self, filename):
         """
         Function exports empirical and theoretical semivariance models into csv file.
 
@@ -426,13 +429,13 @@ class TheoreticalSemivariogram:
         # Create DataFrame to export
         cols = ['lag', 'experimental', 'theoretical']
         theo_values = self.calculate_values()
-        vals = [
-            self.empirical_semivariance[:, 0],
-            self.empirical_semivariance[:, 1],
-            theo_values
-        ]
-        df = pd.DataFrame(vals, columns=cols)
-        df.to_csv(filename)
+        dt = {
+            'lag': self.empirical_semivariance[:, 0],
+            'experimental': self.empirical_semivariance[:, 1],
+            'theoretical': theo_values
+        }
+        df = pd.DataFrame.from_dict(dt, orient='columns')
+        df.to_csv(filename, index=False)
 
     def show_experimental_semivariogram(self):
         """
