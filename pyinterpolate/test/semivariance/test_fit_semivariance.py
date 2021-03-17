@@ -1,7 +1,6 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.io_ops.read_data import read_point_data
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
@@ -10,15 +9,22 @@ from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance 
 
 class TestFitSemivariance(unittest.TestCase):
 
-    def test_fit_semivariance(self):
+    def __init__(self, *args, **kwargs):
+        super(TestFitSemivariance, self).__init__(*args, **kwargs)
+
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
+        path = os.path.join(my_dir, '../sample_data/armstrong_data.npy')
 
-        dataset = read_point_data(path, 'txt')
-        new_col = np.arange(1, len(dataset) + 1)
+        self.complex_arr = np.load(path)
+        self.step_size = 1.1
+        self.max_range = 10
 
-        dataset_weights = np.zeros((dataset.shape[0], dataset.shape[1] + 1))
-        dataset_weights[:, :-1] = dataset
+    def test_fit_semivariance(self):
+
+        new_col = np.arange(1, len(self.dataset) + 1)
+
+        dataset_weights = np.zeros((self.dataset.shape[0], self.dataset.shape[1] + 1))
+        dataset_weights[:, :-1] = self.dataset
         dataset_weights[:, -1] = new_col
 
         # Set semivariance params
@@ -31,10 +37,10 @@ class TestFitSemivariance(unittest.TestCase):
         # Calculate weighted and non-weighted semivariance
 
         gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
-        gamma_non = calculate_semivariance(dataset, step_size, maximum_range)
+        gamma_non = calculate_semivariance(self.dataset, step_size, maximum_range)
 
         # Fit semivariance - find optimal models
-        t_non_weighted = TheoreticalSemivariogram(dataset, gamma_non)
+        t_non_weighted = TheoreticalSemivariogram(self.dataset, gamma_non)
         t_weighted = TheoreticalSemivariogram(dataset_weights[:, :-1], gamma_w)
 
         model_non_weighted = t_non_weighted.find_optimal_model(weighted=False, number_of_ranges=20)  # linear
@@ -74,6 +80,8 @@ class TestFitSemivariance(unittest.TestCase):
         self.assertEqual(fake_theoretical_smv.params, parameters, "Parameters should be [0, 20, 40]")
         self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Model name should be linear")
 
+    def test_semivariance_export(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()
