@@ -142,9 +142,9 @@ We go through it point by point to demonstrate package capabilities.
 
 Breast cancer rates are taken from the Incidence Rate Report for U.S. counties and were clipped to the counties of Northeastern part of U.S. [@cancerData]. These are age-adjusted rates multiplied by 100,000 for the period 2013-2017.
 
-Population centroids are retrieved from the U.S. Census Blocks 2010 [@popCensus]. Breast cancer affects only females but for this example the whole population for an area was included. Raw and transformed datasets are available in a dedicated Github repository [@paperRepo].
+Population centroids are retrieved from the U.S. Census Blocks 2010 [@popCensus]. Breast cancer affects only females but for this example the whole population for an area was included. Raw and transformed datasets are available in a dedicated Github repository. Link is provided in the \autoref{appendix}.
 
-Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Code for this part is available in Github repository [@paperRepo].
+Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Code for this part is available in Github repository \autoref{appendix}.
 
 ## 1. Read and prepare data
 
@@ -195,5 +195,9 @@ The most similar and most important package from Python environment is **PyKrige
 **PySAL** is next GIS / geospatial package which can be used to interpolate missing values – but this time at areal scale. Package’s **tobler** module can be used to interpolate areal values of specific variable at different scales and sizes of support [@eli_knaap_2020_4385980]. Moreover, package has functions for multisource regression, where raster data is used as auxiliary information to enhance interpolation results. Conceptually tobler package is close to the pyinterpolate, where main algorithm transforms areal data into point support derived from auxiliary variable.
 
 **R programming language** offers **gstat** package for spatial interpolation and spatial modeling [@PEBESMA2004683]. Package is designed for variogram modelling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid package for Kriging and spatial interpolation and has the largest number of methods to perform spatial modelling. The main difference between gstat and pyinterpolate is availability of area-to-point Poisson Kriging based on the algorithm proposed by Goovaerts [@Goovaerts:2007] in Pyinterpolate package.
+
+# ![Appendix\label{appendix}]
+
+1. **Example Repository and data**: https://github.com/szymon-datalions/pyinterpolate-paper 
 
 # References
