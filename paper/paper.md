@@ -75,7 +75,7 @@ Ordinary Kriging is one of the classic Kriging types within the package. Other i
 
 (5) $$\hat{z} = R + \mu$$
 
-where $\mu$ is a process mean and $R$ is a residual at a specific location. Residual value is derived as the first element (denoted as \boldsymbol{1}) from:
+where $\mu$ is a process mean and $R$ is a residual at a specific location. Residual value is derived as the first element (denoted as $\boldsymbol{1}$) from:
 
 (6) $$R = ((Z - \mu) * \lambda)\boldsymbol{1}$$
 
@@ -197,6 +197,3 @@ The most similar and most important package from Python environment is **PyKrige
 **R programming language** offers **gstat** package for spatial interpolation and spatial modeling [@PEBESMA2004683]. Package is designed for variogram modelling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid package for Kriging and spatial interpolation and has the largest number of methods to perform spatial modelling. The main difference between gstat and pyinterpolate is availability of area-to-point Poisson Kriging based on the algorithm proposed by Goovaerts [@Goovaerts:2007] in Pyinterpolate package.
 
 # References
-
-
-
