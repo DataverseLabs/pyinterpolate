@@ -13,11 +13,9 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
+    <link rel="next" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
     <link rel="prev" title="Semivariogram calculation - tutorial" href="Semivariogram%20Estimation%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -300,8 +298,8 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to perform prediction with Ordinary and Simple Kriging. We will compare different number of ranges and test outcomes of processing with root mean squared error.</p>
-<p>Ordinary and Simple Kriging are the simplest form of Kriging. After this tutorial you may learn how to perform Point Poisson Kriging (based on the centroid values) which is a form of areal kriging.</p>
-<p>We use DEM data which is stored in a file ‘sample_data/poland_dem_gorzow_wielkopolski’.</p>
+<p>Ordinary and Simple Kriging are the simplest form of Kriging but it’s still very powerful technique.</p>
+<p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
 </div>
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
@@ -314,7 +312,7 @@ div.rendered_html tbody tr:hover {
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.io</span> <span class="kn">import</span> <span class="n">read_point_data</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.io_ops</span> <span class="kn">import</span> <span class="n">read_point_data</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>  <span class="c1"># experimental semivariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariance</span> <span class="kn">import</span> <span class="n">TheoreticalSemivariogram</span>  <span class="c1"># theoretical models</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging</span> <span class="kn">import</span> <span class="n">Krige</span>  <span class="c1"># kriging models</span>
@@ -325,17 +323,17 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1)-Read-point-data">
 <h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_point_data</span><span class="p">(</span><span class="s1">&#39;../sample_data/poland_dem_gorzow_wielkopolski&#39;</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span>
+<span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_point_data</span><span class="p">(</span><span class="s1">&#39;../sample_data/point_data/poland_dem_gorzow_wielkopolski&#39;</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span>
 <span class="n">dem</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -482,7 +480,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[15.11563642 52.70449669 48.72597885]
+[ 15.11563642  52.75044908 106.60320282]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -520,20 +518,20 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(48.72597885131836, 3.390598011445001, 2.9878489242298765e-15, array([ 1.00000000e+00,  6.91218918e-17, -1.89866644e-16, -1.08226020e-15,
-        1.32067636e-15,  7.11595164e-17,  2.56145669e-16, -2.72042876e-16,
-       -1.04224311e-16, -2.35749216e-16,  4.29501799e-16,  1.09878898e-16,
-       -3.74479758e-17, -3.11022819e-16,  2.97266996e-16, -2.93436744e-16,
-        2.98784892e-15]))
+(106.60320281982419, 3.4162188631768915, -7.210201609690972e-16, array([ 1.00000000e+00, -1.95041096e-16,  2.07186440e-16, -1.73120459e-16,
+        1.52892264e-16,  2.43989475e-16, -2.50661660e-16, -1.00506383e-16,
+        3.48014562e-16, -1.11069338e-16, -1.69262995e-16,  4.12207614e-16,
+        5.86141648e-17, -3.24901411e-16, -3.64134441e-16,  2.46221941e-16,
+       -7.21020161e-16]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(48.72597885131835, 3.390598011445001, 40.9509380348875, array([ 1.00000000e+00,  1.77633206e-16, -2.09711473e-16, -1.17123593e-15,
-        1.46900170e-15, -7.15728973e-17,  5.72546787e-16, -2.75135377e-16,
-       -1.36336614e-17, -2.64257671e-16, -8.93976095e-17, -1.80495159e-17,
-        6.99591976e-18,  2.73135677e-17, -1.37030821e-18,  1.61860402e-17]))
+(106.60320281982423, 3.4162188631768924, 40.9509380348875, array([ 1.00000000e+00, -3.03118592e-16,  1.06059436e-16,  5.68837727e-17,
+        2.68067239e-16,  2.23832969e-16, -2.61159876e-16, -2.11287169e-16,
+        1.58916612e-16, -1.61334365e-16, -3.45716050e-16,  7.99571057e-17,
+        1.85867338e-16,  3.36420521e-17, -4.77133029e-18,  3.48434222e-17]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -636,19 +634,19 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.04181709123790611
+RMSE: 0.07407925592792708
 
 Number of neighbors: 8
-RMSE: 0.010716787307032405
+RMSE: 0.1717779738967451
 
 Number of neighbors: 16
-RMSE: 0.04080792356459284
+RMSE: 0.1839213538041129
 
 Number of neighbors: 32
-RMSE: 0.03468908509384505
+RMSE: 0.1704907004800198
 
 Number of neighbors: 64
-RMSE: 0.03735457253794294
+RMSE: 0.3037256314912895
 
 </pre></div></div>
 </div>
@@ -710,19 +708,19 @@ RMSE: 0.03735457253794294
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.8332726149683296
+RMSE: 1.4000179356643798
 
 Number of neighbors: 8
-RMSE: 0.6082229711138396
+RMSE: 0.7767736449455747
 
 Number of neighbors: 16
-RMSE: 0.1064266056887746
+RMSE: 0.27065108990441544
 
 Number of neighbors: 32
-RMSE: 0.0044511286400208405
+RMSE: 0.03651135077763712
 
 Number of neighbors: 64
-RMSE: 0.02970655581301429
+RMSE: 0.29264219039382056
 
 </pre></div></div>
 </div>
@@ -731,15 +729,7 @@ RMSE: 0.02970655581301429
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Usually Simple Kriging will give you worse results than Ordinary Kriging. Especially if you do not know process mean. What is more important: Simple Kriging returned best results for the same number of neighbors as Ordinary Kriging. That’s why it is good idea to compare both techniques if you have such opportunity (process mean, or known-points sample mean if you like a risk). Data division for test and train set may influence Simple Kriging results and for some realizations RMSE will be very
 low but for the others it is extremely large.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span>
-</pre></div>
-</div>
-</div>
+<hr class="docutils" />
 </div>
 </div>
 </div>
@@ -776,7 +766,7 @@ low but for the others it is extremely large.</p>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
       <li>Previous: <a href="Semivariogram%20Estimation%20%28Basic%29.html" title="previous chapter">Semivariogram calculation - tutorial</a></li>
-      <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
+      <li>Next: <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="next chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -807,7 +797,7 @@ low but for the others it is extremely large.</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
