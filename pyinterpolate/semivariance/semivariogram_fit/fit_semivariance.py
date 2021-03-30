@@ -1,8 +1,10 @@
 import csv
 from operator import itemgetter
+import warnings
 
 import numpy as np
 import pandas as pd
+from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 
 
@@ -56,6 +58,7 @@ class TheoreticalSemivariogram:
         self.chosen_model_name = None
         self.params = None
         self.model_error = None
+        self.is_weighted = False
 
     # MODELS
 
@@ -211,6 +214,9 @@ class TheoreticalSemivariogram:
             between minimal range of empirical semivariance and maximum range of empirical semivariance.
         """
 
+        if weighted:
+            self.is_weighted = True
+
         # models
         models = {
             'spherical': self.spherical_model,
@@ -236,16 +242,13 @@ class TheoreticalSemivariogram:
         ranges = np.linspace(minrange, maxrange, number_of_ranges)
 
         # Calculate model errors
-        model_errors = [('NULL model', base_error, None)]
+        model_errors = [('Linear (LS) reference model', base_error, None)]
         for model in models:
             optimal_range = self.calculate_range(models[model], ranges, nugget, sill)
 
             # output model
             params = [nugget, sill, optimal_range]
-            if not weighted:
-                model_error = self.calculate_model_error(models[model], params)
-            else:
-                model_error = self.calculate_model_error(models[model], params, True)
+            model_error = self.calculate_model_error(models[model], params)
 
             model_errors.append((model, model_error, params))
             if self.verbose:
@@ -254,7 +257,7 @@ class TheoreticalSemivariogram:
         # Select the best model
         sorted_errors = sorted(model_errors, key=itemgetter(1))
 
-        if sorted_errors[0][0] == 'NULL model':
+        if sorted_errors[0][0] == 'Linear (LS) reference model':
             # This is unlikely case when error estimated as the squared distance between extrapolated values and
             # x axis is smaller than models' errors
 
@@ -264,10 +267,12 @@ class TheoreticalSemivariogram:
             self.theoretical_model = models[model_name]
             self.params = model_params
 
-            print('WARNING: NULL model error is better than estimated models, its value is:', sorted_errors[0][1])
-            print('Chosen model: {}, with value of: {}.'.format(
-                model_name, model_error
-            ))
+            warning_msg = 'WARNING: linear model fitted to the experimental variogram is better than the core models!'
+            warnings.warn(warning_msg)
+            if self.verbose:
+                print('Chosen model: {}, with value of: {}.'.format(
+                    model_name, model_error
+                ))
 
         else:
 
@@ -301,8 +306,8 @@ class TheoreticalSemivariogram:
                                               self.params[2])
         return output_model
 
-
-    def _curve_fit(self, a, b, x):
+    @staticmethod
+    def _curve_fit_function(x, a, b):
         """
         Method fits data into a 1st order polynomial curve where:
             y = a * x + b
@@ -321,32 +326,66 @@ class TheoreticalSemivariogram:
         y = a * x + b
         return y
 
+    def _get_weights(self):
+        """
+        Method creates weights based on the lags for each semivariogram point
+
+        OUTPUT:
+
+        :returns: (numpy array)
+        """
+
+        nh = np.sqrt(self.empirical_semivariance[:, 2])
+        vals = self.empirical_semivariance[:, 1]
+        nh_divided_by_vals = np.divide(nh,
+                                       vals,
+                                       out=np.zeros_like(nh),
+                                       where=vals != 0)
+        return nh_divided_by_vals
+
     def calculate_base_error(self):
         """
-        Method calculates base error as the least squared model of experimental semivariance.
-        """
-        n = len(self.empirical_semivariance[:, 1])
-        zeros = np.zeros(n)
-        error = np.mean(np.abs(self.empirical_semivariance[:, 1] - zeros))
-        return error
+        Method calculates base error as the difference between the least squared model
+            of experimental semivariance and the experimental semivariance points.
 
-    def calculate_model_error(self, model, par, weight=False):
-        if not weight:
-            error = np.abs(self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
-                                                                     par[0],
-                                                                     par[1],
-                                                                     par[2]))
+        OUTPUT:
+
+        :returns: (float) mean squared difference error
+        """
+
+        popt, _pcov = curve_fit(self._curve_fit_function,
+                                self.empirical_semivariance[:, 0],
+                                self.empirical_semivariance[:, 1])
+        a, b = popt
+        y = self._curve_fit_function(self.empirical_semivariance[:, 0],
+                                     a, b)
+        error = np.sqrt((self.empirical_semivariance[:, 1] - y) ** 2)
+
+        if not self.is_weighted:
+            mean_error = np.mean(error)
+            return mean_error
         else:
-            nh = np.sqrt(self.empirical_semivariance[:, 2])
-            vals = self.empirical_semivariance[:, 1]
-            nh_divided_by_vals = np.divide(nh,
-                                           vals,
-                                           out=np.zeros_like(nh),
-                                           where=vals != 0)
-            error = np.abs(nh_divided_by_vals *
-                           (vals - model(self.empirical_semivariance[:, 0], par[0], par[1], par[2])))
-        error = np.mean(error)
-        return error
+            weights = self._get_weights()
+            mean_error = np.mean(weights * error)
+            return mean_error
+
+    def calculate_model_error(self, model, par):
+        """
+        Function calculates error between specific models and experimental curve.
+
+        OUTPUT:
+
+        :returns: (float) mean squared difference between model and experimental variogram.
+        """
+        error = np.sqrt((self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
+                                                                   par[0],
+                                                                   par[1],
+                                                                   par[2])) ** 2)
+        if not self.is_weighted:
+            return np.mean(error)
+        else:
+            weights = self._get_weights()
+            return np.mean(weights * error)
 
     def predict(self, distances):
         """
@@ -391,7 +430,7 @@ class TheoreticalSemivariogram:
                 writer.writeheader()
                 writer.writerow(model_parameters)
         except IOError:
-            print("I/O error, provided path is not valid")
+            raise IOError("I/O error, provided path for semivariance parameters is not valid")
 
     def import_model(self, filename):
         """
@@ -424,7 +463,7 @@ class TheoreticalSemivariogram:
                         raise KeyError('You have provided wrong model name. Available names: spherical, gaussian, '
                                        'exponential, linear.')
         except IOError:
-            print("I/O error, provided path is not valid")
+            raise IOError("I/O error, provided path for semivariance parameters is not valid")
 
     def export_semivariance(self, filename):
         """
@@ -446,7 +485,7 @@ class TheoreticalSemivariogram:
             filename = filename + '.csv'
 
         # Create DataFrame to export
-        cols = ['lag', 'experimental', 'theoretical']
+
         theo_values = self.calculate_values()
         dt = {
             'lag': self.empirical_semivariance[:, 0],
