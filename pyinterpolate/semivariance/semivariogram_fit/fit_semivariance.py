@@ -301,10 +301,29 @@ class TheoreticalSemivariogram:
                                               self.params[2])
         return output_model
 
+
+    def _curve_fit(self, a, b, x):
+        """
+        Method fits data into a 1st order polynomial curve where:
+            y = a * x + b
+
+        INPUT:
+
+        :param a: number or numpy array,
+        :param b: number or numpy array,
+        :param x: number or numpy array.
+
+        OUTPUT:
+
+        :return: y -> a * x + b | number or numpy array.
+        """
+
+        y = a * x + b
+        return y
+
     def calculate_base_error(self):
         """
-        Method calculates base error as a squared difference between experimental semivariogram and
-        a "flat line" on the x-axis (only zeros)
+        Method calculates base error as the least squared model of experimental semivariance.
         """
         n = len(self.empirical_semivariance[:, 1])
         zeros = np.zeros(n)
