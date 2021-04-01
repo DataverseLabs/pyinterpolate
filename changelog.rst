@@ -11,7 +11,8 @@ XXXX-XX-XX
 
 **version 0.2.3**
 
-* more parameters to store (and access) in TheoreticalSemivariogram class
+* more parameters to store (and access) in TheoreticalSemivariogram class,
+* error weighting against linear regression model,
 
 2021-03-10
 ----------
