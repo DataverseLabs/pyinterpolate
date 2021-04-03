@@ -1,5 +1,6 @@
 # Base libraries
 import numpy as np
+from tqdm import trange
 
 # Data vizualization libraries
 import matplotlib.pyplot as plt
@@ -199,9 +200,6 @@ class RegularizedSemivariogram:
     def _check_deviation_ratio(self):
         return bool(self.deviation_ratio <= self.min_deviation_ratio)
 
-    def _check_loop_limit(self):
-        return bool(self.iter >= self.max_iters)
-
     def _check_diff_d_stat(self):
         if self.diff_decrease < self.min_diff_decrease:
 
@@ -221,9 +219,8 @@ class RegularizedSemivariogram:
     def _check_algorithm(self):
         t1 = self._check_deviation_ratio()  # Default False
         t2 = self._check_diff_d_stat()  # Default False
-        t3 = self._check_loop_limit()  # Default False
 
-        cond = not (t1 or t2 or t3)  # Default False
+        cond = not (t1 or t2)  # Default False
 
         return cond
 
@@ -339,54 +336,57 @@ class RegularizedSemivariogram:
 
         # Start iteration procedure
 
-        while self._check_algorithm():
-            # Compute new experimental values for new experimental point support model
-
-            self.temp_experimental_semivariogram, weights = self._rescale_optimal_point_support()
-            self.weights.append(weights)
-
-            # Fit rescaled empirical semivariogram to the new theoretical function
-            self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(areal_centroids,
-                                                                                 self.temp_experimental_semivariogram)
-            self.temp_theoretical_semivariogram_model.find_optimal_model(
-                weighted=is_weighted,
-                number_of_ranges=ranges
-            )
-
-            # Regularize model
-            self.temp_regularized_model = self._regularize(
-                self.temp_experimental_semivariogram,
-                self.temp_theoretical_semivariogram_model
-            )
-
-            # Compute difference statistics
-
-            self.temp_deviation = self._calculate_deviation(self.temp_regularized_model,
-                                                            self.initial_theoretical_model_of_areal_data)
-
-            if self.temp_deviation < self.optimal_deviation:
-                self.weight_change = False
-
-                self.diff_decrease = np.abs(self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
-                self.deviation_ratio = self.temp_deviation / self.deviations[0]
-
-                self.optimal_deviation = self.temp_deviation
-
-                # Update models
-                self.optimal_theoretical_model = self.temp_theoretical_semivariogram_model
-                self.optimal_regularized_model = self.temp_regularized_model
-
+        for _ in trange(self.max_iters):
+            if not self._check_algorithm():
+                break
             else:
-                self.weight_change = True
+                # Compute new experimental values for new experimental point support model
 
-            self.deviations.append(self.temp_deviation)
-            self.iter = self.iter + 1
+                self.temp_experimental_semivariogram, weights = self._rescale_optimal_point_support()
+                self.weights.append(weights)
 
-            # Update models if self.store_models is set to True
-            if self.store_models:
-                self.t_theo_list.append(self.temp_theoretical_semivariogram_model)
-                self.t_exp_list.append(self.temp_experimental_semivariogram)
-                self.t_reg_list.append(self.temp_regularized_model)
+                # Fit rescaled empirical semivariogram to the new theoretical function
+                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(areal_centroids,
+                                                                                     self.temp_experimental_semivariogram)
+                self.temp_theoretical_semivariogram_model.find_optimal_model(
+                    weighted=is_weighted,
+                    number_of_ranges=ranges
+                )
+
+                # Regularize model
+                self.temp_regularized_model = self._regularize(
+                    self.temp_experimental_semivariogram,
+                    self.temp_theoretical_semivariogram_model
+                )
+
+                # Compute difference statistics
+
+                self.temp_deviation = self._calculate_deviation(self.temp_regularized_model,
+                                                                self.initial_theoretical_model_of_areal_data)
+
+                if self.temp_deviation < self.optimal_deviation:
+                    self.weight_change = False
+
+                    self.diff_decrease = np.abs(self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
+                    self.deviation_ratio = self.temp_deviation / self.deviations[0]
+
+                    self.optimal_deviation = self.temp_deviation
+
+                    # Update models
+                    self.optimal_theoretical_model = self.temp_theoretical_semivariogram_model
+                    self.optimal_regularized_model = self.temp_regularized_model
+
+                else:
+                    self.weight_change = True
+
+                self.deviations.append(self.temp_deviation)
+                self.iter = self.iter + 1
+
+                # Update models if self.store_models is set to True
+                if self.store_models:
+                    self.t_theo_list.append(self.temp_theoretical_semivariogram_model)
+                    self.t_exp_list.append(self.temp_experimental_semivariogram)
+                    self.t_reg_list.append(self.temp_regularized_model)
 
         # Get theoretical model from regularized
         self.final_theoretical_model = self.temp_theoretical_semivariogram_model

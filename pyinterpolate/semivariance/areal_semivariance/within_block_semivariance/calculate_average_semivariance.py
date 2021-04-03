@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 from pyinterpolate.transform.select_values_in_range import select_values_in_range
 
 
@@ -61,7 +60,7 @@ def calculate_average_semivariance(between_block_distances,
     # Select distances per lag
 
     avg_semivars = []
-    for distance_lag in tqdm(grouped_distances):
+    for distance_lag in grouped_distances:
         avg_sem = []
         for idx, base_area_id in enumerate(areas_list):
             # Select internal semivariance of base area for chosen lag
