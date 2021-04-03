@@ -40,10 +40,9 @@ class TestKriging(unittest.TestCase):
         return int(km[0])
 
     @staticmethod
-    def _test_simple_kriging(kriging_model, unknown_loc, number_of_ranges):
-        km = kriging_model.simple_kriging(unknown_loc, number_of_ranges, test_anomalies=False)
+    def _test_simple_kriging(kriging_model, unknown_loc, number_of_ranges, mean):
+        km = kriging_model.simple_kriging(unknown_loc, number_of_ranges, global_mean=mean, test_anomalies=False)
         return int(km[0])
-
 
     def test_kriging(self):
         # Set datasets
@@ -51,12 +50,14 @@ class TestKriging(unittest.TestCase):
         pos = [[11, 1, 1], [23, 2, 2], [33, 3, 3], [14, 44, 4], [13, 10, 9], [12, 55, 35], [11, 9, 7]]
         pos = np.array(pos)
 
+        sk_mean = np.mean(pos[:, -1])
+
         # Set semivariogram and kriging model
         s_model = SetSemivariogramModel(pos, 5)
         k_model = SetKrigingModel(pos, s_model.theoretical_semivariance)
 
         kok = self._test_ordinary_kriging(k_model.kriging_model, unknown_pos, 6)
-        ksk = self._test_simple_kriging(k_model.kriging_model, unknown_pos, 6)
+        ksk = self._test_simple_kriging(k_model.kriging_model, unknown_pos, 6, sk_mean)
 
         self.assertEqual(kok, 7, "Kriging value should be 7")
         self.assertEqual(ksk, kok, "Simple and Ordinary Kriging values should be the same")

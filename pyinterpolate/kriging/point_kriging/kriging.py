@@ -99,7 +99,7 @@ class Krige:
             sigma = np.sqrt(sigmasq)
         return zhat, sigma, w[-1], w
 
-    def simple_kriging(self, unknown_location, number_of_neighbours, mu=None, test_anomalies=True):
+    def simple_kriging(self, unknown_location, number_of_neighbours, global_mean, test_anomalies=True):
         """
         Function predicts value at unknown location with Simple Kriging technique.
 
@@ -108,9 +108,7 @@ class Krige:
         :param unknown_location: (tuple) position of unknown location,
         :param number_of_neighbours: (int) number of the closest locations to the unknown position which should be
             included in the modeling,
-        :param mu: (float) global mean which should be known before processing. If not given then it is calculated
-            from the sample but then it may cause a relative large errors (this mean is expectation of the random field,
-            so without knowledge of the ongoing processes it is unknown),
+        :param global_mean: (float) global mean which should be known before processing,
         :param test_anomalies: (bool) check if weights are negative.
 
         OUTPUT:
@@ -124,11 +122,6 @@ class Krige:
                                              number_of_neighbours=number_of_neighbours)
         n = number_of_neighbours
 
-        if mu is None:
-            vals = self.dataset[:, -1]
-            mu = np.sum(vals)
-            mu = mu / len(vals)
-
         unknown_distances = prepared_data[:, -1]
         k = self.model.predict(unknown_distances)
         k = k.T
@@ -138,9 +131,9 @@ class Krige:
         predicted = np.array(predicted_weights.reshape(n, n))
 
         w = np.linalg.solve(predicted, k)
-        r = prepared_data[:, -2] - mu
+        r = prepared_data[:, -2] - global_mean
         zhat = r.dot(w)
-        zhat = zhat + mu
+        zhat = zhat + global_mean
 
         # Test for anomalies
         if test_anomalies:
@@ -158,4 +151,4 @@ class Krige:
             sigma = 0
         else:
             sigma = np.sqrt(sigmasq)
-        return zhat, sigma, mu, w
+        return zhat, sigma, global_mean, w

@@ -290,9 +290,31 @@ div.rendered_html tbody tr:hover {
 <li><p>Load semivariogram (regularized),</p></li>
 <li><p>Build point-based map of better spatial resolution.</p></li>
 </ol>
-<div class="section" id="Level:-Advanced">
-<h3>Level: Advanced<a class="headerlink" href="#Level:-Advanced" title="Permalink to this headline">¶</a></h3>
 </div>
+<div class="section" id="Level:-Advanced">
+<h2>Level: Advanced<a class="headerlink" href="#Level:-Advanced" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
@@ -300,10 +322,10 @@ div.rendered_html tbody tr:hover {
 <p>Poisson Kriging technique is used to model spatial count data. We are analyzing special case where data is counted over areas. Those areas may have irregular shapes and sizes beacuse they represent administrative regions.</p>
 <p>In this tutorial we try to predict rates of Breast Cancer in Pennsylvania counties. Along with areal data we use U.S. Census 2010 data for population blocks.</p>
 <blockquote>
-<div><p>Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/breast_cancer_rate_per_area_2.shp</span></code>.</p>
+<div><p>Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/cancer_data.shp</span></code>.</p>
 </div></blockquote>
 <blockquote>
-<div><p>Population blocks data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/population_data/population_blocks.shp</span></code></p>
+<div><p>Population blocks data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/population_data/cancer_population_base.shp</span></code></p>
 </div></blockquote>
 <p>This tutorial covers following steps:</p>
 <ol class="arabic simple">
@@ -316,7 +338,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -331,16 +353,16 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/breast_cancer_rate_per_area_2.shp&#39;</span>
-<span class="n">point_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/population_blocks.shp&#39;</span>
+<span></span><span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/cancer_data.shp&#39;</span>
+<span class="n">point_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/population_data/cancer_population_base.shp&#39;</span>
 
-<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
 <span class="n">areal_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
-<span class="n">points_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;POPULATION&#39;</span>
+<span class="n">points_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
 
 
 <span class="n">areal_data</span> <span class="o">=</span> <span class="n">prepare_areal_shapefile</span><span class="p">(</span><span class="n">areal_data_file</span><span class="p">,</span>
@@ -352,7 +374,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -364,12 +386,12 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f36f91d5910&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc356b3add0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -388,7 +410,7 @@ div.rendered_html tbody tr:hover {
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>In this step we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regulariztion along with the Poisson Kriging but it is a very long process and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -401,15 +423,17 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="3)-Perform-Area-to-Point-smoothing-of-areal-data.">
 <h2>3) Perform Area to Point smoothing of areal data.<a class="headerlink" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data." title="Permalink to this headline">¶</a></h2>
 <p>The process of map smoothing is straightforward. We need to initialize Kriging model then invoke method <strong>regularize_data</strong>. This method takes three parameters:</p>
-<p>=&gt; <strong>number of observations</strong> (the most important parameter - how many neighbors are affecting your area of analysis), =&gt; minimum <strong>search radius</strong> (minimum search radius for analysis from your area of interest, if there are less areas than number of observations then the new, next closest neighbors are included in the analysis), =&gt; <strong>data_crs</strong> with default <strong>EPSG 4326</strong>.</p>
+<p>=&gt; <strong>number of observations</strong> (the most important parameter - how many neighbors are affecting your area of analysis),</p>
+<p>=&gt; minimum <strong>search radius</strong> (minimum search radius for analysis from your area of interest, if there are less areas than number of observations then the new, next closest neighbors are included in the analysis),</p>
+<p>=&gt; <strong>data_crs</strong> with default <strong>EPSG 4326</strong>.</p>
 <p>Method returns GeoDataFrame with points and predicted values. It iteratively re-calculates each area risk and returns predictions per point. In Area to Area Kriging those predictions where aggregated, now we leave them and use them as a smooth map of areal risk.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">number_of_obs</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">radius</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">radius</span> <span class="o">=</span> <span class="mi">60000</span>  <span class="c1"># 60 km</span>
 
 <span class="n">kriging_model</span> <span class="o">=</span> <span class="n">ArealKriging</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram</span><span class="p">,</span>
     <span class="n">known_areas</span><span class="o">=</span><span class="n">areal_data</span><span class="p">,</span>
@@ -419,7 +443,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -434,7 +458,7 @@ div.rendered_html tbody tr:hover {
 <h2>4) Visualize data<a class="headerlink" href="#4)-Visualize-data" title="Permalink to this headline">¶</a></h2>
 <p>The last step is data visualization. We use choropleth map from the GeoPandas package, but you can store smoothed map to shapefile of points and process it in a different place or with specific software (in our idea the best for it is <strong>QGIS</strong>).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -443,7 +467,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -475,65 +499,65 @@ div.rendered_html tbody tr:hover {
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>POINT (-76.19430 41.94016)</td>
-      <td>1.952190</td>
-      <td>3.694180</td>
-      <td>1.928216</td>
+      <td>25019</td>
+      <td>POINT (2117322.312 556124.507)</td>
+      <td>0.096122</td>
+      <td>7.484998</td>
+      <td>37.640987</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0</td>
-      <td>POINT (-76.26794 41.87167)</td>
-      <td>2.384043</td>
-      <td>5.122247</td>
-      <td>1.928216</td>
+      <td>25019</td>
+      <td>POINT (2134642.820 556124.507)</td>
+      <td>154.462891</td>
+      <td>6.656589</td>
+      <td>37.640987</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0</td>
-      <td>POINT (-76.17911 41.84528)</td>
-      <td>1.953132</td>
-      <td>4.280473</td>
-      <td>1.928216</td>
+      <td>36121</td>
+      <td>POINT (1424501.989 556124.507)</td>
+      <td>5.863822</td>
+      <td>8.887317</td>
+      <td>22.847579</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0</td>
-      <td>POINT (-76.22488 41.78093)</td>
-      <td>2.443223</td>
-      <td>5.289298</td>
-      <td>1.928216</td>
+      <td>36121</td>
+      <td>POINT (1424501.989 546124.507)</td>
+      <td>6.712184</td>
+      <td>8.617830</td>
+      <td>22.847579</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>0</td>
-      <td>POINT (-76.32545 41.96352)</td>
-      <td>1.915817</td>
-      <td>4.492015</td>
-      <td>1.928216</td>
+      <td>36121</td>
+      <td>POINT (1433162.243 561124.507)</td>
+      <td>20.638717</td>
+      <td>8.710094</td>
+      <td>22.847579</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-<span class="n">smoothed_area</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;estimated value&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+<span></span><span class="n">base</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="n">smoothed_area</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;estimated value&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f36f883d090&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc34b4fda50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -610,7 +634,7 @@ div.rendered_html tbody tr:hover {
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

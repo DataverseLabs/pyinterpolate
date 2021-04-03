@@ -295,11 +295,37 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2021-04-03</p></td>
+<td><p>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated point data source.</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to perform prediction with Ordinary and Simple Kriging. We will compare different number of ranges and test outcomes of processing with root mean squared error.</p>
 <p>Ordinary and Simple Kriging are the simplest form of Kriging but it’s still very powerful technique.</p>
-<p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
+<p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
 </div>
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
@@ -480,9 +506,10 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[ 15.11563642  52.75044908 106.60320282]
+[15.11563642 52.72105611 89.48275757]
 </pre></div></div>
 </div>
+<p><strong>Simple Kriging</strong> technique may be used when process mean over sampling area is known. It is rarely the case, that’s why Ordinary Kriging is the first choice for many applications. We know global mean beacuse we have whole dataset but in the real-world scenario we cannot divide set into training and test sets and then get mean from the whole dataset - it is a information leak from the test set into a model!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -499,7 +526,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 
 <span class="n">sk_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span><span class="n">unknown_location</span><span class="o">=</span><span class="n">known_val</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                               <span class="n">number_of_neighbours</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-                              <span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+                              <span class="n">global_mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ordinary Kriging:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">ok_pred</span><span class="p">)</span>
@@ -518,20 +545,20 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(106.60320281982419, 3.4162188631768915, -7.210201609690972e-16, array([ 1.00000000e+00, -1.95041096e-16,  2.07186440e-16, -1.73120459e-16,
-        1.52892264e-16,  2.43989475e-16, -2.50661660e-16, -1.00506383e-16,
-        3.48014562e-16, -1.11069338e-16, -1.69262995e-16,  4.12207614e-16,
-        5.86141648e-17, -3.24901411e-16, -3.64134441e-16,  2.46221941e-16,
-       -7.21020161e-16]))
+(89.48275756835939, 3.4617337514931537, 1.870007043001144e-15, array([ 1.00000000e+00,  1.65992869e-18,  6.74020911e-17,  3.16586372e-16,
+       -5.67672743e-17, -2.94107227e-16, -1.57294435e-16,  7.37586143e-17,
+       -2.92477145e-16,  4.26945661e-16,  1.73151749e-17,  4.11879029e-16,
+        2.87430469e-17, -8.82499278e-17,  1.28202501e-16, -5.83966804e-16,
+        1.87000704e-15]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(106.60320281982423, 3.4162188631768924, 40.9509380348875, array([ 1.00000000e+00, -3.03118592e-16,  1.06059436e-16,  5.68837727e-17,
-        2.68067239e-16,  2.23832969e-16, -2.61159876e-16, -2.11287169e-16,
-        1.58916612e-16, -1.61334365e-16, -3.45716050e-16,  7.99571057e-17,
-        1.85867338e-16,  3.36420521e-17, -4.77133029e-18,  3.48434222e-17]))
+(89.48275756835938, 3.461733751493153, 40.9509380348875, array([ 1.00000000e+00,  9.91274366e-17, -2.48603244e-16,  6.75033515e-16,
+       -1.02134815e-17, -5.01843240e-16, -3.34629032e-16,  2.22176812e-16,
+        1.31854557e-16,  1.41338299e-17,  2.47361731e-16,  4.88719318e-16,
+        5.66972759e-17, -3.66236735e-17, -1.57609050e-17, -6.84711500e-16]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -579,7 +606,7 @@ Difference between real value and SK:
 <ol class="arabic simple">
 <li><p>Set the Kriging model. Our Krige class is in fact a container for theoretical semivariogram model and known points in our dataset. At this stage it is method agnostic and it doesn’t matter if you’d like to perform Ordinary or Simple Kriging.</p></li>
 <li><p>In the next cell we take one arbitrary value from known points list.</p></li>
-<li><p>Then we perform Ordinary and Simple Kriging. Both methods have similar arguments but Simple Kriging requires additional piece of information: mean of the process. If you don’t know the mean then Simple Kriging derives it as a sample mean from the known values (WARNING: this is not recommended, in the future versions of library this process will invoke Warning). If you do not know a process mean it is good idea to leave Simple Kriging and choose Ordinary Kriging instead.</p></li>
+<li><p>Then we perform Ordinary and Simple Kriging. Both methods have similar arguments but Simple Kriging requires additional piece of information: global mean of the process. If you don’t know the mean then leave Simple Kriging and choose Ordinary Kriging instead.</p></li>
 <li><p>Both methods return four objects. The first one is predicted value, then estimated error standard deviation, estimated mean (ordinary kriging) / mean (simple kriging) and weights matrix.</p></li>
 <li><p>Then we calculate difference between predicted and real values. As you may notice difference between Kriging prediction and real value is 0 (due to the floating point precision it may be extremly close to 0 if we left floats).</p></li>
 </ol>
@@ -634,19 +661,19 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.07407925592792708
+RMSE: 0.27210508529694266
 
 Number of neighbors: 8
-RMSE: 0.1717779738967451
+RMSE: 0.6047181144378726
 
 Number of neighbors: 16
-RMSE: 0.1839213538041129
+RMSE: 0.9996994963632915
 
 Number of neighbors: 32
-RMSE: 0.1704907004800198
+RMSE: 1.177813575002304
 
 Number of neighbors: 64
-RMSE: 0.3037256314912895
+RMSE: 1.076636461660172
 
 </pre></div></div>
 </div>
@@ -660,7 +687,7 @@ RMSE: 0.3037256314912895
 <li><p>RMSE value is used in this approach because it is a very good indicator of outliers in data. You should consider simple difference if you want to know if your kriging overestimates values (negative mean differences) or underestimates them (positive mean differences). There are other techniques to measure predictions error.</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -671,7 +698,7 @@ RMSE: 0.3037256314912895
         <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span>
             <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
             <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-            <span class="n">mu</span><span class="o">=</span><span class="n">mean_areal</span><span class="p">,</span>
+            <span class="n">global_mean</span><span class="o">=</span><span class="n">mean_areal</span><span class="p">,</span>
             <span class="n">test_anomalies</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -683,7 +710,7 @@ RMSE: 0.3037256314912895
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -708,27 +735,26 @@ RMSE: 0.3037256314912895
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 1.4000179356643798
+RMSE: 3.1859052618290207
 
 Number of neighbors: 8
-RMSE: 0.7767736449455747
+RMSE: 0.4152432987941239
 
 Number of neighbors: 16
-RMSE: 0.27065108990441544
+RMSE: 0.040998827252550996
 
 Number of neighbors: 32
-RMSE: 0.03651135077763712
+RMSE: 0.9114661983311976
 
 Number of neighbors: 64
-RMSE: 0.29264219039382056
+RMSE: 1.0297999361759764
 
 </pre></div></div>
 </div>
 </div>
 <div class="section" id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Usually Simple Kriging will give you worse results than Ordinary Kriging. Especially if you do not know process mean. What is more important: Simple Kriging returned best results for the same number of neighbors as Ordinary Kriging. That’s why it is good idea to compare both techniques if you have such opportunity (process mean, or known-points sample mean if you like a risk). Data division for test and train set may influence Simple Kriging results and for some realizations RMSE will be very
-low but for the others it is extremely large.</p>
+<p>Usually Simple Kriging will give us worse results than Ordinary Kriging beacuse we do not know process mean. If we know process mean we can compare both techniques and check if there are similarities or differences in relation to error-per-lags. Data division for test and train set may influence Simple Kriging results and for some realizations RMSE will be very low but for the others it is extremely large.</p>
 <hr class="docutils" />
 </div>
 </div>
@@ -797,7 +823,7 @@ low but for the others it is extremely large.</p>
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
