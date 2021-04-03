@@ -14,6 +14,7 @@ XXXX-XX-XX
 * more parameters to store (and access) in TheoreticalSemivariogram class,
 * error weighting against the linear regression model (ax + b),
 * global mean for Simple Kriging as a required parameter,
+* tqdm progress bar to `RegularizedSemivariogram.transform()` and `interpolate_raster()` functions,
 
 2021-03-10
 ----------
