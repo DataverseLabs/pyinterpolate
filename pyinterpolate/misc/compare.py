@@ -12,7 +12,7 @@ class KrigingComparison:
     """
 
     def __init__(self, theoretical_semivariogram, areas, points, search_radius, ranges_of_observations,
-                 training_set_frac=0.8, iters=20):
+                 simple_kriging_mean=None, training_set_frac=0.8, iters=20):
         """
 
         INITIALIZATION PARAMS:
@@ -33,6 +33,7 @@ class KrigingComparison:
         self.points = points
         self.radius = search_radius
         self.ranges = ranges_of_observations
+        self.simple_kriging_mean = simple_kriging_mean
         self.frac = training_set_frac
         self.iters = iters
 
@@ -110,7 +111,7 @@ class KrigingComparison:
                 c_pred.append(err)
         return np.mean(c_pred)
 
-    def _run_k_point(self, training_areas, test_areas, number_of_obs):
+    def _run_ok_point(self, training_areas, test_areas, number_of_obs):
         # Ordinary and Simple Kriging
 
         kriging_data = training_areas[:, -3:]
@@ -118,7 +119,6 @@ class KrigingComparison:
                           known_points=kriging_data)
 
         o_pred = []
-        s_pred = []
         for unknown_area in test_areas:
             unknown_centroids = unknown_area[-3:-1]
 
@@ -133,8 +133,23 @@ class KrigingComparison:
                 err = unknown_area[-1]
                 o_pred.append(err)
 
+        return np.mean(o_pred)
+
+    def _run_sk_point(self, training_areas, test_areas, number_of_obs):
+        # Ordinary and Simple Kriging
+
+        kriging_data = training_areas[:, -3:]
+        p_kriging = Krige(semivariogram_model=self.semivariance,
+                          known_points=kriging_data)
+
+        s_pred = []
+        for unknown_area in test_areas:
+            unknown_centroids = unknown_area[-3:-1]
+
+            # Predict
             try:
-                predicted = p_kriging.simple_kriging(unknown_centroids, number_of_obs)
+                predicted = p_kriging.simple_kriging(unknown_centroids, number_of_obs,
+                                                     global_mean=self.simple_kriging_mean)
                 err = np.sqrt(
                     (unknown_area[-1] - predicted[0]) ** 2
                 )
@@ -143,7 +158,7 @@ class KrigingComparison:
                 err = unknown_area[-1]
                 s_pred.append(err)
 
-        return np.mean(o_pred), np.mean(s_pred)
+        return np.mean(s_pred)
 
     def run_tests(self):
         """
@@ -167,17 +182,28 @@ class KrigingComparison:
                 c_eval = self._run_pk_centroid(sets[0], sets[1], sets[2], sets[3], number_of_obs)
                 ck_evals.append(c_eval)
 
-                # OK and SK
-                osk_eval = self._run_k_point(sets[0], sets[2], number_of_obs)
-                ok_evals.append(osk_eval[0])
-                sk_evals.append(osk_eval[1])
+                # Ordinary Kriging
+                ok_eval = self._run_ok_point(sets[0], sets[2], number_of_obs)
+                ok_evals.append(ok_eval)
+
+                # Simple Kriging
+                if self.simple_kriging_mean is None:
+                    pass
+                else:
+                    sk_eval = self._run_sk_point(sets[0], sets[2], number_of_obs)
+                    sk_evals.append(sk_eval[1])
 
             # Mean of values
 
             pk_rmse = np.mean(pk_evals)
             ck_rmse = np.mean(ck_evals)
             ok_rmse = np.mean(ok_evals)
-            sk_rmse = np.mean(sk_evals)
+
+            # Simple Kriging case
+            if self.simple_kriging_mean is None:
+                sk_rmse = np.nan
+            else:
+                sk_rmse = np.mean(sk_evals)
 
             # Update dict
             d = self.k_types.copy()

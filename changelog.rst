@@ -12,7 +12,8 @@ XXXX-XX-XX
 **version 0.2.3**
 
 * more parameters to store (and access) in TheoreticalSemivariogram class,
-* error weighting against linear regression model,
+* error weighting against the linear regression model (ax + b),
+* global mean for Simple Kriging as a required parameter,
 
 2021-03-10
 ----------

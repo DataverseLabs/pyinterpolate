@@ -295,6 +295,28 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this headline">¶</a></h2>
 </div>
+<div class="section" id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to read and prepare data for semivariogram modeling, how to manually find the best step size between lags and how to detect outliers in our data which can affect final semivariogram.</p>
@@ -653,7 +675,7 @@ before analysis. Other interesting fact is that from 8 lags we are able to see s
 </div>
 <div class="section" id="3)-Detect-and-remove-outliers">
 <h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Permalink to this headline">¶</a></h2>
-<p>With idea how Variogram Point Cloud works we can detect and “remove” outliers from our dataset. We use for it other dataset which represents annual number of accidents per county in Poland. Each county will be transformed to its centroid. Those centroids are not evenly spaced and we can expect that for some number of steps dataset may be modeled incorrectly.</p>
+<p>With idea how Variogram Point Cloud works we can detect and “remove” outliers from our dataset. We use for it other dataset which represents the breast cancer rates in counties of Northeastern part of the U.S. Each county will be transformed into its centroid. Those centroids are not evenly spaced and we can expect that for some number of steps dataset may be modeled incorrectly.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -661,8 +683,8 @@ before analysis. Other interesting fact is that from 8 lags we are able to see s
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Read and prepare data</span>
 
-<span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/breast_cancer_rate_per_area_2.shp&#39;</span>
-<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+<span class="n">areal_data_file</span> <span class="o">=</span> <span class="s1">&#39;../sample_data/areal_data/cancer_data.shp&#39;</span>
+<span class="n">areal_id_column_name</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
 <span class="n">areal_val_column_name</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
 
 <span class="n">areal_data</span> <span class="o">=</span> <span class="n">prepare_areal_shapefile</span><span class="p">(</span><span class="n">areal_data_file</span><span class="p">,</span>
@@ -727,81 +749,81 @@ before analysis. Other interesting fact is that from 8 lags we are able to see s
 <div class="highlight"><pre>
 Lags per area: 4
 
-Lag 0.0 has 461 points.
-Lag 1.3488600800562685 has 1912 points.
-Lag 2.697720160112537 has 1286 points.
-Lag 4.046580240168805 has 678 points.
+Lag 0.0 has 6893 points.
+Lag 301214.2660116966 has 26756 points.
+Lag 602428.5320233932 has 11382 points.
+Lag 903642.7980350899 has 1962 points.
 
 ###########
 
 Lags per area: 8
 
-Lag 0.0 has 109 points.
-Lag 0.6744300400281342 has 806 points.
-Lag 1.3488600800562685 has 1000 points.
-Lag 2.0232901200844027 has 852 points.
-Lag 2.697720160112537 has 640 points.
-Lag 3.372150200140671 has 466 points.
-Lag 4.046580240168805 has 336 points.
-Lag 4.721010280196939 has 230 points.
+Lag 0.0 has 2153 points.
+Lag 150607.1330058483 has 11272 points.
+Lag 301214.2660116966 has 14320 points.
+Lag 451821.3990175449 has 10398 points.
+Lag 602428.5320233932 has 5324 points.
+Lag 753035.6650292415 has 2544 points.
+Lag 903642.7980350899 has 822 points.
+Lag 1054249.931040938 has 236 points.
 
 ###########
 
 Lags per area: 16
 
-Lag 0.0 has 67 points.
-Lag 0.3372150200140671 has 198 points.
-Lag 0.6744300400281342 has 394 points.
-Lag 1.0116450600422013 has 496 points.
-Lag 1.3488600800562685 has 524 points.
-Lag 1.6860751000703356 has 484 points.
-Lag 2.0232901200844027 has 436 points.
-Lag 2.3605051400984696 has 340 points.
-Lag 2.697720160112537 has 306 points.
-Lag 3.0349351801266042 has 276 points.
-Lag 3.372150200140671 has 252 points.
-Lag 3.709365220154738 has 196 points.
-Lag 4.046580240168805 has 174 points.
-Lag 4.383795260182873 has 136 points.
-Lag 4.721010280196939 has 114 points.
-Lag 5.0582253002110065 has 70 points.
+Lag 0.0 has 577 points.
+Lag 75303.56650292415 has 3670 points.
+Lag 150607.1330058483 has 5760 points.
+Lag 225910.69950877246 has 7052 points.
+Lag 301214.2660116966 has 7268 points.
+Lag 376517.83251462074 has 6482 points.
+Lag 451821.3990175449 has 5298 points.
+Lag 527124.965520469 has 3738 points.
+Lag 602428.5320233932 has 2632 points.
+Lag 677732.0985263174 has 1854 points.
+Lag 753035.6650292415 has 1250 points.
+Lag 828339.2315321657 has 728 points.
+Lag 903642.7980350899 has 398 points.
+Lag 978946.3645380139 has 224 points.
+Lag 1054249.931040938 has 110 points.
+Lag 1129553.4975438623 has 42 points.
 
 ###########
 
 Lags per area: 32
 
-Lag 0.0 has 67 points.
-Lag 0.16860751000703356 has 10 points.
-Lag 0.3372150200140671 has 112 points.
-Lag 0.5058225300211007 has 176 points.
-Lag 0.6744300400281342 has 188 points.
-Lag 0.8430375500351678 has 234 points.
-Lag 1.0116450600422013 has 232 points.
-Lag 1.1802525700492348 has 260 points.
-Lag 1.3488600800562685 has 258 points.
-Lag 1.5174675900633021 has 254 points.
-Lag 1.6860751000703356 has 258 points.
-Lag 1.854682610077369 has 220 points.
-Lag 2.0232901200844027 has 230 points.
-Lag 2.1918976300914363 has 190 points.
-Lag 2.3605051400984696 has 176 points.
-Lag 2.5291126501055032 has 166 points.
-Lag 2.697720160112537 has 156 points.
-Lag 2.8663276701195706 has 134 points.
-Lag 3.0349351801266042 has 128 points.
-Lag 3.2035426901336375 has 158 points.
-Lag 3.372150200140671 has 108 points.
-Lag 3.540757710147705 has 114 points.
-Lag 3.709365220154738 has 104 points.
-Lag 3.8779727301617717 has 84 points.
-Lag 4.046580240168805 has 84 points.
-Lag 4.215187750175839 has 78 points.
-Lag 4.383795260182873 has 78 points.
-Lag 4.552402770189906 has 46 points.
-Lag 4.721010280196939 has 58 points.
-Lag 4.889617790203973 has 42 points.
-Lag 5.0582253002110065 has 50 points.
-Lag 5.22683281021804 has 28 points.
+Lag 0.0 has 249 points.
+Lag 37651.783251462075 has 1052 points.
+Lag 75303.56650292415 has 1814 points.
+Lag 112955.34975438623 has 2398 points.
+Lag 150607.1330058483 has 2876 points.
+Lag 188258.91625731037 has 3280 points.
+Lag 225910.69950877246 has 3530 points.
+Lag 263562.4827602345 has 3674 points.
+Lag 301214.2660116966 has 3656 points.
+Lag 338866.0492631587 has 3494 points.
+Lag 376517.83251462074 has 3306 points.
+Lag 414169.61576608283 has 2974 points.
+Lag 451821.3990175449 has 2618 points.
+Lag 489473.18226900697 has 2274 points.
+Lag 527124.965520469 has 1840 points.
+Lag 564776.7487719312 has 1522 points.
+Lag 602428.5320233932 has 1314 points.
+Lag 640080.3152748552 has 1110 points.
+Lag 677732.0985263174 has 928 points.
+Lag 715383.8817777794 has 780 points.
+Lag 753035.6650292415 has 636 points.
+Lag 790687.4482807036 has 502 points.
+Lag 828339.2315321657 has 340 points.
+Lag 865991.0147836277 has 268 points.
+Lag 903642.7980350899 has 192 points.
+Lag 941294.5812865519 has 152 points.
+Lag 978946.3645380139 has 114 points.
+Lag 1016598.147789476 has 70 points.
+Lag 1054249.931040938 has 60 points.
+Lag 1091901.7142924003 has 36 points.
+Lag 1129553.4975438623 has 18 points.
+Lag 1167205.2807953244 has 10 points.
 
 ###########
 
@@ -908,7 +930,6 @@ Lags per area: 32
 <div class="section" id="Clarification">
 <h3>Clarification<a class="headerlink" href="#Clarification" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
-<li><p>Experiment with 32 lags have some under-represented lags. We will use 16-lags experiment instead.</p></li>
 <li><p>There are some outliers in a dataset! To get rid of them we will remove all values which are further away from the mean than 2 standard deviations (for each lag).</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
@@ -955,9 +976,9 @@ Lags per area: 32
 </div>
 <div class="section" id="id4">
 <h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
-<p>Compare y axis of two figures above. Upper figure is cleaned from outliers and lower has those values. Maximum on y axis for the upper is 500, for the lower is 1000… Experimental semivariogram smooths outliers from initial dataset and you may compare y axis of experimental semivariogram with both variogram clouds to see it.</p>
+<p>Compare y axis of two figures above. Upper figure is cleaned from outliers and lower has those values. Maximum on y axis for the upper is 1000, for the lower is 5000. Experimental semivariogram smooths outliers from initial dataset and you may compare y axis of experimental semivariogram with both variogram clouds to see it.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -972,8 +993,8 @@ Lags per area: 32
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in Pennsylvania counties dataset&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in degrees&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in the Northeastern U.S. counties dataset&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in meters&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -991,8 +1012,8 @@ Lags per area: 32
 <div class="section" id="4)-Calculate-experimental-semivariogram-from-point-cloud.">
 <h2>4) Calculate experimental semivariogram from point cloud.<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud." title="Permalink to this headline">¶</a></h2>
 <p>You may calculate semivariogram directly, like in the cell above, or from the point cloud. Latter is useful when you perform outliers detection and you remove some of them. Let’s check it for our dataset without outliers.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1000,17 +1021,8 @@ Lags per area: 32
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/szymon/anaconda3/envs/pyintpk/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3335: RuntimeWarning: Mean of empty slice.
-  out=out, **kwargs)
-</pre></div></div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1018,8 +1030,8 @@ Lags per area: 32
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in Pennsylvania counties dataset. Outliers were removed from each lag.&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in degrees&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in the Northeastern U.S. counties dataset. Outliers were removed from each lag.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in meters&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -1032,9 +1044,7 @@ Lags per area: 32
 <img alt="../_images/tutorials_Variogram_Point_Cloud_(Basic)_30_0.png" src="../_images/tutorials_Variogram_Point_Cloud_(Basic)_30_0.png" />
 </div>
 </div>
-<p>As you may noticed, values are slightly smaller and shape of semivariogram has changed a little bit.</p>
-<p><strong>NOTE:</strong></p>
-<p>This semivariogram shows that <strong>correlation between breast cancer rates may be ovserved up to two degrees from point of origin</strong>.</p>
+<p>As you may noticed, shape of the semivariogram is preserved but values of semivariance are much smaller for the data without outliers.</p>
 <hr class="docutils" />
 </div>
 </div>
@@ -1102,7 +1112,7 @@ Lags per area: 32
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

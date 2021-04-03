@@ -294,7 +294,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Krige</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                      <span class="n">unknown_location</span><span class="p">,</span>
                      <span class="n">number_of_neighbours</span><span class="p">,</span>
-                     <span class="n">mu</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">global_mean</span><span class="p">,</span>
                      <span class="n">test_anomalies</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -303,7 +303,7 @@
 <ul class="simple">
 <li><p><strong>unknown_location</strong>: (<em>tuple</em>) position of unknown location,</p></li>
 <li><p><strong>number_of_neighbours</strong>: (<em>int</em>) number of the closest locations to the unknown position which should be included in the modeling,</p></li>
-<li><p><strong>mu</strong>: (<em>float</em>) global mean which should be known before processing. If not given then it is calculated from the sample but then it may cause a relative large errors (this mean is expectation of the random field, so without knowledge of the ongoing processes it is unknown),</p></li>
+<li><p><strong>global_mean</strong>: (<em>float</em>) global mean which should be known before processing,</p></li>
 <li><p><strong>test_anomalies</strong>: (<em>bool</em>) check if weights are negative.</p></li>
 </ul>
 <p>OUTPUT:</p>
@@ -385,7 +385,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
