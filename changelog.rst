@@ -16,6 +16,9 @@ XXXX-XX-XX
 * global mean for Simple Kriging as a required parameter,
 * tqdm progress bar to `RegularizedSemivariogram.transform()` and `interpolate_raster()` functions,
 * refactored Semivariogram Regularization: ranges are controlled by algorithm, not an user,
+* added pull request template,
+* added issues templates,
+* 
 
 2021-03-10
 ----------
