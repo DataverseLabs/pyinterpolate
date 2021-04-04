@@ -435,7 +435,6 @@ div.rendered_html tbody tr:hover {
                              <span class="n">areal_step_size</span><span class="p">,</span>
                              <span class="n">max_areal_range</span><span class="p">,</span>
                              <span class="n">point_support_data</span><span class="p">,</span>
-                             <span class="n">ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
                              <span class="n">weighted_lags</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
@@ -460,7 +459,6 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>ranges</strong>: (<em>int</em>) number of ranges to test during semivariogram fitting. More steps == more accurate <em>nugget</em> and <em>range</em> prediction, but longer calculations,</p></li>
 <li><p><strong>weighted_lags</strong>: (<em>bool</em>) lags weighted by number of points; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags) have larger weights and semivariogram is modeled to better fit to those lags,</p></li>
 <li><p><strong>store_models</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then experimental, regularized and theoretical models are stored in lists after each iteration. It is important for a debugging process.</p></li>
 </ul>

@@ -201,19 +201,21 @@ class RegularizedSemivariogram:
         return bool(self.deviation_ratio <= self.min_deviation_ratio)
 
     def _check_diff_d_stat(self):
-        if self.diff_decrease < self.min_diff_decrease:
+        if self.diff_decrease <= 0:
+            if np.abs(self.diff_decrease) < self.min_diff_decrease:
 
-            if self.const_d_stat_reps >= self.min_diff_decrease_reps:
-                return True
+                if self.const_d_stat_reps >= self.min_diff_decrease_reps:
+                    return True
 
-            self.const_d_stat_reps += 1
+                self.const_d_stat_reps += 1
+                return False
+
+            if self.const_d_stat_reps >= 1:
+
+                self.const_d_stat_reps = self.const_d_stat_reps - 1
+                return False
+
             return False
-
-        if self.const_d_stat_reps >= 1:
-
-            self.const_d_stat_reps = self.const_d_stat_reps - 1
-            return False
-
         return False
 
     def _check_algorithm(self):
@@ -225,7 +227,7 @@ class RegularizedSemivariogram:
         return cond
 
     def fit(self, areal_data, areal_step_size, max_areal_range,
-            point_support_data, ranges=16, weighted_lags=True, store_models=False):
+            point_support_data, weighted_lags=True, store_models=False):
         """
         Function fits area and point support data to the initial regularized models.
 
@@ -237,8 +239,6 @@ class RegularizedSemivariogram:
         :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
         :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(),
             where data is a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
-        :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
-            and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
             of each model is weighted by number of points for each lag. In practice it means that more reliable data
             (lags) have larger weights and semivariogram is modeled to better fit to those lags,
@@ -251,7 +251,7 @@ class RegularizedSemivariogram:
         self.areal_max_range = max_areal_range
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
-        self.ranges = ranges
+        self.ranges = len(np.arange(0, self.areal_max_range, self.areal_step_size))
         self.weight_error_lags = weighted_lags
 
         self.store_models = store_models
@@ -297,8 +297,8 @@ class RegularizedSemivariogram:
         :param max_iters: (int) maximum number of iterations,
         :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below
             each algorithm is stopped,
-        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by
-            optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
+        :param min_diff_decrease: (float) minimum difference between new and optimal deviation divided by
+            optimal deviation: (D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
             the min_diff_d_stat_reps param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
             min_diff_d_stat is fulfilled.
