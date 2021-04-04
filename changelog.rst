@@ -15,6 +15,7 @@ XXXX-XX-XX
 * error weighting against the linear regression model (ax + b),
 * global mean for Simple Kriging as a required parameter,
 * tqdm progress bar to `RegularizedSemivariogram.transform()` and `interpolate_raster()` functions,
+* refactored Semivariogram Regularization: ranges are controlled by algorithm, not an user,
 
 2021-03-10
 ----------
