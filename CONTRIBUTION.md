@@ -55,3 +55,19 @@ By contributing, you agree that your contributions will be licensed under its BS
 
 ## References
 This document was adapted from the open-source contribution guidelines for [Facebook's Draft](https://github.com/facebook/draft-js/blob/a9316a723f9e918afde44dea68b5f9f39b7d9b00/CONTRIBUTING.md)
+
+## Example of Contribution
+
+1. You have an idea to speed-up computation of areal semivariance. You plan to use `multiprocessing` package for it.
+2. Fork repo from `dev` branch and at the same time propose change or issue in the [project issues](https://github.com/szymon-datalions/pyinterpolate/issues). You may use two templates - one for **bug report** and other for **feature**. In this case you choose **feature**.
+3. Create the new child branch from the forked `dev` branch. Name it as `dev-your-idea`. In this case `dev-areal-multiproc` is decriptive enough.
+4. Code in your branch.
+5. Create few unit tests in `pyinterpolate/test` directory or re-design actual tests if there is a need. For programming cases write unit tests, for mathematical and logic problems write functional tests. Use data from `sample_data` directory.
+6. Multiprocessing maybe does not require new tests. But always run unittests in the `test` directory after any change in the code and check if every test has passed.
+7. Run all tutorials too. Their role is not only informational. They serve as a functional test playground.
+8. If everything is ok make a pull request from your forked repo.
+9. And that's all! For every question use [Discord](https://discord.gg/3EMuRkj).
+
+## Contribution by social networks
+
+Your contribution may be other than coding itself. Questions and issues are important too. Do not be scared to write them!
