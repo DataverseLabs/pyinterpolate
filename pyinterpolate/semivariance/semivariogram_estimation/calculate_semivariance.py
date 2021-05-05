@@ -175,30 +175,31 @@ def calculate_weighted_semivariance(data, step_size, max_range):
     for idx, h in enumerate(lags):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
-        # Weights
-        ws_a = data[distances_in_range[0], 3]
-        ws_ah = data[distances_in_range[1], 3]
+        # Any distance in a range?
+        if len(distances_in_range[0]) > 0:
+            # Weights
+            ws_a = data[distances_in_range[0], 3]
+            ws_ah = data[distances_in_range[1], 3]
 
-        weights = (ws_a * ws_ah) / (ws_a + ws_ah)
+            weights = (ws_a * ws_ah) / (ws_a + ws_ah)
 
-        # Values
-        z_a = data[distances_in_range[0], 2]
-        z_ah = data[distances_in_range[1], 2]
-        z_err = (z_a - z_ah) ** 2
+            # Values
+            z_a = data[distances_in_range[0], 2]
+            z_ah = data[distances_in_range[1], 2]
+            z_err = (z_a - z_ah) ** 2
 
-        # m'
-        mweighted_mean = np.average(data[distances_in_range[0], 2],
-                                    weights=data[distances_in_range[0], 3])
+            # m'
+            _vals = data[distances_in_range[0], 2]
+            _weights = data[distances_in_range[0], 3]
+            mweighted_mean = np.average(_vals,
+                                        weights=_weights)
 
-        # numerator: w(0) * [(z(u_a) - z(u_a + h))^2] - m'
-        numerator = weights * z_err - mweighted_mean
+            # numerator: w(0) * [(z(u_a) - z(u_a + h))^2] - m'
+            numerator = weights * z_err - mweighted_mean
 
-        # semivariance
-        sem_value = 0.5 * (np.sum(numerator) / np.sum(weights))
-        smv.append([sem_value, len(numerator)])
-
-        if smv[idx][0] > 0:
-            semivariance.append([h, smv[idx][0], smv[idx][1]])
+            # semivariance
+            sem_value = 0.5 * (np.sum(numerator) / np.sum(weights))
+            semivariance.append([h, sem_value, len(numerator)])
         else:
             semivariance.append([h, 0, 0])
 
