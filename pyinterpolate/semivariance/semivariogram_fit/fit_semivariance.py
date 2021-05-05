@@ -12,10 +12,9 @@ class TheoreticalSemivariogram:
     """
     Class calculates theoretical semivariogram. Class takes two parameters during initialization:
 
-        points_array - (numpy array) analysed points where the last column is representing values, typically x, y,
-            value,
-        empirical_semivariance - (numpy array) semivariance where first row of array represents lags and the second row
-            represents semivariance's values for given lag.
+    points_array - (numpy array) analysed points where the last column represents values, typically x, y, value,
+    empirical_semivariance - (numpy array) semivariance where first row of array represents lags and the second row
+        represents semivariance's values for a given lag.
 
     Available methods:
 
@@ -521,7 +520,7 @@ class TheoreticalSemivariogram:
         plt.legend(['Empirical semivariogram', 'Theoretical semivariogram - {} model'.format(
             self.chosen_model_name
         )])
-        title_text = 'Empirical and theoretical semivariogram comparison, model error ={:.2f}'.format(
+        title_text = 'Empirical and theoretical semivariogram comparison, model error = {:.2f}'.format(
             self.model_error
         )
         plt.title(title_text)

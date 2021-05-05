@@ -127,11 +127,12 @@ def calculate_weighted_semivariance(data, step_size, max_range):
 
         Equation for calculation is:
 
-        s(h) = [1 / (2 * SUM(a=1, N(h)) (n(u_a) * n(u_a + h)) /...
-                    / (n(u_a) + n(u_a + h)))] *...
-                    * SUM(a=1, N(h)) {[(n(u_a) * n(u_a + h)) / (n(u_a) + n(u_a + h))] * [(z(u_a) - z(u_a + h))^2] - m'}
+        s(h) = [1 / 2 * SUM|a=1, N(h)|: w(0)] ...
+                    * [SUM|a=1, N(h)|: (w(0) * [(z(u_a) - z(u_a + h))^2] - m']
 
         where:
+
+        w(0) = (n(u_a) * n(u_a + h)) / ((n(u_a) + n(u_a + h))
 
         - s(h) - Semivariogram of the risk,
         - n(u_a) - size of the population at risk in the unit a,
@@ -175,22 +176,27 @@ def calculate_weighted_semivariance(data, step_size, max_range):
         distances_in_range = select_values_in_range(distances, h, step_size)
 
         # Weights
-        weight1 = data[distances_in_range[0], 3]
-        weight2 = data[distances_in_range[1], 3]
+        ws_a = data[distances_in_range[0], 3]
+        ws_ah = data[distances_in_range[1], 3]
 
-        weights = (weight1 * weight2) / (weight1 + weight2)
-        weights_sum = np.sum(weights)
+        weights = (ws_a * ws_ah) / (ws_a + ws_ah)
 
         # Values
-        val1 = data[distances_in_range[0], 2]
-        val2 = data[distances_in_range[1], 2]
+        z_a = data[distances_in_range[0], 2]
+        z_ah = data[distances_in_range[1], 2]
+        z_err = (z_a - z_ah) ** 2
 
-        # Weighted mean of values
-        weighted_mean = ((weight1 * val1) + (weight2 * val2)) / weights_sum
+        # m'
+        mweighted_mean = np.average(data[distances_in_range[0], 2],
+                                    weights=data[distances_in_range[0], 3])
 
-        sem = weights * (data[distances_in_range[0], 2] - data[distances_in_range[1], 2]) ** 2
-        sem_value = (np.sum(sem) - np.sum(weighted_mean)) / (2 * np.sum(weights_sum))
-        smv.append([sem_value, len(sem)])
+        # numerator: w(0) * [(z(u_a) - z(u_a + h))^2] - m'
+        numerator = weights * z_err - mweighted_mean
+
+        # semivariance
+        sem_value = 0.5 * (np.sum(numerator) / np.sum(weights))
+        smv.append([sem_value, len(numerator)])
+
         if smv[idx][0] > 0:
             semivariance.append([h, smv[idx][0], smv[idx][1]])
         else:
