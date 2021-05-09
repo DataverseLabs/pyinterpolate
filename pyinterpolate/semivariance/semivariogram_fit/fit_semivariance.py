@@ -78,6 +78,8 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the spherical model.
         """
 
+
+
         x = np.where((distance <= semivar_range),
                      (nugget + sill * (3.0 * distance / (2.0 * semivar_range)) - (
                              (distance / semivar_range) ** 3.0 / 2.0)),
