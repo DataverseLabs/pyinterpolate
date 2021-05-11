@@ -1,24 +1,36 @@
+import numpy as np
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 
 
-def inverse_distance_weighting(known_points, unknown_locations, number_of_neighbours=-1, power=2.):
+def inverse_distance_weighting(known_points, unknown_location, number_of_neighbours=-1, power=2.):
     """
     Function perform Inverse Distance Weighting on a given set of points.
 
     INPUT:
 
     :param known_points: (numpy array) [x, y, value],
-    :param unknown_locations: (numpy array) [[ux, uy]],
+    :param unknown_location: (numpy array) [[ux, uy]],
     :param number_of_neighbours: (int) default=-1 which means that all known points will be used to estimate value at
         the unknown location. Can be any number in the limits [2, length(known_points)],
-    :param power: (float) controls weight assigned to each known point,
+    :param power: (float) value larger or equal to 0, controls weight assigned to each known point.
+
+    OUTPUT:
+
+    :return: (float) value at unknown location.
     """
 
-    # Calculate distances
+    # Test unknown points
+    try:
+        _ = unknown_location.shape[1]
+    except IndexError:
+        unknown_location = np.expand_dims(unknown_location, axis=0)
 
-    distances = calc_point_to_point_distance(unknown_locations, known_points)
+    # Test power
 
-    # For each unknown location get n closest neighbours...
+    if power < 0:
+        raise ValueError('Power cannot be smaller than 0')
+
+    # Test number of neighbours
 
     if number_of_neighbours == -1:
         number_of_closest = len(known_points)
@@ -28,5 +40,25 @@ def inverse_distance_weighting(known_points, unknown_locations, number_of_neighb
         raise ValueError(f'Number of closest neighbors must be between 2 and the number of known points '
                          f'({len(known_points)}) and {number_of_neighbours} neighbours were given instead.')
 
-    for dists in distances:
-        d = 0
+    # Calculate distances
+
+    distances = calc_point_to_point_distance(unknown_location, known_points[:, :-1])
+
+    # Check if any distance is equal to 0
+    if not np.all(distances[0]):
+
+        zer_pos = np.where(distances == 0)
+        unkn_value = known_points[zer_pos[1], -1][0]
+        return unkn_value
+
+    # Get n closest neighbours...
+
+    sdists = distances.argsort()
+    sdists = sdists[0, :number_of_closest]
+    dists = distances[0, sdists]
+    values = known_points[sdists].copy()
+    values = values[:, -1]
+    weights = 1 / dists**power
+
+    unkn_value = np.sum(weights * values) / np.sum(weights)
+    return unkn_value
