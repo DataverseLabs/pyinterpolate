@@ -40,8 +40,8 @@ class TestFitSemivariance(unittest.TestCase):
         model_non_weighted = t_non_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
         model_weighted = t_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
 
-        self.assertEqual(model_non_weighted, 'exponential', "Non-weighted model should be exponential")
-        self.assertEqual(model_weighted, 'linear', "Weighted model should be linear")
+        self.assertEqual(model_non_weighted, 'spherical', "Non-weighted model should be spherical")
+        self.assertEqual(model_weighted, 'spherical', "Weighted model should be spherical")
 
     def test_fit_semivariance_io(self):
         # Prepare fake model for fit semivariance class
@@ -88,9 +88,6 @@ class TestFitSemivariance(unittest.TestCase):
             self.assertIn(c, df.columns, f'DataFrame is corrupted, missing {c} column')
 
         self.assertEqual(len(df), 10, f'DataFrame len should be 10 but it is {len(df)}')
-
-
-
 
 
 if __name__ == '__main__':

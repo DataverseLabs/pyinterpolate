@@ -63,12 +63,20 @@ class TheoreticalSemivariogram:
     # MODELS
 
     @staticmethod
-    def spherical_model(distance, nugget, sill, semivar_range):
+    def spherical_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[(3/2)*a - (1/2)*(a**3)], 0 <= lag <= range
+        gamma = nugget + sill, lag > range
+        gamma = 0, lag == 0
+
+        where:
+
+        a = lag / range
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -78,19 +86,26 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the spherical model.
         """
 
-        x = np.where((distance <= semivar_range),
-                     (nugget + sill * (3.0 * distance / (2.0 * semivar_range)) - (
-                             (distance / semivar_range) ** 3.0 / 2.0)),
-                     (nugget + sill))
-        return x
+        a = lags / semivar_range
+        a1 = 3 / 2 * a
+        a2 = 1 / 2 * a ** 3
+
+        gamma = np.where((lags <= semivar_range),
+                         (nugget + sill * (a1 - a2)),
+                         (nugget + sill))
+
+        return gamma
 
     @staticmethod
-    def exponential_model(distance, nugget, sill, semivar_range):
+    def exponential_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[1 - exp(-lag/range)], distance > 0
+        gamma = 0, lag == 0
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -99,21 +114,28 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the exponential model.
         """
+
         try:
-            x = nugget + sill * (1 - np.exp(-distance / semivar_range))
+            gamma = nugget + sill * (1 - np.exp(-lags / semivar_range))
         except TypeError:
-            distance = distance.astype(float)
+            lags = lags.astype(float)
             semivar_range = float(semivar_range)
-            x = nugget + sill * (1 - np.exp(-distance / semivar_range))
-        return x
+            gamma = nugget + sill * (1 - np.exp(-lags / semivar_range))
+
+        return gamma
 
     @staticmethod
-    def linear_model(distance, nugget, sill, semivar_range):
+    def linear_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*(lag/range), 0 <= lag <= range
+        gamma = nugget + sill, lag > range
+        gamma = 0, lag == 0
+
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -123,18 +145,22 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the linear model.
         """
 
-        x = np.where((distance <= semivar_range),
-                     (nugget + sill * (distance / semivar_range)),
-                     (nugget + sill))
-        return x
+        gamma = np.where((lags <= semivar_range),
+                         (nugget + sill * (lags / semivar_range)),
+                         (nugget + sill))
+
+        return gamma
 
     @staticmethod
-    def gaussian_model(distance, nugget, sill, semivar_range):
+    def gaussian_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[1 - exp(lag**2 / range**2)], lag > 0
+        gamma = 0, lag == 0
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of ranges from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -143,8 +169,12 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the gaussian model.
         """
-        x = nugget + sill * (1 - np.exp(-distance * distance / (semivar_range ** 2)))
-        return x
+        gamma = nugget + sill * (1 - np.exp(-1*(lags ** 2 / semivar_range ** 2)))
+
+        if lags[0] == 0:
+            gamma[0] = 0
+
+        return gamma
 
     def fit_semivariance(self, model_type, number_of_ranges=16):
         """
@@ -500,7 +530,7 @@ class TheoreticalSemivariogram:
         Function shows experimental semivariogram of a given model.
         """
         plt.figure(figsize=(10, 10))
-        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], 'bo')
         plt.title('Experimental semivariogram')
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
@@ -513,10 +543,10 @@ class TheoreticalSemivariogram:
         if self.theoretical_model is None:
             raise RuntimeError('Theoretical semivariogram is not calculated. \
             Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
-        
+
         x = self.calculate_values()
         plt.figure(figsize=(12, 12))
-        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], 'bo')
         plt.plot(self.empirical_semivariance[:, 0], x, color='red')
         plt.legend(['Empirical semivariogram', 'Theoretical semivariogram - {} model'.format(
             self.chosen_model_name

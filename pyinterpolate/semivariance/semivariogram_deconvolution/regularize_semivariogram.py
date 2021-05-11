@@ -413,7 +413,7 @@ class RegularizedSemivariogram:
         """
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
-        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags, self.initial_theoretical_model_of_areal_data.predict(lags), color='r', linestyle='--')
         plt.plot(lags, self.initial_regularized_model, color='g', linestyle='-.')
         plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
@@ -431,7 +431,7 @@ class RegularizedSemivariogram:
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
         plt.plot(lags,
-                 self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+                 self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags,
                  self.initial_theoretical_model_of_areal_data.predict(lags), color='r',
                  linestyle='--')

@@ -277,8 +277,7 @@ class ArealSemivariance:
         Inblock Semivariance, Within-block semivariogram, Between blocks semivariogram, Regularized output.
         """
         plt.figure(figsize=(12, 12))
-        plt.plot(self.experimental_semivariogram[:, 0], self.experimental_semivariogram[:, 1],
-                 color='blue', marker='o')
+        plt.plot(self.experimental_semivariogram[:, 0], self.experimental_semivariogram[:, 1], 'bo')
         plt.plot(self.experimental_semivariogram[:, 0],
                  self.theoretical_semivariance_model.predict(self.experimental_semivariogram[:, 0]),
                  color='black', linestyle='dotted')
