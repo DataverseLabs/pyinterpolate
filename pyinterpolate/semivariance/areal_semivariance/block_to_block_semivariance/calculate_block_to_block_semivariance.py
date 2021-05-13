@@ -1,6 +1,5 @@
 import numpy as np
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
-from tqdm import tqdm
 
 
 def block_pair_semivariance(block_a, block_b, semivariogram_model):
@@ -74,7 +73,7 @@ def calculate_block_to_block_semivariance(points_within_area, distances_between_
 
     block_pairs_smvs = dict()
 
-    for first_idx, first_block_id in enumerate(tqdm(blocks_ids)):
+    for first_idx, first_block_id in enumerate(blocks_ids):
         first_block_points = points_within_area[points_within_area[:, 0] == first_block_id]
 
         for second_idx, second_block_id in enumerate(blocks_ids):

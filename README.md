@@ -212,7 +212,8 @@ Package structure
 High level overview:
 
  - [ ] pyinterpolate
-    - [x] **distance** - distance calculation
+    - [x] **distance** - distance calculation,
+    - [x] **idw** - inverse distance weighting interpolation,
     - [x] **io_ops** - reads and prepares input spatial datasets,
     - [x] **transform** - transforms spatial datasets,
     - [x] **viz** - interpolation of smooth surfaces from points into rasters,
@@ -238,4 +239,4 @@ Development
 Known Bugs
 -----------------
 
-- (still) not detected!
+- Package may crash with very large dataset (memory issues). Operations are performed with numpy arrays and for datasets larger than 10 000 points there could be a memory issue ([Issue page](https://github.com/szymon-datalions/pyinterpolate/issues/64))

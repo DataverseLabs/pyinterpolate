@@ -148,12 +148,13 @@ class AtPPoissonKriging:
             points_within_unknown_area=unknown_location_points,
             known_areas=self.known_areas, points_within_known_areas=self.known_areas_points,
             number_of_neighbours=number_of_neighbours, max_search_radius=max_search_radius
-        )  # [[id (known), val, [
-           #                    [unknown_point_value
-           #                        [known pt vals, distances between unknown point and known points]],
-           #                    [...],
-           #                   ],
-           #  total points value], [list of unknown point coordinates]]
+        )
+        # [[id (known), val, [
+        #                    [unknown_point_value
+        #                        [known pt vals, distances between unknown point and known points]],
+        #                    [...],
+        #                   ],
+        #  total points value], [list of unknown point coordinates]]
 
         self.block_to_point_smv = WeightedBlock2PointSemivariance(semivariance_model=self.model)
         self.block_to_block_smv = WeightedBlock2BlockSemivariance(semivariance_model=self.model)
