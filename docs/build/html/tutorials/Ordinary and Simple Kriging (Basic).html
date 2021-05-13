@@ -4,18 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Ordinary and Simple Kriging - tutorial &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
+    <link rel="next" title="Inverse Distance Weighting model vs Kriging - tutorial" href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" />
     <link rel="prev" title="Semivariogram calculation - tutorial" href="Semivariogram%20Estimation%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -281,9 +284,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Ordinary-and-Simple-Kriging---tutorial">
+<section id="Ordinary-and-Simple-Kriging---tutorial">
 <h1>Ordinary and Simple Kriging - tutorial<a class="headerlink" href="#Ordinary-and-Simple-Kriging---tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Table-of-Contents:">
+<section id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
@@ -291,11 +294,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Set Ordinary Kriging and Simple Kriging models,</p></li>
 <li><p>Predict values at unknown locations.</p></li>
 </ol>
-</div>
-<div class="section" id="Level:-Basic">
+</section>
+<section id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="Changelog">
+</section>
+<section id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -310,24 +313,28 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-04-03</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-04-03</p></td>
 <td><p>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated point data source.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="Introduction">
+</section>
+<section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to perform prediction with Ordinary and Simple Kriging. We will compare different number of ranges and test outcomes of processing with root mean squared error.</p>
 <p>Ordinary and Simple Kriging are the simplest form of Kriging but it’s still very powerful technique.</p>
 <p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
-</div>
-<div class="section" id="Import-packages">
+</section>
+<section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -345,8 +352,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="1)-Read-point-data">
+</section>
+<section id="1)-Read-point-data">
 <h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -401,14 +408,14 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </pre></div>
 </div>
 </div>
-<div class="section" id="Clarification:">
+<section id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>We remove subset of points from a dataset to be sure that Kriging is working. In this scenario 40% of available points are removed, but in a real-world cases you will probably have even less points to perform estimations, down to the 1% of known values.</p>
 <p>Function <strong>create_train_test()</strong> divides our dataset into two subsets: - training set used for semivariogram model derivation, - test set used for the model error calculation.</p>
 <p>Points for each set are chosen randomly to avoid bias related to the geographical location. Let’s imagine that you have a sorted list of Digital Elevation Model points. Western part of your measurements covers a mountain and Eastern part is a plain. Then you take western part for semivariogram modeling and eastern part for test. It ends with catastrophe because your semivariogram learns that elevation is changing over a distance but it is not true in the East!</p>
-</div>
-</div>
-<div class="section" id="2)-Set-Semivariogram-model">
+</section>
+</section>
+<section id="2)-Set-Semivariogram-model">
 <h2>2) Set Semivariogram model<a class="headerlink" href="#2)-Set-Semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>More about semivariogram modeling in tutorial about Semivariogram calculation: [url]</p>
 <div class="nbinput nblast docutils container">
@@ -435,7 +442,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <span></span><span class="c1"># Plot experimental semivariogram</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram od DEM data&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in degrees&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
@@ -470,11 +477,11 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;spherical&#39;
+&#39;linear&#39;
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="3)-Set-Ordinary-Kriging-and-Simple-Kriging-models">
+</section>
+<section id="3)-Set-Ordinary-Kriging-and-Simple-Kriging-models">
 <h2>3) Set Ordinary Kriging and Simple Kriging models<a class="headerlink" href="#3)-Set-Ordinary-Kriging-and-Simple-Kriging-models" title="Permalink to this headline">¶</a></h2>
 <p>This is the most important step of our tutorial. We’ve set our semivariogram model and now we are able to perform prediction of an unknown values. In a first try we will “predict” known, arbitrary point and in the second step we will try to guess values at unknown locations and calculate RMSE of those values.</p>
 <p>For both kriging types class is the same <strong>Kriging</strong>. It takes as arguments theoretical semivariogram model <strong>TheoreticalSemivariogram</strong> class instance and known data points as the Numpy array.</p>
@@ -506,7 +513,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[15.11563642 52.72105611 89.48275757]
+[15.1152409  52.56746749 35.54473495]
 </pre></div></div>
 </div>
 <p><strong>Simple Kriging</strong> technique may be used when process mean over sampling area is known. It is rarely the case, that’s why Ordinary Kriging is the first choice for many applications. We know global mean beacuse we have whole dataset but in the real-world scenario we cannot divide set into training and test sets and then get mean from the whole dataset - it is a information leak from the test set into a model!</p>
@@ -545,20 +552,20 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(89.48275756835939, 3.4617337514931537, 1.870007043001144e-15, array([ 1.00000000e+00,  1.65992869e-18,  6.74020911e-17,  3.16586372e-16,
-       -5.67672743e-17, -2.94107227e-16, -1.57294435e-16,  7.37586143e-17,
-       -2.92477145e-16,  4.26945661e-16,  1.73151749e-17,  4.11879029e-16,
-        2.87430469e-17, -8.82499278e-17,  1.28202501e-16, -5.83966804e-16,
-        1.87000704e-15]))
+(35.54473495483397, 3.3971240271095104, 6.972193264668931e-17, array([ 1.00000000e+00, -2.48921943e-16, -8.00272449e-17,  1.84018500e-16,
+       -2.72481846e-18, -2.51590992e-16, -6.04329063e-17,  1.68820100e-16,
+       -4.77934329e-17, -1.20858740e-16, -2.09982234e-16,  1.64090101e-16,
+        4.48311461e-17,  1.59178733e-16,  3.30431085e-16, -3.27499526e-16,
+        6.97219326e-17]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(89.48275756835938, 3.461733751493153, 40.9509380348875, array([ 1.00000000e+00,  9.91274366e-17, -2.48603244e-16,  6.75033515e-16,
-       -1.02134815e-17, -5.01843240e-16, -3.34629032e-16,  2.22176812e-16,
-        1.31854557e-16,  1.41338299e-17,  2.47361731e-16,  4.88719318e-16,
-        5.66972759e-17, -3.66236735e-17, -1.57609050e-17, -6.84711500e-16]))
+(35.54473495483399, 3.39712402710951, 40.9509380348875, array([ 1.00000000e+00, -2.03476520e-16, -6.67386648e-17,  2.86403696e-17,
+       -1.33239218e-17,  3.37797105e-17, -5.72980376e-17,  3.78975229e-17,
+       -5.14262231e-17, -1.42936524e-16, -1.42492348e-17, -1.32573087e-16,
+       -2.16570003e-16,  3.91363271e-16,  6.50791734e-16, -5.55080853e-16]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -599,7 +606,7 @@ Difference between real value and SK:
 0
 </pre></div></div>
 </div>
-<div class="section" id="Clarfication:">
+<section id="Clarfication:">
 <h3>Clarfication:<a class="headerlink" href="#Clarfication:" title="Permalink to this headline">¶</a></h3>
 <p>What has just happened?</p>
 <p>We go through each cell to understand what our Kriging has done.</p>
@@ -610,9 +617,9 @@ Difference between real value and SK:
 <li><p>Both methods return four objects. The first one is predicted value, then estimated error standard deviation, estimated mean (ordinary kriging) / mean (simple kriging) and weights matrix.</p></li>
 <li><p>Then we calculate difference between predicted and real values. As you may notice difference between Kriging prediction and real value is 0 (due to the floating point precision it may be extremly close to 0 if we left floats).</p></li>
 </ol>
-</div>
-</div>
-<div class="section" id="4)-Predict-values-at-unknown-locations">
+</section>
+</section>
+<section id="4)-Predict-values-at-unknown-locations">
 <h2>4) Predict values at unknown locations<a class="headerlink" href="#4)-Predict-values-at-unknown-locations" title="Permalink to this headline">¶</a></h2>
 <p>Only one parameter is directly controlled by us and it is number of neighbors used for prediction. We can test optimal number of them with a test set leaved for further analysis.</p>
 <p>We create simple function which chooses the most promising ordinary kriging and simple kriging model based on the root mean squared error of predictions.</p>
@@ -661,23 +668,23 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.27210508529694266
+RMSE: 0.43436690746381146
 
 Number of neighbors: 8
-RMSE: 0.6047181144378726
+RMSE: 0.38251845025082076
 
 Number of neighbors: 16
-RMSE: 0.9996994963632915
+RMSE: 0.35402382745489547
 
 Number of neighbors: 32
-RMSE: 1.177813575002304
+RMSE: 0.3677662552453569
 
 Number of neighbors: 64
-RMSE: 1.076636461660172
+RMSE: 0.3676187221660143
 
 </pre></div></div>
 </div>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Now we perform practical test of usefulness of our algorithm. The idea is to use our test set, predict values “not seen” by the kriging algorithm and compare prediction to the ground truth value. Then we calculate root of a mean squared errors between real values and predictions.</p>
 <p>We can find the best <strong>number_of_neighbors</strong> parameter, or alternatively we can discover how many closest points influence our point. More doesn’t better as you can see in this realization.</p>
@@ -687,7 +694,7 @@ RMSE: 1.076636461660172
 <li><p>RMSE value is used in this approach because it is a very good indicator of outliers in data. You should consider simple difference if you want to know if your kriging overestimates values (negative mean differences) or underestimates them (positive mean differences). There are other techniques to measure predictions error.</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -710,7 +717,7 @@ RMSE: 1.076636461660172
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -735,30 +742,30 @@ RMSE: 1.076636461660172
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 3.1859052618290207
+RMSE: 0.23290865902028202
 
 Number of neighbors: 8
-RMSE: 0.4152432987941239
+RMSE: 0.3128240396068094
 
 Number of neighbors: 16
-RMSE: 0.040998827252550996
+RMSE: 0.3450757729622964
 
 Number of neighbors: 32
-RMSE: 0.9114661983311976
+RMSE: 0.36795250017152625
 
 Number of neighbors: 64
-RMSE: 1.0297999361759764
+RMSE: 0.36763369973451177
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Usually Simple Kriging will give us worse results than Ordinary Kriging beacuse we do not know process mean. If we know process mean we can compare both techniques and check if there are similarities or differences in relation to error-per-lags. Data division for test and train set may influence Simple Kriging results and for some realizations RMSE will be very low but for the others it is extremely large.</p>
 <hr class="docutils" />
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -792,7 +799,7 @@ RMSE: 1.0297999361759764
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
       <li>Previous: <a href="Semivariogram%20Estimation%20%28Basic%29.html" title="previous chapter">Semivariogram calculation - tutorial</a></li>
-      <li>Next: <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="next chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
+      <li>Next: <a href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" title="next chapter">Inverse Distance Weighting model vs Kriging - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -823,7 +830,7 @@ RMSE: 1.0297999361759764
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

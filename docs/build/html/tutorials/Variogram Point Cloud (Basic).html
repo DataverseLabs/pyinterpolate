@@ -4,15 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Variogram Point Cloud - tutorial &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Semivariogram calculation - tutorial" href="Semivariogram%20Estimation%20%28Basic%29.html" />
@@ -281,9 +284,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Variogram-Point-Cloud---tutorial">
+<section id="Variogram-Point-Cloud---tutorial">
 <h1>Variogram Point Cloud - tutorial<a class="headerlink" href="#Variogram-Point-Cloud---tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Table-of-Contents:">
+<section id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
@@ -291,11 +294,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Detect and remove outliers.</p></li>
 <li><p>Calculate experimental semivariance from point cloud.</p></li>
 </ol>
-</div>
-<div class="section" id="Level:-Basic">
+</section>
+<section id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="Changelog">
+</section>
+<section id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -310,14 +313,18 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="Introduction">
+</section>
+<section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to read and prepare data for semivariogram modeling, how to manually find the best step size between lags and how to detect outliers in our data which can affect final semivariogram.</p>
 <p>Variogram Point Cloud analysis is an additional, basic data preparation step which may save you a lot of headache with more sophisticated analysis. You should learn about Variogram Point Cloud analysis before you move on to the semivariogram estimation and semivariogram fitting operations.</p>
@@ -326,8 +333,8 @@ div.rendered_html tbody tr:hover {
 <li><p>for point 1 and 2: DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>,</p></li>
 <li><p>for point 3: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/breast_cancer_rate_per_area_2.shp</span></code>.</p></li>
 </ul>
-</div>
-<div class="section" id="Import-packages">
+</section>
+<section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -347,8 +354,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="1)-Read-point-data">
+</section>
+<section id="1)-Read-point-data">
 <h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -388,8 +395,8 @@ array([[15.1152409 , 52.76514556, 91.27559662],
        [15.1152409 , 52.57823111, 45.66201019]])
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
+</section>
+<section id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
 <h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Permalink to this headline">¶</a></h2>
 <p>In this step we generate Variogram Point Cloud. For each proposed lag algorithm assigns point’s values which are grouped in this lag. We check and compare few different lags and step sizes and their respective point clouds.</p>
 <div class="nbinput nblast docutils container">
@@ -519,7 +526,7 @@ Lag 0.32473214733743877 has 1230 points.
 
 </pre></div></div>
 </div>
-<div class="section" id="Clarification:">
+<section id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>Raw numbers are hard to analyze. But we can check those informations with boxplots and that we can learn more about the data:</p>
 <div class="nbinput docutils container">
@@ -620,8 +627,8 @@ Lags per area: 32
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Boxplots of each lag shows halved squared difference (semivariance) between all points grouped for specific lag. The box extends from the lower to upper quartile values of the data, with a line at the median. The whiskers extend from the box to show the range of the data. Flier points are those past the end of the whiskers. As you may observed we have multiple outliers in a dataset, especially for short- and medium-range semivariance values. This may indicate that dataset should be transformed
 before analysis. Other interesting fact is that from 8 lags we are able to see specific pattern at a distance 0.18. Variogram is not constant and there is one valley in it.</p>
@@ -652,7 +659,7 @@ before analysis. Other interesting fact is that from 8 lags we are able to see s
 <span></span><span class="c1"># Plot experimental semivariogram</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram od DEM data&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in degrees&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
@@ -667,13 +674,13 @@ before analysis. Other interesting fact is that from 8 lags we are able to see s
 <img alt="../_images/tutorials_Variogram_Point_Cloud_(Basic)_14_0.png" src="../_images/tutorials_Variogram_Point_Cloud_(Basic)_14_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>As you may noticed experimental semivariogram has drop of semivariance at 0.2 degree range, which is very close to the drop of variogram point cloud.</p>
-</div>
-</div>
-<div class="section" id="3)-Detect-and-remove-outliers">
+</section>
+</section>
+<section id="3)-Detect-and-remove-outliers">
 <h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Permalink to this headline">¶</a></h2>
 <p>With idea how Variogram Point Cloud works we can detect and “remove” outliers from our dataset. We use for it other dataset which represents the breast cancer rates in counties of Northeastern part of the U.S. Each county will be transformed into its centroid. Those centroids are not evenly spaced and we can expect that for some number of steps dataset may be modeled incorrectly.</p>
 <div class="nbinput nblast docutils container">
@@ -927,7 +934,7 @@ Lags per area: 32
 
 </pre></div></div>
 </div>
-<div class="section" id="Clarification">
+<section id="Clarification">
 <h3>Clarification<a class="headerlink" href="#Clarification" title="Permalink to this headline">¶</a></h3>
 <ol class="arabic simple">
 <li><p>There are some outliers in a dataset! To get rid of them we will remove all values which are further away from the mean than 2 standard deviations (for each lag).</p></li>
@@ -973,12 +980,12 @@ Lags per area: 32
 <img alt="../_images/tutorials_Variogram_Point_Cloud_(Basic)_25_0.png" src="../_images/tutorials_Variogram_Point_Cloud_(Basic)_25_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Compare y axis of two figures above. Upper figure is cleaned from outliers and lower has those values. Maximum on y axis for the upper is 1000, for the lower is 5000. Experimental semivariogram smooths outliers from initial dataset and you may compare y axis of experimental semivariogram with both variogram clouds to see it.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -992,7 +999,7 @@ Lags per area: 32
 <span class="c1"># Plot experimental semivariogram</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">exp_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in the Northeastern U.S. counties dataset&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in meters&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
@@ -1007,13 +1014,13 @@ Lags per area: 32
 <img alt="../_images/tutorials_Variogram_Point_Cloud_(Basic)_27_0.png" src="../_images/tutorials_Variogram_Point_Cloud_(Basic)_27_0.png" />
 </div>
 </div>
-</div>
-</div>
-<div class="section" id="4)-Calculate-experimental-semivariogram-from-point-cloud.">
+</section>
+</section>
+<section id="4)-Calculate-experimental-semivariogram-from-point-cloud.">
 <h2>4) Calculate experimental semivariogram from point cloud.<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud." title="Permalink to this headline">¶</a></h2>
 <p>You may calculate semivariogram directly, like in the cell above, or from the point cloud. Latter is useful when you perform outliers detection and you remove some of them. Let’s check it for our dataset without outliers.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1022,14 +1029,14 @@ Lags per area: 32
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Plot experimental semivariogram</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">experimental_semivariogram_from_pt_cloud</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Experimental semivariogram of breast cancer rates in the Northeastern U.S. counties dataset. Outliers were removed from each lag.&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Range - in meters&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
@@ -1046,8 +1053,8 @@ Lags per area: 32
 </div>
 <p>As you may noticed, shape of the semivariogram is preserved but values of semivariance are much smaller for the data without outliers.</p>
 <hr class="docutils" />
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -1112,7 +1119,7 @@ Lags per area: 32
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -4,15 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>kriging module &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="viz module" href="viz.html" />
@@ -33,7 +36,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="kriging-module">
+  <section id="kriging-module">
 <h1>kriging module<a class="headerlink" href="#kriging-module" title="Permalink to this headline">¶</a></h1>
 <p>Available classes:</p>
 <ul class="simple">
@@ -41,9 +44,9 @@
 <li><p>CentroidPoissonKriging: Class performs centroid-based Poisson Kriging of areas,</p></li>
 <li><p>Kriging: Class for kriging interpolation of the unknown values at a given location (position).</p></li>
 </ul>
-<div class="section" id="ArealKriging">
+<section id="ArealKriging">
 <h2><code class="docutils literal notranslate"><span class="pre">ArealKriging</span></code><a class="headerlink" href="#ArealKriging" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="Class-initialization">
+<section id="Class-initialization">
 <h3>Class initialization<a class="headerlink" href="#Class-initialization" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">kriging</span><span class="o">.</span><span class="n">ArealKriging</span><span class="p">(</span>
     <span class="n">semivariogram_model</span><span class="p">,</span>
@@ -74,16 +77,16 @@
 <li><p><strong>kriging_type</strong>: (<em>str</em>) default <code class="docutils literal notranslate"><span class="pre">'ata'</span></code>;</p></li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">'ata'</span></code> - area to area poisson kriging, <code class="docutils literal notranslate"><span class="pre">'atp'</span></code> - area to point poisson kriging.</p>
-</div>
-<div class="section" id="Class-public-methods:">
+</section>
+<section id="Class-public-methods:">
 <h3>Class public methods:<a class="headerlink" href="#Class-public-methods:" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><strong>predict</strong>: predicts area value in an unknown location based on the area-to-area or area-to-point Poisson Kriging,</p></li>
 <li><p><strong>regularize_data</strong>: regularizes whole dataset and creates new values and error maps based on the kriging type.</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="ArealKriging.predict()">
+<section id="ArealKriging.predict()">
 <h3><code class="docutils literal notranslate"><span class="pre">ArealKriging.predict()</span></code><a class="headerlink" href="#ArealKriging.predict()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ArealKriging</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                      <span class="n">unknown_area_points</span><span class="p">,</span>
@@ -118,9 +121,9 @@
 <span class="p">]</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="ArealKriging.regularize_data()">
+<section id="ArealKriging.regularize_data()">
 <h3><code class="docutils literal notranslate"><span class="pre">ArealKriging.regularize_data()</span></code><a class="headerlink" href="#ArealKriging.regularize_data()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ArealKriging</span><span class="o">.</span><span class="n">regularize_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                              <span class="n">number_of_neighbours</span><span class="p">,</span>
@@ -143,11 +146,11 @@
 <li><p>regularized dataset (<code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrame</span></code> object).</p></li>
 </ul>
 <hr class="docutils" />
-</div>
-</div>
-<div class="section" id="CentroidPoissonKriging">
+</section>
+</section>
+<section id="CentroidPoissonKriging">
 <h2><code class="docutils literal notranslate"><span class="pre">CentroidPoissonKriging</span></code><a class="headerlink" href="#CentroidPoissonKriging" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Class initialization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">kriging</span><span class="o">.</span><span class="n">CentroidPoissonKriging</span><span class="p">(</span>
     <span class="n">semivariogram_model</span><span class="p">,</span>
@@ -173,15 +176,15 @@
 <span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id2">
+</section>
+<section id="id2">
 <h3>Class public methods:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><strong>predict</strong>: predicts areal value in a unknown location based on the centroid-based Poisson Kriging.</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="CentroidPoissonKriging.predict()">
+<section id="CentroidPoissonKriging.predict()">
 <h3><code class="docutils literal notranslate"><span class="pre">CentroidPoissonKriging.predict()</span></code><a class="headerlink" href="#CentroidPoissonKriging.predict()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CentroidPoissonKriging</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
     <span class="n">unknown_area</span><span class="p">,</span>
@@ -228,11 +231,11 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-</div>
-</div>
-<div class="section" id="Krige">
+</section>
+</section>
+<section id="Krige">
 <h2><code class="docutils literal notranslate"><span class="pre">Krige</span></code><a class="headerlink" href="#Krige" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id3">
+<section id="id3">
 <h3>Class initialization<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">kriging</span><span class="o">.</span><span class="n">Krige</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="p">,</span>
                             <span class="n">known_points</span><span class="p">)</span>
@@ -251,16 +254,16 @@
 <span class="p">]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="id4">
+</section>
+<section id="id4">
 <h3>Class public methods:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p><strong>ordinary_kriging</strong>: predicts value at unknown location with Ordinary Kriging technique,</p></li>
 <li><p><strong>simple_kriging</strong>: predicts value at unknown location with Simple Kriging technique.</p></li>
 </ul>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="Krige.ordinary_kriging()">
+<section id="Krige.ordinary_kriging()">
 <h3><code class="docutils literal notranslate"><span class="pre">Krige.ordinary_kriging()</span></code><a class="headerlink" href="#Krige.ordinary_kriging()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Krige</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                        <span class="n">unknown_location</span><span class="p">,</span>
@@ -287,9 +290,9 @@
 <span class="p">]</span>
 </pre></div>
 </div>
-</div>
+</section>
 <hr class="docutils" />
-<div class="section" id="Krige.simple_kriging()">
+<section id="Krige.simple_kriging()">
 <h3><code class="docutils literal notranslate"><span class="pre">Krige.simple_kriging()</span></code><a class="headerlink" href="#Krige.simple_kriging()" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Krige</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                      <span class="n">unknown_location</span><span class="p">,</span>
@@ -318,9 +321,9 @@
 <span class="p">]</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -385,7 +388,7 @@
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

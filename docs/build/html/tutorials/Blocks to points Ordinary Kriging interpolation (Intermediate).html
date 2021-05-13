@@ -4,19 +4,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Blocks to points Ordinary Kriging interpolation - tutorial &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
-    <link rel="prev" title="Ordinary and Simple Kriging - tutorial" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" />
+    <link rel="prev" title="Inverse Distance Weighting model vs Kriging - tutorial" href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -281,9 +284,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Blocks-to-points-Ordinary-Kriging-interpolation---tutorial">
+<section id="Blocks-to-points-Ordinary-Kriging-interpolation---tutorial">
 <h1>Blocks to points Ordinary Kriging interpolation - tutorial<a class="headerlink" href="#Blocks-to-points-Ordinary-Kriging-interpolation---tutorial" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Table-of-Contents:">
+<section id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Read areal data,</p></li>
@@ -293,11 +296,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Build map of interpolated values,</p></li>
 <li><p>Show map of interpolated values with choropleth map of breast cancer rates.</p></li>
 </ol>
-</div>
-<div class="section" id="Level:-Intermediate">
+</section>
+<section id="Level:-Intermediate">
 <h2>Level: Intermediate<a class="headerlink" href="#Level:-Intermediate" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="Changelog">
+</section>
+<section id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -312,14 +315,18 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="Introduction">
+</section>
+<section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>This tutorial is based on the question of user <em>&#64;ikey</em> from <em>Discord</em> channel of package (02/04/2021). Thank you <em>&#64;ikey</em> for it!</p>
 <p>In short:</p>
@@ -348,11 +355,11 @@ div.rendered_html tbody tr:hover {
 <li><p>for areal centroids: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/cancer_data.shp</span></code>.</p></li>
 </ul>
 <p>This tutorial requires understanding of concepts presented in <strong>Semivariogram Estimation</strong> and <strong>Variogram Point Cloud</strong> tutorials along with <strong>Ordinary and Simple Kriging</strong> notebook and (optionally) <strong>Semivariogram Regularization</strong> tutorial.</p>
-</div>
-<div class="section" id="Import-packages">
+</section>
+<section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -370,11 +377,11 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="1)-Read-areal-data">
+</section>
+<section id="1)-Read-areal-data">
 <h2>1) Read areal data<a class="headerlink" href="#1)-Read-areal-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -387,18 +394,18 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 array([25019,
-       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7fb3c46b1d90&gt;,
+       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7f070c41d050&gt;,
        2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -408,7 +415,7 @@ array([25019,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -416,16 +423,16 @@ array([25019,
 array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </pre></div></div>
 </div>
-<div class="section" id="Clarification:">
+<section id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>Prepared areal shapefile has five columns: <code class="docutils literal notranslate"><span class="pre">[area</span> <span class="pre">id,</span> <span class="pre">geometry,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]</span></code>. We don’t need polygons’ geometry and areas’ id in the case of point kriging. Prepared array is sliced and in return we get array of centroids and their values. This is our base for modeling.</p>
-</div>
-</div>
-<div class="section" id="2)-Detect-and-remove-outliers">
+</section>
+</section>
+<section id="2)-Detect-and-remove-outliers">
 <h2>2) Detect and remove outliers<a class="headerlink" href="#2)-Detect-and-remove-outliers" title="Permalink to this headline">¶</a></h2>
 <p>We check and clean data before semivariogram fit and Ordinary Kriging. Variogram Point Cloud is the best way to analyze data and detect outliers which may affect further analysis. We check and compare few different lags and step sizes and their respective point clouds. Then we will use those different number of ranges to create multiple semivariogram and Kriging models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -445,7 +452,7 @@ array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -524,7 +531,7 @@ Lags per area: 16
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -535,7 +542,7 @@ Lags per area: 16
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -615,16 +622,16 @@ Lags per area: 16
 
 </pre></div></div>
 </div>
-<div class="section" id="id1">
+<section id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>It could be not visible, but we got rid off outliers from dataset. Look into <strong>y</strong> axes of variogram clouds with and without outliers for each lag. You hopefully see that maximum values after data cleaning are two times smaller. We can test different lags now to create semivariogram models.</p>
-</div>
-</div>
-<div class="section" id="3.-Create-semivariogram-model">
+</section>
+</section>
+<section id="3.-Create-semivariogram-model">
 <h2>3. Create semivariogram model<a class="headerlink" href="#3.-Create-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>Semivariogram may be fitted manually or automatically. In this case we fit it automatically - we test multiple models and it’s easier to use <code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> method of <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -645,9 +652,9 @@ Lags per area: 16
     <span class="n">theoretical_semivariograms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theo_semi</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model parameters:&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nugget:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sill:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Range:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nugget:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">nugget</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sill:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">sill</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Range:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">range</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#####&#39;</span><span class="p">)</span>
 </pre></div>
@@ -660,7 +667,7 @@ Lags per area: 16
 <div class="highlight"><pre>
 Semivariance calculated for 4 lag
 
-Model: spherical, error value: 71.70623485498618
+Model: spherical, error value: 47.46959781307264
 Model: exponential, error value: 12.409730137628472
 Model: linear, error value: 33.73740642254563
 Chosen model: exponential, with value: 12.409730137628472.
@@ -673,7 +680,7 @@ Range: 225000.0
 #####
 Semivariance calculated for 8 lag
 
-Model: spherical, error value: 51.552680270412566
+Model: spherical, error value: 29.50306496934048
 Model: exponential, error value: 18.445105479962933
 Model: linear, error value: 31.969300956642797
 Chosen model: exponential, with value: 18.445105479962933.
@@ -686,7 +693,7 @@ Range: 133928.57142857142
 #####
 Semivariance calculated for 16 lag
 
-Model: spherical, error value: 54.842848099706195
+Model: spherical, error value: 33.17075686586436
 Model: exponential, error value: 22.57867885361459
 Model: linear, error value: 36.236544305662264
 Chosen model: exponential, with value of: 22.57867885361459.
@@ -706,25 +713,25 @@ Range: 123750.0
 <div class="highlight"><pre>
 /home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3335: RuntimeWarning: Mean of empty slice.
   out=out, **kwargs)
-/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:271: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
+/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:302: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
   warnings.warn(warning_msg)
 </pre></div></div>
 </div>
-<div class="section" id="id2">
+<section id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p><em>Exponential</em> model was chosen in each case. This model offers lowest error of fitting. If we look only into the error value then we may assume that the best model is for 4 lags… but when we compare different parameters of semivariogram model we see interesting things.</p>
 <p><strong>Nugget</strong> of four lags is large and it’s 30 cases per 100,000 inhabitants. Why is that? Model with only four lags catches large distance near the zero origin and it introduces bias. Other lags have nugget close to 0.</p>
 <p><strong>Range</strong> of the first model is very large compared to the areal bounds and it is a half of them. Range of 8 and 16 lags is closer to each other and more than two-three times smaller than range of 4 lags. It’s the same effect of large spacing for 4 lags.</p>
 <p><strong>Sill</strong> is the same because it describes variance in dataset (which is constant).</p>
 <p>Summarizing: 4-lags model has lowest error of fit but largest nugget and range. 8- and 16-lags models have comparable nugget and range. Probably one of these models will be a better fit for Kriging.</p>
-</div>
-</div>
-<div class="section" id="4.-Read-point-data-canvas">
+</section>
+</section>
+<section id="4.-Read-point-data-canvas">
 <h2>4. Read point data canvas<a class="headerlink" href="#4.-Read-point-data-canvas" title="Permalink to this headline">¶</a></h2>
 <p><strong>Pyinterpolate</strong> doesn’t have function for read point data directly from shapefile (2021-02-07) but we can do it with <strong>GeoPandas</strong> package. <strong>Pyinterpolate</strong> uses <strong>GeoPandas</strong> under the hood so there is no problem with import of this package.</p>
 <p>We read point file as the <strong>GeoDataFrame</strong> object which stores geometry column and data features as tables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -736,7 +743,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -791,11 +798,11 @@ Range: 123750.0
 </div></div>
 </div>
 <p>Now we interpolate value for each point with Kriging. We use <code class="docutils literal notranslate"><span class="pre">apply()</span></code> on geometry column and create new columns of <em>GeoDataFrame</em> with interpolated results.</p>
-</div>
-<div class="section" id="5.-Build-map-of-interpolated-values">
+</section>
+<section id="5.-Build-map-of-interpolated-values">
 <h2>5. Build map of interpolated values<a class="headerlink" href="#5.-Build-map-of-interpolated-values" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -833,7 +840,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -842,7 +849,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -938,12 +945,12 @@ Range: 123750.0
 </table>
 </div></div>
 </div>
-<div class="section" id="id3">
+<section id="id3">
 <h3>Clarification:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
 <p>This is rather complicated function in which we interpolate missing values as a new columns of <strong>GeoDataFrame</strong>. <em>Uncertainty</em> is assigned to interpolated results for further analysis.</p>
 <p>Now we can save our <strong>GeoDataFrame</strong> as a shapefile…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -954,12 +961,12 @@ Range: 123750.0
 </div>
 </div>
 <p>or check results directly in a notebook!</p>
-</div>
-</div>
-<div class="section" id="6.-Show-map-of-interpolated-values-with-choropleth-map-of-breast-cancer-rates">
+</section>
+</section>
+<section id="6.-Show-map-of-interpolated-values-with-choropleth-map-of-breast-cancer-rates">
 <h2>6. Show map of interpolated values with choropleth map of breast cancer rates<a class="headerlink" href="#6.-Show-map-of-interpolated-values-with-choropleth-map-of-breast-cancer-rates" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -971,7 +978,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1040,7 +1047,7 @@ Range: 123750.0
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1138,7 +1145,7 @@ Lag 16
 ######
 </pre></div></div>
 </div>
-<div class="section" id="id4">
+<section id="id4">
 <h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
 <p>Visual inspection shows that:</p>
 <ol class="arabic simple">
@@ -1147,7 +1154,7 @@ Lag 16
 </ol>
 <p>To answer second question we calculate the Mean Absolute Difference between each lag’s interpolated results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1195,14 +1202,14 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
 
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="id5">
+</section>
+<section id="id5">
 <h3>Clarification:<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p>As you see those differences are really small. Each semivariogram model is similar in this case. In this case we can use <strong>4-lag</strong> model. It will be calculted faster than other models and it is still very similar to other models.</p>
 <hr class="docutils" />
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -1235,7 +1242,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" title="previous chapter">Ordinary and Simple Kriging - tutorial</a></li>
+      <li>Previous: <a href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" title="previous chapter">Inverse Distance Weighting model vs Kriging - tutorial</a></li>
       <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
   </ul></li>
   </ul></li>
@@ -1267,7 +1274,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
