@@ -50,10 +50,10 @@ class TestFitSemivariance(unittest.TestCase):
 
         nugget = 0
         sill = 20
-        range = 40
+        srange = 40
         fake_theoretical_smv.nugget = nugget
         fake_theoretical_smv.sill = sill
-        fake_theoretical_smv.range = range
+        fake_theoretical_smv.range = srange
         fmn = 'linear'
         fake_theoretical_smv.chosen_model_name = fmn
 
