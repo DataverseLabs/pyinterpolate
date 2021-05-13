@@ -70,7 +70,7 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Check if now model is not the same
         assert fake_theoretical_smv.nugget != nugget
-        assert fake_theoretical_smv.range != range
+        assert fake_theoretical_smv.range != srange
         assert fake_theoretical_smv.sill != sill
         assert fake_theoretical_smv.chosen_model_name != fmn
 
@@ -81,7 +81,7 @@ class TestFitSemivariance(unittest.TestCase):
 
         self.assertEqual(fake_theoretical_smv.nugget, nugget, "Problem with import/export of semivariogram nugget")
         self.assertEqual(fake_theoretical_smv.sill, sill, "Problem with import/export of semivariogram sill")
-        self.assertEqual(fake_theoretical_smv.range, range, "Problem with import/export of semivariogram range")
+        self.assertEqual(fake_theoretical_smv.range, srange, "Problem with import/export of semivariogram range")
         self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Problem with import/export of semivariogram "
                                                                       "name")
 
