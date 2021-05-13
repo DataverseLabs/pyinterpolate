@@ -180,7 +180,7 @@ class RegularizedSemivariogram:
         y_opt_h = self.optimal_theoretical_model.predict(lags)
 
         if not self.weight_change:
-            sill = self.initial_theoretical_model_of_areal_data.params[1]
+            sill = self.initial_theoretical_model_of_areal_data.sill
             denominator = sill * np.sqrt(self.iter)
 
             y_exp_v_h = self.initial_theoretical_model_of_areal_data.predict(lags)
@@ -346,8 +346,10 @@ class RegularizedSemivariogram:
                 self.weights.append(weights)
 
                 # Fit rescaled empirical semivariogram to the new theoretical function
-                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(areal_centroids,
-                                                                                     self.temp_experimental_semivariogram)
+                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(
+                    areal_centroids,
+                    self.temp_experimental_semivariogram)
+
                 self.temp_theoretical_semivariogram_model.find_optimal_model(
                     weighted=is_weighted,
                     number_of_ranges=ranges

@@ -185,7 +185,7 @@ class ArealKriging:
         # Transform array into a dataframe
 
         gdf = gpd.GeoDataFrame(list_of_vals)
-        gdf.columns = ['id', 'geometry', 'estimated value', 'estimated prediction error', 'rmse']
+        gdf.columns = ['id', 'geometry', 'reg.est', 'reg.err', 'rmse']
         gdf.crs = data_crs
 
         return gdf

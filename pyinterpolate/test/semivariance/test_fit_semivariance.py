@@ -48,8 +48,12 @@ class TestFitSemivariance(unittest.TestCase):
 
         fake_theoretical_smv = TheoreticalSemivariogram(None, None, False)
 
-        parameters = [0, 20, 40]
-        fake_theoretical_smv.params = parameters
+        nugget = 0
+        sill = 20
+        range = 40
+        fake_theoretical_smv.nugget = nugget
+        fake_theoretical_smv.sill = sill
+        fake_theoretical_smv.range = range
         fmn = 'linear'
         fake_theoretical_smv.chosen_model_name = fmn
 
@@ -59,11 +63,15 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Clear model paramas and name
 
-        fake_theoretical_smv.params = [None, None, None]
+        fake_theoretical_smv.nugget = None
+        fake_theoretical_smv.sill = None
+        fake_theoretical_smv.range = None
         fake_theoretical_smv.chosen_model_name = None
 
         # Check if now model is not the same
-        assert fake_theoretical_smv.params != parameters
+        assert fake_theoretical_smv.nugget != nugget
+        assert fake_theoretical_smv.range != range
+        assert fake_theoretical_smv.sill != sill
         assert fake_theoretical_smv.chosen_model_name != fmn
 
         # Import params
@@ -71,8 +79,11 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Check if params are the same as at the beginning
 
-        self.assertEqual(fake_theoretical_smv.params, parameters, "Parameters should be [0, 20, 40]")
-        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Model name should be linear")
+        self.assertEqual(fake_theoretical_smv.nugget, nugget, "Problem with import/export of semivariogram nugget")
+        self.assertEqual(fake_theoretical_smv.sill, sill, "Problem with import/export of semivariogram sill")
+        self.assertEqual(fake_theoretical_smv.range, range, "Problem with import/export of semivariogram range")
+        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Problem with import/export of semivariogram "
+                                                                      "name")
 
     def test_semivariance_export(self):
         gamma = calculate_semivariance(self.dataset, self.step_size, self.max_range)

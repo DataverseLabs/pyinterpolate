@@ -4,15 +4,16 @@ from pyinterpolate.distance.calculate_distances import calc_point_to_point_dista
 
 def inverse_distance_weighting(known_points, unknown_location, number_of_neighbours=-1, power=2.):
     """
-    Function perform Inverse Distance Weighting on a given set of points.
+    Function performs Inverse Distance Weighting with a given set of points and an unknown location.
 
     INPUT:
 
     :param known_points: (numpy array) [x, y, value],
     :param unknown_location: (numpy array) [[ux, uy]],
     :param number_of_neighbours: (int) default=-1 which means that all known points will be used to estimate value at
-        the unknown location. Can be any number in the limits [2, length(known_points)],
-    :param power: (float) value larger or equal to 0, controls weight assigned to each known point.
+        the unknown location. Can be any number within the limits [2, length(known_points)],
+    :param power: (float) default=2, power value must be larger or equal to 0, controls weight assigned to each known
+        point.
 
     OUTPUT:
 

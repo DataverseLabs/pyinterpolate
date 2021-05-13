@@ -4,15 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Poisson Kriging - Area to Point Kriging &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Documentation" href="../code_documentation.html" />
@@ -281,20 +284,20 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Poisson-Kriging---Area-to-Point-Kriging">
+<section id="Poisson-Kriging---Area-to-Point-Kriging">
 <h1>Poisson Kriging - Area to Point Kriging<a class="headerlink" href="#Poisson-Kriging---Area-to-Point-Kriging" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="Table-of-Contents:">
+<section id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Load areal and point data,</p></li>
 <li><p>Load semivariogram (regularized),</p></li>
 <li><p>Build point-based map of better spatial resolution.</p></li>
 </ol>
-</div>
-<div class="section" id="Level:-Advanced">
+</section>
+<section id="Level:-Advanced">
 <h2>Level: Advanced<a class="headerlink" href="#Level:-Advanced" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="Changelog">
+</section>
+<section id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -309,14 +312,18 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="Introduction">
+</section>
+<section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>To start this tutorial it is required to understand concepts in the <strong>Ordinary and Simple Kriging</strong> and <strong>Semivariogram Regularization</strong> tutorials. The good idea is to end <strong>Poisson Kriging - Centroid based</strong> and <strong>Poisson Kriging - Area to Area</strong> tutorials before this one.</p>
 <p>Poisson Kriging technique is used to model spatial count data. We are analyzing special case where data is counted over areas. Those areas may have irregular shapes and sizes beacuse they represent administrative regions.</p>
@@ -334,11 +341,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Perform Area to Point smoothing of areal data.</p></li>
 <li><p>Visualize points.</p></li>
 </ol>
-</div>
-<div class="section" id="1)-Read-and-explore-data">
+</section>
+<section id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -353,7 +360,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -374,7 +381,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -386,12 +393,12 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc356b3add0&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb1324f7a90&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -401,16 +408,16 @@ div.rendered_html tbody tr:hover {
 <img alt="../_images/tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_4_1.png" src="../_images/tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_4_1.png" />
 </div>
 </div>
-<div class="section" id="Clarification:">
+<section id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>It is good idea to look into the spatial patterns in dataset and to visually check if our data do not have any NaN values. We use geopandas GeoDataFrame plot function for it with color map which is diverging color classes well.</p>
-</div>
-</div>
-<div class="section" id="2)-Load-semivariogram-model">
+</section>
+</section>
+<section id="2)-Load-semivariogram-model">
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>In this step we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regulariztion along with the Poisson Kriging but it is a very long process and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -419,8 +426,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="3)-Perform-Area-to-Point-smoothing-of-areal-data.">
+</section>
+<section id="3)-Perform-Area-to-Point-smoothing-of-areal-data.">
 <h2>3) Perform Area to Point smoothing of areal data.<a class="headerlink" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data." title="Permalink to this headline">¶</a></h2>
 <p>The process of map smoothing is straightforward. We need to initialize Kriging model then invoke method <strong>regularize_data</strong>. This method takes three parameters:</p>
 <p>=&gt; <strong>number of observations</strong> (the most important parameter - how many neighbors are affecting your area of analysis),</p>
@@ -428,7 +435,7 @@ div.rendered_html tbody tr:hover {
 <p>=&gt; <strong>data_crs</strong> with default <strong>EPSG 4326</strong>.</p>
 <p>Method returns GeoDataFrame with points and predicted values. It iteratively re-calculates each area risk and returns predictions per point. In Area to Area Kriging those predictions where aggregated, now we leave them and use them as a smooth map of areal risk.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -443,7 +450,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -453,12 +460,12 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="4)-Visualize-data">
+</section>
+<section id="4)-Visualize-data">
 <h2>4) Visualize data<a class="headerlink" href="#4)-Visualize-data" title="Permalink to this headline">¶</a></h2>
 <p>The last step is data visualization. We use choropleth map from the GeoPandas package, but you can store smoothed map to shapefile of points and process it in a different place or with specific software (in our idea the best for it is <strong>QGIS</strong>).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -467,7 +474,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -491,8 +498,8 @@ div.rendered_html tbody tr:hover {
       <th></th>
       <th>id</th>
       <th>geometry</th>
-      <th>estimated value</th>
-      <th>estimated prediction error</th>
+      <th>reg.est</th>
+      <th>reg.err</th>
       <th>rmse</th>
     </tr>
   </thead>
@@ -501,63 +508,63 @@ div.rendered_html tbody tr:hover {
       <th>0</th>
       <td>25019</td>
       <td>POINT (2117322.312 556124.507)</td>
-      <td>0.096122</td>
-      <td>7.484998</td>
-      <td>37.640987</td>
+      <td>0.094379</td>
+      <td>6.705419</td>
+      <td>30.791424</td>
     </tr>
     <tr>
       <th>1</th>
       <td>25019</td>
       <td>POINT (2134642.820 556124.507)</td>
-      <td>154.462891</td>
-      <td>6.656589</td>
-      <td>37.640987</td>
+      <td>161.314196</td>
+      <td>6.682668</td>
+      <td>30.791424</td>
     </tr>
     <tr>
       <th>2</th>
       <td>36121</td>
       <td>POINT (1424501.989 556124.507)</td>
-      <td>5.863822</td>
-      <td>8.887317</td>
-      <td>22.847579</td>
+      <td>5.668237</td>
+      <td>7.184250</td>
+      <td>26.042054</td>
     </tr>
     <tr>
       <th>3</th>
       <td>36121</td>
       <td>POINT (1424501.989 546124.507)</td>
-      <td>6.712184</td>
-      <td>8.617830</td>
-      <td>22.847579</td>
+      <td>6.426163</td>
+      <td>6.751145</td>
+      <td>26.042054</td>
     </tr>
     <tr>
       <th>4</th>
       <td>36121</td>
       <td>POINT (1433162.243 561124.507)</td>
-      <td>20.638717</td>
-      <td>8.710094</td>
-      <td>22.847579</td>
+      <td>20.399275</td>
+      <td>7.594203</td>
+      <td>26.042054</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="n">base</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">smoothed_area</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;estimated value&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">smoothed_area</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;reg.est&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc34b4fda50&gt;
+&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fb13289fc10&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -568,8 +575,8 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <hr class="docutils" />
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -634,7 +641,7 @@ div.rendered_html tbody tr:hover {
       &copy;2020, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

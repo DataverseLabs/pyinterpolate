@@ -1,7 +1,8 @@
 import numpy as np
 
-from pyinterpolate.transform.prepare_kriging_data import prepare_kriging_data
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+from pyinterpolate.transform.prepare_kriging_data import prepare_kriging_data
+from pyinterpolate.transform.tests import _does_variogram_exist
 
 
 class Krige:
