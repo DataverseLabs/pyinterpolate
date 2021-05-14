@@ -3,6 +3,9 @@
 PyInterpolate
 ========
 
+**version 0.2.3** - *Jezero Crater*
+---------------------------------------
+
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
 
 If you’re:
