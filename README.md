@@ -3,6 +3,9 @@
 PyInterpolate
 ========
 
+**version 0.2.3** - *Jezero Crater*
+---------------------------------------
+
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
 
 If you’re:
@@ -56,7 +59,7 @@ experimental_semivariogram = calculate_semivariance(
 **[3.]** Data transformation, theoretical semivariogram.
 
 ```python
-from pyinterpolate.semivariance import TheoreticalSemivariogram
+from pyinterpolate.semivariance impJezero Craterort TheoreticalSemivariogram
 semivar = TheoreticalSemivariogram(points_array=point_data, empirical_semivariance=experimental_semivariogram)
 number_of_ranges = 32
 
@@ -231,9 +234,9 @@ Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
 Development
 ------------------
 
-- inverse distance weighting,
-- semivariogram analysis and visualization methods,
-- see Projects page of this repository!
+- multi core processing (speed up calculations),
+- code refactoring to be more close to the **GeoPandas** package style,
+- set to work with the newer versions of Python and Windows OS.
 
 
 Known Bugs
