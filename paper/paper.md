@@ -56,7 +56,7 @@ Point observation analysis requires manual or automatic semivariogram fitting to
 
 Kriging, which is the baseline of the Pyinterpolate package, is an estimation method that gives the best unbiased linear estimates of point values or block averages [@Armstrong:1998]. Kriging minimizes variance of a dataset with missing values. Baseline technique is the **Ordinary Kriging** where value at unknown location $\hat{z}$ is estimated as a linear combination of $K$ neighbors with value $z$ and weights $\lambda$ assigned to those neighbors (1).
 
-(1) $$\hat{z} = \sum_{i=1}^{K}\lambda_{i}*z_{i}$$
+(1) $$\hat{z} = \sum_{i=1}^{K}\lambda_{i}z_{i}$$
 
 Weights $\lambda$ are a solution of following system of linear equations (2):
 
@@ -81,21 +81,42 @@ Ordinary Kriging is one of the classic Kriging types within the package. **Simpl
 
 where $\mu$ is a process mean and $R$ is a residual at a specific location. Residual value is derived as the first element (denoted as $\boldsymbol{1}$) from:
 
-(6) $$R = ((Z - \mu) * \lambda)\boldsymbol{1}$$
+(6) $$R = ((Z - \mu) \times \lambda)\boldsymbol{1}$$
 
-Number of values depends on the number of neighbours in search radius, similar to equation (1) for Ordinary Kriging. $\lambda$ weights are the solution of following function:
+Number of values depends on the number of neighbours in a search radius, similar to equation (1) for Ordinary Kriging. $\lambda$ weights are the solution of following function:
 
 (7) $$\lambda = K^{-1}(\hat{k})$$
 
 where $K$ is a semivariance matrix between each neighbour of size $NxN$ and $k$ is a semivariance between unknown point and known points of size $Nx1$.
 
-Package allows use of the three main types of Poisson Kriging: Centroid-based Poisson Kriging, Area-to-Area Poisson Kriging and Area-to-Point Poisson Kriging. Risk over areas (or points) for each type of Poisson Kriging is defined similarly to the equation (1) but weights associated with the $\lambda$ parameter are estimated with additional constraints related to the population weighting. The spatial support of each unit needs to be accounted for in both the semivariogram inference and kriging. Full process of areal data Poisson Kriging is presented in [@Goovaerts:2006] and semivariogram deconvolution which is an intermediate step in Poisson Kriging is described in [Goovaerts:2007].
+Package allows use of the three main types of Poisson Kriging: Centroid-based Poisson Kriging, Area-to-Area Poisson Kriging and Area-to-Point Poisson Kriging. Risk over areas (or points) for each type of Poisson Kriging is defined similarly to the equation (1) but weights associated with the $\lambda$ parameter are estimated with additional constraints related to the population weighting. The spatial support of each unit needs to be accounted for in both the semivariogram inference and kriging. Full process of areal data Poisson Kriging is presented in [@Goovaerts:2006] and semivariogram deconvolution which is an intermediate step in Poisson Kriging is described in [@Goovaerts:2007].
 
 # Package Structure
 
 Prediction steps in spatial interpolation are generally the same for point and areal datasets. Table 1 shows each type of interpolation, input data, steps needed to perform it and outcomes of analysis.
 
-Table 1:
+<style>
+table th:first-of-type {
+    width: 10%;
+}
+table th:nth-of-type(2) {
+    width: 20%;
+}
+table th:nth-of-type(3) {
+    width: 20%;
+}
+table th:nth-of-type(4) {
+    width: 30%;
+}
+table th:nth-of-type(5) {
+    width: 20%;
+}
+table {
+  font-size: x-small;
+}
+</style>
+
+Table 1: *Kriging types implemented in the pyinterpolate package*
 
 | Kriging Type | Input | Output | Steps | Comment |
 |------------------|---------|-----------|---------|--------------|
@@ -194,9 +215,26 @@ The most similar and most important package from Python environment is **PyKrige
 
 **R programming language** offers **gstat** package for spatial interpolation and spatial modeling [@PEBESMA2004683]. Package is designed for variogram modelling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid package for Kriging and spatial interpolation and has the largest number of methods to perform spatial modelling. The main difference between gstat and Pyinterpolate is availability of area-to-point Poisson Kriging based on the algorithm proposed by Goovaerts [@Goovaerts:2007] in Pyinterpolate package.
 
+## Comparison of Ordinary Kriging in `Pyinterpolate` and `gstat` package
+
+Up to date the most popular package for Kriging is **gstat** [@PEBESMA2004683] written in the R programming language. Existence of this software allows to compare **point Kriging** operations between packages. The `meuse` dataset provided with the R package **sp** [@PebesmaSPArt; @BivandBook] is used in this example. This dataset contains measurements of four heavy metals concentration in the top soil in a flood plain along the river Meuse [@meuse]. Code for this comparison is given in the dedicated notebook available in the paper repository with url given in the \autoref{appendix}.
+
+From four metals concentration of zinc is used in this example. Variogram modeling and kriging are performed semi-automatically in both cases with a common setting related to the kriging itself - with the number of neighbours. Variogram modeling is different. In the case of **gstat** package variogram was derived as a Spherical model with nugget equal to the first three values of experimental semivariances, sill is equal to the mean of the last five values of experimental semivariances and range which is 1/3 of the maximum distance. Lags between steps are not equal. On the contrary, **pyinterpolate** fits a semivariogram automatically based on the lowest RMSE between theoretical model and experimental values. It is an iterative process. Based on the given number of ranges equally spaced lags are created and for each lag range equal to it is set and calculates RMSE between experimental points and modeled curve. This process is repeated for each type of theoretical model. Model and range with the lowest error are chosen. In this case the Spherical model is the best. Nugget is equal to the first value of experimental semivariance (usually it is 0 or value very close to the 0). Sill is set to the variance of the whole dataset. Interpolation grid is derived from the **sp** package.
+
+The ordinary Kriging interpolation is performed for both packages. Predictions and prediction variance error terms are calculated and compared. Scatterplot of **pyinterpolate** output versus **gstat** output is presented in the \autoref{fig8}. Calculated Pearson correlation coefficient between both outputs is extremely high and close to the 0.99 with p-value close to the 0.
+
+ ![Correlation between predicted values from the **pyinterpolate** package and the gstat package.\label{fig8}](fig8.png)
+ 
+ Pattern of predicted values and variance errors are very similar in both cases. \autoref{fig9} shows predicted output of **gstat** package and **pyinterpolate** and \autoref{fig10} shows maps of variance errors from the both packages.
+ 
+  ![Comparison of predicted values from gstat (on the left) and pyinterpolate (on the right) packages.\label{fig9}](fig9.png)
+ 
+  ![Comparison of prediction errors from gstat (on the left) and pyinterpolate (on the right) packages.\label{fig10}](fig10.png)
+
+
 # Appendix\label{appendix}
 
-1. **Example and data repository**: https://github.com/szymon-datalions/pyinterpolate-paper
+1. [**Example and data repository**](https://github.com/szymon-datalions/pyinterpolate-paper)
 
 # References
 
