@@ -56,7 +56,7 @@ Point observation analysis requires manual or automatic semivariogram fitting to
 
 Kriging, which is the baseline of the Pyinterpolate package, is an estimation method that gives the best unbiased linear estimates of point values or block averages [@Armstrong:1998]. Kriging minimizes variance of a dataset with missing values. Baseline technique is the **Ordinary Kriging** where value at unknown location $\hat{z}$ is estimated as a linear combination of $K$ neighbors with value $z$ and weights $\lambda$ assigned to those neighbors (1).
 
-(1) $$\hat{z} = \sum_{i=1}^{K}\lambda_{i}*z_{i}$$
+(1) $$\hat{z} = \sum_{i=1}^{K}\lambda_{i}z_{i}$$
 
 Weights $\lambda$ are a solution of following system of linear equations (2):
 
@@ -94,6 +94,27 @@ Package allows use of the three main types of Poisson Kriging: Centroid-based Po
 # Package Structure
 
 Prediction steps in spatial interpolation are generally the same for point and areal datasets. Table 1 shows each type of interpolation, input data, steps needed to perform it and outcomes of analysis.
+
+<style>
+table th:first-of-type {
+    width: 10%;
+}
+table th:nth-of-type(2) {
+    width: 20%;
+}
+table th:nth-of-type(3) {
+    width: 20%;
+}
+table th:nth-of-type(4) {
+    width: 30%;
+}
+table th:nth-of-type(5) {
+    width: 20%;
+}
+table {
+  font-size: x-small;
+}
+</style>
 
 Table 1: *Kriging types implemented in the pyinterpolate package*
 
@@ -141,7 +162,7 @@ Breast cancer rates are taken from the *Incidence Rate Report for U.S.* counties
 
 Population centroids are retrieved from the *U.S. Census Blocks 2010* [@popCensus]. Breast cancer affects only females but for this example the whole population for an area was included. Raw and transformed datasets are available in a dedicated Github repository. Link is provided in the \autoref{appendix}.
 
-Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Code for this part is available in Github repository \autoref[Appendix{appendix}].
+Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**. Code for this part is available in Github repository \autoref{appendix}.
 
 ## 1. Read and prepare data
 
