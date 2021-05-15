@@ -3,6 +3,9 @@
 PyInterpolate
 ========
 
+**version 0.2.3** - *Jezero Crater*
+---------------------------------------
+
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
 
 If you’re:
@@ -56,7 +59,7 @@ experimental_semivariogram = calculate_semivariance(
 **[3.]** Data transformation, theoretical semivariogram.
 
 ```python
-from pyinterpolate.semivariance import TheoreticalSemivariogram
+from pyinterpolate.semivariance impJezero Craterort TheoreticalSemivariogram
 semivar = TheoreticalSemivariogram(points_array=point_data, empirical_semivariance=experimental_semivariogram)
 number_of_ranges = 32
 
@@ -212,7 +215,8 @@ Package structure
 High level overview:
 
  - [ ] pyinterpolate
-    - [x] **distance** - distance calculation
+    - [x] **distance** - distance calculation,
+    - [x] **idw** - inverse distance weighting interpolation,
     - [x] **io_ops** - reads and prepares input spatial datasets,
     - [x] **transform** - transforms spatial datasets,
     - [x] **viz** - interpolation of smooth surfaces from points into rasters,
@@ -230,12 +234,12 @@ Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
 Development
 ------------------
 
-- inverse distance weighting,
-- semivariogram analysis and visualization methods,
-- see Projects page of this repository!
+- multi core processing (speed up calculations),
+- code refactoring to be more close to the **GeoPandas** package style,
+- set to work with the newer versions of Python and Windows OS.
 
 
 Known Bugs
 -----------------
 
-- (still) not detected!
+- Package may crash with very large dataset (memory issues). Operations are performed with numpy arrays and for datasets larger than 10 000 points there could be a memory issue ([Issue page](https://github.com/szymon-datalions/pyinterpolate/issues/64))

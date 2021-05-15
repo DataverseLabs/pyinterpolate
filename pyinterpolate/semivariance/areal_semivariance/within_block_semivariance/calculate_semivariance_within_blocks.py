@@ -1,5 +1,4 @@
 import numpy as np
-from tqdm import tqdm
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 
 
@@ -21,7 +20,7 @@ def calculate_semivariance_within_blocks(points_within_area, semivariance_model)
 
     within_areas_semivariance = []
 
-    for block in tqdm(points_within_area):
+    for block in points_within_area:
 
         # Get area id
         area_id = block[0]

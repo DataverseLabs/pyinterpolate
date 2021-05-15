@@ -1,8 +1,10 @@
 import numpy as np
 import geopandas as gpd
 from shapely.geometry import Point
+
 from pyinterpolate.kriging.areal_poisson_kriging.area_to_area.ata_poisson_kriging import AtAPoissonKriging
 from pyinterpolate.kriging.areal_poisson_kriging.area_to_point.atp_poisson_kriging import AtPPoissonKriging
+from pyinterpolate.transform.tests import does_variogram_exist
 
 
 class ArealKriging:
@@ -37,6 +39,8 @@ class ArealKriging:
             'atp': AtPPoissonKriging
         }
 
+        # Check if semivariogram exists
+        does_variogram_exist(semivariogram_model)
         self.semivar_model = semivariogram_model
         self.areal_data_known = known_areas
         self.point_counts_within_area = known_areas_points
@@ -185,7 +189,7 @@ class ArealKriging:
         # Transform array into a dataframe
 
         gdf = gpd.GeoDataFrame(list_of_vals)
-        gdf.columns = ['id', 'geometry', 'estimated value', 'estimated prediction error', 'rmse']
+        gdf.columns = ['id', 'geometry', 'reg.est', 'reg.err', 'rmse']
         gdf.crs = data_crs
 
         return gdf

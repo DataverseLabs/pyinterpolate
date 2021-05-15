@@ -1,8 +1,8 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.io_ops.read_data import read_point_data
-from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
+import pandas as pd
+
 from pyinterpolate.semivariance.semivariogram_fit.fit_semivariance import TheoreticalSemivariogram
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_weighted_semivariance
@@ -10,46 +10,50 @@ from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance 
 
 class TestFitSemivariance(unittest.TestCase):
 
-    def test_fit_semivariance(self):
+    def __init__(self, *args, **kwargs):
+        super(TestFitSemivariance, self).__init__(*args, **kwargs)
+
         my_dir = os.path.dirname(__file__)
-        path = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
+        path = os.path.join(my_dir, '../sample_data/armstrong_data.npy')
 
-        dataset = read_point_data(path, 'txt')
-        new_col = np.arange(1, len(dataset) + 1)
+        self.dataset = np.load(path)
+        self.step_size = 1.1
+        self.max_range = 10
 
-        dataset_weights = np.zeros((dataset.shape[0], dataset.shape[1] + 1))
-        dataset_weights[:, :-1] = dataset
+    def test_fit_semivariance(self):
+
+        new_col = np.arange(1, len(self.dataset) + 1)
+
+        dataset_weights = np.zeros((self.dataset.shape[0], self.dataset.shape[1] + 1))
+        dataset_weights[:, :-1] = self.dataset
         dataset_weights[:, -1] = new_col
-
-        # Set semivariance params
-        distances = calc_point_to_point_distance(dataset_weights[:, :-2])
-
-        maximum_range = np.max(distances)
-        number_of_divisions = 10
-        step_size = maximum_range / number_of_divisions
 
         # Calculate weighted and non-weighted semivariance
 
-        gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
-        gamma_non = calculate_semivariance(dataset, step_size, maximum_range)
+        gamma_w = calculate_weighted_semivariance(dataset_weights, self.step_size, self.max_range)
+        gamma_non = calculate_semivariance(self.dataset, self.step_size, self.max_range)
 
         # Fit semivariance - find optimal models
-        t_non_weighted = TheoreticalSemivariogram(dataset, gamma_non)
+        t_non_weighted = TheoreticalSemivariogram(self.dataset, gamma_non)
         t_weighted = TheoreticalSemivariogram(dataset_weights[:, :-1], gamma_w)
 
-        model_non_weighted = t_non_weighted.find_optimal_model(weighted=False, number_of_ranges=20)  # linear
-        model_weighted = t_weighted.find_optimal_model(weighted=False, number_of_ranges=20)  # linear
+        model_non_weighted = t_non_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
+        model_weighted = t_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
 
-        self.assertEqual(model_non_weighted, 'linear', "Non-weighted model should be linear")
-        self.assertEqual(model_weighted, 'linear', "Weighted model should be linear")
+        self.assertEqual(model_non_weighted, 'spherical', "Non-weighted model should be spherical")
+        self.assertEqual(model_weighted, 'spherical', "Weighted model should be spherical")
 
     def test_fit_semivariance_io(self):
         # Prepare fake model for fit semivariance class
 
         fake_theoretical_smv = TheoreticalSemivariogram(None, None, False)
 
-        parameters = [0, 20, 40]
-        fake_theoretical_smv.params = parameters
+        nugget = 0
+        sill = 20
+        srange = 40
+        fake_theoretical_smv.nugget = nugget
+        fake_theoretical_smv.sill = sill
+        fake_theoretical_smv.range = srange
         fmn = 'linear'
         fake_theoretical_smv.chosen_model_name = fmn
 
@@ -59,11 +63,15 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Clear model paramas and name
 
-        fake_theoretical_smv.params = [None, None, None]
+        fake_theoretical_smv.nugget = None
+        fake_theoretical_smv.sill = None
+        fake_theoretical_smv.range = None
         fake_theoretical_smv.chosen_model_name = None
 
         # Check if now model is not the same
-        assert fake_theoretical_smv.params != parameters
+        assert fake_theoretical_smv.nugget != nugget
+        assert fake_theoretical_smv.range != srange
+        assert fake_theoretical_smv.sill != sill
         assert fake_theoretical_smv.chosen_model_name != fmn
 
         # Import params
@@ -71,8 +79,26 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Check if params are the same as at the beginning
 
-        self.assertEqual(fake_theoretical_smv.params, parameters, "Parameters should be [0, 20, 40]")
-        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Model name should be linear")
+        self.assertEqual(fake_theoretical_smv.nugget, nugget, "Problem with import/export of semivariogram nugget")
+        self.assertEqual(fake_theoretical_smv.sill, sill, "Problem with import/export of semivariogram sill")
+        self.assertEqual(fake_theoretical_smv.range, srange, "Problem with import/export of semivariogram range")
+        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Problem with import/export of semivariogram "
+                                                                      "name")
+
+    def test_semivariance_export(self):
+        gamma = calculate_semivariance(self.dataset, self.step_size, self.max_range)
+        theo_model = TheoreticalSemivariogram(self.dataset, gamma)
+        theo_model.find_optimal_model(number_of_ranges=8)
+        my_dir = os.path.dirname(__file__)
+        filepath = os.path.join(my_dir, '../sample_data/test_semivariance_export.csv')
+        theo_model.export_semivariance(filepath)
+        df = pd.read_csv(filepath)
+
+        columns = ['lag', 'experimental', 'theoretical']
+        for c in columns:
+            self.assertIn(c, df.columns, f'DataFrame is corrupted, missing {c} column')
+
+        self.assertEqual(len(df), 10, f'DataFrame len should be 10 but it is {len(df)}')
 
 
 if __name__ == '__main__':

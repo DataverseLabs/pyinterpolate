@@ -1,5 +1,6 @@
 # Base libraries
 import numpy as np
+from tqdm import trange
 
 # Data vizualization libraries
 import matplotlib.pyplot as plt
@@ -179,7 +180,7 @@ class RegularizedSemivariogram:
         y_opt_h = self.optimal_theoretical_model.predict(lags)
 
         if not self.weight_change:
-            sill = self.initial_theoretical_model_of_areal_data.params[1]
+            sill = self.initial_theoretical_model_of_areal_data.sill
             denominator = sill * np.sqrt(self.iter)
 
             y_exp_v_h = self.initial_theoretical_model_of_areal_data.predict(lags)
@@ -199,36 +200,34 @@ class RegularizedSemivariogram:
     def _check_deviation_ratio(self):
         return bool(self.deviation_ratio <= self.min_deviation_ratio)
 
-    def _check_loop_limit(self):
-        return bool(self.iter >= self.max_iters)
-
     def _check_diff_d_stat(self):
-        if self.diff_decrease < self.min_diff_decrease:
+        if self.diff_decrease <= 0:
+            if np.abs(self.diff_decrease) < self.min_diff_decrease:
 
-            if self.const_d_stat_reps >= self.min_diff_decrease_reps:
-                return True
+                if self.const_d_stat_reps >= self.min_diff_decrease_reps:
+                    return True
 
-            self.const_d_stat_reps += 1
+                self.const_d_stat_reps += 1
+                return False
+
+            if self.const_d_stat_reps >= 1:
+
+                self.const_d_stat_reps = self.const_d_stat_reps - 1
+                return False
+
             return False
-
-        if self.const_d_stat_reps >= 1:
-
-            self.const_d_stat_reps = self.const_d_stat_reps - 1
-            return False
-
         return False
 
     def _check_algorithm(self):
         t1 = self._check_deviation_ratio()  # Default False
         t2 = self._check_diff_d_stat()  # Default False
-        t3 = self._check_loop_limit()  # Default False
 
-        cond = not (t1 or t2 or t3)  # Default False
+        cond = not (t1 or t2)  # Default False
 
         return cond
 
     def fit(self, areal_data, areal_step_size, max_areal_range,
-            point_support_data, ranges=16, weighted_lags=True, store_models=False):
+            point_support_data, weighted_lags=True, store_models=False):
         """
         Function fits area and point support data to the initial regularized models.
 
@@ -240,8 +239,6 @@ class RegularizedSemivariogram:
         :param max_areal_range: (float) max distance to perform distance and semivariance calculations,
         :param point_support_data: (numpy array) point support data prepared with the function get_points_within_area(),
             where data is a numpy array in the form: [area_id, [point_position_x, point_position_y, value]],
-        :param ranges: (int) number of ranges to test during semivariogram fitting. More steps == more accurate nugget
-            and range prediction, but longer distance,
         :param weighted_lags: (bool) lags weighted by number of points; if True then during semivariogram fitting error
             of each model is weighted by number of points for each lag. In practice it means that more reliable data
             (lags) have larger weights and semivariogram is modeled to better fit to those lags,
@@ -254,7 +251,7 @@ class RegularizedSemivariogram:
         self.areal_max_range = max_areal_range
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
-        self.ranges = ranges
+        self.ranges = len(np.arange(0, self.areal_max_range, self.areal_step_size))
         self.weight_error_lags = weighted_lags
 
         self.store_models = store_models
@@ -300,8 +297,8 @@ class RegularizedSemivariogram:
         :param max_iters: (int) maximum number of iterations,
         :param min_deviation_ratio: (float) minimum ratio between deviation and initial deviation (D(i) / D(0)) below
             each algorithm is stopped,
-        :param min_diff_decrease: (float) minimum absolute difference between new and optimal deviation divided by
-            optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
+        :param min_diff_decrease: (float) minimum difference between new and optimal deviation divided by
+            optimal deviation: (D(i) - D(opt)) / D(opt). If it is recorded n times (controled by
             the min_diff_d_stat_reps param) then algorithm is stopped,
         :param min_diff_decrease_reps: (int) number of iterations when algorithm is stopped if condition
             min_diff_d_stat is fulfilled.
@@ -339,54 +336,59 @@ class RegularizedSemivariogram:
 
         # Start iteration procedure
 
-        while self._check_algorithm():
-            # Compute new experimental values for new experimental point support model
-
-            self.temp_experimental_semivariogram, weights = self._rescale_optimal_point_support()
-            self.weights.append(weights)
-
-            # Fit rescaled empirical semivariogram to the new theoretical function
-            self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(areal_centroids,
-                                                                                 self.temp_experimental_semivariogram)
-            self.temp_theoretical_semivariogram_model.find_optimal_model(
-                weighted=is_weighted,
-                number_of_ranges=ranges
-            )
-
-            # Regularize model
-            self.temp_regularized_model = self._regularize(
-                self.temp_experimental_semivariogram,
-                self.temp_theoretical_semivariogram_model
-            )
-
-            # Compute difference statistics
-
-            self.temp_deviation = self._calculate_deviation(self.temp_regularized_model,
-                                                            self.initial_theoretical_model_of_areal_data)
-
-            if self.temp_deviation < self.optimal_deviation:
-                self.weight_change = False
-
-                self.diff_decrease = np.abs(self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
-                self.deviation_ratio = self.temp_deviation / self.deviations[0]
-
-                self.optimal_deviation = self.temp_deviation
-
-                # Update models
-                self.optimal_theoretical_model = self.temp_theoretical_semivariogram_model
-                self.optimal_regularized_model = self.temp_regularized_model
-
+        for _ in trange(self.max_iters):
+            if not self._check_algorithm():
+                break
             else:
-                self.weight_change = True
+                # Compute new experimental values for new experimental point support model
 
-            self.deviations.append(self.temp_deviation)
-            self.iter = self.iter + 1
+                self.temp_experimental_semivariogram, weights = self._rescale_optimal_point_support()
+                self.weights.append(weights)
 
-            # Update models if self.store_models is set to True
-            if self.store_models:
-                self.t_theo_list.append(self.temp_theoretical_semivariogram_model)
-                self.t_exp_list.append(self.temp_experimental_semivariogram)
-                self.t_reg_list.append(self.temp_regularized_model)
+                # Fit rescaled empirical semivariogram to the new theoretical function
+                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(
+                    areal_centroids,
+                    self.temp_experimental_semivariogram)
+
+                self.temp_theoretical_semivariogram_model.find_optimal_model(
+                    weighted=is_weighted,
+                    number_of_ranges=ranges
+                )
+
+                # Regularize model
+                self.temp_regularized_model = self._regularize(
+                    self.temp_experimental_semivariogram,
+                    self.temp_theoretical_semivariogram_model
+                )
+
+                # Compute difference statistics
+
+                self.temp_deviation = self._calculate_deviation(self.temp_regularized_model,
+                                                                self.initial_theoretical_model_of_areal_data)
+
+                if self.temp_deviation < self.optimal_deviation:
+                    self.weight_change = False
+
+                    self.diff_decrease = np.abs(self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
+                    self.deviation_ratio = self.temp_deviation / self.deviations[0]
+
+                    self.optimal_deviation = self.temp_deviation
+
+                    # Update models
+                    self.optimal_theoretical_model = self.temp_theoretical_semivariogram_model
+                    self.optimal_regularized_model = self.temp_regularized_model
+
+                else:
+                    self.weight_change = True
+
+                self.deviations.append(self.temp_deviation)
+                self.iter = self.iter + 1
+
+                # Update models if self.store_models is set to True
+                if self.store_models:
+                    self.t_theo_list.append(self.temp_theoretical_semivariogram_model)
+                    self.t_exp_list.append(self.temp_experimental_semivariogram)
+                    self.t_reg_list.append(self.temp_regularized_model)
 
         # Get theoretical model from regularized
         self.final_theoretical_model = self.temp_theoretical_semivariogram_model
@@ -413,7 +415,7 @@ class RegularizedSemivariogram:
         """
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
-        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags, self.initial_theoretical_model_of_areal_data.predict(lags), color='r', linestyle='--')
         plt.plot(lags, self.initial_regularized_model, color='g', linestyle='-.')
         plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
@@ -431,7 +433,7 @@ class RegularizedSemivariogram:
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
         plt.plot(lags,
-                 self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+                 self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags,
                  self.initial_theoretical_model_of_areal_data.predict(lags), color='r',
                  linestyle='--')

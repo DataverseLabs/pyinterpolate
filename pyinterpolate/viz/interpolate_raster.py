@@ -1,4 +1,5 @@
 import numpy as np
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
@@ -48,33 +49,17 @@ def _set_dims(xs, ys, dmax):
     return x_dim_coords, y_dim_coords, [step, xmin, xmax, ymin, ymax]
 
 
-def update_interpolation_matrix(rows_coords, cols_coords, kriging_model, no_of_neighbors, progress=True):
+def update_interpolation_matrix(rows_coords, cols_coords, kriging_model, no_of_neighbors):
     output_vals = np.zeros(shape=(len(rows_coords), len(cols_coords)))
     output_errs = np.zeros(shape=(len(rows_coords), len(cols_coords)))
 
-    full_size = output_vals.size
-    prog = 0
-    last_progress = 0
-    print('Progress: {}%'.format(0))
-    for ridx, point_row in enumerate(rows_coords):
+    for ridx, point_row in enumerate(tqdm(rows_coords)):
         for cidx, point_col in enumerate(cols_coords):
             predicted = kriging_model.ordinary_kriging(
                 [point_col, point_row], no_of_neighbors, False
             )
             output_vals[ridx, cidx] = predicted[0]
             output_errs[ridx, cidx] = predicted[1]
-
-            if progress:
-
-                actual_progress = int((prog / full_size) * 100)
-                if actual_progress == last_progress:
-                    pass
-                else:
-                    print('Progress: {}%'.format(actual_progress))
-                    last_progress = actual_progress
-                prog = prog + 1
-    if progress:
-        print('Progress: {}%'.format(100))
 
     return output_vals, output_errs
 
@@ -125,6 +110,6 @@ def interpolate_raster(data, dim=1000, number_of_neighbors=4, semivariogram_mode
     k = Krige(ts, data)
 
     kriged_matrix, kriged_errors = update_interpolation_matrix(rows_coords, cols_coords,
-                                                               k, number_of_neighbors, True)
+                                                               k, number_of_neighbors)
 
     return [kriged_matrix, kriged_errors], props
