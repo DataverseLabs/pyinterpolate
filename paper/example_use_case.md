@@ -85,7 +85,7 @@ Comparison of input and output data in this example is presented in Figure 6. Ou
   author = {United States Census Bureau},
   title = {Centers of Population for the 2010 Census},
   year = 2021,
-  url = {https://www.census.gov/geographies/reference-files/2010/geo/2010-centers-population.html},
+  url = {https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.2010.html},
   urldate = {2021-02-03}
 }
 ```
