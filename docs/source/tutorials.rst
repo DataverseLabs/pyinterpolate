@@ -13,6 +13,7 @@ Available tutorials:
    tutorials/Variogram Point Cloud (Basic)
    tutorials/Semivariogram Estimation (Basic)
    tutorials/Ordinary and Simple Kriging (Basic)
+   tutorials/How good is our Kriging model - test  it with IDW algorithm (Basic)
    tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate)
    tutorials/Semivariogram Regularization (Intermediate)
    tutorials/Poisson Kriging - Centroid Based (Advanced)

@@ -64,7 +64,17 @@ def calculate_average_semivariance(between_block_distances,
         avg_sem = []
         for idx, base_area_id in enumerate(areas_list):
             # Select internal semivariance of base area for chosen lag
-            base_inblock_semivariance = semivariance_within_block_points[semivariance_within_block_points[:, 0] == base_area_id][0][1]
+            base_inblock_semivariance = semivariance_within_block_points[
+                semivariance_within_block_points[:, 0] == base_area_id
+            ]
+            try:
+                base_inblock_semivariance = base_inblock_semivariance[0][1]
+            except IndexError:
+                print(base_inblock_semivariance)
+
+            if not isinstance(base_inblock_semivariance, float):
+                base_inblock_semivariance = float(base_inblock_semivariance)
+
             # Check all distances in search radius
             neighbours_list = distance_lag[1][idx][0][0]
             no_of_areas = len(neighbours_list)
@@ -78,13 +88,19 @@ def calculate_average_semivariance(between_block_distances,
 
                 for neighbour in neighbours_list:
                     n_id = between_block_distances[1][neighbour]
-                    n_semivar = semivariance_within_block_points[semivariance_within_block_points[:, 0] == n_id][0][1]
-                    avg_sem.append((n_semivar + base_inblock_semivariance))
+                    n_semivar = semivariance_within_block_points[semivariance_within_block_points[:, 0] == n_id].copy()
+                    n_semivar = n_semivar[0][1]
+
+                    # Check type
+                    if not isinstance(n_semivar, float):
+                        n_semivar = float(n_semivar)
+
+                    avg_sem.append(n_semivar + base_inblock_semivariance)
 
         if len(avg_sem) == 0:
             avg_sem = 0
         else:
-            avg_sem = 0.5 * (np.mean(avg_sem))
+            avg_sem = 0.5 * np.mean(avg_sem)
 
         # Append average semivariance for given lag
         avg_semivars.append([distance_lag[0], avg_sem])

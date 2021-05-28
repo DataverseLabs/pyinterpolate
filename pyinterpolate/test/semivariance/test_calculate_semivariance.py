@@ -142,10 +142,11 @@ class TestCalculateSemivariance(unittest.TestCase):
 
         gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
 
-        output_int = [46, 189, 384, 512, 534, 486, 438, 488, 493, 414]
+        output_int = [46, 188, 384, 512, 534, 486, 438, 488, 493, 414]
 
         self.assertTrue((gamma_w[:, 1].astype(np.int) == np.array(output_int)).all(),
-                        "Integer part of output should be equal to [46, 189, 384, 512, 534, 486, 438, 488, 493, 414]")
+                        f"Integer part of output should be equal to {output_int}\n"
+                        f"but it is equal to {gamma_w[:, 1].astype(np.int)}")
 
 
 if __name__ == '__main__':

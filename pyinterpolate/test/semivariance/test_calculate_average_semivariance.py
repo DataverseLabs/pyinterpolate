@@ -62,7 +62,7 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
         areal_dataset = os.path.join(my_dir, '../sample_data/test_areas_pyinterpolate.shp')
         subset = os.path.join(my_dir, '../sample_data/test_points_pyinterpolate.shp')
 
-        a_id = 'id'
+        a_id = 'idx'
         areal_val = 'value'
         points_val = 'value'
 
@@ -80,8 +80,6 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
-
-
 
         # Set areal semivariance class
         areal_semivariance = ArealSemivariance(areal_data_prepared, step_size, max_range, points_in_area)
@@ -102,7 +100,6 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
 
         desired_output = np.array([[0, 111], [1, 111]])
         test_vals = (data_test_vals == desired_output)
-        print(data_test_vals)
         self.assertTrue(test_vals.all(), "Output should be [[0, 111], [1, 111]]")
 
 

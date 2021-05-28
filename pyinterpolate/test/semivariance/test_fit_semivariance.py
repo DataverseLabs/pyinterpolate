@@ -40,16 +40,20 @@ class TestFitSemivariance(unittest.TestCase):
         model_non_weighted = t_non_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
         model_weighted = t_weighted.find_optimal_model(weighted=False, number_of_ranges=8)  # linear
 
-        self.assertEqual(model_non_weighted, 'exponential', "Non-weighted model should be exponential")
-        self.assertEqual(model_weighted, 'linear', "Weighted model should be linear")
+        self.assertEqual(model_non_weighted, 'spherical', "Non-weighted model should be spherical")
+        self.assertEqual(model_weighted, 'spherical', "Weighted model should be spherical")
 
     def test_fit_semivariance_io(self):
         # Prepare fake model for fit semivariance class
 
         fake_theoretical_smv = TheoreticalSemivariogram(None, None, False)
 
-        parameters = [0, 20, 40]
-        fake_theoretical_smv.params = parameters
+        nugget = 0
+        sill = 20
+        srange = 40
+        fake_theoretical_smv.nugget = nugget
+        fake_theoretical_smv.sill = sill
+        fake_theoretical_smv.range = srange
         fmn = 'linear'
         fake_theoretical_smv.chosen_model_name = fmn
 
@@ -59,11 +63,15 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Clear model paramas and name
 
-        fake_theoretical_smv.params = [None, None, None]
+        fake_theoretical_smv.nugget = None
+        fake_theoretical_smv.sill = None
+        fake_theoretical_smv.range = None
         fake_theoretical_smv.chosen_model_name = None
 
         # Check if now model is not the same
-        assert fake_theoretical_smv.params != parameters
+        assert fake_theoretical_smv.nugget != nugget
+        assert fake_theoretical_smv.range != srange
+        assert fake_theoretical_smv.sill != sill
         assert fake_theoretical_smv.chosen_model_name != fmn
 
         # Import params
@@ -71,8 +79,11 @@ class TestFitSemivariance(unittest.TestCase):
 
         # Check if params are the same as at the beginning
 
-        self.assertEqual(fake_theoretical_smv.params, parameters, "Parameters should be [0, 20, 40]")
-        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Model name should be linear")
+        self.assertEqual(fake_theoretical_smv.nugget, nugget, "Problem with import/export of semivariogram nugget")
+        self.assertEqual(fake_theoretical_smv.sill, sill, "Problem with import/export of semivariogram sill")
+        self.assertEqual(fake_theoretical_smv.range, srange, "Problem with import/export of semivariogram range")
+        self.assertEqual(fake_theoretical_smv.chosen_model_name, fmn, "Problem with import/export of semivariogram "
+                                                                      "name")
 
     def test_semivariance_export(self):
         gamma = calculate_semivariance(self.dataset, self.step_size, self.max_range)
@@ -88,9 +99,6 @@ class TestFitSemivariance(unittest.TestCase):
             self.assertIn(c, df.columns, f'DataFrame is corrupted, missing {c} column')
 
         self.assertEqual(len(df), 10, f'DataFrame len should be 10 but it is {len(df)}')
-
-
-
 
 
 if __name__ == '__main__':
