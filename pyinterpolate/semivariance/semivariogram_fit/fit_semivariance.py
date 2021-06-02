@@ -12,10 +12,9 @@ class TheoreticalSemivariogram:
     """
     Class calculates theoretical semivariogram. Class takes two parameters during initialization:
 
-        points_array - (numpy array) analysed points where the last column is representing values, typically x, y,
-            value,
-        empirical_semivariance - (numpy array) semivariance where first row of array represents lags and the second row
-            represents semivariance's values for given lag.
+    points_array - (numpy array) analysed points where the last column represents values, typically x, y, value,
+    empirical_semivariance - (numpy array) semivariance where first row of array represents lags and the second row
+        represents semivariance's values for a given lag.
 
     Available methods:
 
@@ -56,19 +55,29 @@ class TheoreticalSemivariogram:
         self.verbose = verbose
         self.theoretical_model = None
         self.chosen_model_name = None
-        self.params = None
+        self.nugget = None
+        self.range = None
+        self.sill = None
         self.model_error = None
         self.is_weighted = False
 
     # MODELS
 
     @staticmethod
-    def spherical_model(distance, nugget, sill, semivar_range):
+    def spherical_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[(3/2)*a - (1/2)*(a**3)], 0 <= lag <= range
+        gamma = nugget + sill, lag > range
+        gamma = 0, lag == 0
+
+        where:
+
+        a = lag / range
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -78,19 +87,26 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the spherical model.
         """
 
-        x = np.where((distance <= semivar_range),
-                     (nugget + sill * (3.0 * distance / (2.0 * semivar_range)) - (
-                             (distance / semivar_range) ** 3.0 / 2.0)),
-                     (nugget + sill))
-        return x
+        a = lags / semivar_range
+        a1 = 3 / 2 * a
+        a2 = 1 / 2 * a ** 3
+
+        gamma = np.where((lags <= semivar_range),
+                         (nugget + sill * (a1 - a2)),
+                         (nugget + sill))
+
+        return gamma
 
     @staticmethod
-    def exponential_model(distance, nugget, sill, semivar_range):
+    def exponential_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[1 - exp(-lag/range)], distance > 0
+        gamma = 0, lag == 0
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -99,21 +115,28 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the exponential model.
         """
+
         try:
-            x = nugget + sill * (1 - np.exp(-distance / semivar_range))
+            gamma = nugget + sill * (1 - np.exp(-lags / semivar_range))
         except TypeError:
-            distance = distance.astype(float)
+            lags = lags.astype(float)
             semivar_range = float(semivar_range)
-            x = nugget + sill * (1 - np.exp(-distance / semivar_range))
-        return x
+            gamma = nugget + sill * (1 - np.exp(-lags / semivar_range))
+
+        return gamma
 
     @staticmethod
-    def linear_model(distance, nugget, sill, semivar_range):
+    def linear_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*(lag/range), 0 <= lag <= range
+        gamma = nugget + sill, lag > range
+        gamma = 0, lag == 0
+
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of lags from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -123,18 +146,22 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the linear model.
         """
 
-        x = np.where((distance <= semivar_range),
-                     (nugget + sill * (distance / semivar_range)),
-                     (nugget + sill))
-        return x
+        gamma = np.where((lags <= semivar_range),
+                         (nugget + sill * (lags / semivar_range)),
+                         (nugget + sill))
+
+        return gamma
 
     @staticmethod
-    def gaussian_model(distance, nugget, sill, semivar_range):
+    def gaussian_model(lags, nugget, sill, semivar_range):
         """
+
+        gamma = nugget + sill*[1 - exp(lag**2 / range**2)], lag > 0
+        gamma = 0, lag == 0
 
         INPUT:
 
-        :param distance: array of ranges from empirical semivariance,
+        :param lags: array of ranges from empirical semivariance,
         :param nugget: scalar,
         :param sill: scalar,
         :param semivar_range: optimal range calculated by fit_semivariance method.
@@ -143,8 +170,12 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the gaussian model.
         """
-        x = nugget + sill * (1 - np.exp(-distance * distance / (semivar_range ** 2)))
-        return x
+        gamma = nugget + sill * (1 - np.exp(-1*(lags ** 2 / semivar_range ** 2)))
+
+        if lags[0] == 0:
+            gamma[0] = 0
+
+        return gamma
 
     def fit_semivariance(self, model_type, number_of_ranges=16):
         """
@@ -188,12 +219,14 @@ class TheoreticalSemivariogram:
         optimal_range = self.calculate_range(model, ranges, nugget, sill)
 
         # output model
-        self.params = [nugget, sill, optimal_range]
+        self.nugget = nugget
+        self.sill = sill
+        self.range = optimal_range
 
         # model error
-        self.model_error = self.calculate_model_error(model, self.params)
+        self.model_error = self.calculate_model_error(model, self.nugget, self.sill, self.range)
 
-        return model_type, self.params
+        return model_type
 
     def find_optimal_model(self, weighted=False, number_of_ranges=16):
         """
@@ -247,10 +280,9 @@ class TheoreticalSemivariogram:
             optimal_range = self.calculate_range(models[model], ranges, nugget, sill)
 
             # output model
-            params = [nugget, sill, optimal_range]
-            model_error = self.calculate_model_error(models[model], params)
+            model_error = self.calculate_model_error(models[model], nugget, sill, optimal_range)
 
-            model_errors.append((model, model_error, params))
+            model_errors.append((model, model_error, [nugget, sill, optimal_range]))
             if self.verbose:
                 print('Model: {}, error value: {}'.format(model, model_error))
 
@@ -264,8 +296,6 @@ class TheoreticalSemivariogram:
             model_name = sorted_errors[1][0]
             model_error = sorted_errors[1][1]
             model_params = sorted_errors[1][2]
-            self.theoretical_model = models[model_name]
-            self.params = model_params
 
             warning_msg = 'WARNING: linear model fitted to the experimental variogram is better than the core models!'
             warnings.warn(warning_msg)
@@ -273,18 +303,19 @@ class TheoreticalSemivariogram:
                 print('Chosen model: {}, with value of: {}.'.format(
                     model_name, model_error
                 ))
-
         else:
-
             model_name = sorted_errors[0][0]
             model_error = sorted_errors[0][1]
             model_params = sorted_errors[0][2]
-            self.theoretical_model = models[model_name]
-            self.params = model_params
             if self.verbose:
                 print('Chosen model: {}, with value: {}.'.format(
                     model_name, model_error
                 ))
+
+        self.theoretical_model = models[model_name]
+        self.nugget = model_params[0]
+        self.sill = model_params[1]
+        self.range = model_params[2]
         self.chosen_model_name = model_name
         self.model_error = model_error
         return model_name
@@ -301,9 +332,9 @@ class TheoreticalSemivariogram:
 
     def calculate_values(self):
         output_model = self.theoretical_model(self.empirical_semivariance[:, 0],
-                                              self.params[0],
-                                              self.params[1],
-                                              self.params[2])
+                                              self.nugget,
+                                              self.sill,
+                                              self.range)
         return output_model
 
     @staticmethod
@@ -369,7 +400,7 @@ class TheoreticalSemivariogram:
             mean_error = np.mean(weights * error)
             return mean_error
 
-    def calculate_model_error(self, model, par):
+    def calculate_model_error(self, model, nugget, sill, semivar_range):
         """
         Function calculates error between specific models and experimental curve.
 
@@ -378,9 +409,9 @@ class TheoreticalSemivariogram:
         :returns: (float) mean squared difference between model and experimental variogram.
         """
         error = np.sqrt((self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0],
-                                                                   par[0],
-                                                                   par[1],
-                                                                   par[2])) ** 2)
+                                                                   nugget,
+                                                                   sill,
+                                                                   semivar_range)) ** 2)
         if not self.is_weighted:
             return np.mean(error)
         else:
@@ -400,9 +431,9 @@ class TheoreticalSemivariogram:
         """
 
         output_model = self.theoretical_model(distances,
-                                              self.params[0],
-                                              self.params[1],
-                                              self.params[2])
+                                              self.nugget,
+                                              self.sill,
+                                              self.range)
         return output_model
 
     def export_model(self, filename):
@@ -417,9 +448,9 @@ class TheoreticalSemivariogram:
 
         model_parameters = {
             'name': self.chosen_model_name,
-            'nugget': self.params[0],
-            'sill': self.params[1],
-            'range': self.params[2],
+            'nugget': self.nugget,
+            'sill': self.sill,
+            'range': self.range,
             'model_error': self.model_error
         }
 
@@ -451,7 +482,9 @@ class TheoreticalSemivariogram:
                 reader = csv.DictReader(semivar_csv, fieldnames=csv_cols)
                 next(reader)
                 for row in reader:
-                    self.params = [float(row['nugget']), float(row['sill']), float(row['range'])]
+                    self.nugget = float(row['nugget'])
+                    self.sill = float(row['sill'])
+                    self.range = float(row['range'])
                     self.chosen_model_name = row['name']
                     if row['model_error']:
                         self.model_error = float(row['model_error'])
@@ -500,7 +533,7 @@ class TheoreticalSemivariogram:
         Function shows experimental semivariogram of a given model.
         """
         plt.figure(figsize=(10, 10))
-        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], 'bo')
         plt.title('Experimental semivariogram')
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
@@ -513,15 +546,15 @@ class TheoreticalSemivariogram:
         if self.theoretical_model is None:
             raise RuntimeError('Theoretical semivariogram is not calculated. \
             Did you run fit_semivariance(model_type, number_of_ranges) on your model?')
-        
+
         x = self.calculate_values()
         plt.figure(figsize=(12, 12))
-        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], color='blue')
+        plt.plot(self.empirical_semivariance[:, 0], self.empirical_semivariance[:, 1], 'bo')
         plt.plot(self.empirical_semivariance[:, 0], x, color='red')
         plt.legend(['Empirical semivariogram', 'Theoretical semivariogram - {} model'.format(
             self.chosen_model_name
         )])
-        title_text = 'Empirical and theoretical semivariogram comparison, model error ={:.2f}'.format(
+        title_text = 'Empirical and theoretical semivariogram comparison, model error = {:.2f}'.format(
             self.model_error
         )
         plt.title(title_text)

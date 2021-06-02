@@ -6,7 +6,7 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
-XXXX-XX-XX
+2021-05-13
 ----------
 
 **version 0.2.3**
@@ -16,6 +16,14 @@ XXXX-XX-XX
 * global mean for Simple Kriging as a required parameter,
 * tqdm progress bar to `RegularizedSemivariogram.transform()` and `interpolate_raster()` functions,
 * refactored Semivariogram Regularization: ranges are controlled by algorithm, not an user,
+* added pull request template,
+* added issues templates,
+* bug in spherical semivariogram model,
+* experimental variogram as points (not a solid line),
+* inverse distance weighting function: algorithm, tests, documentation and new tutorial,
+* changed output names of regularized data (`ArealKriging.regularize_data`) from **estimated value** to **reg.est** and from **estimated prediction error** to **reg.err**,
+* error related to the id column as a string removed,
+* TheoreticalSemivariogram `params` attribute changed to `nugget`, `sill` and `range` attributes.
 
 2021-03-10
 ----------
