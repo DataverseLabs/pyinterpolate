@@ -71,7 +71,7 @@ where $C(x_{i}, x_{j})$ is a covariance between points $x_{i}$ and $x_{j}$, $\ba
 (3) $$\sum_{j=1}\lambda_{j} \gamma(x_{i}, x_{j}) + \mu = \bar{\gamma}(x_{i}, V); i=1, 2, ..., K$$ $$\sum_{i}\lambda_{i} = 1$$
 
 where $\gamma(x_{i}, x_{j})$ is a semivariance between points $x_{i}$ and $x_{j}$, $\bar{\gamma}(x_{i}, V)$ is an average semivariance between point $x_{i}$ and all other points.
-Semivariance is a key concept of spatial interpolation. It is a measure of a dissimilarity between observations in a function of distance. Equation (4) is a semivariance estimation formula.
+Semivariance is a key concept of spatial interpolation. It is a measure of a dissimilarity between observations in a function of distance. Equation (4) is a semivariance estimation formula and \autoref{fig2} and \autoref{fig3} show realization of experimental semivariogram.
 
 (4) $$\frac{1}{2N}\sum_{i}^{N}(z_{(x_{i} + h)} - z_{x_{i}})^{2}$$
 
@@ -97,38 +97,13 @@ Package allows use of the three main types of Poisson Kriging: Centroid-based Po
 
 # Package Structure
 
-Prediction steps in spatial interpolation are generally the same for point and areal datasets. Table 1 shows each type of interpolation, input data, steps needed to perform it and outcomes of analysis.
+Prediction steps in spatial interpolation are generally the same for point and areal datasets. Pyinterpolate has implemented five types of Kriging:
 
-<style>
-table th:first-of-type {
-    width: 10%;
-}
-table th:nth-of-type(2) {
-    width: 20%;
-}
-table th:nth-of-type(3) {
-    width: 20%;
-}
-table th:nth-of-type(4) {
-    width: 30%;
-}
-table th:nth-of-type(5) {
-    width: 20%;
-}
-table {
-  font-size: x-small;
-}
-</style>
-
-Table 1: *Kriging types implemented in the pyinterpolate package*
-
-| Kriging Type | Input | Output | Steps | Comment |
-|------------------|---------|-----------|---------|--------------|
-| **Ordinary Kriging** | Array of Points *[x, y, value]* and Semivariogram Model | *[predicted value, error of variance, local estimated mean, weights array]* | read data - model semivariogram - predict point at unknown location | Universal method for point interpolation |
-| **Simple Kriging** | Array of Points *[x, y, value]*, process mean $\mu$ and Semivariogram Model | *[predicted value, error of variance, given mean, weights array]* | read data - model semivariogram - predict point at unknown location | Useful for processes where mean is known |
-| **Centroid-based Poisson Kriging** | Polygons with rates, points within areas with rates denominator counts and deconvoluted semivariogram model | *[predicted value, error of variance, given mean, weights array]* | read areal data and point data - perform semivariogram deconvolution - interpolate point (centroid) values | Much faster than Area-to-Area and Area-to-Point Poisson Kriging but introduces bias related to the different shapes and sizes of areas |
-| **Area-to-Area Poisson Kriging** | Polygons with rates, points within areas with rates denominator counts and deconvoluted semivariogram model | *[predicted value for area, error of variance, given mean, weights array]* | read areal data and point data - perform semivariogram deconvolution - interpolate areal rates | Filtering and smoothing choropleth maps |
-| **Area-to-Point Poisson Kriging** | Polygons with rates, points within areas with rates denominator counts and deconvoluted semivariogram model | *[predicted value for point within area, error of variance, given mean, weights array, point coordinates]* | read areal data and point data - perform semivariogram deconvolution - interpolate point within area rates | Change of spatial support of analyzed areal rates |
+1. **Ordinary Kriging** which is universal method for point interpolation.
+2. **Simple Kriging** which is useful when the mean of spatial process is known and it is used for the point interpolation.
+3. **Centroid-based Poisson Kriging**. This method of Kriging is based on the assumption that each block can be collapsed into its centroid. It is much faster than Area-to-Area and Area-to-Point Poisson Kriging but introduces bias related to the transformation of areas into single points. It is used for areal interpolation and filtering.
+4. **Area-to-Area Poisson Kriging**. Point support is included in the analysis and if it varies over area model is able to catch this variation.  It is used for areal interpolation and filtering.
+5. **Area-to-Point Poisson Kriging**. Areal support is deconvoluted in regards to the point support. Output map has spatial resolution of the point support while coherence of analysis is preserved (sum of rates is equal to the output of Area-to-Area Poisson Kriging). It is used for point-support interpolation and data filtering.
 
 Users start with semivariogram exploration and modeling. Next researcher or algorithm chooses the theoretical model which best fits the semivariogram. This model is used to predict values at unknown locations. Areal data interpolation, especially transformation from areal aggregates into point support maps, requires deconvolution of areal semivariogram. This is an automatic process which can be performed without prior knowledge of kriging and spatial statistics. The last step is Kriging itself. Poisson Kriging is especially useful for counts over areas. On the other spectrum is Ordinary Kriging which is an universal technique which works well with multiple point data sources. Predicted data is stored as a DataFrame known from the *Pandas* and *GeoPandas* Python packages. Pyinterpolate allows users to transform given point data into a regular numpy array grid for visualization purposes and to perform large-scale comparison of different kriging techniques prediction output. Use case with the whole scenario is available in the [paper package repository](https://github.com/szymon-datalions/pyinterpolate-paper).
 
