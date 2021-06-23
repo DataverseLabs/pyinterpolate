@@ -180,7 +180,7 @@ class RegularizedSemivariogram:
         y_opt_h = self.optimal_theoretical_model.predict(lags)
 
         if not self.weight_change:
-            sill = self.initial_theoretical_model_of_areal_data.params[1]
+            sill = self.initial_theoretical_model_of_areal_data.sill
             denominator = sill * np.sqrt(self.iter)
 
             y_exp_v_h = self.initial_theoretical_model_of_areal_data.predict(lags)
@@ -346,8 +346,10 @@ class RegularizedSemivariogram:
                 self.weights.append(weights)
 
                 # Fit rescaled empirical semivariogram to the new theoretical function
-                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(areal_centroids,
-                                                                                     self.temp_experimental_semivariogram)
+                self.temp_theoretical_semivariogram_model = TheoreticalSemivariogram(
+                    areal_centroids,
+                    self.temp_experimental_semivariogram)
+
                 self.temp_theoretical_semivariogram_model.find_optimal_model(
                     weighted=is_weighted,
                     number_of_ranges=ranges
@@ -413,7 +415,7 @@ class RegularizedSemivariogram:
         """
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
-        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+        plt.plot(lags, self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags, self.initial_theoretical_model_of_areal_data.predict(lags), color='r', linestyle='--')
         plt.plot(lags, self.initial_regularized_model, color='g', linestyle='-.')
         plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
@@ -431,7 +433,7 @@ class RegularizedSemivariogram:
         lags = self.experimental_semivariogram_of_areal_data[:, 0]
         plt.figure(figsize=(12, 12))
         plt.plot(lags,
-                 self.experimental_semivariogram_of_areal_data[:, 1], color='b')
+                 self.experimental_semivariogram_of_areal_data[:, 1], 'bo')
         plt.plot(lags,
                  self.initial_theoretical_model_of_areal_data.predict(lags), color='r',
                  linestyle='--')

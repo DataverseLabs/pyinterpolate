@@ -4,17 +4,18 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>transform module &#8212; Pyinterpolate 0.2.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>transform module &#8212; Pyinterpolate 0.2.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="distance module" href="distance.html" />
@@ -35,7 +36,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="transform-module">
+  <section id="transform-module">
 <h1>transform module<a class="headerlink" href="#transform-module" title="Permalink to this headline">¶</a></h1>
 <p>Available methods:</p>
 <ul class="simple">
@@ -49,7 +50,7 @@
 <li><p>set_areal_weights: prepares array for weighted semivariance calculation.</p></li>
 </ul>
 <hr class="docutils" />
-<div class="section" id="check_points_within_ellipse()">
+<section id="check_points_within_ellipse()">
 <h2><code class="docutils literal notranslate"><span class="pre">check_points_within_ellipse()</span></code><a class="headerlink" href="#check_points_within_ellipse()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">check_points_within_ellipse</span><span class="p">(</span>
     <span class="n">origin_point</span><span class="p">,</span>
@@ -77,7 +78,7 @@
 <div class="math notranslate nohighlight">
 \[((1 - tolerance) * step\_size)\]</div>
 <p>and baseline point at a center of ellipse. <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates omnidirectional semivariogram.</p>
-<div class="section" id="ROTATED-ELLIPSE-EQUATION:">
+<section id="ROTATED-ELLIPSE-EQUATION:">
 <h3>ROTATED ELLIPSE EQUATION:<a class="headerlink" href="#ROTATED-ELLIPSE-EQUATION:" title="Permalink to this headline">¶</a></h3>
 <div class="math notranslate nohighlight">
 \[part_a = [cos(A) * (x - h) + sin(A) * (y - k)]^2\]</div>
@@ -90,9 +91,9 @@
 <p>OUTPUT:</p>
 <p>(<em>numpy array</em>) boolean array of <strong>points within ellipse with center in origin point</strong>.</p>
 <hr class="docutils" />
-</div>
-</div>
-<div class="section" id="get_centroids()">
+</section>
+</section>
+<section id="get_centroids()">
 <h2><code class="docutils literal notranslate"><span class="pre">get_centroids()</span></code><a class="headerlink" href="#get_centroids()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">get_centroids</span><span class="p">(</span><span class="n">polygon</span><span class="p">)</span>
 </pre></div>
@@ -107,8 +108,8 @@
 <li><p>(<em>tuple</em>) centroid position (x, y) for a given area.</p></li>
 </ul>
 <hr class="docutils" />
-</div>
-<div class="section" id="prepare_kriging_data()">
+</section>
+<section id="prepare_kriging_data()">
 <h2><code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code><a class="headerlink" href="#prepare_kriging_data()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">prepare_kriging_data</span><span class="p">(</span>
     <span class="n">unknown_position</span><span class="p">,</span>
@@ -134,8 +135,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-</div>
-<div class="section" id="prepare_poisson_kriging_data()">
+</section>
+<section id="prepare_poisson_kriging_data()">
 <h2><code class="docutils literal notranslate"><span class="pre">prepare_poisson_kriging_data()</span></code><a class="headerlink" href="#prepare_poisson_kriging_data()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">prepare_poisson_kriging_data</span><span class="p">(</span>
     <span class="n">unknown_area</span><span class="p">,</span>
@@ -199,8 +200,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-</div>
-<div class="section" id="prepare_ata_data()">
+</section>
+<section id="prepare_ata_data()">
 <h2><code class="docutils literal notranslate"><span class="pre">prepare_ata_data()</span></code><a class="headerlink" href="#prepare_ata_data()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">prepare_ata_data</span><span class="p">(</span>
     <span class="n">points_within_unknown_area</span><span class="p">,</span>
@@ -253,8 +254,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-</div>
-<div class="section" id="prepare_atp_data()">
+</section>
+<section id="prepare_atp_data()">
 <h2><code class="docutils literal notranslate"><span class="pre">prepare_atp_data()</span></code><a class="headerlink" href="#prepare_atp_data()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">prepare_atp_data</span><span class="p">(</span>
     <span class="n">points_within_unknown_area</span><span class="p">,</span>
@@ -311,8 +312,8 @@
 </pre></div>
 </div>
 <hr class="docutils" />
-</div>
-<div class="section" id="select_values_in_range()">
+</section>
+<section id="select_values_in_range()">
 <h2><code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code><a class="headerlink" href="#select_values_in_range()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">select_values_in_range</span><span class="p">(</span>
     <span class="n">data</span><span class="p">,</span>
@@ -332,8 +333,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> mask with distances within specified radius.</p></li>
 </ul>
 <hr class="docutils" />
-</div>
-<div class="section" id="set_areal_weights()">
+</section>
+<section id="set_areal_weights()">
 <h2><code class="docutils literal notranslate"><span class="pre">set_areal_weights()</span></code><a class="headerlink" href="#set_areal_weights()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">set_areal_weights</span><span class="p">(</span>
     <span class="n">areal_data</span><span class="p">,</span>
@@ -358,8 +359,8 @@
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of weighted points.</p></li>
 </ul>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -421,10 +422,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2020, Szymon Moliński.
+      &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

@@ -20,11 +20,11 @@ master_doc = 'index'
 # -- Project information -----------------------------------------------------
 
 project = 'Pyinterpolate'
-copyright = '2020, Szymon Moliński'
+copyright = '2021, Szymon Moliński'
 author = 'Szymon Moliński'
 
 # The full version, including alpha/beta/rc tags
-release = '0.2.0'
+release = '0.2.3'
 
 
 # -- General configuration ---------------------------------------------------
