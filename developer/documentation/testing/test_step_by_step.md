@@ -27,7 +27,7 @@ Every time when code is changed or new feature is added we should perform tests 
 4. [Create testing `conda` environment with implemented and tested functionality](#test-with-tutorials). Update all tutorials where change / addition may affect calculation results. Remember to update **Changelog table** in recalculated tutorials.
 5. (Optional) [Write a tutorial](#tutorial-as-a-test) which covers your functionality or code change.
 
-To make things easier to understand we will gou through the example of `calculate_seimvariance()` function.
+To make things easier to understand we will go through the example of `calculate_seimvariance()` function.
 
 ## Example function
 
@@ -56,7 +56,7 @@ With a block diagram we may think of the first bunch of tests which should be im
 
 (4b) Calculated mean squared error between all points pairs and divide it by two (each pair is taken twice a time),
 
-(4c) Store calculated semivariance along the lag within array `lag, semivariance`,
+(4c) Store calculated semivariance along the lag and number of points used for calculation within array `lag, semivariance, number of points`,
 
 (5) Return array of lags and their semivariances.
 
@@ -75,7 +75,7 @@ import unittest
 from pyinterpolate.semivariance import calculate_semivariance
 ```
 
-To write a test we must create **class** which starts with `Test` prefix. Usually it is named `TestYourFunctionOrModuleName`, in our case: `TestCalculateSemivariance`. This class inherits from the `unittest.TestCase` class. We can skip explanation what inheritance is. The key is to understand that we can use methods from `unittest.TestCase` in our class `TestCalculateSemivariance`. Let's update our script with this new piece of information:
+To write a test we must create **class** which starts with `Test` prefix. Usually it is named `TestYourFunctionOrModuleName`, in our case: `TestCalculateSemivariance`. This class inherits from the `unittest.TestCase` class. We can skip explanation what inheritance is. The key is to understand that we can use methods from `unittest.TestCase` in our class `TestCalculateSemivariance` and those methods allow us to write unit tests. Let's update our script with this new piece of information:
 
 ```python
 import unittest
@@ -87,9 +87,53 @@ class TestCalculateSemivariance(unittest.TestCase):
 		pass
 ```
 
-Good practice with unit testing is to have data which is not depended on the external sources or processes. In other words we use mostly static files with known datasets or artificial arrays. Those arrays may be filled with random numbers of specific distribution or hard-coded values which are simulating possible input. We should avoid using additional scripts from within the package if there is a chance to do so.
+Good practice with unit testing is to have data which is not depended on the external sources or processes. In other words we use mostly static files with known datasets or artificial arrays. Those arrays may be filled with random numbers of specific distribution or hard-coded values which are simulating possible input. We are going to create one array for the sake of simplicity:
 
+1. Array:
 
+```python
+test_arr = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
+```
+
+This array is not random. It comes from the **Basic Linear Geostatistic** and it is presented in the page 48. It has important property: **we are able to calculate semivariance _by hand_** and it will be a topic of functional testing scenario. Now we consider test if all output values are positive. `calculate_semivariance()` returns list of triplets: `[lag, semivariance, number of point pairs]`. First, calculate semivariances up to lag 5 by hand:
+
+**Lag 0:**
+
+Calculations: _n/a_
+
+Expected output: `[0, 0, 13]`
+
+**Lag 1:**
+
+Calculations: 
+
+$$\gamma(h_{1})= \frac{1}{2*24}*2(4+4+1+9+1+4+25+36+1+16+1+9)=\frac{111}{24}=4.625$$
+
+Expected output: `[1, 4.625, 24]`
+
+**Lag 2:**
+
+Calculations:
+
+$$\gamma(h_{2})= \frac{1}{2*22}*2(16+9+4+4+1+9+1+49+9+9+4)=\frac{115}{22}=5.227$$
+
+Expected output: `[2, 5.227, 22]`
+
+**Lag 3:**
+
+Calculations:
+
+$$\gamma(h_{3})= \frac{1}{2*10}*2(25+0+1+16+16+9+4+9+4+36)=\frac{120}{10}=12$$
+
+Expected output: `[3, 12.0, 10]`
+
+**Lag 4:**
+
+Calculations:
+
+$$\gamma(h_{4})= \frac{1}{2*9}*2(4+1+9+1+4+16+4+16+25)=\frac{80}{9}=8.889$$
+
+Expected output: `[4, 8.889, 9]`
 
 ## Logical and functionality testing
 
