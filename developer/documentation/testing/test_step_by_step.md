@@ -92,7 +92,7 @@ Good practice with unit testing is to have data which is not depended on the ext
 1. Array:
 
 ```python
-test_arr = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
+INPUT = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
 ```
 
 This array is not random. It comes from the **Basic Linear Geostatistic** and it is presented in the page 48. It has important property: **we are able to calculate semivariance _by hand_** and it will be a topic of functional testing scenario. Now we consider test if all output values are positive. `calculate_semivariance()` returns list of triplets: `[lag, semivariance, number of point pairs]`. First, calculate semivariances up to lag 5 by hand:
@@ -123,19 +123,164 @@ Expected output: `[2, 5.227, 22]`
 
 Calculations:
 
-$$\gamma(h_{3})= \frac{1}{2*10}*2(25+0+1+16+16+9+4+9+4+36)=\frac{120}{10}=12$$
+$$\gamma(h_{3})= \frac{1}{2*20}*2(25+0+1+16+16+9+4+9+4+36)=\frac{120}{20}=6.0$$
 
-Expected output: `[3, 12.0, 10]`
+Expected output: `[3, 6.0, 20]`
 
 **Lag 4:**
 
 Calculations:
 
-$$\gamma(h_{4})= \frac{1}{2*9}*2(4+1+9+1+4+16+4+16+25)=\frac{80}{9}=8.889$$
+$$\gamma(h_{4})= \frac{1}{2*18}*2(4+1+9+1+4+16+4+16+25)=\frac{80}{18}=4.444$$
 
-Expected output: `[4, 8.889, 9]`
+Expected output: `[4, 4.444, 18]`
+
+**Lag 5:**
+
+$$\gamma(h_{4})= \frac{1}{2*16}*2(9+1+4+25+9+0+1+1)=\frac{80}{16}=5.0$$
+
+Expected output: `[5, 5.0, 16]`
+
+Now we prepare a static (constant) variable with the expected output values. At this step we import `numpy` to create output of the same type as the output returned by the `calculate_semivariance()` function.
+
+```python
+import unittest
+from pyinterpolate.semivariance import calculate_semivariance
+
+class TestCalculateSemivariance(unittest.TestCase):
+
+	def test_calculate_semivariance(self):
+		INPUT = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
+		EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, 6.0, 20],
+			[4, 4.444, 18],
+			[5, 5.0, 16]
+		])
+```
+
+The first test is very simple: we should check if the output values from the function are positive. Thing is easy because each column from the output array MUST BE positive but we are going to focus only in the middle column with the experimental semivariance values. So let's begin testing! Tests in `Python` are written with the `assert` keyword. We use specific condition with this keyword, as example we are able to:
+
+- check if values are equal,
+- check if values are not equal,
+- check if given value is True or False,
+- check if function raises specific error,
+- and more described (here)[https://docs.python.org/3/library/unittest.html#test-cases].
+
+For the purpose of this tutorial we will perform simple test to check if all values of the output are greater than zero. `unittest` package has method `assertGreaterEqual(a, b)` which can be used to test it but we rather prefer `assertTrue()` to test if an expression is `True`. How are we going to test it? `numpy` has a great system to work with arrays and we can check any condition for a given array with the syntax:
+
+```python
+boolean_test = my_array[my_array >= 0]
+```
+
+Variable `boolean_test` is an array of the same size as `my_array` but with `True` and `False` values at the specific positions where condition has been met or hasn't. We can add method `.all()` to check if all values in boolean array are `True`:
+
+```python
+boolean_test = my_array[my_array >= 0]
+boolean_output = boolean_test.all()
+```
+
+Then we can assert value to our test. In this case let's start with the artificial array `EXPECTED_OUTPUT` and even if we know that everything is ok we should test the output to be sure that the test is designed properly:
+
+```python
+import unittest
+from pyinterpolate.semivariance import calculate_semivariance
+
+class TestCalculateSemivariance(unittest.TestCase):
+
+	def test_calculate_semivariance(self):
+		INPUT = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
+		EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, 6.0, 20],
+			[4, 4.444, 18],
+			[5, 5.0, 16]
+		])
+		expected_output_values = EXPECTED_OUTPUT[:, 1].copy()
+		
+		boolean_test = (expected_output_values >= 0).all()
+		
+		assertTrue(boolean_test, 'Test failed. Calculated values are below zero which is non-physical. Check your data.')
+```
+
+Test should definitively pass but you may check what'll happen if you change one value to the negative number:
+
+```python
+import unittest
+from pyinterpolate.semivariance import calculate_semivariance
+
+class TestCalculateSemivariance(unittest.TestCase):
+
+	def test_calculate_semivariance(self):
+		INPUT = [8, 6, 4, 3, 6, 5, 7, 2, 8, 9, 5, 6, 3]
+		EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, -6.0, 20],
+			[4, 4.444, 18],
+			[5, 5.0, 16]
+		])
+		expected_output_values = EXPECTED_OUTPUT[:, 1].copy()
+		
+		boolean_test = (expected_output_values >= 0).all()
+		
+		self.assertTrue(boolean_test, 'Test failed. Calculated values are below zero which is non-physical. Check your data.')
+```
+
+Surprise!? We got the assertion error and it should inform us that we haven't implented something in a correct way. Let's remove the minus sign from the expected output lag's number 3 semivariance and now we should test the baseline function, and not the `EXPECTED_OUTPUT` variable. Function `calculate_semivariance(data, step_size, max_range)` has three parameters. From the (documentation)[https://pyinterpolate.readthedocs.io/en/latest/code_documentation/semivariance.html#calculate_semivariance()] we know that:
+
+- `data` parameter is a _numpy array_ of coordinates and their values,
+- `step_size` parameter is a distance between lags and has a `float` type,
+- `max_range` is a maximum range of analysis and has a `float` type.
+
+From this description we see that our `INPUT` variable is not what's expected by the algorithm. We will change it and we set `step_size` and `max_range` parameters within our test case and we remove `EXPECTED_OUTPUT` variable because **for this concrete test** we do not need it. We change a name of the unit test to the `test_positive_output(self)` to make it clear what we want to achieve with this test.
+
+```python
+import unittest
+from pyinterpolate.semivariance import calculate_semivariance
+
+class TestCalculateSemivariance(unittest.TestCase):
+
+	def test_positive_output(self):
+		INPUT = np.array([
+			[0, 0, 8],
+			[1, 0, 6],
+			[2, 0, 4], 
+			[3, 0, 3], 
+			[4, 0, 6], 
+			[5, 0, 5], 
+			[6, 0, 7], 
+			[7, 0, 2], 
+			[8, 0, 8], 
+			[9, 0, 9], 
+			[10, 0, 5], 
+			[11, 0, 6], 
+			[12, 0, 3]
+		])
+		
+		# Calculate experimental semivariance
+		t_step_size = 1.1
+		t_max_range = 6
+		
+		experimental_semivariance = calculate_semivariance(INPUT, t_step_size, t_max_range)
+		
+		boolean_test = (experimental_semivariance >= 0).all()
+		
+		self.assertTrue(boolean_test, 'Test failed. Calculated values are below zero which is non-physical.')
+```
+
+Terrific! We've performed our first unit test! (By the way: it is implemented in the package).
 
 ## Logical and functionality testing
+
+The next type of testing is a functionality test. Do you remember how we've calculated semivariance manually in the previous part? Short summary of calculations is the `EXPECTED_OUTPUT` array from the last test:
+
+
 
 ## How to run multiple unit tests
 

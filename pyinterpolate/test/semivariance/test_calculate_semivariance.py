@@ -148,6 +148,36 @@ class TestCalculateSemivariance(unittest.TestCase):
                         f"Integer part of output should be equal to {output_int}\n"
                         f"but it is equal to {gamma_w[:, 1].astype(np.int)}")
 
+    ################################################################
+    ########## TUTORIAL TESTS AREA - FEEL FREE TO EXPLORE ##########
+    ################################################################
+
+    def test_positive_output(self):
+        INPUT = np.array([
+            [0, 0, 8],
+            [1, 0, 6],
+            [2, 0, 4],
+            [3, 0, 3],
+            [4, 0, 6],
+            [5, 0, 5],
+            [6, 0, 7],
+            [7, 0, 2],
+            [8, 0, 8],
+            [9, 0, 9],
+            [10, 0, 5],
+            [11, 0, 6],
+            [12, 0, 3]
+        ])
+
+        # Calculate experimental semivariance
+        t_step_size = 1.1
+        t_max_range = 6
+
+        experimental_semivariance = calculate_semivariance(INPUT, t_step_size, t_max_range)[:, 1]
+
+        boolean_test = (experimental_semivariance >= 0).all()
+
+        self.assertTrue(boolean_test, 'Test failed. Calculated values are below zero which is non-physical.')
 
 if __name__ == '__main__':
     unittest.main()
