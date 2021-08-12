@@ -1,7 +1,6 @@
-from collections import OrderedDict
-
+import warnings
 import numpy as np
-
+from collections import OrderedDict
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.transform.select_values_in_range import select_values_in_range, check_points_within_ellipse
 
@@ -42,25 +41,44 @@ def build_variogram_point_cloud(data, step_size, max_range):
     return variogram_cloud
 
 
-def show_variogram_cloud(variogram_cloud, figsize=None):
+def show_variogram_cloud(variogram_cloud, plot_type='boxplot', figsize=None):
     """
     Function shows boxplots of variogram lags. It is especially useful when
         you want to check outliers in your dataset.
 
     INPUT:
 
-    :param variogram_cloud: (OrderedDict) lags and halved squared differences between
-       points,
+    :param variogram_cloud: (OrderedDict) lags and halved squared differences between points,
+    :param plot_type: (str) default is "boxplot", to choose from "boxplot" or "scatterplot",
     :param figsize: (tuple) figure size (width, height).
     """
+
     if figsize is None:
         figsize = (14, 6)
 
-    data = [x for x in variogram_cloud.values()]
+    plot_types = ['boxplot', 'scatter']
+    if plot_type not in plot_types:
+        warnings.warn('Your plot type is {} and it is not available for in-package plotting. Use "scatter" or "boxplot"'
+                      ' instead. "Boxplot" is chosen.'.format(plot_type))
+
     fig, ax = plt.subplots(figsize=figsize)
-    ax.boxplot(data)
-    xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
-    plt.setp(xtick_names, rotation=45, fontsize=8)
+
+    if plot_type is 'boxplot':
+        data = [x for x in variogram_cloud.values()]
+        ax.boxplot(data)
+        xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
+        plt.setp(xtick_names, rotation=45, fontsize=8)
+    elif plot_type is 'scatter':
+        data_ys = [x for x in variogram_cloud.values()]
+        data_xs = variogram_cloud.keys()
+        dy = []
+        dx = []
+        for idx, x in enumerate(data_xs):
+            for y in data_ys[idx]:
+                dy.append(y)
+                dx.append(x)
+        plt.scatter(dx, dy)
+
     plt.show()
 
 
@@ -166,7 +184,6 @@ def calculate_weighted_semivariance(data, step_size, max_range):
     distances = calc_point_to_point_distance(data[:, :-2])
 
     # Prepare semivariance arrays
-    smv = []
     semivariance = []
 
     lags = np.arange(0, max_range, step_size)
@@ -234,19 +251,31 @@ def calc_semivariance_from_pt_cloud(pt_cloud_dict):
     return experimental_semivariogram
 
 
-def remove_outliers(data_dict, std_dist=2.):
-    """Function removes outliers from each lag and returns dict without those values.
+def remove_outliers(data_dict, exclude_part='top', std_dist=2.):
+    """Function removes outliers from the variogram point cloud for each lag and returns dict without extreme values
+        from the top, bottom or both parts of the variogram point cloud for a given lag.
 
     INPUT:
 
-    :param data_dict: (Ordered Dict) with {lag: list of values},
+    :param data_dict: (Ordered Dict) with {lag: [variances between point pairs within a given lag]},
+    :param exclude_part: (str) default = 'top', available 'top', 'both' or 'bottom' - part of the variogram point cloud
+        which is excluded from a lag.
     :param std_dist: (float) number of standard deviations from the mean within values are passed.
 
     OUTPUT:
 
-    :returns: (OrderedDict) {lag: [values]}"""
+    :returns: (OrderedDict) {lag: [variances between point pairs within a given lag]}"""
 
     output = OrderedDict()
+
+    # Check exclude_part parameter
+    correct_param_values = ['top', 'bottom', 'both']
+
+    if exclude_part not in correct_param_values:
+        raise TypeError('Parameter exclude_part takes one of the following values: "{}", "{}", "{}", '
+                        'but you have provided the "{}" value.'.format(
+                            *correct_param_values, exclude_part
+                        ))
 
     for lag in data_dict.keys():
         if isinstance(data_dict[lag], list):
@@ -256,10 +285,17 @@ def remove_outliers(data_dict, std_dist=2.):
 
         mean_ = np.mean(dd)
         std_ = np.std(dd)
+
         upper_boundary = mean_ + std_dist * std_
         lower_boundary = mean_ - std_dist * std_
 
-        vals = dd[(dd < upper_boundary) & (dd > lower_boundary)]
+        if exclude_part == 'both':
+            vals = dd[(dd < upper_boundary) & (dd > lower_boundary)]
+        elif exclude_part == 'bottom':
+            vals = dd[(dd > lower_boundary)]
+        else:
+            vals = dd[(dd < upper_boundary)]
+
         output[lag] = vals
 
     return output
@@ -289,9 +325,9 @@ def calculate_directional_semivariogram(data, step_size, max_range, direction=0,
         90 or 270 is EW direction,
         30 or 210 is NE-SW direction,
         120 or 300 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
-        is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle
-        given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
+    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
+        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
         from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
         of a size:
 
