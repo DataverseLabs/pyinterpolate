@@ -251,16 +251,27 @@ def calc_semivariance_from_pt_cloud(pt_cloud_dict):
     return experimental_semivariogram
 
 
-def remove_outliers(data_dict, exclude_part='top', std_dist=2.):
-    """Function removes outliers from the variogram point cloud for each lag and returns dict without extreme values
-        from the top, bottom or both parts of the variogram point cloud for a given lag.
+def remove_outliers(data_dict, exclude_part='top', weight=1.5):
+    """
+    Function removes outliers from the variogram point cloud for each lag and returns dict without extreme values
+        from the top, bottom or both parts of the variogram point cloud for a given lag. Algorithm uses quantiles to
+        remove outliers:
+
+        BOTTOM OUTLIER < Q1 - w*(Q3-Q1)  (1)
+        Q3 + w*(Q3-Q1) < TOP OUTLIER     (2)
+
+        where:
+
+        Q1 - 1st quantile (25%)
+        Q3 - 3rd quantile (75%)
+        w - weight associated with the algorithm, larger weight == less number of values treated as an outlier.
 
     INPUT:
 
     :param data_dict: (Ordered Dict) with {lag: [variances between point pairs within a given lag]},
     :param exclude_part: (str) default = 'top', available 'top', 'both' or 'bottom' - part of the variogram point cloud
         which is excluded from a lag.
-    :param std_dist: (float) number of standard deviations from the mean within values are passed.
+    :param weight: (float) default=1.5, affects number of values which are removed.
 
     OUTPUT:
 
@@ -283,11 +294,13 @@ def remove_outliers(data_dict, exclude_part='top', std_dist=2.):
         else:
             dd = data_dict[lag].copy()
 
-        mean_ = np.mean(dd)
-        std_ = np.std(dd)
+        q1 = np.quantile(dd, 0.25)
+        q3 = np.quantile(dd, 0.75)
 
-        upper_boundary = mean_ + std_dist * std_
-        lower_boundary = mean_ - std_dist * std_
+        qdiff = q3 - q1
+
+        upper_boundary = q3 + weight*qdiff
+        lower_boundary = q1 - weight*qdiff
 
         if exclude_part == 'both':
             vals = dd[(dd < upper_boundary) & (dd > lower_boundary)]
