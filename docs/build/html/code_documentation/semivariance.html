@@ -15,7 +15,7 @@
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="kriging module" href="kriging.html" />
@@ -498,18 +498,34 @@
 <section id="remove_outliers()">
 <h2><code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code><a class="headerlink" href="#remove_outliers()" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">data_dict</span><span class="p">,</span>
-                                           <span class="n">std_dist</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
+                                           <span class="n">exclude_part</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+                                           <span class="n">weight</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Function removes outliers from each lag and returns dict without those values.</p>
+<p>Function removes outliers from the variogram point cloud for each lag and returns dict without extreme values from the top, bottom or both parts of the variogram point cloud for a given lag. Algorithm uses quartiles to remove outliers:</p>
+<ol class="arabic">
+<li><div class="math notranslate nohighlight">
+\[BottomOutlier &lt; Q1 - w*(Q3-Q1)\]</div>
+</li>
+<li><div class="math notranslate nohighlight">
+\[Q3 + w*(Q3-Q1) &lt; TopOutlier\]</div>
+</li>
+</ol>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Q1\)</span> - 1st quantile (25%)</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q3\)</span> - 3rd quantile (75%)</p></li>
+<li><p><span class="math notranslate nohighlight">\(w\)</span> - weight associated with the algorithm, larger weight =&gt; less number of values treated as an outlier.</p></li>
+</ul>
 <p>INPUT:</p>
 <ul class="simple">
 <li><p><strong>data_dict</strong>: (<em>OrderedDict</em>) with {lag: list of values},</p></li>
-<li><p><strong>std_dist</strong>: (<em>float</em>) number of standard deviations from the mean within values are passed.</p></li>
+<li><p><strong>exclude_part</strong>: (<em>str</em>) default = <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, available <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, <code class="docutils literal notranslate"><span class="pre">'both'</span></code> or <code class="docutils literal notranslate"><span class="pre">'bottom'</span></code> - part of the variogram point cloud which is excluded from a given lag.</p></li>
+<li><p><strong>weight</strong>: (<em>float</em>) default=1.5, affects number of values which are removed.</p></li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>OrderedDict</em>) {lag: [values]}.</p></li>
+<li><p>(<em>OrderedDict</em>) {lag: [variances between point pairs within a given lag]}</p></li>
 </ul>
 <hr class="docutils" />
 </section>
@@ -660,6 +676,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms Explained</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
@@ -701,7 +718,7 @@
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

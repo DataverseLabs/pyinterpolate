@@ -16,6 +16,7 @@ Available tutorials:
    tutorials/How good is our Kriging model - test  it with IDW algorithm (Basic)
    tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate)
    tutorials/Semivariogram Regularization (Intermediate)
+   tutorials/Outliers and Their Influence on the Final Model (Intermediate)
    tutorials/Poisson Kriging - Centroid Based (Advanced)
    tutorials/Poisson Kriging - Area to Area (Advanced)
    tutorials/Poisson Kriging - Area to Point (Advanced)
