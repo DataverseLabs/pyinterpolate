@@ -369,7 +369,7 @@ class RegularizedSemivariogram:
                 if self.temp_deviation < self.optimal_deviation:
                     self.weight_change = False
 
-                    self.diff_decrease = np.abs(self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
+                    self.diff_decrease = (self.temp_deviation - self.optimal_deviation) / self.optimal_deviation
                     self.deviation_ratio = self.temp_deviation / self.deviations[0]
 
                     self.optimal_deviation = self.temp_deviation
