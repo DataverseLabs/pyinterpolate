@@ -15,11 +15,11 @@
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
-    <link rel="prev" title="Inverse Distance Weighting model vs Kriging - tutorial" href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" />
+    <link rel="prev" title="How good is my Kriging model? - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -359,7 +359,7 @@ div.rendered_html tbody tr:hover {
 <section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1233,6 +1233,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms Explained</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
@@ -1242,7 +1243,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="How%20good%20is%20my%20model%3F%20Compare%20Kriging%20results%20to%20the%20IDW%20model%20%28Basic%29.html" title="previous chapter">Inverse Distance Weighting model vs Kriging - tutorial</a></li>
+      <li>Previous: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="previous chapter">How good is my Kriging model? - tests with IDW algorithm - tutorial</a></li>
       <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
   </ul></li>
   </ul></li>
@@ -1252,7 +1253,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -1274,7 +1275,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

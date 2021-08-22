@@ -1,0 +1,485 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>The Semi-Automatic and Automatic Fit of the Semivariogram Model &#8212; Pyinterpolate 0.2.3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contribution to Pyinterpolate" href="../contribution.html" />
+    <link rel="prev" title="Algorithms Explained" href="../algorithms.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">SVG</span>
+</pre></div>
+</div>
+</div>
+<section id="The-Semi-Automatic-and-Automatic-Fit-of-the-Semivariogram-Model">
+<h1>The Semi-Automatic and Automatic Fit of the Semivariogram Model<a class="headerlink" href="#The-Semi-Automatic-and-Automatic-Fit-of-the-Semivariogram-Model" title="Permalink to this headline">¶</a></h1>
+<p>A procedure of the theoretical model fitting into the experimental curve may be performed manually. Researcher may choose <strong>sill</strong>, <strong>range</strong> and the <strong>modeling function</strong> and assign those into the model. This step could be very time-consuming and within the <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> we have chosen two different approaches for the users:</p>
+<ol class="arabic simple">
+<li><p>Researcher chooses <strong>the modeling function</strong> and algorithm of the <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class searches for the best range parameter.</p></li>
+<li><p>The algorithm searches for the <strong>optimal modeling function</strong> and <strong>range</strong> for a given set of experimental points.</p></li>
+</ol>
+<p>Both processes are similar but there are important differences. Firstly, we are going to take a closer look into the semi-supervised model selection - Algorithm 1.</p>
+<section id="fit_semivariance()-method-for-the-semi-supervised-semivariogram-model-selection">
+<h2><code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> method for the semi-supervised semivariogram model selection<a class="headerlink" href="#fit_semivariance()-method-for-the-semi-supervised-semivariogram-model-selection" title="Permalink to this headline">¶</a></h2>
+<section id="Flow-Diagram">
+<h3>Flow Diagram<a class="headerlink" href="#Flow-Diagram" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">SVG</span><span class="p">(</span><span class="s1">&#39;imgs/fit-semivariogram-algorithm.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/algorithms_documentation_Automatic_Fitting_of_the_Semivariogram_Model_3_0.svg" src="../_images/algorithms_documentation_Automatic_Fitting_of_the_Semivariogram_Model_3_0.svg" /></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">fit_semivariance(model_type,</span> <span class="pre">number_of_ranges=16)</span></code> is the method of <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class. It fits the chosen theoretical model (<code class="docutils literal notranslate"><span class="pre">model_type</span></code>) into the multiple ranges (<code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code>) within the area of a study. We must know which kind of the theoretical function should be fitted to our experimental data. Package has four basic models to select:</p>
+<ol class="arabic simple">
+<li><p>Spherical,</p></li>
+<li><p>Exponential,</p></li>
+<li><p>Linear,</p></li>
+<li><p>Gaussian.</p></li>
+</ol>
+<p>Then we should assign the number of ranges to test our model. Algorithm divides the study extent into <code class="docutils literal notranslate"><span class="pre">n</span></code> number of ranges and tests the theoretical model output against the experimental variogram for each range. It is important to distinguish ranges from the lags: they are not the same and we can set up more or less ranges than the number of lags of the experimental curve!</p>
+<p>If we choose the theoretical model and set the number of ranges to check then the algorithm calculates the <strong>sill</strong> of a model as <em>the variance of the observed values of the known points</em>. <strong>Nugget</strong> is set to the first experimental semivariance value if the initial lag is zero. This value is usually zero. In the case where the first lag is greater than zero <strong>nugget</strong> is set to zero.</p>
+<p><strong>NOTE</strong>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>In the future algorithm will test different sill values in a similar way that ranges are tested.
+</pre></div>
+</div>
+<p>With <strong>nugget</strong>, <strong>sill</strong> and <strong>model type</strong> the theoretical curve is calculated for each range from the array of ranges. Then algorithm calculates semivariance for each lag of the experimental values; those are compared to the experimental semivariances and the root mean squared error is calculated. Range with the lowest Root Mean Squared Error and model parameters (<strong>nugget</strong>, <strong>sill</strong>, <strong>model type</strong>) are returned.</p>
+</section>
+</section>
+<section id="find_optimal_model()-method-for-the-automated-semivariogram-model-selection">
+<h2><code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> method for the automated semivariogram model selection<a class="headerlink" href="#find_optimal_model()-method-for-the-automated-semivariogram-model-selection" title="Permalink to this headline">¶</a></h2>
+<section id="id1">
+<h3>Flow Diagram<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">SVG</span><span class="p">(</span><span class="s1">&#39;imgs/find-optimal-semivariogram-algorithm.svg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/algorithms_documentation_Automatic_Fitting_of_the_Semivariogram_Model_6_0.svg" src="../_images/algorithms_documentation_Automatic_Fitting_of_the_Semivariogram_Model_6_0.svg" /></div>
+</div>
+<p>Algorithm which automatically finds the optimal semivariogram model from within defined theoretical semivariogram types is more complex than the algorithm which only fits the semivariogram to the experimental curve. The main difference is the step related to the tests of different model types. We could consider <code class="docutils literal notranslate"><span class="pre">find_optimal_model(weighted=False,</span> <span class="pre">number_of_ranges=16)</span></code> as the development of the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> method. This time researcher doesn’t know which model type is optimal from the
+data perspective and leaves the step of choosing the optimal function for the algorithm itself.</p>
+<p><code class="docutils literal notranslate"><span class="pre">find_optimal_model(weighted=False,</span> <span class="pre">number_of_ranges=16)</span></code> method takes two arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">weighted</span></code> of the <code class="docutils literal notranslate"><span class="pre">bool</span></code> type. Usually it should be set to the <code class="docutils literal notranslate"><span class="pre">False</span></code> but for the semivariogram regularization, where we have blocks of different shapes and sizes, this parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> and the error is weighted by the lag: lags closer to the origin have a larger weight in error calculation that the distant lags. We are more interested in the model performance for the neighbouring and small areas.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> works as the same parameter of the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> method. Algorithm divides the experimental semivariogram into <code class="docutils literal notranslate"><span class="pre">n</span></code> number of ranges and tests every range for the lowest error between the theoretical model and the experimental values.</p></li>
+</ul>
+</section>
+<section id="Block-(A):">
+<h3>Block (A):<a class="headerlink" href="#Block-(A):" title="Permalink to this headline">¶</a></h3>
+<p>At the beginning algorithm takes one of the available model types from the pool:</p>
+<ul class="simple">
+<li><p>Spherical,</p></li>
+<li><p>Exponential,</p></li>
+<li><p>Linear.</p></li>
+</ul>
+<p><em>Gaussian</em> model is ommited in this step because of its properties:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gaussian model represents an extremely continuous phenomenon. Experience shows that numerical instabilities often occur when this is used without a nugget effect.
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><em>Armstrong M. Basic Linear Geostatistics. Page 38.</em></p></li>
+</ul>
+<p>In this case it is assumed that careful fit of this type of variogram is required and algorithm may produce negative weights and the associated negative values.</p>
+</section>
+<section id="Block-(B):">
+<h3>Block (B):<a class="headerlink" href="#Block-(B):" title="Permalink to this headline">¶</a></h3>
+<p>Process in this block is the same as for the semivariogram fitting method.</p>
+</section>
+<section id="Block-(C):">
+<h3>Block (C):<a class="headerlink" href="#Block-(C):" title="Permalink to this headline">¶</a></h3>
+<p>For the sake of sanity it is better to compare automatic output to the well-known function, as example the 1st order polynomial (linear regression) of our experimental variogram. Algorithm calculates associated RMSE of this kind of model and compare it to the other models. This leads us to the Block (D). The difference between the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> model and <code class="docutils literal notranslate"><span class="pre">linear</span></code> model is that the latter includes <code class="docutils literal notranslate"><span class="pre">range</span></code> in the calculations in the opposition to the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> model which uses only experimental lags
+and experimental values.</p>
+</section>
+<section id="Block-(D):">
+<h3>Block (D):<a class="headerlink" href="#Block-(D):" title="Permalink to this headline">¶</a></h3>
+<p>The output of the algorithm is the model type and the range with the lowest error between the theoretical model and the experimental semivariogram. Moreover, algorithm compares tested models to the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> model. If the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> model is better than the analytical models then user is warned by the algorithm. Algorithm always returns one of the models: spherical, exponential or linear with the lowest error, even in the situtation when <code class="docutils literal notranslate"><span class="pre">OLS</span></code> gives better results.</p>
+<section id="Changelog:">
+<h4>Changelog:<a class="headerlink" href="#Changelog:" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>2021-07-24: <code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> description and corrections in the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> diagram. Diagrams inserted as svg files.</p></li>
+<li><p>2021-07-22: The first release of the article.</p></li>
+</ul>
+<hr class="docutils" />
+</section>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../algorithms.html">Algorithms Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../algorithms.html">Algorithms Explained</a><ul>
+      <li>Previous: <a href="../algorithms.html" title="previous chapter">Algorithms Explained</a></li>
+      <li>Next: <a href="../contribution.html" title="next chapter">Contribution to Pyinterpolate</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/algorithms_documentation/Automatic Fitting of the Semivariogram Model.ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

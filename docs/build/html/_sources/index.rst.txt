@@ -14,6 +14,7 @@ Pyinterpolate
    setup
    tutorials.rst
    code_documentation.rst
+   algorithms.rst
    contribution
    license
 
