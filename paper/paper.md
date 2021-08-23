@@ -20,9 +20,9 @@ bibliography: paper.bib
 
 # Summary
 
-Spatial Interpolation techniques are used to interpolate values at unknown locations or filter and smooth existing data sources. Those methods work for point observations and areal aggregates. The basic idea under this family of algorithms is that every point in space can be described as a function of its neighbors values weighted by the relative distance from the analyzed point. It is known as Tobler's First Law of Geography, which states: *everything is related to everything else, but near things are more related than distant things* [@Tobler:1970].
+Spatial Interpolation techniques are used to interpolate values at unknown locations or filter and smooth existing data sources. Those methods work for the point observations and areal aggregates. The basic idea under this family of algorithms is that every point in space can be described as a function of its neighbors values weighted by the relative distance from the analyzed point. It is known as Tobler's First Law of Geography, which states: *everything is related to everything else, but near things are more related than distant things* [@Tobler:1970].
 
-Kriging technique designed for mining applications exploits this statement formally and nowadays it has gained a lot of attention outside the initial area of interest. Today *Kriging* is a set of methods that can be applied to problems from multiple fields: environmental science, hydrogeology, natural resources monitoring, remote sensing, epidemiology and ecology and even computer science [@Chilès:2018]. Commonly Kriging interpolates values from point measurements or regular block units but the real-world datasets are quite often different. Especially challenging are measurements of processes over areas, as for example administrative units in every country [@Goovaerts:2007]. 
+Kriging technique designed for mining applications exploits this statement formally and nowadays it has gained a lot of attention outside the initial area of interest. Today *Kriging* is a set of methods that can be applied to problems from multiple fields: environmental science, hydrogeology, natural resources monitoring, remote sensing, epidemiology and ecology and even computer science [@Chilès:2018]. Commonly Kriging interpolates values from the point measurements or regular block units but the real-world datasets are quite often different. Especially challenging are areal aggregates, as for example administrative units in every country [@Goovaerts:2007]. 
 
 Pyinterpolate tackles the areas of irregular shapes and sizes with Area-to-Area and Area-to-Point Poisson Kriging functions. With those algorithms Pyinterpolate is useful for social, environmental and public health scientists with the areal interpolation and filtering tools. Moreover, the package offers basic point Kriging and Inverse Distance Weighting techniques. Those are utilized in every field of research where geostatistical (distance) analysis gives meaningful results. Pyinterpolate merges basic Kriging techniques with more sophisticated Area-to-Area and Area-to-Point Poisson Kriging methods.
 
@@ -128,6 +128,8 @@ The package can automatically perform the semivariogram fitting step with a deri
 **Pyinterpolate** was initially developed for epidemiological study, where areal aggregates of infections were transformed to point support population-at-risk maps and multiple potential applications follow this algorithm. Initial field of study (epidemiology) was the reason behind automation of the tasks related to the semivariogram modeling. It is assumed that users without a wide geostatistical background may use Pyinterpolate for spatial data modeling and analysis, especially users which are observing processes related to the human population.
 
 The example of a process where deconvolution of areal counts and semivariogram regularization occurs is presented in the \autoref{fig1}.
+
+![Example use case of Pyinterpolate for the derivation of the population-at-risk map for a cancer development from the areal aggregates and the population blocks.\label{fig2}](fig1_example.png)
 
 ## Modules
 
