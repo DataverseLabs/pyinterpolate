@@ -15,10 +15,10 @@
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "document", "processHtmlClass": "math|output_area"}}</script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Poisson Kriging - centroid based approach - tutorial" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" />
+    <link rel="next" title="Outliers and Their Influence on the Final Model - tutorial" href="Outliers%20and%20Their%20Influence%20on%20the%20Final%20Model%20%28Intermediate%29.html" />
     <link rel="prev" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -314,15 +314,19 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-28</p></td>
+<td><p>Updated paths for input/output data</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-04-04</p></td>
+<tr class="row-even"><td><p>2021-04-04</p></td>
 <td><p>Ranges parameter removed from regularize semivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
@@ -956,7 +960,7 @@ information. But with population data we can retrive it and regularized semivari
 <span class="c1"># We will use buil-in method: export_regularized where we pass only filename our semivariogram</span>
 <span class="c1"># parameters are stored for other tasks.</span>
 
-<span class="n">reg_mod</span><span class="o">.</span><span class="n">export_regularized_model</span><span class="p">(</span><span class="s1">&#39;regularized_model.csv&#39;</span><span class="p">)</span>
+<span class="n">reg_mod</span><span class="o">.</span><span class="n">export_regularized_model</span><span class="p">(</span><span class="s1">&#39;output/regularized_model.csv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -986,6 +990,7 @@ information. But with population data we can retrive it and regularized semivari
 <li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms Explained</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
 </ul>
@@ -996,7 +1001,7 @@ information. But with population data we can retrive it and regularized semivari
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
       <li>Previous: <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="previous chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
-      <li>Next: <a href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" title="next chapter">Poisson Kriging - centroid based approach - tutorial</a></li>
+      <li>Next: <a href="Outliers%20and%20Their%20Influence%20on%20the%20Final%20Model%20%28Intermediate%29.html" title="next chapter">Outliers and Their Influence on the Final Model - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -1005,7 +1010,7 @@ information. But with population data we can retrive it and regularized semivari
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -1027,7 +1032,7 @@ information. But with population data we can retrive it and regularized semivari
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

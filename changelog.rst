@@ -6,6 +6,13 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+2021-XX-XX
+----------
+
+**version 0.2.3.XX**
+
+* the outliers removal function: you can choose side for outlier detection and remove. Default is top, available are: both, top, down,
+
 2021-05-13
 ----------
 
