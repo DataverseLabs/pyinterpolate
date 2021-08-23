@@ -11,3 +11,4 @@ Algorithms:
    :maxdepth: 1
 
    algorithms_documentation/Automatic Fitting of the Semivariogram Model
+   algorithms_documentation/Outliers Removal

@@ -128,7 +128,7 @@ brew install spatialindex
 [2.] Next step is to create conda enviornment with Python 3.7, pip and notebook packages and activate your environment:
 
 ```
-conda env create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
+conda create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
 ```
 
 ```
