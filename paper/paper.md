@@ -167,8 +167,8 @@ The most similar and significant package from the Python environment is **PyKrig
 
 1. [**Paper repository** with additional materials](https://github.com/szymon-datalions/pyinterpolate-paper)
 2. [**Package repository**](https://github.com/szymon-datalions/pyinterpolate)
-3. [**Automatic fit of semivariogram within the package**]()
-4. [**Outliers Detection within the package**]()
+3. [**Automatic fit of semivariogram within the package**](https://pyinterpolate.readthedocs.io/en/latest/algorithms_documentation/Automatic%20Fitting%20of%20the%20Semivariogram%20Model.html)
+4. [**Outliers Detection within the package**](https://pyinterpolate.readthedocs.io/en/latest/algorithms_documentation/Outliers%20Removal.html)
 
 # References
 
