@@ -280,6 +280,19 @@ Terrific! We've performed our first unit test! (By the way: it is implemented in
 
 The next type of testing is a functionality test. Do you remember how we've calculated semivariance manually in the previous part? Short summary of calculations is the `EXPECTED_OUTPUT` array from the last test:
 
+```python
+EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, -6.0, 20],
+			[4, 4.444, 18],
+			[5, 5.0, 16]
+		])
+```
+
+Now we are going to use it. Why? A unit test could be important from the software development perspective but the **scientific** software is even more rigorous! We need to prove that our functions are working as expected for the wide range of scenarios. The ultimate goal is to create simple scenario which covers all possible types of outputs...
+
 
 
 ## How to run multiple unit tests
