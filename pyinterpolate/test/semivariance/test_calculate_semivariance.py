@@ -1,6 +1,7 @@
 import unittest
 import os
 import numpy as np
+from numpy.testing import assert_almost_equal
 from pyinterpolate.io_ops.read_data import read_point_data
 from pyinterpolate.distance.calculate_distances import calc_point_to_point_distance
 from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
@@ -176,8 +177,48 @@ class TestCalculateSemivariance(unittest.TestCase):
         experimental_semivariance = calculate_semivariance(INPUT, t_step_size, t_max_range)[:, 1]
 
         boolean_test = (experimental_semivariance >= 0).all()
-
         self.assertTrue(boolean_test, 'Test failed. Calculated values are below zero which is non-physical.')
+
+    def test_against_expected_value_1(self):
+
+        REFERENCE_INPUT = np.array([
+            [0, 0, 8],
+            [1, 0, 6],
+            [2, 0, 4],
+            [3, 0, 3],
+            [4, 0, 6],
+            [5, 0, 5],
+            [6, 0, 7],
+            [7, 0, 2],
+            [8, 0, 8],
+            [9, 0, 9],
+            [10, 0, 5],
+            [11, 0, 6],
+            [12, 0, 3]
+        ])
+
+        EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, 6.0, 20],
+			[4, 4.444, 18],
+			[5, 3.125, 16]
+		])
+
+        # Calculate experimental semivariance
+        t_step_size = 1
+        t_max_range = 6
+
+        experimental_semivariance = calculate_semivariance(REFERENCE_INPUT, t_step_size, t_max_range)
+
+        # Get first five lags
+        estimated_output = experimental_semivariance[:6, :]
+
+        # Compare
+        err_msg = 'The reference output and the estimated output are too dissimilar, check your algorithm'
+        assert_almost_equal(estimated_output, EXPECTED_OUTPUT, 3, err_msg=err_msg)
+
 
 if __name__ == '__main__':
     unittest.main()

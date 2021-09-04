@@ -6,16 +6,23 @@ In this tutorial we will create *unit* and *functional* tests for the code devel
 
 | Date | Change description | Author |
 |--------|--------------------------|----------|
-| 2021-06-23 | First release of tutorial | @szymon-datalions |
+| 2021-04-09 | First release of tutorial | @szymon-datalions |
 
 ## Contents
 
 - [Introduction](#introduction)
 - [(Optional) Example function](#example-function)
-- [Unit tests](#unit-tests)
-- [Logical and functionality testing](#logical-and-functionality-testing)
+- [Unit Tests](#unit-tests)
+- [Logical and Functionality Testing](#logical-and-functionality-testing)
+- [How to run unit tests](#how-to-run-unit-tests)
+  - [PyCharm](#pycharm)
+    - [Single Test](#pycharm-single-test)
+    - [Multiple Tests](#pycharm-multiple-tests)
+  - [Console](#console)
+    - [Single Test](#console-single-test)
+    - [Multiple Tests](#console-multiple-tests)
 - [Testing with tutorials](#test-with-tutorials)
-- [(Optional) Tutorial as a test case](#tutorial-as-a-test)
+- [Summary](#summary)
 
 ## Introduction
 
@@ -137,7 +144,7 @@ Expected output: `[4, 4.444, 18]`
 
 **Lag 5:**
 
-$$\gamma(h_{4})= \frac{1}{2*16}*2(9+1+4+25+9+0+1+1)=\frac{80}{16}=5.0$$
+$$\gamma(h_{5})= \frac{1}{2*16}*2(9+1+4+25+9+0+1+1)=\frac{50}{16}=3.125$$
 
 Expected output: `[5, 5.0, 16]`
 
@@ -157,7 +164,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 			[2, 5.227, 22],
 			[3, 6.0, 20],
 			[4, 4.444, 18],
-			[5, 5.0, 16]
+			[5, 3.125, 16]
 		])
 ```
 
@@ -198,7 +205,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 			[2, 5.227, 22],
 			[3, 6.0, 20],
 			[4, 4.444, 18],
-			[5, 5.0, 16]
+			[5, 3.125, 16]
 		])
 		expected_output_values = EXPECTED_OUTPUT[:, 1].copy()
 		
@@ -223,7 +230,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 			[2, 5.227, 22],
 			[3, -6.0, 20],
 			[4, 4.444, 18],
-			[5, 5.0, 16]
+			[5, 3.125, 16]
 		])
 		expected_output_values = EXPECTED_OUTPUT[:, 1].copy()
 		
@@ -285,18 +292,149 @@ EXPECTED_OUTPUT = np.array([
 			[0, 0, 13],
 			[1, 4.625, 24],
 			[2, 5.227, 22],
-			[3, -6.0, 20],
+			[3, 6.0, 20],
 			[4, 4.444, 18],
-			[5, 5.0, 16]
+			[5, 3.125, 16]
 		])
 ```
 
-Now we are going to use it. Why? A unit test could be important from the software development perspective but the **scientific** software is even more rigorous! We need to prove that our functions are working as expected for the wide range of scenarios. The ultimate goal is to create simple scenario which covers all possible types of outputs...
+Now we are going to use it. Why? A unit test is important for the **software development** but the **scientific software development** is even more rigorous! We need to prove that our function works as expected for the wide range of scenarios. It is not an easy task. Some algorithms are not proven mathematically... But we have an advantage: geostatistics is a well-established discipline and we can use external sources and the pen and paper for testing.
 
+We'd created functionality test in the previous example but we didn't use it. The idea create a simple example which can test if our program calculates semivariance correctly. We'd taken an example array from the literature and we calculated semivariance values for few lags by hand. We assume that the results are correct (if you are not sure check records with the book; but I couldn't assure you that everyone is wrong but your program). `EXPECTED_OUTPUT` array is a static entity against which we can compare results of our algorithm. We can distinguish few steps which need to be done for the logic test:
 
+1. Get the reference input and create the reference output. This could be calculated manually, derived from the literature or estimated by the other program which produces the right output.
+2. Store reference output as the script values or as the non-changing file. The key is to never change values in this output throughout the testing flow.
+3. Estimate the expected output from the reference input with your algorithm.
+4. Compare the expected output and the reference output. If both are the same (or very close) then test is passed.
 
-## How to run multiple unit tests
+A few steps of the functionality testing can be very misleading if we consider the complexity of the whole process. There are traps in here and sometimes it is hard to avoid them:
+
+- the reference input covers very unusual scenario, as example it is created from the dataset with the uniform distribution but in reality data follows other types of distribution,
+- the reference input and output do not exist or the reference data is not publicly available (frequent problem with publications),
+- it's hard to calculate the reference output manually.
+
+But the biggest, and the most dangerous problem which sometimes relates to the previous obstacles is the reference output assignation from the developed algorithm itself (we don't know the reference output and we create it from our algorithm itself...). Is it bad? Yes, it is. Is it sometimes only (fast and dirty) way of development? Yes, it is. But even in this scenario we usually perform some kind of *sanity check* against our belief how the output should look like. Let's put aside the dirty testing and come back to our case. We have the expected output and we have the reference input. With both we can create the functionality test within our package!
+
+The code will be similar to the unit test, e.g.: there's the same building-logic behaind it. We define function within the class which inherits from `unittest.TestCase`. Within this function we define the **reference input** and the **reference output**. We run the algorithm on the **reference input** and compare results to the **reference output**. Numpy has special assertion methods and one of them is `asset_almost_equal()` which is very useful when we compare two arrays with floating-point precision. The code itself is presented below:
+
+```python
+import unittest
+from numpy.testing import assert_almost_equal
+
+from pyinterpolate.semivariance.semivariogram_estimation.calculate_semivariance import calculate_semivariance
+
+class TestCalculateSemivariance(unittest.TestCase):
+    """
+    HERE COULD BE A THE PART FOR OTHER TESTS
+    """
+    def test_against_expected_value_1(self):
+
+        REFERENCE_INPUT = np.array([
+            [0, 0, 8],
+            [1, 0, 6],
+            [2, 0, 4],
+            [3, 0, 3],
+            [4, 0, 6],
+            [5, 0, 5],
+            [6, 0, 7],
+            [7, 0, 2],
+            [8, 0, 8],
+            [9, 0, 9],
+            [10, 0, 5],
+            [11, 0, 6],
+            [12, 0, 3]
+        ])
+
+        EXPECTED_OUTPUT = np.array([
+			[0, 0, 13],
+			[1, 4.625, 24],
+			[2, 5.227, 22],
+			[3, 6.0, 20],
+			[4, 4.444, 18],
+			[5, 3.125, 16]
+		])
+
+        # Calculate experimental semivariance
+        t_step_size = 1
+        t_max_range = 6
+
+        experimental_semivariance = calculate_semivariance(REFERENCE_INPUT, t_step_size, t_max_range)
+
+        # Get first five lags
+        estimated_output = experimental_semivariance[:6, :]
+
+        # Compare
+        err_msg = 'The reference output and the estimated output are too dissimilar, check your algorithm'
+        assert_almost_equal(estimated_output, EXPECTED_OUTPUT, 3, err_msg=err_msg)
+```
+
+This code is an official codebase part, you can look there too, to see how it is slightly rearranged within the test script.
+
+## How to run unit tests
+
+There are two main ways to perform a unit test: within the IDE or manually, from the terminal. I prefer to use `PyCharm` for coding and the next example will be shown in it.
+
+### PyCharm
+
+#### PyCharm Single test
+
+The testing within `PyCharm` is very easy. You should open **Project** view on the left side. You will see a window with the project tree. Navigate to the specific file with unit tests, click right mouse button and select `Run Unittests in test_case_`. A test is under its way. After a while you will the test results in the bottom window.
+
+![Single Test Case](imgs-testing/single_test_case.jpg)
+
+#### PyCharm Multiple tests
+
+To run multiple tests at once do as in the previous step but right-click on the directory with tests and select `Run Unittests in tests`. All tests for **Pyinterpolate** take about a minute to go.
+
+![Multiple Tests at Once](imgs-testing/mutiple_test_cases.jpg)
+
+### Console
+
+A test from console is slightly more complex than from Ithe IDE. It is required to be within a test directory and to have installed all required packages - in the normal scenario those are installed within the virtual environment or the conda environment. Steps to perform tests are as follow:
+
+1. Activate environment with the dependencies of a package.
+2. Navigate to the directory with tests.
+
+The next steps differ in the case if we'd like to test one script or every case.
+
+#### Console Single test
+
+* Navigate to the directory with a specific test.
+* Run `Unittest` script:
+
+```
+python -m unittest test_calculate_semivariance
+```
+
+#### Console Multiple tests
+
+* Navigate to the parent directory of tests which you want to cover.
+* Run `Unittest` script:
+
+```
+python -m unittest
+```
 
 ## Test with tutorials
 
-## Tutorial as a test
+**Pyinterpolate** follows a specific flow of development. At the beginning each feature is developed within the *Jupyter Notebook*. We build a function or class with the concrete example in mind. Then it is easy to transform a development notebook into a tutorial. About a half of tutorials were developed in this manner.
+The next big thing with the tutorials is that we can perform **sanity checks** within them. There are bugs, especially logical, which are not covered by the single tests. Tutorials cover a large part of the workflow and it makes them a great resource for the program testing. Thus after implementation of new features or changes inside old features we always run **all affected** tutorials. Probably you saw that each tutorial has a changelog table and there are records related to the feature changes.
+The development and testing within notebooks can be summarized in few steps:
+
+1. Develop feature in the notebook. (Development)
+2. Write a tutorial related to this feature. (Development)
+3. After any change in the feature run tutorial to check if everything works fine. (Maintenance and Testing)
+4. After development of the new features test affected tutorials if there are any. (Maintenance and Testing)
+
+We strongly encourage any developer to use this pattern. It builds not only confidence about the proposed development but also the understanding of the covered topics, as semivariogram modeling, kriging and so on. **Running all tutorials before releases is mandatory, even if the changes shouldn't affect the workflow**.
+
+## Summary
+
+You have learned how to:
+
+- write the unit test,
+- write and prepare the functionality test,
+- run tests from the IDE and console,
+- use tutorials as the testing playground.
+
+If you are still not sure about anything in this article then write an ![Issue](https://github.com/szymon-datalions/pyinterpolate/issues) within the package repository. We will answer all your questions!
