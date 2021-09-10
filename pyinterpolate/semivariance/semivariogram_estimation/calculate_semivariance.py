@@ -63,12 +63,12 @@ def show_variogram_cloud(variogram_cloud, plot_type='boxplot', figsize=None):
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    if plot_type is 'boxplot':
+    if plot_type == 'boxplot':
         data = [x for x in variogram_cloud.values()]
         ax.boxplot(data)
         xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
         plt.setp(xtick_names, rotation=45, fontsize=8)
-    elif plot_type is 'scatter':
+    elif plot_type == 'scatter':
         data_ys = [x for x in variogram_cloud.values()]
         data_xs = variogram_cloud.keys()
         dy = []

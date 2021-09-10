@@ -1,4 +1,3 @@
-import numpy as np
 import geopandas as gpd
 import pyproj
 from geopandas.tools import sjoin
@@ -35,7 +34,7 @@ def get_points_within_area(area_shapefile,
                            points_val_col_name,
                            dropna=True,
                            points_geometry_col_name='geometry',
-                           nans_to_zero=True):
+                           nans_to_zero=True) -> dict:
     """
     Function prepares points data for further processing.
 
@@ -51,21 +50,20 @@ def get_points_within_area(area_shapefile,
 
     OUTPUT:
 
-    :return: output_points_within_area (numpy array) of area id and array with point coordinates and values
-        [area_id, [point_position_x, point_position_y, value]]
+    :return: output_points_within_area (dict of numpy arrays) of area id and array with point coordinates and values
+        {area_id: [point_position_x, point_position_y, value]}
     """
-    output_points_within_area = []
+    output_points_within_area = {}
 
     areal_data = gpd.read_file(area_shapefile)
     points_data = gpd.read_file(points_shapefile)
 
     # Test if both files have the same columns
-
     areal_data, points_data = _check_columns(areal_data, areal_id_col_name, points_val_col_name, points_data)
 
     # Test if areal data has the same projection as points data
     # Match centroid points with areas
-    if not pyproj.Proj(areal_data.crs).is_exact_same(pyproj.Proj(points_data.crs)):
+    if not areal_data.crs.is_exact_same(pyproj.Proj(points_data.crs)):
         points_data = points_data.to_crs(areal_data.crs)
 
     # Join datasets
@@ -106,6 +104,6 @@ def get_points_within_area(area_shapefile,
             dataset.fillna(0, inplace=True)
 
         dataset_numpy = dataset.values
-        output_points_within_area.append([area_id, dataset_numpy])
+        output_points_within_area[area_id] = dataset_numpy
 
-    return np.array(output_points_within_area)
+    return output_points_within_area

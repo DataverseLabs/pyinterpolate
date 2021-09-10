@@ -11,7 +11,7 @@ def _check_if_coordinates_are_unique(data):
     if isinstance(data, list):
         data = np.array(data)
         
-    unique_values = np.unique(data.astype(np.float), axis=0)
+    unique_values = np.unique(data.astype(float), axis=0)
     no_of_obs = len(data)
     no_of_uniqs = len(unique_values)
     if no_of_uniqs < no_of_obs:

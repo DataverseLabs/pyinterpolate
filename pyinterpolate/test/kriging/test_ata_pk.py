@@ -40,8 +40,8 @@ class TestAreaToAreaPoissonKriging(unittest.TestCase):
                                                 points_val_col_name=points_val)
 
         # Get one area as unknown
-        unknown_area_id = [1]
-        u_points = points_in_area[points_in_area[:, 0] == unknown_area_id][0]
+        unknown_area_id = 1
+        u_points = points_in_area[unknown_area_id]
 
         k_areas = areal_data_prepared[areal_data_prepared[:, 0] != unknown_area_id]
         k_points = points_in_area[points_in_area[:, 0] != unknown_area_id]

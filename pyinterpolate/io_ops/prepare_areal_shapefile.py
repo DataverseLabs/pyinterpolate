@@ -1,15 +1,16 @@
 import numpy as np
 import geopandas as gpd
 
-from pyinterpolate.transform.get_areal_centroids import get_centroids
-
 
 def prepare_areal_shapefile(areal_file_address,
                             id_column_name=None,
                             value_column_name=None,
                             geometry_column_name='geometry',
-                            dropnans=True):
-    """Function prepares areal shapefile for processing and transforms it into numpy array. Function returns two lists.
+                            dropnans=True
+                            ) -> gpd.GeoDataFrame:
+    """
+
+    Function prepares areal shapefile.
 
     INPUT:
 
@@ -21,58 +22,36 @@ def prepare_areal_shapefile(areal_file_address,
 
     OUTPUT:
 
-    :return: areal_array (numpy array) of area id, area geometry, coordinate of centroid x, coordinate of centroid y,
-        value:
-
-        [area_id, area_geometry, centroid coordinate x, centroid coordinate y, value]
+    :return: (gpd.GeoDataFrame)
     """
 
     # Test if value column name is None and dropnans is True
     if (value_column_name is None) and dropnans:
         raise TypeError('You cannot leave value_column_name as None and set dropnans to True because function '
-                        'will return empty list')
+                        'will return empty frame')
 
     shapefile = gpd.read_file(areal_file_address)
-    cols_to_hold = list()
 
-    # Prepare index column
+    # First get geometry as a geoseries
+    gdf = gpd.GeoDataFrame(shapefile[geometry_column_name])
+
+    # Now add index if not the same as the base index
     if id_column_name is None:
-        shapefile['id_generated'] = shapefile.index
-        cols_to_hold.append('id_generated')
+        gdf['area.id'] = gdf.index
     else:
-        cols_to_hold.append(id_column_name)
+        gdf['area.id'] = shapefile[id_column_name]
 
-    # Prepare geometry column
-    cols_to_hold.append(geometry_column_name)
-
-    # Prepare value column
+    # Now add value column name
     if value_column_name is None:
-        shapefile['vals_generated'] = np.nan
-        cols_to_hold.append('vals_generated')
+        gdf['area.value'] = np.nan
     else:
-        cols_to_hold.append(value_column_name)
+        gdf['area.value'] = shapefile[value_column_name]
 
-    # Remove unwanted columns
-    gdf = shapefile.copy()
-    for col in gdf.columns:
-        if col not in cols_to_hold:
-            gdf.drop(labels=col, axis=1, inplace=True)
+    # Now get centroids
+    gdf['area.centroid'] = gdf.centroid
 
-    # Set order of columns
-    gdf = gdf[cols_to_hold]
-
-    # Remove rows with nan's
+    # Now remove nans
     if dropnans:
-        gdf.dropna(axis=0, inplace=True)
+        gdf.dropna(axis=0, inplace=True, how='any')
 
-    # Extract values into numpy array
-    areal_array = gdf.values
-
-    # Get areal centroids
-    centroids = [get_centroids(x) for x in areal_array[:, 1]]
-    centroids = np.array(centroids)
-
-    # Combine data into areal dataset
-    areal_dataset = np.c_[areal_array[:, :2], centroids, areal_array[:, -1]]
-
-    return areal_dataset
+    return gdf
