@@ -50,7 +50,7 @@ class TheoreticalSemivariogram:
         :param verbose: (bool) if True then all messages are printed, otherwise nothing.
         """
 
-        self.points_values = points_array
+        self.points_array = points_array
         self.empirical_semivariance = empirical_semivariance
         self.verbose = verbose
         self.theoretical_model = None
@@ -204,7 +204,7 @@ class TheoreticalSemivariogram:
         self.theoretical_model = model
 
         # sill
-        sill = np.var(self.points_values[:, -1])
+        sill = np.var(self.points_array[:, -1])
 
         # nugget
         if self.empirical_semivariance[0][0] != 0:
@@ -261,7 +261,7 @@ class TheoreticalSemivariogram:
         base_error = self.calculate_base_error()
 
         # sill
-        sill = np.var(self.points_values[:, -1])
+        sill = np.var(self.points_array[:, -1])
 
         # nugget
         if self.empirical_semivariance[0][0] != 0:
