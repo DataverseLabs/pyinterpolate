@@ -157,3 +157,6 @@ class Krige:
         else:
             sigma = np.sqrt(sigmasq)
         return zhat, sigma, global_mean, w
+    
+    def __repr__(self):
+        representation=f'<semivariogram_model = {self.model}, known_points = {self.known_points}>'

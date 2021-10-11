@@ -561,3 +561,11 @@ class TheoreticalSemivariogram:
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
         plt.show()
+
+    def __repr__(self):
+        if self.chosen_model_name and self.nugget and self.range and self.sill:
+            representation=f'<chosen_model = {self.chosen_model_name}, nugget = {self.nugget}, range = {self.range}, sill = {self.sill}>'
+            return representation
+        representation=f'<points_array = {self.points_array}, empirical_semivariance = {self.empirical_semivariance}, verbose = {self.verbose}>'
+        return representation
+
