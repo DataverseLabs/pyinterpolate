@@ -1,3 +1,15 @@
+"""
+Authors:
+
+Szymon Molinski | @szymon-datalions
+
+Contributors:
+
+Ethem Turgut | https://github.com/ethmtrgt
+
+"""
+
+
 import csv
 from operator import itemgetter
 import warnings

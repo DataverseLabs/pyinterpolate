@@ -11,7 +11,8 @@ Changes by date
 
 **version 0.2.XX**
 
-* n/a
+* `self.points_values` chenged to `self.points_array` in `TheoreticalSemivariogram` class,
+* `NaN` values are tested and checked in `calc_semivariance_from_pt_cloud()` function,
 
 
 2021-08-23
