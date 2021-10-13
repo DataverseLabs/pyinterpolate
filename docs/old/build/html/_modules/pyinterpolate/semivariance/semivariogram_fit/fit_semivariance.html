@@ -80,7 +80,7 @@
 <span class="sd">        :param verbose: (bool) if True then all messages are printed, otherwise nothing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">points_values</span> <span class="o">=</span> <span class="n">points_array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points_array</span> <span class="o">=</span> <span class="n">points_array</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">empirical_semivariance</span> <span class="o">=</span> <span class="n">empirical_semivariance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span> <span class="o">=</span> <span class="kc">None</span>
@@ -200,7 +200,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span> <span class="o">=</span> <span class="n">model</span>
 
         <span class="c1"># sill</span>
-        <span class="n">sill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">sill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_array</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># nugget</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">empirical_semivariance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -250,7 +250,7 @@
         <span class="n">base_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_base_error</span><span class="p">()</span>
 
         <span class="c1"># sill</span>
-        <span class="n">sill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">sill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_array</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># nugget</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">empirical_semivariance</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
