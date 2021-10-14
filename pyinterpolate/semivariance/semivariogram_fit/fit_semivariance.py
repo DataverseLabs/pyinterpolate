@@ -245,6 +245,7 @@ class TheoreticalSemivariogram:
     def circular_model(lags, nugget, sill, semivar_range):
         ##### NOTE: found two competing model formulae for the circular model
         ##### 1st one doesn't seem to work with the test data; but 2nd one does
+        ##### Sources added in docstring, further comparison may be needed
         ##### (DELETE AFTER REVIEW)
         """
 
@@ -255,6 +256,9 @@ class TheoreticalSemivariogram:
         where:
         
         a = lag / range
+        
+        (Model 1 Source: https://desktop.arcgis.com/en/arcmap/10.3/tools/spatial-analyst-toolbox/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+        (Model 2 Source: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
 
         INPUT:
 
