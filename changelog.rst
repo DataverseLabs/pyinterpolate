@@ -6,6 +6,14 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+2022-XX-XX
+
+**version 0.3.0**
+
+* module `io_ops` renamed to `io`,
+* the refactored function `read_point_data` (old) into `read_txt` (new): now it sets crs and transforms input data into a GeoDataFrame,
+* the new function `read_csv` to read spatial csv files,
+
 2021-XX-XX
 ----------
 

@@ -6,7 +6,7 @@ from geopandas import points_from_xy
 
 
 def read_txt(
-        path: str, delim=',', skip_header=True, epsg='4326', crs=None
+        path: str, val_col_no=2, lat_col_no=0, lon_col_no=1, delim=',', skip_header=True, epsg='4326', crs=None
 ) -> gpd.GeoDataFrame:
     """
     Function reads data from a text file. Provided data format should include: latitude, longitude, value. You should
@@ -16,6 +16,9 @@ def read_txt(
     INPUT:
 
     :param path: (str) path to the file,
+    :param val_col_no: (int) position of value column,
+    :param lat_col_no: (int) position of latitude column,
+    :param lon_col_no: (int) position of longitude column,
     :param delim: (str) delimiter which separates columns,
     :param skip_header: (bool) skip the first row of data,
     :param epsg: (str) optional; if not provided and crs is None then algorithm sets epsg:4326 as a default value,
@@ -29,6 +32,8 @@ def read_txt(
 
     if skip_header:
         data_arr = data_arr[1:, :]
+
+    columns = ['y', 'x', 'value']
 
     gdf = gpd.GeoDataFrame(data=data_arr, columns=['y', 'x', 'value'])
     gdf['geometry'] = points_from_xy(gdf['x'], gdf['y'])

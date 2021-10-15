@@ -1,15 +1,15 @@
 import unittest
 import os
 import numpy as np
-from pyinterpolate.io_ops import read_point_data
+from pyinterpolate.io.read_data import read_csv, read_txt
 
 
 class TestReadData(unittest.TestCase):
 
-	def test_read_data(self):
+	def test_read_txt(self):
 		my_dir = os.path.dirname(__file__)
-		path_to_the_data = os.path.join(my_dir, '../sample_data/poland_dem_gorzow_wielkopolski')
-		data = read_point_data(path_to_the_data, 'txt')
+		path_to_the_data = os.path.join(my_dir, '../sample_data/point_data/txt/pl_dem.txt')
+		data = read_txt(path_to_the_data, 'txt')
 
 		# Check if data type is ndarray
 		check_ndarray = isinstance(data, np.ndarray)
