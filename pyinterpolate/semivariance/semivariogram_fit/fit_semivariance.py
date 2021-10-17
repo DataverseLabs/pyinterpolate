@@ -1,6 +1,7 @@
 """
 Authors:
 
+Scott Gallacher | @scottgallacher-3
 Szymon Molinski | @szymon-datalions
 
 Contributors:
@@ -168,7 +169,7 @@ class TheoreticalSemivariogram:
     def gaussian_model(lags, nugget, sill, semivar_range):
         """
 
-        gamma = nugget + sill*[1 - exp(lag**2 / range**2)], lag > 0
+        gamma = nugget + sill*[1 - exp(-1*(lag**2 / range**2))], lag > 0
         gamma = 0, lag == 0
 
         INPUT:
@@ -183,6 +184,121 @@ class TheoreticalSemivariogram:
         :return: an array of modeled values for given range. Values are calculated based on the gaussian model.
         """
         gamma = nugget + sill * (1 - np.exp(-1*(lags ** 2 / semivar_range ** 2)))
+
+        if lags[0] == 0:
+            gamma[0] = 0
+
+        return gamma
+    
+    @staticmethod
+    def power_model(lags, nugget, sill, semivar_range):
+        """
+
+        gamma = nugget + sill*[1 - exp(lag**2 / range**2)], lag > 0
+        gamma = 0, lag == 0
+
+        INPUT:
+
+        :param lags: array of ranges from empirical semivariance,
+        :param nugget: scalar,
+        :param sill: scalar,
+        :param semivar_range: optimal range calculated by fit_semivariance method.
+
+        OUTPUT:
+
+        :return: an array of modeled values for given range. Values are calculated based on the power model.
+        """
+        
+        gamma = nugget + sill * (1 - np.exp((lags ** 2 / semivar_range ** 2)))
+
+        if lags[0] == 0:
+            gamma[0] = 0
+
+        return gamma
+    
+    @staticmethod
+    def cubic_model(lags, nugget, sill, semivar_range):
+        """
+
+        gamma = nugget + sill*[7*(a**2) - 8.75*(a**3) + 3.5*(a**5) - 0.75*(a**7)], lag < range
+        gamma = nugget + sill, lag > range
+        gamma = 0, lag == 0
+
+        where:
+
+        a = lag / range
+
+        INPUT:
+
+        :param lags: array of lags from empirical semivariance,
+        :param nugget: scalar,
+        :param sill: scalar,
+        :param semivar_range: optimal range calculated by fit_semivariance method.
+
+        OUTPUT:
+
+        :return: an array of modeled values for given range. Values are calculated based on the cubic model.
+        """
+
+        a = lags / semivar_range
+        a1 = 7 * a ** 2
+        a2 = -8.75 * a ** 3
+        a3 = 3.5 * a ** 5
+        a4 = -0.75 * a ** 7
+        
+        gamma = np.where((lags < semivar_range), nugget + sill * (a1 + a2 + a3 + a4), nugget + sill)
+        
+        if lags[0] == 0:
+            gamma[0] = 0
+
+        return gamma
+    
+    @staticmethod
+    def circular_model(lags, nugget, sill, semivar_range):
+        ##### NOTE: found two competing model formulae for the circular model
+        ##### 1st one doesn't seem to work with the test data; but 2nd one does
+        ##### Sources added in docstring, further comparison may be needed
+        ##### (DELETE AFTER REVIEW)
+        """
+
+        gamma = nugget + sill*[1 - (2/np.pi * np.arccos(a)) + np.sqrt(1 - (lag ** 2)/ (range ** 2) )], 0 < lag <= range
+        OR gamma = nugget + (2/np.pi)*sill*[a * np.sqrt(1 - a ** 2) + np.arcsin(a)], 0 < lag <= range
+        gamma = 0, lag == 0
+        
+        where:
+        
+        a = lag / range
+        
+        (Model 1 Source:
+        https://desktop.arcgis.com/en/arcmap/10.3/tools/spatial-analyst-toolbox/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+        (Model 2 Source:
+        https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+
+        INPUT:
+
+        :param lags: array of ranges from empirical semivariance,
+        :param nugget: scalar,
+        :param sill: scalar,
+        :param semivar_range: optimal range calculated by fit_semivariance method.
+
+        OUTPUT:
+
+        :return: an array of modeled values for given range. Values are calculated based on the circular model.
+        """
+        # TODO: check conditions:
+        # apparently, even using np.where uncovers invalid values in the arccos and square root
+        # but as long as lag <= range this shouldn't happen
+        # use np.clip on the arrays to be passed
+        a = lags / semivar_range
+        
+        # use np.clip to limit range of values passed into np.arccos and np.sqrt
+        # gamma = np.where((lags <= semivar_range),
+        #                  (nugget + sill*(1 - 2/np.pi * np.arccos(np.clip(a, -1, 1)) *
+        #                      np.sqrt(1 - np.clip(a**2, -1, 1))) ),
+        #                  (nugget + sill))
+        
+        # second formula found which seems to fit better, and looks as expected
+        gamma = nugget + (2/np.pi) * sill*(a * np.sqrt(1 - np.clip(a**2, -1, 1)) + np.arcsin(np.clip(a, -1, 1)))
 
         if lags[0] == 0:
             gamma[0] = 0
@@ -209,7 +325,7 @@ class TheoreticalSemivariogram:
             'spherical': self.spherical_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
-            'gaussian': self.gaussian_model,
+            'gaussian': self.gaussian_model
         }
         model = models[model_type]
         self.chosen_model_name = model_type
