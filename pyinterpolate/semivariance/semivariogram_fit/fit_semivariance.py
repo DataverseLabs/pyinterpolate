@@ -73,6 +73,9 @@ class TheoreticalSemivariogram:
         self.sill = None
         self.model_error = None
         self.is_weighted = False
+        
+    def __str__(self):
+        return "chosen_model_name: {chosen_model_name}\nnugget: {nugget}\nrange: {range}\nsill: {sill}\nmodel_error: {model_error}\nis_weighted: {is_weighted}".format(**self.__dict__)
 
     # MODELS
 
