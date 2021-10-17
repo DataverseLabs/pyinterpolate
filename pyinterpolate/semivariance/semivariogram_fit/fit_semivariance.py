@@ -1,6 +1,7 @@
 """
 Authors:
 
+Scott Gallacher | @scottgallacher-3
 Szymon Molinski | @szymon-datalions
 
 Contributors:
@@ -249,7 +250,6 @@ class TheoreticalSemivariogram:
         
         if lags[0] == 0:
             gamma[0] = 0
-        
 
         return gamma
     
@@ -269,8 +269,10 @@ class TheoreticalSemivariogram:
         
         a = lag / range
         
-        (Model 1 Source: https://desktop.arcgis.com/en/arcmap/10.3/tools/spatial-analyst-toolbox/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
-        (Model 2 Source: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+        (Model 1 Source:
+        https://desktop.arcgis.com/en/arcmap/10.3/tools/spatial-analyst-toolbox/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+        (Model 2 Source:
+        https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
 
         INPUT:
 
@@ -283,18 +285,19 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the circular model.
         """
-        #check conditions:
-        #apparently, even using np.where uncovers invalid values in the arccos and square root
-        #but as long as lag <= range this shouldn't happen
-        #use np.clip on the arrays to be passed
+        # TODO: check conditions:
+        # apparently, even using np.where uncovers invalid values in the arccos and square root
+        # but as long as lag <= range this shouldn't happen
+        # use np.clip on the arrays to be passed
         a = lags / semivar_range
         
-        #use np.clip to limit range of values passed into np.arccos and np.sqrt
-        gamma = np.where((lags <= semivar_range), 
-                         (nugget + sill*(1 - 2/np.pi * np.arccos(np.clip(a, -1, 1)) * np.sqrt(1 - np.clip(a**2, -1, 1))) ),
-                         (nugget + sill))
+        # use np.clip to limit range of values passed into np.arccos and np.sqrt
+        # gamma = np.where((lags <= semivar_range),
+        #                  (nugget + sill*(1 - 2/np.pi * np.arccos(np.clip(a, -1, 1)) *
+        #                      np.sqrt(1 - np.clip(a**2, -1, 1))) ),
+        #                  (nugget + sill))
         
-        #second formula found which seems to fit better, and looks as expected
+        # second formula found which seems to fit better, and looks as expected
         gamma = nugget + (2/np.pi) * sill*(a * np.sqrt(1 - np.clip(a**2, -1, 1)) + np.arcsin(np.clip(a, -1, 1)))
 
         if lags[0] == 0:
@@ -322,7 +325,7 @@ class TheoreticalSemivariogram:
             'spherical': self.spherical_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
-            'gaussian': self.gaussian_model,
+            'gaussian': self.gaussian_model
         }
         model = models[model_type]
         self.chosen_model_name = model_type
