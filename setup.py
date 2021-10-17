@@ -34,7 +34,7 @@ setup(
     ],
     keywords=['Spatial interpolation', 'Kriging', 'Area Kriging', 'Block Kriging', 'Poisson Kriging', 'Geostatistics'],
     packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts', 'paper', 'docs',
-        'sample_data']),
+        'sample_data', 'developer']),
 
     install_requires=[
         'descartes==1.1.0',
