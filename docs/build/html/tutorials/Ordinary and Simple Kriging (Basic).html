@@ -18,7 +18,7 @@
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="How good is my Kriging model - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
+    <link rel="next" title="How good is my Kriging model? - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
     <link rel="prev" title="Semivariogram calculation - tutorial" href="Semivariogram%20Estimation%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -313,15 +313,19 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-10-17</p></td>
+<td><p>New theoretical models</p></td>
+<td><p>&#64;scottgallacher-3 &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-04-03</p></td>
+<tr class="row-even"><td><p>2021-04-03</p></td>
 <td><p>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated point data source.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
@@ -467,7 +471,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <span class="n">semivar</span> <span class="o">=</span> <span class="n">TheoreticalSemivariogram</span><span class="p">(</span><span class="n">points_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">empirical_semivariance</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">)</span>
 <span class="n">number_of_ranges</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">)</span>  <span class="c1"># The same number of ranges as experimental semivariogram</span>
 
-<span class="n">semivar</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">(</span><span class="n">weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">semivar</span><span class="o">.</span><span class="n">find_optimal_model</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -477,7 +481,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&#39;linear&#39;
+&#39;cubic&#39;
 </pre></div></div>
 </div>
 </section>
@@ -513,7 +517,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[15.1152409  52.56746749 35.54473495]
+[15.11563642 52.72540295 76.95183563]
 </pre></div></div>
 </div>
 <p><strong>Simple Kriging</strong> technique may be used when process mean over sampling area is known. It is rarely the case, that’s why Ordinary Kriging is the first choice for many applications. We know global mean beacuse we have whole dataset but in the real-world scenario we cannot divide set into training and test sets and then get mean from the whole dataset - it is a information leak from the test set into a model!</p>
@@ -552,20 +556,20 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <div class="highlight"><pre>
 Ordinary Kriging:
 
-(35.54473495483397, 3.3971240271095104, 6.972193264668931e-17, array([ 1.00000000e+00, -2.48921943e-16, -8.00272449e-17,  1.84018500e-16,
-       -2.72481846e-18, -2.51590992e-16, -6.04329063e-17,  1.68820100e-16,
-       -4.77934329e-17, -1.20858740e-16, -2.09982234e-16,  1.64090101e-16,
-        4.48311461e-17,  1.59178733e-16,  3.30431085e-16, -3.27499526e-16,
-        6.97219326e-17]))
+(76.95183563232348, 0.0, -6.15171607227872e-14, array([ 1.00000000e+00, -9.20578620e-16,  3.04870747e-14, -2.79664141e-13,
+        3.21502677e-14,  2.99215108e-13, -1.59344157e-14, -1.51253519e-13,
+        8.08299896e-14,  3.40387588e-13, -3.77306252e-13, -5.81513383e-14,
+       -1.42826829e-13, -4.74371487e-15,  1.56387006e-13,  9.13800964e-14,
+       -6.15171607e-14]))
 
 ========== ========== ========== ========== ==========
 
 Simple Kriging:
 
-(35.54473495483399, 3.39712402710951, 40.9509380348875, array([ 1.00000000e+00, -2.03476520e-16, -6.67386648e-17,  2.86403696e-17,
-       -1.33239218e-17,  3.37797105e-17, -5.72980376e-17,  3.78975229e-17,
-       -5.14262231e-17, -1.42936524e-16, -1.42492348e-17, -1.32573087e-16,
-       -2.16570003e-16,  3.91363271e-16,  6.50791734e-16, -5.55080853e-16]))
+(76.95183563232379, 0.0, 40.9509380348875, array([ 1.00000000e+00,  4.54339540e-15, -3.18216392e-16, -5.43246533e-15,
+        1.63438130e-14, -1.42103943e-15, -3.53015628e-14,  4.45258192e-15,
+       -2.70327243e-15,  3.10884309e-13, -8.64970232e-13, -2.58389113e-14,
+        5.59827728e-13,  7.48816330e-15,  2.14487558e-13, -1.82045234e-13]))
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -632,12 +636,16 @@ Difference between real value and SK:
 
     <span class="n">mse_arr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
-        <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">)</span>
-        <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">mse</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">mse_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">)</span>
+            <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mse</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">mse_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># Negative prediction! Just do nothing</span>
+            <span class="k">pass</span>
     <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mse</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">rmse</span>
 </pre></div>
@@ -668,26 +676,26 @@ Difference between real value and SK:
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.43436690746381146
+RMSE: 0.173684451192738
 
 Number of neighbors: 8
-RMSE: 0.38251845025082076
+RMSE: 0.5403441660894899
 
 Number of neighbors: 16
-RMSE: 0.35402382745489547
+RMSE: 0.3512651993846987
 
 Number of neighbors: 32
-RMSE: 0.3677662552453569
+RMSE: 0.21771318325177624
 
 Number of neighbors: 64
-RMSE: 0.3676187221660143
+RMSE: 0.23851745434338234
 
 </pre></div></div>
 </div>
 <section id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Now we perform practical test of usefulness of our algorithm. The idea is to use our test set, predict values “not seen” by the kriging algorithm and compare prediction to the ground truth value. Then we calculate root of a mean squared errors between real values and predictions.</p>
-<p>We can find the best <strong>number_of_neighbors</strong> parameter, or alternatively we can discover how many closest points influence our point. More doesn’t better as you can see in this realization.</p>
+<p>We can find the best <strong>number_of_neighbors</strong> parameter, or alternatively we can discover how many closest points influence our point. The more is not better as you can see in this realization.</p>
 <p><strong>NOTE:</strong></p>
 <ol class="arabic simple">
 <li><p>This is only a single realization of a division between variables. RMSE of single experiment is not reliable from the practical perspective, you should divide dataset randomly multiple times to find the best number of neighbors for the analysis.</p></li>
@@ -702,15 +710,18 @@ RMSE: 0.3676187221660143
 
     <span class="n">mse_arr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">test_values</span><span class="p">:</span>
-        <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-            <span class="n">global_mean</span><span class="o">=</span><span class="n">mean_areal</span><span class="p">,</span>
-            <span class="n">test_anomalies</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
-        <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">mse</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">mse_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">kriging_model</span><span class="o">.</span><span class="n">simple_kriging</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">number_of_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+                <span class="n">global_mean</span><span class="o">=</span><span class="n">mean_areal</span><span class="p">,</span>
+                <span class="n">test_anomalies</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="n">predicted</span> <span class="o">=</span> <span class="n">prediction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mse</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">mse_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">pass</span>
     <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mse</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">rmse</span>
 </pre></div>
@@ -742,19 +753,19 @@ RMSE: 0.3676187221660143
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Number of neighbors: 4
-RMSE: 0.23290865902028202
+RMSE: 0.6928918111521618
 
 Number of neighbors: 8
-RMSE: 0.3128240396068094
+RMSE: 0.561126416203777
 
 Number of neighbors: 16
-RMSE: 0.3450757729622964
+RMSE: 0.36358502592704767
 
 Number of neighbors: 32
-RMSE: 0.36795250017152625
+RMSE: 0.21773438421355706
 
 Number of neighbors: 64
-RMSE: 0.36763369973451177
+RMSE: 0.23862037804892466
 
 </pre></div></div>
 </div>
@@ -800,7 +811,7 @@ RMSE: 0.36763369973451177
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
       <li>Previous: <a href="Semivariogram%20Estimation%20%28Basic%29.html" title="previous chapter">Semivariogram calculation - tutorial</a></li>
-      <li>Next: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="next chapter">How good is my Kriging model - tests with IDW algorithm - tutorial</a></li>
+      <li>Next: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="next chapter">How good is my Kriging model? - tests with IDW algorithm - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -831,7 +842,7 @@ RMSE: 0.36763369973451177
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

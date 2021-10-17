@@ -197,7 +197,8 @@ class TheoreticalSemivariogram:
     def power_model(lags, nugget, sill, semivar_range):
         """
 
-        gamma = nugget + sill*[1 - exp(lag**2 / range**2)], lag > 0
+        gamma = nugget + sill*(lag/range)**2, 0 <= lag <= range
+        gamma = nugget + sill, lag > range
         gamma = 0, lag == 0
 
         INPUT:
@@ -211,11 +212,10 @@ class TheoreticalSemivariogram:
 
         :return: an array of modeled values for given range. Values are calculated based on the power model.
         """
-        
-        gamma = nugget + sill * (1 - np.exp((lags ** 2 / semivar_range ** 2)))
 
-        if lags[0] == 0:
-            gamma[0] = 0
+        gamma = np.where((lags <= semivar_range),
+                         (nugget + sill * (lags / semivar_range)**2),
+                         (nugget + sill))
 
         return gamma
     
@@ -328,7 +328,10 @@ class TheoreticalSemivariogram:
             'spherical': self.spherical_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
-            'gaussian': self.gaussian_model
+            'gaussian': self.gaussian_model,
+            'cubic': self.cubic_model,
+            'circular': self.circular_model,
+            'power': self.power_model
         }
         model = models[model_type]
         self.chosen_model_name = model_type
@@ -386,6 +389,9 @@ class TheoreticalSemivariogram:
             'spherical': self.spherical_model,
             'exponential': self.exponential_model,
             'linear': self.linear_model,
+            'cubic': self.cubic_model,
+            'circular': self.circular_model,
+            'power': self.power_model
         }
 
         # calculate base error for a flat line

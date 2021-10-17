@@ -314,6 +314,14 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>2021-10-17</p></td>
+<td><p>New theoretical models</p></td>
+<td><p>&#64;scottgallacher-3 &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute)</p></td>
+<td><p>&#64;ethmtrgt</p></td>
+</tr>
 <tr class="row-even"><td><p>2021-05-28</p></td>
 <td><p>Updated paths for input/output data</p></td>
 <td><p>&#64;szymon-datalions</p></td>
@@ -492,16 +500,19 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <li><p>spherical,</p></li>
 <li><p>exponential,</p></li>
 <li><p>linear,</p></li>
-<li><p>gaussian</p></li>
+<li><p>gaussian,</p></li>
+<li><p>cubic,</p></li>
+<li><p>circular,</p></li>
+<li><p>power</p></li>
 </ul>
+<section id="Spherical-model">
+<h4>Spherical model<a class="headerlink" href="#Spherical-model" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Spherical</span>
-
-<span class="n">spherical_model</span> <span class="o">=</span> <span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;spherical&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span></span><span class="n">spherical_model</span> <span class="o">=</span> <span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;spherical&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -518,7 +529,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_14_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_14_0.png" />
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_15_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_15_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -539,52 +550,15 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 51.581179602829174
 </pre></div></div>
 </div>
+</section>
+<section id="Exponential-model">
+<h4>Exponential model<a class="headerlink" href="#Exponential-model" title="Permalink to this headline">¶</a></h4>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Exponential</span>
-
-<span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;exponential&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
-<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_16_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_16_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Linear</span>
-
-<span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
-<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_17_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_17_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="c1"># Gaussian</span>
-
-<span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;exponential&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
 <span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -597,17 +571,118 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 </section>
+<section id="Linear-model">
+<h4>Linear model<a class="headerlink" href="#Linear-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_20_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_20_0.png" />
+</div>
+</div>
+</section>
+<section id="Gaussian-model">
+<h4>Gaussian model<a class="headerlink" href="#Gaussian-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_22_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_22_0.png" />
+</div>
+</div>
+</section>
+<section id="Cubic-model">
+<h4>Cubic model<a class="headerlink" href="#Cubic-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_24_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_24_0.png" />
+</div>
+</div>
+</section>
+<section id="Circular-model">
+<h4>Circular model<a class="headerlink" href="#Circular-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_26_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_26_0.png" />
+</div>
+</div>
+</section>
+<section id="Power-model">
+<h4>Power model<a class="headerlink" href="#Power-model" title="Permalink to this headline">¶</a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">baseline_model</span><span class="o">.</span><span class="n">fit_semivariance</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="o">=</span><span class="n">number_of_ranges</span><span class="p">)</span>
+<span class="n">baseline_model</span><span class="o">.</span><span class="n">show_semivariogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_28_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_28_0.png" />
+</div>
+</div>
+</section>
+</section>
 <section id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>We test four different semivariogram models. Each model gives different results, we can check model’s mean absolute error of prediction by class instance <strong>model_error</strong> parameter or visualize it with <strong>show_semivariogram()</strong> method.</p>
-<p>From comparison we see that the best models are linear and spherical. They could be used in further processing, especially if we know undergoing data process.</p>
+<p>From comparison we see that the best models are linear and cubic. They could be used in further processing, especially if we know undergoing data process.</p>
 <p>Manual selection of theoretical semivariogram model may be tedious. We can automate it with <strong>find_optimal_model()</strong> method. Let’s try it and compare results to the manual selection.</p>
 </section>
 </section>
 <section id="3)-Set-automatically-semivariogram-model">
 <h2>3) Set automatically semivariogram model<a class="headerlink" href="#3)-Set-automatically-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -617,8 +692,11 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <section id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>Chosen model is <strong>linear</strong> and it is automatically set as the class parameter. You may noticed that only spherical, exponential and linear models are considered in automatic searches. Why is that? Gaussian model (and in some cases exponential too) leads to the negative weights in a kriging model and possibly negative estimated value. You should be cautious with those two models and that’s why Gaussian model was intentionally dropped from the automatic model search. (<em>Viable for version 0.2 of
-library</em>).</p>
+<p>Chosen model is <strong>cubic</strong> and it is automatically set as the class parameter.</p>
+<hr class="docutils" />
+<p><strong>Important Note!</strong></p>
+<p><strong>Cubic, Gaussian and Power models</strong></p>
+<p>Gaussian, cubic and power models may lead to the negative weights in a kriging system. Those weights may produce the negative estimated value. You should be cautious with those models and that’s why we have introduced Kriging weights monitoring which throws an error if your estimated value is below zero. Additionally, Gaussian model is <strong>excluded</strong> from the automatic search (<em>Version 0.2.3.post2 of the package</em>).</p>
 </section>
 </section>
 <section id="4)-Export-model">
@@ -626,7 +704,7 @@ library</em>).</p>
 <p>Models could be exported and used for other purposes. It is especially important for the <strong>semivariogram regularization</strong>. Those calculations are very slow and in a production it is not a good idea to build full piepline of semivariogram estimation and kriging; we divide it into two steps.</p>
 <p>Model is saved into a csv file with class method <strong>export_model()</strong>. We pass into it a filename and we save name, nugget, sill and a range of a model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -643,7 +721,7 @@ library</em>).</p>
 <p>We can import semivariogram model into a new <strong>TheoreticalSemivariogram</strong> class instance without passing into it experimental semivariogram or actual data points. It is useful for some applications where we are focused on kriging and we are sure that our semivariogram models fits data well.</p>
 <p>Oposing to <strong>export_model()</strong> method we use <strong>import_model()</strong> method for it.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -655,7 +733,7 @@ library</em>).</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -676,7 +754,7 @@ Model sill is 490.4940934242805
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -685,7 +763,7 @@ Model sill is 490.4940934242805
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -761,7 +839,7 @@ Model sill is 490.4940934242805
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

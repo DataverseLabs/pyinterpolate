@@ -33,15 +33,21 @@ class TestArealSemivariance(unittest.TestCase):
         step_size = max_range / 4
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
-        points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
+        points_in_area = get_points_within_area(areal_dataset,
+                                                subset,
+                                                areal_id_col_name=a_id,
                                                 points_val_col_name=points_val)
 
         # Set areal semivariance class
-        areal_semivariance = ArealSemivariance(areal_data_prepared, step_size, max_range, points_in_area)
+        areal_semivariance = ArealSemivariance(areal_data_prepared,
+                                               step_size,
+                                               max_range,
+                                               points_in_area)
+
         output = areal_semivariance.regularize_semivariogram()
         test_d = output[:, 1].astype(np.int)
-        correct_output = np.array([0, 0, 140, 148])
-        self.assertTrue((test_d == correct_output).all(), "Correct output should be [0, 0, 140, 148]")
+        correct_output = np.array([0, 0, 184, 197])
+        self.assertTrue((test_d == correct_output).all(), "Correct output should be [0, 0, 184, 197]")
 
 
 if __name__ == '__main__':

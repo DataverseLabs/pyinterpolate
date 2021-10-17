@@ -314,19 +314,23 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-05-28</p></td>
+<tr class="row-even"><td><p>2021-10-17</p></td>
+<td><p>New theoretical models</p></td>
+<td><p>&#64;scottgallacher-3 &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-28</p></td>
 <td><p>Updated paths for input/output data</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-04-04</p></td>
+<tr class="row-odd"><td><p>2021-04-04</p></td>
 <td><p>Ranges parameter removed from regularize semivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
@@ -612,7 +616,7 @@ True
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 array([25019,
-       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7f0d0ff80b50&gt;,
+       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7fbb6825f150&gt;,
        2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </pre></div></div>
 </div>
@@ -621,7 +625,7 @@ array([25019,
 <p>Every areal dataset is passed as an array of:</p>
 <p>[area id, area geometry (polygon), areal centroid x (lon), areal centroid y (lat), value]</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -649,30 +653,30 @@ array([25019,
 <div class="highlight"><pre>
 array([42049.0,
        array([[1277277.6705919 ,  441124.50679998,    1866.        ],
-       [1277277.6705919 ,  431124.50679999,    2093.        ],
-       [1285937.92462974,  446124.50679999,   10191.        ],
-       [1285937.92462974,  436124.50679999,    3271.        ],
-       [1285937.92462974,  426124.50679999,    5400.        ],
-       [1294598.17866759,  451124.50679998,   23133.        ],
-       [1294598.17866759,  441124.50679999,    2616.        ],
-       [1294598.17866759,  431124.50679999,    1610.        ],
-       [1303258.43270543,  456124.50679999,  110912.        ],
-       [1303258.43270543,  446124.50679999,    6793.        ],
-       [1303258.43270543,  436124.50679999,    8493.        ],
-       [1311918.68674328,  461124.50679999,   44605.        ],
-       [1311918.68674328,  451124.50679999,    5710.        ],
-       [1311918.68674328,  441124.50679999,    4700.        ],
-       [1311918.68674328,  431124.50679999,    2483.        ],
-       [1320578.94078112,  466124.50679999,    3372.        ],
-       [1320578.94078112,  456124.50679999,    3226.        ],
-       [1320578.94078112,  446124.50679998,    1664.        ],
-       [1320578.94078112,  436124.50679999,    1956.        ],
-       [1329239.19481896,  461124.50679999,    1441.        ],
-       [1329239.19481897,  451124.50679998,    1712.        ],
-       [1329239.19481896,  441124.50679999,    4814.        ],
-       [1337899.44885681,  446124.50679999,    1933.        ],
-       [1337899.44885681,  436124.50679998,    1370.        ],
-       [1346559.70289465,  441124.50679999,    7430.        ]])],
+              [1277277.6705919 ,  431124.50679999,    2093.        ],
+              [1285937.92462974,  446124.50679999,   10191.        ],
+              [1285937.92462974,  436124.50679999,    3271.        ],
+              [1285937.92462974,  426124.50679999,    5400.        ],
+              [1294598.17866759,  451124.50679998,   23133.        ],
+              [1294598.17866759,  441124.50679999,    2616.        ],
+              [1294598.17866759,  431124.50679999,    1610.        ],
+              [1303258.43270543,  456124.50679999,  110912.        ],
+              [1303258.43270543,  446124.50679999,    6793.        ],
+              [1303258.43270543,  436124.50679999,    8493.        ],
+              [1311918.68674328,  461124.50679999,   44605.        ],
+              [1311918.68674328,  451124.50679999,    5710.        ],
+              [1311918.68674328,  441124.50679999,    4700.        ],
+              [1311918.68674328,  431124.50679999,    2483.        ],
+              [1320578.94078112,  466124.50679999,    3372.        ],
+              [1320578.94078112,  456124.50679999,    3226.        ],
+              [1320578.94078112,  446124.50679998,    1664.        ],
+              [1320578.94078112,  436124.50679999,    1956.        ],
+              [1329239.19481896,  461124.50679999,    1441.        ],
+              [1329239.19481897,  451124.50679998,    1712.        ],
+              [1329239.19481896,  441124.50679999,    4814.        ],
+              [1337899.44885681,  446124.50679999,    1933.        ],
+              [1337899.44885681,  436124.50679998,    1370.        ],
+              [1346559.70289465,  441124.50679999,    7430.        ]])],
       dtype=object)
 </pre></div></div>
 </div>
@@ -787,7 +791,7 @@ models are stored in lists after each iteration. It is important for a debugging
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -840,7 +844,9 @@ models are stored in lists after each iteration. It is important for a debugging
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 25/25 [30:04&lt;00:00, 72.17s/it]
+  0%|                                                    | 0/25 [00:00&lt;?, ?it/s]/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/pyinterpolate/semivariance/areal_semivariance/block_to_block_semivariance/calculate_block_to_block_semivariance.py:113: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  output_array = np.array([block_to_block_semivariance, blocks_ids])
+ 20%|████████▊                                   | 5/25 [03:20&lt;13:20, 40.02s/it]
 </pre></div></div>
 </div>
 <p><strong>NOTE:</strong></p>
@@ -1032,7 +1038,7 @@ information. But with population data we can retrive it and regularized semivari
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

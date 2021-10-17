@@ -65,7 +65,11 @@ class TestCentroidBasedKriging(unittest.TestCase):
                                      known_areas_points=k_points)
         d = pkc.predict(u_area, u_points, number_of_observations, search_radius, True)
 
-        self.assertEqual(int(d[0]), 123, "Int of first value should be equal to 123")
+        expected_value = 120
+
+        self.assertEqual(
+            int(d[0]), expected_value, "Int of first value should be equal to {}".format(expected_value)
+        )
 
 
 if __name__ == '__main__':

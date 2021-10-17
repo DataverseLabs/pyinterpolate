@@ -43,12 +43,12 @@ class TestRegularizeSemivariogram(unittest.TestCase):
         # Transform
         reg_mod.transform()
 
-        regularized_smv = np.array([0, 0, 140, 148])
+        regularized_smv = np.array([0, 0, 184, 197])
         test_output = reg_mod.final_optimal_model.astype(np.int)
 
         check = (test_output == regularized_smv).all()
 
-        self.assertTrue(check, "Output should be equal to [0, 0, 140, 148]")
+        self.assertTrue(check, "Output should be equal to [0, 0, 184, 197]")
 
     def test_regularize_semivariogram_id_as_str(self):
         reg_mod = RegularizedSemivariogram()
@@ -86,12 +86,12 @@ class TestRegularizeSemivariogram(unittest.TestCase):
         # Transform
         reg_mod.transform()
 
-        regularized_smv = np.array([0, 0, 140, 148])
+        regularized_smv = np.array([0, 0, 184, 197])
         test_output = reg_mod.final_optimal_model.astype(np.int)
 
         check = (test_output == regularized_smv).all()
 
-        self.assertTrue(check, "Output should be equal to [0, 0, 140, 148]")
+        self.assertTrue(check, "Output should be equal to [0, 0, 184, 197]")
 
 
 if __name__ == '__main__':
