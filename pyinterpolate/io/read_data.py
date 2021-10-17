@@ -6,19 +6,19 @@ from geopandas import points_from_xy
 
 
 def read_txt(
-        path: str, val_col_no=2, lat_col_no=0, lon_col_no=1, delim=',', skip_header=True, epsg='4326', crs=None
+        path: str, lon_col_no=0, lat_col_no=1, val_col_no=2, delim=',', skip_header=True, epsg='4326', crs=None
 ) -> gpd.GeoDataFrame:
     """
-    Function reads data from a text file. Provided data format should include: latitude, longitude, value. You should
-        provide crs or epsg, if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
-        Data read by a function is converted into GeoSeries.
+    Function reads data from a text file. Provided data format should include: longitude (x), latitude (y), value.
+        You should provide crs or epsg, if it's not provided then epsg:4326 is used as a default value
+        (https://epsg.io/4326). Data read by a function is converted into GeoDataFrame.
 
     INPUT:
 
     :param path: (str) path to the file,
-    :param val_col_no: (int) position of value column,
-    :param lat_col_no: (int) position of latitude column,
-    :param lon_col_no: (int) position of longitude column,
+    :param lon_col_no: (int) position of longitude column, default=0,
+    :param lat_col_no: (int) position of latitude column, default=1,
+    :param val_col_no: (int) position of value column, default=2,
     :param delim: (str) delimiter which separates columns,
     :param skip_header: (bool) skip the first row of data,
     :param epsg: (str) optional; if not provided and crs is None then algorithm sets epsg:4326 as a default value,
@@ -33,10 +33,8 @@ def read_txt(
     if skip_header:
         data_arr = data_arr[1:, :]
 
-    columns = ['y', 'x', 'value']
-
-    gdf = gpd.GeoDataFrame(data=data_arr, columns=['y', 'x', 'value'])
-    gdf['geometry'] = points_from_xy(gdf['x'], gdf['y'])
+    gdf = gpd.GeoDataFrame(data=data_arr)
+    gdf['geometry'] = points_from_xy(gdf[lon_col_no], gdf[lat_col_no])
     gdf.set_geometry('geometry', inplace=True)
 
     if crs is None:
@@ -44,7 +42,10 @@ def read_txt(
     else:
         gdf.set_crs(crs=crs, inplace=True)
 
-    return gdf[['geometry', 'value']]
+    gdf = gdf[['geometry', val_col_no]]
+    gdf.columns = ['geometry', 'value']
+
+    return gdf
 
 
 def read_csv(
