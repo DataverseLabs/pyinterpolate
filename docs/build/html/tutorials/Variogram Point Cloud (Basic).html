@@ -313,19 +313,23 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-08-22</p></td>
+<tr class="row-even"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
+<td><p>&#64;ethmtrgt &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-08-22</p></td>
 <td><p>Refactored the Outlier Removal algorithm - quantile based algorithm</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-08-10</p></td>
+<tr class="row-even"><td><p>2021-08-10</p></td>
 <td><p>Refactored the Outlier Removal algorithm</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-05-11</p></td>
+<tr class="row-odd"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;szymon-datalions</p></td>
 </tr>
@@ -408,7 +412,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Permalink to this headline">¶</a></h2>
 <p>In this step we generate Variogram Point Cloud. For each proposed lag algorithm assigns point’s values which are grouped in this lag. We check and compare few different lags and step sizes and their respective point clouds.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -430,8 +434,8 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <p>Now we check how many points are grouped for each lag:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -446,93 +450,6 @@ array([[15.1152409 , 52.76514556, 91.27559662],
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">###########</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Lags per area: 4
-
-Lag 0.0 has 3949909 points.
-Lag 0.08380184447417775 has 20797686 points.
-Lag 0.1676036889483555 has 18499412 points.
-Lag 0.25140553342253324 has 4247496 points.
-
-###########
-
-Lags per area: 8
-
-Lag 0.0 has 1079563 points.
-Lag 0.041900922237088876 has 7088626 points.
-Lag 0.08380184447417775 has 10807462 points.
-Lag 0.12570276671126662 has 11367804 points.
-Lag 0.1676036889483555 has 9508578 points.
-Lag 0.2095046111854444 has 5675518 points.
-Lag 0.25140553342253324 has 1784288 points.
-Lag 0.29330645565962216 has 225814 points.
-
-###########
-
-Lags per area: 16
-
-Lag 0.0 has 289011 points.
-Lag 0.020950461118544438 has 2030532 points.
-Lag 0.041900922237088876 has 3599738 points.
-Lag 0.06285138335563331 has 4740508 points.
-Lag 0.08380184447417775 has 5457110 points.
-Lag 0.1047523055927222 has 5745202 points.
-Lag 0.12570276671126662 has 5724576 points.
-Lag 0.14665322782981108 has 5401064 points.
-Lag 0.1676036889483555 has 4788456 points.
-Lag 0.18855415006689993 has 3905638 points.
-Lag 0.2095046111854444 has 2851764 points.
-Lag 0.23045507230398882 has 1739596 points.
-Lag 0.25140553342253324 has 842102 points.
-Lag 0.2723559945410777 has 314432 points.
-Lag 0.29330645565962216 has 96070 points.
-Lag 0.3142569167781666 has 14926 points.
-
-###########
-
-Lags per area: 32
-
-Lag 0.0 has 79681 points.
-Lag 0.010475230559272219 has 542666 points.
-Lag 0.020950461118544438 has 1026014 points.
-Lag 0.031425691677816656 has 1440430 points.
-Lag 0.041900922237088876 has 1805876 points.
-Lag 0.0523761527963611 has 2112990 points.
-Lag 0.06285138335563331 has 2381936 points.
-Lag 0.07332661391490554 has 2585548 points.
-Lag 0.08380184447417775 has 2734352 points.
-Lag 0.09427707503344997 has 2830336 points.
-Lag 0.1047523055927222 has 2876046 points.
-Lag 0.11522753615199441 has 2891310 points.
-Lag 0.12570276671126662 has 2868114 points.
-Lag 0.13617799727053884 has 2799360 points.
-Lag 0.14665322782981108 has 2708154 points.
-Lag 0.1571284583890833 has 2573354 points.
-Lag 0.1676036889483555 has 2393586 points.
-Lag 0.17807891950762772 has 2193686 points.
-Lag 0.18855415006689993 has 1955112 points.
-Lag 0.19902938062617218 has 1699222 points.
-Lag 0.2095046111854444 has 1427606 points.
-Lag 0.2199798417447166 has 1138918 points.
-Lag 0.23045507230398882 has 865958 points.
-Lag 0.24093030286326103 has 629300 points.
-Lag 0.25140553342253324 has 415606 points.
-Lag 0.2618807639818055 has 250084 points.
-Lag 0.2723559945410777 has 153534 points.
-Lag 0.2828312251003499 has 88892 points.
-Lag 0.29330645565962216 has 45530 points.
-Lag 0.30378168621889434 has 20132 points.
-Lag 0.3142569167781666 has 6436 points.
-Lag 0.32473214733743877 has 1230 points.
-
-###########
-
-</pre></div></div>
 </div>
 <section id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
@@ -997,7 +914,7 @@ Lags per area: 32
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="o">.</span><span class="c1"># Experimental semivariogram</span>
+<span></span><span class="c1"># Experimental semivariogram</span>
 
 <span class="n">search_radius</span> <span class="o">=</span> <span class="n">step_sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <span class="n">max_range</span> <span class="o">=</span> <span class="n">maximum_range</span>
@@ -1061,8 +978,8 @@ Lags per area: 32
 </div>
 <p>As you may noticed, shape of the semivariogram is preserved but values of semivariance are much smaller for the data without outliers.</p>
 </section>
-<section id="5)-What-next?">
-<h2>5) What next?<a class="headerlink" href="#5)-What-next?" title="Permalink to this headline">¶</a></h2>
+<section id="5)-What’s-next?">
+<h2>5) What’s next?<a class="headerlink" href="#5)-What’s-next?" title="Permalink to this headline">¶</a></h2>
 <p>From this point you may look into <strong>Outliers and Their Influence on the Final Model (Intermediate)</strong> notebook where we are exploring the variogram point clouds further.</p>
 <hr class="docutils" />
 </section>
@@ -1132,7 +1049,7 @@ Lags per area: 32
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

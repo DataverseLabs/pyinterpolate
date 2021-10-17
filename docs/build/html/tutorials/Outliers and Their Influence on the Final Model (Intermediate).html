@@ -303,9 +303,9 @@ div.rendered_html tbody tr:hover {
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 22%" />
-<col style="width: 40%" />
-<col style="width: 38%" />
+<col style="width: 18%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -314,6 +314,14 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>2021-10-17</p></td>
+<td><p>New theoretical models</p></td>
+<td><p>&#64;scottgallacher-3 &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
+<td><p>&#64;ethmtrgt &amp; &#64;szymon-datalions</p></td>
+</tr>
 <tr class="row-even"><td><p>2021-08-22</p></td>
 <td><p>Initial release</p></td>
 <td><p>&#64;szymon-datalions</p></td>
@@ -407,13 +415,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[15.32961159, 52.69870089, 26.50076103],
-       [15.33317125, 52.69062817, 21.09065437],
-       [15.14925544, 52.78377491, 52.66115952],
+array([[15.20502346, 52.64177788, 17.19826317],
+       [15.16586719, 52.6328772 , 17.56120872],
+       [15.30508948, 52.70077082, 22.14069557],
        ...,
-       [15.22756798, 52.56374162, 58.7893219 ],
-       [15.31735053, 52.75355397, 83.29890442],
-       [15.29638809, 52.5900297 , 46.89881134]])
+       [15.28056737, 52.67344777, 18.52673531],
+       [15.22440383, 52.6413639 , 16.54854393],
+       [15.26197803, 52.67758763, 18.38500023]])
 </pre></div></div>
 </div>
 </section>
@@ -516,7 +524,7 @@ distance are treated as outliers. The outlier distance is calculated as the <spa
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Length of the full training set is 689 records
-Length of the pre-processed training set is 683 records
+Length of the pre-processed training set is 671 records
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -636,84 +644,84 @@ Length of the pre-processed training set is 683 records
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Lag 0.00
-Standard Deviation raw dataset: 83
-Standard Deviation processed dataset: 84
-Symmetric Mean Absolute Percentage Error of Variances: 1.20
+Standard Deviation raw dataset: 98
+Standard Deviation processed dataset: 90
+Symmetric Mean Absolute Percentage Error of Variances: 8.51
 
 Lag 0.02
-Standard Deviation raw dataset: 312
-Standard Deviation processed dataset: 313
-Symmetric Mean Absolute Percentage Error of Variances: 0.32
+Standard Deviation raw dataset: 291
+Standard Deviation processed dataset: 277
+Symmetric Mean Absolute Percentage Error of Variances: 4.93
 
 Lag 0.04
-Standard Deviation raw dataset: 508
-Standard Deviation processed dataset: 500
-Symmetric Mean Absolute Percentage Error of Variances: 1.59
+Standard Deviation raw dataset: 488
+Standard Deviation processed dataset: 438
+Symmetric Mean Absolute Percentage Error of Variances: 10.80
 
 Lag 0.06
-Standard Deviation raw dataset: 626
-Standard Deviation processed dataset: 594
-Symmetric Mean Absolute Percentage Error of Variances: 5.25
+Standard Deviation raw dataset: 608
+Standard Deviation processed dataset: 530
+Symmetric Mean Absolute Percentage Error of Variances: 13.71
 
 Lag 0.08
-Standard Deviation raw dataset: 686
-Standard Deviation processed dataset: 643
-Symmetric Mean Absolute Percentage Error of Variances: 6.47
+Standard Deviation raw dataset: 660
+Standard Deviation processed dataset: 562
+Symmetric Mean Absolute Percentage Error of Variances: 16.04
 
 Lag 0.10
-Standard Deviation raw dataset: 686
-Standard Deviation processed dataset: 641
-Symmetric Mean Absolute Percentage Error of Variances: 6.78
+Standard Deviation raw dataset: 664
+Standard Deviation processed dataset: 569
+Symmetric Mean Absolute Percentage Error of Variances: 15.41
 
 Lag 0.12
-Standard Deviation raw dataset: 666
-Standard Deviation processed dataset: 619
-Symmetric Mean Absolute Percentage Error of Variances: 7.32
+Standard Deviation raw dataset: 664
+Standard Deviation processed dataset: 559
+Symmetric Mean Absolute Percentage Error of Variances: 17.17
 
 Lag 0.14
-Standard Deviation raw dataset: 637
-Standard Deviation processed dataset: 588
-Symmetric Mean Absolute Percentage Error of Variances: 8.00
+Standard Deviation raw dataset: 653
+Standard Deviation processed dataset: 540
+Symmetric Mean Absolute Percentage Error of Variances: 18.94
 
 Lag 0.16
-Standard Deviation raw dataset: 617
-Standard Deviation processed dataset: 573
-Symmetric Mean Absolute Percentage Error of Variances: 7.39
+Standard Deviation raw dataset: 641
+Standard Deviation processed dataset: 524
+Symmetric Mean Absolute Percentage Error of Variances: 20.09
 
 Lag 0.18
-Standard Deviation raw dataset: 611
-Standard Deviation processed dataset: 575
-Symmetric Mean Absolute Percentage Error of Variances: 6.07
+Standard Deviation raw dataset: 623
+Standard Deviation processed dataset: 519
+Symmetric Mean Absolute Percentage Error of Variances: 18.21
 
 Lag 0.20
-Standard Deviation raw dataset: 622
-Standard Deviation processed dataset: 584
-Symmetric Mean Absolute Percentage Error of Variances: 6.30
+Standard Deviation raw dataset: 625
+Standard Deviation processed dataset: 537
+Symmetric Mean Absolute Percentage Error of Variances: 15.15
 
 Lag 0.22
-Standard Deviation raw dataset: 645
-Standard Deviation processed dataset: 599
-Symmetric Mean Absolute Percentage Error of Variances: 7.40
+Standard Deviation raw dataset: 661
+Standard Deviation processed dataset: 556
+Symmetric Mean Absolute Percentage Error of Variances: 17.26
 
 Lag 0.24
-Standard Deviation raw dataset: 633
-Standard Deviation processed dataset: 590
-Symmetric Mean Absolute Percentage Error of Variances: 7.03
+Standard Deviation raw dataset: 675
+Standard Deviation processed dataset: 563
+Symmetric Mean Absolute Percentage Error of Variances: 18.09
 
 Lag 0.26
-Standard Deviation raw dataset: 556
+Standard Deviation raw dataset: 604
 Standard Deviation processed dataset: 537
-Symmetric Mean Absolute Percentage Error of Variances: 3.48
+Symmetric Mean Absolute Percentage Error of Variances: 11.74
 
-Lag 0.28
-Standard Deviation raw dataset: 486
-Standard Deviation processed dataset: 470
-Symmetric Mean Absolute Percentage Error of Variances: 3.35
+Lag 0.29
+Standard Deviation raw dataset: 484
+Standard Deviation processed dataset: 452
+Symmetric Mean Absolute Percentage Error of Variances: 6.84
 
-Lag 0.30
-Standard Deviation raw dataset: 355
-Standard Deviation processed dataset: 345
-Symmetric Mean Absolute Percentage Error of Variances: 2.86
+Lag 0.31
+Standard Deviation raw dataset: 383
+Standard Deviation processed dataset: 286
+Symmetric Mean Absolute Percentage Error of Variances: 29.00
 
 </pre></div></div>
 </div>
@@ -911,10 +919,15 @@ semivariances to gain more insight into the transformations.</p>
         <span class="n">coordinates</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">nn</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">nn</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">value</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">value</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+            <span class="n">rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rmses</span>
 </pre></div>
 </div>
@@ -1036,52 +1049,52 @@ semivariances to gain more insight into the transformations.</p>
     </tr>
     <tr>
       <th>mean</th>
-      <td>2.936283</td>
-      <td>2.936742</td>
-      <td>2.956846</td>
-      <td>2.957840</td>
+      <td>2.884129</td>
+      <td>4.351836</td>
+      <td>3.020499</td>
+      <td>4.200139</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>3.686328</td>
-      <td>3.685557</td>
-      <td>3.707982</td>
-      <td>3.708420</td>
+      <td>3.490539</td>
+      <td>5.102199</td>
+      <td>3.725570</td>
+      <td>4.727918</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>0.000491</td>
-      <td>0.000152</td>
-      <td>0.000491</td>
-      <td>0.000152</td>
+      <td>0.000507</td>
+      <td>0.001559</td>
+      <td>0.000507</td>
+      <td>0.000001</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>0.617843</td>
-      <td>0.614906</td>
-      <td>0.614773</td>
-      <td>0.612816</td>
+      <td>0.636780</td>
+      <td>0.991270</td>
+      <td>0.655519</td>
+      <td>0.958553</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>1.607936</td>
-      <td>1.602791</td>
-      <td>1.617333</td>
-      <td>1.616114</td>
+      <td>1.618106</td>
+      <td>2.564588</td>
+      <td>1.682518</td>
+      <td>2.503010</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>3.812796</td>
-      <td>3.813395</td>
-      <td>3.839099</td>
-      <td>3.854755</td>
+      <td>3.860469</td>
+      <td>5.875232</td>
+      <td>3.980645</td>
+      <td>5.756033</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>36.599110</td>
-      <td>36.602001</td>
-      <td>36.599110</td>
-      <td>36.602001</td>
+      <td>34.924028</td>
+      <td>60.258041</td>
+      <td>34.924028</td>
+      <td>33.871834</td>
     </tr>
   </tbody>
 </table>
@@ -1162,7 +1175,7 @@ point cloud development.</p>
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

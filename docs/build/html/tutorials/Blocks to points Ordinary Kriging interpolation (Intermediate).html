@@ -19,7 +19,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
-    <link rel="prev" title="How good is my Kriging model - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
+    <link rel="prev" title="How good is my Kriging model? - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -315,6 +315,14 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>2021-10-17</p></td>
+<td><p>New theoretical models</p></td>
+<td><p>&#64;scottgallacher-3 &amp; &#64;szymon-datalions</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> functions to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
+<td><p>&#64;ethmtrgt &amp; &#64;szymon-datalions</p></td>
+</tr>
 <tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;szymon-datalions</p></td>
@@ -381,7 +389,7 @@ div.rendered_html tbody tr:hover {
 <section id="1)-Read-areal-data">
 <h2>1) Read areal data<a class="headerlink" href="#1)-Read-areal-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -394,18 +402,18 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 array([25019,
-       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7f070c41d050&gt;,
+       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7fa328dffd50&gt;,
        2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -415,7 +423,7 @@ array([25019,
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -432,7 +440,7 @@ array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 <h2>2) Detect and remove outliers<a class="headerlink" href="#2)-Detect-and-remove-outliers" title="Permalink to this headline">¶</a></h2>
 <p>We check and clean data before semivariogram fit and Ordinary Kriging. Variogram Point Cloud is the best way to analyze data and detect outliers which may affect further analysis. We check and compare few different lags and step sizes and their respective point clouds. Then we will use those different number of ranges to create multiple semivariogram and Kriging models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -452,7 +460,7 @@ array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -531,7 +539,7 @@ Lags per area: 16
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -542,7 +550,7 @@ Lags per area: 16
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -631,7 +639,7 @@ Lags per area: 16
 <h2>3. Create semivariogram model<a class="headerlink" href="#3.-Create-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>Semivariogram may be fitted manually or automatically. In this case we fit it automatically - we test multiple models and it’s easier to use <code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> method of <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> object.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -639,7 +647,7 @@ Lags per area: 16
 
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cloud_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clouds_without_outliers</span><span class="p">):</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> lag&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> lags&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="c1"># Calculate experimental model</span>
     <span class="n">exp_model</span> <span class="o">=</span> <span class="n">calc_semivariance_from_pt_cloud</span><span class="p">(</span><span class="n">cloud_model</span><span class="p">)</span>
@@ -665,43 +673,52 @@ Lags per area: 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Semivariance calculated for 4 lag
+Semivariance calculated for 4 lags
 
-Model: spherical, error value: 47.46959781307264
-Model: exponential, error value: 12.409730137628472
-Model: linear, error value: 33.73740642254563
-Chosen model: exponential, with value: 12.409730137628472.
+Model: spherical, error value: 43.54732415522008
+Model: exponential, error value: 10.253893291308518
+Model: linear, error value: 31.58156957622567
+Model: cubic, error value: 52.69271368901411
+Model: circular, error value: 43.87315151861017
+Model: power, error value: 39.913785276679754
+Chosen model: exponential, with value: 10.253893291308518.
 
 Model parameters:
-Nugget: 40.84634146341462
+Nugget: 24.599515151515156
 Sill: 171.27273206056609
 Range: 225000.0
 
 #####
-Semivariance calculated for 8 lag
+Semivariance calculated for 8 lags
 
-Model: spherical, error value: 29.50306496934048
-Model: exponential, error value: 18.445105479962933
-Model: linear, error value: 31.969300956642797
-Chosen model: exponential, with value: 18.445105479962933.
-
-Model parameters:
-Nugget: 1.6961373390557952
-Sill: 171.27273206056609
-Range: 133928.57142857142
-
-#####
-Semivariance calculated for 16 lag
-
-Model: spherical, error value: 33.17075686586436
-Model: exponential, error value: 22.57867885361459
-Model: linear, error value: 36.236544305662264
-Chosen model: exponential, with value of: 22.57867885361459.
+Model: spherical, error value: 33.141058208677585
+Model: exponential, error value: 18.069641851272277
+Model: linear, error value: 30.53775981728718
+Model: cubic, error value: 41.00109907539253
+Model: circular, error value: 29.840512638662474
+Model: power, error value: 45.05697986400558
+Chosen model: exponential, with value of: 18.069641851272277.
 
 Model parameters:
 Nugget: 0.0
 Sill: 171.27273206056609
-Range: 123750.0
+Range: 166071.42857142858
+
+#####
+Semivariance calculated for 16 lags
+
+Model: spherical, error value: 35.48795676175165
+Model: exponential, error value: 22.017471556770374
+Model: linear, error value: 33.68860615278811
+Model: cubic, error value: 44.07727722632845
+Model: circular, error value: 33.2870158592721
+Model: power, error value: 50.1467373695057
+Chosen model: exponential, with value of: 22.017471556770374.
+
+Model parameters:
+Nugget: 0.0
+Sill: 171.27273206056609
+Range: 158750.0
 
 #####
 </pre></div></div>
@@ -711,9 +728,11 @@ Range: 123750.0
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3335: RuntimeWarning: Mean of empty slice.
+/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3420: RuntimeWarning: Mean of empty slice.
   out=out, **kwargs)
-/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:302: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
+/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/numpy/core/_methods.py:190: RuntimeWarning: invalid value encountered in long_scalars
+  ret = ret / rcount
+/home/szymon/miniconda3/envs/pyintpk/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:438: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
   warnings.warn(warning_msg)
 </pre></div></div>
 </div>
@@ -731,7 +750,7 @@ Range: 123750.0
 <p><strong>Pyinterpolate</strong> doesn’t have function for read point data directly from shapefile (2021-02-07) but we can do it with <strong>GeoPandas</strong> package. <strong>Pyinterpolate</strong> uses <strong>GeoPandas</strong> under the hood so there is no problem with import of this package.</p>
 <p>We read point file as the <strong>GeoDataFrame</strong> object which stores geometry column and data features as tables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -743,7 +762,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -802,7 +821,7 @@ Range: 123750.0
 <section id="5.-Build-map-of-interpolated-values">
 <h2>5. Build map of interpolated values<a class="headerlink" href="#5.-Build-map-of-interpolated-values" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -840,7 +859,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -849,7 +868,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -895,51 +914,51 @@ Range: 123750.0
       <th>81.0</th>
       <td>POINT (1277277.671 441124.507)</td>
       <td>131.471425</td>
-      <td>6.302487</td>
-      <td>131.624497</td>
-      <td>4.819975</td>
-      <td>131.648728</td>
-      <td>4.855153</td>
+      <td>5.455529</td>
+      <td>131.559152</td>
+      <td>4.342130</td>
+      <td>131.572710</td>
+      <td>4.420054</td>
     </tr>
     <tr>
       <th>82.0</th>
       <td>POINT (1277277.671 431124.507)</td>
       <td>130.587922</td>
-      <td>5.862754</td>
-      <td>130.764126</td>
-      <td>4.568737</td>
-      <td>130.793961</td>
-      <td>4.606546</td>
+      <td>5.098030</td>
+      <td>130.686717</td>
+      <td>4.126394</td>
+      <td>130.702462</td>
+      <td>4.199478</td>
     </tr>
     <tr>
       <th>83.0</th>
       <td>POINT (1277277.671 421124.507)</td>
       <td>129.720084</td>
-      <td>5.415435</td>
-      <td>129.918570</td>
-      <td>4.211067</td>
-      <td>129.953698</td>
-      <td>4.251812</td>
+      <td>4.694533</td>
+      <td>129.829656</td>
+      <td>3.778085</td>
+      <td>129.847500</td>
+      <td>3.849308</td>
     </tr>
     <tr>
       <th>84.0</th>
       <td>POINT (1277277.671 411124.507)</td>
       <td>129.005726</td>
-      <td>5.557726</td>
-      <td>129.317708</td>
-      <td>4.287956</td>
-      <td>129.374854</td>
-      <td>4.328610</td>
+      <td>4.806951</td>
+      <td>129.175367</td>
+      <td>3.839044</td>
+      <td>129.203630</td>
+      <td>3.912469</td>
     </tr>
     <tr>
       <th>85.0</th>
       <td>POINT (1277277.671 401124.507)</td>
       <td>128.936991</td>
-      <td>5.466700</td>
-      <td>128.982976</td>
-      <td>4.266100</td>
-      <td>128.992189</td>
-      <td>4.309141</td>
+      <td>4.740726</td>
+      <td>128.960939</td>
+      <td>3.824894</td>
+      <td>128.965193</td>
+      <td>3.897633</td>
     </tr>
   </tbody>
 </table>
@@ -950,7 +969,7 @@ Range: 123750.0
 <p>This is rather complicated function in which we interpolate missing values as a new columns of <strong>GeoDataFrame</strong>. <em>Uncertainty</em> is assigned to interpolated results for further analysis.</p>
 <p>Now we can save our <strong>GeoDataFrame</strong> as a shapefile…</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -966,7 +985,7 @@ Range: 123750.0
 <section id="6.-Show-map-of-interpolated-values-with-choropleth-map-of-breast-cancer-rates">
 <h2>6. Show map of interpolated values with choropleth map of breast cancer rates<a class="headerlink" href="#6.-Show-map-of-interpolated-values-with-choropleth-map-of-breast-cancer-rates" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -978,7 +997,7 @@ Range: 123750.0
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1047,7 +1066,7 @@ Range: 123750.0
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1154,7 +1173,7 @@ Lag 16
 </ol>
 <p>To answer second question we calculate the Mean Absolute Difference between each lag’s interpolated results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -1181,24 +1200,24 @@ Lag 16
 <div class="highlight"><pre>
 LAG: 4
 
-Mean Absolute Difference between lag 4 and lag 8 is 0.043591
+Mean Absolute Difference between lag 4 and lag 8 is 0.022997
 
 
-Mean Absolute Difference between lag 4 and lag 16 is 0.052167
+Mean Absolute Difference between lag 4 and lag 16 is 0.026996
 
 LAG: 8
 
-Mean Absolute Difference between lag 8 and lag 4 is 0.043591
+Mean Absolute Difference between lag 8 and lag 4 is 0.022997
 
 
-Mean Absolute Difference between lag 8 and lag 16 is 0.008576
+Mean Absolute Difference between lag 8 and lag 16 is 0.003999
 
 LAG: 16
 
-Mean Absolute Difference between lag 16 and lag 4 is 0.052167
+Mean Absolute Difference between lag 16 and lag 4 is 0.026996
 
 
-Mean Absolute Difference between lag 16 and lag 8 is 0.008576
+Mean Absolute Difference between lag 16 and lag 8 is 0.003999
 
 </pre></div></div>
 </div>
@@ -1243,7 +1262,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="previous chapter">How good is my Kriging model - tests with IDW algorithm - tutorial</a></li>
+      <li>Previous: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="previous chapter">How good is my Kriging model? - tests with IDW algorithm - tutorial</a></li>
       <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
   </ul></li>
   </ul></li>
@@ -1275,7 +1294,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.008576
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.2.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
