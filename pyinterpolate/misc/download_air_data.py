@@ -1,3 +1,8 @@
+"""
+Authors:
+
+Sean Lim | @seanjunheng2
+"""
 import requests
 import pandas as pd
 import numpy as np
