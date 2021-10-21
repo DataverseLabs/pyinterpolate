@@ -243,10 +243,19 @@ def calc_semivariance_from_pt_cloud(pt_cloud_dict):
     experimental_semivariogram = []
     for k in pt_cloud_dict.keys():
         try:
-            experimental_semivariogram.append([k, np.mean(pt_cloud_dict[k]), len(pt_cloud_dict[k])])
+            mean_semivariance_value = np.mean(pt_cloud_dict[k])
+            length = len(pt_cloud_dict[k])
         except ZeroDivisionError:
             # There are no points for this lag
-            experimental_semivariogram.append([k, 0, 0])
+            mean_semivariance_value = 0
+            length = 0
+
+        # Check if any nan
+        if np.isnan(mean_semivariance_value):
+            mean_semivariance_value = 0
+            length = 0
+
+        experimental_semivariogram.append([k, mean_semivariance_value, length])
     experimental_semivariogram = np.array(experimental_semivariogram)
     return experimental_semivariogram
 

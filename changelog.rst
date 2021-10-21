@@ -9,9 +9,21 @@ Changes by date
 2021-XX-XX
 ----------
 
-**version 0.2.3.XX**
+**version 0.2.XX**
+
+* `self.points_values` chenged to `self.points_array` in `TheoreticalSemivariogram` class,
+* `NaN` values are tested and checked in `calc_semivariance_from_pt_cloud()` function,
+* new semivariogram models included in the package: **cubic**, **circular**, **power**,
+
+
+2021-08-23
+----------
+
+**version 0.2.3.post1**
 
 * the outliers removal function: you can choose side for outlier detection and remove. Default is top, available are: both, top, down,
+* the outliers removal function: changed algorithm,
+* new tutorial about outliers and their influence on the final model.
 
 2021-05-13
 ----------
