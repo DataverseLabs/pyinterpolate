@@ -258,24 +258,24 @@ class TheoreticalSemivariogram:
     
     @staticmethod
     def circular_model(lags, nugget, sill, semivar_range):
-        ##### NOTE: found two competing model formulae for the circular model
-        ##### 1st one doesn't seem to work with the test data; but 2nd one does
-        ##### Sources added in docstring, further comparison may be needed
-        ##### (DELETE AFTER REVIEW)
         """
 
-        gamma = nugget + sill*[1 - (2/np.pi * np.arccos(a)) + np.sqrt(1 - (lag ** 2)/ (range ** 2) )], 0 < lag <= range
-        OR gamma = nugget + (2/np.pi)*sill*[a * np.sqrt(1 - a ** 2) + np.arcsin(a)], 0 < lag <= range
+        gamma = nugget + (2/np.pi)*sill*[a * np.sqrt(1 - a ** 2) + np.arcsin(a)], 0 < lag <= range
         gamma = 0, lag == 0
+        (Source: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0))
         
         where:
         
         a = lag / range
         
-        (Model 1 Source:
-        https://desktop.arcgis.com/en/arcmap/10.3/tools/spatial-analyst-toolbox/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
-        (Model 2 Source:
-        https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0)
+        
+        NOTE: There exists an equivalent model form for the circular model:
+        gamma = nugget + sill*[1 - (2/np.pi * np.arccos(a)) + (2/np.pi * a) * np.sqrt(1 - a ** 2 )], 0 < lag <= range
+        gamma = 0, lag == 0
+        (Source: 'McBratney, A. B., and R. Webster. "Choosing Functions for Semi-variograms of Soil Properties and Fitting Them to Sampling Estimates." Journal of Soil Science 37: 617–639. 1986.')
+        
+        (Convert between the two forms using: arcsin(x) + arccos(x) = np.pi/2. Then, adjust pre-factors outside of bracket term).
+
 
         INPUT:
 
@@ -291,16 +291,10 @@ class TheoreticalSemivariogram:
         # TODO: check conditions:
         # apparently, even using np.where uncovers invalid values in the arccos and square root
         # but as long as lag <= range this shouldn't happen
-        # use np.clip on the arrays to be passed
+        # use np.clip to limit range of values passed into np.arcsin and np.sqrt
+        
         a = lags / semivar_range
         
-        # use np.clip to limit range of values passed into np.arccos and np.sqrt
-        # gamma = np.where((lags <= semivar_range),
-        #                  (nugget + sill*(1 - 2/np.pi * np.arccos(np.clip(a, -1, 1)) *
-        #                      np.sqrt(1 - np.clip(a**2, -1, 1))) ),
-        #                  (nugget + sill))
-        
-        # second formula found which seems to fit better, and looks as expected
         gamma = nugget + (2/np.pi) * sill*(a * np.sqrt(1 - np.clip(a**2, -1, 1)) + np.arcsin(np.clip(a, -1, 1)))
 
         if lags[0] == 0:
