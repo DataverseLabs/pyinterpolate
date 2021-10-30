@@ -100,3 +100,87 @@ def read_csv(
     gdf.columns = ['geometry', 'value']
 
     return gdf
+
+
+def read_block(
+        path: str,
+        val_col_name: str,
+        geometry_col_name='geometry',
+        id_col_name=None,
+        epsg=None,
+        crs=None
+) -> gpd.GeoDataFrame:
+    """
+    Function reads block data from files supported by fiona / geopandas. Value column name must be provided. If geometry
+        column has different name than 'geometry' it must be provided too. Id column name is optional, if not given then
+        GeoDataFrame index is treated as id column. Optional parameters are epsg and crs. If any is set then read data
+        is reprojected into a specific crs/epsg. Function return GeoDataFrame with columns: id, value, geometry,
+        centroid.
+
+    INPUT:
+
+    :param path: (str) path to the file,
+    :param val_col_name: (str) name of the column with analyzed values,
+    :param geometry_col_name: (str) default='geometry', name of the column with blocks - polygons,
+    :param id_col_name: (str or None) default=None, name of the column with unique indexes of areas,
+    :param epsg: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it,
+    :param crs: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it.
+
+    OUTPUT:
+
+    :returns: (GeoDataFrame) columns=['id', 'geometry', 'value', 'centroid']"""
+
+    ########## INPUT TESTS
+
+    # Check if id column is given
+    if id_col_name is not None:
+        columns = [id_col_name, geometry_col_name, val_col_name]
+    else:
+        columns = [geometry_col_name, val_col_name]
+
+    # Check if crs | epsg is set that minimum one of those values is None
+    check_geometry_params = np.array([True if x is None else False for x in [crs, epsg]]).any()
+    if check_geometry_params:
+        pass
+    else:
+        raise TypeError(f'Only one value CRS or EPSG should be provided but both are given: crs {crs}; epsg: {epsg}')
+
+    ########## FUNCTION'S BODY
+
+    gdf = gpd.read_file(path)
+
+    # Check if columns exist
+    gdf_cols = gdf.columns
+    for c in columns:
+        if c not in gdf_cols:
+            raise TypeError(f'Given column {c} is not present in a dataset. Available columns: {gdf_cols}')
+
+    ndf = gdf[columns].copy()
+    ndf.geometry = ndf[geometry_col_name]
+
+    # Check crs and epsg
+    if (crs is not None) or (epsg is not None):
+        if ndf.crs is None:
+            ndf.set_crs(crs=crs, epsg=epsg, inplace=True)
+        else:
+            ndf.to_crs(crs=crs, epsg=epsg, inplace=True)
+
+    # Get centroids
+    centroid_col_name = 'centroid'
+    ndf[centroid_col_name] = ndf.centroid
+
+    # Add id column if not given
+    if id_col_name is None:
+        id_col_name = 'id'
+        ndf[id_col_name] = ndf.index
+
+    # Set columns
+    output = ndf[[id_col_name, geometry_col_name, val_col_name, centroid_col_name]]
+
+    return output
+
+
+if __name__ == '__main__':
+    bblock = '../../sample_data/areal_data/cancer_data.shp'
+    bdf = read_block(bblock, 'rate')
+    print(bdf.head())

@@ -1,7 +1,7 @@
 import unittest
 import os
 import geopandas as gpd
-from pyinterpolate.io.read_data import read_csv, read_txt
+from pyinterpolate.io.read_data import read_block, read_csv, read_txt
 
 
 class TestReadData(unittest.TestCase):
@@ -37,6 +37,33 @@ class TestReadData(unittest.TestCase):
 		other_y = other_data.iloc[0].geometry.y
 
 		self.assertEqual(base_x, other_y, 'Something went wrong, geometries should be swapped')
+
+	@staticmethod
+	def _check_lists_equality(l1, l2):
+		t = len(l1) == len(l2) and sorted(l1) == sorted(l2)
+		return t
+
+	def test_read_block(self):
+		my_dir = os.path.dirname(__file__)
+		path_to_the_data = os.path.join(my_dir, '../samples/areal_data/test_areas_pyinterpolate.shp')
+
+		# Test if error occurs when wrong column names are given
+		with self.assertRaises(TypeError):
+			read_block(path_to_the_data, 'non_existing_col_name')
+
+		# Test if error occurs when crs AND epsg are given both
+		with self.assertRaises(TypeError):
+			read_block(path_to_the_data, 'value', epsg='2180', crs='Lambert-93')
+
+		# Test if proper columns are returned
+		id_col = 'idx'
+		val_col = 'value'
+		geom_col = 'geometry'
+		cent_col = 'centroid'
+		t = read_block(path_to_the_data, val_col, geometry_col_name=geom_col, id_col_name=id_col)
+		correct_list = [id_col, val_col, geom_col, cent_col]
+		tcols = t.columns
+		self.assertTrue(self._check_lists_equality(correct_list, tcols), f'Returned columns are not as expected!')
 
 
 if __name__ == '__main__':
