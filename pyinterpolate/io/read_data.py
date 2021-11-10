@@ -107,6 +107,7 @@ def read_block(
         val_col_name: str,
         geometry_col_name='geometry',
         id_col_name=None,
+        centroid_col_name=None,
         epsg=None,
         crs=None
 ) -> gpd.GeoDataFrame:
@@ -123,6 +124,9 @@ def read_block(
     :param val_col_name: (str) name of the column with analyzed values,
     :param geometry_col_name: (str) default='geometry', name of the column with blocks - polygons,
     :param id_col_name: (str or None) default=None, name of the column with unique indexes of areas,
+    :param centroid_col_name: (str or None) default=None, optional parameter, name of the column with block centroid,
+        it could be useful when centroid is given for MultiPolygons or Polygons of irregular shapes and sizes to be sure
+        that the centroid lies within area,
     :param epsg: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it,
     :param crs: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it.
 
@@ -166,8 +170,11 @@ def read_block(
             ndf.to_crs(crs=crs, epsg=epsg, inplace=True)
 
     # Get centroids
-    centroid_col_name = 'centroid'
-    ndf[centroid_col_name] = ndf.centroid
+    c_col_name = 'centroid'
+    if centroid_col_name is None:
+        ndf[c_col_name] = ndf.centroid
+    else:
+        ndf[c_col_name] = gdf[centroid_col_name]
 
     # Add id column if not given
     if id_col_name is None:
@@ -175,7 +182,7 @@ def read_block(
         ndf[id_col_name] = ndf.index
 
     # Set columns
-    output = ndf[[id_col_name, geometry_col_name, val_col_name, centroid_col_name]]
+    output = ndf[[id_col_name, geometry_col_name, val_col_name, c_col_name]]
 
     return output
 
