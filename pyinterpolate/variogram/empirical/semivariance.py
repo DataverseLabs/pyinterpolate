@@ -1,5 +1,11 @@
+import numpy as np
+from shapely.geometry import Point
+
+
+# TEMPORARY FUNCTIONS
+
 def temp_calc_point_to_point_distance(points_a, points_b):
-    "temporary function for pt to pt distance estimation"
+    """temporary function for pt to pt distance estimation"""
     from scipy.spatial.distance import cdist
     if points_b is None:
         distances = cdist(points_a, points_a, 'euclidean')
@@ -7,17 +13,74 @@ def temp_calc_point_to_point_distance(points_a, points_b):
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
 
-def calculate_semivariance(points, step_size, max_range, is_weighted=False, direction=0, tolerance=0.1):
+
+# TESTS AND EXCEPTIONS
+def _validate_direction(direction):
+    """
+    Check if direction is within limits 0-360
+    """
+    if direction < 0 or direction > 360:
+        msg = f'Provided direction must be between 0 to 360 degrees:\n' \
+              f'0-180-360: N-S\n' \
+              f'90-270: E-W'
+        raise ValueError(msg)
+
+
+def _validate_points(points):
+    """
+    Check dimensions of provided arrays and data types.
+    """
+
+    dims = points.shape
+    msg = 'Provided array must have 3 columns: [x, y, value] or 2 columns: [shapely Point(), value]'
+    if dims[1] != 3:
+        if dims[1] == 2:
+            # Check if the first value is a Point type
+            if not isinstance(points[0][0], Point):
+                raise AttributeError(msg)
+        else:
+            raise AttributeError(msg)
+
+
+def _validate_tolerance(tolerance):
+    """
+    Check if tolerance is between zero and one.
+    """
+    if tolerance < 0 or tolerance > 1:
+        msg = 'Provided tolerance should be between 0 (straight line) and 1 (circle).'
+
+
+
+def _validate_weights(points, weights):
+    """
+    Check if weights array length is the same as points array.
+    """
+    len_p = len(points)
+    len_w = len(weights)
+    _t = len_p == len_w
+    if not _t:
+        msg = f'Weights array length must be the same as length of points array but it has {len_w} records and' \
+              f' points array has {len_p} records'
+        raise IndexError(msg)
+
+
+def calculate_semivariance(points: np.array,
+                           step_size: float,
+                           max_range: float,
+                           weights=None,
+                           direction=0,
+                           tolerance=1):
     """
     Function calculates semivariance from given points. In a default mode it calculates non-weighted and omnidirectional
         semivariance. User may provide weights to additionally weight points by a specific factor. User can calculate
         directional semivariogram with a specified tolerance.
 
     :param points: (numpy array) coordinates and their values and optionally weighs:
-            [pt x, pt y, value, weight]
+            [pt x, pt y, value] or [Point(), value]
     :param step_size: (float) distance between lags within each points are included in the calculations,
     :param max_range: (float) maximum range of analysis,
-    :param is_weighted: (bool) if True then parameter points must provide weights in the last column of an array,
+    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
+        provided then semivariogram is weighted by those,
     :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
         0 or 180: is NS direction,
         90 or 270 is EW direction,
@@ -130,8 +193,16 @@ def calculate_semivariance(points, step_size, max_range, is_weighted=False, dire
     """
 
     # Data validity tests
+    if weights is not None:
+        _validate_weights(points, weights)
 
-    if is_weighted:
+    # Test size of points array and input data types
+    _validate_points(points)
 
+    # Test directions if provided
+    _validate_direction(direction)
+
+    # Test provided tolerance parameter
+    _validate_tolerance(tolerance)
 
     pass
