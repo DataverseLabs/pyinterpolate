@@ -1,3 +1,12 @@
+def temp_calc_point_to_point_distance(points_a, points_b):
+    "temporary function for pt to pt distance estimation"
+    from scipy.spatial.distance import cdist
+    if points_b is None:
+        distances = cdist(points_a, points_a, 'euclidean')
+    else:
+        distances = cdist(points_a, points_b, 'euclidean')
+    return distances
+
 def calculate_semivariance(points, step_size, max_range, is_weighted=False, direction=0, tolerance=0.1):
     """
     Function calculates semivariance from given points. In a default mode it calculates non-weighted and omnidirectional
@@ -5,7 +14,7 @@ def calculate_semivariance(points, step_size, max_range, is_weighted=False, dire
         directional semivariogram with a specified tolerance.
 
     :param points: (numpy array) coordinates and their values and optionally weighs:
-            [point, value, weight]
+            [pt x, pt y, value, weight]
     :param step_size: (float) distance between lags within each points are included in the calculations,
     :param max_range: (float) maximum range of analysis,
     :param is_weighted: (bool) if True then parameter points must provide weights in the last column of an array,
@@ -119,5 +128,10 @@ def calculate_semivariance(points, step_size, max_range, is_weighted=False, dire
 
 
     """
+
+    # Data validity tests
+
+    if is_weighted:
+
 
     pass
