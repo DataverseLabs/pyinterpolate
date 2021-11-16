@@ -4,7 +4,7 @@ from shapely.geometry import Point
 
 # TEMPORARY FUNCTIONS
 
-def temp_calc_point_to_point_distance(points_a, points_b):
+def temp_calc_point_to_point_distance(points_a, points_b=None):
     """temporary function for pt to pt distance estimation"""
     from scipy.spatial.distance import cdist
     if points_b is None:
@@ -14,7 +14,39 @@ def temp_calc_point_to_point_distance(points_a, points_b):
     return distances
 
 
+def temp_select_values_in_range(data, lag, step_size):
+    """
+    Function selects set of values which are greater than (lag - step size / 2) and smaller or equal than
+        (lag + step size / 2).
+    INPUT:
+    :param data: (numpy array) distances,
+    :param lag: (float) lag within areas are included,
+    :param step_size: (float) step between lags.
+    OUTPUT:
+    :return: numpy array mask with distances within specified radius.
+    """
+
+    step_size = step_size / 2
+
+    # Check if numpy array is given
+    if not isinstance(data, np.ndarray):
+        data = np.array(data)
+
+    greater_than = lag - step_size
+    less_equal_than = lag + step_size
+
+    # Check conditions
+    condition_matrix = np.logical_and(
+            np.greater(data, greater_than),
+            np.less_equal(data, less_equal_than))
+
+    # Find positions
+    position_matrix = np.where(condition_matrix)
+    return position_matrix
+
+
 # TESTS AND EXCEPTIONS
+
 def _validate_direction(direction):
     """
     Check if direction is within limits 0-360
@@ -48,7 +80,7 @@ def _validate_tolerance(tolerance):
     """
     if tolerance < 0 or tolerance > 1:
         msg = 'Provided tolerance should be between 0 (straight line) and 1 (circle).'
-
+        raise ValueError(msg)
 
 
 def _validate_weights(points, weights):
@@ -58,10 +90,73 @@ def _validate_weights(points, weights):
     len_p = len(points)
     len_w = len(weights)
     _t = len_p == len_w
+    # Check weights and points
     if not _t:
         msg = f'Weights array length must be the same as length of points array but it has {len_w} records and' \
               f' points array has {len_p} records'
         raise IndexError(msg)
+    # Check if there is any 0 weight -> error
+    if any([x == 0 for x in weights]):
+        msg = 'One or more of weights in dataset is set to 0, this may cause errors in the distance'
+        raise ValueError(msg)
+
+
+# Semivariogram calculations
+
+def _omnidirectional_semivariance(points: np.array, step_size: float, max_range: float, weights=None):
+    """
+    Function calculates semivariance from given points.
+
+    :param points: (numpy array) coordinates and their values:
+        [pt x, pt y, value] or [Point(), value]
+    :param step_size: (float) distance between lags within each points are included in the calculations,
+    :param max_range: (float) maximum range of analysis,
+    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
+        provided then semivariogram is weighted by those.
+
+
+    :return: (numpy array) [lag, semivariance, number of points within lag]
+    """
+
+    semivariance = list()
+    distances = temp_calc_point_to_point_distance(points[:, :-1])
+    lags = np.arange(0, max_range, step_size)
+
+    for h in lags:
+        # TODO: temp func
+        distances_in_range = temp_select_values_in_range(distances, h, step_size)
+        if len(distances_in_range[0]) == 0:
+            semivariance.append([h, 0, 0])
+        else:
+            vals_0 = points[distances_in_range[0], 2]
+            vals_h = points[distances_in_range[1], 2]
+            sem = (vals_0 - vals_h) ** 2
+            length = len(sem)
+
+            if weights is None:
+                sem_value = np.sum(sem) / (2 * len(sem))
+            else:
+                # Weights
+                ws_a = weights[distances_in_range[0]]
+                ws_ah = weights[distances_in_range[1]]
+                weights = (ws_a * ws_ah) / (ws_a + ws_ah)
+
+                # m'
+                mweighted_mean = np.average(vals_0,
+                                            weights=ws_a)
+
+                # numerator: w(0) * [(z(u_a) - z(u_a + h))^2] - m'
+                numerator = weights * sem - mweighted_mean
+
+                # semivariance
+                sem_value = 0.5 * (np.sum(numerator) / np.sum(weights))
+
+            # Append calculated data into semivariance array
+            semivariance.append([h, sem_value, length])
+
+    semivariance = np.vstack(semivariance)
+
+    return semivariance
 
 
 def calculate_semivariance(points: np.array,
@@ -75,7 +170,7 @@ def calculate_semivariance(points: np.array,
         semivariance. User may provide weights to additionally weight points by a specific factor. User can calculate
         directional semivariogram with a specified tolerance.
 
-    :param points: (numpy array) coordinates and their values and optionally weighs:
+    :param points: (numpy array) coordinates and their values:
             [pt x, pt y, value] or [Point(), value]
     :param step_size: (float) distance between lags within each points are included in the calculations,
     :param max_range: (float) maximum range of analysis,
@@ -192,6 +287,7 @@ def calculate_semivariance(points: np.array,
 
     """
 
+    # START:VALIDATION
     # Data validity tests
     if weights is not None:
         _validate_weights(points, weights)
@@ -199,10 +295,24 @@ def calculate_semivariance(points: np.array,
     # Test size of points array and input data types
     _validate_points(points)
 
+    # Transform Point into floats
+    is_point_type = isinstance(points[0][0], Point)
+    if is_point_type:
+        points = [[x[0].x, x[0].y, x[1]] for x in points]
+
     # Test directions if provided
     _validate_direction(direction)
 
     # Test provided tolerance parameter
     _validate_tolerance(tolerance)
+    # END:VALIDATION
 
-    pass
+    # START:CALCULATIONS
+    # Get distances between points
+    if tolerance == 1:
+        semivariance = _omnidirectional_semivariance(points, step_size, max_range, weights)
+    else:
+        semivariance = None
+    # END:CALCULATIONS
+
+    return semivariance
