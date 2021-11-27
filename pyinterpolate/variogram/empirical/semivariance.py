@@ -13,6 +13,121 @@ def temp_calc_point_to_point_distance(points_a, points_b=None):
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
 
+def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.array,
+                                     lag: float, step_size: float, angle: float, tolerance: float):
+    """
+    Function checks which points from other points are within point range described as an ellipse with
+        center in point, semi-major axis of length step_size and semi-minor axis of length
+        step_size * tolerance and angle of semi-major axis calculated as angle of direction from
+        NS axis (0 radian angle) of a dataset.
+
+    INPUT:
+
+    :param origin_point: (numpy array) single point coordinates,
+    :param other_points: (numpy array),
+    :param lag: (float) lag number (value),
+    :param step_size: (float) step size between lags,
+    :param angle: (float) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.
+    :param tolerance: (float) value in range 0-1 normalized to [0 : 0.5] to select tolerance of semivariogram. If
+        tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate
+        system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance
+        is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance
+        and minor axis of a size:
+
+        (tolerance * step_size)
+
+        and major axis (pointed in NS direction):
+
+        ((1 - tolerance) * step_size)
+
+        and baseline point at a center of ellipse. Tolerance == 1 creates omnidirectional semivariogram.
+
+    ROTATED ELLIPSE EQUATION:
+
+        part_a = (cos(A) * (x - h) + sin(A) * (y - k))**2
+        part_b = (sin(A) * (x - h) + cos(A) * (y - k))**2
+
+        and if:
+
+            part_a / r_x**2 + part_b / r_y**2 <= 1
+
+        then point is inside ellipse.
+
+    OUTPUT:
+
+    :return: (numpy array) boolean array of points within ellipse with center in origin point
+    """
+
+    lower_lag_limit = lag - 0.5 * step_size
+    upper_lag_limit = lag + 0.5 * step_size
+
+    rx_base = (upper_lag_limit * tolerance) ** 2
+    ry_base = (upper_lag_limit * (1 - tolerance)) ** 2
+
+    rx_prev = (lower_lag_limit * tolerance) ** 2
+    ry_prev = (lower_lag_limit * (1 - tolerance)) ** 2
+
+    bool_mask = []
+
+    for point in other_points:
+
+        try:
+            is_origin = (point == origin_point).all()
+        except AttributeError:
+            is_origin = point == origin_point
+
+        if is_origin:
+            bool_mask.append(False)
+        else:
+            if ry_base == 0:
+                part_a_base = 0
+                part_a_previous = 0
+            else:
+                part_a_x = (point[1] - origin_point[1]) * np.cos(angle)
+                part_a_y = (point[0] - origin_point[0]) * np.sin(angle)
+
+                # Points within base
+                part_a_base = (part_a_x + part_a_y) ** 2 / ry_base
+
+                # Points within previous ellipse
+                part_a_previous = (part_a_x + part_a_y) ** 2 / ry_prev
+
+            if rx_base == 0:
+                part_b_base = 0
+                part_b_previous = 0
+            else:
+                part_b_x = (point[1] - origin_point[1]) * np.sin(angle)
+                part_b_y = (point[0] - origin_point[0]) * np.cos(angle)
+
+                # Points within base
+                part_b_base = (part_b_x + part_b_y) ** 2 / rx_base
+
+                # Points within previous ellipse
+                part_b_previous = (part_b_x + part_b_y) ** 2 / rx_prev
+
+            # Points within base
+            test_value_base = part_a_base + part_b_base
+
+            # Points within previous ellipse
+            test_value_prev = part_a_previous + part_b_previous
+
+            if lower_lag_limit <= 0:
+                # This is the first step of analysis
+                if test_value_base <= 1:
+                    bool_mask.append(True)
+                else:
+                    bool_mask.append(False)
+            else:
+                # Second and next steps of analysis
+
+                # If point is within big ellipse and it is not in the previous ellipse
+                if test_value_base <= 1 < test_value_prev:
+                    bool_mask.append(True)
+                else:
+                    bool_mask.append(False)
+
+    return np.array(bool_mask)
+
 
 def temp_select_values_in_range(data, lag, step_size):
     """
@@ -103,14 +218,14 @@ def _validate_weights(points, weights):
 
 # Semivariogram calculations
 
-def _omnidirectional_semivariance(points: np.array, step_size: float, max_range: float, weights=None):
+def _omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: float, weights) -> np.array:
     """
     Function calculates semivariance from given points.
 
     :param points: (numpy array) coordinates and their values:
-        [pt x, pt y, value] or [Point(), value]
+        [pt x, pt y, value] or [Point(), value],
+    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
     :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param max_range: (float) maximum range of analysis,
     :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
         provided then semivariogram is weighted by those.
 
@@ -118,15 +233,14 @@ def _omnidirectional_semivariance(points: np.array, step_size: float, max_range:
     :return: (numpy array) [lag, semivariance, number of points within lag]
     """
 
-    semivariance = list()
+    semivariances_and_lags = list()
     distances = temp_calc_point_to_point_distance(points[:, :-1])
-    lags = np.arange(0, max_range, step_size)
 
     for h in lags:
         # TODO: temp func
         distances_in_range = temp_select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            semivariance.append([h, 0, 0])
+            semivariances_and_lags.append([h, 0, 0])
         else:
             vals_0 = points[distances_in_range[0], 2]
             vals_h = points[distances_in_range[1], 2]
@@ -152,11 +266,73 @@ def _omnidirectional_semivariance(points: np.array, step_size: float, max_range:
                 sem_value = 0.5 * (np.sum(numerator) / np.sum(weights))
 
             # Append calculated data into semivariance array
-            semivariance.append([h, sem_value, length])
+            semivariances_and_lags.append([h, sem_value, length])
 
-    semivariance = np.vstack(semivariance)
+    output_semivariances = np.vstack(semivariances_and_lags)
 
-    return semivariance
+    return output_semivariances
+
+
+def _directional_semivariogram(points: np.array,
+                               lags: np.array,
+                               step_size: float,
+                               weights,
+                               direction,
+                               tolerance) -> np.array:
+    """
+    Function calculates directional semivariogram from a given set of points.
+
+    :param points: (numpy array) coordinates and their values:
+            [pt x, pt y, value] or [Point(), value]
+    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
+    :param step_size: (float) distance between lags within each points are included in the calculations,
+    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
+        provided then semivariogram is weighted by those,
+    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
+        0 or 180: is NS direction,
+        90 or 270 is EW direction,
+        45 or 225 is NE-SW direction,
+        135 or 315 is NW-SE direction,
+    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
+        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
+        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
+        of a size:
+        (tolerance * step_size)
+        and major axis (pointed in NS direction):
+        ((1 - tolerance) * step_size)
+        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+        semivariogram.
+
+    :returns: (np.array)
+    """
+
+    c_angle = np.pi / 180
+    angle = c_angle * direction
+    semivariances_and_lags = list()
+
+    for h in lags:
+        semivars_per_lag = []
+        for point in points:
+            mask = temp_check_points_within_ellipse(point,
+                                                    points,
+                                                    h,
+                                                    step_size,
+                                                    angle,
+                                                    tolerance)
+            points_in_range = points[mask, -1]
+            # Calculate semivariances
+            if len(points_in_range) > 0:
+                semivars = (points_in_range - point[-1]) ** 2
+                semivars_per_lag.extend(semivars)
+            else:
+                semivars_per_lag.append(0)
+
+        average_semivariance = np.mean(semivars_per_lag) / 2
+        semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
+
+    output_semivariances = np.array(semivariances_and_lags)
+    return output_semivariances
 
 
 def calculate_semivariance(points: np.array,
@@ -164,7 +340,7 @@ def calculate_semivariance(points: np.array,
                            max_range: float,
                            weights=None,
                            direction=0,
-                           tolerance=1):
+                           tolerance=1) -> np.array:
     """
     Function calculates semivariance from given points. In a default mode it calculates non-weighted and omnidirectional
         semivariance. User may provide weights to additionally weight points by a specific factor. User can calculate
@@ -179,8 +355,8 @@ def calculate_semivariance(points: np.array,
     :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
         0 or 180: is NS direction,
         90 or 270 is EW direction,
-        30 or 210 is NE-SW direction,
-        120 or 300 is NW-SE direction,
+        45 or 225 is NE-SW direction,
+        135 or 315 is NW-SE direction,
     :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
         If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
         and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
@@ -258,7 +434,7 @@ def calculate_semivariance(points: np.array,
         The selection depends on the angle (direction) of analysis. You may imagine it like that:
 
         - Omnidirectional semivariogram: we test neighbors in a circle,
-        - Directional semivariogram: we test neighbors within an ellipse.
+        - Directional semivariogram: we test neighbors within an ellipse and one direction is major.
 
         or graphically:
 
@@ -308,11 +484,14 @@ def calculate_semivariance(points: np.array,
     # END:VALIDATION
 
     # START:CALCULATIONS
-    # Get distances between points
+
+    lags = np.arange(0, max_range, step_size)
+
     if tolerance == 1:
-        semivariance = _omnidirectional_semivariance(points, step_size, max_range, weights)
+        semivariance = _omnidirectional_semivariogram(points, lags, step_size, weights)
     else:
-        semivariance = None
+        semivariance = _directional_semivariogram(points, lags, step_size, weights, direction, tolerance)
+
     # END:CALCULATIONS
 
     return semivariance

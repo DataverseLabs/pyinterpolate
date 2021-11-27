@@ -1,6 +1,5 @@
 import os
 import unittest
-import geopandas as gpd
 import numpy as np
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 
@@ -44,12 +43,20 @@ EXPECTED_OUTPUT_WE_OMNI = np.array([
 ])
 EXPECTED_OUTPUT_ZEROS = 0
 
+EXPECTED_OUTPUT_ARMSTRONG_WE_LAG1 = 6.41
+EXPECTED_OUTPUT_ARMSTRONG_NS_LAG1 = 4.98
+EXPECTED_OUTPUT_ARMSTRONG_NE_SW_LAG1 = 7.46  # TODO
+EXPECTED_OUTPUT_ARMSTRONG_NW_SE_LAG1 = 7.81  # TODO
+EXPECTED_OUTPUT_ARMSTRONG_LAG1 = 6.6
+
 # CONSTS
 STEP_SIZE = 1
 MAX_RANGE = 6
 
 
 class TestSemivariance(unittest.TestCase):
+
+    # OMNIDIRECTIONAL CASES
 
     def test_calculate_semivariance_we_omni(self):
         output = calculate_semivariance(REFERENCE_INPUT_WE, step_size=STEP_SIZE, max_range=MAX_RANGE)
@@ -66,12 +73,73 @@ class TestSemivariance(unittest.TestCase):
 
     def test_calculate_semivariance_omni(self):
         my_dir = os.path.dirname(__file__)
-        path_to_the_data = os.path.join(my_dir, '../../samples/point_data/shapefile/test_points_pyinterpolate.shp')
-        df = gpd.read_file(path_to_the_data)
-        arr = df[['geometry', 'value']].values
-        output = calculate_semivariance(arr, step_size=)
-        print(arr)
-        self.assertTrue(True)
+        filename = 'armstrong_data.npy'
+        filepath = f'../../samples/point_data/numpy/{filename}'
+        path_to_the_data = os.path.join(my_dir, filepath)
+        arr = np.load(path_to_the_data)
+        smv = calculate_semivariance(arr, 1, 2)
+        lag1_test_value = smv[1][1]
+        err_msg = f'Calculated semivariance for lag 1 should be equal to {EXPECTED_OUTPUT_ARMSTRONG_LAG1} for ' \
+                  f'omnidirectional case and points within {filename} file.'
+        self.assertEqual(lag1_test_value, EXPECTED_OUTPUT_ARMSTRONG_LAG1, msg=err_msg)
+
+    # DIRECTIONAL CASES
+
+    def test_calculate_semivariance_SN_lag1(self):
+        my_dir = os.path.dirname(__file__)
+        filename = 'armstrong_data.npy'
+        filepath = f'../../samples/point_data/numpy/{filename}'
+        path_to_the_data = os.path.join(my_dir, filepath)
+        arr = np.load(path_to_the_data)
+        smv = calculate_semivariance(arr, 1, 2, direction=0, tolerance=0.1)
+        lag1_test_value = smv[1][1]
+        err_msg = f'Calculated semivariance for lag 1 should be equal to {EXPECTED_OUTPUT_ARMSTRONG_NS_LAG1} for ' \
+                  f'N-S direction case and points within {filename} file.'
+        self.assertAlmostEqual(lag1_test_value, EXPECTED_OUTPUT_ARMSTRONG_NS_LAG1, places=2, msg=err_msg)
+
+    def test_calculate_semivariance_WE_lag1(self):
+        my_dir = os.path.dirname(__file__)
+        filename = 'armstrong_data.npy'
+        filepath = f'../../samples/point_data/numpy/{filename}'
+        path_to_the_data = os.path.join(my_dir, filepath)
+        arr = np.load(path_to_the_data)
+        smv = calculate_semivariance(arr, 1, 2, direction=90, tolerance=0.01)
+        lag1_test_value = smv[1][1]
+        err_msg = f'Calculated semivariance for lag 1 should be equal to {EXPECTED_OUTPUT_ARMSTRONG_WE_LAG1} for ' \
+                  f'W-E direction case and points within {filename} file.'
+        self.assertAlmostEqual(lag1_test_value, EXPECTED_OUTPUT_ARMSTRONG_WE_LAG1, places=2, msg=err_msg)
+
+    def test_calculate_semivariance_NW_SE_lag1(self):
+        my_dir = os.path.dirname(__file__)
+        filename = 'armstrong_data.npy'
+        filepath = f'../../samples/point_data/numpy/{filename}'
+        path_to_the_data = os.path.join(my_dir, filepath)
+        arr = np.load(path_to_the_data)
+        smv = calculate_semivariance(arr, 1, 2, direction=135, tolerance=0.01)
+        lag1_test_value = smv[1][1]
+        err_msg = f'Calculated semivariance for lag 1 should be equal to {EXPECTED_OUTPUT_ARMSTRONG_NW_SE_LAG1} for ' \
+                  f'NW-SE direction case and points within {filename} file.'
+        self.assertAlmostEqual(lag1_test_value, EXPECTED_OUTPUT_ARMSTRONG_NW_SE_LAG1, places=2, msg=err_msg)
+
+    def test_calculate_semivariance_NE_SW_lag1(self):
+        my_dir = os.path.dirname(__file__)
+        filename = 'armstrong_data.npy'
+        filepath = f'../../samples/point_data/numpy/{filename}'
+        path_to_the_data = os.path.join(my_dir, filepath)
+        arr = np.load(path_to_the_data)
+        smv = calculate_semivariance(arr, 1, 2, direction=45, tolerance=0.01)
+        lag1_test_value = smv[1][1]
+        err_msg = f'Calculated semivariance for lag 1 should be equal to {EXPECTED_OUTPUT_ARMSTRONG_NE_SW_LAG1} for ' \
+                  f'NE-SW direction case and points within {filename} file.'
+        self.assertAlmostEqual(lag1_test_value, EXPECTED_OUTPUT_ARMSTRONG_NE_SW_LAG1, places=2, msg=err_msg)
+
+    # WEIGHTED CASES
+
+    def test_calculate_weighted_omnidirectional(self):
+        pass
+
+    def test_calculate_directional_weighted(self):
+        pass
 
 
 if __name__ == '__main__':
