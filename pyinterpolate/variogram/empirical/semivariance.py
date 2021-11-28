@@ -64,8 +64,12 @@ def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.ar
     rx_base = (upper_lag_limit * tolerance) ** 2
     ry_base = (upper_lag_limit * (1 - tolerance)) ** 2
 
-    rx_prev = (lower_lag_limit * tolerance) ** 2
-    ry_prev = (lower_lag_limit * (1 - tolerance)) ** 2
+    if lower_lag_limit >= 0:
+        rx_prev = (lower_lag_limit * tolerance) ** 2
+        ry_prev = (lower_lag_limit * (1 - tolerance)) ** 2
+    else:
+        rx_prev = 0
+        ry_prev = 0
 
     bool_mask = []
 
@@ -90,7 +94,10 @@ def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.ar
                 part_a_base = (part_a_x + part_a_y) ** 2 / ry_base
 
                 # Points within previous ellipse
-                part_a_previous = (part_a_x + part_a_y) ** 2 / ry_prev
+                if ry_prev == 0:
+                    part_a_previous = 0
+                else:
+                    part_a_previous = (part_a_x + part_a_y) ** 2 / ry_prev
 
             if rx_base == 0:
                 part_b_base = 0
@@ -103,7 +110,10 @@ def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.ar
                 part_b_base = (part_b_x + part_b_y) ** 2 / rx_base
 
                 # Points within previous ellipse
-                part_b_previous = (part_b_x + part_b_y) ** 2 / rx_prev
+                if rx_prev == 0:
+                    part_b_previous = 0
+                else:
+                    part_b_previous = (part_b_x + part_b_y) ** 2 / rx_prev
 
             # Points within base
             test_value_base = part_a_base + part_b_base
@@ -111,20 +121,14 @@ def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.ar
             # Points within previous ellipse
             test_value_prev = part_a_previous + part_b_previous
 
-            if lower_lag_limit <= 0:
-                # This is the first step of analysis
-                if test_value_base <= 1:
+            # If point is within big ellipse and it is not in the previous ellipse
+            if test_value_base <= 1:
+                if test_value_prev > 1:
                     bool_mask.append(True)
                 else:
                     bool_mask.append(False)
             else:
-                # Second and next steps of analysis
-
-                # If point is within big ellipse and it is not in the previous ellipse
-                if test_value_base <= 1 < test_value_prev:
-                    bool_mask.append(True)
-                else:
-                    bool_mask.append(False)
+                bool_mask.append(False)
 
     return np.array(bool_mask)
 
@@ -308,7 +312,7 @@ def _directional_semivariogram(points: np.array,
     """
 
     c_angle = np.pi / 180
-    angle = c_angle * direction
+    angle = c_angle * (direction - 90)
     semivariances_and_lags = list()
 
     for h in lags:
