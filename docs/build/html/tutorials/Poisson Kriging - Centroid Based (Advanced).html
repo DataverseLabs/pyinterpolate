@@ -4,8 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Poisson Kriging - centroid based approach - tutorial &#8212; Pyinterpolate 0.2.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
@@ -14,7 +13,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -284,9 +283,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Poisson-Kriging---centroid-based-approach---tutorial">
+<div class="section" id="Poisson-Kriging---centroid-based-approach---tutorial">
 <h1>Poisson Kriging - centroid based approach - tutorial<a class="headerlink" href="#Poisson-Kriging---centroid-based-approach---tutorial" title="Permalink to this headline">¶</a></h1>
-<section id="Table-of-Contents:">
+<div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Load areal and point data,</p></li>
@@ -295,11 +294,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Predict values at unknown locations,</p></li>
 <li><p>Analyse Forecast Bias and Root Mean Squared Error of prediction.</p></li>
 </ol>
-</section>
-<section id="Level:-Advanced">
+</div>
+<div class="section" id="Level:-Advanced">
 <h2>Level: Advanced<a class="headerlink" href="#Level:-Advanced" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="Changelog">
+</div>
+<div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -316,20 +315,20 @@ div.rendered_html tbody tr:hover {
 <tbody>
 <tr class="row-even"><td><p>2021-05-28</p></td>
 <td><p>Updated paths for input/output data</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 <tr class="row-odd"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 <tr class="row-even"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="Introduction">
+</div>
+<div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>To start this tutorial it is required to understand concepts in the <strong>Ordinary and Simple Kriging</strong> and <strong>Semivariogram Regularization</strong> tutorials.</p>
 <p>Poisson Kriging technique is used to model spatial count data. We are analyzing special case where data is counted over areas. Those areas may have irregular shapes and sizes beacuse they represent administrative regions.</p>
@@ -350,8 +349,8 @@ div.rendered_html tbody tr:hover {
 <li><p>Predict values of unknown locations and calculate forecast bias and root mean squared error,</p></li>
 <li><p>Analyse error metrics.</p></li>
 </ol>
-</section>
-<section id="1)-Read-and-explore-data">
+</div>
+<div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -368,7 +367,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -389,6 +388,15 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/szymonmolinski/miniconda3/envs/pyint/lib/python3.7/site-packages/pyinterpolate/io_ops/get_points_within_area.py:111: VisibleDeprecationWarning: Creating an ndarray from ragged nested sequences (which is a list-or-tuple of lists-or-tuples-or ndarrays with different lengths or shapes) is deprecated. If you meant to do this, you must specify &#39;dtype=object&#39; when creating the ndarray.
+  return np.array(output_points_within_area)
+</pre></div></div>
+</div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -407,7 +415,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f59679330d0&gt;
+&lt;AxesSubplot:&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -417,12 +425,12 @@ div.rendered_html tbody tr:hover {
 <img alt="../_images/tutorials_Poisson_Kriging_-_Centroid_Based_(Advanced)_4_1.png" src="../_images/tutorials_Poisson_Kriging_-_Centroid_Based_(Advanced)_4_1.png" />
 </div>
 </div>
-<section id="Clarification:">
+<div class="section" id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>It is good idea to look into the spatial patterns in dataset and to visually check if our data do not have any NaN values. We use geopandas GeoDataFrame plot function for it with color map which is diverging color classes well.</p>
-</section>
-</section>
-<section id="2)-Load-semivariogram-model">
+</div>
+</div>
+<div class="section" id="2)-Load-semivariogram-model">
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <p>In this step we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regulariztion along with the Poisson Kriging but it is a very long process and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
@@ -435,8 +443,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="3)-Prepare-training-and-test-data">
+</div>
+<div class="section" id="3)-Prepare-training-and-test-data">
 <h2>3) Prepare training and test data<a class="headerlink" href="#3)-Prepare-training-and-test-data" title="Permalink to this headline">¶</a></h2>
 <p>We simply remove 10% of random ID’s from areal dataset (the same for points) and create four arrays: two training arrays with areal and point geometry and values and two test arrays with the same categories of data.</p>
 <div class="nbinput nblast docutils container">
@@ -484,8 +492,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="4)-Predict-values-at-unknown-locations-and-calculate-forecast-bias-and-root-mean-squared-error">
+</div>
+<div class="section" id="4)-Predict-values-at-unknown-locations-and-calculate-forecast-bias-and-root-mean-squared-error">
 <h2>4) Predict values at unknown locations and calculate forecast bias and root mean squared error<a class="headerlink" href="#4)-Predict-values-at-unknown-locations-and-calculate-forecast-bias-and-root-mean-squared-error" title="Permalink to this headline">¶</a></h2>
 <p>Do you know scikit-learn’s fit-predict-transform estimation procedure? With Kriging it is more complicated because we are fitting semivariogram model to data and we pass this fitted model into kriging estimator. That’s why package with <em>TheoreticalSemivariogram()</em> class is named <strong>fit_semivariance</strong>. You may start work with predictions with fitted semivariogram model. Centroid-based Poisson Kriging takes three arguments during initialization:</p>
 <p>=&gt; semivariogram model (fitted semivariogram model),</p>
@@ -545,8 +553,8 @@ tutorial.</p>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction">
+</div>
+<div class="section" id="5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction">
 <h2>5) Analyze Forecast Bias and Root Mean Squared Error of prediction<a class="headerlink" href="#5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction" title="Permalink to this headline">¶</a></h2>
 <p>The last step is analysis of errors. We plot two histograms: of forecast bias and of root mean squared error then we calculate base statistics of a dataset.</p>
 <div class="nbinput docutils container">
@@ -566,7 +574,7 @@ tutorial.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f59678b5a10&gt;
+&lt;AxesSubplot:ylabel=&#39;Frequency&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -591,7 +599,7 @@ tutorial.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.axes._subplots.AxesSubplot at 0x7f59672c1b10&gt;
+&lt;AxesSubplot:ylabel=&#39;Frequency&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -649,52 +657,52 @@ tutorial.</p>
     </tr>
     <tr>
       <th>mean</th>
-      <td>130.409091</td>
-      <td>129.759091</td>
-      <td>-0.650000</td>
-      <td>11.759091</td>
+      <td>155.045455</td>
+      <td>133.413636</td>
+      <td>-21.631818</td>
+      <td>40.895455</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>12.912375</td>
-      <td>11.594237</td>
-      <td>15.866309</td>
-      <td>10.359613</td>
+      <td>93.122795</td>
+      <td>10.785674</td>
+      <td>90.821155</td>
+      <td>83.586018</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>104.000000</td>
-      <td>111.400000</td>
-      <td>-37.800000</td>
+      <td>60.000000</td>
+      <td>118.000000</td>
+      <td>-392.500000</td>
       <td>0.300000</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>120.500000</td>
-      <td>121.250000</td>
-      <td>-6.900000</td>
-      <td>5.800000</td>
+      <td>125.000000</td>
+      <td>124.475000</td>
+      <td>-15.175000</td>
+      <td>5.875000</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>130.000000</td>
-      <td>125.700000</td>
-      <td>1.000000</td>
-      <td>8.300000</td>
+      <td>135.000000</td>
+      <td>131.500000</td>
+      <td>-0.150000</td>
+      <td>14.350000</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>136.000000</td>
-      <td>141.425000</td>
-      <td>9.500000</td>
-      <td>14.150000</td>
+      <td>148.750000</td>
+      <td>141.675000</td>
+      <td>10.750000</td>
+      <td>31.250000</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>158.000000</td>
-      <td>147.400000</td>
-      <td>28.600000</td>
-      <td>37.800000</td>
+      <td>539.000000</td>
+      <td>154.300000</td>
+      <td>58.000000</td>
+      <td>392.500000</td>
     </tr>
   </tbody>
 </table>
@@ -703,8 +711,8 @@ tutorial.</p>
 <p>Analysis of <strong>Forecast Bias</strong> and <strong>Root Mean Squared Error</strong> - their distribution and basic properties - could be a very useful tool to analyze model performance. However, take in mind that table above is a single test case (realization) and can be very misleading. Good idea is to repeat test dozens of times with a different training/test set division each time. After this we average results from multiple tests and we get an insight how our model behaves.</p>
 <p>Those results are not decisive. Our sample is very small and output could be related to very unfortunate sampling over areas. The good idea is to repeat experiment multiple times with other samples and average results to find out how well model is performing.</p>
 <hr class="docutils" />
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -770,7 +778,7 @@ tutorial.</p>
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

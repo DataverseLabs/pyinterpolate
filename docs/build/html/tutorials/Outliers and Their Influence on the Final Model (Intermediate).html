@@ -4,8 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Outliers and Their Influence on the Final Model - tutorial &#8212; Pyinterpolate 0.2.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
@@ -14,7 +13,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -284,9 +283,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Outliers-and-Their-Influence-on-the-Final-Model---tutorial">
+<div class="section" id="Outliers-and-Their-Influence-on-the-Final-Model---tutorial">
 <h1>Outliers and Their Influence on the Final Model - tutorial<a class="headerlink" href="#Outliers-and-Their-Influence-on-the-Final-Model---tutorial" title="Permalink to this headline">¶</a></h1>
-<section id="Table-of-Contents:">
+<div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data and take 10% of it as a sample for the further analysis (dataset A),</p></li>
@@ -295,17 +294,17 @@ div.rendered_html tbody tr:hover {
 <li><p>Remove outliers from the datasets A and B,</p></li>
 <li><p>Create four Ordinary Kriging models and compare their performance.</p></li>
 </ol>
-</section>
-<section id="Level:-Intermediate">
+</div>
+<div class="section" id="Level:-Intermediate">
 <h2>Level: Intermediate<a class="headerlink" href="#Level:-Intermediate" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="Changelog">
+</div>
+<div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 22%" />
-<col style="width: 40%" />
-<col style="width: 38%" />
+<col style="width: 18%" />
+<col style="width: 59%" />
+<col style="width: 23%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -314,14 +313,22 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>2021-12-11</p></td>
+<td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
+<td><p>&#64;ethmtrgt &amp; &#64;SimonMolinsky</p></td>
+</tr>
 <tr class="row-even"><td><p>2021-08-22</p></td>
 <td><p>Initial release</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="Introduction">
+</div>
+<div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>Outliers may affect our analysis and the final interpolation results. In this tutorial we learn about their influence on the final model and we compare interpolation error for different scenarios where data is treated in a different ways.</p>
 <p>We are able to remove too high or too low values at the preprocessing stage (check part 2 of the tutorial) or we can remove outliers directly from the variogram point cloud (part 4). Results from each type of preprocessing (and a raw dataset analysis) are different and we are going to compare them.</p>
@@ -329,8 +336,8 @@ div.rendered_html tbody tr:hover {
 <ul class="simple">
 <li><p>DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>.</p></li>
 </ul>
-</section>
-<section id="Import-packages">
+</div>
+<div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -350,8 +357,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="1)-Read-point-data-and-divide-it-into-training-and-test-set">
+</div>
+<div class="section" id="1)-Read-point-data-and-divide-it-into-training-and-test-set">
 <h2>1) Read point data and divide it into training and test set<a class="headerlink" href="#1)-Read-point-data-and-divide-it-into-training-and-test-set" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -407,17 +414,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[15.32961159, 52.69870089, 26.50076103],
-       [15.33317125, 52.69062817, 21.09065437],
-       [15.14925544, 52.78377491, 52.66115952],
+array([[15.16309856, 52.76783647, 73.67953491],
+       [15.25446319, 52.57450524, 54.63380814],
+       [15.21412037, 52.752726  , 67.99424744],
        ...,
-       [15.22756798, 52.56374162, 58.7893219 ],
-       [15.31735053, 52.75355397, 83.29890442],
-       [15.29638809, 52.5900297 , 46.89881134]])
+       [15.32249227, 52.66868694, 23.00640106],
+       [15.2236128 , 52.74216937, 52.1764183 ],
+       [15.28412703, 52.56456959, 65.63542175]])
 </pre></div></div>
 </div>
-</section>
-<section id="2)-Check-outliers:-analyze-distribution-of-the-values">
+</div>
+<div class="section" id="2)-Check-outliers:-analyze-distribution-of-the-values">
 <h2>2) Check outliers: analyze distribution of the values<a class="headerlink" href="#2)-Check-outliers:-analyze-distribution-of-the-values" title="Permalink to this headline">¶</a></h2>
 <p>To find if our dataset contains outliers we are going to inspect all values in the <code class="docutils literal notranslate"><span class="pre">train</span></code> set. At the beginning we plot data distribution with the <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>.</p>
 <div class="nbinput docutils container">
@@ -516,7 +523,7 @@ distance are treated as outliers. The outlier distance is calculated as the <spa
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Length of the full training set is 689 records
-Length of the pre-processed training set is 683 records
+Length of the pre-processed training set is 684 records
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -544,8 +551,8 @@ Length of the pre-processed training set is 683 records
 <blockquote>
 <div><p><strong>NOTE</strong>: if you are eager to know how to deal with the skewed datasets we recommend article <a class="reference external" href="https://anatomisebiostats.com/biostatistics-blog/transforming-skewed-data/">Transforming Skewed Data</a>.</p>
 </div></blockquote>
-</section>
-<section id="3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">
+</div>
+<div class="section" id="3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">
 <h2>3) Create the Variogram Point Cloud model for datasets A and B<a class="headerlink" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B" title="Permalink to this headline">¶</a></h2>
 <p>Now we are making one step further and we will transform both datasets with- and without- outliers and calculate variogram point clouds from these. Then we compare both variogram point clouds.</p>
 <div class="nbinput nblast docutils container">
@@ -636,92 +643,92 @@ Length of the pre-processed training set is 683 records
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Lag 0.00
-Standard Deviation raw dataset: 83
-Standard Deviation processed dataset: 84
-Symmetric Mean Absolute Percentage Error of Variances: 1.20
+Standard Deviation raw dataset: 110
+Standard Deviation processed dataset: 110
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
 Lag 0.02
-Standard Deviation raw dataset: 312
-Standard Deviation processed dataset: 313
-Symmetric Mean Absolute Percentage Error of Variances: 0.32
+Standard Deviation raw dataset: 277
+Standard Deviation processed dataset: 277
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
 Lag 0.04
-Standard Deviation raw dataset: 508
-Standard Deviation processed dataset: 500
-Symmetric Mean Absolute Percentage Error of Variances: 1.59
+Standard Deviation raw dataset: 470
+Standard Deviation processed dataset: 459
+Symmetric Mean Absolute Percentage Error of Variances: 2.37
 
 Lag 0.06
-Standard Deviation raw dataset: 626
-Standard Deviation processed dataset: 594
-Symmetric Mean Absolute Percentage Error of Variances: 5.25
+Standard Deviation raw dataset: 571
+Standard Deviation processed dataset: 543
+Symmetric Mean Absolute Percentage Error of Variances: 5.03
 
 Lag 0.08
-Standard Deviation raw dataset: 686
-Standard Deviation processed dataset: 643
-Symmetric Mean Absolute Percentage Error of Variances: 6.47
+Standard Deviation raw dataset: 622
+Standard Deviation processed dataset: 593
+Symmetric Mean Absolute Percentage Error of Variances: 4.77
 
 Lag 0.10
-Standard Deviation raw dataset: 686
-Standard Deviation processed dataset: 641
-Symmetric Mean Absolute Percentage Error of Variances: 6.78
+Standard Deviation raw dataset: 629
+Standard Deviation processed dataset: 597
+Symmetric Mean Absolute Percentage Error of Variances: 5.22
 
 Lag 0.12
-Standard Deviation raw dataset: 666
-Standard Deviation processed dataset: 619
-Symmetric Mean Absolute Percentage Error of Variances: 7.32
+Standard Deviation raw dataset: 593
+Standard Deviation processed dataset: 562
+Symmetric Mean Absolute Percentage Error of Variances: 5.37
 
 Lag 0.14
-Standard Deviation raw dataset: 637
-Standard Deviation processed dataset: 588
-Symmetric Mean Absolute Percentage Error of Variances: 8.00
+Standard Deviation raw dataset: 572
+Standard Deviation processed dataset: 546
+Symmetric Mean Absolute Percentage Error of Variances: 4.65
 
 Lag 0.16
-Standard Deviation raw dataset: 617
-Standard Deviation processed dataset: 573
-Symmetric Mean Absolute Percentage Error of Variances: 7.39
+Standard Deviation raw dataset: 550
+Standard Deviation processed dataset: 527
+Symmetric Mean Absolute Percentage Error of Variances: 4.27
 
 Lag 0.18
-Standard Deviation raw dataset: 611
-Standard Deviation processed dataset: 575
-Symmetric Mean Absolute Percentage Error of Variances: 6.07
+Standard Deviation raw dataset: 551
+Standard Deviation processed dataset: 530
+Symmetric Mean Absolute Percentage Error of Variances: 3.89
 
 Lag 0.20
-Standard Deviation raw dataset: 622
-Standard Deviation processed dataset: 584
-Symmetric Mean Absolute Percentage Error of Variances: 6.30
+Standard Deviation raw dataset: 563
+Standard Deviation processed dataset: 539
+Symmetric Mean Absolute Percentage Error of Variances: 4.36
 
 Lag 0.22
-Standard Deviation raw dataset: 645
-Standard Deviation processed dataset: 599
-Symmetric Mean Absolute Percentage Error of Variances: 7.40
+Standard Deviation raw dataset: 581
+Standard Deviation processed dataset: 555
+Symmetric Mean Absolute Percentage Error of Variances: 4.58
 
 Lag 0.24
-Standard Deviation raw dataset: 633
-Standard Deviation processed dataset: 590
-Symmetric Mean Absolute Percentage Error of Variances: 7.03
+Standard Deviation raw dataset: 569
+Standard Deviation processed dataset: 548
+Symmetric Mean Absolute Percentage Error of Variances: 3.76
 
 Lag 0.26
-Standard Deviation raw dataset: 556
-Standard Deviation processed dataset: 537
-Symmetric Mean Absolute Percentage Error of Variances: 3.48
+Standard Deviation raw dataset: 529
+Standard Deviation processed dataset: 524
+Symmetric Mean Absolute Percentage Error of Variances: 0.95
 
 Lag 0.28
-Standard Deviation raw dataset: 486
-Standard Deviation processed dataset: 470
-Symmetric Mean Absolute Percentage Error of Variances: 3.35
+Standard Deviation raw dataset: 474
+Standard Deviation processed dataset: 475
+Symmetric Mean Absolute Percentage Error of Variances: 0.21
 
 Lag 0.30
-Standard Deviation raw dataset: 355
-Standard Deviation processed dataset: 345
-Symmetric Mean Absolute Percentage Error of Variances: 2.86
+Standard Deviation raw dataset: 393
+Standard Deviation processed dataset: 383
+Symmetric Mean Absolute Percentage Error of Variances: 2.58
 
 </pre></div></div>
 </div>
 <p><strong>Clarification:</strong> The differences (sMAPE) per lag vary a lot. We can see that the preprocessing of raw values introduces the information lost. It is especially painful for the closest neighbors. It doesn’t mean that the preprocessing of raw observations is not recommended but it is a good idea to include the <strong>spatial component</strong> in the outliers detection process.</p>
 <p>Not everything is wrong. Data cleaning has lowered the semivariances dispersion for the middle lags (where we have the largest number of point pairs for the analysis).</p>
 <p>At this point we are not able to judge which dataset is better for the modeling. Instead we are going to remove outliers from the both <strong>variograms</strong> (instead of the <strong>raw data</strong>).</p>
-</section>
-<section id="4)-Remove-outliers-from-the-variograms">
+</div>
+<div class="section" id="4)-Remove-outliers-from-the-variograms">
 <h2>4) Remove outliers from the variograms<a class="headerlink" href="#4)-Remove-outliers-from-the-variograms" title="Permalink to this headline">¶</a></h2>
 <p>In this step we are going to use <strong>pyinterpolate’s</strong> function <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to build additional two variogram point clouds from the raw and processed datasets. We delete the top part outliers of the <strong>semivariance values</strong> rather than the raw readings.</p>
 <div class="nbinput nblast docutils container">
@@ -830,15 +837,15 @@ semivariances to gain more insight into the transformations.</p>
 <li><p>The differences between semivariograms are mostly visible at larger distances. For the closest point pairs differences are smaller.</p></li>
 </ul>
 <p>Semivariograms visual inspection does not infor us of the modeling performance but we can assume that models will be slightly different. Let’s test this assumption!</p>
-</section>
-<section id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
+</div>
+<div class="section" id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
 <h2>5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance<a class="headerlink" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
-<span></span><span class="n">number_of_ranges</span> <span class="o">=</span> <span class="mi">16</span>
+<span></span><span class="n">number_of_ranges</span> <span class="o">=</span> <span class="mi">32</span>
 
 <span class="c1"># Fit different semivariogram models into prepared datasets and variograms</span>
 
@@ -886,13 +893,13 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="c1"># Build test function</span>
 
-<span class="k">def</span> <span class="nf">test_kriging_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_set</span><span class="p">,</span> <span class="n">nn</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">test_kriging_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_set</span><span class="p">,</span> <span class="n">max_nn</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function tests performance of a given kriging model.</span>
 
@@ -900,7 +907,7 @@ semivariances to gain more insight into the transformations.</p>
 
 <span class="sd">    :param model: (Krige) Kriging model,</span>
 <span class="sd">    :param test_set: (array),</span>
-<span class="sd">    :param nn: (int) default=16, number of neighbors.</span>
+<span class="sd">    :param max_nn: (int) default=256, maximum number of neighbors.</span>
 
 <span class="sd">    OUTPUT:</span>
 
@@ -911,7 +918,7 @@ semivariances to gain more insight into the transformations.</p>
         <span class="n">coordinates</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">nn</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">predicted</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">coordinates</span><span class="p">,</span> <span class="n">max_no_neighbors</span><span class="o">=</span><span class="n">max_nn</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">value</span> <span class="o">-</span> <span class="n">predicted</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">rmses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
@@ -920,7 +927,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -929,7 +936,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -938,7 +945,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -947,7 +954,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -956,7 +963,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -966,7 +973,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -989,7 +996,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <p>It is very hard to distinguish any differences in the figure but we can use <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method of <strong>pandas</strong> to get the columns statistic:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -998,7 +1005,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1036,52 +1043,52 @@ semivariances to gain more insight into the transformations.</p>
     </tr>
     <tr>
       <th>mean</th>
-      <td>2.936283</td>
-      <td>2.936742</td>
-      <td>2.956846</td>
-      <td>2.957840</td>
+      <td>3.069334</td>
+      <td>3.065765</td>
+      <td>3.086080</td>
+      <td>3.082691</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>3.686328</td>
-      <td>3.685557</td>
-      <td>3.707982</td>
-      <td>3.708420</td>
+      <td>3.674568</td>
+      <td>3.662073</td>
+      <td>3.717605</td>
+      <td>3.706208</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>0.000491</td>
-      <td>0.000152</td>
-      <td>0.000491</td>
-      <td>0.000152</td>
+      <td>0.000484</td>
+      <td>0.001045</td>
+      <td>0.000484</td>
+      <td>0.001328</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>0.617843</td>
-      <td>0.614906</td>
-      <td>0.614773</td>
-      <td>0.612816</td>
+      <td>0.683417</td>
+      <td>0.684725</td>
+      <td>0.678283</td>
+      <td>0.679635</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>1.607936</td>
-      <td>1.602791</td>
-      <td>1.617333</td>
-      <td>1.616114</td>
+      <td>1.785870</td>
+      <td>1.790341</td>
+      <td>1.782913</td>
+      <td>1.788874</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>3.812796</td>
-      <td>3.813395</td>
-      <td>3.839099</td>
-      <td>3.854755</td>
+      <td>4.054229</td>
+      <td>4.055350</td>
+      <td>4.050506</td>
+      <td>4.053143</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>36.599110</td>
-      <td>36.602001</td>
-      <td>36.599110</td>
-      <td>36.602001</td>
+      <td>31.150499</td>
+      <td>31.157992</td>
+      <td>31.139544</td>
+      <td>31.138482</td>
     </tr>
   </tbody>
 </table>
@@ -1095,8 +1102,8 @@ semivariances to gain more insight into the transformations.</p>
 point cloud development.</p>
 </div></blockquote>
 <hr class="docutils" />
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -1162,7 +1169,7 @@ point cloud development.</p>
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

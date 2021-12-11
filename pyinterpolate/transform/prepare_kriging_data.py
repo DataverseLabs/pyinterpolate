@@ -4,7 +4,11 @@ from pyinterpolate.distance.calculate_distances import calc_point_to_point_dista
 from pyinterpolate.transform.set_areal_weights import get_total_value_of_area
 
 
-def prepare_kriging_data(unknown_position, data_array, number_of_neighbours=10):
+def prepare_kriging_data(unknown_position,
+                         data_array,
+                         neighbors_range,
+                         min_number_of_neighbors=1,
+                         max_number_of_neighbors=256):
     """
     Function prepares data for kriging - array of point position, value and distance to an unknown point.
 
@@ -12,7 +16,11 @@ def prepare_kriging_data(unknown_position, data_array, number_of_neighbours=10):
 
     :param unknown_position: (numpy array) position of unknown value,
     :param data_array: (numpy array) known positions and their values,
-    :param number_of_neighbours: (int) number of the closest locations to the unknown position.
+    :param neighbors_range: (float) range within neighbors are included in the prediction,
+    :param min_number_of_neighbors: (int) number of the n-closest neighbors used for interpolation if not any neighbor is
+        selected within neighbors_range,
+    :param max_number_of_neighbors: (int) maximum number of n-closest neighbors used for interpolation if there are too
+        many neighbors in range. It speeds up calculations for large datasets.
 
     OUTPUT:
     :return: (numpy array) dataset with position, value and distance to the unknown point:
@@ -26,9 +34,18 @@ def prepare_kriging_data(unknown_position, data_array, number_of_neighbours=10):
     dists = calc_point_to_point_distance(r, known_pos)
 
     # Prepare data for kriging
-    kriging_output_array = np.c_[data_array, dists.T]
-    kriging_output_array = kriging_output_array[kriging_output_array[:, -1].argsort()]
-    prepared_data = kriging_output_array[:number_of_neighbours]
+    neighbors_and_dists = np.c_[data_array, dists.T]
+    prepared_data = neighbors_and_dists[neighbors_and_dists[:, -1] <= neighbors_range, :]
+
+    len_prep = len(prepared_data)
+
+    if len_prep == 0:
+        # Sort data
+        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+        prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
+    elif len_prep > max_number_of_neighbors:
+        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+        prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
 
     return prepared_data
 
@@ -198,10 +215,14 @@ def prepare_ata_data(points_within_unknown_area,
         distances_array = calc_point_to_point_distance(points_in_known_area, points_in_unknown_area)
         merged = _merge_vals_and_distances(vals_in_known_area, vals_in_unknown_area, distances_array)
         total_val = np.sum(known_area[1][:, 2])
-        generated_array = [areal_id, areal_value, merged, total_val]  # [id, value, [known point value,
-                                                                      #              unknown point value,
-                                                                      #              distance between points],
-                                                                      #              total point value]
+
+        # generated_array =
+        # [id, value, [known point value,
+        #              unknown point value,
+        #              distance between points],
+        #              total point value]
+
+        generated_array = [areal_id, areal_value, merged, total_val]
         points_vals.append(generated_array)
 
     output_data = np.array(points_vals)
@@ -284,6 +305,7 @@ def _merge_point_val_and_distances(unknown_point_val, known_vals, distances_arra
 
     output_arr = np.array([unknown_point_val, otp])
     return output_arr
+
 
 def prepare_atp_data(points_within_unknown_area,
                      known_areas, points_within_known_areas,
@@ -368,13 +390,17 @@ def prepare_atp_data(points_within_unknown_area,
             merged_points_array.append(merged)
 
         total_val = np.sum(known_area[1][:, 2])
-        generated_array = [areal_id, areal_value, merged_points_array, total_val]  # [[id, value, [
-                                                                                   # [unknown point value,
-                                                                                   #     [known points values,
-                                                                                   #      distances between points]],
-                                                                                   # ...],
-                                                                                   #  total known points value],
-                                                                                   # [list of uknown point coords]]
+
+        # generated_array =
+        # [[id, value, [
+        # [unknown point value,
+        #     [known points values,
+        #      distances between points]],
+        # ...],
+        #  total known points value],
+        # [list of uknown point coords]]
+
+        generated_array = [areal_id, areal_value, merged_points_array, total_val]
         points_vals.append(generated_array)
 
     output_data = np.array(points_vals)

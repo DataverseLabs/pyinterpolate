@@ -4,8 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Semivariogram calculation - tutorial &#8212; Pyinterpolate 0.2.3 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
@@ -14,7 +13,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -284,9 +283,9 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Semivariogram-calculation---tutorial">
+<div class="section" id="Semivariogram-calculation---tutorial">
 <h1>Semivariogram calculation - tutorial<a class="headerlink" href="#Semivariogram-calculation---tutorial" title="Permalink to this headline">¶</a></h1>
-<section id="Table-of-Contents:">
+<div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
@@ -295,11 +294,11 @@ div.rendered_html tbody tr:hover {
 <li><p>Export model,</p></li>
 <li><p>Import model.</p></li>
 </ol>
-</section>
-<section id="Level:-Basic">
+</div>
+<div class="section" id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="Changelog">
+</div>
+<div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
 <table class="docutils align-default">
 <colgroup>
@@ -314,22 +313,26 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2021-05-28</p></td>
+<tr class="row-even"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute)</p></td>
+<td><p>&#64;ethmtrgt</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-28</p></td>
 <td><p>Updated paths for input/output data</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting</p></td>
-<td><p>&#64;szymon-datalions</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="Introduction">
+</div>
+<div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn how to read and prepare data for semivariogram modeling, how to manually set semivariogram type and how to do it automatically. We will compare different semivariogram models by visualizing outcomes of models.</p>
 <p>Semivariogram modeling is an initial step before we can perform spatial interpolation of unknown values with Kriging. When you complete this tutorial you may learn how to:</p>
@@ -338,11 +341,11 @@ div.rendered_html tbody tr:hover {
 <li><p>regularize semivariogram of areal data.</p></li>
 </ul>
 <p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>.</p>
-</section>
-<section id="Import-packages">
+</div>
+<div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -356,11 +359,11 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="1)-Read-point-data">
+</div>
+<div class="section" id="1)-Read-point-data">
 <h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -369,7 +372,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -380,7 +383,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -397,11 +400,11 @@ array([[15.1152409 , 52.76514556, 91.27559662],
        [15.1152409 , 52.57823111, 45.66201019]])
 </pre></div></div>
 </div>
-</section>
-<section id="2)-Set-manually-different-Semivariogram-models">
+</div>
+<div class="section" id="2)-Set-manually-different-Semivariogram-models">
 <h2>2) Set manually different Semivariogram models<a class="headerlink" href="#2)-Set-manually-different-Semivariogram-models" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -415,7 +418,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -437,14 +440,14 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_8_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_8_0.png" />
 </div>
 </div>
-<section id="Clarification:">
+<div class="section" id="Clarification:">
 <h3>Clarification:<a class="headerlink" href="#Clarification:" title="Permalink to this headline">¶</a></h3>
 <p>We set search radius to 0.01 degree, this means that we gradually check semivariance of points at a distance</p>
 <p><strong>(r - search radius; r + search radius]</strong>,</p>
 <p>max_range variable describes upper limit of semivariogram searches, it is usually maximum distance in our points list. Figure of experimental semivariogram shows abrupt change at the distance of 0.35 degrees - we do not have points which are so far away. The better idea is to change max_range parameter to the 0.3 degree.</p>
 <p><strong>Nugget</strong> is slightly above 0. <strong>Sill</strong> is reached at approximately 600 points, and <strong>range</strong> of our model is about 0.12 degrees.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -474,7 +477,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -485,8 +488,8 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </pre></div>
 </div>
 </div>
-</section>
-<section id="Models:">
+</div>
+<div class="section" id="Models:">
 <h3>Models:<a class="headerlink" href="#Models:" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li><p>spherical,</p></li>
@@ -495,7 +498,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <li><p>gaussian</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -506,7 +509,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -522,7 +525,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -531,7 +534,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -540,7 +543,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -559,7 +562,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -578,7 +581,7 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -596,18 +599,18 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <img alt="../_images/tutorials_Semivariogram_Estimation_(Basic)_18_0.png" src="../_images/tutorials_Semivariogram_Estimation_(Basic)_18_0.png" />
 </div>
 </div>
-</section>
-<section id="id1">
+</div>
+<div class="section" id="id1">
 <h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>We test four different semivariogram models. Each model gives different results, we can check model’s mean absolute error of prediction by class instance <strong>model_error</strong> parameter or visualize it with <strong>show_semivariogram()</strong> method.</p>
 <p>From comparison we see that the best models are linear and spherical. They could be used in further processing, especially if we know undergoing data process.</p>
 <p>Manual selection of theoretical semivariogram model may be tedious. We can automate it with <strong>find_optimal_model()</strong> method. Let’s try it and compare results to the manual selection.</p>
-</section>
-</section>
-<section id="3)-Set-automatically-semivariogram-model">
+</div>
+</div>
+<div class="section" id="3)-Set-automatically-semivariogram-model">
 <h2>3) Set automatically semivariogram model<a class="headerlink" href="#3)-Set-automatically-semivariogram-model" title="Permalink to this headline">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -615,18 +618,18 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </pre></div>
 </div>
 </div>
-<section id="id2">
+<div class="section" id="id2">
 <h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>Chosen model is <strong>linear</strong> and it is automatically set as the class parameter. You may noticed that only spherical, exponential and linear models are considered in automatic searches. Why is that? Gaussian model (and in some cases exponential too) leads to the negative weights in a kriging model and possibly negative estimated value. You should be cautious with those two models and that’s why Gaussian model was intentionally dropped from the automatic model search. (<em>Viable for version 0.2 of
 library</em>).</p>
-</section>
-</section>
-<section id="4)-Export-model">
+</div>
+</div>
+<div class="section" id="4)-Export-model">
 <h2>4) Export model<a class="headerlink" href="#4)-Export-model" title="Permalink to this headline">¶</a></h2>
 <p>Models could be exported and used for other purposes. It is especially important for the <strong>semivariogram regularization</strong>. Those calculations are very slow and in a production it is not a good idea to build full piepline of semivariogram estimation and kriging; we divide it into two steps.</p>
 <p>Model is saved into a csv file with class method <strong>export_model()</strong>. We pass into it a filename and we save name, nugget, sill and a range of a model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -637,13 +640,13 @@ library</em>).</p>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="5)-Import-model">
+</div>
+<div class="section" id="5)-Import-model">
 <h2>5) Import model<a class="headerlink" href="#5)-Import-model" title="Permalink to this headline">¶</a></h2>
 <p>We can import semivariogram model into a new <strong>TheoreticalSemivariogram</strong> class instance without passing into it experimental semivariogram or actual data points. It is useful for some applications where we are focused on kriging and we are sure that our semivariogram models fits data well.</p>
 <p>Oposing to <strong>export_model()</strong> method we use <strong>import_model()</strong> method for it.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -655,7 +658,7 @@ library</em>).</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -676,7 +679,7 @@ Model sill is 490.4940934242805
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -685,7 +688,7 @@ Model sill is 490.4940934242805
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -694,8 +697,8 @@ Model sill is 490.4940934242805
 </pre></div></div>
 </div>
 <hr class="docutils" />
-</section>
-</section>
+</div>
+</div>
 
 
           </div>
@@ -761,7 +764,7 @@ Model sill is 490.4940934242805
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

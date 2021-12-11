@@ -35,13 +35,13 @@ class SetSemivariogramModel:
 class TestKriging(unittest.TestCase):
 
     @staticmethod
-    def _test_ordinary_kriging(kriging_model, unknown_loc, number_of_ranges):
-        km = kriging_model.ordinary_kriging(unknown_loc, number_of_ranges, test_anomalies=False)
+    def _test_ordinary_kriging(kriging_model, unknown_loc):
+        km = kriging_model.ordinary_kriging(unknown_loc, test_anomalies=False)
         return int(km[0])
 
     @staticmethod
-    def _test_simple_kriging(kriging_model, unknown_loc, number_of_ranges, mean):
-        km = kriging_model.simple_kriging(unknown_loc, number_of_ranges, global_mean=mean, test_anomalies=False)
+    def _test_simple_kriging(kriging_model, unknown_loc, mean):
+        km = kriging_model.simple_kriging(unknown_loc, global_mean=mean, test_anomalies=False)
         return int(km[0])
 
     def test_kriging(self):
@@ -56,8 +56,8 @@ class TestKriging(unittest.TestCase):
         s_model = SetSemivariogramModel(pos, 5)
         k_model = SetKrigingModel(pos, s_model.theoretical_semivariance)
 
-        kok = self._test_ordinary_kriging(k_model.kriging_model, unknown_pos, 6)
-        ksk = self._test_simple_kriging(k_model.kriging_model, unknown_pos, 6, sk_mean)
+        kok = self._test_ordinary_kriging(k_model.kriging_model, unknown_pos)
+        ksk = self._test_simple_kriging(k_model.kriging_model, unknown_pos, sk_mean)
 
         self.assertEqual(kok, 7, "Kriging value should be 7")
         self.assertEqual(ksk, kok, "Simple and Ordinary Kriging values should be the same")

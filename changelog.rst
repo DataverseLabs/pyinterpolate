@@ -6,15 +6,18 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
-2021-XX-XX
+2021-12-11
 ----------
 
-**version 0.2.XX**
+**version 0.2.4**
 
 * `self.points_values` chenged to `self.points_array` in `TheoreticalSemivariogram` class,
 * `NaN` values are tested and checked in `calc_semivariance_from_pt_cloud()` function,
 * new semivariogram models included in the package: **cubic**, **circular**, **power**,
-
+* corrected calculation of the closest neighbors for kriging interpolation,
+* changed `prepare_kriging_data()` function,
+* the new optional parameter `check_coordinates` (**bool**) of `calc_point_to_point_distance()` function to control the coordinates uniqueness tests. This test is very resource-consuming and should be avoided in a normal work and it should be performed before data injection into the modeling pipeline.
+* the new `dev/profiling/` directory to test and profile parts of a code.
 
 2021-08-23
 ----------
