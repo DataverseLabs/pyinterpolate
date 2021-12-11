@@ -11,7 +11,7 @@ def _check_if_coordinates_are_unique(data):
     if isinstance(data, list):
         data = np.array(data)
         
-    unique_values = np.unique(data.astype(np.float), axis=0)
+    unique_values = np.unique(data.astype(float), axis=0)
     no_of_obs = len(data)
     no_of_uniqs = len(unique_values)
     if no_of_uniqs < no_of_obs:
@@ -21,25 +21,29 @@ def _check_if_coordinates_are_unique(data):
                         '\nYou may get wrong impression of a nugget effect. Clean your data before processing.')
 
 
-def calc_point_to_point_distance(points_a, points_b=None):
+def calc_point_to_point_distance(points_a, points_b=None, check_coordinates=False):
     """Function calculates distances between all points in the given array.
 
     INPUT:
 
     :param points_a: (numpy array) points coordinates,
     :param points_b: (numpy array) points coordinates, default is None. If None then distance between all points in
-        points_a is calculated.
+        points_a is calculated,
+    :param check_coordinates: (bool) checks if coordinates are unique within a given array. It is a resource-consuming
+        process and it should be invoked with caution, especially for large datasets.
 
     OUTPUT:
 
-    :return: numpy array of distances between all coordinates."""
+    :return: (numpy array) distances between all coordinates."""
 
-    t = _check_if_coordinates_are_unique(points_a)  # Test redundant observations
+    if check_coordinates:
+        _check_if_coordinates_are_unique(points_a)  # Test redundant observations
 
     if points_b is None:
         distances = cdist(points_a, points_a, 'euclidean')
     else:
-        t = _check_if_coordinates_are_unique(points_b)  # Test redundant observations
+        if check_coordinates:
+            _check_if_coordinates_are_unique(points_b)  # Test redundant observations
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
 
@@ -87,7 +91,7 @@ def _calculate_block_to_block_distance(area_block_1, area_block_2):
 
 def calc_block_to_block_distance(areas):
     """
-    Function calculates distances between blocks based on the population points within the block.
+    Function calculates distances between all given blocks.
 
     INPUT:
 
