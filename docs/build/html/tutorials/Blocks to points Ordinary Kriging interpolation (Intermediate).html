@@ -1,24 +1,26 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Blocks to points Ordinary Kriging interpolation - tutorial &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
-    <link rel="prev" title="How good is my Kriging model? - tests with IDW algorithm - tutorial" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" />
+    <link rel="next" title="Semivariogram regularization - tutorial" href="Semivariogram Regularization (Intermediate).html" />
+    <link rel="prev" title="How good is my Kriging model? - tests with IDW algorithm - tutorial" href="How good is our Kriging model - test  it with IDW algorithm (Basic).html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -288,12 +290,12 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Read areal data,</p></li>
-<li><p>Detect and remove outliers,</p></li>
-<li><p>Create semivariogram model,</p></li>
-<li><p>Read point data canvas,</p></li>
-<li><p>Build map of interpolated values,</p></li>
-<li><p>Show map of interpolated values with choropleth map of breast cancer rates.</p></li>
+<li>Read areal data,</li>
+<li>Detect and remove outliers,</li>
+<li>Create semivariogram model,</li>
+<li>Read point data canvas,</li>
+<li>Build map of interpolated values,</li>
+<li>Show map of interpolated values with choropleth map of breast cancer rates.</li>
 </ol>
 </div>
 <div class="section" id="Level:-Intermediate">
@@ -301,34 +303,42 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 18%" />
-<col style="width: 59%" />
-<col style="width: 23%" />
+<col width="18%" />
+<col width="59%" />
+<col width="23%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Change description</p></th>
-<th class="head"><p>Author</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>2021-12-06</p></td>
-<td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>2021-12-14</td>
+<td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-10-13</p></td>
-<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> functions to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
-<td><p>&#64;ethmtrgt &amp; &#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-12-13</td>
+<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-05-11</p></td>
-<td><p>Refactored TheoreticalSemivariogram class</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-12-06</td>
+<td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-03-31</p></td>
-<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-10-13</td>
+<td>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> functions to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</td>
+<td>&#64;ethmtrgt &amp; &#64;SimonMolinsky</td>
+</tr>
+<tr class="row-even"><td>2021-05-11</td>
+<td>Refactored TheoreticalSemivariogram class</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2021-03-31</td>
+<td>Update related to the change of semivariogram weighting. Updated cancer rates data.</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
 </tbody>
 </table>
@@ -338,28 +348,27 @@ div.rendered_html tbody tr:hover {
 <p>This tutorial is based on the question of user <em>&#64;ikey</em> from <em>Discord</em> channel of package (02/04/2021). Thank you <em>&#64;ikey</em> for it!</p>
 <p>In short:</p>
 <blockquote>
-<div><p>Are we able to perform Semivariogram Regularization and Poisson Kriging if our point support represents only points without any values?</p>
-</div></blockquote>
+<div>Are we able to perform Semivariogram Regularization and Poisson Kriging if our point support represents only points without any values?</div></blockquote>
 <p><strong>No, it’s not possible</strong>. But there is a hack which we can use - we are able to interpolate missing values from areal centroids with Ordinary and Simple Kriging just like we do it with <em>regular points</em>. Why is it not possible with unknown points?</p>
 <p>The idea behind semivariogram regularization of areal aggregates is to use semivariogram of points (values). And not any points, they must reflect ongoing process. As example, in the case of epidemiology:</p>
 <ol class="arabic simple">
-<li><p>We have areal counts of infections divided by POPULATION over some area.</p></li>
-<li><p>We take POPULATION blocks (points) with number of inhabitants per block and use those as a support of our map. Thus we transform choropleth map into point map, and only to the points, where someone is living ==&gt; someone may be infected. We skip large parts of map where risk of infection is not present because no one is living there.</p></li>
-<li><p>And we finally obtain population-at-risk map of points or smoothed choropleth map of infection risk without large visual bias where large/small areas seems to be more important.</p></li>
+<li>We have areal counts of infections divided by POPULATION over some area.</li>
+<li>We take POPULATION blocks (points) with number of inhabitants per block and use those as a support of our map. Thus we transform choropleth map into point map, and only to the points, where someone is living ==&gt; someone may be infected. We skip large parts of map where risk of infection is not present because no one is living there.</li>
+<li>And we finally obtain population-at-risk map of points or smoothed choropleth map of infection risk without large visual bias where large/small areas seems to be more important.</li>
 </ol>
 <p>This works when we have specific <strong>counts over area divided by other parameter</strong> (time, population, probability, volume etc.). In this scenario we can find function which links our areal counts with those underlying variables and/or processes. Without support values we are not able to perform semivariogram regularization.</p>
 <p>What we want to achieve may be done with Ordinary Kriging (because our points are really unknown) and semivariogram regularization is not required (and not possible without any values).</p>
 <p>In summary we will learn how to:</p>
 <ul class="simple">
-<li><p>transform areal data into points,</p></li>
-<li><p>detect and remove outliers from data,</p></li>
-<li><p>create interpolated map from unknown points,</p></li>
-<li><p>visualize and save created map.</p></li>
+<li>transform areal data into points,</li>
+<li>detect and remove outliers from data,</li>
+<li>create interpolated map from unknown points,</li>
+<li>visualize and save created map.</li>
 </ul>
 <p>We use:</p>
 <ul class="simple">
-<li><p>for point canvas: <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/regular_grid_points.shp</span></code>,</p></li>
-<li><p>for areal centroids: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/cancer_data.shp</span></code>.</p></li>
+<li>for point canvas: <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/regular_grid_points.shp</span></code>,</li>
+<li>for areal centroids: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">sample_data/areal_data/cancer_data.shp</span></code>.</li>
 </ul>
 <p>This tutorial requires understanding of concepts presented in <strong>Semivariogram Estimation</strong> and <strong>Variogram Point Cloud</strong> tutorials along with <strong>Ordinary and Simple Kriging</strong> notebook and (optionally) <strong>Semivariogram Regularization</strong> tutorial.</p>
 </div>
@@ -407,7 +416,7 @@ div.rendered_html tbody tr:hover {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 array([25019,
-       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7fa156c3ad90&gt;,
+       &lt;shapely.geometry.multipolygon.MultiPolygon object at 0x7faac2192f10&gt;,
        2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </pre></div></div>
 </div>
@@ -464,7 +473,7 @@ array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">number_of_lags</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="n">lag</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="n">lag</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="n">var_cloud</span> <span class="o">=</span> <span class="n">variogram_clouds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
     <span class="n">show_variogram_cloud</span><span class="p">(</span><span class="n">var_cloud</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -478,7 +487,7 @@ array([2132629.599151873, 557971.1559491967, 192.2], dtype=object)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lags per area: 4
+Lags per area: 3
 
 </pre></div></div>
 </div>
@@ -497,7 +506,7 @@ Lags per area: 4
 
 ###########
 
-Lags per area: 8
+Lags per area: 7
 
 </pre></div></div>
 </div>
@@ -516,7 +525,7 @@ Lags per area: 8
 
 ###########
 
-Lags per area: 16
+Lags per area: 15
 
 </pre></div></div>
 </div>
@@ -556,7 +565,7 @@ Lags per area: 16
 <span></span><span class="c1"># And show data without outliers</span>
 
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">number_of_lags</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="n">lag</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="n">lag</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="n">var_cloud</span> <span class="o">=</span> <span class="n">clouds_without_outliers</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
     <span class="n">show_variogram_cloud</span><span class="p">(</span><span class="n">var_cloud</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -570,7 +579,7 @@ Lags per area: 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lags per area: 4
+Lags per area: 3
 
 </pre></div></div>
 </div>
@@ -589,7 +598,7 @@ Lags per area: 4
 
 ###########
 
-Lags per area: 8
+Lags per area: 7
 
 </pre></div></div>
 </div>
@@ -608,7 +617,7 @@ Lags per area: 8
 
 ###########
 
-Lags per area: 16
+Lags per area: 15
 
 </pre></div></div>
 </div>
@@ -629,8 +638,8 @@ Lags per area: 16
 
 </pre></div></div>
 </div>
-<div class="section" id="id1">
-<h3>Clarification:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clarification-1">
+<h3>Clarification:<a class="headerlink" href="#clarification-1" title="Permalink to this headline">¶</a></h3>
 <p>It could be not visible, but we got rid off outliers from dataset. Look into <strong>y</strong> axes of variogram clouds with and without outliers for each lag. You hopefully see that maximum values after data cleaning are two times smaller. We can test different lags now to create semivariogram models.</p>
 </div>
 </div>
@@ -646,7 +655,7 @@ Lags per area: 16
 
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">cloud_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clouds_without_outliers</span><span class="p">):</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> lags&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s1"> lags&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="c1"># Calculate experimental model</span>
     <span class="n">exp_model</span> <span class="o">=</span> <span class="n">calc_semivariance_from_pt_cloud</span><span class="p">(</span><span class="n">cloud_model</span><span class="p">)</span>
@@ -672,43 +681,43 @@ Lags per area: 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Semivariance calculated for 4 lags
+Semivariance calculated for 3 lags
 
-Model: spherical, error value: 43.54732415522008
-Model: exponential, error value: 10.253893291308518
-Model: linear, error value: 31.58156957622567
-Chosen model: exponential, with value: 10.253893291308518.
+Model: spherical, error value: 8.241434104749422
+Model: exponential, error value: 12.299614574268972
+Model: linear, error value: 15.092343387172065
+Chosen model: spherical, with value of: 8.241434104749422.
 
 Model parameters:
-Nugget: 24.599515151515156
-Sill: 171.27273206056609
-Range: 225000.0
+Nugget: 0
+Sill: 109.61454851876229
+Range: 150000.0
 
 #####
-Semivariance calculated for 8 lags
+Semivariance calculated for 7 lags
 
-Model: spherical, error value: 33.141058208677585
-Model: exponential, error value: 18.069641851272277
-Model: linear, error value: 30.53775981728718
-Chosen model: exponential, with value of: 18.069641851272277.
+Model: spherical, error value: 10.49400071519736
+Model: exponential, error value: 9.602477078573983
+Model: linear, error value: 10.936407998381856
+Chosen model: exponential, with value of: 9.602477078573983.
 
 Model parameters:
-Nugget: 0.0
-Sill: 171.27273206056609
-Range: 166071.42857142858
+Nugget: 0
+Sill: 109.61454851876229
+Range: 75000.0
 
 #####
-Semivariance calculated for 16 lags
+Semivariance calculated for 15 lags
 
-Model: spherical, error value: 35.48795676175165
-Model: exponential, error value: 22.017471556770374
-Model: linear, error value: 33.68860615278811
-Chosen model: exponential, with value of: 22.017471556770374.
+Model: spherical, error value: 17.905475707567167
+Model: exponential, error value: 13.926371661388727
+Model: linear, error value: 19.2756575640517
+Chosen model: exponential, with value of: 13.926371661388727.
 
 Model parameters:
-Nugget: 0.0
-Sill: 171.27273206056609
-Range: 158750.0
+Nugget: 0
+Sill: 109.61454851876229
+Range: 37500.0
 
 #####
 </pre></div></div>
@@ -718,20 +727,16 @@ Range: 158750.0
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/Users/szymonmolinski/miniconda3/envs/pyint/lib/python3.7/site-packages/numpy/core/fromnumeric.py:3420: RuntimeWarning: Mean of empty slice.
-  out=out, **kwargs)
-/Users/szymonmolinski/miniconda3/envs/pyint/lib/python3.7/site-packages/numpy/core/_methods.py:190: RuntimeWarning: invalid value encountered in long_scalars
-  ret = ret / rcount
-/Users/szymonmolinski/miniconda3/envs/pyint/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:429: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
+/Users/szymonmolinski/miniconda3/envs/pyint/lib/python3.7/site-packages/pyinterpolate/semivariance/semivariogram_fit/fit_semivariance.py:436: UserWarning: WARNING: linear model fitted to the experimental variogram is better than the core models!
   warnings.warn(warning_msg)
 </pre></div></div>
 </div>
-<div class="section" id="id2">
-<h3>Clarification:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clarification-2">
+<h3>Clarification:<a class="headerlink" href="#clarification-2" title="Permalink to this headline">¶</a></h3>
 <p><em>Exponential</em> model was chosen in each case. This model offers lowest error of fitting. If we look only into the error value then we may assume that the best model is for 4 lags… but when we compare different parameters of semivariogram model we see interesting things.</p>
 <p><strong>Nugget</strong> of four lags is large and it’s 30 cases per 100,000 inhabitants. Why is that? Model with only four lags catches large distance near the zero origin and it introduces bias. Other lags have nugget close to 0.</p>
 <p><strong>Range</strong> of the first model is very large compared to the areal bounds and it is a half of them. Range of 8 and 16 lags is closer to each other and more than two-three times smaller than range of 4 lags. It’s the same effect of large spacing for 4 lags.</p>
-<p><strong>Sill</strong> is the same because it describes variance in dataset (which is constant).</p>
+<p><strong>Sill</strong> is set to 109, it was derived from the grid search of potential sill values.</p>
 <p>Summarizing: 4-lags model has lowest error of fit but largest nugget and range. 8- and 16-lags models have comparable nugget and range. Probably one of these models will be a better fit for Kriging.</p>
 </div>
 </div>
@@ -830,13 +835,16 @@ Range: 158750.0
 
 <span class="sd">    :return: (float)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">val</span> <span class="o">=</span> <span class="n">k_model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">unknown_location</span><span class="o">=</span><span class="p">[</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+    <span class="n">xloc</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">x</span>
+    <span class="n">yloc</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">k_model</span><span class="o">.</span><span class="n">ordinary_kriging</span><span class="p">(</span><span class="n">unknown_location</span><span class="o">=</span><span class="p">[</span><span class="n">xloc</span><span class="p">,</span> <span class="n">yloc</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
 
 <span class="n">kriging_models</span> <span class="o">=</span> <span class="p">[]</span>
+
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">semi_model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">theoretical_semivariograms</span><span class="p">):</span>
     <span class="n">kriging_model</span> <span class="o">=</span> <span class="n">Krige</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semi_model</span><span class="p">,</span> <span class="n">known_points</span><span class="o">=</span><span class="n">data_centroids</span><span class="p">)</span>
-    <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+    <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_lags</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">err_col_name</span> <span class="o">=</span> <span class="s1">&#39;e_&#39;</span> <span class="o">+</span> <span class="n">col_name</span>
 
     <span class="c1"># Interpolate missing values and uncertainty</span>
@@ -880,12 +888,12 @@ Range: 158750.0
     <tr style="text-align: right;">
       <th></th>
       <th>geometry</th>
-      <th>lags_4</th>
-      <th>e_lags_4</th>
-      <th>lags_8</th>
-      <th>e_lags_8</th>
-      <th>lags_16</th>
-      <th>e_lags_16</th>
+      <th>lags_3</th>
+      <th>e_lags_3</th>
+      <th>lags_7</th>
+      <th>e_lags_7</th>
+      <th>lags_15</th>
+      <th>e_lags_15</th>
     </tr>
     <tr>
       <th>id</th>
@@ -902,59 +910,59 @@ Range: 158750.0
     <tr>
       <th>81.0</th>
       <td>POINT (1277277.671 441124.507)</td>
-      <td>131.824005</td>
-      <td>0.000000</td>
-      <td>132.254262</td>
-      <td>2.490786</td>
-      <td>131.236029</td>
-      <td>0.0</td>
+      <td>131.666933</td>
+      <td>59.385887</td>
+      <td>131.337370</td>
+      <td>67.766214</td>
+      <td>134.8</td>
+      <td>130.459101</td>
     </tr>
     <tr>
       <th>82.0</th>
       <td>POINT (1277277.671 431124.507)</td>
-      <td>130.850084</td>
-      <td>0.000000</td>
-      <td>130.525824</td>
-      <td>0.000000</td>
-      <td>130.418898</td>
-      <td>0.0</td>
+      <td>128.719734</td>
+      <td>57.028773</td>
+      <td>131.168005</td>
+      <td>63.188088</td>
+      <td>134.8</td>
+      <td>136.839561</td>
     </tr>
     <tr>
       <th>83.0</th>
       <td>POINT (1277277.671 421124.507)</td>
-      <td>130.140675</td>
-      <td>0.000000</td>
-      <td>129.700968</td>
-      <td>0.000000</td>
-      <td>129.696579</td>
-      <td>0.0</td>
+      <td>127.941703</td>
+      <td>56.161701</td>
+      <td>130.426622</td>
+      <td>62.056515</td>
+      <td>125.8</td>
+      <td>132.505136</td>
     </tr>
     <tr>
       <th>84.0</th>
       <td>POINT (1277277.671 411124.507)</td>
-      <td>129.491474</td>
-      <td>0.000000</td>
-      <td>129.103466</td>
-      <td>0.000000</td>
-      <td>129.140148</td>
-      <td>0.0</td>
+      <td>127.776175</td>
+      <td>55.355213</td>
+      <td>129.984403</td>
+      <td>61.382583</td>
+      <td>125.8</td>
+      <td>129.323233</td>
     </tr>
     <tr>
       <th>85.0</th>
       <td>POINT (1277277.671 401124.507)</td>
-      <td>129.387272</td>
-      <td>0.982872</td>
-      <td>128.988025</td>
-      <td>0.000000</td>
-      <td>128.879488</td>
-      <td>0.0</td>
+      <td>127.439055</td>
+      <td>54.962963</td>
+      <td>129.025893</td>
+      <td>60.290506</td>
+      <td>125.8</td>
+      <td>133.023383</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
-<div class="section" id="id3">
-<h3>Clarification:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clarification-3">
+<h3>Clarification:<a class="headerlink" href="#clarification-3" title="Permalink to this headline">¶</a></h3>
 <p>This is rather complicated function in which we interpolate missing values as a new columns of <strong>GeoDataFrame</strong>. <em>Uncertainty</em> is assigned to interpolated results for further analysis.</p>
 <p>Now we can save our <strong>GeoDataFrame</strong> as a shapefile…</p>
 <div class="nbinput nblast docutils container">
@@ -1064,8 +1072,8 @@ Range: 158750.0
 <span class="n">fs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">lag</span> <span class="ow">in</span> <span class="n">number_of_lags</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lag&#39;</span><span class="p">,</span> <span class="n">lag</span><span class="p">)</span>
-    <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lag&#39;</span><span class="p">,</span> <span class="n">lag</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">col_name</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">base</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;rate&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">col_name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">)</span>
@@ -1079,7 +1087,7 @@ Range: 158750.0
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 4
+Lag 3
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1103,7 +1111,7 @@ Lag 4
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 ######
-Lag 8
+Lag 7
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1127,7 +1135,7 @@ Lag 8
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 ######
-Lag 16
+Lag 15
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1153,31 +1161,32 @@ Lag 16
 ######
 </pre></div></div>
 </div>
-<div class="section" id="id4">
-<h3>Clarification:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clarification-4">
+<h3>Clarification:<a class="headerlink" href="#clarification-4" title="Permalink to this headline">¶</a></h3>
 <p>Visual inspection shows that:</p>
 <ol class="arabic simple">
-<li><p>Interpolated results are more smoothed over area and in the most part of a map they are similar to the rate observed in specific county.</p></li>
-<li><p>Difference between interpolated points is not visible. Is there any?</p></li>
+<li>Interpolated results are more smoothed over area and in the most part of a map they are similar to the rate observed in specific county.</li>
+<li>Why map with the largest number of lags has the largest areas with similar values? (Large blocks). It is related to the maximum range of analysis. Optimal range is smallest for the area with 15 lags.</li>
+<li>Are differences between those maps large or small?</li>
 </ol>
-<p>To answer second question we calculate the Mean Absolute Difference between each lag’s interpolated results.</p>
+<p>To answer the last question we calculate the Mean Absolute Difference between each lag’s interpolated results.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
 <span></span><span class="k">for</span> <span class="n">lag1</span> <span class="ow">in</span> <span class="n">number_of_lags</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LAG:&#39;</span><span class="p">,</span> <span class="n">lag1</span><span class="p">)</span>
-    <span class="n">col_name1</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;LAG:&#39;</span><span class="p">,</span> <span class="n">lag1</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">col_name1</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag1</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">lag2</span> <span class="ow">in</span> <span class="n">number_of_lags</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">lag1</span> <span class="o">==</span> <span class="n">lag2</span><span class="p">:</span>
             <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">col_name2</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag2</span><span class="p">)</span>
+            <span class="n">col_name2</span> <span class="o">=</span> <span class="s1">&#39;lags_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lag2</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">mad</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">col_name1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">col_name2</span><span class="p">]</span>
             <span class="n">mad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mad</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean Absolute Difference between lag </span><span class="si">{</span><span class="n">lag1</span><span class="si">}</span><span class="s1"> and lag </span><span class="si">{</span><span class="n">lag2</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">mad</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean Absolute Difference between lag </span><span class="si">{</span><span class="n">lag1</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s1"> and lag </span><span class="si">{</span><span class="n">lag2</span><span class="o">-</span><span class="mi">1</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">mad</span><span class="si">:</span><span class="s1">.6f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1187,32 +1196,32 @@ Lag 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-LAG: 4
+LAG: 3
 
-Mean Absolute Difference between lag 4 and lag 8 is 0.053254
-
-
-Mean Absolute Difference between lag 4 and lag 16 is 0.054208
-
-LAG: 8
-
-Mean Absolute Difference between lag 8 and lag 4 is 0.053254
+Mean Absolute Difference between lag 3 and lag 7 is 0.035865
 
 
-Mean Absolute Difference between lag 8 and lag 16 is 0.000953
+Mean Absolute Difference between lag 3 and lag 15 is 0.026831
 
-LAG: 16
+LAG: 7
 
-Mean Absolute Difference between lag 16 and lag 4 is 0.054208
+Mean Absolute Difference between lag 7 and lag 3 is 0.035865
 
 
-Mean Absolute Difference between lag 16 and lag 8 is 0.000953
+Mean Absolute Difference between lag 7 and lag 15 is 0.062696
+
+LAG: 15
+
+Mean Absolute Difference between lag 15 and lag 3 is 0.026831
+
+
+Mean Absolute Difference between lag 15 and lag 7 is 0.062696
 
 </pre></div></div>
 </div>
 </div>
-<div class="section" id="id5">
-<h3>Clarification:<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="clarification-5">
+<h3>Clarification:<a class="headerlink" href="#clarification-5" title="Permalink to this headline">¶</a></h3>
 <p>As you see those differences are really small. Each semivariogram model is similar in this case. In this case we can use <strong>4-lag</strong> model. It will be calculted faster than other models and it is still very similar to other models.</p>
 <hr class="docutils" />
 </div>
@@ -1251,22 +1260,24 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.000953
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="How%20good%20is%20our%20Kriging%20model%20-%20test%20%20it%20with%20IDW%20algorithm%20%28Basic%29.html" title="previous chapter">How good is my Kriging model? - tests with IDW algorithm - tutorial</a></li>
-      <li>Next: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="next chapter">Semivariogram regularization - tutorial</a></li>
+      <li>Previous: <a href="How good is our Kriging model - test  it with IDW algorithm (Basic).html" title="previous chapter">How good is my Kriging model? - tests with IDW algorithm - tutorial</a></li>
+      <li>Next: <a href="Semivariogram Regularization (Intermediate).html" title="next chapter">Semivariogram regularization - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -1283,7 +1294,7 @@ Mean Absolute Difference between lag 16 and lag 8 is 0.000953
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

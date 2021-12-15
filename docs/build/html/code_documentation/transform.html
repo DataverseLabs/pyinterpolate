@@ -1,20 +1,22 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>transform module &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="distance module" href="distance.html" />
@@ -39,14 +41,14 @@
 <h1>transform module<a class="headerlink" href="#transform-module" title="Permalink to this headline">¶</a></h1>
 <p>Available methods:</p>
 <ul class="simple">
-<li><p>check_points_within_ellipse: checks if points are grouped within specified ellipse for directional semivariograms,</p></li>
-<li><p>get_centroids: gets position x and y of polygon centroid,</p></li>
-<li><p>prepare_kriging_data: prepares data for kriging - array of point position, value and distance to an unknown point,</p></li>
-<li><p>prepare_poisson_kriging_data: prepares data for centroid based Poisson Kriging,</p></li>
-<li><p>prepare_ata_data: prepares data for Area to Area Poisson Kriging,</p></li>
-<li><p>prepare_atp_data: prepares data for Area to Point Poisson Kriging,</p></li>
-<li><p>select_values_in_range: selects set of values which are greater than (lag - step size) and lesser than (lag + step size),</p></li>
-<li><p>set_areal_weights: prepares array for weighted semivariance calculation.</p></li>
+<li>check_points_within_ellipse: checks if points are grouped within specified ellipse for directional semivariograms,</li>
+<li>get_centroids: gets position x and y of polygon centroid,</li>
+<li>prepare_kriging_data: prepares data for kriging - array of point position, value and distance to an unknown point,</li>
+<li>prepare_poisson_kriging_data: prepares data for centroid based Poisson Kriging,</li>
+<li>prepare_ata_data: prepares data for Area to Area Poisson Kriging,</li>
+<li>prepare_atp_data: prepares data for Area to Point Poisson Kriging,</li>
+<li>select_values_in_range: selects set of values which are greater than (lag - step size) and lesser than (lag + step size),</li>
+<li>set_areal_weights: prepares array for weighted semivariance calculation.</li>
 </ul>
 <hr class="docutils" />
 <div class="section" id="check_points_within_ellipse()">
@@ -64,12 +66,12 @@
 <p>Function checks which points from other points are within point range described as an ellipse with center in an <code class="docutils literal notranslate"><span class="pre">origin_point</span></code>, semi-major axis of length <code class="docutils literal notranslate"><span class="pre">step_size</span></code> and semi-minor axis of length <code class="docutils literal notranslate"><span class="pre">step_size</span> <span class="pre">*</span> <span class="pre">tolerance</span></code> and angle of semi-major axis calculated as <code class="docutils literal notranslate"><span class="pre">angle</span></code> of direction from NS (0 radian angle) axis of a dataset.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>origin_point</strong>: (<em>numpy array</em>) single point coordinates,</p></li>
-<li><p><strong>other_points</strong>: (<em>numpy array</em>),</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) current distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>last_step_size</strong>: (<em>float</em>) last distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>angle</strong>: (<em>float</em>) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.</p></li>
-<li><p><strong>tolerance</strong>: (<em>float</em>) value in range 0-1 normalized to <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">:</span> <span class="pre">0.5]</span></code> to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</p></li>
+<li><strong>origin_point</strong>: (<em>numpy array</em>) single point coordinates,</li>
+<li><strong>other_points</strong>: (<em>numpy array</em>),</li>
+<li><strong>step_size</strong>: (<em>float</em>) current distance between lags within each points are included in the calculations,</li>
+<li><strong>last_step_size</strong>: (<em>float</em>) last distance between lags within each points are included in the calculations,</li>
+<li><strong>angle</strong>: (<em>float</em>) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.</li>
+<li><strong>tolerance</strong>: (<em>float</em>) value in range 0-1 normalized to <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">:</span> <span class="pre">0.5]</span></code> to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</li>
 </ul>
 <div class="math notranslate nohighlight">
 \[(tolerance * step\_size)\]</div>
@@ -100,11 +102,11 @@
 <p>Function gets position x and y of polygon centroid.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>polygon</strong>: (<em>shapely Polygon</em>).</p></li>
+<li><strong>polygon</strong>: (<em>shapely Polygon</em>).</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>tuple</em>) centroid position (x, y) for a given area.</p></li>
+<li>(<em>tuple</em>) centroid position (x, y) for a given area.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -122,15 +124,15 @@
 <p>Function prepares data for kriging - array of point position, value and distance to an unknown point.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>unknown_position</strong>: (<em>numpy array</em>) position of unknown value,</p></li>
-<li><p><strong>data_array</strong>: (<em>numpy array</em>) known positions and their values,</p></li>
-<li><p><strong>neighbors_range</strong>: (<em>float</em>) range within neighbors are included in the prediction,</p></li>
-<li><p><strong>min_number_of_neighbors</strong>: (<em>int</em>) number of the n-closest neighbors used for interpolation if not any neighbor is selected within neighbors_range,</p></li>
-<li><p><strong>max_number_of_neighbors</strong>: (<em>int</em>) maximum number of n-closest neighbors used for interpolation if there are too many neighbors in range. It speeds up calculations for large datasets.</p></li>
+<li><strong>unknown_position</strong>: (<em>numpy array</em>) position of unknown value,</li>
+<li><strong>data_array</strong>: (<em>numpy array</em>) known positions and their values,</li>
+<li><strong>neighbors_range</strong>: (<em>float</em>) range within neighbors are included in the prediction,</li>
+<li><strong>min_number_of_neighbors</strong>: (<em>int</em>) number of the n-closest neighbors used for interpolation if not any neighbor is selected within neighbors_range,</li>
+<li><strong>max_number_of_neighbors</strong>: (<em>int</em>) maximum number of n-closest neighbors used for interpolation if there are too many neighbors in range. It speeds up calculations for large datasets.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) dataset with position, value and distance to the unknown point:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) dataset with position, value and distance to the unknown point:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">distance</span> <span class="n">to</span> <span class="n">unknown</span> <span class="n">position</span><span class="p">],</span>
@@ -155,13 +157,13 @@
 <p>Function prepares data for centroid based Poisson Kriging.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>unknown_area</strong>: (<em>numpy array</em>) unknown area in the form:</p></li>
+<li><strong>unknown_area</strong>: (<em>numpy array</em>) unknown area in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the given area:</p></li>
+<li><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the given area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -170,13 +172,13 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</p></li>
+<li><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</p></li>
+<li><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -185,13 +187,13 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</p></li>
-<li><p><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors),</p></li>
-<li><p><strong>weighted</strong>: (<em>bool</em>) distances weighted by process or point measurements within area (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or not (<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></li>
+<li><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</li>
+<li><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors),</li>
+<li><strong>weighted</strong>: (<em>bool</em>) distances weighted by process or point measurements within area (<code class="docutils literal notranslate"><span class="pre">True</span></code>) or not (<code class="docutils literal notranslate"><span class="pre">False</span></code>).</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">id_known</span><span class="p">,</span>
@@ -218,7 +220,7 @@
 <p>Function prepares data for Area to Area Poisson Kriging.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the unknown area:</p></li>
+<li><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the unknown area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -227,13 +229,13 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</p></li>
+<li><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</p></li>
+<li><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">[</span><span class="n">area_id</span><span class="p">,</span>
@@ -242,12 +244,12 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</p></li>
-<li><p><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</p></li>
+<li><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</li>
+<li><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">id_known</span><span class="p">,</span>
@@ -272,7 +274,7 @@
 <p>Function prepares data for Area to Point Poisson Kriging.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the unknown area:</p></li>
+<li><strong>points_within_unknown_area</strong>: (<em>numpy array</em>) points and their values within the unknown area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -281,13 +283,13 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</p></li>
+<li><strong>known_areas</strong>: (<em>numpy array</em>) known areas in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">aggregated</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</p></li>
+<li><strong>points_within_known_areas</strong>: (<em>numpy array</em>) points and their values within the given area:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="p">[</span><span class="n">area_id</span><span class="p">,</span>
@@ -296,12 +298,12 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</p></li>
-<li><p><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</p></li>
+<li><strong>number_of_neighbours</strong>: (<em>int</em>) minimum number of neighbours to include in the algorithm,</li>
+<li><strong>max_search_radius</strong>: (<em>float</em>) maximum search radius (if number of neighbours within this search radius is smaller than <code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter then additional neighbours are included up to the minimum number of neighbors).</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) distances from known locations to the unknown location:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">id_known</span><span class="p">,</span>
@@ -328,13 +330,13 @@
 <p>Function selects set of values which are greater than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">-</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">/</span> <span class="pre">2</span></code>) and smaller or equal than (<code class="docutils literal notranslate"><span class="pre">lag</span> <span class="pre">+</span> <span class="pre">step</span> <span class="pre">size</span> <span class="pre">/</span> <span class="pre">2</span></code>).</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<em>numpy array</em>) distances,</p></li>
-<li><p><strong>lag</strong>: (<em>float</em>) lag within areas are included,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) step between lags.</p></li>
+<li><strong>data</strong>: (<em>numpy array</em>) distances,</li>
+<li><strong>lag</strong>: (<em>float</em>) lag within areas are included,</li>
+<li><strong>step_size</strong>: (<em>float</em>) step between lags.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> mask with distances within specified radius.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> mask with distances within specified radius.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -348,20 +350,20 @@
 <p>Function prepares array for <em>weighted semivariance</em> calculation.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>areal_data</strong>: (<em>numpy array</em>) of areas in the form:</p></li>
+<li><strong>areal_data</strong>: (<em>numpy array</em>) of areas in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">areal_polygon</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_points</strong>: (<em>numpy array</em>) of points within areas in the form:</p></li>
+<li><strong>areal_points</strong>: (<em>numpy array</em>) of points within areas in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="p">[</span><span class="n">point_position_x</span><span class="p">,</span> <span class="n">point_position_y</span><span class="p">,</span> <span class="n">value</span><span class="p">]]</span>
 </pre></div>
 </div>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of weighted points.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of weighted points.</li>
 </ul>
 </div>
 </div>
@@ -405,15 +407,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -430,7 +434,7 @@
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

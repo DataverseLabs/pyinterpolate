@@ -1,23 +1,25 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>The Semi-Automatic and Automatic Fit of the Semivariogram Model &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The Outliers Removal Algorithm" href="Outliers%20Removal.html" />
+    <link rel="next" title="The Outliers Removal Algorithm" href="Outliers Removal.html" />
     <link rel="prev" title="Algorithms Explained" href="../algorithms.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -296,8 +298,8 @@ div.rendered_html tbody tr:hover {
 <h1>The Semi-Automatic and Automatic Fit of the Semivariogram Model<a class="headerlink" href="#The-Semi-Automatic-and-Automatic-Fit-of-the-Semivariogram-Model" title="Permalink to this headline">¶</a></h1>
 <p>A procedure of the theoretical model fitting into the experimental curve may be performed manually. Researcher may choose <strong>sill</strong>, <strong>range</strong> and the <strong>modeling function</strong> and assign those into the model. This step could be very time-consuming and within the <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> we have chosen two different approaches for the users:</p>
 <ol class="arabic simple">
-<li><p>Researcher chooses <strong>the modeling function</strong> and algorithm of the <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class searches for the best range parameter.</p></li>
-<li><p>The algorithm searches for the <strong>optimal modeling function</strong> and <strong>range</strong> for a given set of experimental points.</p></li>
+<li>Researcher chooses <strong>the modeling function</strong> and algorithm of the <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class searches for the best range parameter.</li>
+<li>The algorithm searches for the <strong>optimal modeling function</strong> and <strong>range</strong> for a given set of experimental points.</li>
 </ol>
 <p>Both processes are similar but there are important differences. Firstly, we are going to take a closer look into the semi-supervised model selection - Algorithm 1.</p>
 <div class="section" id="fit_semivariance()-method-for-the-semi-supervised-semivariogram-model-selection">
@@ -322,10 +324,10 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">fit_semivariance(model_type,</span> <span class="pre">number_of_ranges=16)</span></code> is the method of <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class. It fits the chosen theoretical model (<code class="docutils literal notranslate"><span class="pre">model_type</span></code>) into the multiple ranges (<code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code>) within the area of a study. We must know which kind of the theoretical function should be fitted to our experimental data. Package has four basic models to select:</p>
 <ol class="arabic simple">
-<li><p>Spherical,</p></li>
-<li><p>Exponential,</p></li>
-<li><p>Linear,</p></li>
-<li><p>Gaussian.</p></li>
+<li>Spherical,</li>
+<li>Exponential,</li>
+<li>Linear,</li>
+<li>Gaussian.</li>
 </ol>
 <p>Then we should assign the number of ranges to test our model. Algorithm divides the study extent into <code class="docutils literal notranslate"><span class="pre">n</span></code> number of ranges and tests the theoretical model output against the experimental variogram for each range. It is important to distinguish ranges from the lags: they are not the same and we can set up more or less ranges than the number of lags of the experimental curve!</p>
 <p>If we choose the theoretical model and set the number of ranges to check then the algorithm calculates the <strong>sill</strong> of a model as <em>the variance of the observed values of the known points</em>. <strong>Nugget</strong> is set to the first experimental semivariance value if the initial lag is zero. This value is usually zero. In the case where the first lag is greater than zero <strong>nugget</strong> is set to zero.</p>
@@ -338,8 +340,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="find_optimal_model()-method-for-the-automated-semivariogram-model-selection">
 <h2><code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> method for the automated semivariogram model selection<a class="headerlink" href="#find_optimal_model()-method-for-the-automated-semivariogram-model-selection" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Flow Diagram<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="flow-diagram-1">
+<h3>Flow Diagram<a class="headerlink" href="#flow-diagram-1" title="Permalink to this headline">¶</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -360,24 +362,24 @@ div.rendered_html tbody tr:hover {
 data perspective and leaves the step of choosing the optimal function for the algorithm itself.</p>
 <p><code class="docutils literal notranslate"><span class="pre">find_optimal_model(weighted=False,</span> <span class="pre">number_of_ranges=16)</span></code> method takes two arguments:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">weighted</span></code> of the <code class="docutils literal notranslate"><span class="pre">bool</span></code> type. Usually it should be set to the <code class="docutils literal notranslate"><span class="pre">False</span></code> but for the semivariogram regularization, where we have blocks of different shapes and sizes, this parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> and the error is weighted by the lag: lags closer to the origin have a larger weight in error calculation that the distant lags. We are more interested in the model performance for the neighbouring and small areas.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> works as the same parameter of the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> method. Algorithm divides the experimental semivariogram into <code class="docutils literal notranslate"><span class="pre">n</span></code> number of ranges and tests every range for the lowest error between the theoretical model and the experimental values.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">weighted</span></code> of the <code class="docutils literal notranslate"><span class="pre">bool</span></code> type. Usually it should be set to the <code class="docutils literal notranslate"><span class="pre">False</span></code> but for the semivariogram regularization, where we have blocks of different shapes and sizes, this parameter is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> and the error is weighted by the lag: lags closer to the origin have a larger weight in error calculation that the distant lags. We are more interested in the model performance for the neighbouring and small areas.</li>
+<li><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> works as the same parameter of the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> method. Algorithm divides the experimental semivariogram into <code class="docutils literal notranslate"><span class="pre">n</span></code> number of ranges and tests every range for the lowest error between the theoretical model and the experimental values.</li>
 </ul>
 </div>
 <div class="section" id="Block-(A):">
 <h3>Block (A):<a class="headerlink" href="#Block-(A):" title="Permalink to this headline">¶</a></h3>
 <p>At the beginning algorithm takes one of the available model types from the pool:</p>
 <ul class="simple">
-<li><p>Spherical,</p></li>
-<li><p>Exponential,</p></li>
-<li><p>Linear.</p></li>
+<li>Spherical,</li>
+<li>Exponential,</li>
+<li>Linear.</li>
 </ul>
 <p><em>Gaussian</em> model is ommited in this step because of its properties:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>The gaussian model represents an extremely continuous phenomenon. Experience shows that numerical instabilities often occur when this is used without a nugget effect.
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><em>Armstrong M. Basic Linear Geostatistics. Page 38.</em></p></li>
+<li><em>Armstrong M. Basic Linear Geostatistics. Page 38.</em></li>
 </ul>
 <p>In this case it is assumed that careful fit of this type of variogram is required and algorithm may produce negative weights and the associated negative values.</p>
 </div>
@@ -396,8 +398,8 @@ and experimental values.</p>
 <div class="section" id="Changelog:">
 <h4>Changelog:<a class="headerlink" href="#Changelog:" title="Permalink to this headline">¶</a></h4>
 <ul class="simple">
-<li><p>2021-07-24: <code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> description and corrections in the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> diagram. Diagrams inserted as svg files.</p></li>
-<li><p>2021-07-22: The first release of the article.</p></li>
+<li>2021-07-24: <code class="docutils literal notranslate"><span class="pre">find_optimal_model()</span></code> description and corrections in the <code class="docutils literal notranslate"><span class="pre">fit_semivariance()</span></code> diagram. Diagrams inserted as svg files.</li>
+<li>2021-07-22: The first release of the article.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -438,21 +440,23 @@ and experimental values.</p>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../algorithms.html">Algorithms Explained</a><ul>
       <li>Previous: <a href="../algorithms.html" title="previous chapter">Algorithms Explained</a></li>
-      <li>Next: <a href="Outliers%20Removal.html" title="next chapter">The Outliers Removal Algorithm</a></li>
+      <li>Next: <a href="Outliers Removal.html" title="next chapter">The Outliers Removal Algorithm</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -469,7 +473,7 @@ and experimental values.</p>
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

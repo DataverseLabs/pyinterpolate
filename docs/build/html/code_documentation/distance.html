@@ -1,20 +1,22 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>distance module &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="semivariance module" href="semivariance.html" />
@@ -39,8 +41,8 @@
 <h1>distance module<a class="headerlink" href="#distance-module" title="Permalink to this headline">¶</a></h1>
 <p>Available methods:</p>
 <ul class="simple">
-<li><p>calc_point_to_point_distance: calculates distances between all points in the given array,</p></li>
-<li><p>calc_block_to_block_distance: calculates distances between blocks based on the population points within the block.</p></li>
+<li>calc_point_to_point_distance: calculates distances between all points in the given array,</li>
+<li>calc_block_to_block_distance: calculates distances between blocks based on the population points within the block.</li>
 </ul>
 <div class="section" id="calc_point_to_point_distance()">
 <h2><code class="docutils literal notranslate"><span class="pre">calc_point_to_point_distance()</span></code><a class="headerlink" href="#calc_point_to_point_distance()" title="Permalink to this headline">¶</a></h2>
@@ -54,13 +56,13 @@
 <p>Function calculates distances between all points in the given array.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>points_a</strong>: (<em>numpy array</em>) points coordinates,</p></li>
-<li><p><strong>points_b</strong>: (<em>numpy array</em>) points coordinates, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code> is given then distances between all points within <code class="docutils literal notranslate"><span class="pre">points_a</span></code> is calculated,</p></li>
-<li><p><strong>check_coordinates</strong>: (<em>bool</em>) checks if coordinates are unique within a given array. It is a resource-consuming process and it should be invoked with caution, especially for large datasets.</p></li>
+<li><strong>points_a</strong>: (<em>numpy array</em>) points coordinates,</li>
+<li><strong>points_b</strong>: (<em>numpy array</em>) points coordinates, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code> is given then distances between all points within <code class="docutils literal notranslate"><span class="pre">points_a</span></code> is calculated,</li>
+<li><strong>check_coordinates</strong>: (<em>bool</em>) checks if coordinates are unique within a given array. It is a resource-consuming process and it should be invoked with caution, especially for large datasets.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of distances between all coordinates.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of distances between all coordinates.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -72,7 +74,7 @@
 <p>Function calculates distances between all given blocks.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>areas</strong>: (<em>numpy array</em> or Python <em>list of lists</em>) area <em>ids</em> and coordinates per each id. Single input row:</p></li>
+<li><strong>areas</strong>: (<em>numpy array</em> or Python <em>list of lists</em>) area <em>ids</em> and coordinates per each id. Single input row:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -82,7 +84,7 @@
 </div>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><strong>areal distances</strong>: <code class="docutils literal notranslate"><span class="pre">tuple</span> <span class="pre">of</span> <span class="pre">arrays</span></code> with matrix with areal distances and ids of each row of distances:</p></li>
+<li><strong>areal distances</strong>: <code class="docutils literal notranslate"><span class="pre">tuple</span> <span class="pre">of</span> <span class="pre">arrays</span></code> with matrix with areal distances and ids of each row of distances:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
     <span class="p">[</span>
@@ -137,15 +139,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -162,7 +166,7 @@
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

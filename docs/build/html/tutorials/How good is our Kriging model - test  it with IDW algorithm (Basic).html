@@ -1,24 +1,26 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>How good is my Kriging model? - tests with IDW algorithm - tutorial &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
-    <link rel="prev" title="Ordinary and Simple Kriging - tutorial" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" />
+    <link rel="next" title="Blocks to points Ordinary Kriging interpolation - tutorial" href="Blocks to points Ordinary Kriging interpolation (Intermediate).html" />
+    <link rel="prev" title="Ordinary and Simple Kriging - tutorial" href="Ordinary and Simple Kriging (Basic).html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -288,12 +290,12 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Read point data,</p></li>
-<li><p>Divide dataset into two sets: modeling and validation set,</p></li>
-<li><p>Perform IDW and evaluate it,</p></li>
-<li><p>Perform variogram modeling on the modeling set,</p></li>
-<li><p>Validate Kriging and compare Kriging and IDW validation results,</p></li>
-<li><p>Bonus scenario: only 5% of values are known!</p></li>
+<li>Read point data,</li>
+<li>Divide dataset into two sets: modeling and validation set,</li>
+<li>Perform IDW and evaluate it,</li>
+<li>Perform variogram modeling on the modeling set,</li>
+<li>Validate Kriging and compare Kriging and IDW validation results,</li>
+<li>Bonus scenario: only 5% of values are known!</li>
 </ol>
 </div>
 <div class="section" id="Level:-Basic">
@@ -301,26 +303,34 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this headline">¶</a></h2>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 18%" />
-<col style="width: 59%" />
-<col style="width: 23%" />
+<col width="18%" />
+<col width="59%" />
+<col width="23%" />
 </colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Change description</p></th>
-<th class="head"><p>Author</p></th>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>2021-12-08</p></td>
-<td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>2021-12-14</td>
+<td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-12</p></td>
-<td><p>First version of tutorial</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-12-13</td>
+<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-even"><td>2021-12-08</td>
+<td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2021-05-12</td>
+<td>First version of tutorial</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
 </tbody>
 </table>
@@ -329,26 +339,26 @@ div.rendered_html tbody tr:hover {
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial we will learn about the one method of validation of our Kriging model. We’ll compare it to the Inverse Distance Weighting function where the unknown point value is interpolated as the weighted mean of it’s neighbours. Weights are assigned by the inverted distance raised to the n-th power.</p>
 <ol class="arabic simple">
-<li><p><strong>GENERAL FORM OF IDW</strong></p></li>
+<li><strong>GENERAL FORM OF IDW</strong></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[z(u) = \frac{\sum_{i}\lambda_{i}*z_{i}}{\sum_{i}\lambda_{i}}\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(z(u)\)</span>: is the value at unknown location,</p></li>
-<li><p><span class="math notranslate nohighlight">\(i\)</span>: is a i-th known location,</p></li>
-<li><p><span class="math notranslate nohighlight">\(z_{i}\)</span>: is a value at known location <span class="math notranslate nohighlight">\(i\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\(\lambda_{i}\)</span>: is a weight assigned to the known location <span class="math notranslate nohighlight">\(i\)</span>.</p></li>
+<li><span class="math notranslate nohighlight">\(z(u)\)</span>: is the value at unknown location,</li>
+<li><span class="math notranslate nohighlight">\(i\)</span>: is a i-th known location,</li>
+<li><span class="math notranslate nohighlight">\(z_{i}\)</span>: is a value at known location <span class="math notranslate nohighlight">\(i\)</span>,</li>
+<li><span class="math notranslate nohighlight">\(\lambda_{i}\)</span>: is a weight assigned to the known location <span class="math notranslate nohighlight">\(i\)</span>.</li>
 </ul>
 <ol class="arabic simple" start="2">
-<li><p><strong>WEIGHTING PARAMETER</strong></p></li>
+<li><strong>WEIGHTING PARAMETER</strong></li>
 </ol>
 <div class="math notranslate nohighlight">
 \[\lambda_{i} = \frac{1}{d^{p}_{i}}\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(d\)</span>: is a distance from known point <span class="math notranslate nohighlight">\(z_{i}\)</span> to the unknown point <span class="math notranslate nohighlight">\(z(u)\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\(p\)</span>: is a hyperparameter which controls how strong is a relationship between known point and unknown point. You may set large <span class="math notranslate nohighlight">\(p\)</span> if you want to show strong relationship between closest point and very weak influence of distant points. On the other hand, you may set small <span class="math notranslate nohighlight">\(p\)</span> to emphasize fact that points are influencing each other with the same power irrespectively of their distance.</p></li>
+<li><span class="math notranslate nohighlight">\(d\)</span>: is a distance from known point <span class="math notranslate nohighlight">\(z_{i}\)</span> to the unknown point <span class="math notranslate nohighlight">\(z(u)\)</span>,</li>
+<li><span class="math notranslate nohighlight">\(p\)</span>: is a hyperparameter which controls how strong is a relationship between known point and unknown point. You may set large <span class="math notranslate nohighlight">\(p\)</span> if you want to show strong relationship between closest point and very weak influence of distant points. On the other hand, you may set small <span class="math notranslate nohighlight">\(p\)</span> to emphasize fact that points are influencing each other with the same power irrespectively of their distance.</li>
 </ul>
 <hr class="docutils" />
 <p>As you noticed <strong>IDW</strong> is a simple but powerful technique. Unfortunately it has major drawback: <strong>we must set ``p`` - power - manually</strong> and it isn’t derived from the data and variogram. That’s why it can be used for other tasks. Example is to use IDW as a baseline for comparison to the other techniques.</p>
@@ -405,8 +415,8 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <h2>2) Divide dataset into two sets: modeling and validation set<a class="headerlink" href="#2)-Divide-dataset-into-two-sets:-modeling-and-validation-set" title="Permalink to this headline">¶</a></h2>
 <p>In this step we will divide our dataset into two sets:</p>
 <ul class="simple">
-<li><p>modeling set (50%): points used for variogram modeling,</p></li>
-<li><p>validation set (50%): points used for prediction and results validation.</p></li>
+<li>modeling set (50%): points used for variogram modeling,</li>
+<li>validation set (50%): points used for prediction and results validation.</li>
 </ul>
 <p>Baseline dataset will be divided randomly.</p>
 <div class="nbinput nblast docutils container">
@@ -442,8 +452,8 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 <h2>3) Perform IDW and evaluate it<a class="headerlink" href="#3)-Perform-IDW-and-evaluate-it" title="Permalink to this headline">¶</a></h2>
 <p>Inverse Distance Weighting doesn’t require variogram modeling or other steps. We pass power to which we want raise distance in weight denominator. Things to remember are:</p>
 <ul class="simple">
-<li><p>Large <code class="docutils literal notranslate"><span class="pre">power</span></code> -&gt; closer neighbours are more important,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">power</span></code> which is close to the <strong>zero</strong> -&gt; all neighbours are important and we assume that distant process has the same effect on our variable as the closest events.</p></li>
+<li>Large <code class="docutils literal notranslate"><span class="pre">power</span></code> -&gt; closer neighbours are more important,</li>
+<li><code class="docutils literal notranslate"><span class="pre">power</span></code> which is close to the <strong>zero</strong> -&gt; all neighbours are important and we assume that distant process has the same effect on our variable as the closest events.</li>
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -478,15 +488,15 @@ array([[15.1152409 , 52.76514556, 91.27559662],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW is 5.19107490245737
+Root Mean Squared Error of prediction with IDW is 5.182182467881956
 </pre></div></div>
 </div>
 <p><strong>Clarification:</strong> Obtained Root Mean Squared Error could serve as a baseline for further model development. To build better reference, we create four IDW models of powers:</p>
 <ol class="arabic simple">
-<li><p>0.5,</p></li>
-<li><p>1,</p></li>
-<li><p>2,</p></li>
-<li><ol class="arabic simple" start="4">
+<li>0.5,</li>
+<li>1,</li>
+<li>2,</li>
+<li><ol class="first arabic" start="4">
 <li></li>
 </ol>
 </li>
@@ -523,10 +533,10 @@ Root Mean Squared Error of prediction with IDW is 5.19107490245737
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW of power 0.5 is 17.6443
-Root Mean Squared Error of prediction with IDW of power 1 is 14.6930
-Root Mean Squared Error of prediction with IDW of power 2 is 5.1911
-Root Mean Squared Error of prediction with IDW of power 4 is 1.8930
+Root Mean Squared Error of prediction with IDW of power 0.5 is 17.3953
+Root Mean Squared Error of prediction with IDW of power 1 is 14.4409
+Root Mean Squared Error of prediction with IDW of power 2 is 5.1822
+Root Mean Squared Error of prediction with IDW of power 4 is 1.9178
 </pre></div></div>
 </div>
 </div>
@@ -627,7 +637,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8930
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
+Root Mean Squared Error of prediction with Kriging is 1.643199932985393
 </pre></div></div>
 </div>
 <p><strong>Clarification</strong>: Kriging is better than any from the IDW models and we may assume that our modeling approach gives us more insights into the spatial process which we are observing. But this is not the end… let’s consider more complex scenario!</p>
@@ -636,7 +646,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 <h2>6) Bonus scenario: only 5% of values are known!<a class="headerlink" href="#6)-Bonus-scenario:-only-5%-of-values-are-known!" title="Permalink to this headline">¶</a></h2>
 <p>Real world data are rarely as good as sample from the tutorial. It is too expensive to densily sample every location and usually we get only small percent of area covered by data. That’s why it is good to compare <strong>IDW vs Kriging</strong> in this scenario! We repeat steps 1-5 with change in division for modeling / validation set. (I encourage you to try it do alone and then compare your code and results with those given in this notebook).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -647,7 +657,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -666,7 +676,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -681,7 +691,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -699,7 +709,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -710,7 +720,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -726,7 +736,7 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -743,11 +753,11 @@ Root Mean Squared Error of prediction with Kriging is 1.7118337970412345
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW of power 0.5 is 17.6009
-Root Mean Squared Error of prediction with IDW of power 1 is 14.6137
-Root Mean Squared Error of prediction with IDW of power 2 is 5.4637
-Root Mean Squared Error of prediction with IDW of power 4 is 2.1395
-Root Mean Squared Error of prediction with Kriging is 1.9805
+Root Mean Squared Error of prediction with IDW of power 0.5 is 17.5698
+Root Mean Squared Error of prediction with IDW of power 1 is 14.5844
+Root Mean Squared Error of prediction with IDW of power 2 is 5.5657
+Root Mean Squared Error of prediction with IDW of power 4 is 2.3090
+Root Mean Squared Error of prediction with Kriging is 2.0523
 </pre></div></div>
 </div>
 <p>Your results may be different but in the most cases Kriging will be better than IDW. What’s even more important is the fact that for the single data source with low number of samples we don’t have opportunity to perform validation step and we’re not able to guess how big should be the power parameter. With Kriging we model variogram and <em>voila!</em> - model works.</p>
@@ -787,22 +797,24 @@ Root Mean Squared Error of prediction with Kriging is 1.9805
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../tutorials.html">Tutorials</a><ul>
-      <li>Previous: <a href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" title="previous chapter">Ordinary and Simple Kriging - tutorial</a></li>
-      <li>Next: <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="next chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
+      <li>Previous: <a href="Ordinary and Simple Kriging (Basic).html" title="previous chapter">Ordinary and Simple Kriging - tutorial</a></li>
+      <li>Next: <a href="Blocks to points Ordinary Kriging interpolation (Intermediate).html" title="next chapter">Blocks to points Ordinary Kriging interpolation - tutorial</a></li>
   </ul></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -819,7 +831,7 @@ Root Mean Squared Error of prediction with Kriging is 1.9805
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

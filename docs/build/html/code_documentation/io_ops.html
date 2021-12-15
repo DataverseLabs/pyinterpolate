@@ -1,20 +1,22 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>io_ops module &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="transform module" href="transform.html" />
@@ -39,9 +41,9 @@
 <h1>io_ops module<a class="headerlink" href="#io_ops-module" title="Permalink to this headline">¶</a></h1>
 <p>Available methods:</p>
 <ul class="simple">
-<li><p>get_points_within_area: prepares points data for further processing,</p></li>
-<li><p>prepare_areal_shapefile: prepares areal shapefile for processing and transforms it into numpy array,</p></li>
-<li><p>read_point_data: reads data and converts it into numpy array.</p></li>
+<li>get_points_within_area: prepares points data for further processing,</li>
+<li>prepare_areal_shapefile: prepares areal shapefile for processing and transforms it into numpy array,</li>
+<li>read_point_data: reads data and converts it into numpy array.</li>
 </ul>
 <div class="section" id="get_points_within_area()">
 <h2><code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code><a class="headerlink" href="#get_points_within_area()" title="Permalink to this headline">¶</a></h2>
@@ -58,17 +60,17 @@
 <p>Function prepares points data for further processing.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>area_shapefile</strong>: (<em>str</em>) areal data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</p></li>
-<li><p><strong>points_shapefile</strong>: (<em>str</em>) points data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</p></li>
-<li><p><strong>areal_id_col_name</strong>: (<em>str</em>) name of the column with id of areas,</p></li>
-<li><p><strong>points_val_col_name</strong>: (<em>str</em>) name of the value column of each point,</p></li>
-<li><p><strong>dropna</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are deleted (areas without any points),</p></li>
-<li><p><strong>points_geometry_col_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</p></li>
-<li><p><strong>nans_to_zero</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are casted to 0.</p></li>
+<li><strong>area_shapefile</strong>: (<em>str</em>) areal data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</li>
+<li><strong>points_shapefile</strong>: (<em>str</em>) points data <code class="docutils literal notranslate"><span class="pre">shapefile</span></code> address,</li>
+<li><strong>areal_id_col_name</strong>: (<em>str</em>) name of the column with id of areas,</li>
+<li><strong>points_val_col_name</strong>: (<em>str</em>) name of the value column of each point,</li>
+<li><strong>dropna</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are deleted (areas without any points),</li>
+<li><strong>points_geometry_col_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</li>
+<li><strong>nans_to_zero</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values are casted to 0.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id and array with point coordinates and values:</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id and array with point coordinates and values:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -91,15 +93,15 @@
 <p>Function prepares areal shapefile for processing and transforms it into <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>. Function returns two lists.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>areal_file_address</strong>: (<em>str</em>) path to the shapefile with area data,</p></li>
-<li><p><strong>id_column_name</strong>: (<em>str</em>) id column name, if not provided then index column is treated as the id,</p></li>
-<li><p><strong>value_column_name</strong>: (<em>str</em>) value column name, if not provided then all values are set to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>,</p></li>
-<li><p><strong>geometry_column_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</p></li>
-<li><p><strong>dropnans</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are dropped.</p></li>
+<li><strong>areal_file_address</strong>: (<em>str</em>) path to the shapefile with area data,</li>
+<li><strong>id_column_name</strong>: (<em>str</em>) id column name, if not provided then index column is treated as the id,</li>
+<li><strong>value_column_name</strong>: (<em>str</em>) value column name, if not provided then all values are set to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>,</li>
+<li><strong>geometry_column_name</strong>: (<em>str</em>) default is <code class="docutils literal notranslate"><span class="pre">'geometry'</span></code> as in <code class="docutils literal notranslate"><span class="pre">GeoPandas</span> <span class="pre">GeoDataFrames</span></code>,</li>
+<li><strong>dropnans</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then rows with <code class="docutils literal notranslate"><span class="pre">NaN</span></code> are dropped.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id, area geometry, coordinate of centroid x, coordinate of centroid y, value:</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of area id, area geometry, coordinate of centroid x, coordinate of centroid y, value:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
@@ -114,12 +116,12 @@
 <p>Function reads data from a text file and converts it into <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>path</strong>: (<em>str</em>) path to the file,</p></li>
-<li><p><strong>data_type</strong>: (<em>str</em>) data type, available types: <code class="docutils literal notranslate"><span class="pre">'txt'</span></code> for txt files.</p></li>
+<li><strong>path</strong>: (<em>str</em>) path to the file,</li>
+<li><strong>data_type</strong>: (<em>str</em>) data type, available types: <code class="docutils literal notranslate"><span class="pre">'txt'</span></code> for txt files.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of coordinates and their values.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> of coordinates and their values.</li>
 </ul>
 </div>
 </div>
@@ -163,15 +165,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -188,7 +192,7 @@
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

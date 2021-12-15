@@ -1,20 +1,22 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>semivariance module &#8212; Pyinterpolate 0.2.3 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "tex2jax_ignore|mathjax_ignore|document", "processClass": "tex2jax_process|mathjax_process|math|output_area"}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="kriging module" href="kriging.html" />
@@ -39,17 +41,17 @@
 <h1>semivariance module<a class="headerlink" href="#semivariance-module" title="Permalink to this headline">¶</a></h1>
 <p>Available classes and functions:</p>
 <ul class="simple">
-<li><p>ArealSemivariance: Class calculates semivariance of areas for Poisson Kriging (area to area and area to point),</p></li>
-<li><p>RegularizedSemivariogram: Class performs deconvolution of semivariogram of areal data,</p></li>
-<li><p>calculate_covariance: Function calculates covariance of a given set of points,</p></li>
-<li><p>calculate_semivariance: Function calculates semivariance of a given set of points,</p></li>
-<li><p>calculate_weighted_semivariance: Function calculates weighted semivariance,</p></li>
-<li><p>calculate_directional_semivariogram: Function calculates semivariogram within specified ellipse,</p></li>
-<li><p>build_variogram_point_cloud: Function creates OrderedDict with lags and variances between points within specific lag,</p></li>
-<li><p>show_variogram_cloud: function shows boxplots of lags and squared differences between ponts’ values within specific lag,</p></li>
-<li><p>calc_semivariance_from_pt_cloud: based on Point Cloud semivariogram is calculated,</p></li>
-<li><p>remove_outliers: removes outliers from point cloud variogram,</p></li>
-<li><p>TheoreticalSemivariogram: Class calculates theoretical semivariogram.</p></li>
+<li>ArealSemivariance: Class calculates semivariance of areas for Poisson Kriging (area to area and area to point),</li>
+<li>RegularizedSemivariogram: Class performs deconvolution of semivariogram of areal data,</li>
+<li>calculate_covariance: Function calculates covariance of a given set of points,</li>
+<li>calculate_semivariance: Function calculates semivariance of a given set of points,</li>
+<li>calculate_weighted_semivariance: Function calculates weighted semivariance,</li>
+<li>calculate_directional_semivariogram: Function calculates semivariogram within specified ellipse,</li>
+<li>build_variogram_point_cloud: Function creates OrderedDict with lags and variances between points within specific lag,</li>
+<li>show_variogram_cloud: function shows boxplots of lags and squared differences between ponts’ values within specific lag,</li>
+<li>calc_semivariance_from_pt_cloud: based on Point Cloud semivariogram is calculated,</li>
+<li>remove_outliers: removes outliers from point cloud variogram,</li>
+<li>TheoreticalSemivariogram: Class calculates theoretical semivariogram.</li>
 </ul>
 <div class="section" id="ArealSemivariance">
 <h2><code class="docutils literal notranslate"><span class="pre">ArealSemivariance</span></code><a class="headerlink" href="#ArealSemivariance" title="Permalink to this headline">¶</a></h2>
@@ -67,15 +69,15 @@
 <p>Class calculates semivariance of areas for Poisson Kriging (area to area and area to point).</p>
 <p>INITIALIZATION PARAMS:</p>
 <ul class="simple">
-<li><p><strong>areal_data</strong>: (<em>numpy array</em> / <em>list</em>)</p></li>
+<li><strong>areal_data</strong>: (<em>numpy array</em> / <em>list</em>)</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span><span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_step_size</strong>: (<em>float</em>) step size for search radius,</p></li>
-<li><p><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</p></li>
-<li><p><strong>areal_points_data</strong>: (<em>numpy array</em> / <em>list</em>)</p></li>
+<li><strong>areal_step_size</strong>: (<em>float</em>) step size for search radius,</li>
+<li><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</li>
+<li><strong>areal_points_data</strong>: (<em>numpy array</em> / <em>list</em>)</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -84,15 +86,15 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>weighted_semivariance</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">False</span></code> then each distance is treated equally when calculating theoretical semivariance; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then semivariances closer to the point of origin have more weight,</p></li>
-<li><p><strong>verbose</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all messages are printed, otherwise nothing.</p></li>
+<li><strong>weighted_semivariance</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">False</span></code> then each distance is treated equally when calculating theoretical semivariance; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then semivariances closer to the point of origin have more weight,</li>
+<li><strong>verbose</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then all messages are printed, otherwise nothing.</li>
 </ul>
 </div>
 <div class="section" id="Class-public-methods:">
 <h3>Class public methods:<a class="headerlink" href="#Class-public-methods:" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><strong>regularize_semivariogram</strong>: Function calculates regularized point support semivariogram,</p></li>
-<li><p><strong>show_semivariograms</strong>: Function shows semivariograms calculated by the class: Empirical semivariogram, Theoretical model, Inblock Semivariance, Within-block semivariogram, Between blocks semivariogram, Regularized output.</p></li>
+<li><strong>regularize_semivariogram</strong>: Function calculates regularized point support semivariogram,</li>
+<li><strong>show_semivariograms</strong>: Function shows semivariograms calculated by the class: Empirical semivariogram, Theoretical model, Inblock Semivariance, Within-block semivariogram, Between blocks semivariogram, Regularized output.</li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -108,33 +110,32 @@
 </div>
 <p>Function calculates regularized point support semivariogram in the form given in:</p>
 <blockquote>
-<div><p>Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008</p>
-</div></blockquote>
+<div>Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008</div></blockquote>
 <p>Function has the form:</p>
 <div class="math notranslate nohighlight">
 \[\gamma_{v(h)} = \gamma(v, v_h) - \gamma_{h}(v, v)\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\gamma_{v(h)}\)</span> - regularized semivariogram,</p></li>
-<li><p><span class="math notranslate nohighlight">\(\gamma(v, v_h)\)</span> - semivariogram value between any two blocks separated by the distance <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\(\gamma_{h}(v, v)\)</span> - arithmetical average of within-block semivariogram.</p></li>
+<li><span class="math notranslate nohighlight">\(\gamma_{v(h)}\)</span> - regularized semivariogram,</li>
+<li><span class="math notranslate nohighlight">\(\gamma(v, v_h)\)</span> - semivariogram value between any two blocks separated by the distance <span class="math notranslate nohighlight">\(h\)</span>,</li>
+<li><span class="math notranslate nohighlight">\(\gamma_{h}(v, v)\)</span> - arithmetical average of within-block semivariogram.</li>
 </ul>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>within_block_semivariogram</strong>: (<em>numpy array</em>) mean semivariance between the blocks:</p></li>
+<li><strong>within_block_semivariogram</strong>: (<em>numpy array</em>) mean semivariance between the blocks:</li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\gamma_{h}(v, v) = \frac{1}{2*N(h)} \sum^{N(h)}_{a=1} [\gamma(v\alpha, v\alpha) + \gamma(v\alpha+h, v\alpha+h)]\]</div>
 <p>where:</p>
 <p><span class="math notranslate nohighlight">\(\gamma(v\alpha, v\alpha)\)</span> and <span class="math notranslate nohighlight">\(\gamma(v\alpha+h, v\alpha+h)\)</span> are the inblock semivariances of block <span class="math notranslate nohighlight">\(\alpha\)</span> and block <span class="math notranslate nohighlight">\(\alpha+h\)</span> separated by the distance <span class="math notranslate nohighlight">\(h\)</span> weighted by the inblock population.</p>
 <ul class="simple">
-<li><p><strong>between_blocks_semivariogram</strong>: (<em>numpy array</em>) semivariance between all blocks calculated from the theoretical model,</p></li>
-<li><p><strong>empirical_semivariance</strong>: (<em>numpy array</em>) empirical semivariance between area centroids, <code class="docutils literal notranslate"><span class="pre">default=None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then empirical semivariance is computed by the <code class="docutils literal notranslate"><span class="pre">_calculate_empirical_semivariance</span></code> method from area centroids,</p></li>
-<li><p><strong>theoretical_semivariance_model</strong>: (<em>TheoreticalSemivariogram</em>) theoretical semivariance model from <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariance</span></code> class, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then theoretical model is derived from area centroids and empirical semivariance.</p></li>
+<li><strong>between_blocks_semivariogram</strong>: (<em>numpy array</em>) semivariance between all blocks calculated from the theoretical model,</li>
+<li><strong>empirical_semivariance</strong>: (<em>numpy array</em>) empirical semivariance between area centroids, <code class="docutils literal notranslate"><span class="pre">default=None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then empirical semivariance is computed by the <code class="docutils literal notranslate"><span class="pre">_calculate_empirical_semivariance</span></code> method from area centroids,</li>
+<li><strong>theoretical_semivariance_model</strong>: (<em>TheoreticalSemivariogram</em>) theoretical semivariance model from <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariance</span></code> class, default is <code class="docutils literal notranslate"><span class="pre">None</span></code>, if <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided then theoretical model is derived from area centroids and empirical semivariance.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p><strong>semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) of lag, semivariance values and number of areas within lag where:</p></li>
+<li><strong>semivariance</strong>: (<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) of lag, semivariance values and number of areas within lag where:</li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[0]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lags</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[1]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lag's</span> <span class="pre">values</span></code>;</p>
@@ -152,31 +153,30 @@
 </div>
 <div class="section" id="RegularizedSemivariogram">
 <h2><code class="docutils literal notranslate"><span class="pre">RegularizedSemivariogram</span></code><a class="headerlink" href="#RegularizedSemivariogram" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id1">
-<h3>Class initialization<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="class-initialization-1">
+<h3>Class initialization<a class="headerlink" href="#class-initialization-1" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">RegularizedSemivariogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Class performs deconvolution of semivariogram of areal data. Whole procedure is based on the iterative process described in:</p>
 <blockquote>
-<div><p>Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008</p>
-</div></blockquote>
+<div>Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008</div></blockquote>
 <p>Class works as follow:</p>
 <ul class="simple">
-<li><p>initialize your object (no parameters),</p></li>
-<li><p>then use <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method to build initial point support model,</p></li>
-<li><p>then use <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method to perform semivariogram regularization,</p></li>
-<li><p>save semivariogram model with <code class="docutils literal notranslate"><span class="pre">export_model()</span></code> method.</p></li>
+<li>initialize your object (no parameters),</li>
+<li>then use <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method to build initial point support model,</li>
+<li>then use <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method to perform semivariogram regularization,</li>
+<li>save semivariogram model with <code class="docutils literal notranslate"><span class="pre">export_model()</span></code> method.</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h3>Class public methods:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="class-public-methods-1">
+<h3>Class public methods:<a class="headerlink" href="#class-public-methods-1" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><strong>fit</strong> - fits areal data and point support data into a model, initialize experimental semivariogram, theoretical semivariogram model, regularized point support model and deviation.</p></li>
-<li><p><strong>transform</strong> - performs semivariogram regularization, which is an iterative process,</p></li>
-<li><p><strong>export_regularized_model</strong> - Function exports final regularized model parameters into specified csv file.</p></li>
-<li><p><strong>show_baseline_semivariograms</strong> - Function shows experimental semivariogram, initial theoretical semivariogram and initial regularized semivariogram after fit() operation.</p></li>
-<li><p><strong>show_semivariograms</strong> - plots experimental semivariogram of area data, theoretical curve of area data, regularized model values and regularized model theoretical curve.</p></li>
+<li><strong>fit</strong> - fits areal data and point support data into a model, initialize experimental semivariogram, theoretical semivariogram model, regularized point support model and deviation.</li>
+<li><strong>transform</strong> - performs semivariogram regularization, which is an iterative process,</li>
+<li><strong>export_regularized_model</strong> - Function exports final regularized model parameters into specified csv file.</li>
+<li><strong>show_baseline_semivariograms</strong> - Function shows experimental semivariogram, initial theoretical semivariogram and initial regularized semivariogram after fit() operation.</li>
+<li><strong>show_semivariograms</strong> - plots experimental semivariogram of area data, theoretical curve of area data, regularized model values and regularized model theoretical curve.</li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -194,15 +194,15 @@
 <p>Function fits area and point support data to the initial regularized models.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>areal_data</strong>: (<em>numpy array</em>) areal data prepared with the function <code class="docutils literal notranslate"><span class="pre">prepare_areal_shapefile()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>in the form:</p></li>
+<li><strong>areal_data</strong>: (<em>numpy array</em>) areal data prepared with the function <code class="docutils literal notranslate"><span class="pre">prepare_areal_shapefile()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">area_geometry</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">x</span><span class="p">,</span> <span class="n">centroid</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>areal_step_size</strong>: (<em>float</em>) step size between each lag, usually it is a half of distance between lags,</p></li>
-<li><p><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</p></li>
-<li><p><strong>point_support_data</strong>: (<em>numpy array</em>) point support data prepared with the function <code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> in the form:</p></li>
+<li><strong>areal_step_size</strong>: (<em>float</em>) step size between each lag, usually it is a half of distance between lags,</li>
+<li><strong>max_areal_range</strong>: (<em>float</em>) max distance to perform distance and semivariance calculations,</li>
+<li><strong>point_support_data</strong>: (<em>numpy array</em>) point support data prepared with the function <code class="docutils literal notranslate"><span class="pre">get_points_within_area()</span></code>, where data is a <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> in the form:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
     <span class="n">area_id</span><span class="p">,</span>
@@ -211,8 +211,8 @@
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>weighted_lags</strong>: (<em>bool</em>) lags weighted by number of points; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags) have larger weights and semivariogram is modeled to better fit to those lags,</p></li>
-<li><p><strong>store_models</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then experimental, regularized and theoretical models are stored in lists after each iteration. It is important for a debugging process.</p></li>
+<li><strong>weighted_lags</strong>: (<em>bool</em>) lags weighted by number of points; if <code class="docutils literal notranslate"><span class="pre">True</span></code> then during semivariogram fitting error of each model is weighted by number of points for each lag. In practice it means that more reliable data (lags) have larger weights and semivariogram is modeled to better fit to those lags,</li>
+<li><strong>store_models</strong>: (<em>bool</em>) if <code class="docutils literal notranslate"><span class="pre">True</span></code> then experimental, regularized and theoretical models are stored in lists after each iteration. It is important for a debugging process.</li>
 </ul>
 <p>OUTPUT:</p>
 <p>None, class is updating its internal parameters. Usually after fitting you should perform regularization with <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method.</p>
@@ -230,10 +230,10 @@
 <p>Function transofrms fitted data and performs semivariogram regularization iterative procedure.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>max_iters</strong>: (<em>int</em>) maximum number of iterations,</p></li>
-<li><p><strong>min_deviation_ratio</strong>: (<em>float</em>) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each algorithm is stopped,</p></li>
-<li><p><strong>min_diff_decrease</strong>: (<em>float</em>) minimum absolute difference between new and optimal deviation divided by optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded <code class="docutils literal notranslate"><span class="pre">n</span></code> times (controled by the <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat_reps</span></code> param) then algorithm is stopped,</p></li>
-<li><p><strong>min_diff_decrease_reps</strong>: (<em>int</em>) number of iterations when algorithm is stopped if condition <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat</span></code> is fulfilled.</p></li>
+<li><strong>max_iters</strong>: (<em>int</em>) maximum number of iterations,</li>
+<li><strong>min_deviation_ratio</strong>: (<em>float</em>) minimum ratio between deviation and initial deviation (D(i) / D(0)) below each algorithm is stopped,</li>
+<li><strong>min_diff_decrease</strong>: (<em>float</em>) minimum absolute difference between new and optimal deviation divided by optimal deviation: ABS(D(i) - D(opt)) / D(opt). If it is recorded <code class="docutils literal notranslate"><span class="pre">n</span></code> times (controled by the <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat_reps</span></code> param) then algorithm is stopped,</li>
+<li><strong>min_diff_decrease_reps</strong>: (<em>int</em>) number of iterations when algorithm is stopped if condition <code class="docutils literal notranslate"><span class="pre">min_diff_d_stat</span></code> is fulfilled.</li>
 </ul>
 <p>OUTPUT:</p>
 <p>None, class is updating its internal parameters. Usually after transforming you should export your theoretical model with <code class="docutils literal notranslate"><span class="pre">export_regularized_model()</span></code> method.</p>
@@ -248,7 +248,7 @@
 <p>Function exports final regularized model parameters into specified csv file.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>filename</strong>: (<em>str</em>) filename for model parameters (nugget, sill, range, model type).</p></li>
+<li><strong>filename</strong>: (<em>str</em>) filename for model parameters (nugget, sill, range, model type).</li>
 </ul>
 <p>OUTPUT:</p>
 <p>Method saves regularized model into csv file.</p>
@@ -291,13 +291,13 @@
 <p><span class="math notranslate nohighlight">\(u\)</span> - mean of observations at a given lag distance.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
+<li><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</li>
+<li><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</li>
+<li><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) covariance - array of pair of lag and covariance values where:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) covariance - array of pair of lag and covariance values where:</li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">covariance[0]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lags</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">covariance[1]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lag's</span> <span class="pre">values</span></code>;</p>
@@ -323,13 +323,13 @@
 <p><span class="math notranslate nohighlight">\((x_{i} + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_{i}\)</span>,</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
+<li><strong>data</strong>: (<em>numpy array</em>) coordinates and their values,</li>
+<li><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</li>
+<li><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) semivariance - array of pair of lag and semivariance values where:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) semivariance - array of pair of lag and semivariance values where:</li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[0]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lags</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[1]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lag's</span> <span class="pre">values</span></code>;</p>
@@ -347,12 +347,12 @@
 <p>Function calculates weighted semivariance following <em>Monestiez et al.</em>:</p>
 <blockquote>
 <div><ol class="upperalpha simple">
-<li><p>Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Comparison of model based geostatistical methods in ecology: application to fin whale spatial distribution in northwestern Mediterranean Sea. In Geostatistics Banff 2004 Volume 2. Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands, Kluwer Academic Publishers; 2005:777-786.</p></li>
+<li>Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Comparison of model based geostatistical methods in ecology: application to fin whale spatial distribution in northwestern Mediterranean Sea. In Geostatistics Banff 2004 Volume 2. Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands, Kluwer Academic Publishers; 2005:777-786.</li>
 </ol>
 </div></blockquote>
 <blockquote>
 <div><ol class="upperalpha simple" start="2">
-<li><p>Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Geostatistical modelling of spatial distribution of Balenoptera physalus in the northwestern Mediterranean Sea from sparse count data and heterogeneous observation efforts. Ecological Modelling 2006 in press.</p></li>
+<li>Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C: Geostatistical modelling of spatial distribution of Balenoptera physalus in the northwestern Mediterranean Sea from sparse count data and heterogeneous observation efforts. Ecological Modelling 2006 in press.</li>
 </ol>
 </div></blockquote>
 <p>Equation for calculation is:</p>
@@ -369,18 +369,18 @@
 <p><span class="math notranslate nohighlight">\(m'\)</span> - population weighted mean of rates.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</p></li>
+<li><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
+<li><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</li>
+<li><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) semivariance - array of pair of lag and semivariance values where:</p></li>
+<li>(<code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>) semivariance - array of pair of lag and semivariance values where:</li>
 </ul>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[0]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lags</span></code>;</p>
 <p><code class="docutils literal notranslate"><span class="pre">semivariance[1]</span> <span class="pre">=</span> <span class="pre">array</span> <span class="pre">of</span> <span class="pre">lag's</span> <span class="pre">values</span></code>;</p>
@@ -402,24 +402,24 @@
 \[semivariance = \frac{1}{2N} * \sum_{i=1}^{N} [z(x_{i} + h) - z(x_{i})]^{2}\]</div>
 <p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observation pairs,</p></li>
-<li><p><span class="math notranslate nohighlight">\(h\)</span> - distance (lag),</p></li>
-<li><p><span class="math notranslate nohighlight">\(z(x_{i})\)</span> - value at location <span class="math notranslate nohighlight">\(z_{i}\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\((x_{i} + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_{i}\)</span>.</p></li>
+<li><span class="math notranslate nohighlight">\(N\)</span> - number of observation pairs,</li>
+<li><span class="math notranslate nohighlight">\(h\)</span> - distance (lag),</li>
+<li><span class="math notranslate nohighlight">\(z(x_{i})\)</span> - value at location <span class="math notranslate nohighlight">\(z_{i}\)</span>,</li>
+<li><span class="math notranslate nohighlight">\((x_{i} + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_{i}\)</span>.</li>
 </ul>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<a href="#id3"><span class="problematic" id="id4">*</span></a>numpy array8) coordinates and their values,</p></li>
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis,</p></li>
-<li><p><strong>direction</strong>: (<em>float</em>) direction of semivariogram, values from 0 to 360 degrees:</p></li>
+<li><strong>data</strong>: (<a href="#system-message-1"><span class="problematic" id="problematic-1">*</span></a>numpy array8) coordinates and their values,</li>
+<li><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</li>
+<li><strong>max_range</strong>: (<em>float</em>) maximum range of analysis,</li>
+<li><strong>direction</strong>: (<em>float</em>) direction of semivariogram, values from 0 to 360 degrees:</li>
 </ul>
 <p>– 0 or 180: is NS direction,</p>
 <p>– 90 or 270 is EW direction,</p>
 <p>– 30 or 210 is NE-SW direction,</p>
 <p>– 120 or 300 is NW-SE direction,</p>
 <ul class="simple">
-<li><p>tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</p></li>
+<li>tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis of a size:</li>
 </ul>
 <div class="math notranslate nohighlight">
 \[(tolerance * step\_size)\]</div>
@@ -429,7 +429,7 @@
 <p>and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional semivariogram.</p>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>numpy array</em>) <strong>semivariance</strong> - array of pair of lag and semivariance values where:</p></li>
+<li>(<em>numpy array</em>) <strong>semivariance</strong> - array of pair of lag and semivariance values where:</li>
 </ul>
 <p>– semivariance[0] = array of lags;</p>
 <p>– semivariance[1] = array of lag’s values;</p>
@@ -447,18 +447,18 @@
 <p>Function calculates variogram point cloud of a given set of points for a given set of distances. Variogram is calculated as a squared difference of each point against other point within range specified by step_size parameter.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</p></li>
+<li><strong>data</strong>: (<em>numpy array</em>) coordinates and their values and weights:</li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">coordinate</span> <span class="n">x</span><span class="p">,</span> <span class="n">coordinate</span> <span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">weight</span><span class="p">]</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li><p><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</p></li>
-<li><p><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</p></li>
+<li><strong>step_size</strong>: (<em>float</em>) distance between lags within each points are included in the calculations,</li>
+<li><strong>max_range</strong>: (<em>float</em>) maximum range of analysis.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>OrderedDict</em>) variogram_cloud - dict with pairs {lag: list of squared differences}.</p></li>
+<li>(<em>OrderedDict</em>) variogram_cloud - dict with pairs {lag: list of squared differences}.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -472,8 +472,8 @@
 <p>Function shows boxplots of variogram lags. It is especially useful when you want to check outliers in your dataset.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>variogram_cloud</strong>: (<em>OrderedDict</em>) lags and halved squared differences between points,</p></li>
-<li><p><strong>figsize</strong>: (<em>tuple</em>), default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><strong>variogram_cloud</strong>: (<em>OrderedDict</em>) lags and halved squared differences between points,</li>
+<li><strong>figsize</strong>: (<em>tuple</em>), default is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -486,11 +486,11 @@
 <p>Function calculates experimental semivariogram from point cloud variogram.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>pt_cloud_dict</strong>: (<em>OrderedDict</em>) {lag: [values]}.</p></li>
+<li><strong>pt_cloud_dict</strong>: (<em>OrderedDict</em>) {lag: [values]}.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>numpy array</em>) [lag, semivariance, number of points].</p></li>
+<li>(<em>numpy array</em>) [lag, semivariance, number of points].</li>
 </ul>
 <hr class="docutils" />
 </div>
@@ -503,35 +503,35 @@
 </div>
 <p>Function removes outliers from the variogram point cloud for each lag and returns dict without extreme values from the top, bottom or both parts of the variogram point cloud for a given lag. Algorithm uses quartiles to remove outliers:</p>
 <ol class="arabic">
-<li><div class="math notranslate nohighlight">
+<li><div class="first math notranslate nohighlight">
 \[BottomOutlier &lt; Q1 - w*(Q3-Q1)\]</div>
 </li>
-<li><div class="math notranslate nohighlight">
+<li><div class="first math notranslate nohighlight">
 \[Q3 + w*(Q3-Q1) &lt; TopOutlier\]</div>
 </li>
 </ol>
 <p>where:</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(Q1\)</span> - 1st quantile (25%)</p></li>
-<li><p><span class="math notranslate nohighlight">\(Q3\)</span> - 3rd quantile (75%)</p></li>
-<li><p><span class="math notranslate nohighlight">\(w\)</span> - weight associated with the algorithm, larger weight =&gt; less number of values treated as an outlier.</p></li>
+<li><span class="math notranslate nohighlight">\(Q1\)</span> - 1st quantile (25%)</li>
+<li><span class="math notranslate nohighlight">\(Q3\)</span> - 3rd quantile (75%)</li>
+<li><span class="math notranslate nohighlight">\(w\)</span> - weight associated with the algorithm, larger weight =&gt; less number of values treated as an outlier.</li>
 </ul>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>data_dict</strong>: (<em>OrderedDict</em>) with {lag: list of values},</p></li>
-<li><p><strong>exclude_part</strong>: (<em>str</em>) default = <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, available <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, <code class="docutils literal notranslate"><span class="pre">'both'</span></code> or <code class="docutils literal notranslate"><span class="pre">'bottom'</span></code> - part of the variogram point cloud which is excluded from a given lag.</p></li>
-<li><p><strong>weight</strong>: (<em>float</em>) default=1.5, affects number of values which are removed.</p></li>
+<li><strong>data_dict</strong>: (<em>OrderedDict</em>) with {lag: list of values},</li>
+<li><strong>exclude_part</strong>: (<em>str</em>) default = <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, available <code class="docutils literal notranslate"><span class="pre">'top'</span></code>, <code class="docutils literal notranslate"><span class="pre">'both'</span></code> or <code class="docutils literal notranslate"><span class="pre">'bottom'</span></code> - part of the variogram point cloud which is excluded from a given lag.</li>
+<li><strong>weight</strong>: (<em>float</em>) default=1.5, affects number of values which are removed.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(<em>OrderedDict</em>) {lag: [variances between point pairs within a given lag]}</p></li>
+<li>(<em>OrderedDict</em>) {lag: [variances between point pairs within a given lag]}</li>
 </ul>
 <hr class="docutils" />
 </div>
 <div class="section" id="TheoreticalSemivariogram">
 <h2><code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code><a class="headerlink" href="#TheoreticalSemivariogram" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id5">
-<h3>Class initialization<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="class-initialization-2">
+<h3>Class initialization<a class="headerlink" href="#class-initialization-2" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pyinterpolate</span><span class="o">.</span><span class="n">semivariance</span><span class="o">.</span><span class="n">TheoreticalSemivariogram</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">points_array</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -552,20 +552,20 @@
 </div>
 <p>INITIALIZATION PARAMS:</p>
 <ul class="simple">
-<li><p><strong>points_array</strong>: (<em>numpy array</em>) analysed points where the last column is representing values, typically x, y, value,</p></li>
-<li><p><strong>empirical_semivariance</strong>: (<em>numpy array</em>) semivariance where first row of array represents lags and the second row represents semivariance’s values for given lag.</p></li>
+<li><strong>points_array</strong>: (<em>numpy array</em>) analysed points where the last column is representing values, typically x, y, value,</li>
+<li><strong>empirical_semivariance</strong>: (<em>numpy array</em>) semivariance where first row of array represents lags and the second row represents semivariance’s values for given lag.</li>
 </ul>
 </div>
-<div class="section" id="id6">
-<h3>Class public methods:<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="class-public-methods-2">
+<h3>Class public methods:<a class="headerlink" href="#class-public-methods-2" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><strong>fit_semivariance</strong>: Method fits experimental points into chosen semivariance model type,</p></li>
-<li><p><strong>find_optimal_model</strong>: Method fits experimental points into all available models and choose one with the lowest error,</p></li>
-<li><p><strong>export_model</strong>: Function exports semivariance model to the csv file,</p></li>
-<li><p><strong>import_model</strong>: Function imports semivariance model and updates it’s parameters,</p></li>
-<li><p><strong>export_semivariance</strong>: Method exports theoretical semivariance and experimental semivariance to csv file,</p></li>
-<li><p><strong>show_experimental_semivariogram</strong>: Function shows experimental semivariogram of a given model,</p></li>
-<li><p><strong>show_semivariogram</strong>: Function shows experimental and theoretical semivariogram in one plot.</p></li>
+<li><strong>fit_semivariance</strong>: Method fits experimental points into chosen semivariance model type,</li>
+<li><strong>find_optimal_model</strong>: Method fits experimental points into all available models and choose one with the lowest error,</li>
+<li><strong>export_model</strong>: Function exports semivariance model to the csv file,</li>
+<li><strong>import_model</strong>: Function imports semivariance model and updates it’s parameters,</li>
+<li><strong>export_semivariance</strong>: Method exports theoretical semivariance and experimental semivariance to csv file,</li>
+<li><strong>show_experimental_semivariogram</strong>: Function shows experimental semivariogram of a given model,</li>
+<li><strong>show_semivariogram</strong>: Function shows experimental and theoretical semivariogram in one plot.</li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -580,12 +580,12 @@
 <p>Method fits experimental points into chosen semivariance model type.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>model_type</strong>: (<em>str</em>) ‘exponential’, ‘gaussian’, ‘linear’, ‘spherical’,</p></li>
-<li><p><strong>number_of_ranges</strong>: (<em>int</em>) deafult = 16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p></li>
+<li><strong>model_type</strong>: (<em>str</em>) ‘exponential’, ‘gaussian’, ‘linear’, ‘spherical’,</li>
+<li><strong>number_of_ranges</strong>: (<em>int</em>) deafult = 16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</li>
 </ul>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>(model_type, model parameters)</p></li>
+<li>(model_type, model parameters)</li>
 </ul>
 </div>
 <hr class="docutils" />
@@ -600,7 +600,7 @@
 <p>Method fits experimental points into all available models and choose one with the lowest error.</p>
 <p>INPUT:</p>
 <ul class="simple">
-<li><p><strong>weighted</strong>: (<em>bool</em>) default=<code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each lag is weighted by:</p></li>
+<li><strong>weighted</strong>: (<em>bool</em>) default=<code class="docutils literal notranslate"><span class="pre">False</span></code>. If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each lag is weighted by:</li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\frac{\sqrt{N(h)}}{\gamma_{experimental}(h)}\]</div>
@@ -609,7 +609,7 @@
 <p><span class="math notranslate nohighlight">\(\gamma_{experimental}(h)\)</span> - value of experimental semivariogram for <span class="math notranslate nohighlight">\(h\)</span>. - <strong>number_of_ranges</strong>: (<em>int</em>) default=16. Used to create an array of equidistant ranges between minimal range of empirical semivariance and maximum range of empirical semivariance.</p>
 <p>OUTPUT:</p>
 <ul class="simple">
-<li><p>model_type</p></li>
+<li>model_type</li>
 </ul>
 <p>Function updates class parameters with model properties.</p>
 </div>
@@ -695,15 +695,17 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
+  <h3>Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script type="text/javascript">$('#searchbox').show(0);</script>
 
 
 
@@ -720,7 +722,7 @@
       &copy;2021, Szymon Moliński.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.3.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
