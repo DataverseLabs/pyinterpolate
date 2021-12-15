@@ -10,6 +10,10 @@ tags:
 authors:
   - name: Szymon Moliński
     orcid: 0000-0003-3525-2104
+    affiliation: 1
+affiliations:
+  - name: Independent Researcher
+    index: 1
 date: 20 October 2020
 bibliography: paper.bib
 ---
