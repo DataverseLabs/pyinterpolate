@@ -26,7 +26,7 @@ def build_variogram_point_cloud(data, step_size, max_range):
     """
 
     distances = calc_point_to_point_distance(data[:, :-1])
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
     variogram_cloud = OrderedDict()
 
     # Calculate squared differences
@@ -115,7 +115,7 @@ def calculate_semivariance(data, step_size, max_range):
 
     semivariance = []
 
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
 
     # Calculate semivariances
     for h in lags:
@@ -186,7 +186,7 @@ def calculate_weighted_semivariance(data, step_size, max_range):
     # Prepare semivariance arrays
     semivariance = []
 
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
 
     # Calculate semivariances
     for idx, h in enumerate(lags):

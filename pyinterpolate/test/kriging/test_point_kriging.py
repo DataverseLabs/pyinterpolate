@@ -59,8 +59,11 @@ class TestKriging(unittest.TestCase):
         kok = self._test_ordinary_kriging(k_model.kriging_model, unknown_pos)
         ksk = self._test_simple_kriging(k_model.kriging_model, unknown_pos, sk_mean)
 
-        self.assertEqual(kok, 7, "Kriging value should be 7")
-        self.assertEqual(ksk, kok, "Simple and Ordinary Kriging values should be the same")
+        EXPECTED_VALUE_ORDINARY = 7
+        EXPECTED_VALUE_SIMPLE = 6
+
+        self.assertEqual(kok, EXPECTED_VALUE_ORDINARY, f"Ordinary Kriging value should be {EXPECTED_VALUE_ORDINARY}")
+        self.assertEqual(ksk, EXPECTED_VALUE_SIMPLE, f"Simple Kriging value should be {EXPECTED_VALUE_SIMPLE}")
 
 
 if __name__ == '__main__':

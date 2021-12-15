@@ -6,6 +6,15 @@ PyInterpolate is designed as the Python library for geostatistics. It's role is 
 Changes by date
 ===============
 
+2021-12-XX
+----------
+
+**version 0.2.5**
+
+* neighbors selection (lags counting) has been changed,
+* `TheoreticalSemivariogram` searches for optimal sill in a grid search algorithm,
+* corrected error in `Krige` class; now calculation of error variance is correct.
+
 2021-12-11
 ----------
 

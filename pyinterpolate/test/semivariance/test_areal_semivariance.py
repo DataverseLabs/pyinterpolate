@@ -40,8 +40,10 @@ class TestArealSemivariance(unittest.TestCase):
         areal_semivariance = ArealSemivariance(areal_data_prepared, step_size, max_range, points_in_area)
         output = areal_semivariance.regularize_semivariogram()
         test_d = output[:, 1].astype(np.int)
-        correct_output = np.array([0, 0, 140, 148])
-        self.assertTrue((test_d == correct_output).all(), "Correct output should be [0, 0, 140, 148]")
+        correct_output = np.array([0, 63, 46])
+
+        tescase = np.equal(test_d, correct_output).all()
+        self.assertTrue(tescase, f"Correct output is {correct_output} but calculated output is {test_d}")
 
 
 if __name__ == '__main__':

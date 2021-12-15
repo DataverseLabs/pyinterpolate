@@ -23,10 +23,10 @@ class TestCalculateCovariance(unittest.TestCase):
 
         gamma = calculate_covariance(dataset, step_size, maximum_range)
 
-        output_int = [427, 184, 0,  0,  0,  0,  0,  0]
+        output_int = [490, 324, 41,  0,  0,  0,  0,  0]
 
         check_equality = (gamma[:, 1].astype(np.int) == np.array(output_int)).all()
-        self.assertTrue(check_equality, "Int if output array is not equal to [427, 184, 0,  0,  0,  0,  0,  0]")
+        self.assertTrue(check_equality, "Int if output array is not equal to [490, 324, 41,  0,  0,  0,  0,  0]")
 
 
 if __name__ == '__main__':

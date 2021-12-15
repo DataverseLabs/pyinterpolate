@@ -117,10 +117,10 @@ class TestCalculateSemivariance(unittest.TestCase):
 
         gamma = calculate_semivariance(dataset, step_size, maximum_range)
 
-        output_int = [51, 207, 416, 552, 579, 544, 517, 589, 619, 540]
+        output_int = [116, 316, 496, 578, 566, 522, 543, 618, 591]
 
         self.assertTrue((gamma[:, 1].astype(np.int) == np.array(output_int)).all(),
-                        "Integer part of output should be equal to [51, 207, 416, 552, 579, 544, 517, 589, 619, 540]")
+                        "Integer part of output should be equal to [116, 316, 496, 578, 566, 522, 543, 618, 591]")
 
 
     def test_calculate_weighted_semivariance(self):
@@ -143,7 +143,7 @@ class TestCalculateSemivariance(unittest.TestCase):
 
         gamma_w = calculate_weighted_semivariance(dataset_weights, step_size, maximum_range)
 
-        output_int = [46, 188, 384, 512, 534, 486, 438, 488, 493, 414]
+        output_int = [105, 290, 459, 536, 515, 456, 449, 503, 469]
 
         self.assertTrue((gamma_w[:, 1].astype(np.int) == np.array(output_int)).all(),
                         f"Integer part of output should be equal to {output_int}\n"
@@ -198,7 +198,6 @@ class TestCalculateSemivariance(unittest.TestCase):
         ])
 
         EXPECTED_OUTPUT = np.array([
-			[0, 0, 13],
 			[1, 4.625, 24],
 			[2, 5.227, 22],
 			[3, 6.0, 20],

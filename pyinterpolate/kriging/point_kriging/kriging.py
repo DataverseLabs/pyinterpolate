@@ -39,6 +39,9 @@ class Krige:
             [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]]
         """
 
+        if known_points.dtype != float:
+            known_points = known_points.astype(float)
+
         self.dataset = known_points
 
         # Test semivariogram model
@@ -112,11 +115,7 @@ class Krige:
 
                 raise ValueError(text_error)
 
-        sigmasq = (w.T * k)[0]
-        if sigmasq < 0:
-            sigma = 0
-        else:
-            sigma = np.sqrt(sigmasq)
+        sigma = np.matmul(w.T, k)
         return zhat, sigma, w[-1], w
 
     def simple_kriging(self,
@@ -182,9 +181,5 @@ class Krige:
 
                 raise ValueError(text_error)
 
-        sigmasq = (w.T * k)[0]
-        if sigmasq < 0:
-            sigma = 0
-        else:
-            sigma = np.sqrt(sigmasq)
+        sigma = np.matmul(w.T, k)
         return zhat, sigma, global_mean, w

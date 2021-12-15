@@ -56,7 +56,10 @@ class TestCalculateSemivarianceWithinBlocks(unittest.TestCase):
         inblock_semivariance = np.array(inblock_semivariance)
 
         data_point = inblock_semivariance[inblock_semivariance[:, 0] == 1][0]
-        self.assertEqual(int(data_point[1]), 104, "First data point's integer part should be equal to 104")
+        EXPECTED_OUTPUT = 24
+        output = int(data_point[1])
+        self.assertEqual(output, EXPECTED_OUTPUT, f"First data point's integer part should be equal to "
+                                                              f"{EXPECTED_OUTPUT} but it is {output}")
 
 
 if __name__ == '__main__':

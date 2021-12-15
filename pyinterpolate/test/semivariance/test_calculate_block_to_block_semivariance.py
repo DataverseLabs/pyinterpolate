@@ -46,7 +46,9 @@ class TestCalculateBlock2BlockSemivariance(unittest.TestCase):
                                                        areal_semivariance.theoretical_semivariance_model)
         test_block = np.array(blocks[0][0])
         mean_semivariance = int(np.mean(test_block[:, 1]))
-        self.assertEqual(mean_semivariance, 212, "Average semivariance should be 212 (decimal part)")
+        EXPECTED_OUTPUT = 60
+        self.assertEqual(mean_semivariance, EXPECTED_OUTPUT, f"Average semivariance should be {EXPECTED_OUTPUT} "
+                                                             f"but it is {mean_semivariance}")
 
 
 if __name__ == '__main__':
