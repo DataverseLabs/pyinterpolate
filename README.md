@@ -1,8 +1,8 @@
-![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Build Status](https://travis-ci.com/szymon-datalions/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
+![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/DataverseLabs/pyinterpolate) ![Build Status](https://travis-ci.com/DataverseLabs/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate)
 
 ![Pyinterpolate](https://github.com/szymon-datalions/pyinterpolate/blob/main/logo.png?raw=true  "Pyinterpolate logo")
 
-**version 0.2.3** - *Jezero Crater*
+**version 0.2.5** - *Huygens Crater*
 ---------------------------------------
 
 PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
