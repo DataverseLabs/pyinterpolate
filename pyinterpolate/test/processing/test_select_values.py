@@ -17,7 +17,7 @@ EXPECTED_NW_SE = ([[1, 4, 9]],
                   [[1, 2, 7], [3, 4, 19]],
                   [[2, 2, 12], [4, 4, 24]],
                   [[3, 2, 17]])  # FROM column number 3, lag 1
-EXPECTED_NE_SW = ([2, 2, 12], [1, 2, 7], [0, 2, 2])  # FROM [1, 1], [1, 2], lag 2
+EXPECTED_NE_SW = ([[0, 4, 4], [4, 0, 20]])  # FROM [2, 2], lag 2
 
 def contains(arr1: np.array, arr2: np.array) -> bool:
     for r in arr2:
@@ -32,11 +32,10 @@ class TestDirectionalSelection(unittest.TestCase):
         pt = np.array([3, 2])
         selection = select_points_within_ellipse(ellipse_center=pt,
                                                  other_points=INPUT_ARRAY[:, :-1],
-                                                 lag=1,
-                                                 previous_lag=0,
+                                                 lag=0,
                                                  step_size=1,
                                                  theta=0,
-                                                 minor_axis_size=0.1)
+                                                 minor_axis_size=0.01)
         output = INPUT_ARRAY[selection]
         for row in output:
             err_msg = f'Points in direction N-S from point [3, 2] were not detected! Wrong point is: {row[:-1]}'
@@ -48,7 +47,6 @@ class TestDirectionalSelection(unittest.TestCase):
         selection = select_points_within_ellipse(ellipse_center=pt,
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=2,
-                                                 previous_lag=1,
                                                  step_size=1,
                                                  theta=90,
                                                  minor_axis_size=0.1)
@@ -68,10 +66,9 @@ class TestDirectionalSelection(unittest.TestCase):
             selection = select_points_within_ellipse(ellipse_center=pt,
                                                      other_points=INPUT_ARRAY[:, :-1],
                                                      lag=1,
-                                                     previous_lag=0,
                                                      step_size=1,
                                                      theta=-45,
-                                                     minor_axis_size=0.2)
+                                                     minor_axis_size=0.01)
             output = INPUT_ARRAY[selection]
             selections.append(output)
         for idx, unit_output in enumerate(selections):
@@ -84,23 +81,21 @@ class TestDirectionalSelection(unittest.TestCase):
 
     def test_NE_SW_selection(self):
         points = [
-            [1, 1], [1, 2]
+            [2, 2]
         ]
         selections = []
         for pt in points:
             selection = select_points_within_ellipse(ellipse_center=pt,
                                                      other_points=INPUT_ARRAY[:, :-1],
                                                      lag=2,
-                                                     previous_lag=1,
                                                      step_size=1,
                                                      theta=45,
-                                                     minor_axis_size=0.1)
+                                                     minor_axis_size=0.01)
             output = INPUT_ARRAY[selection]
             selections.append(output)
         for idx, unit_output in enumerate(selections):
-            expected = EXPECTED_NW_SE[idx]
-            for jdx, out in enumerate(unit_output):
-                is_point_equal = np.equal(out, expected[jdx]).all()
-                err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
-                          f' Wrong point is: {out[:-1]}'
-                self.assertTrue(is_point_equal, msg=err_msg)
+            expected = EXPECTED_NE_SW
+            is_point_equal = np.equal(unit_output, expected).all()
+            err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
+                      f' Wrong point is: {unit_output[:-1]}'
+            self.assertTrue(is_point_equal, msg=err_msg)

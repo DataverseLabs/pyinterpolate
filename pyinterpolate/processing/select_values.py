@@ -33,8 +33,13 @@ def _select_distances(distances_array, weighting_matrix, lag, step_size):
     for pt in distances_array:
         norm_distance = np.matmul(weighting_matrix, pt)
         result = np.sqrt(norm_distance.dot(norm_distance))
-        if (result <= lag + 0.5 * step_size) and (result != 0):
-            mask.append(True)
+        upper_limit = lag + step_size
+        lower_limit = lag
+        if result > 0:
+            if (result <= upper_limit) and (result > lower_limit):
+                mask.append(True)
+            else:
+                mask.append(False)
         else:
             mask.append(False)
 
@@ -45,7 +50,6 @@ def _select_distances(distances_array, weighting_matrix, lag, step_size):
 def select_points_within_ellipse(ellipse_center: np.array,
                                  other_points: np.array,
                                  lag: float,
-                                 previous_lag: float,
                                  step_size: float,
                                  theta: float,
                                  minor_axis_size: float):
@@ -86,9 +90,35 @@ def select_points_within_ellipse(ellipse_center: np.array,
 
     # Distances
     current_ellipse = _select_distances(vector_distance, w_matrix, lag, step_size)
-    previous_ellipse = _select_distances(vector_distance, w_matrix, previous_lag, step_size)
 
-    boolean_mask = np.logical_and(current_ellipse,
-                                  np.logical_not(np.logical_and(current_ellipse, previous_ellipse)))
+    return current_ellipse
 
-    return boolean_mask
+
+def select_values_in_range(data, lag, step_size):
+    """
+    Function selects set of values which are greater than lag - step size and smaller or equal than lag.
+
+    INPUT:
+        :param data: (numpy array) distances,
+        :param lag: (float) lag within areas are included,
+        :param step_size: (float) step between lags.
+
+    OUTPUT:
+        :return: numpy array mask with distances within specified radius.
+    """
+
+    # Check if numpy array is given
+    if not isinstance(data, np.ndarray):
+        data = np.array(data)
+
+    greater_than = lag - step_size
+    less_equal_than = lag + step_size
+
+    # Check conditions
+    condition_matrix = np.logical_and(
+            np.greater(data, greater_than),
+            np.less_equal(data, less_equal_than))
+
+    # Find positions
+    position_matrix = np.where(condition_matrix)
+    return position_matrix

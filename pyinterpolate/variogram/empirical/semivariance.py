@@ -1,9 +1,9 @@
 import numpy as np
 from shapely.geometry import Point
+from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 
 
 # TEMPORARY FUNCTIONS
-
 def temp_calc_point_to_point_distance(points_a, points_b=None):
     """temporary function for pt to pt distance estimation"""
     from scipy.spatial.distance import cdist
@@ -13,159 +13,8 @@ def temp_calc_point_to_point_distance(points_a, points_b=None):
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
 
-def temp_check_points_within_ellipse(origin_point: np.array, other_points: np.array,
-                                     lag: float, step_size: float, angle: float, tolerance: float):
-    """
-    Function checks which points from other points are within point range described as an ellipse with
-        center in point, semi-major axis of length step_size and semi-minor axis of length
-        step_size * tolerance and angle of semi-major axis calculated as angle of direction from
-        NS axis (0 radian angle) of a dataset.
-
-    INPUT:
-
-    :param origin_point: (numpy array) single point coordinates,
-    :param other_points: (numpy array),
-    :param lag: (float) lag number (value),
-    :param step_size: (float) step size between lags,
-    :param angle: (float) direction of semivariogram, in radians. Angle is rotated by PI/2 rad.
-    :param tolerance: (float) value in range 0-1 normalized to [0 : 0.5] to select tolerance of semivariogram. If
-        tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate
-        system and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance
-        is estimated from elliptical area with major axis with the same direction as the line for 0 tolerance
-        and minor axis of a size:
-
-        (tolerance * step_size)
-
-        and major axis (pointed in NS direction):
-
-        ((1 - tolerance) * step_size)
-
-        and baseline point at a center of ellipse. Tolerance == 1 creates omnidirectional semivariogram.
-
-    ROTATED ELLIPSE EQUATION:
-
-        part_a = (cos(A) * (x - h) + sin(A) * (y - k))**2
-        part_b = (sin(A) * (x - h) + cos(A) * (y - k))**2
-
-        and if:
-
-            part_a / r_x**2 + part_b / r_y**2 <= 1
-
-        then point is inside ellipse.
-
-    OUTPUT:
-
-    :return: (numpy array) boolean array of points within ellipse with center in origin point
-    """
-
-    lower_lag_limit = lag - 0.5 * step_size
-    upper_lag_limit = lag + 0.5 * step_size
-
-    rx_base = (upper_lag_limit * tolerance) ** 2
-    ry_base = (upper_lag_limit * (1 - tolerance)) ** 2
-
-    if lower_lag_limit >= 0:
-        rx_prev = (lower_lag_limit * tolerance) ** 2
-        ry_prev = (lower_lag_limit * (1 - tolerance)) ** 2
-    else:
-        rx_prev = 0
-        ry_prev = 0
-
-    bool_mask = []
-
-    for point in other_points:
-
-        try:
-            is_origin = (point == origin_point).all()
-        except AttributeError:
-            is_origin = point == origin_point
-
-        if is_origin:
-            bool_mask.append(False)
-        else:
-            if ry_base == 0:
-                part_a_base = 0
-                part_a_previous = 0
-            else:
-                part_a_x = (point[1] - origin_point[1]) * np.cos(angle)
-                part_a_y = (point[0] - origin_point[0]) * np.sin(angle)
-
-                # Points within base
-                part_a_base = (part_a_x + part_a_y) ** 2 / ry_base
-
-                # Points within previous ellipse
-                if ry_prev == 0:
-                    part_a_previous = 0
-                else:
-                    part_a_previous = (part_a_x + part_a_y) ** 2 / ry_prev
-
-            if rx_base == 0:
-                part_b_base = 0
-                part_b_previous = 0
-            else:
-                part_b_x = (point[1] - origin_point[1]) * np.sin(angle)
-                part_b_y = (point[0] - origin_point[0]) * np.cos(angle)
-
-                # Points within base
-                part_b_base = (part_b_x + part_b_y) ** 2 / rx_base
-
-                # Points within previous ellipse
-                if rx_prev == 0:
-                    part_b_previous = 0
-                else:
-                    part_b_previous = (part_b_x + part_b_y) ** 2 / rx_prev
-
-            # Points within base
-            test_value_base = part_a_base + part_b_base
-
-            # Points within previous ellipse
-            test_value_prev = part_a_previous + part_b_previous
-
-            # If point is within big ellipse and it is not in the previous ellipse
-            if test_value_base <= 1:
-                if test_value_prev > 1:
-                    bool_mask.append(True)
-                else:
-                    bool_mask.append(False)
-            else:
-                bool_mask.append(False)
-
-    return np.array(bool_mask)
-
-
-def temp_select_values_in_range(data, lag, step_size):
-    """
-    Function selects set of values which are greater than (lag - step size / 2) and smaller or equal than
-        (lag + step size / 2).
-    INPUT:
-    :param data: (numpy array) distances,
-    :param lag: (float) lag within areas are included,
-    :param step_size: (float) step between lags.
-    OUTPUT:
-    :return: numpy array mask with distances within specified radius.
-    """
-
-    step_size = step_size / 2
-
-    # Check if numpy array is given
-    if not isinstance(data, np.ndarray):
-        data = np.array(data)
-
-    greater_than = lag - step_size
-    less_equal_than = lag + step_size
-
-    # Check conditions
-    condition_matrix = np.logical_and(
-            np.greater(data, greater_than),
-            np.less_equal(data, less_equal_than))
-
-    # Find positions
-    position_matrix = np.where(condition_matrix)
-    return position_matrix
-
 
 # TESTS AND EXCEPTIONS
-
 def _validate_direction(direction):
     """
     Check if direction is within limits 0-360
@@ -221,7 +70,6 @@ def _validate_weights(points, weights):
 
 
 # Semivariogram calculations
-
 def _omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: float, weights) -> np.array:
     """
     Function calculates semivariance from given points.
@@ -242,7 +90,7 @@ def _omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: 
 
     for h in lags:
         # TODO: temp func
-        distances_in_range = temp_select_values_in_range(distances, h, step_size)
+        distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
             semivariances_and_lags.append([h, 0, 0])
         else:
@@ -311,20 +159,21 @@ def _directional_semivariogram(points: np.array,
     :returns: (np.array)
     """
 
-    c_angle = np.pi / 180
-    angle = c_angle * (direction - 90)
     semivariances_and_lags = list()
 
     for h in lags:
         semivars_per_lag = []
         for point in points:
-            mask = temp_check_points_within_ellipse(point,
-                                                    points,
-                                                    h,
-                                                    step_size,
-                                                    angle,
-                                                    tolerance)
+            mask = select_points_within_ellipse(
+                point,
+                points,
+                h,
+                step_size,
+                direction,
+                tolerance
+            )
             points_in_range = points[mask, -1]
+            
             # Calculate semivariances
             if len(points_in_range) > 0:
                 semivars = (points_in_range - point[-1]) ** 2
@@ -374,9 +223,9 @@ def calculate_semivariance(points: np.array,
 
     ## Semivariance
 
-    It is a measure of dissimilarity between points over distance. In geography, we assume that the close observations
-        tends to be similar. Distant observations are less and less similar up to the distance where influence of one
-        point value into the other is negligible.
+    It is a measure of dissimilarity between points over distance. We assume that the close observations tends to be
+        similar (see Tobler's Law). Distant observations are less and less similar up to the distance where influence
+        of one point value into the other is negligible.
 
     We calculate the empirical semivariance as:
 
@@ -388,7 +237,6 @@ def calculate_semivariance(points: np.array,
         n(h): number of point pairs within a specific lag,
         z(x_i): point a (value of observation at point a),
         z(x_i + h): point b in distance h from point a (value of observation at point b).
-
 
     As an output we get array of lags h, semivariances g and number of points within each lag n.
 
@@ -489,7 +337,7 @@ def calculate_semivariance(points: np.array,
 
     # START:CALCULATIONS
 
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
 
     if tolerance == 1:
         semivariance = _omnidirectional_semivariogram(points, lags, step_size, weights)
