@@ -33,8 +33,8 @@ def _select_distances(distances_array, weighting_matrix, lag, step_size):
     for pt in distances_array:
         norm_distance = np.matmul(weighting_matrix, pt)
         result = np.sqrt(norm_distance.dot(norm_distance))
-        upper_limit = lag + step_size
-        lower_limit = lag
+        upper_limit = lag
+        lower_limit = lag - step_size
         if result > 0:
             if (result <= upper_limit) and (result > lower_limit):
                 mask.append(True)
@@ -112,7 +112,7 @@ def select_values_in_range(data, lag, step_size):
         data = np.array(data)
 
     greater_than = lag - step_size
-    less_equal_than = lag + step_size
+    less_equal_than = lag
 
     # Check conditions
     condition_matrix = np.logical_and(

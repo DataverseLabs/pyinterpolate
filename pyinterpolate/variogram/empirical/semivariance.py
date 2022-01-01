@@ -135,7 +135,7 @@ def _directional_semivariogram(points: np.array,
     Function calculates directional semivariogram from a given set of points.
 
     :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value] or [Point(), value]
+            [pt x, pt y, value]
     :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
     :param step_size: (float) distance between lags within each points are included in the calculations,
     :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
@@ -164,9 +164,10 @@ def _directional_semivariogram(points: np.array,
     for h in lags:
         semivars_per_lag = []
         for point in points:
+            coordinates = point[:-1]
             mask = select_points_within_ellipse(
-                point,
-                points,
+                coordinates,
+                points[:, :-1],
                 h,
                 step_size,
                 direction,
@@ -178,11 +179,12 @@ def _directional_semivariogram(points: np.array,
             if len(points_in_range) > 0:
                 semivars = (points_in_range - point[-1]) ** 2
                 semivars_per_lag.extend(semivars)
-            else:
-                semivars_per_lag.append(0)
 
-        average_semivariance = np.mean(semivars_per_lag) / 2
-        semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
+        if len(semivars_per_lag) == 0:
+            semivariances_and_lags.append([h, 0, 0])
+        else:
+            average_semivariance = np.mean(semivars_per_lag) / 2
+            semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
 
     output_semivariances = np.array(semivariances_and_lags)
     return output_semivariances

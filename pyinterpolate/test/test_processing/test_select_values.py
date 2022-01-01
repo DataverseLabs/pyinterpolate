@@ -87,7 +87,7 @@ class TestDirectionalSelection(unittest.TestCase):
         for pt in points:
             selection = select_points_within_ellipse(ellipse_center=pt,
                                                      other_points=INPUT_ARRAY[:, :-1],
-                                                     lag=2,
+                                                     lag=3,
                                                      step_size=1,
                                                      theta=45,
                                                      minor_axis_size=0.01)
