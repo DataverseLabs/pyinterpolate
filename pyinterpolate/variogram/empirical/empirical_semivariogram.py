@@ -1,0 +1,2 @@
+class EmpiricalSemivariogram:
+    pass

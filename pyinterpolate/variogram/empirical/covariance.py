@@ -69,7 +69,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
             lag_mean_squared = lag_mean**2
             cov = (vals_0 * vals_h) - lag_mean_squared
             length = len(cov)
-            cov_value = np.mean(cov)
+            cov_value = np.sum(cov) / length
 
             # Append calculated data into semivariance array
             if return_lag_squared_means:
