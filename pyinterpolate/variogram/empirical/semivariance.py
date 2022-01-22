@@ -1,6 +1,8 @@
 import numpy as np
 from shapely.geometry import Point
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
+from pyinterpolate.variogram.utils.validate import validate_direction, validate_points, validate_tolerance, \
+    validate_weights
 
 
 # TEMPORARY FUNCTIONS
@@ -14,63 +16,8 @@ def temp_calc_point_to_point_distance(points_a, points_b=None):
     return distances
 
 
-# TESTS AND EXCEPTIONS
-def _validate_direction(direction):
-    """
-    Check if direction is within limits 0-360
-    """
-    if direction < 0 or direction > 360:
-        msg = f'Provided direction must be between 0 to 360 degrees:\n' \
-              f'0-180-360: N-S\n' \
-              f'90-270: E-W'
-        raise ValueError(msg)
-
-
-def _validate_points(points):
-    """
-    Check dimensions of provided arrays and data types.
-    """
-
-    dims = points.shape
-    msg = 'Provided array must have 3 columns: [x, y, value] or 2 columns: [shapely Point(), value]'
-    if dims[1] != 3:
-        if dims[1] == 2:
-            # Check if the first value is a Point type
-            if not isinstance(points[0][0], Point):
-                raise AttributeError(msg)
-        else:
-            raise AttributeError(msg)
-
-
-def _validate_tolerance(tolerance):
-    """
-    Check if tolerance is between zero and one.
-    """
-    if tolerance < 0 or tolerance > 1:
-        msg = 'Provided tolerance should be between 0 (straight line) and 1 (circle).'
-        raise ValueError(msg)
-
-
-def _validate_weights(points, weights):
-    """
-    Check if weights array length is the same as points array.
-    """
-    len_p = len(points)
-    len_w = len(weights)
-    _t = len_p == len_w
-    # Check weights and points
-    if not _t:
-        msg = f'Weights array length must be the same as length of points array but it has {len_w} records and' \
-              f' points array has {len_p} records'
-        raise IndexError(msg)
-    # Check if there is any 0 weight -> error
-    if any([x == 0 for x in weights]):
-        msg = 'One or more of weights in dataset is set to 0, this may cause errors in the distance'
-        raise ValueError(msg)
-
-
 # Semivariogram calculations
-def _omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: float, weights) -> np.array:
+def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: float, weights) -> np.array:
     """
     Function calculates semivariance from given points.
 
@@ -209,12 +156,12 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
     return output_semivariances
 
 
-def _directional_semivariogram(points: np.array,
-                               lags: np.array,
-                               step_size: float,
-                               weights,
-                               direction,
-                               tolerance) -> np.array:
+def directional_semivariogram(points: np.array,
+                              lags: np.array,
+                              step_size: float,
+                              weights,
+                              direction,
+                              tolerance) -> np.array:
     """
     Function calculates directional semivariogram from a given set of points.
 
@@ -409,12 +356,11 @@ def calculate_semivariance(points: np.array,
     """
 
     # START:VALIDATION
-    # Data validity tests
     if weights is not None:
-        _validate_weights(points, weights)
+        validate_weights(points, weights)
 
     # Test size of points array and input data types
-    _validate_points(points)
+    validate_points(points)
 
     # Transform Point into floats
     is_point_type = isinstance(points[0][0], Point)
@@ -422,21 +368,18 @@ def calculate_semivariance(points: np.array,
         points = [[x[0].x, x[0].y, x[1]] for x in points]
 
     # Test directions if provided
-    _validate_direction(direction)
+    validate_direction(direction)
 
     # Test provided tolerance parameter
-    _validate_tolerance(tolerance)
+    validate_tolerance(tolerance)
     # END:VALIDATION
 
     # START:CALCULATIONS
-
     lags = np.arange(step_size, max_range, step_size)
 
     if tolerance == 1:
-        semivariance = _omnidirectional_semivariogram(points, lags, step_size, weights)
+        semivariance = omnidirectional_semivariogram(points, lags, step_size, weights)
     else:
-        semivariance = _directional_semivariogram(points, lags, step_size, weights, direction, tolerance)
-
+        semivariance = directional_semivariogram(points, lags, step_size, weights, direction, tolerance)
     # END:CALCULATIONS
-
     return semivariance
