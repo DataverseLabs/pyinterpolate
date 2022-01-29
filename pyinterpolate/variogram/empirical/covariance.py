@@ -15,23 +15,19 @@ def temp_calc_point_to_point_distance(points_a, points_b=None):
     return distances
 
 
-def _form_empty_output(lag_no, return_lag_squared_means=False) -> np.array:
+def _form_empty_output(lag_no) -> np.array:
     """
     Function returns empty output for the case where no neighbors are selected.
 
-    :param lag_no: (int)
-    :param return_lag_squared_means: (bool) default=False, if True it adds additional zero value to the output array.\
+    :param lag_no: (int).
 
     :return: (numpy array)
     """
-    if return_lag_squared_means:
-        return [lag_no, 0, 0, 0]
     return [lag_no, 0, 0]
 
 
 # Covariogram calculations
-def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: float,
-                                return_lag_squared_means=False) -> np.array:
+def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: float) -> np.array:
     """
     Function calculates covariance from given points.
 
@@ -47,9 +43,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     :param points: (numpy array) coordinates and their values:
         [pt x, pt y, value] or [Point(), value],
     :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param return_lag_squared_means: (bool) default=False, returns lag variances - it is important to compare results to
-        the semivariance output.
+    :param step_size: (float) distance between lags within each points are included in the calculations.
 
     :return: (numpy array) [lag, covariance, number of points within lag]
     """
@@ -60,7 +54,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            output = _form_empty_output(h, return_lag_squared_means)
+            output = _form_empty_output(h)
             covariances_and_lags.append(output)
         else:
             vals_0 = points[distances_in_range[0], 2]
@@ -72,10 +66,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
             cov_value = np.sum(cov) / length
 
             # Append calculated data into semivariance array
-            if return_lag_squared_means:
-                covariances_and_lags.append([h, cov_value, length, lag_mean_squared])
-            else:
-                covariances_and_lags.append([h, cov_value, length])
+            covariances_and_lags.append([h, cov_value, length])
 
     output_covariances = np.vstack(covariances_and_lags)
 
@@ -86,8 +77,7 @@ def directional_covariogram(points: np.array,
                             lags: np.array,
                             step_size: float,
                             direction,
-                            tolerance,
-                            return_lag_squared_means=False) -> np.array:
+                            tolerance) -> np.array:
     """
     Function calculates directional semivariogram from a given set of points.
 
@@ -109,9 +99,7 @@ def directional_covariogram(points: np.array,
         and major axis (pointed in NS direction):
         ((1 - tolerance) * step_size)
         and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram,
-    :param return_lag_squared_means: (bool) default=False, returns lag variances - it is important to compare results to
-        the semivariance output.
+        semivariogram.
 
     :returns: (np.array)
     """
@@ -144,16 +132,13 @@ def directional_covariogram(points: np.array,
                 covars_per_lag.extend(covars)
 
         if len(covars_per_lag) == 0:
-            output = _form_empty_output(h, return_lag_squared_means)
+            output = _form_empty_output(h)
             covariances_and_lags.append(output)
         else:
             lag_mean = np.mean(values_per_lag)
             lag_mean_squared = lag_mean * lag_mean
             average_covariance = np.mean(np.array(covars_per_lag) - lag_mean_squared)
-            if return_lag_squared_means:
-                covariances_and_lags.append([h, average_covariance, len(covars_per_lag), lag_mean_squared])
-            else:
-                covariances_and_lags.append([h, average_covariance, len(covars_per_lag)])
+            covariances_and_lags.append([h, average_covariance, len(covars_per_lag)])
 
     output_covariances = np.array(covariances_and_lags)
 
@@ -165,8 +150,7 @@ def calculate_covariance(points: np.array,
                          max_range: float,
                          direction=0,
                          tolerance=1,
-                         get_c0=True,
-                         return_lag_squared_means=False) -> np.array:
+                         get_c0=True) -> tuple:
     """
     Function calculates covariance from given points. In a default mode it calculates an omnidirectional
         covariance. User can calculate directional covariogram with a specified tolerance.
@@ -190,9 +174,9 @@ def calculate_covariance(points: np.array,
         ((1 - tolerance) * step_size)
         and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
         semivariogram,
-    :param get_c0: (bool), default=True. Starts covariance array from the c(0) value which is a variance of a dataset,
-    :param return_lag_squared_means: (bool) default=False, returns lag variances - it is important to compare results to
-        the semivariance output.
+    :param get_c0: (bool), default=True. Starts covariance array from the c(0) value which is a variance of a dataset.
+
+    :return: (tuple) (np.array, float or None)
 
     ## Covariance
 
@@ -272,17 +256,14 @@ def calculate_covariance(points: np.array,
     lags = np.arange(step_size, max_range, step_size)
 
     if tolerance == 1:
-        covariance = omnidirectional_covariogram(points, lags, step_size, return_lag_squared_means)
+        covariance = omnidirectional_covariogram(points, lags, step_size)
     else:
-        covariance = directional_covariogram(points, lags, step_size, direction, tolerance, return_lag_squared_means)
+        covariance = directional_covariogram(points, lags, step_size, direction, tolerance)
     # END:CALCULATIONS
+
+    cvar = None
 
     if get_c0:
         cvar = np.var(points[:, -1])
-        if return_lag_squared_means:
-            cvar_arr = np.array([[0, cvar, 0, 0]])
-        else:
-            cvar_arr = np.array([[0, cvar, 0]])
-        covariance = np.append(cvar_arr, covariance, axis=0)
 
-    return covariance
+    return covariance, cvar
