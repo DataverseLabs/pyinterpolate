@@ -103,7 +103,7 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
         and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
         semivariogram.
 
-    :returns: (np.array)
+    :return: (numpy array) [lag, semivariance, number of points within lag]
     """
 
     semivariances_and_lags = list()
@@ -187,7 +187,7 @@ def directional_semivariogram(points: np.array,
         and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
         semivariogram.
 
-    :returns: (np.array)
+    :return: (numpy array) [lag, semivariance, number of points within lag]
     """
 
     if weights is None:
@@ -352,7 +352,7 @@ def calculate_semivariance(points: np.array,
 
     # TODO
 
-
+    :return: (numpy array) [lag, semivariance, number of points within lag]
     """
 
     # START:VALIDATION
