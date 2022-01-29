@@ -265,7 +265,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             max_range=BOUNDED_RANGE
         )
 
-        diff = bounded_variogram.variance - bounded_variogram.experimental_covariances
+        diff = bounded_variogram.variance_covariances_diff
         are_close = np.allclose(bounded_variogram.experimental_semivariances,
                                 diff, rtol=2)
 
