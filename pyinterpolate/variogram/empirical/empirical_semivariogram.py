@@ -55,13 +55,28 @@ class EmpiricalSemivariogram:
     input_array : numpy array
                   The array with coordinates and observed values.
 
-    experimental_semivariance : numpy array or None, optional, default=None
-                                The array of semivariance per lag in the form:
-                                (lag, semivariance, number of points within lag).
+    experimental_semivariance_array : numpy array or None, optional, default=None
+                                      The array of semivariance per lag in the form:
+                                      (lag, semivariance, number of points within lag).
 
-    experimental_covariance : numpy array or None, optional, default=None
-                              The array of covariance per lag in the form:
-                              (lag, covariance, number of points within lag).
+    experimental_covariance_array : numpy array or None, optional, default=None
+                                    The array of covariance per lag in the form:
+                                    (lag, covariance, number of points within lag).
+
+    experimental_semivariances : numpy array or None, optional, default=None
+                                 The array of semivariances.
+
+    experimental_covariances : numpy array or None, optional, default=None
+                               The array of covariances, optional, default=None
+
+    variance_covariances_diff : numpy array or None, optional, default=None
+                                The array of differences c(0) - c(h).
+
+    lags : numpy array or None, default=None
+           The array of lags (upper bound for each lag).
+
+    points_per_lag : int or None, default=None
+                     A number of points in each lag-bin.
 
     variance : float or None, optional, default=None
                The variance of a dataset, if data is second-order stationary then we are able to retrieve a semivariance
@@ -79,6 +94,7 @@ class EmpiricalSemivariogram:
 
                 Important! Have in mind that it works only if process is second-order stationary (variance is the same
                 for each distance bin) and if the semivariogram has the upper bound.
+                See also: variance_covariances_diff attribute.
 
     step : float
         Derived from the step_size parameter.
@@ -146,8 +162,13 @@ class EmpiricalSemivariogram:
             input_array = np.array(input_array)
 
         self.input_array = input_array
-        self.experimental_semivariance = None
-        self.experimental_covariance = None
+        self.experimental_semivariance_array = None
+        self.experimental_covariance_array = None
+        self.lags = None
+        self.experimental_semivariances = None
+        self.experimental_covariances = None
+        self.variance_covariances_diff = None
+        self.points_per_lag = None
         self.variance = None
 
         self.step = step_size
@@ -156,14 +177,26 @@ class EmpiricalSemivariogram:
         self.direct = direction
         self.tol = tolerance
 
-        if is_semivariance:
-            self._calculate_semivariance()
-        if is_covariance:
-            self._calculate_covariance(is_variance)
-
         self.__c_sem = is_semivariance
         self.__c_cov = is_covariance
         self.__c_var = is_variance
+
+        if is_semivariance:
+            self._calculate_semivariance()
+            self.lags = self.experimental_semivariance_array[:, 0]
+            self.points_per_lag = self.experimental_semivariance_array[:, 2]
+            self.experimental_semivariances = self.experimental_semivariance_array[:, 1]
+
+        if is_covariance:
+            self._calculate_covariance(is_variance)
+            self.experimental_covariances = self.experimental_covariance_array[:, 1]
+
+            if not is_semivariance:
+                self.lags = self.experimental_covariance_array[:, 0]
+                self.points_per_lag = self.experimental_covariance_array[:, 2]
+
+            if is_variance:
+                self.variance_covariances_diff = self.variance - self.experimental_covariances
 
     def _calculate_semivariance(self):
         """
@@ -171,7 +204,7 @@ class EmpiricalSemivariogram:
 
         See: calculate_semivariance function.
         """
-        self.experimental_semivariance = calculate_semivariance(
+        self.experimental_semivariance_array = calculate_semivariance(
             points=self.input_array.copy(),
             step_size=self.step,
             max_range=self.mx_rng,
@@ -186,7 +219,7 @@ class EmpiricalSemivariogram:
 
         See : calculate_covariance function.
         """
-        self.experimental_covariance, self.variance = calculate_covariance(
+        self.experimental_covariance_array, self.variance = calculate_covariance(
             points=self.input_array.copy(),
             step_size=self.step,
             max_range=self.mx_rng,
@@ -204,17 +237,17 @@ class EmpiricalSemivariogram:
     def __str_populate_both(self):
         rows = []
         if self.__c_var:
-            for idx, row in enumerate(self.experimental_semivariance):
-                lag = row[0]
-                smv = row[1]
-                cov = self.experimental_covariance[idx][1]
-                var_cov_diff = self.variance - cov
+            for idx, row in enumerate(self.experimental_semivariances):
+                lag = self.lags[idx]
+                smv = row
+                cov = self.experimental_covariances[idx]
+                var_cov_diff = self.variance_covariances_diff[idx]
                 rows.append([lag, smv, cov, var_cov_diff])
         else:
-            for idx, row in enumerate(self.experimental_semivariance):
-                lag = row[0]
-                smv = row[1]
-                cov = self.experimental_covariance[idx][1]
+            for idx, row in enumerate(self.experimental_semivariances):
+                lag = self.lags[idx]
+                smv = row
+                cov = self.experimental_covariances[idx]
                 rows.append([lag, smv, cov, nan])
         return rows
 
@@ -222,20 +255,20 @@ class EmpiricalSemivariogram:
         rows = []
         if self.__c_cov:
             if self.__c_var:
-                for row in self.experimental_covariance:
-                    lag = row[0]
-                    cov = row[1]
-                    var_cov_diff = self.variance - cov
+                for idx, row in enumerate(self.experimental_covariances):
+                    lag = self.lags[idx]
+                    cov = row
+                    var_cov_diff = self.variance_covariances_diff[idx]
                     rows.append([lag, nan, cov, var_cov_diff])
             else:
-                for row in self.experimental_covariance:
-                    lag = row[0]
-                    cov = row[1]
+                for idx, row in enumerate(self.experimental_covariances):
+                    lag = self.lags[idx]
+                    cov = row
                     rows.append([lag, nan, cov, nan])
         else:
-            for row in self.experimental_semivariance:
-                lag = row[0]
-                sem = row[1]
+            for idx, row in enumerate(self.experimental_semivariances):
+                lag = self.lags[idx]
+                sem = row
                 rows.append([lag, sem, nan, nan])
         return rows
 
