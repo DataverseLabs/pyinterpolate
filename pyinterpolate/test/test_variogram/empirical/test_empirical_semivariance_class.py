@@ -108,8 +108,8 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             max_range=MAX_RANGE
         )
 
-        mean_semivar = np.mean(variogram_stats.experimental_semivariance[:, 1])
-        mean_covar = np.mean(variogram_stats.experimental_covariance[:, 1])
+        mean_semivar = np.mean(variogram_stats.experimental_semivariances)
+        mean_covar = np.mean(variogram_stats.experimental_covariances)
         var_value = variogram_stats.variance
 
         expected_value = 0
@@ -166,7 +166,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             max_range=MAX_RANGE
         )
 
-        are_equal = np.array_equal(variogram_stats.experimental_semivariance, variogram)
+        are_equal = np.array_equal(variogram_stats.experimental_semivariance_array, variogram)
         self.assertTrue(are_equal, msg='Semivariogram calculated with the EmpiricalSemivariogram class and '
                                        'the calculate_semivariance() function must be the same!')
 
@@ -200,7 +200,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             get_c0=True
         )
 
-        are_equal = np.array_equal(variogram_stats.experimental_covariance, covariogram)
+        are_equal = np.array_equal(variogram_stats.experimental_covariance_array, covariogram)
         self.assertTrue(are_equal, msg='Covariogram calculated with the EmpiricalSemivariogram class and '
                                        'the calculate_covariance() function must be the same!')
 
@@ -239,11 +239,11 @@ class TestEmpiricalSemivariance(unittest.TestCase):
         )
 
         are_equal_semivariances = np.array_equal(
-            exp_variogram.experimental_semivariance, variogram_stats.experimental_semivariance
+            exp_variogram.experimental_semivariances, variogram_stats.experimental_semivariances
         )
 
         are_equal_covariances = np.array_equal(
-            exp_variogram.experimental_covariance, variogram_stats.experimental_covariance
+            exp_variogram.experimental_covariances, variogram_stats.experimental_covariances
         )
 
         are_equal_variances = np.equal(exp_variogram.variance, variogram_stats.variance)
@@ -265,8 +265,8 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             max_range=BOUNDED_RANGE
         )
 
-        diff = bounded_variogram.variance - bounded_variogram.experimental_covariance[:, 1]
-        are_close = np.allclose(bounded_variogram.experimental_semivariance[:, 1],
+        diff = bounded_variogram.variance - bounded_variogram.experimental_covariances
+        are_close = np.allclose(bounded_variogram.experimental_semivariances,
                                 diff, rtol=2)
 
         self.assertTrue(are_close, msg='Expeced difference c(0) - c(h) should be close to the '
