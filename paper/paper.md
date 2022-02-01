@@ -79,7 +79,7 @@ The repository [here](https://github.com/SimonMolinsky/pyinterpolate-paper/) pre
 
 1. [*IPython* notebook with code](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper-examples/example-use-case/joss%20paper%20example.ipynb).
 2. [Document with detailed description of methodology](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/example_use_case.md).
-3. [Document that describes the areal data transformation process](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/areal_data_transformation.md). This procedure follows [@Goovaerts2007].
+3. [Document that describes the areal data transformation process](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/areal_data_transformation.md). This procedure follows [@Goovaerts:2007].
 
 ## Modules
 
