@@ -20,20 +20,20 @@ bibliography: paper.bib
 
 # Summary
 
-We use spatial Interpolation techniques to interpolate values at unknown locations or filter and smooth existing data sources. Those methods work for point observations and areal aggregates. The basic idea behind this algorithms is that every point in space can be described as a function of its neighbors’ values weighted by the relative distance from the analyzed point. It is known as Tobler's First Law of Geography, which states: *everything is related to everything else, but near things are more related than distant things* [@Tobler:1970].
+We use spatial interpolation techniques to interpolate values at unknown locations or filter and smooth existing data sources. Those methods work for point observations and areal aggregates. The basic idea behind this algorithm is that every point in space can be described as a function of its neighbors’ values weighted by the relative distance from the analyzed point. It is known as Tobler's First Law of Geography, which states: *everything is related to everything else, but near things are more related than distant things* [@Tobler:1970].
 
-Kriging technique designed for mining applications exploits this statement formally, and nowadays, it has gained a lot of attention outside the initial area of interest. Today *Kriging* is a set of methods applied to problems from multiple fields: environmental science, hydrogeology, natural resources monitoring, remote sensing, epidemiology and ecology, and even computer science [@Chilès:2018]. Commonly Kriging is used to interpolate values from point measurements or regular block units. However, the real-world datasets are often different. Especially challenging are measurements of processes over areas, for example, administrative units in every country [@Goovaerts:2007].
+The Kriging technique, designed for mining applications, exploits this statement formally, and nowadays, it has gained a lot of attention outside the initial area of interest. Today Kriging is a set of methods applied to problems from multiple fields: environmental science, hydrogeology, natural resources monitoring, remote sensing, epidemiology and ecology, and even computer science [@Chilès:2018]. Commonly, Kriging is used to interpolate values from point measurements or regular block units. However, the real-world datasets are often different. Especially challenging are measurements of processes over areas, for example, administrative units in every country [@Goovaerts:2007].
 
-**Pyinterpolate** transforms areas of irregular shapes and sizes with Area-to-Area and Area-to-Point Poisson Kriging functions. Those algorithms make **Pyinterpolate** beneficial for social, environmental, and public health scientists because they usually deal with areal counts instead of point measurements. Moreover, the package offers basic point Kriging and Inverse Distance Weighting techniques. Those algorithms are used in every field of research where geostatistical (distance) analysis gives meaningful results. **Pyinterpolate** merges basic Kriging techniques with more sophisticated Area-to-Area and Area-to-Point Poisson Kriging methods.
+Pyinterpolate transforms areas of irregular shapes and sizes with Area-to-Area and Area-to-Point Poisson Kriging functions. Those algorithms make Pyinterpolate beneficial for social, environmental, and public health scientists because they usually deal with areal counts instead of point measurements. Moreover, the package offers basic point Kriging and Inverse Distance Weighting techniques. Those algorithms are used in every field of research where geostatistical (distance) analysis gives meaningful results. Pyinterpolate merges basic Kriging techniques with more sophisticated Area-to-Area and Area-to-Point Poisson Kriging methods.
 
 
 # Statement of need
 
-**Pyinterpolate** is a Python package for spatial interpolation. It performs predictions from point measurements and areal aggregates of different sizes and shapes. Pyinterpolate automates Kriging interpolation and semivariogram regularization. The package helps with data exploration, data preprocessing and semivariogram analysis. A researcher with geostatistical background has control over the basic modeling parameters: semivariogram models, nugget, sill and range, the number of neighbors included in the interpolation and Kriging type. The thing that makes Pyinterpolate different from other spatial interpolation packages is the ability to perform Kriging on areas of different shapes and sizes. This type of operation is essential in social, medical and ecological sciences [@Goovaerts:2007; @Goovaerts:2008; @Kerry:2013].
+Pyinterpolate is a Python package for spatial interpolation. It performs predictions from point measurements and areal aggregates of different sizes and shapes. Pyinterpolate automates Kriging interpolation, and semivariogram regularization. The package helps with data exploration, data preprocessing, and semivariogram analysis. A researcher with geostatistical background has control over the basic modeling parameters: semivariogram models, nugget, sill, range, and the number of neighbors included in the interpolation and Kriging type. The thing that makes Pyinterpolate different from other spatial interpolation packages is the ability to perform Kriging on areas of different shapes and sizes. This type of operation is essential in social, medical and ecological sciences [@Goovaerts:2007; @Goovaerts:2008; @Kerry:2013].
 
 ## Importance of areal (block) Kriging
 
-There are many applications where researchers need to model areal data with irregular shapes and sizes. A good example is the public health sector, where data is aggregated over administrative units for patient protection and policy-making purposes. Unfortunately, this transformation makes data analysis and modeling more complex for researchers. There are techniques to deal with this kind of data. We can work directly with areal aggregates or transform the irregular areal’s centroids support into the point-support model. The latter is not a way to *get back* original observations but rather a form of lossy semivariogram transformation to the point-support scale. There are reasons to do it:
+There are many applications where researchers need to model areal data with irregular shapes and sizes. A good example is the public health sector, where data is aggregated over administrative units for patient protection and policy-making purposes. Unfortunately, this transformation makes data analysis and modeling more complex for researchers. There are different techniques to deal with this kind of data. We can work directly with areal aggregates or transform the irregular areal’s centroids support into the point-support model. The latter is not a way to *get back* original observations but rather a form of lossy semivariogram transformation to the point-support scale. There are reasons to do it:
 
 1. The presence of extremely unreliable rates that typically occur for sparsely populated areas and rare events. Consider the examples with the number of leukemia cases (numerator) per population size in a given county (denominator) or the number of whales observed in a given area (numerator) per time of observation (denominator). In those cases, extreme values may be related to the fact that variance for a given area of interest is high (low number of samples) and not to the fact that the chance of the event is exceptionally high for this region.
 2. The visual bias. People tend to give more importance to large blocks in contrary to the small regions.
@@ -45,11 +45,11 @@ Alternatively to the Area-to-Area and Area-to-Point Poisson Kriging, researchers
 
 # Methodology
 
-The chapter presents the general calculations methodology within a package. The document [here](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/example_use_case.md) presents an example use-case. Then document [here](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/comparison_to_gstat.md) is a comparison of the Ordinary Kriging algorithms between **gstat** package and **Pyinterpolate**.
+The section presents the general calculations methodology within the package. The document [here](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/example_use_case.md) presents an example use-case. Then the document [here](https://github.com/SimonMolinsky/pyinterpolate-paper/blob/main/paper/supplementary%20materials/comparison_to_gstat.md) is a comparison of the Ordinary Kriging algorithms between *gstat* package and Pyinterpolate.
 
 ## Spatial Interpolation with Kriging
 
-Kriging is an estimation method that gives the best unbiased linear estimates of point values or block averages [@Armstrong:1998]. It is the core method of the **Pyinterpolate** package.
+Kriging is an estimation method that gives the best unbiased linear estimates of point values or block averages [@Armstrong:1998]. It is the core method of the Pyinterpolate package.
 The primary technique is the Ordinary Kriging. The value at unknown location $\hat{z}$ is estimated as a linear combination of $K$ neighbors with the observed values $z$ and weights $\lambda$ assigned to those neighbors (1).
 
 (1) $$\hat{z} = \sum_{i=1}^{K}\lambda_{i}z_{i}$$
@@ -71,7 +71,7 @@ where $z_{x_{i}}$ is a value at location $x_{i}$ and $z_{(x_{i} + h)}$ is a valu
 
 Pyinterpolate package implements linear, spherical, exponential and Gaussian models [@Armstrong:1998]. They are fitted to the experimental curve. The model with the lowest error is used in (3) to estimate the $\gamma$ parameter.
 
-**Simple Kriging** is another method for point interpolation in **Pyinterpolate**. We may use Simple Kriging when we know the process mean. This situation rarely occurs in real-world scenarios. It is observed in places where sampling density is high [@Armstrong:1998]. Simple Kriging system is defined as:
+**Simple Kriging** is another method for point interpolation in Pyinterpolate. We may use Simple Kriging when we know the process mean. This situation rarely occurs in real-world scenarios. It is observed in places where sampling density is high [@Armstrong:1998]. Simple Kriging system is defined as:
 
 (5) $$\hat{z} = R + \mu$$
 
@@ -89,23 +89,23 @@ Users may use three types of Poisson Kriging procedure: Centroid-based Poisson K
 
 ## Interpolation methods within Pyinterpolate
 
-**Pyinterpolate** performs six types of spatial interpolation at the time of paper writing; five types of Kriging and inverse distance weighting:
+Pyinterpolate performs six types of spatial interpolation; five types of Kriging and inverse distance weighting:
 
-1. **Ordinary Kriging**. It is a universal method for point interpolation.
+1. **Ordinary Kriging** is a universal method for point interpolation.
 2. **Simple Kriging** is a special case of point interpolation when the mean of the spatial process is known and does not vary spatially in a systematic way.
-3. **Centroid-based Poisson Kriging**. is used for areal interpolation and filtering and assumes that each block can collapse into its centroid. It is much faster than Area-to-Area and Area-to-Point Poisson Kriging but introduces bias related to the area's transformation into single points.
+3. **Centroid-based Poisson Kriging** is used for areal interpolation and filtering and assumes that each block can collapse into its centroid. It is much faster than Area-to-Area and Area-to-Point Poisson Kriging but introduces bias related to the area's transformation into single points.
 4. **Area-to-Area Poisson Kriging** is used for areal interpolation and filtering. If point support varies over an area, it will appear in the analysis. The model can catch this variation.
-5. **Area-to-Point Poisson Kriging**. Areal support is deconvoluted in regards to the point support. Output map has a spatial resolution of the point support while coherence of analysis is preserved (sum of rates is equal to the output of Area-to-Area Poisson Kriging). It is used for point-support interpolation and data filtering.
+5. **Area-to-Point Poisson Kriging** where areal support is deconvoluted in regards to the point support. Output map has a spatial resolution of the point support while coherence of analysis is preserved (sum of rates is equal to the output of Area-to-Area Poisson Kriging). It is used for point-support interpolation and data filtering.
 
 The user starts with semivariogram exploration and modeling. Next, the researcher or algorithm chooses the theoretical model which best fits the semivariogram. If this is done automatically, the algorithm tests linear, spherical and exponential models with different sills and ranges and the constant nugget against the experimental curve. Model performance is measured by the root mean squared error between the tested theoretical model with the experimental semivariance. 
 
 Areal data interpolation, especially transformation from areal aggregates into point support maps, requires deconvolution of areal semivariogram. Users may do it without prior knowledge of kriging and spatial statistics because this operation is automated. The iterative procedure of the semivariogram regularization is described in detail in [@Goovaerts:2007]. The last step of analysis is a solution of linear Kriging equations.
 
-Predicted data is stored as a DataFrame known from the **Pandas** and **GeoPandas** Python packages. Pyinterpolate allows the user to transform the point data into a regular Numpy array grid for further processing and analysis. Use case with the whole scenario is available in the [paper package repository](https://github.com/szymon-datalions/pyinterpolate-paper).
+Predicted data is stored as a DataFrame known from the Pandas* and *GeoPandas* Python packages. Pyinterpolate allows the user to transform the point data into a regular Numpy array grid for further processing and analysis. Use case with the whole scenario is available in the [paper package repository](https://github.com/szymon-datalions/pyinterpolate-paper).
 
 The package can automatically perform the semivariogram fitting step with a derivation of the theoretical semivariogram from the experimental curve. The semivariogram regularization is entirely automated (the process is described in [@Goovaerts:2007]). Users can change the derived theoretical model only by directly overwriting the derived semivariogram model parameters (nugget, sill, range, model type).
 
-The initial field of study (epidemiology) was the reason behind the automation of the tasks related to semivariogram modeling. **Pyinterpolate** was initially developed for the epidemiological research, where areal aggregates of infections were transformed to point support population-at-risk maps. It is assumed that users without a broad geostatistical background may use **Pyinterpolate** for spatial data modeling and analysis, especially users observing processes related to the human population.
+The initial field of study (epidemiology) was the reason behind the automation of the tasks related to semivariogram modeling. Pyinterpolate was initially developed for the epidemiological research, where areal aggregates of infections were transformed to point support population-at-risk maps. It is assumed that users without a broad geostatistical background may use Pyinterpolate for spatial data modeling and analysis, especially users observing processes related to the human population.
 
 The \autoref{fig1} is an example of a full-scale process of the semivariogram regularization and Area-to-Point Poisson Kriging.
 
@@ -119,7 +119,7 @@ To disaggregate areal data into the point support, one must know a regionalized 
 2. Compute the theoretically regularized model and compare it to the experimental curve.
 3. Adjust the parameters of the point-support model to bring them in line with the regularized model.
 
-**Pyinterpolate** follows an extended procedure. It leads to the automatic semivariogram regularization. [@Goovaerts2007] described this process in detail. The procedure has ten steps:
+Pyinterpolate follows an extended procedure. It leads to the automatic semivariogram regularization. [@Goovaerts2007] described this process in detail. The procedure has ten steps:
 
 1. Compute the experimental semivariogram of areal data and fit a theoretical model to it.
 2. The algorithm compares a few theoretical models and calculates the error between a modeled curve and the experimental semivariogram. The algorithm selects the theoretical model with the lowest error as the initial point-support model.
@@ -156,22 +156,17 @@ It is possible to show output as a **NumPy** array with **viz** module and compa
 
 # Comparison to Existing Software
 
-**Pyinterpolate** is a package from an ecosystem of spatial modeling and spatial interpolation packages written in Python. The main difference between **Pyinterpolate** and other packages is that it focuses on areal deconvolution methods and Poisson Kriging techniques useful for ecology, social science and public health studies. Potential users may choose other packages if they can perform their research with the point data interpolation.
+The main difference between Pyinterpolate and other packages is that it focuses on areal deconvolution methods and Poisson Kriging techniques useful for ecology, social science and public health studies. Potential users may choose other packages if they can perform their research with the point data interpolation.
 
-The most similar and significant package from the Python environment is **PyKrige** [@benjamin_murphy_2020_3991907]. PyKrige is designed especially for point kriging. PyKrige supports 2D and 3D ordinary and universal Kriging. User can incorporate own semivariogram models and use external functions (as an example from **scikit-learn** package [@scikit-learn]) to model drift in universal Kriging. The package is well designed, and it is actively maintained.
+The most similar and significant package from the Python environment is *PyKrige* [@benjamin_murphy_2020_3991907]. PyKrige is designed especially for point kriging. PyKrige supports 2D and 3D ordinary and universal Kriging. User can incorporate their own semivariogram models and use external functions (as an example from *scikit-learn* package [@scikit-learn]) to model drift in universal Kriging. The package is actively maintained.
 
-**GRASS GIS** [@GRASS_GIS_software] is well-established software for vector and raster data processing and analysis. GRASS contains multiple modules and a user may access them in numerous ways: GUI, command line, C API, Python APU, Jupyter Notebooks, web, QGIS or R. GRASS has two functions for spatial interpolation: `r.surf.idw` and `v.surf.idw`. Both use Inverse Distance Weighting technique, first interpolated raster files and second vectors (points).
+*GRASS GIS* [@GRASS_GIS_software] is a well-established software for vector and raster data processing and analysis. GRASS contains multiple modules and a user may access them in numerous ways: GUI, command line, C API, Python APU, Jupyter Notebooks, web, QGIS or R. GRASS has two functions for spatial interpolation: `r.surf.idw` and `v.surf.idw`. Both use Inverse Distance Weighting technique, first interpolated raster files and second vectors (points).
 
-**PySAL** is the next GIS / geospatial package that is used for spatial interpolation. However, **PySAL** is built upon the spatial graph analysis algorithms. Package’s (sub-module) for areal analysis is **tobler** [@eli_knaap_2020_4385980]. Moreover, the package has functions for multisource regression, where raster data is used as auxiliary information to enhance interpolation results.
+*PySAL* is the next GIS / geospatial package that is used for spatial interpolation. However, PySAL is built upon the spatial graph analysis algorithms. The areal analysis is performed with the sub-module *tobler* [@eli_knaap_2020_4385980]. Moreover, the package has functions for multisource regression, where raster data is used as auxiliary information to enhance interpolation results.
 
-**R programming language** offers **gstat** package for spatial interpolation and spatial modeling [@PEBESMA2004683]. The package is designed for variogram modeling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid Kriging and spatial interpolation package and has the largest number of methods to perform spatial modeling. The main difference between **gstat** and **Pyinterpolate** is the availability of area-to-point Poisson Kriging in the latter and the difference between baseline programming languages [@Goovaerts:2007]. The functional comparison to **gstat** is available in the [paper repository](https://github.com/SimonMolinsky/pyinterpolate-paper).
+The R *gstat* package is another option for spatial interpolation and spatial modeling [@PEBESMA2004683]. The package is designed for variogram modeling, simple, ordinary and universal point or block kriging (with drift), spatio-temporal kriging and sequential Gaussian (co)simulation. Gstat is a solid Kriging and spatial interpolation package and has the largest number of methods to perform spatial modeling. The main difference between gstat and Pyinterpolate is the availability of area-to-point Poisson Kriging in the latter and the difference between baseline programming languages [@Goovaerts:2007]. The functional comparison to gstat is available in the [paper repository](https://github.com/SimonMolinsky/pyinterpolate-paper).
 
-# Appendix\label{appendix}
 
-1. [**Paper repository** with additional materials](https://github.com/SimonMolinsky/pyinterpolate-paper)
-2. [**Package repository**](https://github.com/DataverseLabs/pyinterpolate)
-3. [**Automatic fit of semivariogram within the package**](https://pyinterpolate.readthedocs.io/en/latest/algorithms_documentation/Automatic%20Fitting%20of%20the%20Semivariogram%20Model.html)
-4. [**Outliers Detection within the package**](https://pyinterpolate.readthedocs.io/en/latest/algorithms_documentation/Outliers%20Removal.html)
 
 # References
 
