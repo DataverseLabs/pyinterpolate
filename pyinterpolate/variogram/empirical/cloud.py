@@ -18,7 +18,7 @@ def omnidirectional_point_cloud(input_array: np.array,
     Parameters
     ----------
     input_array : numpy array
-                  coordinates and their values: (pt x, pt y, value) or (Point(), value).
+                  coordinates and their values: (pt x, pt y, value).
 
     step_size : float
                 distance between lags within each points are included in the calculations.
@@ -58,6 +58,93 @@ def omnidirectional_point_cloud(input_array: np.array,
             sems = (input_array[distances_in_range[0], 2] - input_array[distances_in_range[1], 2]) ** 2
             # TODO: check if there is other operation needed - for example div by 2
             variogram_cloud[h] = sems
+
+    return variogram_cloud
+
+
+def directional_point_cloud(input_array: np.array,
+                            step_size: float,
+                            max_range: float,
+                            direction: float,
+                            tolerance: float) -> dict:
+    """
+    Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point
+        against other point within range specified by step_size parameter.
+
+    Parameters
+    ----------
+    input_array : numpy array
+                  coordinates and their values: (pt x, pt y, value).
+
+    step_size : float
+                distance between lags within each points are included in the calculations.
+
+    max_range : float
+                maximum range of analysis.
+
+    direction : float (in range [0, 360])
+                direction of semivariogram, values from 0 to 360 degrees:
+                * 0 or 180: is NS direction,
+                * 90 or 270 is EW direction,
+                * 45 or 225 is NE-SW direction,
+                * 135 or 315 is NW-SE direction.
+
+    tolerance : float (in range [0, 1])
+                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
+                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+                for 0 tolerance.
+                * The minor axis size is (tolerance * step_size)
+                * The major axis size is ((1 - tolerance) * step_size)
+                * The baseline point is at a center of the ellipse.
+                Tolerance == 1 creates an omnidirectional semivariogram.
+
+    Returns
+    -------
+    variogram_cloud : dict
+                      {Lag: array of semivariances within a given lag}
+
+    See Also
+    --------
+    TODO
+
+    Notes
+    -----
+    TODO
+
+    Examples
+    --------
+    TODO
+    """
+
+    variogram_cloud = OrderedDict()
+    lags = np.arange(step_size, max_range, step_size)
+
+    for h in lags:
+        variogram_vars_list = []
+        for point in input_array:
+            coordinates = point[:-1]
+
+            mask = select_points_within_ellipse(
+                coordinates,
+                input_array[:, :-1],
+                h,
+                step_size,
+                direction,
+                tolerance
+            )
+
+            points_in_range = input_array[mask, -1]
+
+            # Calculate semivariances
+            if len(points_in_range) > 0:
+                svars = (points_in_range - point[-1]) ** 2
+                variogram_vars_list.extend(svars)
+
+        if len(variogram_vars_list) == 0:
+            variogram_cloud[h] = []
+        else:
+            variogram_cloud[h] = variogram_vars_list
 
     return variogram_cloud
 
@@ -136,4 +223,4 @@ def get_variogram_point_cloud(input_array: np.array,
     if tolerance == 1:
         return omnidirectional_point_cloud(input_array, step_size, max_range)
     else:
-        return dict()
+        return directional_point_cloud(input_array, step_size, max_range, direction, tolerance)

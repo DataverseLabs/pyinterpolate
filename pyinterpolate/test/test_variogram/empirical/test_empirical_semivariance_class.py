@@ -9,110 +9,31 @@ from pyinterpolate.variogram.empirical.semivariance import calculate_semivarianc
 from pyinterpolate.variogram.empirical.empirical_semivariogram import build_experimental_variogram, \
     EmpiricalSemivariogram
 
-# REFERENCE INPUTS
-REFERENCE_INPUT_WE = np.array([
-    [0, 0, 8],
-    [1, 0, 6],
-    [2, 0, 4],
-    [3, 0, 3],
-    [4, 0, 6],
-    [5, 0, 5],
-    [6, 0, 7],
-    [7, 0, 2],
-    [8, 0, 8],
-    [9, 0, 9],
-    [10, 0, 5],
-    [11, 0, 6],
-    [12, 0, 3]
-])
-REFERENCE_INPUT_ZEROS = np.array([
-    [0, 0, 0],
-    [0, 1, 0],
-    [1, 0, 0],
-    [1, 1, 0],
-    [2, 1, 0],
-    [1, 2, 0],
-    [2, 2, 0],
-    [3, 3, 0],
-    [3, 1, 0],
-    [3, 2, 0]
-])
-REFERENCE_INPUT_BOUNDED = np.array([
-    [0, 0, 2],
-    [1, 0, 4],
-    [2, 0, 6],
-    [3, 0, 8],
-    [4, 0, 10],
-    [5, 0, 12],
-    [6, 0, 14],
-    [7, 0, 12],
-    [8, 0, 10],
-    [9, 0, 8],
-    [10, 0, 6],
-    [11, 0, 4],
-    [12, 0, 2]
-])
 
-REFERENCE_INPUT_WEIGHTED = np.array(
-    [
-        [
-            [0, 0, 735],
-            [0, 1, 45],
-            [0, 2, 125],
-            [0, 3, 167],
-            [1, 0, 450],
-            [1, 1, 337],
-            [1, 2, 95],
-            [1, 3, 245],
-            [2, 0, 124],
-            [2, 1, 430],
-            [2, 2, 230],
-            [2, 3, 460],
-            [3, 0, 75],
-            [3, 1, 20],
-            [3, 2, 32],
-            [3, 3, 20]
-        ],
-        [
-            [0, 0, 2],
-            [0, 1, 3],
-            [0, 2, 2],
-            [0, 3, 3],
-            [1, 0, 1],
-            [1, 1, 3],
-            [1, 2, 3],
-            [1, 3, 2],
-            [2, 0, 1],
-            [2, 1, 2],
-            [2, 2, 3],
-            [2, 3, 1],
-            [3, 0, 2],
-            [3, 1, 2],
-            [3, 2, 2],
-            [3, 3, 1]
-        ]]
-)
+# Test data
+from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data, EmpiricalVariogramTestData,\
+    EmpiricalVariogramClassData
 
-# CONSTS
-STEP_SIZE = 1
-MAX_RANGE = 4
-BOUNDED_RANGE = (len(REFERENCE_INPUT_BOUNDED) / 2) - 1
+
+gen_data = EmpiricalVariogramTestData()
+cls_data = EmpiricalVariogramClassData()
+armstrong_arr = get_armstrong_data()
 
 
 class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_build_statistics_with_zeros(self):
         variogram_stats = EmpiricalSemivariogram(
-            input_array=REFERENCE_INPUT_ZEROS,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE
+            input_array=gen_data.input_zeros,
+            step_size=gen_data.param_step_size,
+            max_range=gen_data.param_max_range
         )
 
         mean_semivar = np.mean(variogram_stats.experimental_semivariances)
         mean_covar = np.mean(variogram_stats.experimental_covariances)
         var_value = variogram_stats.variance
 
-        expected_value = 0
+        expected_value = gen_data.output_zeros
 
         self.assertEqual(mean_semivar, expected_value)
         self.assertEqual(mean_covar, expected_value)
@@ -121,9 +42,9 @@ class TestEmpiricalSemivariance(unittest.TestCase):
     def test_output_both(self):
 
         variogram_stats = EmpiricalSemivariogram(
-            input_array=REFERENCE_INPUT_WE,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE
+            input_array=gen_data.input_data_we,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_max_range
         )
 
         # Check __str__() output
@@ -153,17 +74,17 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_single_output_semivariance(self):
         variogram_stats = EmpiricalSemivariogram(
-            input_array=REFERENCE_INPUT_WE,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE,
+            input_array=gen_data.input_data_we,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_max_range,
             is_semivariance=True,
             is_covariance=False,
             is_variance=False
         )
         variogram = calculate_semivariance(
-            points=REFERENCE_INPUT_WE,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE
+            points=gen_data.input_data_we,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_max_range
         )
 
         are_equal = np.array_equal(variogram_stats.experimental_semivariance_array, variogram)
@@ -186,17 +107,17 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_single_output_covariance(self):
         variogram_stats = EmpiricalSemivariogram(
-            input_array=REFERENCE_INPUT_WE,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE,
+            input_array=gen_data.input_data_we,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_max_range,
             is_semivariance=False,
             is_covariance=True,
             is_variance=True
         )
         covariogram, variance = calculate_covariance(
-            points=REFERENCE_INPUT_WE,
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE,
+            gen_data.input_data_we,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_max_range,
             get_c0=True
         )
 
@@ -225,17 +146,17 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_build_variogram_stats(self):
         exp_variogram = build_experimental_variogram(
-            input_array=REFERENCE_INPUT_WEIGHTED[0],
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE,
-            weights=REFERENCE_INPUT_WEIGHTED[1][:, -1]
+            input_array=gen_data.input_weighted[0],
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_bounded_max_range,
+            weights=gen_data.input_weighted[1][:, -1]
         )
 
         variogram_stats = EmpiricalSemivariogram(
-            input_array=REFERENCE_INPUT_WEIGHTED[0],
-            step_size=STEP_SIZE,
-            max_range=MAX_RANGE,
-            weights=REFERENCE_INPUT_WEIGHTED[1][:, -1]
+            input_array=gen_data.input_weighted[0],
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_bounded_max_range,
+            weights=gen_data.input_weighted[1][:, -1]
         )
 
         are_equal_semivariances = np.array_equal(
@@ -260,9 +181,9 @@ class TestEmpiricalSemivariance(unittest.TestCase):
     def test_bounded_variogram(self):
 
         bounded_variogram = build_experimental_variogram(
-            input_array=REFERENCE_INPUT_BOUNDED,
-            step_size=STEP_SIZE,
-            max_range=BOUNDED_RANGE
+            input_array=cls_data.input_bounded,
+            step_size=cls_data.param_step_size,
+            max_range=cls_data.param_bounded_max_range,
         )
 
         diff = bounded_variogram.variance_covariances_diff
