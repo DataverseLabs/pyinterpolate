@@ -3,16 +3,8 @@ from shapely.geometry import Point
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.validate import validate_direction, validate_points, validate_tolerance
 
-
-# TEMPORARY FUNCTIONS
-def temp_calc_point_to_point_distance(points_a, points_b=None):
-    """temporary function for pt to pt distance estimation"""
-    from scipy.spatial.distance import cdist
-    if points_b is None:
-        distances = cdist(points_a, points_a, 'euclidean')
-    else:
-        distances = cdist(points_a, points_b, 'euclidean')
-    return distances
+# Temp
+from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distance
 
 
 def _form_empty_output(lag_no) -> np.array:

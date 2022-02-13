@@ -5,7 +5,7 @@ from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 
 
-class EmpiricalSemivariogram:
+class EmpiricalVariogram:
     """
     Class calculates Experimental Semivariogram and Experimental Covariogram of a given dataset.
 
@@ -75,7 +75,7 @@ class EmpiricalSemivariogram:
     lags : numpy array or None, default=None
            The array of lags (upper bound for each lag).
 
-    points_per_lag : int or None, default=None
+    points_per_lag : numpy array or None, default=None
                      A number of points in each lag-bin.
 
     variance : float or None, optional, default=None
@@ -141,10 +141,10 @@ class EmpiricalSemivariogram:
     ...    [10, 0, 5],
     ...    [11, 0, 6],
     ...    [12, 0, 3]
-    ...])
+    ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
-    >>> empirical_smv = EmpiricalSemivariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> empirical_smv = EmpiricalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
     >>> print(empirical_smv)
     +-----+--------------------+---------------------+--------------------+
     | lag |    semivariance    |      covariance     |    var_cov_diff    |
@@ -169,7 +169,7 @@ class EmpiricalSemivariogram:
         self.experimental_covariances = None
         self.variance_covariances_diff = None
         self.points_per_lag = None
-        self.variance = None
+        self.variance = 0
 
         self.step = step_size
         self.mx_rng = max_range
@@ -198,6 +198,21 @@ class EmpiricalSemivariogram:
             if is_variance:
                 self.variance_covariances_diff = self.variance - self.experimental_covariances
 
+    def _calculate_covariance(self, get_variance=False):
+        """
+        Method calculates covariance and variance.
+
+        See : calculate_covariance function.
+        """
+        self.experimental_covariance_array, self.variance = calculate_covariance(
+            points=self.input_array.copy(),
+            step_size=self.step,
+            max_range=self.mx_rng,
+            direction=self.direct,
+            tolerance=self.tol,
+            get_c0=get_variance
+        )
+
     def _calculate_semivariance(self):
         """
         Method calculates semivariance.
@@ -213,20 +228,28 @@ class EmpiricalSemivariogram:
             tolerance=self.tol
         )
 
-    def _calculate_covariance(self, get_variance=False):
-        """
-        Method calculates covariance and variance.
+    def __repr__(self):
+        cname = 'EmpiricalVariogram'
+        input_params = f'input_array={self.input_array.tolist()}, step_size={self.step}, max_range={self.mx_rng}, ' \
+                       f'weights={self.weights}, direction={self.direct}, tolerance={self.tol}, ' \
+                       f'is_semivariance={self.__c_sem}, is_covariance={self.__c_cov}, is_variance={self.__c_var}'
+        repr_val = cname + '(' + input_params + ')'
+        return repr_val
 
-        See : calculate_covariance function.
-        """
-        self.experimental_covariance_array, self.variance = calculate_covariance(
-            points=self.input_array.copy(),
-            step_size=self.step,
-            max_range=self.mx_rng,
-            direction=self.direct,
-            tolerance=self.tol,
-            get_c0=get_variance
-        )
+    def __str__(self):
+
+        pretty_table = PrettyTable()
+
+        pretty_table.field_names = ["lag", "semivariance", "covariance", "var_cov_diff"]
+
+        if not self.__c_sem and not self.__c_cov:
+            return self.__str_empty()
+        else:
+            if self.__c_sem and self.__c_cov:
+                pretty_table.add_rows(self.__str_populate_both())
+            else:
+                pretty_table.add_rows(self.__str_populate_single())
+            return pretty_table.get_string()
 
     def __str_empty(self):
         if not self.__c_var:
@@ -272,36 +295,13 @@ class EmpiricalSemivariogram:
                 rows.append([lag, sem, nan, nan])
         return rows
 
-    def __str__(self):
-
-        pretty_table = PrettyTable()
-
-        pretty_table.field_names = ["lag", "semivariance", "covariance", "var_cov_diff"]
-
-        if not self.__c_sem and not self.__c_cov:
-            return self.__str_empty()
-        else:
-            if self.__c_sem and self.__c_cov:
-                pretty_table.add_rows(self.__str_populate_both())
-            else:
-                pretty_table.add_rows(self.__str_populate_single())
-            return pretty_table.get_string()
-
-    def __repr__(self):
-        cname = 'EmpiricalSemivariogram'
-        input_params = f'input_array={self.input_array.tolist()}, step_size={self.step}, max_range={self.mx_rng}, ' \
-                       f'weights={self.weights}, direction={self.direct}, tolerance={self.tol}, ' \
-                       f'is_semivariance={self.__c_sem}, is_covariance={self.__c_cov}, is_variance={self.__c_var}'
-        repr_val = cname + '(' + input_params + ')'
-        return repr_val
-
 
 def build_experimental_variogram(input_array,
                                  step_size: float,
                                  max_range: float,
                                  weights=None,
                                  direction=0,
-                                 tolerance=1) -> EmpiricalSemivariogram:
+                                 tolerance=1) -> EmpiricalVariogram:
     """
     Function prepares:
         - experimental semivariogram,
@@ -373,7 +373,7 @@ def build_experimental_variogram(input_array,
     ...    [10, 0, 5],
     ...    [11, 0, 6],
     ...    [12, 0, 3]
-    ...])
+    ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
     >>> empirical_smv = build_experimental_variogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
@@ -385,9 +385,8 @@ def build_experimental_variogram(input_array,
     | 2.0 | 5.2272727272727275 | -0.7954545454545454 | 5.0439752555137165 |
     | 3.0 |        6.0         | -1.2599999999999958 | 5.508520710059168  |
     +-----+--------------------+---------------------+--------------------+
-
     """
-    semivariogram_stats = EmpiricalSemivariogram(
+    semivariogram_stats = EmpiricalVariogram(
         input_array=input_array,
         step_size=step_size,
         max_range=max_range,
