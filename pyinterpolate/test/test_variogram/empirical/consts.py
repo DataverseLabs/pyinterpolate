@@ -2,6 +2,10 @@ import os
 from dataclasses import dataclass
 import numpy as np
 
+"""
+- - - - GENERAL - - - -
+"""
+
 
 def get_armstrong_data():
     my_dir = os.path.dirname(__file__)
@@ -11,9 +15,7 @@ def get_armstrong_data():
     arr = np.load(path_to_the_data)
     return arr
 
-"""
-- - - - GENERAL - - - -
-"""
+
 @dataclass
 class EmpiricalVariogramTestData:
     input_data_we = np.array([
@@ -89,9 +91,37 @@ class EmpiricalVariogramTestData:
     param_step_size = 1
     param_max_range = 6
 
+
+"""
+- - - - CALCULATE COVARIANCE - - - -
+"""
+
+
+@dataclass
+class EmpiricalCovarianceData:
+    # EXPECTED OUTPUTS
+    output_variance = 4.248
+
+    output_we_omni = np.array([
+        [1, -0.543, 24],
+        [2, -0.795, 22],
+        [3, -1.26, 20],
+        [4, -0.197, 18],
+        [5, 1.234, 16]
+    ])
+
+    output_armstrong_we_lag1 = 4.643
+    output_armstrong_ns_lag1 = 9.589
+    output_armstrong_ne_sw_lag2 = 4.551
+    output_armstrong_nw_se_lag2 = 6.331
+    output_armstrong_omni_lag1 = 6.649
+
+
 """
 - - - - CALCULATE SEMIVARIANCE - - - -
 """
+
+
 @dataclass
 class EmpiricalSemivarianceData:
     output_we_omni = np.array([
@@ -119,31 +149,11 @@ class EmpiricalSemivarianceData:
         [6, 4166.9, 2]
     ])
 
-"""
-- - - - CALCULATE COVARIANCE - - - -
-"""
-@dataclass
-class EmpiricalCovarianceData:
-    # EXPECTED OUTPUTS
-    output_variance = 4.248
-
-    output_we_omni = np.array([
-        [1, -0.543, 24],
-        [2, -0.795, 22],
-        [3, -1.26, 20],
-        [4, -0.197, 18],
-        [5, 1.234, 16]
-    ])
-
-    output_armstrong_we_lag1 = 4.643
-    output_armstrong_ns_lag1 = 9.589
-    output_armstrong_ne_sw_lag2 = 4.551
-    output_armstrong_nw_se_lag2 = 6.331
-    output_armstrong_omni_lag1 = 6.649
 
 """
 - - - - CALCULATE EMPIRICAL VARIOGRAM CLASS - - - -
 """
+
 
 @dataclass
 class EmpiricalVariogramClassData:
@@ -167,3 +177,39 @@ class EmpiricalVariogramClassData:
     param_max_range = 4
     param_step_size_bounded = 4
     param_bounded_max_range = (len(input_bounded) / 2) - 1
+
+
+"""
+- - - - GET VARIOGRAM POINT CLOUD DATA - - - -
+"""
+
+
+@dataclass
+class VariogramPointCloudClassData:
+    class_output = ''.join(
+        """
+        +-----+-------+--------------------+--------------------+-----+-----+--------+-------+-----+--------------------+----------------------+
+        | lag | count |  avg semivariance  |        std         | min | 25% | median |  75%  | max |      skewness      |       kurtosis       |
+        +-----+-------+--------------------+--------------------+-----+-----+--------+-------+-----+--------------------+----------------------+
+        |  1  |   24  |       4.625        | 10.662434056068061 |  1  | 1.0 |  4.0   | 10.75 |  36 | 1.4213738657613832 |  0.8456271093620846  |
+        |  2  |   22  | 5.2272727272727275 | 12.89371683744829  |  1  | 4.0 |  9.0   |  9.0  |  49 | 2.3296167978711484 |  4.333710640543743   |
+        |  3  |   20  |        6.0         | 10.89954127475097  |  0  | 4.0 |  9.0   |  16.0 |  36 | 0.9276639132083223 | -0.13337074448185549 |
+        |  4  |   18  | 4.444444444444445  | 7.866164453523492  |  1  | 4.0 |  4.0   |  16.0 |  25 | 0.814650643420655  | -0.6217727095831935  |
+        |  5  |   16  |       3.125        | 7.854139036202504  |  0  | 1.0 |  2.5   |  9.0  |  25 | 1.533468263397538  |  1.189536928397434   |
+        +-----+-------+--------------------+--------------------+-----+-----+--------+-------+-----+--------------------+----------------------+
+        """).split()
+
+    describe_output = {
+        1: {
+            'count': 224,
+            'avg semivariance': 5.696428571428571,
+            'std': 13.743412150955105,
+            'min': 0,
+            'max': 81,
+            '25%': 1.0,
+            'median': 4.0,
+            '75%': 16.0,
+            'skewness': 2.057993640635216,
+            'kurtosis': 5.318955203628329,
+            'lag': 1},
+    }

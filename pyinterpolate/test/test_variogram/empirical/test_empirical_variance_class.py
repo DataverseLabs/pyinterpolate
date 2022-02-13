@@ -6,24 +6,22 @@ import numpy as np
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 # Tested module
-from pyinterpolate.variogram.empirical.empirical_semivariogram import build_experimental_variogram, \
-    EmpiricalSemivariogram
+from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram, \
+    EmpiricalVariogram
 
 
 # Test data
-from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data, EmpiricalVariogramTestData,\
-    EmpiricalVariogramClassData
+from pyinterpolate.test.test_variogram.empirical.consts import EmpiricalVariogramTestData, EmpiricalVariogramClassData
 
 
 gen_data = EmpiricalVariogramTestData()
 cls_data = EmpiricalVariogramClassData()
-armstrong_arr = get_armstrong_data()
 
 
 class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_build_statistics_with_zeros(self):
-        variogram_stats = EmpiricalSemivariogram(
+        variogram_stats = EmpiricalVariogram(
             input_array=gen_data.input_zeros,
             step_size=gen_data.param_step_size,
             max_range=gen_data.param_max_range
@@ -41,7 +39,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
     def test_output_both(self):
 
-        variogram_stats = EmpiricalSemivariogram(
+        variogram_stats = EmpiricalVariogram(
             input_array=gen_data.input_data_we,
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_max_range
@@ -73,7 +71,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
                                                               'the returned __repr__() object text')
 
     def test_single_output_semivariance(self):
-        variogram_stats = EmpiricalSemivariogram(
+        variogram_stats = EmpiricalVariogram(
             input_array=gen_data.input_data_we,
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_max_range,
@@ -106,7 +104,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
                                                           ' than the returned text')
 
     def test_single_output_covariance(self):
-        variogram_stats = EmpiricalSemivariogram(
+        variogram_stats = EmpiricalVariogram(
             input_array=gen_data.input_data_we,
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_max_range,
@@ -152,7 +150,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             weights=gen_data.input_weighted[1][:, -1]
         )
 
-        variogram_stats = EmpiricalSemivariogram(
+        variogram_stats = EmpiricalVariogram(
             input_array=gen_data.input_weighted[0],
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_bounded_max_range,
