@@ -80,4 +80,18 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
         self.assertEqual(desc[1], cls_data.describe_output[1])
 
+    def test__repr__(self):
+        variogram_cloud = VariogramCloud(
+            input_array=gen_data.input_data_we,
+            step_size=gen_data.param_step_size,
+            max_range=gen_data.param_max_range
+        )
+
+        new_cloud = eval(variogram_cloud.__repr__())
+
+        msg = 'Variogram cloud generated with __repr__() method should be the same as the initial variogram cloud'
+        self.assertEqual(variogram_cloud.describe(),
+                         new_cloud.describe(),
+                         msg=msg)
+
     # TODO: test plots (future)
