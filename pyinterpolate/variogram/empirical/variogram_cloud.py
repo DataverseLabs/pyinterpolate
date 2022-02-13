@@ -238,18 +238,18 @@ class VariogramCloud:
             self.points_per_lag.append(length)
 
     def _box_plot(self):
-        title_box = 'Boxplot of Variogram Point Cloud per lag'
+        title_box = 'Boxplot of Variogram Point Cloud per lag.'
         self.__dist_plots(title_box, 'box')
 
     def _scatter_plot(self):
         plot_data = self.__prep_scatterplot_data()
         plt.figure(figsize=(14, 8))
         plt.scatter(x=plot_data[:, 0], y=plot_data[:, 1])
-        plt.title('Variogram Point Cloud per lag')
+        plt.title('Variogram Point Cloud per lag.')
         plt.show()
 
     def _violin_plot(self):
-        title_violin = 'Violinplot of Variogram Point Cloud per lag'
+        title_violin = 'Variogram Point Cloud distributions per lag.'
         self.__dist_plots(title_violin, 'violin')
 
     def __repr__(self):
@@ -276,16 +276,25 @@ class VariogramCloud:
         if kind == 'box':
             ax.boxplot(plot_data_values)
         elif kind == 'violin':
-            ax.violinplot(plot_data_values)
+            vplot = ax.violinplot(plot_data_values, showmeans=True, showmedians=True, showextrema=True)
+            vplot['cmeans'].set_color('orange')
+            vplot['cmedians'].set(color='black', ls='dashed')
+            vplot['cmins'].set(color='black')
+            vplot['cmaxes'].set(color='black')
+            ax.legend([vplot['cmeans'],
+                       vplot['cmedians'],
+                       vplot['cmins'],
+                       vplot['cmaxes']], ['mean', 'median', 'min & max'], loc='upper left')
+
 
         ax.xaxis.set_ticks(plabels)
-        no_of_plbls = len(plabels)
+        no_of_digits = max([len(str(x)) for x in plabels])
 
-        if 5 < no_of_plbls < 10:
+        if 3 < no_of_digits < 6:
             ax.tick_params(axis='x', labelrotation=30)
-        elif 10 <= no_of_plbls < 20:
+        elif 6 <= no_of_digits < 10:
             ax.tick_params(axis='x', labelrotation=45)
-        elif no_of_plbls >= 20:
+        elif no_of_digits >= 10:
             ax.tick_params(axis='x', labelrotation=90)
 
         plt.title(title_label)
@@ -317,3 +326,11 @@ class VariogramCloud:
     @staticmethod
     def __str_empty():
         return 'Empty Object'
+
+
+if __name__ == '__main__':
+    from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data
+
+    data = get_armstrong_data()
+    cloud = VariogramCloud(data, 1, 8)
+    cloud.plot(kind='violin')
