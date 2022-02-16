@@ -4,9 +4,9 @@ In this tutorial, we will learn about the different types of tests that could co
 
 ## Changelog
 
-| Date | Change description | Author |
-|--------|--------------------------|----------|
-| 2021-09-05 | First release of tutorial | @szymon-datalions |
+| Date | Change description | Author         |
+|--------|--------------------------|----------------|
+| 2021-09-05 | First release of tutorial | @SimonMolinsky |
 
 ## Reader-friendly version
 

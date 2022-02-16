@@ -56,9 +56,7 @@ def omnidirectional_point_cloud(input_array: np.array,
             variogram_cloud[h] = []
         else:
             sems = (input_array[distances_in_range[0], 2] - input_array[distances_in_range[1], 2]) ** 2
-            # TODO: check if there is other operation needed - for example div by 2
             variogram_cloud[h] = sems
-
     return variogram_cloud
 
 
