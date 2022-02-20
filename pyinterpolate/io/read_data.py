@@ -6,27 +6,56 @@ from geopandas import points_from_xy
 
 
 def read_txt(
-        path: str, lon_col_no=0, lat_col_no=1, val_col_no=2, delim=',', skip_header=True, epsg='4326', crs=None
+        path: str, lon_col_pos=0, lat_col_pos=1, val_col_pos=2, delim=',', skip_header=True, epsg='4326', crs=None
 ) -> gpd.GeoDataFrame:
+    """Function reads data from a text file.
+
+    Provided data format should include: longitude (x), latitude (y), value. You should provide crs or epsg,
+    if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
+    Data read by a function is converted into GeoDataFrame.
+
+    Parameters
+    ----------
+    path : str
+           Path to the file.
+
+    lon_col_pos : int, default=0
+                  Position of the longitude column.
+
+    lat_col_pos : int, default=1
+                  Position of the latitude column.
+
+    val_col_pos : int, default=2
+                  Position of the value column.
+
+    delim : str, default=','
+            Delimiter that separates columns.
+
+    skip_header : bool, default=True
+                  Skips the first row of a file if set to True.
+
+    epsg : str, optional, default='epsg:4326'
+           Sets epsg for a given dataset.
+
+    crs : str or None, optional, default=None
+          Sets CRS for a given dataset. If not None then it overwrites EPSG.
+
+    Returns
+    -------
+    gdf : GeoDataFrame
+
+    Examples
+    --------
+    >>> path_to_the_data = 'path_to_the_data.txt'
+    >>> data = read_txt(path_to_the_data, skip_header=False)
+    >>> print(data.head(2))
+    +---+---------------------------+-----------+
+    |   |         geometry          |   value   |
+    +---+---------------------------+-----------+
+    | 0 | POINT (15.11524 52.76515) | 91.275597 |
+    | 1 | POINT (15.11524 52.74279) | 96.548294 |
+    +---+---------------------------+-----------+
     """
-    Function reads data from a text file. Provided data format should include: longitude (x), latitude (y), value.
-        You should provide crs or epsg, if it's not provided then epsg:4326 is used as a default value
-        (https://epsg.io/4326). Data read by a function is converted into GeoDataFrame.
-
-    INPUT:
-
-    :param path: (str) path to the file,
-    :param lon_col_no: (int) position of longitude column, default=0,
-    :param lat_col_no: (int) position of latitude column, default=1,
-    :param val_col_no: (int) position of value column, default=2,
-    :param delim: (str) delimiter which separates columns,
-    :param skip_header: (bool) skip the first row of data,
-    :param epsg: (str) optional; if not provided and crs is None then algorithm sets epsg:4326 as a default value,
-    :param crs: (str) optional;
-
-    OUTPUT:
-
-    :returns: (GeoDataFrame)"""
 
     data_arr = np.loadtxt(path, delimiter=delim)
 
@@ -34,7 +63,7 @@ def read_txt(
         data_arr = data_arr[1:, :]
 
     gdf = gpd.GeoDataFrame(data=data_arr)
-    gdf['geometry'] = points_from_xy(gdf[lon_col_no], gdf[lat_col_no])
+    gdf['geometry'] = points_from_xy(gdf[lon_col_pos], gdf[lat_col_pos])
     gdf.set_geometry('geometry', inplace=True)
 
     if crs is None:
@@ -42,7 +71,7 @@ def read_txt(
     else:
         gdf.set_crs(crs=crs, inplace=True)
 
-    gdf = gdf[['geometry', val_col_no]]
+    gdf = gdf[['geometry', val_col_pos]]
     gdf.columns = ['geometry', 'value']
 
     return gdf
@@ -57,24 +86,53 @@ def read_csv(
         epsg=4326,
         crs=None
 ) -> gpd.GeoDataFrame:
+    """Function reads data from a csv file.
+
+    Provided data format should include: latitude, longitude, value. You should provide crs or epsg,
+    if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
+    Data read by a function is converted into GeoDataFrame.
+
+    Parameters
+    ----------
+
+    path : str
+           Path to the file.
+
+    val_col_name : str
+                   Name of the value column (header title).
+
+    lat_col_name : str
+                   Name of the latitude column (header title).
+
+    lon_col_name : str
+                   Name of the longitude column (header title).
+
+    delim : str, default=','
+            Delimiter that separates columns.
+
+    epsg : str, optional, default='epsg:4326'
+           Sets epsg for a given dataset.
+
+    crs : str or None, optional, default=None
+          Sets CRS for a given dataset. If not None then it overwrites EPSG.
+
+    Returns
+    -------
+
+    gdf : GeoDataFrame
+
+    Examples
+    --------
+    >>> path_to_the_data = 'path_to_the_data.csv'
+    >>> data = read_csv(path_to_the_data, val_col_name='value', lat_col_name='y', lon_col_name='x')
+    >>> print(data.head(2))
+    +---+---------------------------+-----------+
+    |   |         geometry          |   value   |
+    +---+---------------------------+-----------+
+    | 0 | POINT (15.11524 52.76515) | 91.275597 |
+    | 1 | POINT (15.11524 52.74279) | 96.548294 |
+    +---+---------------------------+-----------+
     """
-    Function reads data from a text file. Provided data format should include: latitude, longitude, value. You should
-        provide crs or epsg, if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
-        Data read by a function is converted into GeoSeries.
-
-    INPUT:
-
-    :param path: (str) path to the file,
-    :param delim: (str) delimiter which separates columns,
-    :param val_col_name: (str) name of the header with values,
-    :param lat_col_name: (str) name of the latitude column (usually it is 'y' or 'latitude'),
-    :param lon_col_name: (str) name of the longitude column (usually it is 'x' or 'longitude'),
-    :param epsg: (str) optional; if not provided and crs is None then algorithm sets epsg:4326 as a default value,
-    :param crs: (str) optional;
-
-    OUTPUT:
-
-    :returns: (GeoDataFrame)"""
 
     df = pd.read_csv(
         path, sep=delim
@@ -111,30 +169,59 @@ def read_block(
         epsg=None,
         crs=None
 ) -> gpd.GeoDataFrame:
+    """Function reads block data from files supported by fiona / geopandas.
+
+    Value column name must be provided. If geometry column has different name than 'geometry' then
+    it must be provided too. ID column name is optional, if not given then GeoDataFrame index is
+    treated as an id column. Optional parameters are epsg and crs. If any is set then data is reprojected
+    into a specific crs/epsg. Function return GeoDataFrame with columns: id, value, geometry, centroid.
+
+    Parameters
+    ----------
+    path : str
+           Path to the file.
+
+    val_col_name : str
+                   Name of the value column (header title).
+
+    geometry_col_name : str, default='geometry'
+                        Name of the column with blocks - polygons.
+
+    id_col_name: str or None, default=None, optional
+                 Name of the colum with unique indexes.
+
+
+    centroid_col_name: str or None, default=None, optional
+                       Name of the column with block centroid. Centroids are calculated
+                       from MultiPolygons or Polygons later on but their accuracy may be limited.
+                       For most applications it does not matter.
+
+    epsg : str or None, default=None, optional
+           If provided then GeoDataFrame projection is set to it. You should choose if you provide EPSG or CRS.
+
+    crs : str or None, default=None, optional
+          If provided then GeoDataFrame projection is set to. You should choose if you provide CRS or EPSG.
+
+    Returns
+    -------
+    gpd : GeoDataFrame
+          columns=['id', 'geometry', 'value', 'centroid']
+
+    Raises
+    ------
+    TypeError
+        - EPSG and CRS are provided both (should be one),
+        - Provided column name does not exist in a dataset.
+
+    Examples
+    --------
+    >>> bblock = 'path_to_the_shapefile.shp'
+    >>> bdf = read_block(bblock, val_col_name='rate', id_col_name='id')
+    >>> print(bdf.columns)
+    Index(['id', 'geometry', 'rate', 'centroid'], dtype='object')
     """
-    Function reads block data from files supported by fiona / geopandas. Value column name must be provided. If geometry
-        column has different name than 'geometry' it must be provided too. Id column name is optional, if not given then
-        GeoDataFrame index is treated as id column. Optional parameters are epsg and crs. If any is set then read data
-        is reprojected into a specific crs/epsg. Function return GeoDataFrame with columns: id, value, geometry,
-        centroid.
 
-    INPUT:
-
-    :param path: (str) path to the file,
-    :param val_col_name: (str) name of the column with analyzed values,
-    :param geometry_col_name: (str) default='geometry', name of the column with blocks - polygons,
-    :param id_col_name: (str or None) default=None, name of the column with unique indexes of areas,
-    :param centroid_col_name: (str or None) default=None, optional parameter, name of the column with block centroid,
-        it could be useful when centroid is given for MultiPolygons or Polygons of irregular shapes and sizes to be sure
-        that the centroid lies within area,
-    :param epsg: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it,
-    :param crs: (str) default=None, optional parameter; if provided then read GeoDataFrame is reprojected to it.
-
-    OUTPUT:
-
-    :returns: (GeoDataFrame) columns=['id', 'geometry', 'value', 'centroid']"""
-
-    ########## INPUT TESTS
+    # INPUT TESTS
 
     # Check if id column is given
     if id_col_name is not None:
@@ -149,7 +236,7 @@ def read_block(
     else:
         raise TypeError(f'Only one value CRS or EPSG should be provided but both are given: crs {crs}; epsg: {epsg}')
 
-    ########## FUNCTION'S BODY
+    # FUNCTION'S BODY
 
     gdf = gpd.read_file(path)
 
@@ -185,9 +272,3 @@ def read_block(
     output = ndf[[id_col_name, geometry_col_name, val_col_name, c_col_name]]
 
     return output
-
-
-if __name__ == '__main__':
-    bblock = '../../sample_data/areal_data/cancer_data.shp'
-    bdf = read_block(bblock, 'rate')
-    print(bdf.head())
