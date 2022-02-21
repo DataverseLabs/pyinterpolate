@@ -1,4 +1,4 @@
-![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/DataverseLabs/pyinterpolate) ![Build Status](https://travis-ci.com/DataverseLabs/pyinterpolate.svg?branch=main) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) ![CodeFactor](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate)
+![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/DataverseLabs/pyinterpolate) ![Build Status](https://travis-ci.com/DataverseLabs/pyinterpolate.svg?branch=main) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) ![CodeFactor](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate/badge)
 
 ![Pyinterpolate](https://github.com/szymon-datalions/pyinterpolate/blob/main/logo.png?raw=true  "Pyinterpolate logo")
 
