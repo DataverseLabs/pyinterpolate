@@ -159,8 +159,6 @@ Tests and contribution
 All tests are grouped in the `test` directory. To run them, you must have installed the `unittest` package. More about test and contribution is here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
 
 
-
-
 Commercial and scientific projects where the library has been used
 ------------------------------------------------------------------
 
@@ -184,6 +182,12 @@ PyInterpolate is developed thanks to many resources, and some of them are pointe
 - Pardo-Iguzquiza E., VARFIT: a Fortran-77 program for fitting variogram models by weighted least squares, Computers & Geosciences 25, 251-261, 1999,
 - Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008
 - Deutsch C.V., Correcting for Negative Weights in Ordinary Kriging, Computers & Geosciences Vol.22, No.7, pp. 765-773, 1996
+
+
+How to cite
+-----------
+Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
+
 
 Requirements and dependencies (v 0.2.5)
 ---------------------------------------
