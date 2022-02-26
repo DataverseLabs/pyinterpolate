@@ -326,11 +326,3 @@ class VariogramCloud:
     @staticmethod
     def __str_empty():
         return 'Empty Object'
-
-
-if __name__ == '__main__':
-    from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data
-
-    data = get_armstrong_data()
-    cloud = VariogramCloud(data, 1, 8)
-    cloud.plot(kind='violin')

@@ -3,12 +3,17 @@ from scipy.linalg import fractional_matrix_power
 
 
 def _rotation_matrix(angle: float) -> np.array:
-    """
-    Function builds rotation matrix.
+    """Function builds rotation matrix.
 
-    :param angle: (float) in degrees.
+    Parameters
+    ----------
+    angle : float
+            Angle in degrees.
 
-    :returns: (numpy array) rotation matrix.
+    Returns
+    -------
+    numpy array
+        The rotation matrix.
     """
     theta = np.radians(angle)
     e_major_rot = [np.cos(theta), -np.sin(theta)]
@@ -17,16 +22,25 @@ def _rotation_matrix(angle: float) -> np.array:
     return e_matrix
 
 
-def _select_distances(distances_array, weighting_matrix, lag, step_size):
-    """
-    Function mutiplies each point from the distances array with weighting matrix to check if point is within an ellipse.
+def _select_distances(distances_array: np.array, weighting_matrix: np.array, lag: float, step_size: float) -> np.array:
+    """Function mutiplies each point from the distances array with weighting matrix to check
+       if point is within ellipse.
 
-    :param distances_array: (numpy array) coordinates,
-    :param weighting_matrix: (numpy array) matrix to perform calculations,
-    :param lag: (float)
-    :param step_size: (float)
+    Parameters
+    distances_array : numpy array
+                      Array with distances between points.
 
-    :returns: (numpy array) boolean mask of valid coordinates.
+    weighting_matrix : numpy array
+                       The matrix of weights for each distance.
+
+    lag : float
+
+    step_size : float
+
+    Returns
+    -------
+    : numpy array
+        Boolean mask of valid coordinate indexes.
     """
 
     mask = []
@@ -52,25 +66,35 @@ def select_points_within_ellipse(ellipse_center: np.array,
                                  lag: float,
                                  step_size: float,
                                  theta: float,
-                                 minor_axis_size: float):
-    """
-    Function checks which points from other points are within point range described as an ellipse with
+                                 minor_axis_size: float) -> np.array:
+    """Function checks which points from other points are within point range described as an ellipse with
         center in point, semi-major axis of length step_size and semi-minor axis of length
         step_size * tolerance and angle of semi-major axis calculated as angle of direction from
         NS axis (0 radian angle) of a dataset.
 
-    INPUT:
+    Parameters
+    ----------
+    ellipse_center : numpy array
+                     Origin point coordinates.
 
-    :param ellipse_center: (numpy array) origin point coordinates,
-    :param other_points: (numpy array),
-    :param lag: (float) lag number (value),
-    :param step_size: (float) step size between lags,
-    :param theta: (float) Angle from y axis (N-S is a 0).
-    :param minor_axis_size: (float) fraction of the major axis size.
+    other_points : numpy array
+                   Array with points for which distance is calculated.
 
-    OUTPUT:
+    lag : float
 
-    :return: (numpy array) boolean array of points within ellipse with center in origin point
+    step_size : float
+                Step size between lags.
+
+    theta : float
+            Angle from y axis clockwise (N-S is a 0).
+
+    minor_axis_size : float
+                      Fraction of the major axis size.
+
+    Returns
+    -------
+    : numpy array
+        Boolean array of points within ellipse with a center in origin point.
     """
 
     vector_distance = other_points - ellipse_center
@@ -95,16 +119,22 @@ def select_points_within_ellipse(ellipse_center: np.array,
 
 
 def select_values_in_range(data, lag, step_size):
-    """
-    Function selects set of values which are greater than lag - step size and smaller or equal than lag.
+    """Function selects set of values which are greater than lag - step size and smaller or equal than lag.
 
-    INPUT:
-        :param data: (numpy array) distances,
-        :param lag: (float) lag within areas are included,
-        :param step_size: (float) step between lags.
+    Parameters
+    ----------
+    data : numpy array
+           Distances between points.
 
-    OUTPUT:
-        :return: numpy array mask with distances within specified radius.
+    lag : float
+
+    step_size : float
+                Distance between lags.
+
+    Returns
+    -------
+    : numpy array
+        Mask with distances within a specified radius.
     """
 
     # Check if numpy array is given

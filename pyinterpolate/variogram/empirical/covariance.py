@@ -7,22 +7,43 @@ from pyinterpolate.variogram.utils.validate import validate_direction, validate_
 from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distance
 
 
-def _form_empty_output(lag_no) -> np.array:
-    """
-    Function returns empty output for the case where no neighbors are selected.
+def _form_empty_output(lag: float) -> list:
+    """Function returns empty output for the case where no neighbors are selected.
 
-    :param lag_no: (int).
+    Parameters
+    ----------
+    lag : float
 
-    :return: (numpy array)
+    Returns
+    -------
+    : list
+        [lag, 0, 0]
     """
-    return [lag_no, 0, 0]
+    return [lag, 0, 0]
 
 
 # Covariogram calculations
 def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: float) -> np.array:
-    """
-    Function calculates covariance from given points.
+    """Function calculates covariance from given points.
 
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values [pt x, pt y, value] or [Point(), value].
+
+    lags : numpy array
+           Specific lags (h) to calculate semivariance at a given range.
+
+    step_size : float
+                Distance between lags within a point pair is included in the calculation.
+
+    Returns
+    -------
+    : numpy array
+        [lag, covariance, number of points within lag]
+
+    Notes
+    -----
     covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2
 
     where:
@@ -31,13 +52,6 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
         - z(x_i)    - value at location z_i,
         - (x_i + h) - location at a distance h from x_i,
         - u -         mean of observations at a given lag distance.
-
-    :param points: (numpy array) coordinates and their values:
-        [pt x, pt y, value] or [Point(), value],
-    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations.
-
-    :return: (numpy array) [lag, covariance, number of points within lag]
     """
 
     covariances_and_lags = list()
@@ -70,30 +84,42 @@ def directional_covariogram(points: np.array,
                             step_size: float,
                             direction,
                             tolerance) -> np.array:
-    """
-    Function calculates directional semivariogram from a given set of points.
+    """Function calculates directional semivariogram from a given set of points.
 
-    :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value]
-    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
-        0 or 180: is NS direction,
-        90 or 270 is EW direction,
-        45 or 225 is NE-SW direction,
-        135 or 315 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
-        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
-        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
-        of a size:
-        (tolerance * step_size)
-        and major axis (pointed in NS direction):
-        ((1 - tolerance) * step_size)
-        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values [pt x, pt y, value].
 
-    :returns: (np.array)
+    lags : numpy array
+        List with specific lags (h) to calculate semivariance at a given range.
+
+    step_size : float
+                Distance between lags within a point pair is included in the calculation.
+
+    direction : float
+                Direction of covariogram, values from 0 to 360 degrees:
+                    - 0 or 180: is NS,
+                    - 90 or 270 is EW,
+                    - 45 or 225 is NE-SW,
+                    - 135 or 315 is NW-SE.
+
+    tolerance : float
+                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of covariogram. If tolerance
+                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
+                covariance is estimated from elliptical area with major axis with the same direction as the line
+                for 0 tolerance and minor axis of a size:
+                    (tolerance * step_size)
+                and major axis (pointed in NS direction):
+                    ((1 - tolerance) * step_size)
+                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+                covariogram.
+
+    Returns
+    -------
+    : numpy array
+        [lag, covariance, number of points within lag]
     """
 
     covariances_and_lags = list()
@@ -143,34 +169,50 @@ def calculate_covariance(points: np.array,
                          direction=0,
                          tolerance=1,
                          get_c0=True) -> tuple:
-    """
-    Function calculates covariance from given points. In a default mode it calculates an omnidirectional
-        covariance. User can calculate directional covariogram with a specified tolerance.
+    """Function calculates covariance from given points. In a default mode it calculates an omnidirectional
+       covariance. User can calculate a directional covariogram with a specified tolerance.
 
-    :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value] or [Point(), value]
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param max_range: (float) maximum range of analysis,
-    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
-        0 or 180: is NS direction,
-        90 or 270 is EW direction,
-        45 or 225 is NE-SW direction,
-        135 or 315 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
-        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
-        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
-        of a size:
-        (tolerance * step_size)
-        and major axis (pointed in NS direction):
-        ((1 - tolerance) * step_size)
-        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram,
-    :param get_c0: (bool), default=True. Starts covariance array from the c(0) value which is a variance of a dataset.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values [pt x, pt y, value].
 
-    :return: (tuple) (np.array, float or None)
+    step_size : float
+                Distance between lags within a point pair is included in the calculation.
 
-    ## Covariance
+    max_range : float
+                Maximum range of analysis. Lags are calculated from it as a points in range (0, max_range, step_size).
+
+    direction : float
+                Direction of covariogram, values from 0 to 360 degrees:
+                    - 0 or 180: is NS,
+                    - 90 or 270 is EW,
+                    - 45 or 225 is NE-SW,
+                    - 135 or 315 is NW-SE.
+
+    tolerance : float
+                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of covariogram. If tolerance
+                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
+                covariance is estimated from elliptical area with major axis with the same direction as the line
+                for 0 tolerance and minor axis of a size:
+                    (tolerance * step_size)
+                and major axis (pointed in NS direction):
+                    ((1 - tolerance) * step_size)
+                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+                covariogram.
+
+    get_c0 : bool, default=True
+             Calculate variance of a dataset and return it.
+
+    Returns
+    -------
+    : tuple
+        (numpy array [lag, covariance, number of pairs], variance : float or None)
+
+    Notes
+    -----
+    # Covariance
 
     It is a measure of similarity between points over distance. We assume that the close observations tends to be
         similar (see Tobler's Law). Distant observations are less and less similar up to the distance where influence
@@ -190,7 +232,7 @@ def calculate_covariance(points: np.array,
 
     As an output we get array of lags h, covariances c and number of points within each lag n.
 
-    ## Directional Covariogram
+    # Directional Covariogram
 
     Assumption that our observations change in the same way in every direction is rarely true. Let's consider
         temperature. It changes from equator to poles, so in the N-S and S-N axes. The good idea is to test if
@@ -221,8 +263,8 @@ def calculate_covariance(points: np.array,
                  o
                  o
 
-    ## Examples:
-
+    Examples
+    --------
     # TODO
 
 
