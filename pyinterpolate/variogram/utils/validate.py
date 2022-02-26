@@ -54,3 +54,4 @@ def validate_weights(points, weights):
     if any([x == 0 for x in weights]):
         msg = 'One or more of weights in dataset is set to 0, this may cause errors in the distance'
         raise ValueError(msg)
+

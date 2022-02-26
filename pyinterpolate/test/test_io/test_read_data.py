@@ -17,7 +17,7 @@ class TestReadData(unittest.TestCase):
 
 		# Check if lat is switched with lon
 		base_x = data.iloc[0].geometry.x
-		other_data = read_txt(path_to_the_data, lon_col_no=1, lat_col_no=0)
+		other_data = read_txt(path_to_the_data, lon_col_pos=1, lat_col_pos=0)
 		other_y = other_data.iloc[0].geometry.y
 
 		self.assertEqual(base_x, other_y, 'Something went wrong, geometries should be swapped')

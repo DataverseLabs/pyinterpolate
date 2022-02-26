@@ -10,18 +10,27 @@ from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distan
 
 # Semivariogram calculations
 def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: float, weights) -> np.array:
-    """
-    Function calculates semivariance from given points.
+    """Function calculates semivariance from given points.
 
-    :param points: (numpy array) coordinates and their values:
-        [pt x, pt y, value] or [Point(), value],
-    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
-        provided then semivariogram is weighted by those.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value] or [Point(), value].
 
+    lags : numpy array
+           Array with lags.
 
-    :return: (numpy array) [lag, semivariance, number of points within lag]
+    step_size : float
+                Distance between lags.
+
+    weights : numpy array
+              Weights assigned to points, index of weight must be the same as index of point, if provided then
+              the semivariogram is weighted by those.
+
+    Returns
+    -------
+    : numpy array
+        [lag, semivariance, number of points within a lag]
     """
 
     semivariances_and_lags = list()
@@ -68,34 +77,48 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
                                                   lags: np.array,
                                                   step_size: float,
                                                   weights: np.array,
-                                                  direction,
-                                                  tolerance) -> np.array:
-    """
-    Function calculates directional semivariogram from a given set of points.
+                                                  direction: float,
+                                                  tolerance: float) -> np.array:
+    """Function calculates directional semivariogram from a given set of points.
 
-    :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value]
-    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
-        provided then semivariogram is weighted by those,
-    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
-        0 or 180: is NS direction,
-        90 or 270 is EW direction,
-        45 or 225 is NE-SW direction,
-        135 or 315 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
-        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
-        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
-        of a size:
-        (tolerance * step_size)
-        and major axis (pointed in NS direction):
-        ((1 - tolerance) * step_size)
-        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value] or [Point(), value].
 
-    :return: (numpy array) [lag, semivariance, number of points within lag]
+    lags : numpy array
+           Array with lags.
+
+    step_size : float
+                Distance between lags.
+
+    weights : numpy array
+              Weights assigned to points, index of weight must be the same as index of point, if provided then
+              the semivariogram is weighted by those.
+
+    direction : float
+                Direction of semivariogram, values from 0 to 360 degrees:
+                    - 0 or 180: is NS,
+                    - 90 or 270 is EW,
+                    - 45 or 225 is NE-SW,
+                    - 135 or 315 is NW-SE.
+
+    tolerance : float
+                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
+                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
+                semivariance is estimated from elliptical area with major axis with the same direction as the line
+                for 0 tolerance and minor axis of a size:
+                    (tolerance * step_size)
+                and major axis (pointed in NS direction):
+                    ((1 - tolerance) * step_size)
+                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+                semivariogram.
+
+    Returns
+    -------
+    : (numpy array)
+        [lag, semivariance, number of points within a lag]
     """
 
     semivariances_and_lags = list()
@@ -154,32 +177,46 @@ def directional_semivariogram(points: np.array,
                               weights,
                               direction,
                               tolerance) -> np.array:
-    """
-    Function calculates directional semivariogram from a given set of points.
+    """Function calculates directional semivariogram from a given set of points.
 
-    :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value]
-    :param lags: (numpy array) specific lags (h) to calculate semivariance at a given range,
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
-        provided then semivariogram is weighted by those,
-    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
-        0 or 180: is NS direction,
-        90 or 270 is EW direction,
-        45 or 225 is NE-SW direction,
-        135 or 315 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
-        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
-        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
-        of a size:
-        (tolerance * step_size)
-        and major axis (pointed in NS direction):
-        ((1 - tolerance) * step_size)
-        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value] or [Point(), value].
 
-    :return: (numpy array) [lag, semivariance, number of points within lag]
+    lags : numpy array
+           Array with lags.
+
+    step_size : float
+                Distance between lags.
+
+    weights : numpy array
+              Weights assigned to points, index of weight must be the same as index of point, if provided then
+              the semivariogram is weighted by those.
+
+    direction : float
+                Direction of semivariogram, values from 0 to 360 degrees:
+                    - 0 or 180: is NS,
+                    - 90 or 270 is EW,
+                    - 45 or 225 is NE-SW,
+                    - 135 or 315 is NW-SE.
+
+    tolerance : float
+                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
+                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
+                semivariance is estimated from elliptical area with major axis with the same direction as the line
+                for 0 tolerance and minor axis of a size:
+                    (tolerance * step_size)
+                and major axis (pointed in NS direction):
+                    ((1 - tolerance) * step_size)
+                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+                semivariogram.
+
+    Returns
+    -------
+    : (numpy array)
+        [lag, semivariance, number of points within a lag]
     """
 
     if weights is None:
@@ -226,34 +263,52 @@ def calculate_semivariance(points: np.array,
                            weights=None,
                            direction=0,
                            tolerance=1) -> np.array:
-    """
-    Function calculates semivariance from given points. In a default mode it calculates non-weighted and omnidirectional
-        semivariance. User may provide weights to additionally weight points by a specific factor. User can calculate
-        directional semivariogram with a specified tolerance.
+    """Function calculates semivariance from given points. In a default mode it calculates non-weighted and
+       omnidirectional semivariance. User may provide weights to additionally weight points by a specific factor.
+       User can calculate directional semivariogram with a specified tolerance.
 
-    :param points: (numpy array) coordinates and their values:
-            [pt x, pt y, value] or [Point(), value]
-    :param step_size: (float) distance between lags within each points are included in the calculations,
-    :param max_range: (float) maximum range of analysis,
-    :param weights: (numpy array) weights assigned to points, index of weight must be the same as index of point, if
-        provided then semivariogram is weighted by those,
-    :param direction: (float) direction of semivariogram, values from 0 to 360 degrees:
-        0 or 180: is NS direction,
-        90 or 270 is EW direction,
-        45 or 225 is NE-SW direction,
-        135 or 315 is NW-SE direction,
-    :param tolerance: (float) value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram.
-        If tolerance is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-        and angle given by y axis and direction parameter. If tolerance is greater than 0 then semivariance is estimated
-        from elliptical area with major axis with the same direction as the line for 0 tolerance and minor axis
-        of a size:
-        (tolerance * step_size)
-        and major axis (pointed in NS direction):
-        ((1 - tolerance) * step_size)
-        and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-        semivariogram.
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value] or [Point(), value].
 
-    ## Semivariance
+    step_size : float
+                Distance between lags.
+
+    max_range : float
+                Maximum range of analysis. Lags are calculated from it as a points in range (0, max_range, step_size).
+
+    weights : numpy array or None, optional, default=None
+              Weights assigned to points, index of weight must be the same as index of point, if provided then
+              the semivariogram is weighted by those.
+
+    direction : float, default=0
+                Direction of semivariogram, values from 0 to 360 degrees:
+                    - 0 or 180: is NS,
+                    - 90 or 270 is EW,
+                    - 45 or 225 is NE-SW,
+                    - 135 or 315 is NW-SE.
+
+    tolerance : float, default=1
+                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
+                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
+                semivariance is estimated from elliptical area with major axis with the same direction as the line
+                for 0 tolerance and minor axis of a size:
+                    (tolerance * step_size)
+                and major axis (pointed in NS direction):
+                    ((1 - tolerance) * step_size)
+                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
+                semivariogram.
+
+    Returns
+    -------
+    : (numpy array)
+        [lag, semivariance, number of points within a lag]
+
+    Notes
+    -----
+    # Semivariance
 
     It is a measure of dissimilarity between points over distance. We assume that the close observations tends to be
         similar (see Tobler's Law). Distant observations are less and less similar up to the distance where influence
@@ -272,7 +327,7 @@ def calculate_semivariance(points: np.array,
 
     As an output we get array of lags h, semivariances g and number of points within each lag n.
 
-    ## Weighted Semivariance
+    # Weighted Semivariance
 
     For some cases we need to weight each point by specific factor. It is especially important for the semivariogram
         deconvolution and Poisson Kriging. We can weight observations by a specific factors, for example the time effort
@@ -309,7 +364,7 @@ def calculate_semivariance(points: np.array,
     The output of weighted algorithm is the same as for non-weighted data: array of lags h, semivariances g and number
         of points within each lag n.
 
-    ## Directional Semivariogram
+    # Directional Semivariogram
 
     Assumption that our observations change in the same way in every direction is rarely true. Let's consider
         temperature. It changes from equator to poles, so in the N-S and S-N axes. The good idea is to test if
@@ -340,11 +395,9 @@ def calculate_semivariance(points: np.array,
                  o
                  o
 
-    ## Examples:
-
+    Examples
+    --------
     # TODO
-
-    :return: (numpy array) [lag, semivariance, number of points within lag]
     """
 
     # START:VALIDATION
