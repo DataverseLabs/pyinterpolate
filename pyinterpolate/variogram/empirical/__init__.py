@@ -29,13 +29,13 @@ Authors
 
 Bibliography
 ------------
-1. Armstrong, M. Basic Linear Geostatistics. Springer 1998. doi:10.1007/978-3-642-58727-6
-2. Oliver, M. and Webster, R. Basic Steps in Geostatistics: The Variogram and Kriging. Springer 2015. doi:10.1007/978-3-319-15865-5
+[1] Armstrong, M. Basic Linear Geostatistics. Springer 1998. doi:10.1007/978-3-642-58727-6
+[2] Oliver, M. and Webster, R. Basic Steps in Geostatistics: The Variogram and Kriging. Springer 2015.
+    doi:10.1007/978-3-319-15865-5
 
 TODO
 ----
 - Tutorial for experimental semivariance (Basics)
-- Docstrings for all public classes and functions within the module
 
 """
 
