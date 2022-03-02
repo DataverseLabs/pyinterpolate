@@ -1,11 +1,11 @@
-![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Build Status](https://travis-ci.com/szymon-datalions/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02869/status.svg)](https://doi.org/10.21105/joss.02869) ![License](https://img.shields.io/github/license/DataverseLabs/pyinterpolate) ![Build Status](https://travis-ci.com/DataverseLabs/pyinterpolate.svg?branch=main) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) ![CodeFactor](https://www.codefactor.io/repository/github/DataverseLabs/pyinterpolate/badge)
 
 ![Pyinterpolate](https://github.com/szymon-datalions/pyinterpolate/blob/main/logo.png?raw=true  "Pyinterpolate logo")
 
-**version 0.2.3** - *Jezero Crater*
+**version 0.2.5** - *Huygens Crater*
 ---------------------------------------
 
-PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
+PyInterpolate is designed as the Python library for geostatistics. Its role is to provide access to spatial statistics tools used in many studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 If you’re:
 
@@ -16,7 +16,7 @@ If you’re:
 - public health specialist,
 - data scientist.
 
-Then this package may be useful for you. You could use it for:
+Then this package may be helpful for you. You could use it for:
 
 - spatial interpolation and spatial prediction,
 - alone or with machine learning libraries,
@@ -31,7 +31,7 @@ Pyinterpolate allows you to perform:
 How it works
 --------------
 
-Package allows o perform multiple spatial interpolation tasks. The flow of analysis is usually the same for each interpolation method:
+The package performs multiple spatial interpolation tasks. The flow of analysis is usually the same for each interpolation method:
 
 **[1.]** Read and prepare data.
 
@@ -88,16 +88,16 @@ print(squared_error)
 >> 48.72
 ```
 
-With **pyinterpolate** you are able to retrieve point support model from areal aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. It was done with Area-to-Point Poisson Kriging technique from package. Countries along the world presents infections as areal sums to protect privacy of infected people. But this kind of representaion introduces bias to the decision-making process. To overcome this bias you may use Poisson Kriging. Areal aggregates of COVID-19 infection rate are transformed to new point support semivariogram created from population density blocks. As output we get population at risk map:
+With **pyinterpolate**, you can retrieve the point support model from areal aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. It was done with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide present infections as areal sums to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Areal aggregates of COVID-19 infection rate are transformed to new point support semivariogram created from population density blocks. As an output, we get a population at risk map:
 
-![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/szymon-datalions/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
+![Covid-19 infection risk in Poland for 14th April 2020.](https://github.com/szymon-datalions/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April 2020.")
 
 
 
 Status
 ------
 
-Beta version: package is tested and the main structure is preserved but future changes are very likely to occur.
+Beta version: the package is tested, and the main structure is preserved, but future changes are likely to occur.
 
 
 Setup
@@ -105,13 +105,13 @@ Setup
 
 Setup by pip: pip install pyinterpolate / **Python 3.7** is required!
 
-Detailed instructions how to setup package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed there most common problems related to third-party packages.
+Detailed instructions on setting up the package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed out there most common problems related to third-party packages.
 
-You may follow those setup steps to create conda environment with package for your tests:
+You may follow those setup steps to create a conda environment with a package for your tests:
 
 ### Recommended - conda installation
 
-[1.] First install system dependencies to use package (```libspatialindex_c.so```):
+[1.] First, install system dependencies to use package (```libspatialindex_c.so```):
 
 LINUX:
 
@@ -125,7 +125,7 @@ MAC OS:
 brew install spatialindex
 ```
 
-[2.] Next step is to create conda enviornment with Python 3.7, pip and notebook packages and activate your environment:
+[2.] Next step is to create conda environment with Python 3.7, pip, and notebook packages and activate your environment:
 
 ```
 conda create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
@@ -135,7 +135,7 @@ conda create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
 conda activate [YOUR NAME]
 ```
 
-[3.] In the next step install **pyinterpolate** and its dependencies with ```pip```:
+[3.] In the next step, install **pyinterpolate** and its dependencies with ```pip```:
 
 ```
 pip install pyinterpolate
@@ -145,28 +145,26 @@ pip install pyinterpolate
 
 ### pip installation
 
-With **Python==3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+With **Python==3.7** and system ```libspatialindex_c.so``` dependencies, you may install the package by simple command:
 
 ```
 pip install pyinterpolate
 ```
 
-A world of advice is to use Virtual Environment for the installation.
+**Always use Virtual Environment for the installation**.
 
 Tests and contribution
 ------------------------
 
-All tests are grouped in `test` directory. To run them you must have installed `unittest` package. More about test and contribution is here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
+All tests are grouped in the `test` directory. To run them, you must have installed the `unittest` package. More about test and contribution is here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
 
 
+Commercial and scientific projects where the library has been used
+------------------------------------------------------------------
 
-
-Commercial and scientific projects where library has been used
---------------------------------------------------------------
-
-* Tick-Borne Disease Detector (Data Lions company) for the European Space Agency (2019-2020).
+* Tick-Borne Disease Detector (Data Lions) for the European Space Agency (2019-2020).
 * B2C project related to the prediction of demand for specific flu medications,
-* B2G project related to the large-scale infrastructure maintenance.
+* B2G project related to large-scale infrastructure maintenance.
 
 Community
 ---------
@@ -177,16 +175,22 @@ Join our community in Discord: [Discord Server PyInterpolate](https://discord.gg
 Bibliography
 ------------
 
-PyInterpolate was created thanks to many resources and all of them are pointed here:
+PyInterpolate is developed thanks to many resources, and some of them are pointed out here:
 
 - Armstrong M., Basic Linear Geostatistics, Springer 1998,
 - GIS Algorithms by Ningchuan Xiao: https://uk.sagepub.com/en-gb/eur/gis-algorithms/book241284
-- Pardo-Iguzquiza E., VARFIT: a fortran-77 program for fitting variogram models by weighted least squares, Computers & Geosciences 25, 251-261, 1999,
+- Pardo-Iguzquiza E., VARFIT: a Fortran-77 program for fitting variogram models by weighted least squares, Computers & Geosciences 25, 251-261, 1999,
 - Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008
 - Deutsch C.V., Correcting for Negative Weights in Ordinary Kriging, Computers & Geosciences Vol.22, No.7, pp. 765-773, 1996
 
-Requirements and dependencies
------------------------------
+
+How to cite
+-----------
+Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
+
+
+Requirements and dependencies (v 0.2.5)
+---------------------------------------
 
 * Python 3.7.6
 
@@ -224,21 +228,19 @@ High level overview:
     - [x] **semivariance** - calculate semivariance, fit semivariograms and regularize semivariogram,
     - [x] **tutorials** - tutorials (Basic, Intermediate and Advanced)
 
-Functions documentation
------------------------
+Functions in detail
+-------------------
 
 Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
 
 
 Development
-------------------
+-----------
 
-- multi core processing (speed up calculations),
-- code refactoring to be more close to the **GeoPandas** package style,
-- set to work with the newer versions of Python and Windows OS.
+- v 0.3 of the package that runs on the Linux, Mac, and Windows OS; updated and extended variance modeling and analysis.
 
 
 Known Bugs
 -----------------
 
-- Package may crash with very large dataset (memory issues). Operations are performed with numpy arrays and for datasets larger than 10 000 points there could be a memory issue ([Issue page](https://github.com/szymon-datalions/pyinterpolate/issues/64))
+- Package may crash with a huge dataset (memory issues). Operations are performed with numpy arrays, and for datasets larger than 10 000 points, there could be a memory issue ([Issue page](https://github.com/szymon-datalions/pyinterpolate/issues/64))

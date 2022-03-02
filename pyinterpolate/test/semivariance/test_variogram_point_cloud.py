@@ -21,8 +21,7 @@ class TestBuildVariogramPointCloud(unittest.TestCase):
         step_size = maximum_range / number_of_divisions
 
         variogram_cloud = build_variogram_point_cloud(dataset, step_size, maximum_range)
-        variogram_number_of_points = [705661, 4795616, 7823488, 9114824, 8978790,
-                                      7631956, 5248886, 2493818, 653348, 93140]
+        variogram_number_of_points = [2608958, 6525694]
 
         for idx, k in enumerate(variogram_cloud.keys()):
             points_number = len(variogram_cloud[k])
@@ -30,6 +29,8 @@ class TestBuildVariogramPointCloud(unittest.TestCase):
                              variogram_number_of_points[idx],
                              f'Number of points {points_number} for distance {k} is not'
                              f' equal {variogram_number_of_points[idx]}.')
+            if idx == 1:
+                break
 
 
 if __name__ == '__main__':

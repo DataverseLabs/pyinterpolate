@@ -26,7 +26,7 @@ def build_variogram_point_cloud(data, step_size, max_range):
     """
 
     distances = calc_point_to_point_distance(data[:, :-1])
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
     variogram_cloud = OrderedDict()
 
     # Calculate squared differences
@@ -63,12 +63,12 @@ def show_variogram_cloud(variogram_cloud, plot_type='boxplot', figsize=None):
 
     fig, ax = plt.subplots(figsize=figsize)
 
-    if plot_type is 'boxplot':
+    if plot_type == 'boxplot':
         data = [x for x in variogram_cloud.values()]
         ax.boxplot(data)
         xtick_names = plt.setp(ax, xticklabels=variogram_cloud.keys())
         plt.setp(xtick_names, rotation=45, fontsize=8)
-    elif plot_type is 'scatter':
+    elif plot_type == 'scatter':
         data_ys = [x for x in variogram_cloud.values()]
         data_xs = variogram_cloud.keys()
         dy = []
@@ -115,7 +115,7 @@ def calculate_semivariance(data, step_size, max_range):
 
     semivariance = []
 
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
 
     # Calculate semivariances
     for h in lags:
@@ -186,7 +186,7 @@ def calculate_weighted_semivariance(data, step_size, max_range):
     # Prepare semivariance arrays
     semivariance = []
 
-    lags = np.arange(0, max_range, step_size)
+    lags = np.arange(step_size, max_range, step_size)
 
     # Calculate semivariances
     for idx, h in enumerate(lags):

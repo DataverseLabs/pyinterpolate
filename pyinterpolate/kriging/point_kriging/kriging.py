@@ -39,6 +39,9 @@ class Krige:
             [[dim_x1, dim_y1, val_1], [dim_x2, dim_y2, val_2]]
         """
 
+        if known_points.dtype != float:
+            known_points = known_points.astype(float)
+
         self.dataset = known_points
 
         # Test semivariogram model
@@ -46,15 +49,24 @@ class Krige:
         self.model = semivariogram_model
         self.distances = None
 
-    def ordinary_kriging(self, unknown_location, number_of_neighbours, test_anomalies=True):
+    def ordinary_kriging(self,
+                         unknown_location,
+                         neighbors_range=None,
+                         min_no_neighbors=1,
+                         max_no_neighbors=256,
+                         test_anomalies=True):
         """
         Function predicts value at unknown location with Ordinary Kriging technique.
 
         INPUT:
 
         :param unknown_location: (tuple) position of unknown location,
-        :param number_of_neighbours: (int) number of the closest locations to the unknown position which should be
-            included in the modeling,
+        :param neighbors_range: (float) distance for each neighbors are affecting the interpolated point, if not given
+            then it is set to the semivariogram range,
+        :param min_no_neighbors: (int) minimum number of neighbors used for interpolation if there is not any neighbor
+            within the range specified by neighbors_range,
+        :param max_no_neighbors: (int) maximum number of n-closest neighbors used for interpolation if there are too
+            many neighbors in range. It speeds up calculations for large datasets.
         :param test_anomalies: (bool) check if weights are negative.
 
         OUTPUT:
@@ -63,10 +75,16 @@ class Krige:
             [value_in_unknown_location, error, estimated_mean, weights]
         """
 
+        # Check range
+        if neighbors_range is None:
+            neighbors_range = self.model.range
+
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,
                                              data_array=self.dataset,
-                                             number_of_neighbours=number_of_neighbours)
-        n = number_of_neighbours
+                                             neighbors_range=neighbors_range,
+                                             min_number_of_neighbors=min_no_neighbors,
+                                             max_number_of_neighbors=max_no_neighbors)
+        n = len(prepared_data)
         unknown_distances = prepared_data[:, -1]
         k = self.model.predict(unknown_distances)
         k = k.T
@@ -97,23 +115,29 @@ class Krige:
 
                 raise ValueError(text_error)
 
-        sigmasq = (w.T * k)[0]
-        if sigmasq < 0:
-            sigma = 0
-        else:
-            sigma = np.sqrt(sigmasq)
+        sigma = np.matmul(w.T, k)
         return zhat, sigma, w[-1], w
 
-    def simple_kriging(self, unknown_location, number_of_neighbours, global_mean, test_anomalies=True):
+    def simple_kriging(self,
+                       unknown_location,
+                       global_mean,
+                       neighbors_range=None,
+                       min_no_neighbors=1,
+                       max_no_neighbors=256,
+                       test_anomalies=True):
         """
         Function predicts value at unknown location with Simple Kriging technique.
 
         INPUT:
 
         :param unknown_location: (tuple) position of unknown location,
-        :param number_of_neighbours: (int) number of the closest locations to the unknown position which should be
-            included in the modeling,
+        :param neighbors_range: (float) distance for each neighbors are affecting the interpolated point, if not given
+            then it is set to the semivariogram range,
+        :param min_no_neighbors: (int) minimum number of neighbors used for interpolation if there is not any neighbor
+            within the range specified by neighbors_range,
         :param global_mean: (float) global mean which should be known before processing,
+        :param max_no_neighbors: (int) maximum number of n-closest neighbors used for interpolation if there are too
+            many neighbors in range. It speeds up calculations for large datasets.
         :param test_anomalies: (bool) check if weights are negative.
 
         OUTPUT:
@@ -122,10 +146,16 @@ class Krige:
             [value_in_unknown_location, error, mean, weights]
         """
 
+        # Check range
+        if neighbors_range is None:
+            neighbors_range = self.model.range
+
         prepared_data = prepare_kriging_data(unknown_position=unknown_location,
                                              data_array=self.dataset,
-                                             number_of_neighbours=number_of_neighbours)
-        n = number_of_neighbours
+                                             neighbors_range=neighbors_range,
+                                             min_number_of_neighbors=min_no_neighbors,
+                                             max_number_of_neighbors=max_no_neighbors)
+        n = len(prepared_data)
 
         unknown_distances = prepared_data[:, -1]
         k = self.model.predict(unknown_distances)
@@ -151,11 +181,7 @@ class Krige:
 
                 raise ValueError(text_error)
 
-        sigmasq = (w.T * k)[0]
-        if sigmasq < 0:
-            sigma = 0
-        else:
-            sigma = np.sqrt(sigmasq)
+        sigma = np.matmul(w.T, k)
         return zhat, sigma, global_mean, w
     
     def __repr__(self):

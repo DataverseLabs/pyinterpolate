@@ -251,7 +251,7 @@ class RegularizedSemivariogram:
         self.areal_max_range = max_areal_range
         self.areal_step_size = areal_step_size
         self.point_support_data = point_support_data
-        self.ranges = len(np.arange(0, self.areal_max_range, self.areal_step_size))
+        self.ranges = len(np.arange(self.areal_step_size, self.areal_max_range, self.areal_step_size))
         self.weight_error_lags = weighted_lags
 
         self.store_models = store_models

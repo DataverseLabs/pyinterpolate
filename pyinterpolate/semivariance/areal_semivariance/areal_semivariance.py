@@ -49,7 +49,7 @@ class ArealSemivariance:
         # Initial data
         self.areal_dataset = areal_data
         self.areal_centroids = self.areal_dataset[:, 2:]
-        self.areal_lags = np.arange(0, max_areal_range, areal_step_size)
+        self.areal_lags = np.arange(areal_step_size, max_areal_range, areal_step_size)
         self.areal_ss = areal_step_size
         self.areal_max_range = max_areal_range
         self.within_area_points = areal_points_data

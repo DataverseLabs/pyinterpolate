@@ -116,8 +116,7 @@ def check_points_within_ellipse(origin_point: np.array, other_points: np.array, 
 
 def select_values_in_range(data, lag, step_size):
     """
-    Function selects set of values which are greater than (lag - step size / 2) and smaller or equal than
-        (lag + step size / 2).
+    Function selects set of values which are greater than (lag - step size) and smaller or equal than lag.
 
     INPUT:
 
@@ -130,14 +129,12 @@ def select_values_in_range(data, lag, step_size):
     :return: numpy array mask with distances within specified radius.
     """
 
-    step_size = step_size / 2
-
     # Check if numpy array is given
     if not isinstance(data, np.ndarray):
         data = np.array(data)
 
     greater_than = lag - step_size
-    less_equal_than = lag + step_size
+    less_equal_than = lag
 
     # Check conditions
     condition_matrix = np.logical_and(

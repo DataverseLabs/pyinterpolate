@@ -32,7 +32,7 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
         total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
         max_range = min(total_bounds_x, total_bounds_y)
-        step_size = max_range / 2
+        step_size = max_range / 4
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
@@ -48,10 +48,9 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
                                                   areal_semivariance.areal_ss)
         data_test_vals = avg_semi.astype(np.int)
 
-        desired_output = np.array([[0, 111], [1, 111]])
-        test_vals = (data_test_vals == desired_output)
-        print(data_test_vals)
-        self.assertTrue(test_vals.all(), "Output should be [[0, 111], [1, 111]]")
+        desired_output = np.array([[0, 0], [1, 0], [1, 24]])
+        test_vals = np.equal(data_test_vals, desired_output).all()
+        self.assertTrue(test_vals.all(), f"Output is {data_test_vals} ut should be {desired_output}")
 
 
     def test_calculate_average_semivariance_id_as_str(self):
@@ -75,7 +74,7 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
         total_bounds_y = np.abs(total_bounds[3] - total_bounds[1])
 
         max_range = min(total_bounds_x, total_bounds_y)
-        step_size = max_range / 2
+        step_size = max_range / 4
 
         areal_data_prepared = prepare_areal_shapefile(areal_dataset, a_id, areal_val)
         points_in_area = get_points_within_area(areal_dataset, subset, areal_id_col_name=a_id,
@@ -98,9 +97,9 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
                                                   areal_semivariance.areal_ss)
         data_test_vals = avg_semi.astype(np.int)
 
-        desired_output = np.array([[0, 111], [1, 111]])
-        test_vals = (data_test_vals == desired_output)
-        self.assertTrue(test_vals.all(), "Output should be [[0, 111], [1, 111]]")
+        desired_output = np.array([[0, 0], [1, 0], [1, 24]])
+        test_vals = np.equal(data_test_vals, desired_output).all()
+        self.assertTrue(test_vals.all(), f"Output is {data_test_vals} ut should be {desired_output}")
 
 
 if __name__ == '__main__':

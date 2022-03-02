@@ -2,7 +2,7 @@
 Authors:
 
 Scott Gallacher | @scottgallacher-3
-Szymon Molinski | @szymon-datalions
+Szymon Molinski | @SimonMolinsky
 
 Contributors:
 
@@ -302,15 +302,16 @@ class TheoreticalSemivariogram:
 
         return gamma
 
-    def fit_semivariance(self, model_type, number_of_ranges=16):
+    def fit_semivariance(self, model_type, number_of_ranges=16, number_of_sill_ranges=16):
         """
         Method fits experimental points into chosen semivariance model type.
 
         INPUT:
 
         :param model_type: (str) 'exponential', 'gaussian', 'linear', 'spherical',
-        :param number_of_ranges: (int) deafult = 16. Used to create an array of equidistant ranges
-            between minimal range of empirical semivariance and maximum range of empirical semivariance.
+        :param number_of_ranges: (int) deafult = 16. Used to create an array of equidistant ranges between minimal
+            range of empirical semivariance and maximum range of empirical semivariance,
+        :param number_of_sill_ranges: (int) default=16, number of sill ranges to find the optimal one in a grid search.
 
         OUTPUT:
 
@@ -332,7 +333,10 @@ class TheoreticalSemivariogram:
         self.theoretical_model = model
 
         # sill
-        sill = np.var(self.points_array[:, -1])
+        variance = np.var(self.points_array[:, -1])
+        minsill = 0.3 * variance
+        maxsill = 2 * variance
+        sills = np.linspace(minsill, maxsill, number_of_sill_ranges)
 
         # nugget
         if self.empirical_semivariance[0][0] != 0:
@@ -344,11 +348,11 @@ class TheoreticalSemivariogram:
         minrange = self.empirical_semivariance[:, 0][1]
         maxrange = self.empirical_semivariance[:, 0][-1]
         ranges = np.linspace(minrange, maxrange, number_of_ranges)
-        optimal_range = self.calculate_range(model, ranges, nugget, sill)
+        optimal_range, optimal_sill = self.calculate_range_and_sill(model, ranges, sills, nugget)
 
         # output model
         self.nugget = nugget
-        self.sill = sill
+        self.sill = optimal_sill
         self.range = optimal_range
 
         # model error
@@ -356,7 +360,7 @@ class TheoreticalSemivariogram:
 
         return model_type
 
-    def find_optimal_model(self, weighted=False, number_of_ranges=16):
+    def find_optimal_model(self, weighted=False, number_of_ranges=16, number_of_sill_ranges=16):
         """
 
         Method fits experimental points into all available models and choose one with the lowest error.
@@ -370,9 +374,9 @@ class TheoreticalSemivariogram:
             where:
 
             - N(h) - number of point pairs in a given range, gamma_{exp}(h) - value of experimental semivariogram for h.
-
-        :param number_of_ranges: (int) default=16. Used to create an array of equidistant ranges
-            between minimal range of empirical semivariance and maximum range of empirical semivariance.
+        :param number_of_ranges: (int) default=16. Used to create an array of equidistant ranges between minimal range
+            of empirical semivariance and maximum range of empirical semivariance,
+        :param number_of_sill_ranges: (int) default=16, number of sill ranges to find the optimal one in a grid search.
         """
 
         if weighted:
@@ -392,7 +396,10 @@ class TheoreticalSemivariogram:
         base_error = self.calculate_base_error()
 
         # sill
-        sill = np.var(self.points_array[:, -1])
+        variance = np.var(self.points_array[:, -1])
+        minsill = 0.3 * variance
+        maxsill = 2 * variance
+        sills = np.linspace(minsill, maxsill, number_of_sill_ranges)
 
         # nugget
         if self.empirical_semivariance[0][0] != 0:
@@ -408,12 +415,12 @@ class TheoreticalSemivariogram:
         # Calculate model errors
         model_errors = [('Linear (LS) reference model', base_error, None)]
         for model in models:
-            optimal_range = self.calculate_range(models[model], ranges, nugget, sill)
+            optimal_range, optimal_sill = self.calculate_range_and_sill(models[model], ranges, sills, nugget)
 
             # output model
-            model_error = self.calculate_model_error(models[model], nugget, sill, optimal_range)
+            model_error = self.calculate_model_error(models[model], nugget, optimal_sill, optimal_range)
 
-            model_errors.append((model, model_error, [nugget, sill, optimal_range]))
+            model_errors.append((model, model_error, [nugget, optimal_sill, optimal_range]))
             if self.verbose:
                 print('Model: {}, error value: {}'.format(model, model_error))
 
@@ -451,7 +458,21 @@ class TheoreticalSemivariogram:
         self.model_error = model_error
         return model_name
 
+    def calculate_range_and_sill(self, model, possible_ranges, possible_sills, nugget):
+        errors = []
+        ranges_and_sills = []
+        for r in possible_ranges:
+            for s in possible_sills:
+                x = (self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0], nugget, s, r))
+                x = x * x
+                errors.append(np.mean(x))
+                ranges_and_sills.append((r, s))
+        best_pos = np.argmin(errors)
+        opt_range, opt_sill = ranges_and_sills[best_pos]
+        return opt_range, opt_sill
+
     def calculate_range(self, model, ranges, nugget, sill):
+        # TODO: deprecated method
         errors = []
         for r in ranges:
             x = (self.empirical_semivariance[:, 1] - model(self.empirical_semivariance[:, 0], nugget, sill, r))
