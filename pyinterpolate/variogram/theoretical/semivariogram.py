@@ -6,23 +6,19 @@ class TheoreticalVariogram:
 
     Parameters
     ----------
+    empirical_variogram : EmpiricalVariogram
+                          Prepared Empirical Variogram.
+
     verbose : bool, default=False
               Prints messages related to the model preparation.
 
     Attributes
     ----------
-    observations : numpy array
-                   Coordinates and their values: (pt x, pt y, value) or (Point(), value).
-
     verbose : bool, default=False
               Prints messages related to the model preparation.
 
     empirical_variogram : EmpiricalVariogram or None, default=None
                           Empirical Variogram class and its attributes.
-
-    theoretical_model : str or None, default=None
-                        The name of a theoretical model. Only finite set of models are available.
-                        See variogram_models attribute.
 
     variogram_models : dict
                        Dict with keys representing theoretical variogram models and values that
@@ -34,6 +30,10 @@ class TheoreticalVariogram:
                            'linear',
                            'power',
                            'spherical'.
+
+    model : str or None, default=None
+            The name of a theoretical model. Only finite set of models are available.
+            See variogram_models attribute.
 
     name : str or None, default=None
            Name of the chosen model. Available names are the same as keys in variogram_models attribute.
@@ -65,14 +65,13 @@ class TheoreticalVariogram:
     """
 
     def __init__(self,
-                 empirical_model=None,
+                 empirical_variogram: EmpiricalVariogram,
                  verbose=False):
 
         self.verbose = verbose
 
         # Model
-        self.observations = None
-        self.empirical_variogram = empirical_model
+        self.empirical_variogram = empirical_variogram
         self.variogram_models = {
             'circular': self.circular_model,
             'cubic': self.cubic_model,
@@ -96,38 +95,37 @@ class TheoreticalVariogram:
         self.smape = 0.
         self.akaike = 0.
 
-    def set_empirical_model(self,
-                            empirical_model=None,
-                            observations=None,
-                            step_size=None,
-                            max_range=None,
-                            weights=None,
-                            direction=0,
-                            tolerance=1,
-                            auto_search=False):
-        """Method sets empirical model for further calculations.
+    def fit(self,
+            model_type: str,
+            nugget: float,
+            sill: float,
+            range: float):
+        """
 
         Parameters
         ----------
-        empirical_model : EmpiricalVariogram or None, default=None
-                          Prepared EmpiricalVariogram model or None. If None then the observations parameter must
-                          be given along with other semivariogram parameters.
-
-        observations : numpy array or None, default=None
-                       Coordinates and their values: (pt x, pt y, value) or (Point(), value). If None then
-                       the EmpiricalVariogram parameter must be given.
-
-        step_size :
-        max_range
-        weights
-        direction
-        tolerance
-        autofit
+        model_type
+        nugget
+        sill
+        range
 
         Returns
         -------
 
         """
+        pass
+
+    def autofit(self,
+                model_type=None,
+                nugget=None,
+                min_range=0,
+                max_range=0.5,
+                number_of_ranges=16,
+                min_sill=0.,
+                max_sill=1,
+                number_of_sills=16,
+                error_estimator='rmse'):
+        pass
 
     def __str__(self):
         pass
