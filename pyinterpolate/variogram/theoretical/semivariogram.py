@@ -1,4 +1,8 @@
+import numpy as np
+from collections import namedtuple
 from pyinterpolate.variogram.empirical import EmpiricalVariogram
+from pyinterpolate.variogram.utils.evals import forecast_bias
+from pyinterpolate.variogram.utils.errors import check_selected_errors
 
 
 class TheoreticalVariogram:
@@ -73,13 +77,13 @@ class TheoreticalVariogram:
         # Model
         self.empirical_variogram = empirical_variogram
         self.variogram_models = {
-            'circular': self.circular_model,
-            'cubic': self.cubic_model,
+            'circular': self._circular_model,
+            'cubic': self._cubic_model,
             'exponential': self.exponential_model,
-            'gaussian': self.gaussian_model,
-            'linear': self.linear_model,
-            'power': self.power_model,
-            'spherical': self.spherical_model
+            'gaussian': self._gaussian_model,
+            'linear': self._linear_model,
+            'power': self._power_model,
+            'spherical': self._spherical_model
         }
 
         # Model parameters
@@ -97,23 +101,65 @@ class TheoreticalVariogram:
 
     def fit(self,
             model_type: str,
-            nugget: float,
             sill: float,
-            range: float):
+            range: float,
+            nugget=0.,
+            update_attrs=True) -> namedtuple:
         """
 
         Parameters
         ----------
-        model_type
-        nugget
-        sill
-        range
+        model_type : str
+                     Model type. Available models:
+                    - 'circular',
+                    - 'cubic',
+                    - 'exponential',
+                    - 'gaussian',
+                    - 'linear',
+                    - 'power',
+                    - 'spherical'.
+
+        sill : float
+               Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
+               to observations variance.
+
+        range : float
+                Range is a distance at which spatial correlation exists and often it is a distance when variogram
+                reaches its sill. It shouldn't be set at a distance larger than a half of a study extent.
+
+        nugget : float, default=0.
+                 Nugget parameter (bias at a zero distance),
+
+        update_attrs : bool, default=True
+                       Should class attributes be updated?
+
+        Raises
+        ------
+        KeyError : Model type not implemented
 
         Returns
         -------
+        ModelErrors : namedtuple
+                      ('ModelErrors', 'rmse bias smape akaike')
 
         """
-        pass
+
+        # Check model type
+
+        _names = list(self.variogram_models.keys())
+
+        if not model_type in _names:
+            msg = f'Defined model name {model_type} not available. You may choose one from {names} instead.'
+            raise KeyError(msg)
+        
+        _model = self.variogram_models[model_type]
+
+        _theoretical_values = _model(nugget, sill, range)
+        
+        # Estimate errors
+        _error = self.calculate_model_error(_model, nugget, sill, range,
+                                            rmse=True, bias=True, akaike=True, smape=True)
+        return _error
 
     def autofit(self,
                 model_type=None,
@@ -132,3 +178,65 @@ class TheoreticalVariogram:
 
     def __repr__(self):
         pass
+
+    #TODO: annot to _model
+    def calculate_model_error(self, model_fn,
+                              nugget: float,
+                              sill: float,
+                              range: float,
+                              rmse=True,
+                              bias=True,
+                              akaike=True,
+                              smape=True) -> namedtuple:
+        """
+
+        Parameters
+        ----------
+        model_fn
+        nugget
+        sill
+        range
+        rmse
+        bias
+        akaike
+        smape
+
+        Returns
+        -------
+
+        Raises
+        ------
+        ErrorTypeSelectionError : User set all errors to False
+        """
+
+        # Check errors
+        check_selected_errors(rmse + bias + akaike + smape)
+        ModelErrors = namedtuple('ModelErrors', 'rmse bias akaike smape')
+
+        _model_values = model_fn(self.empirical_variogram.experimental_semivariance_array[:, 0], nugget, sill, range)
+        _real_values = self.empirical_variogram.experimental_semivariance_array[:, 1].copy()
+
+        # Get Forecast Biast
+        if bias:
+            _fb = forecast_bias(_model_values, _real_values)
+        else:
+            _fb = np.nan
+
+        # Get RMSE
+        if rmse:
+            _rmse = root_mean_squared_error(_model_values, _real_values)
+        else:
+            _rmse = np.nan
+
+        if akaike:
+            _akaike = akaike_information_criterion(nugget, sill, range, len(_real_values))
+        else:
+            _akaike = np.nan
+
+        if smape:
+            _smape = symmetric_mean_absolute_percentage_error(_model_values, _real_values)
+        else:
+            _smape = np.nan
+
+        model_errors = ModelErrors(_rmse, _fb, _akaike, _smape)
+        return model_errors
