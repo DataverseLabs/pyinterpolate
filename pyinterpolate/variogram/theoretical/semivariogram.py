@@ -3,7 +3,7 @@ from collections import namedtuple
 from pyinterpolate.variogram.empirical import EmpiricalVariogram
 from pyinterpolate.variogram.utils.evals import forecast_bias, root_mean_squared_error,\
     symmetric_mean_absolute_percentage_error, mean_absolute_error
-from pyinterpolate.variogram.utils.validate import validate_selected_errors
+from pyinterpolate.variogram.utils.exceptions import validate_selected_errors
 
 
 class TheoreticalVariogram:
@@ -50,9 +50,9 @@ class TheoreticalVariogram:
            Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
            to observations variance.
 
-    range : float, default=0
-            Range is a distance at which spatial correlation exists and often it is a distance when variogram reaches
-            sill. It shouldn't be set at a distance larger than a half of a study extent.
+    srange : float, default=0
+             Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
+             variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
 
     rmse : float, default=0
            Root mean squared error of the difference between the empirical observations and the modeled curve.
@@ -90,7 +90,7 @@ class TheoreticalVariogram:
         self.model = None
         self.name = None
         self.nugget = 0.
-        self.range = 0.
+        self.srange = 0.
         self.sill = 0.
 
         # Dynamic parameters
@@ -102,7 +102,7 @@ class TheoreticalVariogram:
     def fit(self,
             model_type: str,
             sill: float,
-            range: float,
+            srange: float,
             nugget=0.,
             update_attrs=True) -> namedtuple:
         """
@@ -123,9 +123,9 @@ class TheoreticalVariogram:
                Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
                to observations variance.
 
-        range : float
-                Range is a distance at which spatial correlation exists and often it is a distance when variogram
-                reaches its sill. It shouldn't be set at a distance larger than a half of a study extent.
+        srange : float, default=0
+                 Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
+                 variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
 
         nugget : float, default=0.
                  Nugget parameter (bias at a zero distance).
@@ -154,10 +154,10 @@ class TheoreticalVariogram:
         
         _model = self.variogram_models[model_type]
 
-        _theoretical_values = _model(nugget, sill, range)
+        _theoretical_values = _model(nugget, sill, srange)
         
         # Estimate errors
-        _error = self.calculate_model_error(_model, nugget, sill, range,
+        _error = self.calculate_model_error(_model, nugget, sill, srange,
                                             rmse=True, bias=True, smape=True)
 
         if update_attrs:
@@ -165,7 +165,7 @@ class TheoreticalVariogram:
             self.model = _model
             self.name = model_type
             self.nugget = nugget
-            self.range = range
+            self.srange = srange
             self.sill = sill
 
             # Dynamic parameters
@@ -198,7 +198,7 @@ class TheoreticalVariogram:
     def calculate_model_error(self, model_fn,
                               nugget: float,
                               sill: float,
-                              range: float,
+                              srange: float,
                               rmse=True,
                               bias=True,
                               mae=True,
@@ -217,9 +217,9 @@ class TheoreticalVariogram:
                Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
                to observations variance.
 
-        range : float
-                Range is a distance at which spatial correlation exists and often it is a distance when variogram
-                reaches its sill. It shouldn't be set at a distance larger than a half of a study extent.
+        srange : float
+                 Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
+                 variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
 
         rmse : bool, default=True
                Root Mean Squared Error of a model.
@@ -247,7 +247,7 @@ class TheoreticalVariogram:
         validate_selected_errors(rmse + bias + mae + smape)  # all False sums to 0 -> error detection
         ModelErrors = namedtuple('ModelErrors', 'rmse bias mae smape')
 
-        _model_values = model_fn(self.empirical_variogram.experimental_semivariance_array[:, 0], nugget, sill, range)
+        _model_values = model_fn(self.empirical_variogram.experimental_semivariance_array[:, 0], nugget, sill, srange)
         _real_values = self.empirical_variogram.experimental_semivariance_array[:, 1].copy()
 
         # Get Forecast Biast

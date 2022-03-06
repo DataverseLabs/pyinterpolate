@@ -47,6 +47,10 @@ Theoretical variogram is a specific mathematical model fitted into a data with t
 Module returns the Theoretical Variogram as a set of four values: model type (str), sill (float), range (float),
     nugget (float). It is used later for Kriging.
 
+Variogram Models:
+- circular variogram [4],
+
+
 Changelog
 ---------
 
@@ -73,6 +77,8 @@ Bibliography
 [2] Oliver, M.A., Webster, R. Basic steps in geostatistics: the variogram and Kriging. ISBN: 978-3-319-15865-5.
     Springer 2015.
 [3] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
+[4] McBratney, A. B., Webster R. Choosing Functions for Semivariograms of Soil Properties and Fitting Them
+    to Sampling Estimates. Journal of Soil Science 37: 617–639. 1986.
 
 
 TODO

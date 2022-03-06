@@ -1,7 +1,42 @@
+import warnings
 from shapely.geometry import Point
 
 
-# TESTS AND EXCEPTIONS
+class ErrorTypeSelectionError(Exception):
+    """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
+
+    Attributes
+    ----------
+    message : str
+    """
+    def __init__(self):
+        self.message = "You didn't selected any error type from available rmse, bias, akaike and smape. Set one of" \
+                       " those to True."
+
+    def __str__(self):
+        return self.message
+
+
+class UndefinedSMAPEWarning(Warning):
+    """Warning invoked by the scenario when predicted value is equal to 0 and observation is equal to 0. It leads to
+        the 0/0 division and, in return, to NaN value at a specific position. Finally, user gets NaN as the output.
+
+    Parameters
+    ----------
+    message : str
+
+    Attributes
+    ----------
+    message : str
+    """
+
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)
+
+
 def validate_direction(direction):
     """
     Check if direction is within limits 0-360
@@ -54,21 +89,6 @@ def validate_weights(points, weights):
     if any([x == 0 for x in weights]):
         msg = 'One or more of weights in dataset is set to 0, this may cause errors in the distance'
         raise ValueError(msg)
-
-
-class ErrorTypeSelectionError(Exception):
-    """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
-
-    Attributes
-    ----------
-    message : str
-    """
-    def __init__(self):
-        self.message = "You didn't selected any error type from available rmse, bias, akaike and smape. Set one of" \
-                       " those to True."
-
-    def __str__(self):
-        return self.message
 
 
 def validate_selected_errors(val: int):

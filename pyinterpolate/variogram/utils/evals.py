@@ -1,4 +1,6 @@
+import warnings
 import numpy as np
+from pyinterpolate.variogram.utils.exceptions import UndefinedSMAPEWarning
 
 
 def forecast_bias(predicted_array: np.array, real_array: np.array) -> float:
@@ -121,7 +123,8 @@ def root_mean_squared_error(predicted_array: np.array, real_array: np.array) -> 
     return rmse
 
 
-def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_array: np.array) -> float:
+def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_array: np.array,
+                                             test_undefined=True) -> float:
     """
 
     Parameters
@@ -132,10 +135,18 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_arr
     real_array : numpy array
                  Array with real observations.
 
+    test_undefined : bool
+                     Check if there are cases when prediction and observation are equal to 0.
+
     Returns
     -------
     smape : float
             Symmetric Mean Absolute Percentage Error.
+
+    Warns
+    --------
+    UndefinedSMAPEWarning
+        Observation and prediction are equal to 0 - smape of this pair is undefined and numpy return the NaN value.
 
     Notes
     -----
@@ -159,7 +170,23 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_arr
         * $N$ - number of observations.
 
     """
-    smape = 100 * np.mean(
-        np.abs(predicted_array - real_array) / (np.abs(real_array) + np.abs(predicted_array))
-    )
+    smape = 100
+
+    if test_undefined:
+        psmapes = []
+        for idx, val in enumerate(real_array):
+            if val == 0 and predicted_array[idx] == 0:
+                msg = f'Values of observation and prediction on position {idx} are equal to zero. ' \
+                      f'Partial smape is set to 0 to avoid zero by zero division.'
+                warnings.warn(msg, UndefinedSMAPEWarning)
+                psmapes.append(0)
+            else:
+                pred = predicted_array[idx]
+                psmape = np.abs(pred - val) / (np.abs(pred) + np.abs(val))
+                psmapes.append(psmape)
+        smape = smape * np.mean(psmapes)
+    else:
+        smape = smape * np.mean(
+            np.abs(predicted_array - real_array) / (np.abs(real_array) + np.abs(predicted_array))
+        )
     return smape

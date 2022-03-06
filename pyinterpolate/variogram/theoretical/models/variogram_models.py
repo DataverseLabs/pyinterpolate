@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def circular_model(lags: np.array, nugget: float, sill: float, range: float) -> np.array:
+def circular_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
     """Function calculates circular model of semivariogram.
 
     Parameters
@@ -12,7 +12,8 @@ def circular_model(lags: np.array, nugget: float, sill: float, range: float) -> 
 
     sill : float
 
-    range : float
+    srange : float
+             Semivariogram Range.
 
     Returns
     -------
@@ -22,21 +23,34 @@ def circular_model(lags: np.array, nugget: float, sill: float, range: float) -> 
     -----
     Equation:
 
-    gamma = nugget + (2/np.pi)*sill*[a * np.sqrt(1 - a ** 2) + np.arcsin(a)], 0 < lag <= range
-        gamma = 0, lag == 0
-        (Source: https://pro.arcgis.com/en/pro-app/latest/tool-reference/spatial-analyst/how-kriging-works.htm#GUID-94A34A70-DBCF-4B23-A198-BB50FB955DC0))
+    (1) $\gamma = c0 + c[1 - (\frac{2}{\pi} * arccos(a)) + (\frac{2}{\pi} * a) * \sqrt{1 - a^{2}}]$, $0 < a <= h$;
+    (2) $\gamma = c0 + c$, $a > h$;
+    (3) $\gamma = 0$, $a = 0$.
 
-        where:
+    where:
 
-        a = lag / range
+    - $\gamma$ - semivariance,
+    - $c0$ - nugget,
+    - $c$ - sill,
+    - $a$ - lag,
+    - $h$ - range.
 
-
-        NOTE: There exists an equivalent model form for the circular model:
-        gamma = nugget + sill*[1 - (2/np.pi * np.arccos(a)) + (2/np.pi * a) * np.sqrt(1 - a ** 2 )], 0 < lag <= range
-        gamma = 0, lag == 0
-        (Source: 'McBratney, A. B., and R. Webster. "Choosing Functions for Semi-variograms of Soil Properties and Fitting Them to Sampling Estimates." Journal of Soil Science 37: 617–639. 1986.')
-
-        (Convert between the two forms using: arcsin(x) + arccos(x) = np.pi/2. Then, adjust pre-factors outside of bracket term).
+    Bibliography
+    ------------
+    [1] McBratney, A. B., Webster R. Choosing Functions for Semivariograms of Soil Properties and Fitting Them to
+    Sampling Estimates. Journal of Soil Science 37: 617–639. 1986.
 
 
     """
+
+    pic = 2 / np.pi
+
+    gamma = np.where(
+        (lags <= srange),
+        (nugget + sill*(1 - (pic * np.arccos(lags)) + (pic * lags) * np.sqrt(1 - lags**2))),
+        (nugget + sill)
+    )
+
+    if lags[0] == 0:
+        gamma[0] = 0
+    return gamma

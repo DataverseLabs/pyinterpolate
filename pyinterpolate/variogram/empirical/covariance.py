@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.geometry import Point
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
-from pyinterpolate.variogram.utils.validate import validate_direction, validate_points, validate_tolerance
+from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
 
 # Temp
 from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distance
