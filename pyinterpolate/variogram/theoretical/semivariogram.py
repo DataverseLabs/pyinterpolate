@@ -1,3 +1,4 @@
+#TODO test is lags are increasing
 import numpy as np
 from collections import namedtuple
 from pyinterpolate.variogram.empirical import EmpiricalVariogram
