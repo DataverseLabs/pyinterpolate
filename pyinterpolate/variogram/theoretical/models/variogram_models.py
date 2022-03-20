@@ -25,7 +25,7 @@ def _get_zero_lag_value(lag0: float, nugget: float, gamma0: float) -> float:
     return gamma0
 
 
-def circular_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates circular model of semivariogram.
 
     Parameters
@@ -36,8 +36,8 @@ def circular_model(lags: np.array, nugget: float, sill: float, srange: float) ->
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -68,10 +68,10 @@ def circular_model(lags: np.array, nugget: float, sill: float, srange: float) ->
     """
 
     pic = 2 / np.pi
-    ar = lags / srange
+    ar = lags / rang
 
     gamma = np.where(
-        (lags <= srange),
+        (lags <= rang),
         (nugget + sill*(1 - (pic * np.arccos(ar)) + (pic * ar) * np.sqrt(1 - ar**2))),
         (nugget + sill)
     )
@@ -82,7 +82,7 @@ def circular_model(lags: np.array, nugget: float, sill: float, srange: float) ->
     return gamma
 
 
-def cubic_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates cubic model of semivariogram.
 
     Parameters
@@ -93,8 +93,8 @@ def cubic_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -122,14 +122,14 @@ def cubic_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
 
     """
 
-    ar = lags / srange
+    ar = lags / rang
     a1 = 7 * ar ** 2
     a2 = -8.75 * ar ** 3
     a3 = 3.5 * ar ** 5
     a4 = -0.75 * ar ** 7
 
     gamma = np.where(
-        (lags <= srange),
+        (lags <= rang),
         nugget + sill * (a1 + a2 + a3 + a4),
         nugget + sill
     )
@@ -140,7 +140,7 @@ def cubic_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
     return gamma
 
 
-def exponential_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def exponential_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates exponential model of semivariogram.
 
     Parameters
@@ -151,8 +151,8 @@ def exponential_model(lags: np.array, nugget: float, sill: float, srange: float)
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -178,14 +178,14 @@ def exponential_model(lags: np.array, nugget: float, sill: float, srange: float)
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / srange
+    ar = lags / rang
     gamma = nugget + sill * (1 - np.exp(-ar))
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
     return gamma
 
 
-def gaussian_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def gaussian_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates gaussian model of semivariogram.
 
     Parameters
@@ -196,8 +196,8 @@ def gaussian_model(lags: np.array, nugget: float, sill: float, srange: float) ->
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -224,15 +224,15 @@ def gaussian_model(lags: np.array, nugget: float, sill: float, srange: float) ->
 
     """
 
-    srange_sq = srange * srange
-    ar = lags**2 / srange_sq
+    rang_sq = rang * rang
+    ar = lags**2 / rang_sq
     gamma = nugget + sill * (1 - np.exp(-ar))
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
     return gamma
 
 
-def linear_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def linear_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates linear model of semivariogram.
 
     Parameters
@@ -243,8 +243,8 @@ def linear_model(lags: np.array, nugget: float, sill: float, srange: float) -> n
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -271,10 +271,10 @@ def linear_model(lags: np.array, nugget: float, sill: float, srange: float) -> n
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / srange
+    ar = lags / rang
 
     gamma = np.where(
-        lags <= srange,
+        lags <= rang,
         nugget + sill * ar,
         nugget + sill
     )
@@ -283,7 +283,7 @@ def linear_model(lags: np.array, nugget: float, sill: float, srange: float) -> n
     return gamma
 
 
-def power_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def power_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates power model of semivariogram.
 
     Parameters
@@ -294,8 +294,8 @@ def power_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -322,11 +322,11 @@ def power_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / srange
+    ar = lags / rang
     ar_sq = ar * ar
 
     gamma = np.where(
-        lags <= srange,
+        lags <= rang,
         nugget + sill * ar_sq,
         nugget + sill
     )
@@ -335,7 +335,7 @@ def power_model(lags: np.array, nugget: float, sill: float, srange: float) -> np
     return gamma
 
 
-def spherical_model(lags: np.array, nugget: float, sill: float, srange: float) -> np.array:
+def spherical_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
     """Function calculates spherical model of semivariogram.
 
     Parameters
@@ -346,8 +346,8 @@ def spherical_model(lags: np.array, nugget: float, sill: float, srange: float) -
 
     sill : float
 
-    srange : float
-             Semivariogram Range.
+    rang : float
+           Semivariogram Range.
 
     Returns
     -------
@@ -374,11 +374,11 @@ def spherical_model(lags: np.array, nugget: float, sill: float, srange: float) -
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / srange
+    ar = lags / rang
     a1 = (3/2) * ar
     a2 = 0.5 * ar**3
 
-    gamma = np.where((lags <= srange),
+    gamma = np.where((lags <= rang),
                      (nugget + sill * (a1 - a2)),
                      (nugget + sill))
     g0 = gamma[0]

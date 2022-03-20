@@ -216,7 +216,7 @@ def directional_semivariogram(points: np.array,
     Returns
     -------
     : (numpy array)
-        [lag, semivariance, number of points within a lag]
+      [lag, semivariance, number of points within a lag]
     """
 
     if weights is None:

@@ -10,19 +10,19 @@ from pyinterpolate.variogram.theoretical.models import linear_model
 from pyinterpolate.variogram.theoretical.models import power_model
 from pyinterpolate.variogram.theoretical.models import spherical_model
 
-from .consts import TheoreticalVariogramData
+from .consts import TheoreticalVariogramModelsData
 
 
-VARIANCES = TheoreticalVariogramData()
+VARIANCES = TheoreticalVariogramModelsData()
 LAGS = VARIANCES.lags
 
 
-def build_model(model_fn: Callable, lags: Iterable, nugget: float, sill: float, srange: float):
+def build_model(model_fn: Callable, lags: Iterable, nugget: float, sill: float, rang: float):
     mdl = model_fn(
         lags=lags,
         nugget=nugget,
         sill=sill,
-        srange=srange
+        rang=rang
     )
     return mdl
 
@@ -65,7 +65,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(circular_model,
@@ -110,7 +110,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(cubic_model,
@@ -155,7 +155,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(exponential_model,
@@ -200,7 +200,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(gaussian_model,
@@ -245,7 +245,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(linear_model,
@@ -290,7 +290,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(power_model,
@@ -335,7 +335,7 @@ class TestModels(unittest.TestCase):
         self.assertAlmostEqual(modeled_variance_mean, expected_variance_mean, places=3, msg=msg_mean)
 
         # n=random, s=random, r=random, l=(0:10)
-        rrange = VARIANCES.srange_random
+        rrange = VARIANCES.rang_random
         rnugget = VARIANCES.nugget_random
         rsill = VARIANCES.sill_random
         cm_random = build_model(spherical_model,

@@ -152,3 +152,33 @@ def select_values_in_range(data, lag, step_size):
     # Find positions
     position_matrix = np.where(condition_matrix)
     return position_matrix
+
+
+def create_min_max_array(value: float,
+                         min_scaling_factor: float,
+                         max_scaling_factor: float,
+                         number_of_steps: int) -> np.array:
+    """Function prepares a numpy array of N equidistant values between (a:b), where:
+        N - number of steps,
+        a - min_scaling_factor * value
+        b - max_scaling_factor * value
+
+    Parameters
+    ----------
+    value : float
+
+    min_scaling_factor : float
+
+    max_scaling_factor : float
+
+    number_of_steps : int
+
+    Returns
+    -------
+    numpy array
+
+    """
+    min_step = value * min_scaling_factor
+    max_step = value * max_scaling_factor
+    min_max_steps = np.linspace(min_step, max_step, number_of_steps)
+    return min_max_steps

@@ -2,13 +2,14 @@ import warnings
 from shapely.geometry import Point
 
 
-class ErrorTypeSelectionError(Exception):
+class MetricsTypeSelectionError(Exception):
     """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
 
     Attributes
     ----------
     message : str
     """
+
     def __init__(self):
         self.message = "You didn't selected any error type from available rmse, bias, akaike and smape. Set one of" \
                        " those to True."
@@ -93,6 +94,43 @@ def validate_weights(points, weights):
 
 def validate_selected_errors(val: int):
     if val == 0:
-        raise ErrorTypeSelectionError
-    else:
-        pass
+        raise MetricsTypeSelectionError
+
+
+def check_ranges(minr: float, maxr: float):
+    # Check if min is lower or equal to max
+    if minr > maxr:
+        msg = f'Minimum range {minr} is larger than maximum range {maxr}'
+        raise ValueError(msg)
+
+    # Check if min is negative
+    if minr < 0:
+        msg = f'Minimum range ratio is below 0 and it is equal to {minr}'
+        raise ValueError(msg)
+
+    # Check if max is larger than 1
+    if maxr > 1:
+        msg = f'Maximum range ratio should be lower than 1, but it is {maxr}'
+        raise ValueError(msg)
+
+    # Check if max is larger than 0.5 and throw warning if it is
+    if maxr > 0.5:
+        msg = f'Maximum range ratio is greater than the half of area smaller distance, it could introduce bias'
+        warnings.warn(msg)
+
+
+def check_sills(mins: float, maxs: float):
+    # Check if min is lower or equal to max
+    if mins > maxs:
+        msg = f'Minimum sill ratio {mins} is larger than maximum sill ratio {maxs}'
+        raise ValueError(msg)
+
+    # Check if min is negative
+    if mins < 0:
+        msg = f'Minimum sill ratio is below 0 and it is equal to {mins}'
+        raise ValueError(msg)
+
+    # Check if max is larger than 0.5 and throw warning if it is
+    if maxs > 1:
+        msg = f'Maximum sill ratio is greater than the variance of a data, it could introduce bias'
+        warnings.warn(msg)

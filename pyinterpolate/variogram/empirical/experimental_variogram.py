@@ -155,7 +155,7 @@ class EmpiricalVariogram:
     +-----+--------------------+---------------------+--------------------+
     """
 
-    def __init__(self, input_array, step_size: float, max_range: float, weights=None, direction=0, tolerance=1,
+    def __init__(self, input_array, step_size: float, max_range: float, weights=None, direction=0.0, tolerance=1.0,
                  is_semivariance=True, is_covariance=True, is_variance=True):
 
         if not isinstance(input_array, np.ndarray):
@@ -296,12 +296,12 @@ class EmpiricalVariogram:
         return rows
 
 
-def build_experimental_variogram(input_array,
+def build_experimental_variogram(input_array: np.array,
                                  step_size: float,
                                  max_range: float,
-                                 weights=None,
-                                 direction=0,
-                                 tolerance=1) -> EmpiricalVariogram:
+                                 weights: np.array = None,
+                                 direction: float = 0,
+                                 tolerance: float = 1) -> EmpiricalVariogram:
     """
     Function prepares:
         - experimental semivariogram,
