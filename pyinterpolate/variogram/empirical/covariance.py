@@ -274,11 +274,6 @@ def calculate_covariance(points: np.array,
     # Test size of points array and input data types
     validate_points(points)
 
-    # Transform Point into floats
-    is_point_type = isinstance(points[0][0], Point)
-    if is_point_type:
-        points = [[x[0].x, x[0].y, x[1]] for x in points]
-
     # Test directions if provided
     validate_direction(direction)
 

@@ -34,7 +34,8 @@ def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: f
     """
 
     semivariances_and_lags = list()
-    distances = temp_calc_point_to_point_distance(points[:, :-1])
+    pts = points[:, :-1]
+    distances = temp_calc_point_to_point_distance(pts)
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
@@ -406,11 +407,6 @@ def calculate_semivariance(points: np.array,
 
     # Test size of points array and input data types
     validate_points(points)
-
-    # Transform Point into floats
-    is_point_type = isinstance(points[0][0], Point)
-    if is_point_type:
-        points = [[x[0].x, x[0].y, x[1]] for x in points]
 
     # Test directions if provided
     validate_direction(direction)

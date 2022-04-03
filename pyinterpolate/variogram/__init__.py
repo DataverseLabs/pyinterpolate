@@ -1,2 +1,2 @@
-from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram, EmpiricalVariogram
+from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram, ExperimentalVariogram
 from pyinterpolate.variogram.theoretical.semivariogram import build_theoretical_variogram, TheoreticalVariogram

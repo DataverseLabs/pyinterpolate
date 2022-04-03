@@ -38,6 +38,25 @@ class UndefinedSMAPEWarning(Warning):
         return repr(self.message)
 
 
+class AttributeSetToFalseWarning(Warning):
+    """
+    Warning invoked when ExperimentalVariogram class attributes are set to False (is_semivariance, is_covariance,
+    is_variance) but user wants to plot one of the indices controlled by those attributes (semivariance, covariance,
+    variance) with a plot() method of this class.
+    """
+    def __init__(self, validated):
+        wrong_params = list(validated.keys())
+        msg = ''
+        for _param in wrong_params:
+            attr_msg = f'Warning! Attribute {_param} is set to False but you try to plot this object! Plot has been' \
+                       f' cancelled.\n'
+            msg = msg + attr_msg
+        self.message = msg
+
+    def __str__(self):
+        return repr(self.message)
+
+
 def validate_direction(direction):
     """
     Check if direction is within limits 0-360
@@ -55,14 +74,9 @@ def validate_points(points):
     """
 
     dims = points.shape
-    msg = 'Provided array must have 3 columns: [x, y, value] or 2 columns: [shapely Point(), value]'
+    msg = 'Provided array must have 3 columns: [x, y, value]'
     if dims[1] != 3:
-        if dims[1] == 2:
-            # Check if the first value is a Point type
-            if not isinstance(points[0][0], Point):
-                raise AttributeError(msg)
-        else:
-            raise AttributeError(msg)
+        raise AttributeError(msg)
 
 
 def validate_tolerance(tolerance):
@@ -134,3 +148,24 @@ def check_sills(mins: float, maxs: float):
     if maxs > 1:
         msg = f'Maximum sill ratio is greater than the variance of a data, it could introduce bias'
         warnings.warn(msg)
+
+
+def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
+                                                              is_covar: bool,
+                                                              is_var: bool,
+                                                              plot_semivar: bool,
+                                                              plot_covar: bool,
+                                                              plot_var: bool):
+    validation = {}
+
+    if (is_semivar is False) and (plot_semivar is True):
+        validation['is_semivariance'] = True
+
+    if (is_covar is False) and (plot_covar is True):
+        validation['is_covariance'] = True
+
+    if (is_var is False) and (plot_var is True):
+        validation['is_variance'] = True
+
+    if validation:
+        print(AttributeSetToFalseWarning(validation))

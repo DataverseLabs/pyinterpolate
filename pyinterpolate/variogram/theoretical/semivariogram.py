@@ -8,7 +8,7 @@ from prettytable import PrettyTable
 from pyinterpolate.processing.select_values import create_min_max_array
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
-from pyinterpolate.variogram.empirical import EmpiricalVariogram
+from pyinterpolate.variogram.empirical import ExperimentalVariogram
 from pyinterpolate.variogram.utils.evals import forecast_bias, root_mean_squared_error,\
     symmetric_mean_absolute_percentage_error, mean_absolute_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
@@ -19,7 +19,7 @@ class TheoreticalVariogram:
 
     Parameters
     ----------
-    empirical_variogram : EmpiricalVariogram
+    empirical_variogram : ExperimentalVariogram
                           Prepared Empirical Variogram.
 
     Attributes
@@ -69,7 +69,7 @@ class TheoreticalVariogram:
             Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
     """
 
-    def __init__(self, empirical_variogram: EmpiricalVariogram):
+    def __init__(self, empirical_variogram: ExperimentalVariogram):
 
         # Model
         self.empirical_variogram = empirical_variogram
@@ -515,7 +515,7 @@ class TheoreticalVariogram:
         return modeled
 
 
-def build_theoretical_variogram(empirical_variogram: EmpiricalVariogram,
+def build_theoretical_variogram(empirical_variogram: ExperimentalVariogram,
                                 model_type: str,
                                 sill: float,
                                 rang: float,
@@ -524,7 +524,7 @@ def build_theoretical_variogram(empirical_variogram: EmpiricalVariogram,
 
     Parameters
     ----------
-    empirical_variogram : EmpiricalVariogram
+    empirical_variogram : ExperimentalVariogram
 
     model_type : str
                  Available types:
