@@ -182,3 +182,24 @@ def create_min_max_array(value: float,
     max_step = value * max_scaling_factor
     min_max_steps = np.linspace(min_step, max_step, number_of_steps)
     return min_max_steps
+
+def get_study_max_range(input_coordinates: np.ndarray) -> float:
+    """Function calculates max range of a study area.
+
+    Parameters
+    ----------
+    input_coordinates : numpy array
+
+    Returns
+    -------
+    study_range : float
+    """
+
+    min_x = min(input_coordinates[:, 1])
+    max_x = max(input_coordinates[:, 1])
+    min_y = min(input_coordinates[:, 0])
+    max_y = max(input_coordinates[:, 0])
+
+    study_range = (max_x - min_x)**2 + (max_y - min_y)**2
+    study_range = np.sqrt(study_range)
+    return study_range

@@ -118,7 +118,7 @@ def check_ranges(minr: float, maxr: float):
         raise ValueError(msg)
 
     # Check if min is negative
-    if minr < 0:
+    if minr <= 0:
         msg = f'Minimum range ratio is below 0 and it is equal to {minr}'
         raise ValueError(msg)
 
@@ -128,6 +128,7 @@ def check_ranges(minr: float, maxr: float):
         raise ValueError(msg)
 
     # Check if max is larger than 0.5 and throw warning if it is
+    # TODO: it may be removed later
     if maxr > 0.5:
         msg = f'Maximum range ratio is greater than the half of area smaller distance, it could introduce bias'
         warnings.warn(msg)

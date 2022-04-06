@@ -17,13 +17,16 @@ WEIGHTED_VARIOGRAM = build_experimental_variogram(VARIOGRAM_DATA.input_weighted[
                                                   step_size=VARIOGRAM_DATA.param_step_size,
                                                   max_range=VARIOGRAM_DATA.param_max_range,
                                                   weights=VARIOGRAM_DATA.input_weighted[1][:, -1])
+ARMSTRONG_VARIOGRAM = build_experimental_variogram(ARMSTRONG_DATA,
+                                                   step_size=1,
+                                                   max_range=6)
 ARMSTRONG_VARIOGRAM_DIRECTIONAL = build_experimental_variogram(ARMSTRONG_DATA,
                                                                step_size=1,
                                                                max_range=6,
                                                                direction=135,
                                                                tolerance=0.02)
 
-class TestTheoreticalVariogram:
+class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_zero_case(self):
         _sill = 10
@@ -32,16 +35,42 @@ class TestTheoreticalVariogram:
             ZEROS_VARIOGRAM, 'linear', _sill, _range
         )
 
-        print(_theo)
+        expected_bias = -3
+        expected_rmse = 3.32
+        self.assertEqual(expected_bias, _theo.bias)
+        self.assertAlmostEqual(expected_rmse, _theo.rmse, places=2)
+
+    def test_zero_autofit_case(self):
+        variogram = TheoreticalVariogram(ZEROS_VARIOGRAM)
+        variogram.autofit(model_types='linear')
+        self.assertEqual(0, variogram.rmse)
+        self.assertEqual(0, variogram.nugget)
 
     def test_we_direction_case(self):
-        pass
+        variogram = TheoreticalVariogram(WE_VARIOGRAM)
+        variogram.autofit(model_types='all')
 
-    def test_weighted_case(self):
-        pass
+        expected_nugget = 0
+        expected_sill = 4.25
+        expected_range = 1.2
 
-    def test_directional_case(self):
-        pass
+        self.assertEqual(expected_nugget, variogram.nugget)
+        self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
+        self.assertAlmostEqual(expected_range, variogram.rang, places=1)
+
+    # def test_weighted_case(self):
+        # variogram = TheoreticalVariogram(WEIGHTED_VARIOGRAM)
+        # variogram.autofit(model_types='all')
+        #
+        # print(variogram)
+
+    def test_armstrong_case(self):
+        variogram = TheoreticalVariogram(ARMSTRONG_VARIOGRAM)
+        variogram.autofit(model_types='all')
+        expected_sill = 12.85
+        expected_range = 4.16
+        self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
+        self.assertAlmostEqual(expected_range, variogram.rang, places=2)
 
     def test_str_output(self):
         pass

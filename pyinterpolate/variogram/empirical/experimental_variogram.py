@@ -102,7 +102,7 @@ class ExperimentalVariogram:
         Derived from the step_size parameter.
 
     mx_rng : float
-        Derived from the  max_range parameter.
+        Derived from the max_range parameter.
 
     weights : numpy array or None
         Derived from the weights paramtere.

@@ -5,7 +5,7 @@ from collections import namedtuple
 
 from prettytable import PrettyTable
 
-from pyinterpolate.processing.select_values import create_min_max_array
+from pyinterpolate.processing.select_values import create_min_max_array, get_study_max_range
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
 from pyinterpolate.variogram.empirical import ExperimentalVariogram
@@ -82,6 +82,7 @@ class TheoreticalVariogram:
             'power': power_model,
             'spherical': spherical_model
         }
+        self.study_max_range = None
 
         # Model parameters
         self.fitted_model = None
@@ -154,26 +155,27 @@ class TheoreticalVariogram:
         _theoretical_values = self._fit_model(_model, nugget, sill, rang)
         
         # Estimate errors
-        _error = self.calculate_model_error(_model, rmse=True, bias=True, smape=True)
+        _error = self.calculate_model_error(_theoretical_values[:, 1], rmse=True, bias=True, smape=True)
 
         if update_attrs:
-            self._update_attributes(
-                fitted_model=_theoretical_values,
-                model_type=model_type,
-                nugget=nugget,
-                sill=sill,
-                rang=rang,
-                bias=_error.bias,
-                smape=_error.smape,
-                rmse=_error.rmse
-            )
+
+            attrs_to_update = {
+                'fitted_model': _theoretical_values,
+                'model_type': model_type,
+                'nugget': nugget,
+                'sill': sill,
+                'rang': rang
+            }
+            attrs_to_update.update(_error)
+
+            self._update_attributes(**attrs_to_update)
 
         return _theoretical_values, _error
 
     def autofit(self,
                 model_types: Union[str, list],
                 nugget=0,
-                min_range=0,
+                min_range=0.1,
                 max_range=0.5,
                 number_of_ranges=16,
                 min_sill=0.,
@@ -201,8 +203,8 @@ class TheoreticalVariogram:
         nugget : float, default = 0
                  Nugget (bias) of a variogram. Default value is 0.
 
-        min_range : float, default = 0
-                    Minimal fraction of a variogram range, 0 <= min_range <= max_range
+        min_range : float, default = 0.1
+                    Minimal fraction of a variogram range, 0 < min_range <= max_range
 
         max_range : float, default = 0.5
                     Maximum fraction of a variogram range, min_range <= max_range <= 1. Parameter max_range greater
@@ -269,8 +271,10 @@ class TheoreticalVariogram:
         mtypes = self._check_models_type_autofit(model_types)
 
         # Set ranges and sills
-        dist_range = self.empirical_variogram.lags[-1]
-        min_max_ranges = create_min_max_array(dist_range, min_range, max_range, number_of_ranges)
+        if self.study_max_range is None:
+            self.study_max_range = get_study_max_range(self.empirical_variogram.input_array[:, :-1])
+
+        min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
 
         var_sill = self.empirical_variogram.variance
         min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
@@ -286,9 +290,7 @@ class TheoreticalVariogram:
             'model_type': '',
             'nugget': 0,
             'sill': 0,
-            'rang': 0,
-            'error_type': error_estimator,
-            'error_value': err_val
+            'rang': 0
         }
 
         for _mtype in mtypes:
@@ -297,7 +299,7 @@ class TheoreticalVariogram:
                     # Create model
                     _mdl_fn = self.variogram_models[_mtype]
                     _fitted_model = self._fit_model(_mdl_fn, nugget, _sill, _rang)
-                    _err = self.calculate_model_error(_fitted_model, **_errors_keys)
+                    _err = self.calculate_model_error(_fitted_model[:, 1], **_errors_keys)
 
                     if verbose:
                         self.__print_autofit_info(_mtype, nugget, _sill, _rang, error_estimator, _err[error_estimator])
@@ -309,9 +311,8 @@ class TheoreticalVariogram:
                         optimal_parameters['nugget'] = nugget
                         optimal_parameters['sill'] = _sill
                         optimal_parameters['rang'] = _rang
-                        optimal_parameters['error_type'] = error_estimator
-                        optimal_parameters['error_value'] = err_val
-                        optimal_parameters['fitted_model'] = _mdl_fn
+                        optimal_parameters['fitted_model'] = _fitted_model
+                        optimal_parameters.update(_err)
         
         if auto_update_attributes:
             self._update_attributes(**optimal_parameters)
@@ -319,13 +320,38 @@ class TheoreticalVariogram:
         return optimal_parameters
 
     def __str__(self):
-        pretty_table = PrettyTable()
-        # TODO add title to pretty table
-        title = f'{self.name}'.capitalize()
-        header = title + '\n'
-        pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
 
-        pass
+        if self.fitted_model is None:
+            return 'Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model.'
+        else:
+            title = '* Selected model: ' + f'{self.name}'.capitalize() + ' model'
+            msg_nugget = f'* Nugget: {self.nugget}'
+            msg_sill = f'* Sill: {self.sill}'
+            msg_range = f'* Range: {self.rang}'
+            mean_bias_msg = f'* Mean Bias: {self.bias}'
+            mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
+
+            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg]
+
+            header = '\n'.join(text_list) + '\n'
+
+            # Build pretty table
+            pretty_table = PrettyTable()
+            pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
+
+            records = []
+            for idx, record in enumerate(self.empirical_variogram.experimental_semivariance_array):
+                lag = record[0]
+                experimental_semivar = record[1]
+                theoretical_semivar = self.fitted_model[idx][1]
+                bias = experimental_semivar - theoretical_semivar
+                rmse = np.sqrt((experimental_semivar - theoretical_semivar)**2)
+                records.append([lag, experimental_semivar, theoretical_semivar, bias, rmse])
+
+            pretty_table.add_rows(records)
+
+            msg = header + pretty_table.get_string()
+            return msg
 
     def __repr__(self):
         pass
@@ -338,7 +364,7 @@ class TheoreticalVariogram:
                               rmse=True,
                               bias=True,
                               mae=True,
-                              smape=True) -> namedtuple:
+                              smape=True) -> dict:
         """
 
         Parameters
@@ -360,8 +386,8 @@ class TheoreticalVariogram:
 
         Returns
         -------
-        model_errors : namedtuple
-                       Named tuple with error values per model: rmse, bias, mae, smape.
+        model_errors : dict
+                       Dict with error values per model: rmse, bias, mae, smape.
 
         Raises
         ------
@@ -370,34 +396,36 @@ class TheoreticalVariogram:
 
         # Check errors
         validate_selected_errors(rmse + bias + mae + smape)  # all False sums to 0 -> error detection
-        ModelError = namedtuple('ModelError', 'rmse bias mae smape')
+        model_error = {
+            'rmse': np.nan,
+            'bias': np.nan,
+            'mae': np.nan,
+            'smape': np.nan
+        }
 
         _real_values = self.empirical_variogram.experimental_semivariance_array[:, 1].copy()
 
         # Get Forecast Biast
         if bias:
             _fb = forecast_bias(fitted_values, _real_values)
-        else:
-            _fb = np.nan
+            model_error['bias'] = _fb
 
         # Get RMSE
         if rmse:
             _rmse = root_mean_squared_error(fitted_values, _real_values)
-        else:
-            _rmse = np.nan
+            model_error['rmse'] = _rmse
 
+        # Get MAE
         if mae:
             _mae = mean_absolute_error(fitted_values, _real_values)
-        else:
-            _mae = np.nan
+            model_error['mae'] = _mae
 
+        # Get SMAPE
         if smape:
             _smape = symmetric_mean_absolute_percentage_error(fitted_values, _real_values)
-        else:
-            _smape = np.nan
+            model_error['smape'] = _smape
 
-        model_errors = ModelError(_rmse, _fb, _mae, _smape)
-        return model_errors
+        return model_error
 
     def _check_model_names(self, mname):
         _names = list(self.variogram_models.keys())
@@ -511,7 +539,9 @@ class TheoreticalVariogram:
 
         lags = self.empirical_variogram.lags
         fitted_values = model_fn(lags, nugget, sill, rang)
-        modeled = np.concatenate([lags, fitted_values], axis=1)
+        modeled = np.zeros(shape=(len(lags), 2))
+        modeled[:, 0] = lags
+        modeled[:, 1] = fitted_values
         return modeled
 
 
