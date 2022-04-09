@@ -1,10 +1,12 @@
+# Core python packages
 from typing import Collection, Union, Callable, Tuple
 
+# Core calculations and visualization packages
 import numpy as np
-from collections import namedtuple
-
+import matplotlib.pyplot as plt
 from prettytable import PrettyTable
 
+# Pyinterpolate dependencies
 from pyinterpolate.processing.select_values import create_min_max_array, get_study_max_range
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
@@ -67,6 +69,47 @@ class TheoreticalVariogram:
 
     smape : float, default=0
             Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
+
+    Methods
+    -------
+    plot()
+        Shows theoretical model.
+
+    __str__()
+        Prints basic info about the class parameters.
+
+    __repr__()
+        Reproduces class initialization with an input experimental variogram.
+
+    See Also
+    --------
+    ExperimentalVariogram : class to calculate experimental variogram and more.
+
+    Examples
+    --------
+    >>> import numpy
+    >>> REFERENCE_INPUT = numpy.array([
+    ...    [0, 0, 1],
+    ...    [1, 0, 2],
+    ...    [2, 0, 3],
+    ...    [3, 0, 4],
+    ...    [4, 0, 5],
+    ...    [5, 0, 6],
+    ...    [6, 0, 7],
+    ...    [7, 0, 5],
+    ...    [8, 0, 3],
+    ...    [9, 0, 1],
+    ...    [10, 0, 4],
+    ...    [11, 0, 6],
+    ...    [12, 0, 8]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> theoretical_smv = TheoreticalVariogram(empirical_variogram=empirical_smv)
+    >>> _ = theoretical_smv.autofit(model_types='gaussian')
+    >>> print(theoretical_smv.rmse)
+    1.5275214898546217
     """
 
     def __init__(self, empirical_variogram: ExperimentalVariogram):
@@ -102,7 +145,7 @@ class TheoreticalVariogram:
             sill: float,
             rang: float,
             nugget=0.,
-            update_attrs=True) -> Tuple[np.array, namedtuple]:
+            update_attrs=True) -> Tuple[np.array, dict]:
         """
 
         Parameters
@@ -137,8 +180,8 @@ class TheoreticalVariogram:
 
         Returns
         -------
-        : Tuple[ numpy array, namedtuple ]
-            [ theoretical semivariances, ('ModelError', 'rmse bias smape mae')]
+        : Tuple[ numpy array, dict ]
+            [ theoretical semivariances, {'rmse bias smape mae'}]
 
         """
 
@@ -354,10 +397,41 @@ class TheoreticalVariogram:
             return msg
 
     def __repr__(self):
-        pass
+        cname = 'TheoreticalVariogram'
+        input_params = f'empirical_variogram={self.empirical_variogram}'
+        repr_val = cname + '(' + input_params + ')'
+        return repr_val
 
     def plot(self, experimental=True):
-        pass
+        """
+        Method plots theoretical curve and (optionally) experimental scatterplot.
+
+        Parameters
+        ----------
+        experimental : bool
+                       Plot experimental observations.
+
+        Raises
+        ------
+        AttributeError
+        """
+        if self.fitted_model is None:
+            raise AttributeError('Model has not been trained, nothing to plot.')
+        else:
+            legend = []
+            plt.figure(figsize=(12, 6))
+
+            if experimental:
+                plt.scatter(self.empirical_variogram.lags,
+                            self.empirical_variogram.experimental_semivariances,
+                            marker='8', c='#66c2a5')
+                legend.append('Experimental Semivariances')
+
+            plt.plot(self.fitted_model[:, 0], self.fitted_model[:, 1], '--', color='#fc8d62')
+            plt.legend(legend)
+            plt.xlabel('Distance')
+            plt.ylabel('Variance')
+            plt.show()
 
     def calculate_model_error(self,
                               fitted_values: np.array,

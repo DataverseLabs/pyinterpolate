@@ -13,10 +13,6 @@ ZEROS_VARIOGRAM = build_experimental_variogram(VARIOGRAM_DATA.input_zeros,
 WE_VARIOGRAM = build_experimental_variogram(VARIOGRAM_DATA.input_data_we,
                                             step_size=VARIOGRAM_DATA.param_step_size,
                                             max_range=VARIOGRAM_DATA.param_max_range)
-WEIGHTED_VARIOGRAM = build_experimental_variogram(VARIOGRAM_DATA.input_weighted[0],
-                                                  step_size=VARIOGRAM_DATA.param_step_size,
-                                                  max_range=VARIOGRAM_DATA.param_max_range,
-                                                  weights=VARIOGRAM_DATA.input_weighted[1][:, -1])
 ARMSTRONG_VARIOGRAM = build_experimental_variogram(ARMSTRONG_DATA,
                                                    step_size=1,
                                                    max_range=6)
@@ -58,12 +54,6 @@ class TestTheoreticalVariogram(unittest.TestCase):
         self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
         self.assertAlmostEqual(expected_range, variogram.rang, places=1)
 
-    # def test_weighted_case(self):
-        # variogram = TheoreticalVariogram(WEIGHTED_VARIOGRAM)
-        # variogram.autofit(model_types='all')
-        #
-        # print(variogram)
-
     def test_armstrong_case(self):
         variogram = TheoreticalVariogram(ARMSTRONG_VARIOGRAM)
         variogram.autofit(model_types='all')
@@ -73,7 +63,19 @@ class TestTheoreticalVariogram(unittest.TestCase):
         self.assertAlmostEqual(expected_range, variogram.rang, places=2)
 
     def test_str_output(self):
-        pass
+        variogram = TheoreticalVariogram(ZEROS_VARIOGRAM)
+        output_str_empty = variogram.__str__()
+        variogram.autofit(model_types='linear')
+        output_str_trained = variogram.__str__()
+        expected_str_empty_model = 'Theoretical model is not calculated yet. ' \
+                                   'Use fit() or autofit() methods to build or find a model.'
+        expected_str_trained_model_startswith = '* Selected model: Linear model'
+
+        msg_empty = 'Expected __str__() of the empty model is not equal to returned __str__().'
+        self.assertEqual(output_str_empty, expected_str_empty_model, msg=msg_empty)
+
+        msg_trained = 'Expected __str__() of trained model starts differently than the returned __str__().'
+        self.assertTrue(output_str_trained.startswith(expected_str_trained_model_startswith), msg=msg_trained)
 
     def test_repr_eval(self):
         pass
