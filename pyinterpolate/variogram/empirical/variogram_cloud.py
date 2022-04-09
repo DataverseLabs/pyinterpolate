@@ -84,7 +84,7 @@ class VariogramCloud:
     --------
     get_variogram_point_cloud : function to calculate variogram point cloud, class VariogramCloud is a wrapper
                                 around it.
-    EmpiricalVariogram : class that calculates experimental semivariogram, experimental covariogram and data variance.
+    ExperimentalVariogram : class that calculates experimental semivariogram, experimental covariogram and data variance.
 
     Examples
     --------

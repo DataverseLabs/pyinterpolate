@@ -1,7 +1,7 @@
 import numpy as np
 from shapely.geometry import Point
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
-from pyinterpolate.variogram.utils.validate import validate_direction, validate_points, validate_tolerance, \
+from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance, \
     validate_weights
 
 # Temp
@@ -34,7 +34,8 @@ def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: f
     """
 
     semivariances_and_lags = list()
-    distances = temp_calc_point_to_point_distance(points[:, :-1])
+    pts = points[:, :-1]
+    distances = temp_calc_point_to_point_distance(pts)
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
@@ -216,7 +217,7 @@ def directional_semivariogram(points: np.array,
     Returns
     -------
     : (numpy array)
-        [lag, semivariance, number of points within a lag]
+      [lag, semivariance, number of points within a lag]
     """
 
     if weights is None:
@@ -406,11 +407,6 @@ def calculate_semivariance(points: np.array,
 
     # Test size of points array and input data types
     validate_points(points)
-
-    # Transform Point into floats
-    is_point_type = isinstance(points[0][0], Point)
-    if is_point_type:
-        points = [[x[0].x, x[0].y, x[1]] for x in points]
 
     # Test directions if provided
     validate_direction(direction)

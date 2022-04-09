@@ -1,6 +1,8 @@
 import unittest
 import os
 import geopandas as gpd
+import numpy as np
+
 from pyinterpolate.io.read_data import read_block, read_csv, read_txt
 
 
@@ -12,15 +14,8 @@ class TestReadData(unittest.TestCase):
 		data = read_txt(path_to_the_data, skip_header=False)
 
 		# Check if data type is GeoDataFrame
-		check_frame_1 = isinstance(data, gpd.GeoDataFrame)
-		self.assertTrue(check_frame_1, "Instance of a data type should be GeoDataFrame")
-
-		# Check if lat is switched with lon
-		base_x = data.iloc[0].geometry.x
-		other_data = read_txt(path_to_the_data, lon_col_pos=1, lat_col_pos=0)
-		other_y = other_data.iloc[0].geometry.y
-
-		self.assertEqual(base_x, other_y, 'Something went wrong, geometries should be swapped')
+		check_frame_1 = isinstance(data, np.ndarray)
+		self.assertTrue(check_frame_1, "Instance of a data type should be numpy array")
 
 	def test_read_csv(self):
 		my_dir = os.path.dirname(__file__)
@@ -28,15 +23,8 @@ class TestReadData(unittest.TestCase):
 		data = read_csv(path_to_the_data, val_col_name='dem', lat_col_name='latitude', lon_col_name='longitude')
 
 		# Check if data type is GeoDataFrame
-		check_frame_1 = isinstance(data, gpd.GeoDataFrame)
-		self.assertTrue(check_frame_1, "Instance of a data type should be GeoDataFrame")
-
-		# Check if lat is switched with lon
-		base_x = data.iloc[0].geometry.x
-		other_data = read_csv(path_to_the_data, val_col_name='dem', lat_col_name='longitude', lon_col_name='latitude')
-		other_y = other_data.iloc[0].geometry.y
-
-		self.assertEqual(base_x, other_y, 'Something went wrong, geometries should be swapped')
+		check_frame_1 = isinstance(data, np.ndarray)
+		self.assertTrue(check_frame_1, "Instance of a data type should be numpy array")
 
 	@staticmethod
 	def _check_lists_equality(l1, l2):

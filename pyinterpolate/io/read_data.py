@@ -2,31 +2,19 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from geopandas import points_from_xy
-
 
 def read_txt(
-        path: str, lon_col_pos=0, lat_col_pos=1, val_col_pos=2, delim=',', skip_header=True, epsg='4326', crs=None
-) -> gpd.GeoDataFrame:
+        path: str, delim=',', skip_header=True
+) -> np.ndarray:
     """Function reads data from a text file.
 
-    Provided data format should include: longitude (x), latitude (y), value. You should provide crs or epsg,
-    if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
-    Data read by a function is converted into GeoDataFrame.
+    Provided data format should include: longitude (x), latitude (y), value.
+    Data read by a function is converted into numpy array.
 
     Parameters
     ----------
     path : str
            Path to the file.
-
-    lon_col_pos : int, default=0
-                  Position of the longitude column.
-
-    lat_col_pos : int, default=1
-                  Position of the latitude column.
-
-    val_col_pos : int, default=2
-                  Position of the value column.
 
     delim : str, default=','
             Delimiter that separates columns.
@@ -34,27 +22,20 @@ def read_txt(
     skip_header : bool, default=True
                   Skips the first row of a file if set to True.
 
-    epsg : str, optional, default='epsg:4326'
-           Sets epsg for a given dataset.
-
-    crs : str or None, optional, default=None
-          Sets CRS for a given dataset. If not None then it overwrites EPSG.
-
     Returns
     -------
-    gdf : GeoDataFrame
+    data_arr : numpy array
 
     Examples
     --------
     >>> path_to_the_data = 'path_to_the_data.txt'
     >>> data = read_txt(path_to_the_data, skip_header=False)
-    >>> print(data.head(2))
-    +---+---------------------------+-----------+
-    |   |         geometry          |   value   |
-    +---+---------------------------+-----------+
-    | 0 | POINT (15.11524 52.76515) | 91.275597 |
-    | 1 | POINT (15.11524 52.74279) | 96.548294 |
-    +---+---------------------------+-----------+
+    >>> print(data[:2, :])
+
+    [
+        [15.11524 52.76515 91.275597]
+        [15.11524 52.74279 96.548294]
+    ]
     """
 
     data_arr = np.loadtxt(path, delimiter=delim)
@@ -62,19 +43,7 @@ def read_txt(
     if skip_header:
         data_arr = data_arr[1:, :]
 
-    gdf = gpd.GeoDataFrame(data=data_arr)
-    gdf['geometry'] = points_from_xy(gdf[lon_col_pos], gdf[lat_col_pos])
-    gdf.set_geometry('geometry', inplace=True)
-
-    if crs is None:
-        gdf.set_crs(epsg=epsg, inplace=True)
-    else:
-        gdf.set_crs(crs=crs, inplace=True)
-
-    gdf = gdf[['geometry', val_col_pos]]
-    gdf.columns = ['geometry', 'value']
-
-    return gdf
+    return data_arr
 
 
 def read_csv(
@@ -82,15 +51,11 @@ def read_csv(
         val_col_name: str,
         lat_col_name: str,
         lon_col_name: str,
-        delim=',',
-        epsg=4326,
-        crs=None
-) -> gpd.GeoDataFrame:
+        delim=','
+) -> np.ndarray:
     """Function reads data from a csv file.
 
-    Provided data format should include: latitude, longitude, value. You should provide crs or epsg,
-    if it's not provided then epsg:4326 is used as a default value (https://epsg.io/4326).
-    Data read by a function is converted into GeoDataFrame.
+    Provided data format should include: latitude, longitude, value.
 
     Parameters
     ----------
@@ -110,54 +75,30 @@ def read_csv(
     delim : str, default=','
             Delimiter that separates columns.
 
-    epsg : str, optional, default='epsg:4326'
-           Sets epsg for a given dataset.
-
-    crs : str or None, optional, default=None
-          Sets CRS for a given dataset. If not None then it overwrites EPSG.
-
     Returns
     -------
 
-    gdf : GeoDataFrame
+    data_arr : numpy array
 
     Examples
     --------
     >>> path_to_the_data = 'path_to_the_data.csv'
     >>> data = read_csv(path_to_the_data, val_col_name='value', lat_col_name='y', lon_col_name='x')
-    >>> print(data.head(2))
-    +---+---------------------------+-----------+
-    |   |         geometry          |   value   |
-    +---+---------------------------+-----------+
-    | 0 | POINT (15.11524 52.76515) | 91.275597 |
-    | 1 | POINT (15.11524 52.74279) | 96.548294 |
-    +---+---------------------------+-----------+
+    >>> print(data[:2, :])
+
+    [
+        [15.11524 52.76515 91.275597]
+        [15.11524 52.74279 96.548294]
+    ]
     """
 
     df = pd.read_csv(
         path, sep=delim
     )
 
-    gdf = gpd.GeoDataFrame(df[[val_col_name, lat_col_name, lon_col_name]])
+    data_arr = df[[lon_col_name, lat_col_name, val_col_name]].to_numpy()
 
-    # Very low possibility but check if there is a geometry column in the data
-    if 'geometry' in gdf.columns:
-        geometry_col_name = '_geometry'
-    else:
-        geometry_col_name = 'geometry'
-
-    gdf[geometry_col_name] = points_from_xy(gdf[lon_col_name], gdf[lat_col_name])
-    gdf.set_geometry(geometry_col_name, inplace=True)
-
-    if crs is None:
-        gdf.set_crs(epsg=epsg, inplace=True)
-    else:
-        gdf.set_crs(crs=crs, inplace=True)
-
-    gdf = gdf[[geometry_col_name, val_col_name]]
-    gdf.columns = ['geometry', 'value']
-
-    return gdf
+    return data_arr
 
 
 def read_block(

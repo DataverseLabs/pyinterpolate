@@ -432,7 +432,7 @@ class EmpiricalVariogram:
     ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
-    >>> empirical_smv = EmpiricalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
     >>> print(empirical_smv)
     +-----+--------------------+---------------------+--------------------+
     | lag |    semivariance    |      covariance     |    var_cov_diff    |

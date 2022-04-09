@@ -1,11 +1,13 @@
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
+from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
 
 
-class EmpiricalVariogram:
+class ExperimentalVariogram:
     """
     Class calculates Experimental Semivariogram and Experimental Covariogram of a given dataset.
 
@@ -100,7 +102,7 @@ class EmpiricalVariogram:
         Derived from the step_size parameter.
 
     mx_rng : float
-        Derived from the  max_range parameter.
+        Derived from the max_range parameter.
 
     weights : numpy array or None
         Derived from the weights paramtere.
@@ -113,11 +115,14 @@ class EmpiricalVariogram:
 
     Methods
     -------
+    plot()
+        Shows experimental variances.
+
     __str__()
-        prints basic info about the class parameters.
+        Prints basic info about the class parameters.
 
     __repr__()
-        reproduces class initialization with an input data.
+        Reproduces class initialization with an input data.
 
     See Also
     --------
@@ -144,7 +149,7 @@ class EmpiricalVariogram:
     ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
-    >>> empirical_smv = EmpiricalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
     >>> print(empirical_smv)
     +-----+--------------------+---------------------+--------------------+
     | lag |    semivariance    |      covariance     |    var_cov_diff    |
@@ -155,8 +160,8 @@ class EmpiricalVariogram:
     +-----+--------------------+---------------------+--------------------+
     """
 
-    def __init__(self, input_array, step_size: float, max_range: float, weights=None, direction=0, tolerance=1,
-                 is_semivariance=True, is_covariance=True, is_variance=True):
+    def __init__(self, input_array, step_size: float, max_range: float, weights=None, direction: float = 0.0,
+                 tolerance: float = 1.0, is_semivariance=True, is_covariance=True, is_variance=True):
 
         if not isinstance(input_array, np.ndarray):
             input_array = np.array(input_array)
@@ -198,6 +203,60 @@ class EmpiricalVariogram:
             if is_variance:
                 self.variance_covariances_diff = self.variance - self.experimental_covariances
 
+    def plot(self, plot_semivariance=True, plot_covariance=False, plot_variance=False) -> None:
+        """
+
+        Parameters
+        ----------
+        plot_semivariance : bool, default=True
+                            Show semivariance on a plot. If class attribute is_semivariance is set to False then
+                            semivariance is not plotted and warning is printed.
+
+        plot_covariance : bool, default=True
+                          Show covariance on a plot. If class attribute is_covariance is set to False then
+                          covariance is not plotted and warning is printed.
+
+        plot_variance : bool, default=True
+                        Show variance level on a plot. If class attribute is_variance is set to False then
+                        variance is not plotted and warning is printed.
+
+        Warns
+        -----
+        AttributeSetToFalseWarning
+            Warning invoked when plotting parameter for semivariance, covariance or variance is set to True but
+            class atrributes to calculate those indices are set to False.
+        """
+
+        # Validate parameters
+        validate_plot_attributes_for_experimental_variogram_class(is_semivar=self.__c_sem,
+                                                                  is_covar=self.__c_cov,
+                                                                  is_var=self.__c_var,
+                                                                  plot_semivar=plot_semivariance,
+                                                                  plot_covar=plot_covariance,
+                                                                  plot_var=plot_variance)
+
+        # Plot
+        # Cmap - 3 class Set2 https://colorbrewer2.org/#type=qualitative&scheme=Set2&n=3
+        # Colorblind friendly
+        # Print friendly
+
+        legend = []
+        plt.figure(figsize=(12, 6))
+        if plot_semivariance and self.__c_sem:
+            plt.scatter(self.lags, self.experimental_semivariances, marker='8', c='#66c2a5')
+            legend.append('Experimental Semivariances')
+        if plot_covariance and self.__c_cov:
+            plt.scatter(self.lags, self.experimental_covariances, marker='+', c='#8da0cb')
+            legend.append('Experimental Covariances')
+        if plot_variance and self.__c_var:
+            var_line = [self.variance for _ in self.lags]
+            plt.plot(self.lags, var_line, '--', color='#fc8d62')
+            legend.append('Variance')
+        plt.legend(legend)
+        plt.xlabel('Distance')
+        plt.ylabel('Variance')
+        plt.show()
+
     def _calculate_covariance(self, get_variance=False):
         """
         Method calculates covariance and variance.
@@ -205,7 +264,7 @@ class EmpiricalVariogram:
         See : calculate_covariance function.
         """
         self.experimental_covariance_array, self.variance = calculate_covariance(
-            points=self.input_array.copy(),
+            points=self.input_array,
             step_size=self.step,
             max_range=self.mx_rng,
             direction=self.direct,
@@ -220,7 +279,7 @@ class EmpiricalVariogram:
         See: calculate_semivariance function.
         """
         self.experimental_semivariance_array = calculate_semivariance(
-            points=self.input_array.copy(),
+            points=self.input_array,
             step_size=self.step,
             max_range=self.mx_rng,
             weights=self.weights,
@@ -229,7 +288,7 @@ class EmpiricalVariogram:
         )
 
     def __repr__(self):
-        cname = 'EmpiricalVariogram'
+        cname = 'ExperimentalVariogram'
         input_params = f'input_array={self.input_array.tolist()}, step_size={self.step}, max_range={self.mx_rng}, ' \
                        f'weights={self.weights}, direction={self.direct}, tolerance={self.tol}, ' \
                        f'is_semivariance={self.__c_sem}, is_covariance={self.__c_cov}, is_variance={self.__c_var}'
@@ -296,12 +355,12 @@ class EmpiricalVariogram:
         return rows
 
 
-def build_experimental_variogram(input_array,
+def build_experimental_variogram(input_array: np.array,
                                  step_size: float,
                                  max_range: float,
-                                 weights=None,
-                                 direction=0,
-                                 tolerance=1) -> EmpiricalVariogram:
+                                 weights: np.array = None,
+                                 direction: float = 0,
+                                 tolerance: float = 1) -> ExperimentalVariogram:
     """
     Function prepares:
         - experimental semivariogram,
@@ -386,7 +445,7 @@ def build_experimental_variogram(input_array,
     | 3.0 |        6.0         | -1.2599999999999958 | 5.508520710059168  |
     +-----+--------------------+---------------------+--------------------+
     """
-    semivariogram_stats = EmpiricalVariogram(
+    semivariogram_stats = ExperimentalVariogram(
         input_array=input_array,
         step_size=step_size,
         max_range=max_range,
