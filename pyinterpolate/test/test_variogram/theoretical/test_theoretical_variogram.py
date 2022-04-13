@@ -37,14 +37,14 @@ class TestTheoreticalVariogram(unittest.TestCase):
         self.assertAlmostEqual(expected_rmse, _theo.rmse, places=2)
 
     def test_zero_autofit_case(self):
-        variogram = TheoreticalVariogram(ZEROS_VARIOGRAM)
-        variogram.autofit(model_types='linear')
+        variogram = TheoreticalVariogram()
+        variogram.autofit(empirical_variogram=ZEROS_VARIOGRAM, model_types='linear')
         self.assertEqual(0, variogram.rmse)
         self.assertEqual(0, variogram.nugget)
 
     def test_we_direction_case(self):
-        variogram = TheoreticalVariogram(WE_VARIOGRAM)
-        variogram.autofit(model_types='all')
+        variogram = TheoreticalVariogram()
+        variogram.autofit(empirical_variogram=WE_VARIOGRAM, model_types='all')
 
         expected_nugget = 0
         expected_sill = 4.25
@@ -55,17 +55,17 @@ class TestTheoreticalVariogram(unittest.TestCase):
         self.assertAlmostEqual(expected_range, variogram.rang, places=1)
 
     def test_armstrong_case(self):
-        variogram = TheoreticalVariogram(ARMSTRONG_VARIOGRAM)
-        variogram.autofit(model_types='all')
+        variogram = TheoreticalVariogram()
+        variogram.autofit(empirical_variogram=ARMSTRONG_VARIOGRAM, model_types='all')
         expected_sill = 12.85
         expected_range = 4.16
         self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
         self.assertAlmostEqual(expected_range, variogram.rang, places=2)
 
     def test_str_output(self):
-        variogram = TheoreticalVariogram(ZEROS_VARIOGRAM)
+        variogram = TheoreticalVariogram()
         output_str_empty = variogram.__str__()
-        variogram.autofit(model_types='linear')
+        variogram.autofit(empirical_variogram=ZEROS_VARIOGRAM, model_types='linear')
         output_str_trained = variogram.__str__()
         expected_str_empty_model = 'Theoretical model is not calculated yet. ' \
                                    'Use fit() or autofit() methods to build or find a model.'
@@ -77,5 +77,14 @@ class TestTheoreticalVariogram(unittest.TestCase):
         msg_trained = 'Expected __str__() of trained model starts differently than the returned __str__().'
         self.assertTrue(output_str_trained.startswith(expected_str_trained_model_startswith), msg=msg_trained)
 
-    def test_repr_eval(self):
+    def test_to_dict(self):
+        pass
+
+    def test_from_dict(self):
+        pass
+
+    def test_to_json(self):
+        pass
+
+    def test_from_json(self):
         pass
