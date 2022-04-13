@@ -6,11 +6,13 @@ import numpy as np
 
 # Pyinterpolate
 from pyinterpolate.variogram import TheoreticalVariogram
+from pyinterpolate.variogram.utils.exceptions import validate_theoretical_variogram
 
 
 def ordinary_kriging(
-        theoretical_variogram_model: TheoreticalVariogram,
-        unknown_locations: Union[np.ndarray, Collection],
+        theoretical_model: TheoreticalVariogram,
+        known_locations: np.ndarray,
+        unknown_location: Union[np.ndarray, Collection],
         neighbors_range=None,
         min_no_neighbors=1,
         max_no_neighbors=-1,
@@ -21,7 +23,7 @@ def ordinary_kriging(
 
     Parameters
     ----------
-    theoretical_variogram_model : TheoreticalVariogram
+    theoretical_model : TheoreticalVariogram
                                   Trained theoretical variogram model.
 
     unknown_locations : numpy array
@@ -50,53 +52,56 @@ def ordinary_kriging(
     -----
     NegativeWeightsWarning : set if weights in weighting matrix are negative.
 
+    Raises
+    ------
+    VariogramModelNotSetError : Semivariogram model has not been set (it doesn't have a name)
+
     """
 
     # Check if variogram model is valid
-    # TODO
+    validate_theoretical_variogram(theoretical_model)
 
     # Check range
     if neighbors_range is None:
-        neighbors_range = theoretical_variogram_model.rang
-        
-    output = []
+        neighbors_range = theoretical_model.rang
 
-    for pt in unknown_locations:
-        prepared_data = prepare_kriging_data(unknown_position=unknown_location,
-                                             data_array=self.dataset,
-                                             neighbors_range=neighbors_range,
-                                             min_number_of_neighbors=min_no_neighbors,
-                                             max_number_of_neighbors=max_no_neighbors)
-        n = len(prepared_data)
-        unknown_distances = prepared_data[:, -1]
-        k = self.model.predict(unknown_distances)
-        k = k.T
-        k_ones = np.ones(1)[0]
-        k = np.r_[k, k_ones]
+    # TODO
+    prepared_data = prepare_kriging_data(unknown_position=unknown_location,
+                                         data_array=self.dataset,
+                                         neighbors_range=neighbors_range,
+                                         min_number_of_neighbors=min_no_neighbors,
+                                         max_number_of_neighbors=max_no_neighbors)
+    n = len(prepared_data)
+    unknown_distances = prepared_data[:, -1]
+    k = theoretical_model.predict(unknown_distances)
+    k = k.T
+    k_ones = np.ones(1)[0]
+    k = np.r_[k, k_ones]
 
-        dists = calc_point_to_point_distance(prepared_data[:, :-2])
+    dists = calc_point_to_point_distance(prepared_data[:, :-2])
 
-        predicted_weights = self.model.predict(dists.ravel())
-        predicted = np.array(predicted_weights.reshape(n, n))
-        p_ones = np.ones((predicted.shape[0], 1))
-        predicted_with_ones_col = np.c_[predicted, p_ones]
-        p_ones_row = np.ones((1, predicted_with_ones_col.shape[1]))
-        p_ones_row[0][-1] = 0.
-        weights = np.r_[predicted_with_ones_col, p_ones_row]
+    predicted_weights = self.model.predict(dists.ravel())
+    predicted = np.array(predicted_weights.reshape(n, n))
+    p_ones = np.ones((predicted.shape[0], 1))
+    predicted_with_ones_col = np.c_[predicted, p_ones]
+    p_ones_row = np.ones((1, predicted_with_ones_col.shape[1]))
+    p_ones_row[0][-1] = 0.
+    weights = np.r_[predicted_with_ones_col, p_ones_row]
 
-        w = np.linalg.solve(weights, k)
-        zhat = prepared_data[:, -2].dot(w[:-1])
+    w = np.linalg.solve(weights, k)
+    zhat = prepared_data[:, -2].dot(w[:-1])
 
-        # Test for anomalies
-        if test_anomalies:
-            if zhat < 0:
-                user_input_message = 'Estimated value is below zero and it is: {}. \n'.format(zhat)
-                text_error = user_input_message + 'Program is terminated. Try different semivariogram model. ' \
+    # Test for anomalies
+    if test_anomalies:
+        if zhat < 0:
+            user_input_message = 'Estimated value is below zero and it is: {}. \n'.format(zhat)
+            text_error = user_input_message + 'Program is terminated. Try different semivariogram model. ' \
                                                   '(Did you use gaussian model? \
                             If so then try to use other models like linear or exponential) and/or analyze your data \
                             for any clusters which may affect the final estimation'
 
-                raise ValueError(text_error)
+            raise ValueError(text_error)
 
-        sigma = np.matmul(w.T, k)
+    sigma = np.matmul(w.T, k)
+
     return [zhat, sigma, w[-1], w]

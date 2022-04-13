@@ -13,7 +13,7 @@ from pyinterpolate.processing.select_values import create_min_max_array, get_stu
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
 from pyinterpolate.variogram.empirical import ExperimentalVariogram
-from pyinterpolate.variogram.utils.evals import forecast_bias, root_mean_squared_error, \
+from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
     symmetric_mean_absolute_percentage_error, mean_absolute_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
 
@@ -430,6 +430,27 @@ class TheoreticalVariogram:
             self._update_attributes(**optimal_parameters)
 
         return optimal_parameters
+
+    def predict(self, distances: np.ndarray) -> np.ndarray:
+        """
+        Method returns semivariances for a given distances.
+
+        Parameters
+        ----------
+        distances : np.ndarray
+
+        Returns
+        -------
+        predicted : np.ndarray
+
+        """
+
+        _model = self.variogram_models[self.name]
+
+        predicted = _model(
+            distances, self.nugget, self.sill, self.rang
+        )
+        return predicted
 
     # Plotting and visualization
 
