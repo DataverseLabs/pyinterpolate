@@ -6,7 +6,7 @@ from pyinterpolate.processing.select_values import select_points_within_ellipse,
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
 
 # Temp
-from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distance
+from pyinterpolate.distance.distance import calc_point_to_point_distance
 
 
 def omnidirectional_point_cloud(input_array: np.array,
@@ -43,7 +43,7 @@ def omnidirectional_point_cloud(input_array: np.array,
     --------
     TODO
     """
-    distances = temp_calc_point_to_point_distance(input_array[:, :-1])
+    distances = calc_point_to_point_distance(input_array[:, :-1])
     lags = np.arange(step_size, max_range, step_size)
     variogram_cloud = OrderedDict()
 

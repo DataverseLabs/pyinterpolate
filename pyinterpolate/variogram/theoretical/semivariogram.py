@@ -12,7 +12,7 @@ from prettytable import PrettyTable
 from pyinterpolate.processing.select_values import create_min_max_array, get_study_max_range
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
-from pyinterpolate.variogram.empirical import ExperimentalVariogram
+from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
     symmetric_mean_absolute_percentage_error, mean_absolute_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills

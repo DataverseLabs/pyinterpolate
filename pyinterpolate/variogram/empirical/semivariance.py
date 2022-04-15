@@ -1,11 +1,10 @@
 import numpy as np
-from shapely.geometry import Point
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance, \
     validate_weights
 
 # Temp
-from pyinterpolate.distance.temp_distance import temp_calc_point_to_point_distance
+from pyinterpolate.distance.distance import calc_point_to_point_distance
 
 
 # Semivariogram calculations
@@ -35,7 +34,7 @@ def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: f
 
     semivariances_and_lags = list()
     pts = points[:, :-1]
-    distances = temp_calc_point_to_point_distance(pts)
+    distances = calc_point_to_point_distance(pts)
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)

@@ -1,7 +1,5 @@
 import warnings
 
-from pyinterpolate.variogram import TheoreticalVariogram
-
 
 class MetricsTypeSelectionError(Exception):
     """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
@@ -186,7 +184,7 @@ def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
         print(AttributeSetToFalseWarning(validation))
 
 
-def validate_theoretical_variogram(variogram: TheoreticalVariogram) -> None:
+def validate_theoretical_variogram(variogram) -> None:
     """
     Function checks if variogram is set.
 

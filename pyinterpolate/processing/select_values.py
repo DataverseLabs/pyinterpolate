@@ -1,5 +1,9 @@
+from typing import Iterable
+
 import numpy as np
 from scipy.linalg import fractional_matrix_power
+
+from pyinterpolate.distance.distance import calc_point_to_point_distance
 
 
 def _rotation_matrix(angle: float) -> np.array:
@@ -183,6 +187,7 @@ def create_min_max_array(value: float,
     min_max_steps = np.linspace(min_step, max_step, number_of_steps)
     return min_max_steps
 
+
 def get_study_max_range(input_coordinates: np.ndarray) -> float:
     """Function calculates max range of a study area.
 
@@ -203,3 +208,67 @@ def get_study_max_range(input_coordinates: np.ndarray) -> float:
     study_range = (max_x - min_x)**2 + (max_y - min_y)**2
     study_range = np.sqrt(study_range)
     return study_range
+
+
+def select_kriging_data(unknown_position: Iterable,
+                        data_array: np.ndarray,
+                        neighbors_range: float,
+                        min_number_of_neighbors: int = 4,
+                        max_number_of_neighbors: int = -1) -> np.ndarray:
+    """
+    Function prepares data for kriging - array of point position, value and distance to an unknown point.
+
+    Parameters
+    ----------
+    unknown_position : Iterable
+                       List, tuple or array with x, y coordinates.
+
+    data_array : np.ndarray
+                 Known points.
+
+    neighbors_range : float
+                      Range within neighbors are affecting the value, it should be close or the same as
+                      the variogram range.
+
+    min_number_of_neighbors : int, default = 4
+                              Number of the n-closest neighbors used for interpolation. If within the
+                              neighbors_range is less neighbors than min_number_of_neighbors, then additional points are
+                              selected from outside the neighbors_range based on their position.
+
+    max_number_of_neighbors : int, default = -1
+                              Maximum number of neighbors within neighbors_range. You should leave default value
+                              -1 if you want to include all available points. If your range of analysis catches multiple
+                              points, you may consider to set this parameter to some large integer value to speed-up
+                              the computations.
+
+    Returns
+    -------
+    : np.ndarray
+      Dataset of the length min_number_of_neighbors <= length <= max_number_of_neighbors. Each record is created from
+      the position, value and distance to the unknown point `[[x, y, value, distance to unknown position]]`.
+
+    """
+
+    # Distances to unknown point
+    r = np.array([unknown_position])
+
+    known_pos = data_array[:, :-1]
+    dists = calc_point_to_point_distance(r, known_pos)
+
+    # Prepare data for kriging
+    neighbors_and_dists = np.c_[data_array, dists.T]
+    prepared_data = neighbors_and_dists[neighbors_and_dists[:, -1] <= neighbors_range, :]
+
+    len_prep = len(prepared_data)
+
+    if len_prep < min_number_of_neighbors:
+        # Sort data
+        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+        prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
+
+    if max_number_of_neighbors == -1:
+        return prepared_data
+    else:
+        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+        prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
+        return prepared_data

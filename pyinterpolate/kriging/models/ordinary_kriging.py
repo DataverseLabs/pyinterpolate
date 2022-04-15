@@ -1,10 +1,12 @@
 # Python core
-from typing import Union, Collection, List
+from typing import List, Union, Tuple
 
 # Core calculation and data visualization
 import numpy as np
 
 # Pyinterpolate
+from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.processing.select_values import select_kriging_data
 from pyinterpolate.variogram import TheoreticalVariogram
 from pyinterpolate.variogram.utils.exceptions import validate_theoretical_variogram
 
@@ -12,11 +14,10 @@ from pyinterpolate.variogram.utils.exceptions import validate_theoretical_variog
 def ordinary_kriging(
         theoretical_model: TheoreticalVariogram,
         known_locations: np.ndarray,
-        unknown_location: Union[np.ndarray, Collection],
+        unknown_location: Union[List, Tuple, np.ndarray],
         neighbors_range=None,
         min_no_neighbors=1,
-        max_no_neighbors=-1,
-        monitor_negative_weights=True
+        max_no_neighbors=-1
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -24,29 +25,31 @@ def ordinary_kriging(
     Parameters
     ----------
     theoretical_model : TheoreticalVariogram
-                                  Trained theoretical variogram model.
+                        Trained theoretical variogram model.
 
-    unknown_locations : numpy array
-                        Array with unknown locations.
+    known_locations : numpy array
+                      Array with the known locations.
 
-    neighbors_range : float
-                      Maximum distance where we search for point neighbors.
+    unknown_location : Union[List, Tuple, numpy array]
+                       Point where you want to estimate value (x, y) <-> (lon, lat)
 
-    min_no_neighbors : int
+    neighbors_range : float, default = None
+                      Maximum distance where we search for point neighbors. If None given then range is selected from
+                      the theoretical_model rang attribute.
+
+    min_no_neighbors : int, default = 1
                        Minimum number of neighbors to estimate unknown value; value is used when insufficient number of
                        neighbors is within neighbors_range.
 
-    max_no_neighbors : int
+    max_no_neighbors : int, default = -1
                        Maximum number of n-closest neighbors used for interpolation if there are too many neighbors
-                       in neighbors_range. It speeds up calculations for large datasets.
-
-    monitor_negative_weights : bool
-                               Analyze output and weights and if they are negative throw warning.
+                       in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
+                       all possible neighbors will be used.
 
     Returns
     -------
     : numpy array
-        [longitude (x), latitude (y), predicted value, variance error]
+        [predicted value, variance error, longitude (x), latitude (y)]
 
     Warns
     -----
@@ -65,12 +68,12 @@ def ordinary_kriging(
     if neighbors_range is None:
         neighbors_range = theoretical_model.rang
 
-    # TODO
-    prepared_data = prepare_kriging_data(unknown_position=unknown_location,
-                                         data_array=self.dataset,
-                                         neighbors_range=neighbors_range,
-                                         min_number_of_neighbors=min_no_neighbors,
-                                         max_number_of_neighbors=max_no_neighbors)
+    prepared_data = select_kriging_data(unknown_position=unknown_location,
+                                        data_array=known_locations,
+                                        neighbors_range=neighbors_range,
+                                        min_number_of_neighbors=min_no_neighbors,
+                                        max_number_of_neighbors=max_no_neighbors)
+
     n = len(prepared_data)
     unknown_distances = prepared_data[:, -1]
     k = theoretical_model.predict(unknown_distances)
@@ -80,7 +83,7 @@ def ordinary_kriging(
 
     dists = calc_point_to_point_distance(prepared_data[:, :-2])
 
-    predicted_weights = self.model.predict(dists.ravel())
+    predicted_weights = theoretical_model.predict(dists.ravel())
     predicted = np.array(predicted_weights.reshape(n, n))
     p_ones = np.ones((predicted.shape[0], 1))
     predicted_with_ones_col = np.c_[predicted, p_ones]
@@ -91,17 +94,6 @@ def ordinary_kriging(
     w = np.linalg.solve(weights, k)
     zhat = prepared_data[:, -2].dot(w[:-1])
 
-    # Test for anomalies
-    if test_anomalies:
-        if zhat < 0:
-            user_input_message = 'Estimated value is below zero and it is: {}. \n'.format(zhat)
-            text_error = user_input_message + 'Program is terminated. Try different semivariogram model. ' \
-                                                  '(Did you use gaussian model? \
-                            If so then try to use other models like linear or exponential) and/or analyze your data \
-                            for any clusters which may affect the final estimation'
-
-            raise ValueError(text_error)
-
     sigma = np.matmul(w.T, k)
 
-    return [zhat, sigma, w[-1], w]
+    return [zhat, sigma, unknown_location[0], unknown_location[1]]
