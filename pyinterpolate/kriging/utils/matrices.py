@@ -13,7 +13,7 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
                     unknown_location: Union[List, Tuple, np.ndarray],
                     neighbors_range=None,
                     min_no_neighbors=1,
-                    max_no_neighbors=-1) -> List[np.ndarray, np.ndarray, np.ndarray]:
+                    max_no_neighbors=-1) -> List:
     """
     Function predicts semivariances for distances between points and unknown points, and between known points and
     returns two predicted arrays.
@@ -67,8 +67,6 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     unknown_distances = prepared_data[:, -1]
     k = theoretical_model.predict(unknown_distances)
     k = k.T
-    k_ones = np.ones(1)[0]
-    k = np.r_[k, k_ones]
 
     dists = calc_point_to_point_distance(prepared_data[:, :-2])
 

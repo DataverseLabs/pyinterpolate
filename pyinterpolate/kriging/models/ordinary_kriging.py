@@ -48,11 +48,6 @@ def ordinary_kriging(
     -------
     : numpy array
         [predicted value, variance error, longitude (x), latitude (y)]
-
-    Warns
-    -----
-    TODO
-    NegativeWeightsWarning : set if weights in weighting matrix are negative.
     """
 
     k, predicted, dataset = get_predictions(theoretical_model,
@@ -61,6 +56,9 @@ def ordinary_kriging(
                                             neighbors_range,
                                             min_no_neighbors,
                                             max_no_neighbors)
+
+    k_ones = np.ones(1)[0]
+    k = np.r_[k, k_ones]
 
     p_ones = np.ones((predicted.shape[0], 1))
     predicted_with_ones_col = np.c_[predicted, p_ones]

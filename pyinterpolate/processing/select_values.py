@@ -261,14 +261,17 @@ def select_kriging_data(unknown_position: Iterable,
 
     len_prep = len(prepared_data)
 
+    if max_number_of_neighbors == -1:
+        # Get all neighbors
+        return prepared_data
+
     if len_prep < min_number_of_neighbors:
-        # Sort data
+        # Get minimal number of neighbors
         sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
         prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
-
-    if max_number_of_neighbors == -1:
-        return prepared_data
     else:
+        # Get max number of neighbors
         sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
         prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
-        return prepared_data
+
+    return prepared_data

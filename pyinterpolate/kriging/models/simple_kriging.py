@@ -16,7 +16,8 @@ def simple_kriging(
         process_mean: float,
         neighbors_range=None,
         min_no_neighbors=1,
-        max_no_neighbors=-1
+        max_no_neighbors=-1,
+        check_negative_weights=True
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -55,11 +56,6 @@ def simple_kriging(
     : numpy array
         [predicted value, variance error, longitude (x), latitude (y)]
 
-    Warns
-    -----
-    TODO
-    NegativeWeightsWarning : set if weights in weighting matrix are negative.
-
     """
 
     k, predicted, dataset = get_predictions(theoretical_model,
@@ -70,6 +66,7 @@ def simple_kriging(
                                             max_no_neighbors)
 
     w = np.linalg.solve(predicted, k)
+
     r = dataset[:, -2] - process_mean
     zhat = r.dot(w)
     zhat = zhat + process_mean
