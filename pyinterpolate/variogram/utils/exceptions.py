@@ -1,5 +1,4 @@
 import warnings
-from shapely.geometry import Point
 
 
 class MetricsTypeSelectionError(Exception):
@@ -16,6 +15,19 @@ class MetricsTypeSelectionError(Exception):
 
     def __str__(self):
         return self.message
+
+
+class VariogramModelNotSetError(Exception):
+    """
+    Exception raised when TheoreticalVariogram model name has not been set. (Model without name probably wasn't
+    fitted).
+    """
+
+    def __init__(self):
+        self.msg = 'Theoretical Variogram model is not set. You should fit() or autofit() TheoreticalVariogram model first.'
+
+    def __str__(self):
+        return self.msg
 
 
 class UndefinedSMAPEWarning(Warning):
@@ -170,3 +182,21 @@ def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
 
     if validation:
         print(AttributeSetToFalseWarning(validation))
+
+
+def validate_theoretical_variogram(variogram) -> None:
+    """
+    Function checks if variogram is set.
+
+    Parameters
+    ----------
+    variogram : TheoreticalVariogram
+
+    Returns
+    -------
+    : bool
+        True if variogram is calculated.
+
+    """
+    if variogram.name is None:
+        raise VariogramModelNotSetError()

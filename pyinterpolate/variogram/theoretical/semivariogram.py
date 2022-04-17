@@ -1,4 +1,6 @@
 # Core python packages
+import json
+import warnings
 from typing import Collection, Union, Callable, Tuple
 
 # Core calculations and visualization packages
@@ -10,8 +12,8 @@ from prettytable import PrettyTable
 from pyinterpolate.processing.select_values import create_min_max_array, get_study_max_range
 from pyinterpolate.variogram.theoretical.models import circular_model, cubic_model, linear_model, exponential_model, \
     gaussian_model, spherical_model, power_model
-from pyinterpolate.variogram.empirical import ExperimentalVariogram
-from pyinterpolate.variogram.utils.evals import forecast_bias, root_mean_squared_error,\
+from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
+from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
     symmetric_mean_absolute_percentage_error, mean_absolute_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
 
@@ -21,8 +23,8 @@ class TheoreticalVariogram:
 
     Parameters
     ----------
-    empirical_variogram : ExperimentalVariogram
-                          Prepared Empirical Variogram.
+    model_params : dict or None, default=None
+                   Dictionary with 'nugget', 'sill', 'range' and 'name' of the model.
 
     Attributes
     ----------
@@ -70,8 +72,32 @@ class TheoreticalVariogram:
     smape : float, default=0
             Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
 
+    are_params : bool
+                 Check if model parameters were given during initialization.
+
     Methods
     -------
+    fit()
+        Fits experimental variogram data into theoretical model.
+
+    autofit()
+        The same as fit but tests multiple ranges, sills and models.
+
+    calculate_model_error()
+        Evaluates the model performance against experimental values.
+
+    to_dict()
+        Store model parameters in a dict.
+
+    from_dict()
+        Read model parameters from a dict.
+
+    to_json()
+        Save model parameteres in a JSON file.
+
+    from_json()
+        Read model parameters from a JSON file.
+
     plot()
         Shows theoretical model.
 
@@ -106,16 +132,17 @@ class TheoreticalVariogram:
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
     >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
-    >>> theoretical_smv = TheoreticalVariogram(empirical_variogram=empirical_smv)
-    >>> _ = theoretical_smv.autofit(model_types='gaussian')
+    >>> theoretical_smv = TheoreticalVariogram()
+    >>> _ = theoretical_smv.autofit(empirical_variogram=empirical_smv, model_types='gaussian')
     >>> print(theoretical_smv.rmse)
     1.5275214898546217
     """
 
-    def __init__(self, empirical_variogram: ExperimentalVariogram):
+    def __init__(self, model_params: Union[dict, None] = None):
+
+        self.are_params = isinstance(model_params, dict)
 
         # Model
-        self.empirical_variogram = empirical_variogram
         self.variogram_models = {
             'circular': circular_model,
             'cubic': cubic_model,
@@ -128,11 +155,17 @@ class TheoreticalVariogram:
         self.study_max_range = None
 
         # Model parameters
+        self.lags = None
+        self.empirical_variogram = None
         self.fitted_model = None
+
         self.name = None
         self.nugget = 0.
         self.rang = 0.
         self.sill = 0.
+
+        if self.are_params:
+            self._set_model_parameters(model_params)
 
         # Dynamic parameters
         self.rmse = 0.
@@ -140,16 +173,23 @@ class TheoreticalVariogram:
         self.smape = 0.
         self.mae = 0.
 
+    # Core functions
+
     def fit(self,
+            empirical_variogram: ExperimentalVariogram,
             model_type: str,
             sill: float,
             rang: float,
             nugget=0.,
-            update_attrs=True) -> Tuple[np.array, dict]:
+            update_attrs=True,
+            warn_about_set_params=True) -> Tuple[np.array, dict]:
         """
 
         Parameters
         ----------
+        empirical_variogram : ExperimentalVariogram
+                          Prepared Empirical Variogram.
+
         model_type : str
                      Model type. Available models:
                     - 'circular',
@@ -174,9 +214,16 @@ class TheoreticalVariogram:
         update_attrs : bool, default=True
                        Should class attributes be updated?
 
+        warn_about_set_params: bool, default=True
+                               Should class invoke warning if model parameters has been set during initialization?
+
         Raises
         ------
         KeyError : Model type not implemented
+
+        Warns
+        -----
+        : Model parameters were given during initilization but program is forced to fit the new set of parameters.
 
         Returns
         -------
@@ -184,6 +231,12 @@ class TheoreticalVariogram:
             [ theoretical semivariances, {'rmse bias smape mae'}]
 
         """
+        if self.are_params:
+            if warn_about_set_params:
+                warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
+
+        self.empirical_variogram = empirical_variogram
+        self.lags = empirical_variogram.lags
 
         # Check model type
 
@@ -192,16 +245,15 @@ class TheoreticalVariogram:
         if model_type not in _names:
             msg = f'Defined model name {model_type} not available. You may choose one from {_names} instead.'
             raise KeyError(msg)
-        
+
         _model = self.variogram_models[model_type]
 
         _theoretical_values = self._fit_model(_model, nugget, sill, rang)
-        
+
         # Estimate errors
         _error = self.calculate_model_error(_theoretical_values[:, 1], rmse=True, bias=True, smape=True)
 
         if update_attrs:
-
             attrs_to_update = {
                 'fitted_model': _theoretical_values,
                 'model_type': model_type,
@@ -216,6 +268,7 @@ class TheoreticalVariogram:
         return _theoretical_values, _error
 
     def autofit(self,
+                empirical_variogram: ExperimentalVariogram,
                 model_types: Union[str, list],
                 nugget=0,
                 min_range=0.1,
@@ -226,12 +279,16 @@ class TheoreticalVariogram:
                 number_of_sills=16,
                 error_estimator='rmse',
                 auto_update_attributes=True,
+                warn_about_set_params=True,
                 verbose=False):
-
-        """Methods tries to find the optimal range, sill and model of theoretical semivariogram.
+        """
+        Methodtries to find the optimal range, sill and model of theoretical semivariogram.
 
         Parameters
         ----------
+        empirical_variogram : ExperimentalVariogram
+                          Prepared Empirical Variogram.
+
         model_types : str or list
                       List of models of string with a model name. Available models:
                       - 'all' - the same as list with all models,
@@ -277,6 +334,9 @@ class TheoreticalVariogram:
         auto_update_attributes : bool, default = True
                                  Update sill, range, model type and nugget based on the best model.
 
+        warn_about_set_params: bool, default=True
+                               Should class invoke warning if model parameters has been set during initialization?
+
         verbose : bool, default = False
                   Show iteration results.
 
@@ -299,12 +359,21 @@ class TheoreticalVariogram:
 
         RangeOutsideSafeDistanceWarning : max_range > 0.5
 
+        : Model parameters were given during initilization but program is forced to fit the new set of parameters.
+
         Raises
         ------
         ValueError : sill < 0 or range < 0 or range > 1.
 
         KeyError : wrong model name(s) or wrong error type name.
         """
+
+        if self.are_params:
+            if warn_about_set_params:
+                warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
+
+        self.empirical_variogram = empirical_variogram
+        self.lags = empirical_variogram.lags
 
         # Check parameters
         check_ranges(min_range, max_range)
@@ -356,51 +425,34 @@ class TheoreticalVariogram:
                         optimal_parameters['rang'] = _rang
                         optimal_parameters['fitted_model'] = _fitted_model
                         optimal_parameters.update(_err)
-        
+
         if auto_update_attributes:
             self._update_attributes(**optimal_parameters)
 
         return optimal_parameters
 
-    def __str__(self):
+    def predict(self, distances: np.ndarray) -> np.ndarray:
+        """
+        Method returns semivariances for a given distances.
 
-        if self.fitted_model is None:
-            return 'Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model.'
-        else:
-            title = '* Selected model: ' + f'{self.name}'.capitalize() + ' model'
-            msg_nugget = f'* Nugget: {self.nugget}'
-            msg_sill = f'* Sill: {self.sill}'
-            msg_range = f'* Range: {self.rang}'
-            mean_bias_msg = f'* Mean Bias: {self.bias}'
-            mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
+        Parameters
+        ----------
+        distances : np.ndarray
 
-            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg]
+        Returns
+        -------
+        predicted : np.ndarray
 
-            header = '\n'.join(text_list) + '\n'
+        """
 
-            # Build pretty table
-            pretty_table = PrettyTable()
-            pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
+        _model = self.variogram_models[self.name]
 
-            records = []
-            for idx, record in enumerate(self.empirical_variogram.experimental_semivariance_array):
-                lag = record[0]
-                experimental_semivar = record[1]
-                theoretical_semivar = self.fitted_model[idx][1]
-                bias = experimental_semivar - theoretical_semivar
-                rmse = np.sqrt((experimental_semivar - theoretical_semivar)**2)
-                records.append([lag, experimental_semivar, theoretical_semivar, bias, rmse])
+        predicted = _model(
+            distances, self.nugget, self.sill, self.rang
+        )
+        return predicted
 
-            pretty_table.add_rows(records)
-
-            msg = header + pretty_table.get_string()
-            return msg
-
-    def __repr__(self):
-        cname = 'TheoreticalVariogram'
-        input_params = f'empirical_variogram={self.empirical_variogram}'
-        repr_val = cname + '(' + input_params + ')'
-        return repr_val
+    # Plotting and visualization
 
     def plot(self, experimental=True):
         """
@@ -413,7 +465,7 @@ class TheoreticalVariogram:
 
         Raises
         ------
-        AttributeError
+        AttributeError : Model is not fitted yet
         """
         if self.fitted_model is None:
             raise AttributeError('Model has not been trained, nothing to plot.')
@@ -422,16 +474,18 @@ class TheoreticalVariogram:
             plt.figure(figsize=(12, 6))
 
             if experimental:
-                plt.scatter(self.empirical_variogram.lags,
+                plt.scatter(self.lags,
                             self.empirical_variogram.experimental_semivariances,
                             marker='8', c='#66c2a5')
                 legend.append('Experimental Semivariances')
 
-            plt.plot(self.fitted_model[:, 0], self.fitted_model[:, 1], '--', color='#fc8d62')
+            plt.plot(self.lags, self.fitted_model[:, 1], '--', color='#fc8d62')
             plt.legend(legend)
             plt.xlabel('Distance')
             plt.ylabel('Variance')
             plt.show()
+
+    # Evaluation
 
     def calculate_model_error(self,
                               fitted_values: np.array,
@@ -501,6 +555,122 @@ class TheoreticalVariogram:
 
         return model_error
 
+    # I/O
+
+    def to_dict(self) -> dict:
+        """Method exports theoretical variogram parameters to dictionary.
+
+        Returns
+        -------
+        model_parameters : dict
+                           Dictionary with model 'name', 'nugget', 'sill' and 'range'.
+
+        Raises
+        ------
+        AttributeError : Model parameters are not derived yet
+        """
+
+        if self.fitted_model is None:
+            if self.name is None:
+                msg = 'Model is not set yet, cannot export model parameters to dict'
+                raise AttributeError(msg)
+
+        modeled_parameters = {'name': self.name,
+                              'sill': self.sill,
+                              'range': self.rang,
+                              'nugget': self.nugget}
+
+        return modeled_parameters
+
+    def from_dict(self, parameters: dict) -> None:
+        """Method updates model with a given parameters.
+
+        Parameters
+        ----------
+        parameters : dict
+                     'name', 'nugget', 'sill', 'range'
+        """
+
+        self._set_model_parameters(parameters)
+        self.are_params = True
+
+    def to_json(self, fname: str):
+        """
+        Method stores variogram parameters into a JSON file.
+
+        Parameters
+        ----------
+        fname : str
+                File to store a data.
+
+        """
+
+        json_output = {
+            'name': self.name,
+            'nugget': self.nugget,
+            'range': self.rang,
+            'sill': self.sill
+        }
+
+        with open(fname, 'w') as fout:
+            json.dump(json_output, fout)
+
+    def from_json(self, fname: str):
+        """
+        Method reads data from a JSON file.
+
+        Parameters
+        ----------
+        fname : str
+                File with a stored parameters.
+        """
+
+        with open(fname, 'r') as fin:
+            json_input = json.load(fin)
+
+        self._set_model_parameters(json_input)
+        self.are_params = True
+
+    def __str__(self):
+
+        if self.fitted_model is None:
+            return 'Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model.'
+        else:
+            title = '* Selected model: ' + f'{self.name}'.capitalize() + ' model'
+            msg_nugget = f'* Nugget: {self.nugget}'
+            msg_sill = f'* Sill: {self.sill}'
+            msg_range = f'* Range: {self.rang}'
+            mean_bias_msg = f'* Mean Bias: {self.bias}'
+            mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
+
+            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg]
+
+            header = '\n'.join(text_list) + '\n'
+
+            # Build pretty table
+            pretty_table = PrettyTable()
+            pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
+
+            records = []
+            for idx, record in enumerate(self.empirical_variogram.experimental_semivariance_array):
+                lag = record[0]
+                experimental_semivar = record[1]
+                theoretical_semivar = self.fitted_model[idx][1]
+                bias = experimental_semivar - theoretical_semivar
+                rmse = np.sqrt((experimental_semivar - theoretical_semivar) ** 2)
+                records.append([lag, experimental_semivar, theoretical_semivar, bias, rmse])
+
+            pretty_table.add_rows(records)
+
+            msg = header + pretty_table.get_string()
+            return msg
+
+    def __repr__(self):
+        cname = 'TheoreticalVariogram'
+        input_params = f'empirical_variogram={self.empirical_variogram}'
+        repr_val = cname + '(' + input_params + ')'
+        return repr_val
+
     def _check_model_names(self, mname):
         _names = list(self.variogram_models.keys())
 
@@ -508,7 +678,7 @@ class TheoreticalVariogram:
             msg = f'Defined model name {mname} not available. You may choose one from {_names} instead.'
             raise KeyError(msg)
 
-    def _check_models_type_autofit(self, model_types: Union[str, Collection]):
+    def _check_models_type_autofit(self, model_types: Union[str, Collection]) -> list:
         mtypes = list()
         if isinstance(model_types, str):
             if model_types == 'all':
@@ -618,6 +788,12 @@ class TheoreticalVariogram:
         modeled[:, 1] = fitted_values
         return modeled
 
+    def _set_model_parameters(self, model_params: dict):
+        self.nugget = model_params['nugget']
+        self.rang = model_params['range']
+        self.sill = model_params['sill']
+        self.name = model_params['name']
+
 
 def build_theoretical_variogram(empirical_variogram: ExperimentalVariogram,
                                 model_type: str,
@@ -656,8 +832,8 @@ def build_theoretical_variogram(empirical_variogram: ExperimentalVariogram,
     : TheoreticalVariogram
 
     """
-    theo = TheoreticalVariogram(empirical_variogram)
+    theo = TheoreticalVariogram()
     theo.fit(
-        model_type=model_type, sill=sill, rang=rang, nugget=nugget
+        empirical_variogram=empirical_variogram, model_type=model_type, sill=sill, rang=rang, nugget=nugget
     )
     return theo
