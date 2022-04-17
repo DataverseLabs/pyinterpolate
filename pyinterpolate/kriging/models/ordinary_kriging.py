@@ -5,7 +5,7 @@ from typing import List, Union, Tuple
 import numpy as np
 
 # Pyinterpolate
-from pyinterpolate.kriging.utils.matrices import get_predictions
+from pyinterpolate.kriging.utils.matrices import get_predictions, solve_weights
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -15,7 +15,8 @@ def ordinary_kriging(
         unknown_location: Union[List, Tuple, np.ndarray],
         neighbors_range=None,
         min_no_neighbors=1,
-        max_no_neighbors=-1
+        max_no_neighbors=-1,
+        allow_approximate_solutions=False
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -44,6 +45,10 @@ def ordinary_kriging(
                        in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
                        all possible neighbors will be used.
 
+    allow_approximate_solutions : bool, default = False
+                                  Allows the approximation of kriging weights based on the OLS algorithm.
+                                  Not recommended to set to True if you don't know what you are doing!
+
     Returns
     -------
     : numpy array
@@ -66,9 +71,12 @@ def ordinary_kriging(
     p_ones_row[0][-1] = 0.
     weights = np.r_[predicted_with_ones_col, p_ones_row]
 
-    w = np.linalg.solve(weights, k)
-    zhat = dataset[:, -2].dot(w[:-1])
+    output_weights = solve_weights(weights, k, allow_approximate_solutions)
+    try:
+        zhat = dataset[:, -2].dot(output_weights[:-1])
+    except ValueError:
+        print(dataset)
 
-    sigma = np.matmul(w.T, k)
+    sigma = np.matmul(output_weights.T, k)
 
     return [zhat, sigma, unknown_location[0], unknown_location[1]]
