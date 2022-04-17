@@ -19,6 +19,12 @@ def kriging(observations: np.ndarray,
             process_mean: Union[float, None] = None,
             number_of_workers: int = -1) -> np.ndarray:
 
+    # Check model type
+    if how == 'sk' and process_mean is None:
+        raise AttributeError('You have chosen simple kriging "sk" as a baseline for your '
+                             'interpolation but you did not set process_mean parameter. You must do it '
+                             'to perform calculations properly.')
+
     if number_of_workers == -1:
         core_num = os.cpu_count()
         if core_num > 1:

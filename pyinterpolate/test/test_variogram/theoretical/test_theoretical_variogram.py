@@ -1,3 +1,4 @@
+import os
 import unittest
 from pyinterpolate.variogram import build_experimental_variogram
 from pyinterpolate.variogram import build_theoretical_variogram, TheoreticalVariogram
@@ -77,14 +78,46 @@ class TestTheoreticalVariogram(unittest.TestCase):
         msg_trained = 'Expected __str__() of trained model starts differently than the returned __str__().'
         self.assertTrue(output_str_trained.startswith(expected_str_trained_model_startswith), msg=msg_trained)
 
-    def test_to_dict(self):
-        pass
+    def test_to_and_from_dict(self):
+        variogram = TheoreticalVariogram()
+        variogram.autofit(empirical_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        vdict = variogram.to_dict()
 
-    def test_from_dict(self):
-        pass
+        variogram2 = TheoreticalVariogram()
+        variogram2.from_dict(vdict)
 
-    def test_to_json(self):
-        pass
+        test = (
+            variogram.name == variogram2.name
+        ) and (
+            variogram.sill == variogram2.sill
+        ) and (
+            variogram.rang == variogram2.rang
+        ) and (
+            variogram.nugget == variogram2.nugget
+        )
 
-    def test_from_json(self):
-        pass
+        self.assertTrue(test, msg='Theoretical variograms should be the same! Saved and loaded dicts are different!')
+
+    def test_to_and_from_json(self):
+        fname = 'testfile'
+        variogram = TheoreticalVariogram()
+        variogram.autofit(empirical_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        variogram.to_json(fname)
+
+        variogram2 = TheoreticalVariogram()
+        variogram2.from_json(fname)
+
+        test = (
+                       variogram.name == variogram2.name
+               ) and (
+                       variogram.sill == variogram2.sill
+               ) and (
+                       variogram.rang == variogram2.rang
+               ) and (
+                       variogram.nugget == variogram2.nugget
+               )
+
+        # remove json
+        os.remove(fname)
+
+        self.assertTrue(test, msg='Theoretical variograms should be the same! Saved and loaded jsons are different!')
