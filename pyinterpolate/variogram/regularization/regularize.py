@@ -14,11 +14,45 @@ class Deconvolution:
 
     Attributes
     ----------
-    iter : int
-           A control parameter. Number of iterations.
+    experimental_variogram_areal : ExperimentalVariogram
+                                   The experimental variogram of aggregated dataset.
+
+    theoretical_variogram_areal : TheoreticalVariogram
+                                  The modeled variogram of areal data.
+
+    initial_reg_model : TODO
+
+    theoretical_model : TheoreticalVariogram
+                        TODO
+
+    optimal_model : TODO
+
+    areal_data : AggData
+                 TODO
+
+    point_support_data : numpy array
+                         TODO
+
+
+    weighting_method : str
+                       How lags are weighted to calculate model error. Possible methods:
+                       - TODO
+                       - TODO
+
+    store_models : bool
+                   Should algorithm save a model from each iteration?
+
+    weights : list
+              Weights of each iteration.
+
+    deviations : list
+                 List of deviations for each iteration.
 
     iters_max : int
                 A control parameter. Maximum number of iterations.
+
+    iters_min : int
+                A control parameter. Minimum number of iterations.
 
     deviation_ratio : float
                       A control parameter. Ratio of the initial regularization error and the last iteration
@@ -26,11 +60,20 @@ class Deconvolution:
                       areal semivariogram and the point-support theoretical semivariance. Smaller ratio > better model.
 
     min_deviation_ratio : float
-                          A control parameter. The minimal deviation ratio when algorithm stops.
+                          A control parameter. The minimal deviation ratio when algorithm stops iterations.
 
+    diff_decrease : float
+                    A control parameter. Ratio of difference:
+                    (The current error - The optimal model error) / (The optimal model error).
+                    It is measured at each iteration.
 
+    min_diff_decrease : float
+                        A control parameter. The algorithm measures a relative error decrease in each iteration in
+                        comparison to the optimal model. Usually, a tiny decrease for n_diffs times should
+                        stop algorithm. We assume that model has reached its optimum.
 
-
+    n_diffs : int
+              A control parameter. Number of iterations when algorithm should stop if min_diff_decrease is low.
 
     Methods
     -------
