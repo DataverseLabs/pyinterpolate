@@ -100,6 +100,10 @@ def solve_weights(weights: np.ndarray, k: np.ndarray, allow_lsa=False) -> np.nda
     Warns
     -----
     ZerosMatrixWarning : raised when weights / k matrices are full of zeros.
+
+    TODO
+    ----
+    - functional tests and analysis of LSA output
     """
 
     try:
