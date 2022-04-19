@@ -1,4 +1,8 @@
+from enum import Enum
+from typing import Union
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class Deconvolution:
@@ -27,7 +31,7 @@ class Deconvolution:
 
     optimal_model : TODO
 
-    areal_data : AggData
+    areal_data : AggregatedDataClass
                  TODO
 
     point_support_data : numpy array
@@ -108,7 +112,27 @@ class Deconvolution:
     def __init__(self):
         pass
 
-    def fit(self):
+    def fit(self,
+            agg_variogram: AggTheoreticalVariogram,
+            point_support_variogram: TheoreticalVariogram,
+            weighting_method: Union[str, None] = None,
+            store_models: bool = False) -> None:
+        # TODO weighting methods to Enum
+        """
+
+        Parameters
+        ----------
+        aggregated : AggregatedDataClass
+                     Aggregated data in a form of AggregatedDataClass object.
+
+        agg_variogram : TheoreticalVariogram
+                        The initial variogram.
+
+        point_support
+        weighting_method
+        store_models
+
+        """
         pass
 
     def transform(self):
