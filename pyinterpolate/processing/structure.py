@@ -81,7 +81,7 @@ class PolygonDataClass:
 
         # Group data
         core_array = dataset[[cx, cy, val_col]].to_numpy()
-        indexes_and_geometries = dataset[[idx_col, geo_col]].to_list()
+        indexes_and_geometries = dataset[[idx_col, geo_col]].to_numpy()
 
         datadict = {
             'points': core_array,
@@ -146,7 +146,12 @@ class PolygonDataClass:
         # Update polyset
         self.polyset = self._parse(dataset, val_col=value_col, geo_col=geometry_col, idx_col=index_col)
 
-    def from_geodataframe(self, gdf: gpd.GeoDataFrame, value_col: str, geometry_col: str = 'geometry', use_index=True):
+    def from_geodataframe(self,
+                          gdf: gpd.GeoDataFrame,
+                          value_col: str,
+                          geometry_col: str = 'geometry',
+                          use_index: bool = True,
+                          index_col: Union[str, None] =  None):
         """
         Loads areal dataset from a GeoDataFrame supported by GeoPandas.
 
@@ -163,6 +168,9 @@ class PolygonDataClass:
         use_index : bool, default = True
                     Should the GeoDataFrame index be used as a column.
 
+        index_col : Union[str, None], default = None
+                    If set then a specific column is treated as an index.
+
         Raises
         ------
         WrongGeometryTypeError : Raised if given geometry is different than Polygon or MultiPolygon.
@@ -174,13 +182,22 @@ class PolygonDataClass:
 
         dataset = gdf[[value_col, geometry_col]]
 
-        if use_index:
-            idx_name = dataset.index.name
-            dataset.reset_index(inplace=True)
-
+        if index_col is not None:
+            self._check_index(dataset, index_col)
+            idx_name = index_col
         else:
-            idx_name = 'index'
-            dataset[idx_name] = np.arange(0, len(dataset))
+            if use_index:
+                idx_name = dataset.index.name
+
+                if idx_name is None:
+                    dataset.index.name = 'index'
+                idx_name = 'index'
+
+                dataset.reset_index(inplace=True)
+
+            else:
+                idx_name = 'index'
+                dataset[idx_name] = np.arange(0, len(dataset))
 
         self.polyset = self._parse(dataset,
                                    val_col=value_col,
@@ -191,7 +208,8 @@ class PolygonDataClass:
 def get_polyset_from_geodataframe(gdf: gpd.GeoDataFrame,
                                   value_col: str,
                                   geometry_col: str = 'geometry',
-                                  use_index=True):
+                                  use_index=True,
+                                  index_col: Union[str, None] =  None):
     """
     Function prepares polyset object from GeoDataFrame.
 
@@ -207,6 +225,9 @@ def get_polyset_from_geodataframe(gdf: gpd.GeoDataFrame,
 
     use_index : bool, default = True
                 Uses passed GeoDataFrame index as area indices.
+
+    index_col : Union[str, None], default = None
+                    If set then a specific column is treated as an index.
 
     Returns
     -------
