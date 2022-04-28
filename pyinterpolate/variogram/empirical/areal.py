@@ -9,7 +9,7 @@ from pyinterpolate.variogram.empirical.experimental_variogram import build_exper
 def build_areal_variogram(polyset: Union[dict, PolygonDataClass],
                           step_size: float,
                           max_range: float,
-                          weights: np.array = None,
+                          weights: np.ndarray = None,
                           direction: float = 0,
                           tolerance: float = 1):
     """
@@ -75,15 +75,7 @@ def build_areal_variogram(polyset: Union[dict, PolygonDataClass],
     >>> empirical_smv = build_areal_variogram(parsed, step_size=STEP_SIZE, max_range=MAX_RANGE)
     """
 
-    if isinstance(polyset, dict):
-        datapoints = polyset['points']
-    elif isinstance(polyset, PolygonDataClass):
-        datapoints = polyset.polyset['points']
-    else:
-        raise TypeError(f'Input data structure may be only dict or PolygonDataClass, '
-                        f'you have used {type(polyset)} instead')
-
-    exp_variogram = build_experimental_variogram(datapoints,
+    exp_variogram = build_experimental_variogram(polyset,
                                                  step_size=step_size,
                                                  max_range=max_range,
                                                  weights=weights,

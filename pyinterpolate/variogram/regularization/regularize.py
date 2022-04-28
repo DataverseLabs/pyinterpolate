@@ -4,6 +4,9 @@ from typing import Union
 import matplotlib.pyplot as plt
 import numpy as np
 
+from pyinterpolate.processing.structure import PolygonDataClass
+from pyinterpolate.variogram import TheoreticalVariogram
+
 
 class Deconvolution:
     """
@@ -113,26 +116,23 @@ class Deconvolution:
         pass
 
     def fit(self,
-            agg_variogram: AggTheoreticalVariogram,
-            point_support_variogram: TheoreticalVariogram,
-            weighting_method: Union[str, None] = None,
-            store_models: bool = False) -> None:
+            agg_dataset: PolygonDataClass,
+            point_support_dataset: np.ndarray,
+            step_agg: float,
+            max_range_agg: float,
+            direction_agg: float = 0,
+            tolerance_agg: float = 1,
+            weight_lags_method: Union[str, int] = 0) -> None:
         # TODO weighting methods to Enum
         """
 
         Parameters
         ----------
-        aggregated : AggregatedDataClass
-                     Aggregated data in a form of AggregatedDataClass object.
 
-        agg_variogram : TheoreticalVariogram
-                        The initial variogram.
-
-        point_support
-        weighting_method
-        store_models
 
         """
+
+        avar =
         pass
 
     def transform(self):
