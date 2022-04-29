@@ -132,7 +132,16 @@ class Deconvolution:
 
         """
 
-        avar =
+        # Update class parameters
+        self.aggregated = agg_dataset
+        self.point_support = point_support_dataset
+        self.step_agg = step_agg
+        self.max_range_agg = max_range_agg
+        self.direction_agg = direction_agg
+        self.tolerance_agg = tolerance_agg
+        self.weight_lags_fn = self._select_weighting_method(weight_lags_method)
+
+
         pass
 
     def transform(self):
