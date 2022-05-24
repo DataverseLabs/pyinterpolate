@@ -305,7 +305,7 @@ class ExperimentalVariogram:
             tolerance=self.tol
         )
 
-    def _parse_input_array(self, input_array: Union[np.ndarray, list, tuple, PolygonDataClass, dict]) -> None:
+    def _parse_input_array(self, input_array) -> None:
         """
         Method parses input array into a valid structure.
 
