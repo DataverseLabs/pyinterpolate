@@ -14,7 +14,7 @@ from pyinterpolate.variogram.theoretical.models import circular_model, cubic_mod
     gaussian_model, spherical_model, power_model
 from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
-    symmetric_mean_absolute_percentage_error, mean_absolute_error
+    symmetric_mean_absolute_percentage_error, mean_absolute_error, weighted_root_mean_squared_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
 
 
@@ -278,6 +278,7 @@ class TheoreticalVariogram:
                 max_sill=1,
                 number_of_sills=16,
                 error_estimator='rmse',
+                deviation_weighting='equal',
                 auto_update_attributes=True,
                 warn_about_set_params=True,
                 verbose=False):
@@ -330,6 +331,14 @@ class TheoreticalVariogram:
                           - 'mae': Mean Absolute Error,
                           - 'bias': Forecast Bias,
                           - 'smape': Symmetric Mean Absolute Percentage Error.
+
+        deviation_weighting : str, default = "equal"
+                              The name of a method used to weight error at a given lags. Works only with RMSE.
+                              Available methods:
+                              - equal: no weighting,
+                              - closest: lags at a close range have bigger weights,
+                              - distant: lags that are further away have bigger weights,
+                              - dense: error is weighted by the number of point pairs within a lag.
 
         auto_update_attributes : bool, default = True
                                  Update sill, range, model type and nugget based on the best model.
@@ -411,7 +420,11 @@ class TheoreticalVariogram:
                     # Create model
                     _mdl_fn = self.variogram_models[_mtype]
                     _fitted_model = self._fit_model(_mdl_fn, nugget, _sill, _rang)
-                    _err = self.calculate_model_error(_fitted_model[:, 1], **_errors_keys)
+
+                    # Calculate Error
+                    _err = self.calculate_model_error(_fitted_model[:, 1],
+                                                      **_errors_keys,
+                                                      deviation_weighting=deviation_weighting)
 
                     if verbose:
                         self.__print_autofit_info(_mtype, nugget, _sill, _rang, error_estimator, _err[error_estimator])
@@ -492,7 +505,8 @@ class TheoreticalVariogram:
                               rmse=True,
                               bias=True,
                               mae=True,
-                              smape=True) -> dict:
+                              smape=True,
+                              deviation_weighting='equal') -> dict:
         """
 
         Parameters
@@ -511,6 +525,14 @@ class TheoreticalVariogram:
 
         smape : bool, default=True
                 Symmetric Mean Absolute Percentage Error of a model.
+
+        deviation_weighting : str, default = "equal"
+                              The name of a method used to weight error at a given lags. Works only with RMSE.
+                              Available methods:
+                              - equal: no weighting,
+                              - closest: lags at a close range have bigger weights,
+                              - distant: lags that are further away have bigger weights,
+                              - dense: error is weighted by the number of point pairs within a lag.
 
         Returns
         -------
@@ -540,7 +562,15 @@ class TheoreticalVariogram:
 
         # Get RMSE
         if rmse:
-            _rmse = root_mean_squared_error(fitted_values, _real_values)
+            if deviation_weighting != 'equal':
+                if deviation_weighting == 'dense':
+                    points_per_lag = self.empirical_variogram.experimental_semivariance_array[:, -1]
+                    _rmse = weighted_root_mean_squared_error(fitted_values, _real_values, deviation_weighting,
+                                                             lag_points_distribution=points_per_lag)
+                else:
+                    _rmse = weighted_root_mean_squared_error(fitted_values, _real_values, deviation_weighting)
+            else:
+                _rmse = root_mean_squared_error(fitted_values, _real_values)
             model_error['rmse'] = _rmse
 
         # Get MAE

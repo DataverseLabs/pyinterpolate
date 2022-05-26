@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import numpy as np
 
 from pyinterpolate.variogram import TheoreticalVariogram
@@ -65,7 +67,7 @@ class AggVariogramPK:
         self.agg_tolerance = agg_tolerance
         self.agg_direction = agg_direction
         self.point_support = point_support
-        self.weighting_method = self._select_weighting_method(variogram_weighting_method)
+        self.weighting_method = variogram_weighting_method
         self.verbose = verbose
 
         # Variogram models
@@ -138,7 +140,7 @@ class AggVariogramPK:
 
         if theoretical_model is None:
             theoretical_model = self._fit_theoretical_model()
-        self.theoretical_model = theoretical_model.copy()
+        self.theoretical_model = deepcopy(theoretical_model)
 
         # gamma_h(v, v)
         if within_block_variogram is None:
@@ -177,8 +179,13 @@ class AggVariogramPK:
         theoretical_model = TheoreticalVariogram()
         theoretical_model.autofit(
             empirical_variogram=self.experimental_variogram,
+            model_types='all',
             deviation_weighting=self.weighting_method
         )
+
+        return theoretical_model
+
+
 
     def _get_experimental_variogram(self) -> np.ndarray:
         """
