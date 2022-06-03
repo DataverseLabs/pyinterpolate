@@ -1,10 +1,7 @@
-from enum import Enum
-from typing import Union, Dict
+from typing import Dict
 
-import matplotlib.pyplot as plt
 import numpy as np
 
-from pyinterpolate.processing.structure import PolygonDataClass
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.aggregated import AggVariogram
 

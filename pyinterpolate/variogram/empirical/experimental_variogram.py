@@ -5,7 +5,7 @@ import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
 
-from pyinterpolate.processing.structure import PolygonDataClass
+from pyinterpolate.processing.polygon.structure import PolygonDataClass
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class

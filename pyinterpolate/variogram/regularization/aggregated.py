@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Dict
 
 import numpy as np
 
@@ -38,6 +39,23 @@ class AggVariogramPK:
                           'area_id': [numpy array with points]
                         }
 
+    agg_direction : float (in range [0, 360]), optional, default=0
+                    direction of semivariogram, values from 0 to 360 degrees:
+                    * 0 or 180: is NS direction,
+                    * 90 or 270 is EW direction,
+                    * 45 or 225 is NE-SW direction,
+                    * 135 or 315 is NW-SE direction.
+
+    agg_tolerance : float (in range [0, 1]), optional, default=1
+                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
+                    the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+                    for 0 tolerance.
+                    * The minor axis size is (tolerance * step_size)
+                    * The major axis size is ((1 - tolerance) * step_size)
+                    * The baseline point is at a center of the ellipse.
+                    Tolerance == 1 creates an omnidirectional semivariogram.
+
     variogram_weighting_method : str, default = "closest"
                                  Method used to weight error at a given lags. Available methods:
                                  - equal: no weighting,
@@ -45,6 +63,12 @@ class AggVariogramPK:
                                  - distant: lags that are further away have bigger weights,
                                  - dense: error is weighted by the number of point pairs within a lag - more pairs,
                                    lesser weight.
+
+    verbose : bool, default = False
+              Print steps performed by the algorithm.
+
+    log_process : bool, default = False
+                  Log process info (Level DEBUG).
 
     verbose : bool, default = False
 
@@ -58,8 +82,11 @@ class AggVariogramPK:
                  agg_step_size: float,
                  agg_max_range: float,
                  point_support: Dict,
+                 agg_direction: float = 0,
+                 agg_tolerance: float = 1,
                  variogram_weighting_method: str = 'closest',
-                 verbose: bool = False):
+                 verbose: bool = False,
+                 log_process: bool = False):
 
         self.aggregated_data = aggregated_data
         self.agg_step_size = agg_step_size
@@ -68,7 +95,10 @@ class AggVariogramPK:
         self.agg_direction = agg_direction
         self.point_support = point_support
         self.weighting_method = variogram_weighting_method
+
+        # Process info
         self.verbose = verbose
+        self.log_process = log_process
 
         # Variogram models
         self.experimental_variogram = None
@@ -165,6 +195,57 @@ class AggVariogramPK:
         self.regularized_variogram = regularized_variogram.copy()
 
         return self.regularized_variogram
+
+    def calculate_mean_semivariance_within_blocks(self):
+        """
+        Method calculates the average semivariance within blocks gamma_h(v, v).
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        Notes
+        -----
+        $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$
+
+            where:
+            - $\gamma(v_{a}, v_{a})$ is semivariance within a block $a$,
+            - $\gamma(v_{a+h}, v_{a+h})$ is samivariance within a block at a distance $h$ from the block $a$.
+
+        """
+
+        # Calculate inblock semivariance
+        if self.verbose:
+            print('Start of the inblock semivariance calculation')
+
+        # Pass numpy array with [area id, [points within area and their values]] and semivariogram model
+        self.inblock_semivariance = calculate_inblock_semivariance(self.point_support, self.theoretical_model)
+
+        if self.verbose:
+            print('Inblock semivariance calculated successfully')
+        #
+        # # Calculate distance between blocks
+        # if distances is None:
+        #     if self.verbose:
+        #         print('Distances between blocks: calculation starts')
+        #     self.distances_between_blocks = calc_block_to_block_distance(self.within_area_points)
+        #     if self.verbose:
+        #         print('Distances between blocks have been calculated')
+        # else:
+        #     if self.verbose:
+        #         print('Distances between blocks are provided, distance skipped, model parameters updated')
+        #     self.distances_between_blocks = distances
+        #
+        # # Calc average semivariance
+        # avg_semivariance = calculate_average_semivariance(self.distances_between_blocks, self.inblock_semivariance,
+        #                                                   self.areal_lags, self.areal_ss)
+        # return avg_semivariance
+
+
+    def calculate_semivariance_between_blocks(self):
+        pass
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """

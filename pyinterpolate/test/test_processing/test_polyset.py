@@ -2,7 +2,7 @@ import unittest
 import geopandas as gpd
 import numpy
 
-from pyinterpolate.processing.structure import get_polyset_from_file, get_polyset_from_geodataframe
+from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_polyset_from_geodataframe
 from pyinterpolate.processing.utils.exceptions import WrongGeometryTypeError
 
 

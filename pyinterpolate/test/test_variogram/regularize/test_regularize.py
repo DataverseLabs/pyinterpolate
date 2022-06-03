@@ -1,9 +1,8 @@
-import os
 import unittest
 
 import numpy as np
 
-from pyinterpolate.processing.structure import get_polyset_from_file
+from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram.regularization.regularize import Deconvolution
 
 SHAPEFILE = '../../samples/areal_data/test_areas_pyinterpolate.shp'
