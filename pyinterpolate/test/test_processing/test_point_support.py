@@ -6,8 +6,9 @@ from pyinterpolate.processing.point.structure import get_point_support_from_geod
     PointSupportDataClass
 
 
-POLYGON_DATA = '../samples/regularization/counties_cancer_data.json'
-POPULATION_DATA = '../samples/regularization/population_counts.json'
+DATASET = '../samples/regularization/cancer_data.gpkg'
+POLYGON_LAYER = 'areas'
+POPULATION_LAYER = 'points'
 POP10 = 'POP10'
 GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'FIPS'
@@ -16,16 +17,19 @@ POLYGON_ID = 'FIPS'
 class TestPointSupportDataClass(unittest.TestCase):
 
     def test_get_from_files_fn(self):
-        out = get_point_support_from_files(POPULATION_DATA, POLYGON_DATA,
+        out = get_point_support_from_files(DATASET,
+                                           DATASET,
                                            point_support_geometry_col=GEOMETRY_COL,
                                            point_support_val_col=POP10,
                                            polygon_geometry_col=GEOMETRY_COL,
-                                           polygon_index_col=POLYGON_ID)
+                                           polygon_index_col=POLYGON_ID,
+                                           point_support_layer_name=POPULATION_LAYER,
+                                           polygon_layer_name=POLYGON_LAYER)
         self._test_cases(out)
 
     def test_get_from_geodataframes_fn(self):
-        gdf_points = gpd.read_file(POPULATION_DATA)
-        gdf_polygons = gpd.read_file(POLYGON_DATA)
+        gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
+        gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
         out = get_point_support_from_geodataframes(gdf_points, gdf_polygons,
                                                    point_support_geometry_col=GEOMETRY_COL,
                                                    point_support_val_col=POP10,
@@ -35,17 +39,20 @@ class TestPointSupportDataClass(unittest.TestCase):
 
     def test_load_from_files(self):
         point_support = PointSupportDataClass()
-        out = point_support.from_files(POPULATION_DATA, POLYGON_DATA,
+        out = point_support.from_files(DATASET,
+                                       DATASET,
                                        point_support_geometry_col=GEOMETRY_COL,
                                        point_support_val_col=POP10,
                                        polygon_geometry_col=GEOMETRY_COL,
-                                       polygon_index_col=POLYGON_ID)
+                                       polygon_index_col=POLYGON_ID,
+                                       point_support_layer_name=POPULATION_LAYER,
+                                       polygon_layer_name=POLYGON_LAYER)
 
         self._test_cases(out)
 
     def test_load_from_geodataframes(self):
-        gdf_points = gpd.read_file(POPULATION_DATA)
-        gdf_polygons = gpd.read_file(POLYGON_DATA)
+        gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
+        gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
         point_support = PointSupportDataClass()
         out = point_support.from_geodataframes(gdf_points,
                                                gdf_polygons,
@@ -57,7 +64,7 @@ class TestPointSupportDataClass(unittest.TestCase):
 
     def _test_cases(self, output):
         # Check if all keys are present
-        df = gpd.read_file(POLYGON_DATA)
+        df = gpd.read_file(DATASET, layer=POLYGON_LAYER)
         uniq_keys = set(df[POLYGON_ID].unique())
 
         out_keys = set(output['data'].keys())

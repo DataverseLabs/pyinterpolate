@@ -65,7 +65,9 @@ class PointSupportDataClass:
                    polygon_geometry_col: str,
                    polygon_index_col: str,
                    use_point_support_crs: bool = True,
-                   dropna: bool = True):
+                   dropna: bool = True,
+                   point_support_layer_name: str = None,
+                   polygon_layer_name: str = None):
         """
         Methods prepares the point support data from files.
 
@@ -95,10 +97,22 @@ class PointSupportDataClass:
 
         dropna : bool, default = True
                  Drop areas with NaN records (id or geometry).
+
+        point_support_layer_name : str, default = None
+                                   If provided file is .gpkg then this parameter must be provided.
+
+        polygon_layer_name  : str, default = None
+                              If provided file is .gpkg then this parameter must be provided.
         """
         # Load data
-        point_support = gpd.read_file(point_support_data_file)
-        polygon_data = gpd.read_file(polygon_file)
+        if point_support_data_file.lower().endswith('.gpkg'):
+            point_support = gpd.read_file(point_support_data_file, layer=point_support_layer_name)
+        else:
+            point_support = gpd.read_file(point_support_data_file)
+        if polygon_file.lower().endswith('.gpkg'):
+            polygon_data = gpd.read_file(polygon_file, layer=polygon_layer_name)
+        else:
+            polygon_data = gpd.read_file(polygon_file)
 
         self.pointset = self.from_geodataframes(point_support,
                                                 polygon_data,
@@ -270,7 +284,9 @@ def get_point_support_from_files(point_support_data_file: str,
                                  polygon_geometry_col: str,
                                  polygon_index_col: str,
                                  use_point_support_crs: bool = True,
-                                 dropna: bool = True) -> Dict:
+                                 dropna: bool = True,
+                                 point_support_layer_name: str = None,
+                                 polygon_layer_name: str = None) -> Dict:
     """
     Function prepares the point support data from files.
 
@@ -301,6 +317,12 @@ def get_point_support_from_files(point_support_data_file: str,
     dropna : bool, default = True
              Drop areas with NaN records (id or geometry).
 
+    point_support_layer_name : str, default = None
+                               If provided file is .gpkg then this parameter must be provided.
+
+    polygon_layer_name  : str, default = None
+                          If provided file is .gpkg then this parameter must be provided.
+
     Returns
     -------
     pointset : Dict
@@ -319,7 +341,9 @@ def get_point_support_from_files(point_support_data_file: str,
                                         polygon_geometry_col=polygon_geometry_col,
                                         polygon_index_col=polygon_index_col,
                                         use_point_support_crs=use_point_support_crs,
-                                        dropna=dropna)
+                                        dropna=dropna,
+                                        point_support_layer_name=point_support_layer_name,
+                                        polygon_layer_name=polygon_layer_name)
     return pointset
 
 

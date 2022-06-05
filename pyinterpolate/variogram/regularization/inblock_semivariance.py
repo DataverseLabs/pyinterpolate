@@ -33,7 +33,7 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     return average_block_semivariance
 
 
-def multi_inblock_semivariance(output_dict: Dict, block: Tuple, variogram_model: TheoreticalVariogram) -> float:
+def multi_inblock_semivariance(output_dict: Dict, block: Tuple, variogram_model: TheoreticalVariogram):
     """
     Function calculates inblock semivariance and updates given dict with a results.
 
