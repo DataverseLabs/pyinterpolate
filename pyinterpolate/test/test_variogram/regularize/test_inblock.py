@@ -1,37 +1,75 @@
 import unittest
+from typing import Dict
 
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.processing.point.structure import get_point_support_from_files
-from pyinterpolate.variogram import build_experimental_variogram
+from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
 
+# Experimental imports - to move later
+from datetime import datetime
 
-POLYGON_DATA = '../../samples/regularization/counties_cancer_data.json'
-POPULATION_DATA = '../../samples/regularization/population_counts.json'
-POINT_SUPPORT_VALUE_COLUMN = 'POP10'
+DATASET = '../../samples/regularization/cancer_data.gpkg'
+POLYGON_LAYER = 'areas'
+POPULATION_LAYER = 'points'
+POP10 = 'POP10'
 GEOMETRY_COL = 'geometry'
-POLYGON_ID_COLUMN = 'FIPS'
-POLYGON_VALUE_COLUMN = 'rate'
+POLYGON_ID = 'FIPS'
+POLYGON_VALUE = 'rate'
+MAX_RANGE = 400000
+STEP_SIZE = 40000
 
-AREAL_INPUT = get_polyset_from_file(POLYGON_DATA, value_col=POLYGON_VALUE_COLUMN, index_col=POLYGON_ID_COLUMN)
-POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=POPULATION_DATA,
-                                                   polygon_file=POLYGON_DATA,
+AREAL_INPUT = get_polyset_from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
+POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATASET,
+                                                   polygon_file=DATASET,
                                                    point_support_geometry_col=GEOMETRY_COL,
-                                                   point_support_val_col=POINT_SUPPORT_VALUE_COLUMN,
+                                                   point_support_val_col=POP10,
                                                    polygon_geometry_col=GEOMETRY_COL,
-                                                   polygon_index_col=POLYGON_ID_COLUMN,
+                                                   polygon_index_col=POLYGON_ID,
                                                    use_point_support_crs=True,
-                                                   dropna=True)
+                                                   dropna=True,
+                                                   point_support_layer_name=POPULATION_LAYER,
+                                                   polygon_layer_name=POLYGON_LAYER)
 
 
 class TestDeconvolution(unittest.TestCase):
 
     def test_calculate_inblock(self):
         # Variogram model
-        # experimental_variogram_of_areal_data = build_experimental_variogram(AREAL_INPUT, )
-
+        experimental_variogram_of_areal_data = build_experimental_variogram(AREAL_INPUT['points'],
+                                                                            step_size=STEP_SIZE,
+                                                                            max_range=MAX_RANGE)
+        theoretical_model = TheoreticalVariogram()
+        theoretical_model.autofit(experimental_variogram_of_areal_data,
+                                  number_of_ranges=64,
+                                  number_of_sills=64,
+                                  deviation_weighting='closest')
 
         # Single core
+        inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'],
+                                                               variogram_model=theoretical_model)
+        self.assertTrue(inblock_semivariances)
+        self.assertIsInstance(inblock_semivariances, Dict)
+        self.assertEqual(
+            set(
+                inblock_semivariances.keys()
+            ),
+            set(
+                POINT_SUPPORT_INPUT['data'].keys()
+            )
+        )
 
-        # inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'], )
-        self.assertTrue(1)
+        # Multiple cores
+        inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'],
+                                                               variogram_model=theoretical_model,
+                                                               n_workers=4)
+        self.assertTrue(inblock_semivariances)
+        self.assertIsInstance(inblock_semivariances, Dict)
+        self.assertEqual(
+            set(
+                inblock_semivariances.keys()
+            ),
+            set(
+                POINT_SUPPORT_INPUT['data'].keys()
+            )
+        )

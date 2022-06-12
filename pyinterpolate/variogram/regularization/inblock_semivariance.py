@@ -25,11 +25,15 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     number_of_points_within_block = len(points_of_block)  # P
     p = number_of_points_within_block * number_of_points_within_block  # P^2
 
-    distances_between_points = calc_point_to_point_distance(points_of_block[:, :-1])
+    distances_between_points = calc_point_to_point_distance(points_of_block[:, :-1])  # Matrix of size PxP
+    multiplied_semivariances = distances_between_points.flatten()
 
-    semivariances = variogram_model.predict(distances_between_points)
+    # TODO: part below to test with very large datasets
+    # unique_distances, uniq_count = np.unique(distances_between_points, return_counts=True)  # Array is flattened here
+    # semivariances = variogram_model.predict(unique_distances)
+    # multiplied_semivariances = semivariances * uniq_count
 
-    average_block_semivariance = np.sum(semivariances) / p
+    average_block_semivariance = np.sum(multiplied_semivariances) / p
     return average_block_semivariance
 
 
@@ -88,6 +92,7 @@ def calculate_inblock_semivariance(point_support: Dict,
         - $u_{s}$ is a point u within the block $v$,
         - $\gamma(u_{s}, u_{s}')$ is a semivariance between point $u_{s}$ and $u_{s}'$ inside the block $v$.
     """
+    # TODO: check how big should be dataset to have a gain from the multiprocessing overhead
     inblock_semivariances = {}
     # Sequential version
     if n_workers == 1:
@@ -106,4 +111,4 @@ def calculate_inblock_semivariance(point_support: Dict,
         pool.close()
         pool.join()
 
-    return inblock_semivariances
+    return inblock_semivariances.copy()

@@ -72,12 +72,14 @@ class PolygonDataClass:
     @staticmethod
     def _parse(dataset, val_col: str, geo_col: str, idx_col: str):
         cx = 'centroid.x'
-        cy = 'centroid.x'
+        cy = 'centroid.y'
 
         # Build centroids
         centroids = dataset.centroid
-        dataset[cx] = centroids.x
-        dataset[cy] = centroids.y
+        cxs = centroids.x
+        cys = centroids.y
+        dataset[cx] = cxs
+        dataset[cy] = cys
 
         # Group data
         core_array = dataset[[cx, cy, val_col]].to_numpy()
@@ -100,7 +102,8 @@ class PolygonDataClass:
                   fpath: str,
                   value_col: str,
                   geometry_col: str = 'geometry',
-                  index_col: Union[str, None] = None) -> None:
+                  index_col: str = None,
+                  layer_name: str = None):
         """
         Loads areal dataset from a file supported by GeoPandas.
 
@@ -119,6 +122,8 @@ class PolygonDataClass:
                     Index column name. It could be any unique value from a dataset. If not given then index is created
                     by an algorithm as a set of values in range 0:length of a dataset.
 
+        layer_name : str, Optional
+                 The name of a layer with data if provided input is a gpkg file.
 
         Raises
         ------
@@ -127,8 +132,10 @@ class PolygonDataClass:
         WrongGeometryTypeError : Raised if given geometry is different than Polygon or MultiPolygon.
 
         """
-
-        dataset = gpd.read_file(fpath)
+        if fpath.lower().endswith('.gpkg'):
+            dataset = gpd.read_file(fpath, layer=layer_name)
+        else:
+            dataset = gpd.read_file(fpath)
 
         if index_col is not None:
             dataset = dataset[[index_col, geometry_col, value_col]]
@@ -253,7 +260,8 @@ def get_polyset_from_geodataframe(gdf: gpd.GeoDataFrame,
 def get_polyset_from_file(fpath: str,
                           value_col: str,
                           geometry_col: str = 'geometry',
-                          index_col: Union[str, None] = None):
+                          index_col: str = None,
+                          layer_name: str = None):
     """
     Function prepares polyset object from spatial file.
 
@@ -268,9 +276,12 @@ def get_polyset_from_file(fpath: str,
     geometry_col : str, default = 'geometry'
                    Column with geometry.
 
-    index_col : str, default = None
+    index_col : str, Optional
                 Index values column name, default is None and index is created as a set of number in range 0 to number
                 of areas.
+
+    layer_name : str, Optional
+                 The name of a layer with data if provided input is a gpkg file.
 
     Returns
     -------
@@ -289,5 +300,5 @@ def get_polyset_from_file(fpath: str,
 
     """
     polyclass = PolygonDataClass()
-    polyclass.from_file(fpath, value_col, geometry_col, index_col)
+    polyclass.from_file(fpath, value_col, geometry_col, index_col, layer_name)
     return polyclass.polyset

@@ -167,7 +167,8 @@ class TheoreticalVariogram:
         if self.are_params:
             self._set_model_parameters(model_params)
 
-        # Dynamic parameters
+        # Errror
+        self.deviation_weighting = None
         self.rmse = 0.
         self.bias = 0.
         self.smape = 0.
@@ -269,7 +270,7 @@ class TheoreticalVariogram:
 
     def autofit(self,
                 empirical_variogram: ExperimentalVariogram,
-                model_types: Union[str, list],
+                model_types: Union[str, list] = 'all',
                 nugget=0,
                 min_range=0.1,
                 max_range=0.5,
@@ -377,6 +378,8 @@ class TheoreticalVariogram:
         KeyError : wrong model name(s) or wrong error type name.
         """
 
+        self.deviation_weighting = deviation_weighting
+
         if self.are_params:
             if warn_about_set_params:
                 warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
@@ -483,7 +486,7 @@ class TheoreticalVariogram:
         if self.fitted_model is None:
             raise AttributeError('Model has not been trained, nothing to plot.')
         else:
-            legend = []
+            legend = ['Theoretical Model']
             plt.figure(figsize=(12, 6))
 
             if experimental:
@@ -672,23 +675,23 @@ class TheoreticalVariogram:
             msg_range = f'* Range: {self.rang}'
             mean_bias_msg = f'* Mean Bias: {self.bias}'
             mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
+            error_weighting = f'* Error-lag weighting method: {self.deviation_weighting}'
 
-            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg]
+            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg, error_weighting]
 
-            header = '\n'.join(text_list) + '\n'
+            header = '\n'.join(text_list) + '\n' + '\n'
 
             # Build pretty table
             pretty_table = PrettyTable()
-            pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
+            pretty_table.field_names = ["lag", "theoretical", "experimental", "bias (y'-y)"]
 
             records = []
             for idx, record in enumerate(self.empirical_variogram.experimental_semivariance_array):
                 lag = record[0]
                 experimental_semivar = record[1]
                 theoretical_semivar = self.fitted_model[idx][1]
-                bias = experimental_semivar - theoretical_semivar
-                rmse = np.sqrt((experimental_semivar - theoretical_semivar) ** 2)
-                records.append([lag, experimental_semivar, theoretical_semivar, bias, rmse])
+                bias = theoretical_semivar - experimental_semivar
+                records.append([lag, theoretical_semivar, experimental_semivar, bias])
 
             pretty_table.add_rows(records)
 
