@@ -5,6 +5,7 @@ import numpy as np
 
 from pyinterpolate.variogram import TheoreticalVariogram
 from pyinterpolate.variogram.empirical import calculate_semivariance
+from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
 
 
 class AggVariogramPK:
@@ -220,19 +221,18 @@ class AggVariogramPK:
         if self.verbose:
             print('Start of the inblock semivariance calculation')
 
-        # Pass numpy array with [area id, [points within area and their values]] and semivariogram model
+        # Pass dict with {area id, [points within area and their values]} and semivariogram model
         self.inblock_semivariance = calculate_inblock_semivariance(self.point_support, self.theoretical_model)
 
         if self.verbose:
             print('Inblock semivariance calculated successfully')
-        #
-        # # Calculate distance between blocks
-        # if distances is None:
-        #     if self.verbose:
-        #         print('Distances between blocks: calculation starts')
-        #     self.distances_between_blocks = calc_block_to_block_distance(self.within_area_points)
-        #     if self.verbose:
-        #         print('Distances between blocks have been calculated')
+
+        # Calculate distances between blocks
+        if self.verbose:
+            print('Distances between blocks: calculation starts')
+        self.distances_between_blocks = calc_block_to_block_distance(self.within_area_points)
+            if self.verbose:
+                print('Distances between blocks have been calculated')
         # else:
         #     if self.verbose:
         #         print('Distances between blocks are provided, distance skipped, model parameters updated')
