@@ -92,7 +92,10 @@ def calculate_inblock_semivariance(point_support: Dict,
         - $u_{s}$ is a point u within the block $v$,
         - $\gamma(u_{s}, u_{s}')$ is a semivariance between point $u_{s}$ and $u_{s}'$ inside the block $v$.
     """
-    # TODO: check how big should be dataset to have a gain from the multiprocessing overhead
+
+    # TODO: It seems that multiprocessing gives the best results for point support matrices between
+    #       10^2x10^2:10^4x10^4. It must be investigated further in the future!
+
     inblock_semivariances = {}
     # Sequential version
     if n_workers == 1:
