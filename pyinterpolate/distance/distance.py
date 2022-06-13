@@ -53,34 +53,31 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
 
     Notes
     -----
-    The weighted distance between blocks is
+    The weighted distance between blocks is derived from the equation:
 
-    :param area_block_1: set of coordinates of each population block in the form [x, y, value],
-    :param area_block_2: the same set of coordinates as area_block_1.
-    :return distance: weighted array of block to block distance.
-    Equation: Dist(v_a, v_b) = 1 / (SUM_to(Pa), SUM_to(Pb) n(u_s) * n(u_si)) *
-        * SUM_to(Pa), SUM_to(Pb) n(u_s) * n(u_si) ||u_s - u_si||
+    $$d(v_{a}, v_{b})=\frac{1}{\sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s}) n(u_{s'})} *
+        \sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s})n(u_{s'})||u_{s}-u_{s'}||$$
+
     where:
-    Pa and Pb: number of points u_s and u_si used to discretize the two units v_a and v_b
-    n(u_s) - population size in the cell u_s
+    $P_{a}$ and $P_{b}$: number of points $u_{s}$ and $u_{s'}$ used to discretize the two units $v_{a}$ and $v_{b}$,
+    $n(u_{s})$ and $n(u_{s'})$ - population size in the cells $u_{s}$ and $u_{s'}$.
+
+    References
+    ----------
+    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units.
+           Math Geosci 40, 101–128 (2008). https://doi.org/10.1007/s11004-007-9129-1
     """
 
-    if isinstance(area_block_1, list):
-        area_block_1 = np.array(area_block_1)
-
-    if isinstance(area_block_2, list):
-        area_block_2 = np.array(area_block_2)
-
-    a_shape = area_block_1.shape[0]
-    b_shape = area_block_2.shape[0]
-    ax = area_block_1[:, 0].reshape(1, a_shape)
-    bx = area_block_2[:, 0].reshape(b_shape, 1)
+    a_shape = block_1.shape[0]
+    b_shape = block_2.shape[0]
+    ax = block_1[:, 0].reshape(1, a_shape)
+    bx = block_2[:, 0].reshape(b_shape, 1)
     dx = ax - bx
-    ay = area_block_1[:, 1].reshape(1, a_shape)
-    by = area_block_2[:, 1].reshape(b_shape, 1)
+    ay = block_1[:, 1].reshape(1, a_shape)
+    by = block_2[:, 1].reshape(b_shape, 1)
     dy = ay - by
-    aval = area_block_1[:, -1].reshape(1, a_shape)
-    bval = area_block_2[:, -1].reshape(b_shape, 1)
+    aval = block_1[:, -1].reshape(1, a_shape)
+    bval = block_2[:, -1].reshape(b_shape, 1)
     w = aval * bval
 
     dist = np.sqrt(dx ** 2 + dy ** 2)
