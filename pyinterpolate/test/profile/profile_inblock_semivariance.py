@@ -19,7 +19,7 @@ FAKE_THEORETICAL_MODEL.from_dict({
     'range': RANGE_VAL
 })
 NUMBER_OF_TRIALS = 5
-ARRAY_SIZES = np.linspace(10, 12000, 10, dtype=int)
+ARRAY_SIZES = np.linspace(10, 5000, 10, dtype=int)
 IDS = np.linspace(1000, 2000, 50)
 
 
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     results_multiple_cores = []
     for arr_size in tqdm(ARRAY_SIZES):
         print(f'Fn has started analysis of an array of size {arr_size}')
+        print(datetime.now())
         one_core = []
         multiple_cores = []
         for _ in tqdm(range(0, NUMBER_OF_TRIALS)):

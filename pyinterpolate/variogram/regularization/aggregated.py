@@ -243,7 +243,9 @@ class AggVariogramPK:
 
 
     def calculate_semivariance_between_blocks(self):
-        pass
+        """
+        Method calculates semivariance between blocks based on
+        """
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """
