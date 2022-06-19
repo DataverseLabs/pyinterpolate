@@ -14,7 +14,7 @@ class TestDeconvolution(unittest.TestCase):
     def test_fit_method(self):
         regularized_variogram = Deconvolution()
         output = regularized_variogram.fit(
-            AREAL_DATA, np.zeros(10), 1, 3
+            AREAL_DATA, {0: 0}, 1, 3
         )
         print(output)
 

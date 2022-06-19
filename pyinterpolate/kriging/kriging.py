@@ -28,7 +28,7 @@ def kriging(observations: np.ndarray,
     if number_of_workers == -1:
         core_num = os.cpu_count()
         if core_num > 1:
-            number_of_workers = int(core_num / 2)
+            number_of_workers = core_num - 1  # Safety reasons
         else:
             number_of_workers = core_num
 
@@ -54,7 +54,7 @@ def kriging(observations: np.ndarray,
                 max_no_neighbors=max_no_neighbors
             )
         elif how == 'sk':
-            prediction = model(
+            prediction = dask.delayed(model)(
                 theoretical_model,
                 observations,
                 point,
