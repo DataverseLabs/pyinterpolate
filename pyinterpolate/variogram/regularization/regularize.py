@@ -2,8 +2,9 @@ from typing import Dict
 
 import numpy as np
 
+from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
-from pyinterpolate.variogram.regularization.aggregated import AggVariogram
+from pyinterpolate.variogram.regularization.aggregated import AggVariogramPK
 
 
 class Deconvolution:
@@ -115,7 +116,7 @@ class Deconvolution:
 
     def fit(self,
             agg_dataset: Dict,
-            point_support_dataset: np.ndarray,
+            point_support_dataset: Dict,
             step_agg: float,
             max_range_agg: float,
             direction_agg: float = 0,
@@ -141,7 +142,7 @@ class Deconvolution:
         self.weight_lags_method = self._select_weighting_method(weight_lags_method)
 
         # Compute experimental variogram of areal data
-        areal_centroids = self.aggregated['points']
+        areal_centroids = get_block_centroids_from_polyset(self.aggregated)
         self.experimental_variogram_agg_data = build_experimental_variogram(
             input_array=areal_centroids,
             step_size=self.step_agg,
@@ -153,7 +154,7 @@ class Deconvolution:
         # Compute theoretical variogram of areal data
         theo_model_agg = TheoreticalVariogram()
         theo_model_agg.autofit(
-            self.experimental_variogram_areal_data,
+            self.experimental_variogram_agg_data,
             model_types='all'
         )
         self.initial_theoretical_agg_model = theo_model_agg
@@ -200,12 +201,16 @@ class Deconvolution:
                              The set of regularized semivariances from aggregated data.
         """
 
-        weighted_semivariance = AggVariogram(
-            self.aggregated['points'],
-            self.step_agg,
-            self.max_range_agg,
-            self.point_support,
-            self.weight_lags_method
+        weighted_semivariance = AggVariogramPK(
+            aggregated_data=self.aggregated,
+            agg_step_size=self.step_agg,
+            agg_max_range=self.max_range_agg,
+            point_support=self.point_support,
+            agg_direction=self.direction_agg,
+            agg_tolerance=self.tolerance_agg,
+            variogram_weighting_method=self.weight_lags_method,
+            verbose=True,
+            log_process=True
         )
 
         regularized_model = weighted_semivariance.regularize(

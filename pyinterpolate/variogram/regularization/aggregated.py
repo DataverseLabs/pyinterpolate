@@ -4,8 +4,9 @@ from typing import Dict
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
-from pyinterpolate.variogram import TheoreticalVariogram
-from pyinterpolate.variogram.empirical import calculate_semivariance
+from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
+from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
+from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
 
 
@@ -19,14 +20,21 @@ class AggVariogramPK:
                       Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
 
                           polyset = {
-                            'points': numpy array with [centroid.x, centroid.y and value],
-                            'igeom': list of [index, geometry polygon],
-                            'info': {
-                                'index_name': the name of the index column,
-                                'geom_name': the name of the geometry column,
-                                'val_name': the name of the value column,
-                                'crs': CRS of a dataset
-                          }
+                                    'blocks': {
+                                        'block index': {
+                                            'value_name': float,
+                                            'geometry_name': MultiPolygon | Polygon,
+                                            'centroid.x': float,
+                                            'centroid.y': float
+                                        }
+                                    }
+                                    'info': {
+                                            'index_name': the name of the index column,
+                                            'geometry_name': the name of the geometry column,
+                                            'value_name': the name of the value column,
+                                            'crs': CRS of a dataset
+                                    }
+                                }
 
     agg_step_size : float
                     Step size between lags.
@@ -167,36 +175,32 @@ class AggVariogramPK:
         """
         # Set all variograms and models
         if experimental_variogram is None:
-            experimental_variogram = self._get_experimental_variogram()
-        self.experimental_variogram = experimental_variogram.copy()
+            self.experimental_variogram = self._get_experimental_variogram()
 
         if theoretical_model is None:
-            theoretical_model = self._fit_theoretical_model()
-        self.theoretical_model = deepcopy(theoretical_model)
+            self.theoretical_model = self._fit_theoretical_model()
 
         # gamma_h(v, v)
         if within_block_variogram is None:
-            within_block_variogram = self.calculate_mean_semivariance_within_blocks()
-        self.within_block_variogram = within_block_variogram.copy()
+            self.within_block_variogram = self.calculate_mean_semivariance_within_blocks()
 
         # gamma(v, v_h)
         if between_blocks_variogram is None:
-            between_blocks_variogram = self.calculate_semivariance_between_blocks()
-        self.between_blocks_variogram = between_blocks_variogram.copy()
+            self.between_blocks_variogram = self.calculate_semivariance_between_blocks()
 
-        # Regularize
-        # gamma_v(h)
-        regularized_variogram = self.between_blocks_variogram.copy()
-        regularized_variogram[:, 1] = (
-            self.between_blocks_variogram[:, 1] - self.within_block_variogram[:, 1]
-        )
+        # # Regularize
+        # # gamma_v(h)
+        # regularized_variogram = deepcopy(self.between_blocks_variogram)
+        # regularized_variogram[:, 1] = (
+        #     self.between_blocks_variogram[:, 1] - self.within_block_variogram[:, 1]
+        # )
+        #
+        # if np.any(regularized_variogram[:, 1] < 0):
+        #     raise ValueError('Calculated semivariances are below zero!')
+        #
+        # self.regularized_variogram = regularized_variogram.copy()
 
-        if np.any(regularized_variogram[:, 1] < 0):
-            raise ValueError('Calculated semivariances are below zero!')
-
-        self.regularized_variogram = regularized_variogram.copy()
-
-        return self.regularized_variogram
+        return self.within_block_variogram
 
     def calculate_mean_semivariance_within_blocks(self):
         """
@@ -236,14 +240,18 @@ class AggVariogramPK:
         if self.verbose:
             print('Distances between blocks have been calculated')
 
-        # # Calc average semivariance
-        # avg_semivariance = calculate_average_semivariance(self.distances_between_blocks, self.inblock_semivariance,
-        #                                                   self.areal_lags, self.areal_ss)
-        # return avg_semivariance
+        # Calc average semivariance
+        avg_semivariance = calculate_average_semivariance_between_blocks(self.distances_between_blocks,
+                                                                         self.inblock_semivariance,
+                                                                         self.areal_lags,
+                                                                         self.areal_ss)
+        return avg_semivariance
 
 
     def calculate_semivariance_between_blocks(self):
-        pass
+        """
+        Method calculates semivariance between blocks based on
+        """
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """
@@ -266,18 +274,17 @@ class AggVariogramPK:
 
 
 
-    def _get_experimental_variogram(self) -> np.ndarray:
+    def _get_experimental_variogram(self) -> ExperimentalVariogram:
         """
         Method gets experimental variogram from aggregated data if None is given in the regularize method.
 
         Returns
         -------
-        gammas : np.ndarray
-                 [lag, semivariance, number of points] from aggregated data
+        gammas : ExperimentalVariogram
         """
 
-        gammas = calculate_semivariance(
-            points=self.aggregated_data['points'],
+        gammas = build_experimental_variogram(
+            input_array=get_block_centroids_from_polyset(self.aggregated_data),
             step_size=self.agg_step_size,
             max_range=self.agg_max_range,
             weights=None,

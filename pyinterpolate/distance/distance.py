@@ -1,11 +1,11 @@
-from typing import Dict, Tuple
+from typing import Dict
 
 import numpy as np
 
 from scipy.spatial.distance import cdist
 
 
-def calc_block_to_block_distance(blocks: Dict) -> Tuple:
+def calc_block_to_block_distance(blocks: Dict) -> Dict:
     """
     Function calculates distances between blocks.
 
@@ -16,10 +16,11 @@ def calc_block_to_block_distance(blocks: Dict) -> Tuple:
 
     Returns
     -------
-    block_distances, block_ids : Tuple[Dict, Tuple]
-                                 {block id : [distances to other blocks]}, (block ids in the order of distances)
+    block_distances : Dict
+                      {block id : [distances to other blocks]}. Block ids in the order from the list of
+                      distances.
     """
-    block_keys = tuple(blocks.keys())
+    block_keys = sorted(list(blocks.keys()))
     block_distances = dict()
     for k_i in block_keys:
         i_block = blocks[k_i]
@@ -33,7 +34,7 @@ def calc_block_to_block_distance(blocks: Dict) -> Tuple:
                 distances.append(value)
         block_distances[k_i] = distances
 
-    return block_distances, block_keys
+    return block_distances
 
 
 def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray) -> float:

@@ -1,7 +1,7 @@
 # Core python packages
 import json
 import warnings
-from typing import Collection, Union, Callable, Tuple
+from typing import Collection, Union, Callable, Tuple, List
 
 # Core calculations and visualization packages
 import numpy as np
@@ -269,7 +269,7 @@ class TheoreticalVariogram:
         return _theoretical_values, _error
 
     def autofit(self,
-                empirical_variogram: ExperimentalVariogram,
+                empirical_variogram: Union[ExperimentalVariogram, np.ndarray, List],
                 model_types: Union[str, list] = 'all',
                 nugget=0,
                 min_range=0.1,
@@ -289,7 +289,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         empirical_variogram : ExperimentalVariogram
-                          Prepared Empirical Variogram.
+                              Prepared Empirical Variogram or array
 
         model_types : str or list
                       List of models of string with a model name. Available models:

@@ -6,7 +6,7 @@ from pyinterpolate.processing.point.structure import get_point_support_from_geod
     PointSupportDataClass
 
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'

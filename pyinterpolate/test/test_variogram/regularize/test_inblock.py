@@ -1,15 +1,13 @@
 import unittest
 from typing import Dict
 
-from pyinterpolate.processing.polygon.structure import get_polyset_from_file
+from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_block_centroids_from_polyset
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
 
-# Experimental imports - to move later
-from datetime import datetime
 
-DATASET = '../../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -36,7 +34,8 @@ class TestDeconvolution(unittest.TestCase):
 
     def test_calculate_inblock(self):
         # Variogram model
-        experimental_variogram_of_areal_data = build_experimental_variogram(AREAL_INPUT['points'],
+        bc = get_block_centroids_from_polyset(AREAL_INPUT)
+        experimental_variogram_of_areal_data = build_experimental_variogram(bc,
                                                                             step_size=STEP_SIZE,
                                                                             max_range=MAX_RANGE)
         theoretical_model = TheoreticalVariogram()

@@ -26,14 +26,15 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     p = number_of_points_within_block * number_of_points_within_block  # P^2
 
     distances_between_points = calc_point_to_point_distance(points_of_block[:, :-1])  # Matrix of size PxP
-    multiplied_semivariances = distances_between_points.flatten()
+    flattened_distances = distances_between_points.flatten()
+    semivariances = variogram_model.predict(flattened_distances)
 
     # TODO: part below to test with very large datasets
     # unique_distances, uniq_count = np.unique(distances_between_points, return_counts=True)  # Array is flattened here
     # semivariances = variogram_model.predict(unique_distances)
     # multiplied_semivariances = semivariances * uniq_count
 
-    average_block_semivariance = np.sum(multiplied_semivariances) / p
+    average_block_semivariance = np.sum(semivariances) / p
     return average_block_semivariance
 
 

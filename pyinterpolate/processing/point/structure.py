@@ -11,7 +11,7 @@ class PointSupportDataClass:
     Attributes
     ----------
     pointset : Dict
-               Prepared dict with Polygon data. It's structure is:
+               Prepared dict with point-support data. It's structure is:
                polyset = {
                    'data': {id: [[point support array - lon, lat, value]], },
                    'info': {
