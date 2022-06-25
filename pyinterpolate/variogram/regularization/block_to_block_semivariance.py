@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Collection
+from typing import Dict, Collection
 
 import numpy as np
 
@@ -15,10 +15,10 @@ def block_pair_semivariance(block_a: Collection,
     Parameters
     ----------
     block_a : Collection
-              Block A points in the form of array with each record [x, y, value].
+              Block A points in the form of array with each record [x, y].
 
     block_b : Collection
-              Block B points in the form of array with each record [x, y, value].
+              Block B points in the form of array with each record [x, y].
 
     semivariogram_model : TheoreticalVariogram
                           Fitted theoretical variogram model from TheoreticalVariogram class.
@@ -40,7 +40,7 @@ def block_pair_semivariance(block_a: Collection,
 
 
 def calculate_centroid_block_to_block_semivariance(point_support: Dict,
-                                                   block_to_block_distances: Tuple,
+                                                   block_to_block_distances: Dict,
                                                    semivariogram_model: TheoreticalVariogram):
     """
     Function calculates semivariance between blocks based on their centroids and weighted distance between them.
@@ -54,8 +54,8 @@ def calculate_centroid_block_to_block_semivariance(point_support: Dict,
                           'area_id': [numpy array with points and their values]
                     }
 
-    block_to_block_distances : Tuple[Dict, Tuple]
-                               {block id : [distances to other blocks]}, (block ids in the order of distances)
+    block_to_block_distances : Dict
+                               {block id : [distances to other blocks in order of keys]}
 
     semivariogram_model : TheoreticalVariogram
                           Fitted variogram model.
@@ -66,7 +66,7 @@ def calculate_centroid_block_to_block_semivariance(point_support: Dict,
                        {(block id a, block id b): [distance, semivariance, number of point pairs between blocks]}
     """
 
-    blocks_ids = block_to_block_distances[1]
+    blocks_ids = list(block_to_block_distances.keys())
     semivariances_b2b = {}
 
     for first_block_id in blocks_ids:
@@ -88,7 +88,7 @@ def calculate_centroid_block_to_block_semivariance(point_support: Dict,
                     # Select set of points to calculate block-pair semivariance
                     a_block_points = point_support[first_block_id][:, :-1]
                     b_block_points = point_support[second_block_id][:, :-1]
-                    no_of_p_pairs = len(a_block_points) + len(b_block_points)
+                    no_of_p_pairs = 2 * (len(a_block_points) + len(b_block_points))
 
                     # Calculate semivariance between blocks
                     semivariance = block_pair_semivariance(a_block_points,

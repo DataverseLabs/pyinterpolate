@@ -241,12 +241,11 @@ class AggVariogramPK:
             print('Distances between blocks have been calculated')
 
         # Calc average semivariance
-        # avg_semivariance = calculate_average_semivariance_between_blocks(self.distances_between_blocks,
-        #                                                                  self.inblock_semivariance,
-        #                                                                  self.areal_lags,
-        #                                                                  self.areal_ss)
-        # return avg_semivariance
-        return self.inblock_semivariance
+        avg_semivariance = calculate_average_semivariance_between_blocks(self.distances_between_blocks,
+                                                                         self.inblock_semivariance,
+                                                                         self.areal_lags,
+                                                                         self.areal_ss)
+        return avg_semivariance
 
 
     def calculate_semivariance_between_blocks(self):
