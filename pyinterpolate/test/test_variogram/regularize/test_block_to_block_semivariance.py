@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
-from pyinterpolate.variogram.regularization.block_to_block_semivariance import block_pair_semivariance, \
+from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import block_pair_semivariance, \
     calculate_centroid_block_to_block_semivariance
 
 

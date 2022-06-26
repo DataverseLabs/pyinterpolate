@@ -1,4 +1,3 @@
-from copy import deepcopy
 from typing import Dict
 
 import numpy as np
@@ -7,7 +6,8 @@ from pyinterpolate.distance.distance import calc_block_to_block_distance
 from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical import build_experimental_variogram
-from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
+from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
+
 
 
 class AggVariogramPK:
@@ -235,6 +235,7 @@ class AggVariogramPK:
         # Calculate distances between blocks
         if self.verbose:
             print('Distances between blocks: calculation starts')
+
         self.distances_between_blocks = calc_block_to_block_distance(self.point_support)
 
         if self.verbose:
@@ -252,6 +253,7 @@ class AggVariogramPK:
         """
         Method calculates semivariance between blocks based on
         """
+        pass
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """
