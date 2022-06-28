@@ -2,6 +2,7 @@ from typing import Union, Dict
 
 import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.processing.utils.exceptions import IndexColNotUniqueError, WrongGeometryTypeError
 
@@ -141,11 +142,12 @@ class PolygonDataClass:
             }
 
         """
+        pd.options.mode.chained_assignment = None  # Disable setting with copy warning
         cx = 'centroid.x'
         cy = 'centroid.y'
 
         # Build centroids
-        centroids = dataset.centroid
+        centroids = dataset[geo_col].centroid
         cxs = centroids.x
         cys = centroids.y
         dataset[cx] = cxs
@@ -155,6 +157,7 @@ class PolygonDataClass:
 
         # Group data
         ds = dataset.transpose().to_dict()
+
         datadict = {
             'blocks': ds,
             'info': {
@@ -201,6 +204,7 @@ class PolygonDataClass:
         WrongGeometryTypeError : Raised if given geometry is different than Polygon or MultiPolygon.
 
         """
+
         if fpath.lower().endswith('.gpkg'):
             dataset = gpd.read_file(fpath, layer=layer_name)
         else:
