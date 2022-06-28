@@ -7,6 +7,7 @@ from pyinterpolate.processing.polygon.structure import get_block_centroids_from_
 from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
+from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariance import calculate_average_semivariance
 
 
 
@@ -111,11 +112,11 @@ class AggVariogramPK:
         self.log_process = log_process
 
         # Variogram models
-        self.experimental_variogram = None
-        self.theoretical_model = None
-        self.inblock_semivariance = None
-        self.within_block_variogram = None
-        self.between_blocks_variogram = None
+        self.experimental_variogram = None  # from blocks
+        self.theoretical_model = None  # from blocks
+        self.inblock_semivariance = None  # from point support within a block
+        self.avg_inblock_semivariance_between_blocks = None  # from inblock semivariances; lags -> from blocks
+        self.semivariance_between_blocks = None  # from point supports between block pairs
         self.regularized_variogram = None
 
         # Model parameters
@@ -182,11 +183,11 @@ class AggVariogramPK:
 
         # gamma_h(v, v)
         if within_block_variogram is None:
-            self.within_block_variogram = self.calculate_mean_semivariance_within_blocks()
+            self.avg_inblock_semivariance_between_blocks = self.calculate_avg_inblock_semivariance()
 
         # gamma(v, v_h)
         if between_blocks_variogram is None:
-            self.between_blocks_variogram = self.calculate_semivariance_between_blocks()
+            self.semivariance_between_blocks = self.calculate_semivariance_between_blocks()
 
         # # Regularize
         # # gamma_v(h)
@@ -202,7 +203,7 @@ class AggVariogramPK:
 
         return self.within_block_variogram
 
-    def calculate_mean_semivariance_within_blocks(self):
+    def calculate_avg_inblock_semivariance(self) -> np.ndarray:
         """
         Method calculates the average semivariance within blocks gamma_h(v, v).
 
@@ -242,11 +243,11 @@ class AggVariogramPK:
             print('Distances between blocks have been calculated')
 
         # Calc average semivariance
-        avg_semivariance = calculate_average_semivariance_between_blocks(self.distances_between_blocks,
-                                                                         self.inblock_semivariance,
-                                                                         self.areal_lags,
-                                                                         self.areal_ss)
-        return avg_semivariance
+        avg_inblock_semivariance = calculate_average_semivariance(self.distances_between_blocks,
+                                                                  self.inblock_semivariance,
+                                                                  block_step_size=self.agg_step_size,
+                                                                  block_max_range=self.agg_max_range)
+        return avg_inblock_semivariance
 
 
     def calculate_semivariance_between_blocks(self):
