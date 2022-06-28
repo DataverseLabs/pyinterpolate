@@ -181,7 +181,7 @@ class PointSupportDataClass:
 
         # Merge data
         crs_ps = point_support.crs
-        joined = gpd.sjoin(point_support, polygon_data, how='left', op='within')
+        joined = gpd.sjoin(point_support, polygon_data, how='left')
 
         if dropna:
             joined.dropna(inplace=True)

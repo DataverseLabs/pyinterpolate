@@ -33,6 +33,7 @@ POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATAS
                                                    point_support_layer_name=POPULATION_LAYER,
                                                    polygon_layer_name=POLYGON_LAYER)
 
+
 # Artificial data
 def generate_test_blocks(number_of_blocks: int, points_per_block=100) -> Tuple[Dict, Dict]:
     """
@@ -74,6 +75,7 @@ def generate_test_blocks(number_of_blocks: int, points_per_block=100) -> Tuple[D
 
     return blocks, distances
 
+
 SAMPLE_VARIOGRAM = TheoreticalVariogram(model_params={
     'nugget': 0,
     'sill': 95,
@@ -81,36 +83,35 @@ SAMPLE_VARIOGRAM = TheoreticalVariogram(model_params={
     'name': 'gaussian'
 })
 
-# TODO: check SettingWithCopyWarning
 
 class TestCalculateAverageSemivariance(unittest.TestCase):
 
-    # def test_avg_from_inblock_real_world_data(self):
-    #     # Variogram model
-    #     bc = get_block_centroids_from_polyset(AREAL_INPUT)
-    #     experimental_variogram_of_areal_data = build_experimental_variogram(bc,
-    #                                                                         step_size=STEP_SIZE,
-    #                                                                         max_range=MAX_RANGE)
-    #     theoretical_model = TheoreticalVariogram()
-    #     theoretical_model.autofit(experimental_variogram_of_areal_data,
-    #                               number_of_ranges=64,
-    #                               number_of_sills=64,
-    #                               deviation_weighting='closest')
-    #
-    #     # Inblock
-    #     inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'],
-    #                                                            variogram_model=theoretical_model)
-    #
-    #     # Distances
-    #     distances_between_blocks = calc_block_to_block_distance(POINT_SUPPORT_INPUT['data'])
-    #
-    #     # Avg semi
-    #     avg_semivariance = calculate_average_semivariance(distances_between_blocks,
-    #                                                       inblock_semivariances,
-    #                                                       STEP_SIZE,
-    #                                                       MAX_RANGE)
-    #
-    #     self.assertIsInstance(avg_semivariance, np.ndarray)
+    def test_avg_from_inblock_real_world_data(self):
+        # Variogram model
+        bc = get_block_centroids_from_polyset(AREAL_INPUT)
+        experimental_variogram_of_areal_data = build_experimental_variogram(bc,
+                                                                            step_size=STEP_SIZE,
+                                                                            max_range=MAX_RANGE)
+        theoretical_model = TheoreticalVariogram()
+        theoretical_model.autofit(experimental_variogram_of_areal_data,
+                                  number_of_ranges=64,
+                                  number_of_sills=64,
+                                  deviation_weighting='closest')
+
+        # Inblock
+        inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'],
+                                                               variogram_model=theoretical_model)
+
+        # Distances
+        distances_between_blocks = calc_block_to_block_distance(POINT_SUPPORT_INPUT['data'])
+
+        # Avg semi
+        avg_semivariance = calculate_average_semivariance(distances_between_blocks,
+                                                          inblock_semivariances,
+                                                          STEP_SIZE,
+                                                          MAX_RANGE)
+
+        self.assertIsInstance(avg_semivariance, np.ndarray)
 
     def test_avg_from_inblock_artificial(self):
 
