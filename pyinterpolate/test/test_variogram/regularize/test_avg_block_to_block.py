@@ -6,10 +6,11 @@ import numpy as np
 from pyinterpolate.distance.distance import calc_block_to_block_distance
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_block_centroids_from_polyset
-from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
-from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
-from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariance import calculate_average_semivariance
-
+from pyinterpolate.variogram import TheoreticalVariogram, build_experimental_variogram
+from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances import \
+    average_block_to_block_semivariances
+from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import \
+    calculate_block_to_block_semivariance
 
 DATASET = '../../samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
@@ -84,10 +85,10 @@ SAMPLE_VARIOGRAM = TheoreticalVariogram(model_params={
 })
 
 
-class TestCalculateAverageSemivariance(unittest.TestCase):
+class TestAverageBlockToBlockSemivariance(unittest.TestCase):
 
-    def test_avg_from_inblock_real_world_data(self):
-        # Variogram model
+    def test_real_world_data(self):
+        # Get variogram model
         bc = get_block_centroids_from_polyset(AREAL_INPUT)
         experimental_variogram_of_areal_data = build_experimental_variogram(bc,
                                                                             step_size=STEP_SIZE,
@@ -98,41 +99,21 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
                                   number_of_sills=64,
                                   deviation_weighting='closest')
 
-        # Inblock
-        inblock_semivariances = calculate_inblock_semivariance(POINT_SUPPORT_INPUT['data'],
-                                                               variogram_model=theoretical_model)
+        # Calc block to block distances
+        b2b_distances = calc_block_to_block_distance(POINT_SUPPORT_INPUT['data'])
 
-        # Distances
-        distances_between_blocks = calc_block_to_block_distance(POINT_SUPPORT_INPUT['data'])
+        # Calc block to block
+        b_semivars = calculate_block_to_block_semivariance(
+            point_support=POINT_SUPPORT_INPUT['data'],
+            block_to_block_distances=b2b_distances,
+            semivariogram_model=theoretical_model
+        )
 
-        # Avg semi
-        avg_semivariance = calculate_average_semivariance(distances_between_blocks,
-                                                          inblock_semivariances,
-                                                          STEP_SIZE,
-                                                          MAX_RANGE)
+        # Calc avg
+        # TODO: remove fromiter
+        b_arr = np.fromiter(b_semivars.values(), dtype=np.dtype((float, 3)))
+        lags = np.arange(STEP_SIZE, MAX_RANGE, STEP_SIZE)
 
-        self.assertIsInstance(avg_semivariance, np.ndarray)
-
-    def test_avg_from_inblock_artificial(self):
-
-        sample_point_support, sample_b2b_distances = generate_test_blocks(100)
-
-        # Inblock
-        inblock_semivariances = calculate_inblock_semivariance(sample_point_support,
-                                                               variogram_model=SAMPLE_VARIOGRAM)
-
-        # Avg semi
-        avg_semivariance = calculate_average_semivariance(sample_b2b_distances,
-                                                          inblock_semivariances,
-                                                          block_step_size=10,
-                                                          block_max_range=80)
-
-        lags = np.arange(10, 80, 10)
-
-        for idx, lag in enumerate(lags):
-            self.assertEqual(lag, avg_semivariance[idx, 0])
-
-        mean_semi = float(np.mean(avg_semivariance[:, 1]))
-
-        for row in avg_semivariance:
-            self.assertAlmostEqual(mean_semi, row[1], places=1)
+        avg_semi = average_block_to_block_semivariances(b_arr, lags, STEP_SIZE)
+        print(avg_semi)
+        self.assertTrue(1)

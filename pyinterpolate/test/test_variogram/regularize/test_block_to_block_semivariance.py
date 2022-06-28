@@ -3,7 +3,7 @@ import numpy as np
 
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import block_pair_semivariance, \
-    calculate_centroid_block_to_block_semivariance
+    calculate_block_to_block_semivariance
 
 
 TEST_BLOCK_A = np.random.random(size=(100, 3))
@@ -51,7 +51,7 @@ class TestCalculateCentroidBlock2BlockSemivariance(unittest.TestCase):
     """
 
     def test_fn(self):
-        semivars = calculate_centroid_block_to_block_semivariance(
+        semivars = calculate_block_to_block_semivariance(
             point_support=POINT_SUPPORT,
             block_to_block_distances=BLOCK_TO_BLOCK_DISTANCES,
             semivariogram_model=SAMPLE_VARIOGRAM

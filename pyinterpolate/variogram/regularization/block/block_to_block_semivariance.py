@@ -39,11 +39,12 @@ def block_pair_semivariance(block_a: Collection,
     return semivariance_between_blocks
 
 
-def calculate_centroid_block_to_block_semivariance(point_support: Dict,
-                                                   block_to_block_distances: Dict,
-                                                   semivariogram_model: TheoreticalVariogram):
+def calculate_block_to_block_semivariance(point_support: Dict,
+                                          block_to_block_distances: Dict,
+                                          semivariogram_model: TheoreticalVariogram):
     """
-    Function calculates semivariance between blocks based on their centroids and weighted distance between them.
+    Function calculates semivariance between blocks based on their point support and weighted distance between
+        block centroids.
 
     Parameters
     ----------

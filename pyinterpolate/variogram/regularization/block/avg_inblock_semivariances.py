@@ -96,7 +96,6 @@ def calculate_average_semivariance(block_to_block_distances: Dict,
         number_of_blocks_per_lag = []
         for block_name, block_neighbors in block_distances_per_lag[lag].items():
             # TODO: check if append this one, for not it is not used at all
-            block_inblock_semivariance = inblock_semivariances[block_name]
             no_of_areas = len(block_neighbors)
             if no_of_areas > 0:
                 partial_neighbors = [x for x in block_neighbors if x != block_name]
