@@ -109,6 +109,7 @@ class PointSupportDataClass:
             point_support = gpd.read_file(point_support_data_file, layer=point_support_layer_name)
         else:
             point_support = gpd.read_file(point_support_data_file)
+
         if polygon_file.lower().endswith('.gpkg'):
             polygon_data = gpd.read_file(polygon_file, layer=polygon_layer_name)
         else:
@@ -180,7 +181,7 @@ class PointSupportDataClass:
 
         # Merge data
         crs_ps = point_support.crs
-        joined = gpd.sjoin(point_support, polygon_data, how='left', op='within')
+        joined = gpd.sjoin(point_support, polygon_data, how='left')
 
         if dropna:
             joined.dropna(inplace=True)

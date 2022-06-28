@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
+from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
 

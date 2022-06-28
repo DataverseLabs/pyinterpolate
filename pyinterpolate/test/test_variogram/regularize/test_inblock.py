@@ -4,7 +4,7 @@ from typing import Dict
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_block_centroids_from_polyset
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
-from pyinterpolate.variogram.regularization.inblock_semivariance import calculate_inblock_semivariance
+from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
 
 
 DATASET = 'samples/regularization/cancer_data.gpkg'
