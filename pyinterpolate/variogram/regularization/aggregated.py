@@ -6,12 +6,14 @@ from pyinterpolate.distance.distance import calc_block_to_block_distance
 from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical import build_experimental_variogram
+from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances import \
+    average_block_to_block_semivariances
 from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
-from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariance import calculate_average_semivariance
+from pyinterpolate.variogram.regularization.block.avg_inblock_semivariances import calculate_average_semivariance
+from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import calculate_block_to_block_semivariance
 
 
-
-class AggVariogramPK:
+class AggregatedVariogram:
     """
     Class calculates semivariance of aggregated counts.
 
@@ -102,6 +104,7 @@ class AggVariogramPK:
         self.aggregated_data = aggregated_data
         self.agg_step_size = agg_step_size
         self.agg_max_range = agg_max_range
+        self.agg_lags = np.arange(self.agg_step_size, self.agg_max_range, self.agg_step_size)
         self.agg_tolerance = agg_tolerance
         self.agg_direction = agg_direction
         self.point_support = point_support
@@ -115,39 +118,40 @@ class AggVariogramPK:
         self.experimental_variogram = None  # from blocks
         self.theoretical_model = None  # from blocks
         self.inblock_semivariance = None  # from point support within a block
-        self.avg_inblock_semivariance_between_blocks = None  # from inblock semivariances; lags -> from blocks
-        self.semivariance_between_blocks = None  # from point supports between block pairs
+        self.avg_inblock_semivariance = None  # from inblock semivariances; lags -> from blocks
+        self.block_to_block_semivariances = None  # from point supports between blocks
+        self.avg_block_to_block_semivariance = None  # average from point supports between block pairs
         self.regularized_variogram = None
 
         # Model parameters
         self.distances_between_blocks = None
 
     def regularize(self,
-                   within_block_variogram: np.ndarray = None,
-                   between_blocks_variogram=None,
-                   experimental_variogram=None,
-                   theoretical_model=None) -> np.ndarray:
+                   average_inblock_semivariances: np.ndarray = None,
+                   semivariance_between_point_supports=None,
+                   experimental_block_variogram=None,
+                   theoretical_block_model=None) -> np.ndarray:
         """
         Method regularizes point support model. Procedure is described in [1].
 
         Parameters
         ----------
-        within_block_variogram : np.ndarray, optional
-                                 The mean variance between the blocks. See Notes to learn more.
+        average_inblock_semivariances : np.ndarray, optional
+                                        The mean semivariance between the blocks. See Notes to learn more.
 
-        between_block_variogram : np.ndarray, optional
-                                  Semivariance between all blocks calculated from the theoretical model.
+        semivariance_between_point_supports : np.ndarray, optional
+                                              Semivariance between all blocks calculated from the theoretical model.
 
-        experimental_variogram : np.ndarray, optional
-                              The experimental semivariance between area centroids.
+        experimental_block_variogram : np.ndarray, optional
+                                       The experimental semivariance between area centroids.
 
-        theoretical_model : TheoreticalVariogram, optional
-                            Modeled variogram.
+        theoretical_block_model : TheoreticalVariogram, optional
+                                  Modeled variogram.
 
 
         Returns
         -------
-        regularized_model : np.ndarray
+        regularized_model : numpy array
                             [lag, semivariance, number of point pairs]
 
         Notes
@@ -158,16 +162,17 @@ class AggVariogramPK:
 
         where:
         - gamma_v(h) - regularized variogram,
-        - gamma(v, v_h) - variogram value between any two blocks separated by the distance h,
-        - gamma_h(v, v) - arithmetical average of the within-block variogram.
+        - gamma(v, v_h) - variogram value between any two blocks separated by the distance h (calculated from their
+                          point support),
+        - gamma_h(v, v) - average inblock semivariance between blocks.
 
-        Within-block variogram definition:
+        Average inblock semivariance between blocks:
 
-            gamma_h(v, v) = 1 / (2*N(h)) SUM(from a=1 to N(h)) [y(va, va) + y(va+h, va+h)]
+            $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$
 
         where:
-        - gamma(va, va) and gamma(va+h, va+h) are the inblock semivariances of block a and block a+h separated by
-          the distance h weighted by the inblock sum of point support blocks.
+        - $\gamma(v_{a}, v_{a})$ and $\gamma(v_{a+h}, v_{a+h})$ are the inblock semivariances of block $a$ and
+          block $a+h$ separated by the distance $h$.
 
         References
         ----------
@@ -175,19 +180,19 @@ class AggVariogramPK:
             Mathematical Geology 40(1), 101-128, 2008
         """
         # Set all variograms and models
-        if experimental_variogram is None:
+        if experimental_block_variogram is None:
             self.experimental_variogram = self._get_experimental_variogram()
 
-        if theoretical_model is None:
+        if theoretical_block_model is None:
             self.theoretical_model = self._fit_theoretical_model()
 
         # gamma_h(v, v)
-        if within_block_variogram is None:
-            self.avg_inblock_semivariance_between_blocks = self.calculate_avg_inblock_semivariance()
+        if average_inblock_semivariances is None:
+            self.avg_inblock_semivariance = self.calculate_avg_inblock_semivariance()
 
         # gamma(v, v_h)
-        if between_blocks_variogram is None:
-            self.semivariance_between_blocks = self.calculate_semivariance_between_blocks()
+        if semivariance_between_point_supports is None:
+            self.avg_block_to_block_semivariance = self.calculate_avg_semivariance_between_blocks()
 
         # # Regularize
         # # gamma_v(h)
@@ -201,7 +206,7 @@ class AggVariogramPK:
         #
         # self.regularized_variogram = regularized_variogram.copy()
 
-        return self.within_block_variogram
+        return self.avg_block_to_block_semivariance
 
     def calculate_avg_inblock_semivariance(self) -> np.ndarray:
         """
@@ -249,12 +254,62 @@ class AggVariogramPK:
                                                                   block_max_range=self.agg_max_range)
         return avg_inblock_semivariance
 
+    def calculate_avg_semivariance_between_blocks(self) -> np.ndarray:
+        """
+        Function calculates semivariance between areas based on their division into smaller blocks. It is
+            gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.
 
-    def calculate_semivariance_between_blocks(self):
+        Returns
+        -------
+        avg_block_to_block_semivariance : numpy array
+                                          The average semivariance between neighboring blocks point-supports:
+                                          [lag, semivariance, number of block pairs within a range]
+        Notes
+        -----
+        Block-to-block semivariance is calculated as:
+
+        $$\gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})$$
+
+        where:
+            - $\gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of block $a$ and paired block $a+h$.
+            - $P_{a}$ and $P_{a+h}$ - number of support points within block $a$ and block $a+h$.
+            - $\gamma(u_{s}, u_{s'})$ - semivariance of point supports between blocks.
+
+        Then average block-to-block semivariance is calculated as:
+
+        $$\gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})$$
+
+        where:
+            - $\gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances for a lag $h$,
+            - $\gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired block at a distance $h$.
         """
-        Method calculates semivariance between blocks based on
-        """
-        pass
+
+        # Check if distances between blocks are calculated
+        if self.distances_between_blocks is None:
+            if self.verbose:
+                print('Distances between blocks: calculation starts')
+
+            self.distances_between_blocks = calc_block_to_block_distance(self.point_support)
+
+            if self.verbose:
+                print('Distances between blocks have been calculated')
+
+        if self.verbose:
+            print('Calculation of semivariances between areas separated by chosen lags')
+
+        # {(block id a, block id b): [distance, semivariance, number of point pairs between blocks]}
+        self.block_to_block_semivariances = calculate_block_to_block_semivariance(self.point_support,
+                                                                                  self.distances_between_blocks,
+                                                                                  self.theoretical_model)
+        if self.verbose:
+            print('Semivariance between blocks for a given lags calculated')
+            print('Calculation of the mean semivariance for a given lag')
+
+        semivars_arr = np.array(list(self.block_to_block_semivariances.values()), dtype=float)
+        avg_block_to_block_semivariance = average_block_to_block_semivariances(semivariances_array=semivars_arr,
+                                                                               lags=self.agg_lags,
+                                                                               step_size=self.agg_step_size)
+        return avg_block_to_block_semivariance
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """
@@ -275,8 +330,6 @@ class AggVariogramPK:
 
         return theoretical_model
 
-
-
     def _get_experimental_variogram(self) -> ExperimentalVariogram:
         """
         Method gets experimental variogram from aggregated data if None is given in the regularize method.
@@ -296,4 +349,3 @@ class AggVariogramPK:
         )
 
         return gammas
-
