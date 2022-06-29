@@ -13,8 +13,7 @@ from pyinterpolate.variogram.regularization.block.avg_inblock_semivariances impo
 from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import calculate_block_to_block_semivariance
 
 
-
-class AggVariogramPK:
+class AggregatedVariogram:
     """
     Class calculates semivariance of aggregated counts.
 
@@ -257,12 +256,32 @@ class AggVariogramPK:
 
     def calculate_avg_semivariance_between_blocks(self) -> np.ndarray:
         """
-        # TODO: change docstring
         Function calculates semivariance between areas based on their division into smaller blocks. It is
             gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.
-        OUTPUT:
-        :return semivariogram: (array) Semivariances between blocks for a given lags based on the inblock division into
-            smaller blocks. It is numpy array of the form [[lag, semivariance], [next lag, other semivariance], [...]].
+
+        Returns
+        -------
+        avg_block_to_block_semivariance : numpy array
+                                          The average semivariance between neighboring blocks point-supports:
+                                          [lag, semivariance, number of block pairs within a range]
+        Notes
+        -----
+        Block-to-block semivariance is calculated as:
+
+        $$\gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})$$
+
+        where:
+            - $\gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of block $a$ and paired block $a+h$.
+            - $P_{a}$ and $P_{a+h}$ - number of support points within block $a$ and block $a+h$.
+            - $\gamma(u_{s}, u_{s'})$ - semivariance of point supports between blocks.
+
+        Then average block-to-block semivariance is calculated as:
+
+        $$\gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})$$
+
+        where:
+            - $\gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances for a lag $h$,
+            - $\gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired block at a distance $h$.
         """
 
         # Check if distances between blocks are calculated
@@ -330,4 +349,3 @@ class AggVariogramPK:
         )
 
         return gammas
-
