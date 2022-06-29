@@ -1,5 +1,4 @@
 import unittest
-from typing import Tuple, Dict
 
 import numpy as np
 
@@ -35,56 +34,6 @@ POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATAS
                                                    polygon_layer_name=POLYGON_LAYER)
 
 
-# Artificial data
-def generate_test_blocks(number_of_blocks: int, points_per_block=100) -> Tuple[Dict, Dict]:
-    """
-    Function generates a sample point support dict and random distances between blocks Dict.
-
-    Parameters
-    ----------
-    number_of_blocks : int
-
-    points_per_block : int, default = 100
-
-    Returns
-    -------
-    : Tuple[Dict, Dict]
-        sample_point_support, sample_distances
-    """
-
-    blocks = {}
-
-    # Create blocks
-    for x in range(number_of_blocks):
-        test_block = np.random.random(size=(points_per_block, 3)) * 1000
-        sx = str(x)
-        blocks[sx] = test_block
-
-    # Create distances
-    distances_matrix = np.zeros(shape=(number_of_blocks, number_of_blocks))
-
-    distances = {}
-    for x in range(number_of_blocks):
-        number_of_distances = number_of_blocks - x
-        generated_distances = np.random.randint(0, 100, size=number_of_distances)
-        distances_matrix[x, x:] = generated_distances
-        distances_matrix[x:, x] = generated_distances
-        distances_matrix[x, x] = 0
-
-    for idx, row in enumerate(distances_matrix):
-        distances[str(idx)] = row
-
-    return blocks, distances
-
-
-SAMPLE_VARIOGRAM = TheoreticalVariogram(model_params={
-    'nugget': 0,
-    'sill': 95,
-    'range': 50,
-    'name': 'gaussian'
-})
-
-
 class TestAverageBlockToBlockSemivariance(unittest.TestCase):
 
     def test_real_world_data(self):
@@ -111,9 +60,13 @@ class TestAverageBlockToBlockSemivariance(unittest.TestCase):
 
         # Calc avg
         # TODO: remove fromiter
-        b_arr = np.fromiter(b_semivars.values(), dtype=np.dtype((float, 3)))
+        b_arr = np.array(list(b_semivars.values()), dtype=float)
         lags = np.arange(STEP_SIZE, MAX_RANGE, STEP_SIZE)
 
         avg_semi = average_block_to_block_semivariances(b_arr, lags, STEP_SIZE)
-        print(avg_semi)
-        self.assertTrue(1)
+        self.assertEqual(set(lags), set(avg_semi[:, 0]))
+        self.assertEqual(int(avg_semi[0, 1]), 62)
+        self.assertEqual(int(avg_semi[-1, 1]), 154)
+
+        pts_per_lag = [416, 1716, 2358, 2892, 3342, 3780, 3964, 3832, 3696]
+        self.assertEqual(set(pts_per_lag), set(avg_semi[:, -1]))

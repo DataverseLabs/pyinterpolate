@@ -286,7 +286,7 @@ class AggVariogramPK:
             print('Semivariance between blocks for a given lags calculated')
             print('Calculation of the mean semivariance for a given lag')
 
-        semivars_arr = np.fromiter(self.block_to_block_semivariances.values(), dtype=float)
+        semivars_arr = np.array(list(self.block_to_block_semivariances.values()), dtype=float)
         avg_block_to_block_semivariance = average_block_to_block_semivariances(semivariances_array=semivars_arr,
                                                                                lags=self.agg_lags,
                                                                                step_size=self.agg_step_size)
