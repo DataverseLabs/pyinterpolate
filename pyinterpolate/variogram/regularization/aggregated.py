@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Dict
 
+import numpy
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
@@ -11,7 +12,8 @@ from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivarianc
     average_block_to_block_semivariances
 from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
 from pyinterpolate.variogram.regularization.block.avg_inblock_semivariances import calculate_average_semivariance
-from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import calculate_block_to_block_semivariance
+from pyinterpolate.variogram.regularization.block.block_to_block_semivariance import \
+    calculate_block_to_block_semivariance
 
 
 class AggregatedVariogram:
@@ -126,7 +128,7 @@ class AggregatedVariogram:
     inblock_semivariance : Dict
                            {area id: the average inblock semivariance}
 
-    avg_invlock_semivariance : numpy array
+    avg_inblock_semivariance : numpy array
                                [lag, average inblocks semivariances, number of blocks within a lag]
 
     block_to_block_semivariance : Dict
@@ -413,3 +415,111 @@ class AggregatedVariogram:
         )
 
         return gammas
+
+
+def regularize(aggregated_data: Dict,
+               agg_step_size: float,
+               agg_max_range: float,
+               point_support: Dict,
+               agg_direction: float = 0,
+               agg_tolerance: float = 1,
+               variogram_weighting_method: str = 'closest',
+               verbose: bool = False,
+               log_process: bool = False) -> numpy.ndarray:
+    """
+    Function is an alias to AggregatedVariogram class and performs semivariogram regularization. Function returns
+    regularized variogram.
+
+    Parameters
+    ----------
+    aggregated_data : Dict
+                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
+
+                          polyset = {
+                                    'blocks': {
+                                        'block index': {
+                                            'value_name': float,
+                                            'geometry_name': MultiPolygon | Polygon,
+                                            'centroid.x': float,
+                                            'centroid.y': float
+                                        }
+                                    }
+                                    'info': {
+                                            'index_name': the name of the index column,
+                                            'geometry_name': the name of the geometry column,
+                                            'value_name': the name of the value column,
+                                            'crs': CRS of a dataset
+                                    }
+                                }
+
+    agg_step_size : float
+                    Step size between lags.
+
+    agg_max_range : float
+                    Maximal distance of analysis.
+
+    point_support : Dict
+                    Point support data as a Dict:
+
+                        point_support = {
+                          'area_id': [numpy array with points]
+                        }
+
+    agg_direction : float (in range [0, 360]), optional, default=0
+                    direction of semivariogram, values from 0 to 360 degrees:
+                    * 0 or 180: is NS direction,
+                    * 90 or 270 is EW direction,
+                    * 45 or 225 is NE-SW direction,
+                    * 135 or 315 is NW-SE direction.
+
+    agg_tolerance : float (in range [0, 1]), optional, default=1
+                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
+                    the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+                    for 0 tolerance.
+                    * The minor axis size is (tolerance * step_size)
+                    * The major axis size is ((1 - tolerance) * step_size)
+                    * The baseline point is at a center of the ellipse.
+                    Tolerance == 1 creates an omnidirectional semivariogram.
+
+    variogram_weighting_method : str, default = "closest"
+                                 Method used to weight error at a given lags. Available methods:
+                                 - equal: no weighting,
+                                 - closest: lags at a close range have bigger weights,
+                                 - distant: lags that are further away have bigger weights,
+                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,
+                                   lesser weight.
+
+    verbose : bool, default = False
+              Print steps performed by the algorithm.
+
+    log_process : bool, default = False
+                  Log process info (Level DEBUG).
+
+    Returns
+    -------
+    regularized : numpy array
+                  [lag, semivariance]
+
+    See Also
+    --------
+    AggregatedVariogram : core class for block semivariogram regularization
+
+    References
+    ----------
+    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+    Units, Mathematical Geology 40(1), 101-128, 2008
+    """
+
+    agg_var = AggregatedVariogram(aggregated_data,
+                                  agg_step_size,
+                                  agg_max_range,
+                                  point_support,
+                                  agg_direction,
+                                  agg_tolerance,
+                                  variogram_weighting_method,
+                                  verbose,
+                                  log_process)
+
+    regularized = agg_var.regularize()
+    return regularized

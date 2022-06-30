@@ -1,5 +1,5 @@
 import unittest
-
+# TODO: change name to deconvolution
 import numpy as np
 
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
