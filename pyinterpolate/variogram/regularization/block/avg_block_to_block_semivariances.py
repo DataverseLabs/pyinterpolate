@@ -12,7 +12,7 @@ def average_block_to_block_semivariances(semivariances_array: np.ndarray,
     Parameters
     ----------
     semivariances_array : numpy array
-                          [distance, semivariance, number of point pairs between blocks]
+                          [lag, semivariance, number of point pairs between blocks]
 
     lags : numpy array
 
