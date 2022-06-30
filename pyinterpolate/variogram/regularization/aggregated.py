@@ -3,6 +3,7 @@ from typing import Dict
 
 import numpy
 import numpy as np
+import matplotlib.pyplot as plt
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
 from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
@@ -148,6 +149,10 @@ class AggregatedVariogram:
     -------
     regularize()
         Method performs semivariogram regularization.
+
+    show_semivariograms()
+        Shows experimental variogram, theoretical model, average inblock semivariance,
+        average block to block semivariance and regularized variogram.
 
     References
     ----------
@@ -376,6 +381,43 @@ class AggregatedVariogram:
                     raise ValueError(msg)
 
         return reg_variogram
+
+    def show_semivariograms(self):
+        """
+        Method plots:
+            - experimental variogram,
+            - theoretical model,
+            - average inblock semivariance,
+            - average block-to-block semivariance,
+            - regularized variogram.
+
+        Raises
+        ------
+        AttributeError : semivariogram regularization process has not been performed.
+        """
+
+        if self.regularized_variogram is None:
+            raise AttributeError('Variograms may be plot after regularization process. Use regularize() method.')
+        else:
+            plt.figure(figsize=(12, 6))
+            # Plot experimental
+            plt.scatter(self.agg_lags,
+                        self.experimental_variogram.experimental_semivariances,
+                        marker='8',
+                        c='black')
+            # Plot theoretical
+            plt.plot(self.agg_lags, self.theoretical_model.fitted_model[:, 1], ':', color='black')
+            # Plot average inblock
+            plt.plot(self.agg_lags, self.avg_inblock_semivariance[:, 1], '--', color='#e66101')
+            # Plot average block to block
+            plt.plot(self.agg_lags, self.avg_block_to_block_semivariance[:, 1], '--', color='#fdb863')
+            # Plot regularized
+            plt.plot(self.agg_lags, self.regularized_variogram[:, 1], color='#5e3c99')
+            legend = ['Experimental', 'Theoretical', 'Avg. Inblock', 'Avg. Block-to-block', 'Regularized']
+            plt.legend(legend)
+            plt.xlabel('Distance')
+            plt.ylabel('Semivariance')
+            plt.show()
 
     def _fit_theoretical_model(self) -> TheoreticalVariogram:
         """
