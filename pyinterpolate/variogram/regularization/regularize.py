@@ -4,7 +4,7 @@ import numpy as np
 
 from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
-from pyinterpolate.variogram.regularization.aggregated import AggVariogramPK
+from pyinterpolate.variogram.regularization.aggregated import AggregatedVariogram
 
 
 class Deconvolution:
@@ -16,7 +16,7 @@ class Deconvolution:
     - initialize your object (no parameters),
     - use fit() method to build initial point support model,
     - use transform() method to perform semivariogram regularization,
-    - save semivariogram model with export_model() method.
+    - save deconvoluted semivariogram model with export() method.
 
     Attributes
     ----------
