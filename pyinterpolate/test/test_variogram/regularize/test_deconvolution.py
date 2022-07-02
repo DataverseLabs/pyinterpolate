@@ -39,7 +39,7 @@ class TestDeconvolution(unittest.TestCase):
                 agg_step_size=STEP_SIZE,
                 agg_max_range=MAX_RANGE)
 
-        fitted = dcv.initial_regularized_model
+        fitted = dcv.initial_regularized_variogram
         initial_deviation = dcv.initial_deviation
 
         self.assertTrue(fitted is not None)

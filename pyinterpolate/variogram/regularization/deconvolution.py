@@ -1,6 +1,7 @@
 from typing import Dict
 
 import numpy as np
+from tqdm import trange
 
 from pyinterpolate.processing.checks import check_limits
 from pyinterpolate.processing.point.structure import get_point_support_from_files
@@ -113,6 +114,9 @@ class Deconvolution:
     n_diffs : int
               A control parameter. Number of iterations when algorithm should stop if min_diff_decrease is low.
 
+    store_models : bool, default = False
+                       Should theoretical models parameters and regularized variograms be stored?
+
     Methods
     -------
     fit()
@@ -143,7 +147,7 @@ class Deconvolution:
 
     """
 
-    def __init__(self, verbose=True):
+    def __init__(self, verbose=True, store_models=False):
 
         # Core data structures
         self.ps = None  # point support
@@ -160,19 +164,32 @@ class Deconvolution:
         # Deviation and weights
         self.deviations = []
         self.initial_deviation = None
+        self.optimal_deviation = None
         self.weights = []
 
         # Variograms - initial
-        self.initial_regularized_model = None
+        self.initial_regularized_variogram = None
         self.initial_theoretical_agg_model = None
         self.initial_experimental_variogram = None
 
         # Variograms - temp
 
         # Variograms - optimal
+        self.optimal_theoretical_model = None
+        self.optimal_regularized_variogram = None
 
         # Control
         self.verbose = verbose
+        self.store_models = store_models
+        self.iter = 0
+        self.max_iters = 0
+        self.min_deviation_ratio = None
+        self.min_deviation_decrease = None
+
+        # Debug and stability
+        self.theoretical_models = []  # List with theoretical models parameters
+        self.regularized_models = []  # List with numpy arrays with regularized models
+
 
 
 
@@ -225,30 +242,29 @@ class Deconvolution:
                         Maximal distance of analysis.
 
         agg_direction : float (in range [0, 360]), optional, default=0
-                    direction of semivariogram, values from 0 to 360 degrees:
-                    * 0 or 180: is NS direction,
-                    * 90 or 270 is EW direction,
-                    * 45 or 225 is NE-SW direction,
-                    * 135 or 315 is NW-SE direction.
+                        direction of semivariogram, values from 0 to 360 degrees:
+                        * 0 or 180: is NS direction,
+                        * 90 or 270 is EW direction,
+                        * 45 or 225 is NE-SW direction,
+                        * 135 or 315 is NW-SE direction.
 
-    agg_tolerance : float (in range [0, 1]), optional, default=1
-                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
-                    then the bin is selected as an elliptical area with major axis pointed in the same direction as
-                    the line for 0 tolerance.
-                    * The minor axis size is (tolerance * step_size)
-                    * The major axis size is ((1 - tolerance) * step_size)
-                    * The baseline point is at a center of the ellipse.
-                    Tolerance == 1 creates an omnidirectional semivariogram.
+        agg_tolerance : float (in range [0, 1]), optional, default=1
+                        If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+                        the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
+                        then the bin is selected as an elliptical area with major axis pointed in the same direction as
+                        the line for 0 tolerance.
+                        * The minor axis size is (tolerance * step_size)
+                        * The major axis size is ((1 - tolerance) * step_size)
+                        * The baseline point is at a center of the ellipse.
+                        Tolerance == 1 creates an omnidirectional semivariogram.
 
-    variogram_weighting_method : str, default = "closest"
-                                 Method used to weight error at a given lags. Available methods:
-                                 - equal: no weighting,
-                                 - closest: lags at a close range have bigger weights,
-                                 - distant: lags that are further away have bigger weights,
-                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,
-                                   lesser weight.
-
+        variogram_weighting_method : str, default = "closest"
+                                     Method used to weight error at a given lags. Available methods:
+                                     - equal: no weighting,
+                                     - closest: lags at a close range have bigger weights,
+                                     - distant: lags that are further away have bigger weights,
+                                     - dense: error is weighted by the number of point pairs within a lag - more pairs,
+                                       lesser weight.
         """
 
         if self.verbose:
@@ -284,7 +300,7 @@ class Deconvolution:
         self.initial_theoretical_agg_model = theo_model_agg
 
         # Regularize
-        self.initial_regularized_model = regularize(
+        self.initial_regularized_variogram = regularize(
             aggregated_data=self.agg,
             agg_step_size=self.agg_step,
             agg_max_range=self.agg_rng,
@@ -297,7 +313,7 @@ class Deconvolution:
         )
 
         self.initial_deviation = calculate_deviation(self.initial_theoretical_agg_model,
-                                                     self.initial_regularized_model)
+                                                     self.initial_regularized_variogram)
 
         self.deviations.append(self.initial_deviation)
 
@@ -326,10 +342,6 @@ class Deconvolution:
                                      to the optimal deviation: |dev - opt_dev| / opt_dev.
                                      Parameter must be set in the limits (0, 1).
 
-        reps_minimum_deviation_decrease : int, default = 3
-                                          How many consecutive repetitions of minimum_deviation_decrease must occur to
-                                          stop the algorithm.
-
         Raises
         ------
         AttributeError : initial_regularized_model is undefined (user didn't perform fit() method).
@@ -345,7 +357,33 @@ class Deconvolution:
         check_limits(limit_deviation_ratio)
         check_limits(minimum_deviation_decrease)
 
-        # Start processing
+        # Update optimal models with initial models - make copies to be sure that we didn't overwrite values
+        self.max_iters = max_iters
+        self.min_deviation_ratio = limit_deviation_ratio
+        self.min_deviation_decrease = minimum_deviation_decrease
+
+        initial_model_params = self.initial_theoretical_agg_model.to_dict()
+        self.optimal_theoretical_model = TheoreticalVariogram(
+            model_params=initial_model_params
+        )
+        self.optimal_regularized_variogram = self.initial_regularized_variogram.copy()
+        self.optimal_deviation = self.initial_deviation
+
+        # Append models if store_models parameter is set to True
+        if self.store_models:
+            self.theoretical_models.append(initial_model_params)
+            self.regularized_models.append(self.initial_regularized_variogram)
+
+        # Start iterative procedure
+        for i in trange(self.max_iters):
+            deviation_test = self._check_transform(i)
+            if deviation_test:
+                break
+            else:
+                # Compute new experimental values for new experimental point support model
+                rescaled_experimental_variogram, weights = self._rescale_optimal_theoretical_model()
+
+
 
 
 
@@ -362,21 +400,75 @@ class Deconvolution:
     def plot(self):
         pass
 
-    def _deviation(self):
+    def _check_fit(self):
+        if self.initial_regularized_variogram is None:
+            msg = 'The initial regularized model (initial_regularized_model attribute) is undefined. Perform fit()' \
+                  'before transformation!'
+            raise AttributeError(msg)
+
+    def _check_transform(self, iter_no: int):
+        # Test deviation ratio
+        if self._deviation_ratio(iter_no):
+            return True
+
+        # Test deviation decrease
+        if self._deviation_decrease(iter_no):
+            return True
+
+        return False
+
+    def _deviation_decrease(self, iter_no: int) -> bool:
         """
-        Method calculates deviation between regularized model and experimental values.
+        |dev - opt_dev| / opt_dev
+
+        Parameters
+        ----------
+        iter_no : int
+
+        Returns
+        -------
+        : bool
+        """
+        if iter_no == 0:
+            return False
+        else:
+            dev_decrease = np.abs(self.deviations[-1] - self.optimal_deviation) / self.optimal_deviation
+
+            if dev_decrease <= self.min_deviation_decrease:
+                return True
+
+            return False
+
+    def _deviation_ratio(self, iter_no: int) -> bool:
+        """
+        The model deviation to initial deviation.
+
+        Parameters
+        ----------
+        iter_no : int
+
+        Returns
+        -------
+        : bool
+        """
+        dev_ratio = self.deviations[-1] / self.initial_deviation
+        if dev_ratio <= self.min_deviation_ratio:
+            return True
+        return False
+
+    def _rescale_optimal_theoretical_model(self):
+        """
+        Function rescales points derived from the optimal theoretical model and creates new experimental
+        values based on the equation:
+
+        $$\gamma_{res}(h) = \gamma_{opt}(h) \times w(h)$$
+
+        $$w(h) =
 
         Returns
         -------
 
         """
-        return -1
-
-    def _check_fit(self):
-        if self.initial_regularized_model is None:
-            msg = 'The initial regularized model (initial_regularized_model attribute) is undefined. Perform fit()' \
-                  'before transformation!'
-            raise AttributeError(msg)
 
     # def _select_weighting_method(self, method_id: int) -> str:
     #     """
