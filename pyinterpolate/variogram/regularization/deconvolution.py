@@ -2,6 +2,7 @@ from typing import Dict
 
 import numpy as np
 
+from pyinterpolate.processing.checks import check_limits
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset, get_polyset_from_file
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
@@ -303,8 +304,51 @@ class Deconvolution:
         if self.verbose:
             print('Regularization fit process ends')
 
-    def transform(self):
-        pass
+    def transform(self,
+                  max_iters=25,
+                  limit_deviation_ratio=0.01,
+                  minimum_deviation_decrease=0.001,
+                  reps_minimum_deviation_decrease=3):
+        """
+        Method performs semivariogram regularization after model fitting.
+
+        Parameters
+        ----------
+        max_iters : int, default = 25
+                    Maximum number of iterations.
+
+        limit_deviation_ratio : float, default = 0.01
+                                Minimal ratio of model deviation to initial deviation when algorithm is stopped.
+                                Parameter must be set in the limits (0, 1).
+
+        minimum_deviation_decrease : float, default = 0.001
+                                     The minimum ratio of the difference between model deviation and optimal deviation
+                                     to the optimal deviation: |dev - opt_dev| / opt_dev.
+                                     Parameter must be set in the limits (0, 1).
+
+        reps_minimum_deviation_decrease : int, default = 3
+                                          How many consecutive repetitions of minimum_deviation_decrease must occur to
+                                          stop the algorithm.
+
+        Raises
+        ------
+        AttributeError : initial_regularized_model is undefined (user didn't perform fit() method).
+
+        ValueError : limit_deviation_ratio or minimum_deviation_decrease parameters <= 0 or >= 1.
+
+        """
+
+        # Check if model was fitted
+        self._check_fit()
+
+        # Check limits
+        check_limits(limit_deviation_ratio)
+        check_limits(minimum_deviation_decrease)
+
+        # Start processing
+
+
+
 
     def fit_transform(self):
         pass
@@ -327,6 +371,12 @@ class Deconvolution:
 
         """
         return -1
+
+    def _check_fit(self):
+        if self.initial_regularized_model is None:
+            msg = 'The initial regularized model (initial_regularized_model attribute) is undefined. Perform fit()' \
+                  'before transformation!'
+            raise AttributeError(msg)
 
     # def _select_weighting_method(self, method_id: int) -> str:
     #     """
