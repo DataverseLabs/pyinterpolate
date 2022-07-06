@@ -29,6 +29,7 @@ POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATAS
                                                    point_support_layer_name=POPULATION_LAYER,
                                                    polygon_layer_name=POLYGON_LAYER)
 
+
 class TestAggregatedRegularization(unittest.TestCase):
 
     def test_aggregated_variogram_class(self):
