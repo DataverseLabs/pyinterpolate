@@ -26,8 +26,6 @@ def calculate_deviation(theoretical: TheoreticalVariogram,
     -------
     deviation : float
                 |Regularized - Theoretical| / Theoretical
-
-    TODO: calculate deviation tests
     """
     lags = regularized[:, 0]
     reg_values = regularized[:, 1]
@@ -380,8 +378,8 @@ class Deconvolution:
 
     def transform(self,
                   max_iters=5,
-                  limit_deviation_ratio=0.01,
-                  minimum_deviation_decrease=0.001,
+                  limit_deviation_ratio=0.1,
+                  minimum_deviation_decrease=0.01,
                   reps_deviation_decrease=3):
         """
         Method performs semivariogram regularization after model fitting.
