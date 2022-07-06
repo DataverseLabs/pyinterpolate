@@ -189,7 +189,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         empirical_variogram : ExperimentalVariogram
-                          Prepared Empirical Variogram.
+                              Prepared Empirical Variogram.
 
         model_type : str
                      Model type. Available models:
@@ -272,19 +272,21 @@ class TheoreticalVariogram:
                 empirical_variogram: Union[ExperimentalVariogram, np.ndarray, List],
                 model_types: Union[str, list] = 'all',
                 nugget=0,
+                rang=None,
                 min_range=0.1,
                 max_range=0.5,
-                number_of_ranges=16,
+                number_of_ranges=64,
+                sill=None,
                 min_sill=0.,
                 max_sill=1,
-                number_of_sills=16,
+                number_of_sills=64,
                 error_estimator='rmse',
                 deviation_weighting='equal',
                 auto_update_attributes=True,
                 warn_about_set_params=True,
                 verbose=False):
         """
-        Methodtries to find the optimal range, sill and model of theoretical semivariogram.
+        Method tries to find the optimal range, sill and model of theoretical semivariogram.
 
         Parameters
         ----------
@@ -305,6 +307,9 @@ class TheoreticalVariogram:
         nugget : float, default = 0
                  Nugget (bias) of a variogram. Default value is 0.
 
+        rang : float, optional
+               If given, then range is fixed to this value.
+
         min_range : float, default = 0.1
                     Minimal fraction of a variogram range, 0 < min_range <= max_range
 
@@ -314,6 +319,9 @@ class TheoreticalVariogram:
 
         number_of_ranges : int, default = 16
                            How many equally spaced ranges are tested between min_range and max_range.
+
+        sill : float, optional
+               If given, then it is fixed to this value.
 
         min_sill : float, default = 0
                    Minimal fraction of variogram variance at lag 0 to find a sill, 0 <= min_sill <= max_sill.
@@ -385,23 +393,28 @@ class TheoreticalVariogram:
                 warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
 
         self.empirical_variogram = empirical_variogram
-        self.lags = empirical_variogram.lags
 
-        # Check parameters
-        check_ranges(min_range, max_range)
-        check_sills(min_sill, max_sill)
+        self.lags = self.empirical_variogram.lags
 
         # Check model type and set models
         mtypes = self._check_models_type_autofit(model_types)
 
         # Set ranges and sills
-        if self.study_max_range is None:
-            self.study_max_range = get_study_max_range(self.empirical_variogram.input_array[:, :-1])
+        if rang is None:
+            check_ranges(min_range, max_range)
+            if self.study_max_range is None:
+                self.study_max_range = get_study_max_range(self.empirical_variogram.input_array[:, :-1])
 
-        min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
+            min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
+        else:
+            min_max_ranges = [rang]
 
-        var_sill = self.empirical_variogram.variance
-        min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
+        if sill is None:
+            check_sills(min_sill, max_sill)
+            var_sill = self.empirical_variogram.variance
+            min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
+        else:
+            min_max_sill = [sill]
 
         # Get errors
         _errors_keys = self._get_err_keys(error_estimator)

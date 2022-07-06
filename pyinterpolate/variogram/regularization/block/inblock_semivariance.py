@@ -29,6 +29,7 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     flattened_distances = distances_between_points.flatten()
     semivariances = variogram_model.predict(flattened_distances)
 
+
     # TODO: part below to test with very large datasets
     # unique_distances, uniq_count = np.unique(distances_between_points, return_counts=True)  # Array is flattened here
     # semivariances = variogram_model.predict(unique_distances)

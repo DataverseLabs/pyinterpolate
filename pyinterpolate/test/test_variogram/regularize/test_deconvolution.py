@@ -13,7 +13,7 @@ GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'FIPS'
 POLYGON_VALUE = 'rate'
 MAX_RANGE = 400000
-STEP_SIZE = 40000
+STEP_SIZE = 20000
 
 AREAL_INPUT = get_polyset_from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID,
                                     layer_name=POLYGON_LAYER)
@@ -32,17 +32,30 @@ POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATAS
 
 class TestDeconvolution(unittest.TestCase):
 
-    def test_fit_method(self):
+    # def test_fit_method(self):
+    #     dcv = Deconvolution(verbose=True)
+    #     dcv.fit(agg_dataset=AREAL_INPUT,
+    #             point_support_dataset=POINT_SUPPORT_INPUT['data'],
+    #             agg_step_size=STEP_SIZE,
+    #             agg_max_range=MAX_RANGE)
+    #
+    #     fitted = dcv.initial_regularized_variogram
+    #     initial_deviation = dcv.initial_deviation
+    #
+    #     self.assertTrue(fitted is not None)
+    #
+    #     expected_deviation = 0.1785
+    #     self.assertAlmostEqual(initial_deviation, expected_deviation, 4)
+
+    def test_transform(self):
         dcv = Deconvolution(verbose=True)
         dcv.fit(agg_dataset=AREAL_INPUT,
                 point_support_dataset=POINT_SUPPORT_INPUT['data'],
                 agg_step_size=STEP_SIZE,
-                agg_max_range=MAX_RANGE)
-
-        fitted = dcv.initial_regularized_variogram
-        initial_deviation = dcv.initial_deviation
-
-        self.assertTrue(fitted is not None)
-
-        expected_deviation = 0.1785
-        self.assertAlmostEqual(initial_deviation, expected_deviation, 4)
+                agg_max_range=MAX_RANGE,
+                variogram_weighting_method='closest')
+        dcv.transform(max_iters=500)
+        dcv.plot_variograms()
+        dcv.plot_deviations()
+        dcv.plot_weights()
+        self.assertTrue(1)

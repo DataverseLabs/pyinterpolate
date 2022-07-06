@@ -218,7 +218,8 @@ class AggregatedVariogram:
 
         # Calculate inblock semivariance
         # Pass dict with {area id, [points within area and their values]} and semivariogram model
-        self.inblock_semivariance = calculate_inblock_semivariance(self.point_support, self.theoretical_model)
+        self.inblock_semivariance = calculate_inblock_semivariance(self.point_support,
+                                                                   self.theoretical_model)
 
         # Calculate distances between blocks
         self.distances_between_blocks = calc_block_to_block_distance(self.point_support)
@@ -331,17 +332,25 @@ class AggregatedVariogram:
         # Set all variograms and models
         if experimental_block_variogram is None:
             self.experimental_variogram = self._get_experimental_variogram()
+        else:
+            self.experimental_variogram = experimental_block_variogram
 
         if theoretical_block_model is None:
             self.theoretical_model = self._fit_theoretical_model()
+        else:
+            self.theoretical_model = theoretical_block_model
 
         # gamma_h(v, v)
         if average_inblock_semivariances is None:
             self.avg_inblock_semivariance = self.calculate_avg_inblock_semivariance()
+        else:
+            self.avg_inblock_semivariance = average_inblock_semivariances
 
         # gamma(v, v_h)
         if semivariance_between_point_supports is None:
             self.avg_block_to_block_semivariance = self.calculate_avg_semivariance_between_blocks()
+        else:
+            self.avg_block_to_block_semivariance = semivariance_between_point_supports
 
         # regularize variogram
         self.regularized_variogram = self.regularize_variogram()
@@ -463,6 +472,10 @@ def regularize(aggregated_data: Dict,
                agg_step_size: float,
                agg_max_range: float,
                point_support: Dict,
+               average_inblock_semivariances = None,
+               semivariance_between_point_supports = None,
+               experimental_block_variogram = None,
+               theoretical_block_model = None,
                agg_direction: float = 0,
                agg_tolerance: float = 1,
                variogram_weighting_method: str = 'closest',
@@ -506,6 +519,18 @@ def regularize(aggregated_data: Dict,
                         point_support = {
                           'area_id': [numpy array with points]
                         }
+
+    average_inblock_semivariances : np.ndarray, optional
+                                    The mean semivariance between the blocks. See Notes to learn more.
+
+    semivariance_between_point_supports : np.ndarray, optional
+                                          Semivariance between all blocks calculated from the theoretical model.
+
+    experimental_block_variogram : np.ndarray, optional
+                                   The experimental semivariance between area centroids.
+
+    theoretical_block_model : TheoreticalVariogram, optional
+                              Modeled variogram.
 
     agg_direction : float (in range [0, 360]), optional, default=0
                     direction of semivariogram, values from 0 to 360 degrees:
@@ -563,5 +588,8 @@ def regularize(aggregated_data: Dict,
                                   verbose,
                                   log_process)
 
-    regularized = agg_var.regularize()
+    regularized = agg_var.regularize(average_inblock_semivariances,
+                                     semivariance_between_point_supports,
+                                     experimental_block_variogram,
+                                     theoretical_block_model)
     return regularized
