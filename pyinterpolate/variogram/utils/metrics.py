@@ -190,3 +190,105 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_arr
             np.abs(predicted_array - real_array) / (np.abs(real_array) + np.abs(predicted_array))
         )
     return smape
+
+
+def weighted_root_mean_squared_error(predicted_array: np.array,
+                                     real_array: np.array,
+                                     weighting_method: str,
+                                     lag_points_distribution=None) -> float:
+    """
+
+    Parameters
+    ----------
+    predicted_array : numpy array
+                      Array with predicted values.
+
+    real_array : numpy array
+                 Array with real observations.
+
+    weighting_method : str
+                       The name of a method used to weight error at a given lags.
+                       Available methods:
+                       - closest: lags at a close range have larger weights,
+                       - distant: lags that are further away have larger weights,
+                       - dense: error is weighted by the number of point pairs within a lag.
+
+    lag_points_distribution : numpy array
+                              Array with points per lag (real observations).
+
+    Returns
+    -------
+    wrmse : float
+           Weighted Root Mean Squared Error of prediction.
+
+    Raises
+    ------
+    AttributeError : The lag_points_distribution parameter is undefined when "dense" method is selected.
+
+    Notes
+    -----
+    Error weighting is a useful method in the case when we want to force variogram to better represent semivariances
+    at specific ranges. The most popular is "closest" - we create model that fits better pairs near the origin.
+
+    Equations:
+
+    - "closest"
+
+    (1) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}}$$
+
+        where:
+        * $e_{rmse}$ - weighted root mean squared error,
+        * $i$ - lag, i > 0,
+        * $y_{i}$ - i-th observation,
+        * $\bar{y_{i}}$ - i-th prediction,
+        * $N$ - number of observations.
+
+    - "distant"
+
+    (2) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}}$$
+
+        where:
+        * $e_{rmse}$ - weighted root mean squared error,
+        * $i$ - lag, i > 0,
+        * $y_{i}$ - i-th observation,
+        * $\bar{y_{i}}$ - i-th prediction,
+        * $N$ - number of observations.
+
+    - "dense"
+
+    (3) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}}$$
+
+        where:
+        * $e_{rmse}$ - weighted root mean squared error,
+        * $y_{i}$ - i-th observation,
+        * $\bar{y_{i}}$ - i-th prediction,
+        * $p_{i}$ - number of points within i-th lag,
+        * $P$ - number of all points,
+        * $N$ - number of observations.
+
+
+    """
+    error = (real_array - predicted_array)**2
+    arr_length = len(error)
+    weights = np.ones(len(error))
+
+    if weighting_method == 'closest':
+        sequence = np.arange(1, arr_length + 1)
+        weights = (arr_length - sequence) / arr_length
+    elif weighting_method == 'distant':
+        sequence = np.arange(1, arr_length + 1)
+        weights = sequence / arr_length
+    elif weighting_method == 'dense':
+        if lag_points_distribution is None:
+            msg = 'The "dense" weighting method requires you to pass number of point pairs per lag!'
+            raise AttributeError(msg)
+        else:
+            weights = lag_points_distribution / sum(lag_points_distribution)
+
+
+
+    wrmse = error * weights
+    wrmse = np.mean(wrmse)
+    wrmse = np.sqrt(wrmse)
+
+    return wrmse

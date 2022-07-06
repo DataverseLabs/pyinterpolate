@@ -1,7 +1,7 @@
 # Core python packages
 import json
 import warnings
-from typing import Collection, Union, Callable, Tuple
+from typing import Collection, Union, Callable, Tuple, List
 
 # Core calculations and visualization packages
 import numpy as np
@@ -14,7 +14,7 @@ from pyinterpolate.variogram.theoretical.models import circular_model, cubic_mod
     gaussian_model, spherical_model, power_model
 from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
-    symmetric_mean_absolute_percentage_error, mean_absolute_error
+    symmetric_mean_absolute_percentage_error, mean_absolute_error, weighted_root_mean_squared_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
 
 
@@ -167,7 +167,8 @@ class TheoreticalVariogram:
         if self.are_params:
             self._set_model_parameters(model_params)
 
-        # Dynamic parameters
+        # Errror
+        self.deviation_weighting = None
         self.rmse = 0.
         self.bias = 0.
         self.smape = 0.
@@ -188,7 +189,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         empirical_variogram : ExperimentalVariogram
-                          Prepared Empirical Variogram.
+                              Prepared Empirical Variogram.
 
         model_type : str
                      Model type. Available models:
@@ -268,26 +269,29 @@ class TheoreticalVariogram:
         return _theoretical_values, _error
 
     def autofit(self,
-                empirical_variogram: ExperimentalVariogram,
-                model_types: Union[str, list],
+                empirical_variogram: Union[ExperimentalVariogram, np.ndarray, List],
+                model_types: Union[str, list] = 'all',
                 nugget=0,
+                rang=None,
                 min_range=0.1,
                 max_range=0.5,
-                number_of_ranges=16,
+                number_of_ranges=64,
+                sill=None,
                 min_sill=0.,
                 max_sill=1,
-                number_of_sills=16,
+                number_of_sills=64,
                 error_estimator='rmse',
+                deviation_weighting='equal',
                 auto_update_attributes=True,
                 warn_about_set_params=True,
                 verbose=False):
         """
-        Methodtries to find the optimal range, sill and model of theoretical semivariogram.
+        Method tries to find the optimal range, sill and model of theoretical semivariogram.
 
         Parameters
         ----------
         empirical_variogram : ExperimentalVariogram
-                          Prepared Empirical Variogram.
+                              Prepared Empirical Variogram or array
 
         model_types : str or list
                       List of models of string with a model name. Available models:
@@ -303,6 +307,9 @@ class TheoreticalVariogram:
         nugget : float, default = 0
                  Nugget (bias) of a variogram. Default value is 0.
 
+        rang : float, optional
+               If given, then range is fixed to this value.
+
         min_range : float, default = 0.1
                     Minimal fraction of a variogram range, 0 < min_range <= max_range
 
@@ -312,6 +319,9 @@ class TheoreticalVariogram:
 
         number_of_ranges : int, default = 16
                            How many equally spaced ranges are tested between min_range and max_range.
+
+        sill : float, optional
+               If given, then it is fixed to this value.
 
         min_sill : float, default = 0
                    Minimal fraction of variogram variance at lag 0 to find a sill, 0 <= min_sill <= max_sill.
@@ -330,6 +340,14 @@ class TheoreticalVariogram:
                           - 'mae': Mean Absolute Error,
                           - 'bias': Forecast Bias,
                           - 'smape': Symmetric Mean Absolute Percentage Error.
+
+        deviation_weighting : str, default = "equal"
+                              The name of a method used to weight error at a given lags. Works only with RMSE.
+                              Available methods:
+                              - equal: no weighting,
+                              - closest: lags at a close range have bigger weights,
+                              - distant: lags that are further away have bigger weights,
+                              - dense: error is weighted by the number of point pairs within a lag.
 
         auto_update_attributes : bool, default = True
                                  Update sill, range, model type and nugget based on the best model.
@@ -368,28 +386,35 @@ class TheoreticalVariogram:
         KeyError : wrong model name(s) or wrong error type name.
         """
 
+        self.deviation_weighting = deviation_weighting
+
         if self.are_params:
             if warn_about_set_params:
                 warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
 
         self.empirical_variogram = empirical_variogram
-        self.lags = empirical_variogram.lags
 
-        # Check parameters
-        check_ranges(min_range, max_range)
-        check_sills(min_sill, max_sill)
+        self.lags = self.empirical_variogram.lags
 
         # Check model type and set models
         mtypes = self._check_models_type_autofit(model_types)
 
         # Set ranges and sills
-        if self.study_max_range is None:
-            self.study_max_range = get_study_max_range(self.empirical_variogram.input_array[:, :-1])
+        if rang is None:
+            check_ranges(min_range, max_range)
+            if self.study_max_range is None:
+                self.study_max_range = get_study_max_range(self.empirical_variogram.input_array[:, :-1])
 
-        min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
+            min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
+        else:
+            min_max_ranges = [rang]
 
-        var_sill = self.empirical_variogram.variance
-        min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
+        if sill is None:
+            check_sills(min_sill, max_sill)
+            var_sill = self.empirical_variogram.variance
+            min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
+        else:
+            min_max_sill = [sill]
 
         # Get errors
         _errors_keys = self._get_err_keys(error_estimator)
@@ -411,7 +436,11 @@ class TheoreticalVariogram:
                     # Create model
                     _mdl_fn = self.variogram_models[_mtype]
                     _fitted_model = self._fit_model(_mdl_fn, nugget, _sill, _rang)
-                    _err = self.calculate_model_error(_fitted_model[:, 1], **_errors_keys)
+
+                    # Calculate Error
+                    _err = self.calculate_model_error(_fitted_model[:, 1],
+                                                      **_errors_keys,
+                                                      deviation_weighting=deviation_weighting)
 
                     if verbose:
                         self.__print_autofit_info(_mtype, nugget, _sill, _rang, error_estimator, _err[error_estimator])
@@ -470,7 +499,7 @@ class TheoreticalVariogram:
         if self.fitted_model is None:
             raise AttributeError('Model has not been trained, nothing to plot.')
         else:
-            legend = []
+            legend = ['Theoretical Model']
             plt.figure(figsize=(12, 6))
 
             if experimental:
@@ -492,7 +521,8 @@ class TheoreticalVariogram:
                               rmse=True,
                               bias=True,
                               mae=True,
-                              smape=True) -> dict:
+                              smape=True,
+                              deviation_weighting='equal') -> dict:
         """
 
         Parameters
@@ -511,6 +541,14 @@ class TheoreticalVariogram:
 
         smape : bool, default=True
                 Symmetric Mean Absolute Percentage Error of a model.
+
+        deviation_weighting : str, default = "equal"
+                              The name of a method used to weight error at a given lags. Works only with RMSE.
+                              Available methods:
+                              - equal: no weighting,
+                              - closest: lags at a close range have bigger weights,
+                              - distant: lags that are further away have bigger weights,
+                              - dense: error is weighted by the number of point pairs within a lag.
 
         Returns
         -------
@@ -540,7 +578,15 @@ class TheoreticalVariogram:
 
         # Get RMSE
         if rmse:
-            _rmse = root_mean_squared_error(fitted_values, _real_values)
+            if deviation_weighting != 'equal':
+                if deviation_weighting == 'dense':
+                    points_per_lag = self.empirical_variogram.experimental_semivariance_array[:, -1]
+                    _rmse = weighted_root_mean_squared_error(fitted_values, _real_values, deviation_weighting,
+                                                             lag_points_distribution=points_per_lag)
+                else:
+                    _rmse = weighted_root_mean_squared_error(fitted_values, _real_values, deviation_weighting)
+            else:
+                _rmse = root_mean_squared_error(fitted_values, _real_values)
             model_error['rmse'] = _rmse
 
         # Get MAE
@@ -642,23 +688,23 @@ class TheoreticalVariogram:
             msg_range = f'* Range: {self.rang}'
             mean_bias_msg = f'* Mean Bias: {self.bias}'
             mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
+            error_weighting = f'* Error-lag weighting method: {self.deviation_weighting}'
 
-            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg]
+            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg, error_weighting]
 
-            header = '\n'.join(text_list) + '\n'
+            header = '\n'.join(text_list) + '\n' + '\n'
 
             # Build pretty table
             pretty_table = PrettyTable()
-            pretty_table.field_names = ["lag", "experimental", "theoretical", "bias", "rmse"]
+            pretty_table.field_names = ["lag", "theoretical", "experimental", "bias (y'-y)"]
 
             records = []
             for idx, record in enumerate(self.empirical_variogram.experimental_semivariance_array):
                 lag = record[0]
                 experimental_semivar = record[1]
                 theoretical_semivar = self.fitted_model[idx][1]
-                bias = experimental_semivar - theoretical_semivar
-                rmse = np.sqrt((experimental_semivar - theoretical_semivar) ** 2)
-                records.append([lag, experimental_semivar, theoretical_semivar, bias, rmse])
+                bias = theoretical_semivar - experimental_semivar
+                records.append([lag, theoretical_semivar, experimental_semivar, bias])
 
             pretty_table.add_rows(records)
 

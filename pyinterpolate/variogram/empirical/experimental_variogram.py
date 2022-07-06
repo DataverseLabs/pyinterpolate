@@ -1,7 +1,11 @@
+from typing import Union
+
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
+
+from pyinterpolate.processing.polygon.structure import PolygonDataClass
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
@@ -13,8 +17,10 @@ class ExperimentalVariogram:
 
     Parameters
     ----------
-    input_array : numpy array
-                  coordinates and their values: (pt x, pt y, value) or (Point(), value).
+    input_array : numpy array, list, dict, PolygonDataClass
+                  As a list and numpy array: coordinates and their values: (pt x, pt y, value),
+                  as a dict: polyset = {'points': numpy array with coordinates and their values},
+                  as a PolygonDataClass: PolygonDataClass.polyset['points']
 
     step_size : float
                 distance between lags within each points are included in the calculations.
@@ -160,13 +166,25 @@ class ExperimentalVariogram:
     +-----+--------------------+---------------------+--------------------+
     """
 
-    def __init__(self, input_array, step_size: float, max_range: float, weights=None, direction: float = 0.0,
-                 tolerance: float = 1.0, is_semivariance=True, is_covariance=True, is_variance=True):
+    def __init__(self,
+                 input_array: Union[np.ndarray, list, tuple, PolygonDataClass, dict],
+                 step_size: float,
+                 max_range: float,
+                 weights=None,
+                 direction: float = 0.0,
+                 tolerance: float = 1.0,
+                 is_semivariance=True,
+                 is_covariance=True,
+                 is_variance=True):
 
-        if not isinstance(input_array, np.ndarray):
-            input_array = np.array(input_array)
+        self.input_array = None  # core structure
+        # Structures for areal data
+        self.polyset = None
+        self.polygon_data_class = None
 
-        self.input_array = input_array
+        self._parse_input_array(input_array)
+
+        # Object main attributes
         self.experimental_semivariance_array = None
         self.experimental_covariance_array = None
         self.lags = None
@@ -286,6 +304,36 @@ class ExperimentalVariogram:
             direction=self.direct,
             tolerance=self.tol
         )
+
+    def _parse_input_array(self, input_array) -> None:
+        """
+        Method parses input array into a valid structure.
+
+        Parameters
+        ----------
+        input_array : numpy array, list, dict, PolygonDataClass
+                      As a list and numpy array: coordinates and their values: (pt x, pt y, value),
+                      as a dict: polyset = {'points': numpy array with coordinates and their values},
+                      as a PolygonDataClass: PolygonDataClass.polyset['points']
+        """
+
+        if isinstance(input_array, PolygonDataClass):
+            self.input_array = input_array.polyset['points']
+            self.polygon_data_class = input_array
+            self.polyset = None
+        elif isinstance(input_array, dict):
+            # Check if it is a valid dict
+            self.input_array = input_array['points']
+            self.polyset = input_array
+            self.polygon_data_class = None
+        elif isinstance(input_array, np.ndarray):
+            self.input_array = input_array
+            self.polyset = None
+            self.polygon_data_class = None
+        else:
+            self.input_array = np.array(input_array)
+            self.polyset = None
+            self.polygon_data_class = None
 
     def __repr__(self):
         cname = 'ExperimentalVariogram'
@@ -440,9 +488,9 @@ def build_experimental_variogram(input_array: np.array,
     +-----+--------------------+---------------------+--------------------+
     | lag |    semivariance    |      covariance     |    var_cov_diff    |
     +-----+--------------------+---------------------+--------------------+
-    | 1.0 |       4.625        | -0.5434027777777798 | 4.791923487836951  |
-    | 2.0 | 5.2272727272727275 | -0.7954545454545454 | 5.0439752555137165 |
-    | 3.0 |        6.0         | -1.2599999999999958 | 5.508520710059168  |
+    | 1.0 |       4.625        |       -0.543        |       4.792        |
+    | 2.0 |       5.227        |       -0.795        |       5.043        |
+    | 3.0 |        6.0         |       -1.26         |       5.509        |
     +-----+--------------------+---------------------+--------------------+
     """
     semivariogram_stats = ExperimentalVariogram(
