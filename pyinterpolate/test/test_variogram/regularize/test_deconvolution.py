@@ -5,7 +5,7 @@ from pyinterpolate.processing.point.structure import get_point_support_from_file
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram.regularization.deconvolution import Deconvolution
 
-DATASET = '../../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'

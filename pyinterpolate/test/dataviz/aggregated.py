@@ -1,8 +1,6 @@
-import numpy as np
-
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
-from pyinterpolate.variogram.regularization.aggregated import AggregatedVariogram, regularize
+from pyinterpolate.variogram.regularization.aggregated import AggregatedVariogram
 
 
 if __name__ == '__main__':

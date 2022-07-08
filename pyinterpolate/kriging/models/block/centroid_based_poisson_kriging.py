@@ -24,24 +24,19 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                           Fitted variogram.
 
     blocks : Dict
-             Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
+             Dictionary retrieved from the Blocks, it's structure is defined as:
              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                    'index_name': the name of the index column,
-                    'geometry_name': the name of the geometry column,
-                    'value_name': the name of the value column,
-                    'crs': CRS of a dataset
-                }
-             }
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
 
     point_support : Dict
                     Point support data as a Dict:

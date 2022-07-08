@@ -4,7 +4,7 @@ import geopandas as gpd
 import pandas as pd
 
 
-class PointSupportDataClass:
+class PointSupport:
     """
     Class stores and describes the point support data in relation to polygon dataset.
 
@@ -12,7 +12,7 @@ class PointSupportDataClass:
     ----------
     pointset : Dict
                Prepared dict with point-support data. It's structure is:
-               polyset = {
+               pointset = {
                    'data': {id: [[point support array - lon, lat, value]], },
                    'info': {
                        'crs': CRS of a dataset
@@ -34,7 +34,7 @@ class PointSupportDataClass:
     Examples
     --------
     import geopandas as gpd
-    from pyinterpolate.processing.point.structure import PointSupportDataClass
+    from pyinterpolate.processing.point.structure import PointSupport
 
 
     POPULATION_DATA = "path to the point support file"
@@ -45,7 +45,7 @@ class PointSupportDataClass:
 
     gdf_points = gpd.read_file(POPULATION_DATA)
     gdf_polygons = gpd.read_file(POLYGON_DATA)
-    point_support = PointSupportDataClass()
+    point_support = PointSupport()
     out = point_support.from_geodataframes(gdf_points,
                                            gdf_polygons,
                                            point_support_geometry_col=GEOMETRY_COL,
@@ -328,14 +328,14 @@ def get_point_support_from_files(point_support_data_file: str,
     -------
     pointset : Dict
                Prepared dict with Polygon data. It's structure is:
-               polyset = {
+               pointset = {
                    'data': {id: [[point support array - lon, lat, value]], },
                    'info': {
                        'crs': CRS of a dataset
                    }
                }
     """
-    point_support = PointSupportDataClass()
+    point_support = PointSupport()
     pointset = point_support.from_files(point_support_data_file, polygon_file,
                                         point_support_geometry_col=point_support_geometry_col,
                                         point_support_val_col=point_support_val_col,
@@ -393,14 +393,14 @@ def get_point_support_from_geodataframes(point_support_dataframe: Union[gpd.GeoD
     -------
     pointset : Dict
                Prepared dict with Polygon data. It's structure is:
-               polyset = {
+               pointset = {
                    'data': {id: [[point support array - lon, lat, value]], },
                    'info': {
                        'crs': CRS of a dataset
                    }
                }
     """
-    point_support = PointSupportDataClass()
+    point_support = PointSupport()
     pointset = point_support.from_geodataframes(point_support_dataframe,
                                                 polygon_dataframe,
                                                 point_support_geometry_col=point_support_geometry_col,

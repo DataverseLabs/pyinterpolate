@@ -3,7 +3,7 @@ import geopandas as gpd
 
 from pyinterpolate.processing.point.structure import get_point_support_from_geodataframes,\
     get_point_support_from_files,\
-    PointSupportDataClass
+    PointSupport
 
 
 DATASET = 'samples/regularization/cancer_data.gpkg'
@@ -38,7 +38,7 @@ class TestPointSupportDataClass(unittest.TestCase):
         self._test_cases(out)
 
     def test_load_from_files(self):
-        point_support = PointSupportDataClass()
+        point_support = PointSupport()
         out = point_support.from_files(DATASET,
                                        DATASET,
                                        point_support_geometry_col=GEOMETRY_COL,
@@ -53,7 +53,7 @@ class TestPointSupportDataClass(unittest.TestCase):
     def test_load_from_geodataframes(self):
         gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
         gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
-        point_support = PointSupportDataClass()
+        point_support = PointSupport()
         out = point_support.from_geodataframes(gdf_points,
                                                gdf_polygons,
                                                point_support_geometry_col=GEOMETRY_COL,

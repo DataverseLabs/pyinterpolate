@@ -5,7 +5,6 @@ from tqdm import trange
 import matplotlib.pyplot as plt
 
 from pyinterpolate.processing.checks import check_limits
-from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.regularization.aggregated import regularize
 
@@ -56,24 +55,19 @@ class Deconvolution:
          Point support data as a Dict: point_support = {'area_id': [numpy array with points]}
 
     agg : Dict
-          Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
+          Dictionary retrieved from the Blocks, it's structure is defined as:
           polyset = {
-              'blocks': {
-                  'block index': {
-                      'value_name': float,
-                      'geometry_name': MultiPolygon | Polygon,
-                      'centroid.x': float,
-                      'centroid.y': float
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
                   }
-              }
-              'info': {
-                  'index_name': the name of the index column,
-                  'geometry_name': the name of the geometry column,
-                  'value_name': the name of the value column,
-                  'crs': CRS of a dataset
-              }
-          }
 
     initial_regularized_variogram : numpy array
                                     [lag, semivariance]
@@ -255,24 +249,19 @@ class Deconvolution:
         Parameters
         ----------
         agg_dataset : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+                      Dictionary retrieved from the Blocks, it's structure is defined as:
+                      polyset = {
+                          'geometry': {
+                              'block index': geometry
+                          }
+                          'data': [[index centroid.x, centroid.y value]],
+                          'info': {
+                              'index_name': the name of the index column,
+                              'geometry_name': the name of the geometry column,
+                              'value_name': the name of the value column,
+                              'crs': CRS of a dataset
+                          }
+                      }
 
         point_support_dataset : Dict
                                 Point support data as a Dict:
@@ -327,7 +316,7 @@ class Deconvolution:
         self.weighting_method = variogram_weighting_method
 
         # Compute experimental variogram of areal data
-        areal_centroids = get_block_centroids_from_polyset(self.agg)
+        areal_centroids = self.agg['data'][:, 1:]
 
         self.initial_experimental_variogram = build_experimental_variogram(
             input_array=areal_centroids,
@@ -517,24 +506,19 @@ class Deconvolution:
         Parameters
         ----------
         agg_dataset : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+                      Dictionary retrieved from the Blocks, it's structure is defined as:
+                      polyset = {
+                          'geometry': {
+                              'block index': geometry
+                          }
+                          'data': [[index centroid.x, centroid.y value]],
+                          'info': {
+                              'index_name': the name of the index column,
+                              'geometry_name': the name of the geometry column,
+                              'value_name': the name of the value column,
+                              'crs': CRS of a dataset
+                          }
+                      }
 
         point_support_dataset : Dict
                                 Point support data as a Dict:
