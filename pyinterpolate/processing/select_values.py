@@ -1,9 +1,10 @@
-from typing import Iterable
+from typing import Iterable, Dict
 
 import numpy as np
 from scipy.linalg import fractional_matrix_power
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 
 
 def _rotation_matrix(angle: float) -> np.array:
@@ -275,3 +276,75 @@ def select_kriging_data(unknown_position: Iterable,
         prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
 
     return prepared_data
+
+
+def select_poisson_kriging_data(u_block: Dict,
+                                u_point_support: Dict,
+                                k_blocks: Dict,
+                                k_point_support: Dict,
+                                nn: int,
+                                max_radius: float,
+                                weighted: bool) -> np.ndarray:
+    """
+    Function prepares data for the Poisson Kriging Process.
+
+    Parameters
+    ----------
+    u_block : Dict
+              'block index': {
+                  'value_name': float,
+                  'geometry_name': MultiPolygon | Polygon,
+                  'centroid.x': float,
+                  'centroid.y': float
+              }
+
+    u_point_support : Dict
+                      {'block index': [numpy array with points]}
+
+    k_blocks : Dict
+               Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
+
+                polyset = {
+                    'blocks': {
+                        'block index': {
+                            'value_name': float,
+                            'geometry_name': MultiPolygon | Polygon,
+                            'centroid.x': float,
+                            'centroid.y': float
+                        }
+                    }
+                    'info': {
+                        'index_name': the name of the index column,
+                        'geometry_name': the name of the geometry column,
+                        'value_name': the name of the value column,
+                        'crs': CRS of a dataset
+                    }
+                 }
+
+    k_point_support : Dict
+                      Point support data as a Dict:
+
+                        point_support = {
+                            'area_id': [numpy array with points]
+                        }
+
+    nn : int
+         The minimum number of neighbours that potentially affect block.
+
+    max_radius : float
+                 The maximum radius of search for the closest neighbors.
+
+    weighted : bool
+               Are distances between blocks weighted by point support?
+
+    Returns
+    -------
+    dataset : numpy array
+              [block id, cx, cy, value, distance to unknown, aggregated point support sum]
+    """
+
+    # Get distances from all centroids to the unknown block centroid
+    centroids = get_block_centroids_from_polyset(k_blocks)
+    u_idx = list(u_block.keys())[0]
+    u_centroid = [u_block[u_idx]['centroid.x'], u_block[u_idx]['centroid.y']]
+    u_value = u_block[u_idx]['value']
