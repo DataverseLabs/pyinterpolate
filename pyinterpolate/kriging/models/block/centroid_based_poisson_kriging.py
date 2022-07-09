@@ -2,7 +2,7 @@ from typing import Dict
 import geopandas as gpd
 import numpy as np
 
-from pyinterpolate.processing.transform import prepare_poisson_kriging_data
+from pyinterpolate.processing.select_values import select_poisson_kriging_data
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -75,7 +75,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     """
 
-    kriging_data = prepare_poisson_kriging_data(
+    kriging_data = select_poisson_kriging_data(
         u_block=unknown_block,
         u_point_support=unknown_block_point_support,
         k_blocks=blocks,

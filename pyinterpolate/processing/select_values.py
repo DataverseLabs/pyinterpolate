@@ -3,7 +3,7 @@ from typing import Iterable, Dict
 import numpy as np
 from scipy.linalg import fractional_matrix_power
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance
 
 
 def _rotation_matrix(angle: float) -> np.array:
@@ -277,8 +277,8 @@ def select_kriging_data(unknown_position: Iterable,
     return prepared_data
 
 
-def select_poisson_kriging_data(u_block: Dict,
-                                u_point_support: Dict,
+def select_poisson_kriging_data(u_block_centroid: np.ndarray,
+                                u_point_support: np.ndarray,
                                 k_blocks: Dict,
                                 k_point_support: Dict,
                                 nn: int,
@@ -289,16 +289,11 @@ def select_poisson_kriging_data(u_block: Dict,
 
     Parameters
     ----------
-    u_block : Dict
-              'block index': {
-                  'value_name': float,
-                  'geometry_name': MultiPolygon | Polygon,
-                  'centroid.x': float,
-                  'centroid.y': float
-              }
+    u_block_centroid : numpy array or List
+                       [index, centroid.x, centroid.y]
 
-    u_point_support : Dict
-                      {'block index': [numpy array with points]}
+    u_point_support : numpy array
+                      Numpy array of points within block [[x, y, point support value]]
 
     k_blocks : Dict
                Dictionary retrieved from the Blocks, it's structure is defined as:
@@ -338,7 +333,100 @@ def select_poisson_kriging_data(u_block: Dict,
     """
 
     # Get distances from all centroids to the unknown block centroid
-    centroids = get_block_centroids_from_polyset(k_blocks)
-    u_idx = list(u_block.keys())[0]
-    u_centroid = [u_block[u_idx]['centroid.x'], u_block[u_idx]['centroid.y']]
-    u_value = u_block[u_idx]['value']
+    k_centroids = k_blocks['data'][:, 1:]
+    k_keys = k_blocks['data'][:, 0]
+
+    if not isinstance(u_block_centroid, np.ndarray):
+        u_block_centroid = np.array(u_block_centroid)
+
+    if len(u_block_centroid) != 3:
+        raise AttributeError(
+            f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
+            f'But provided array has {len(u_block_centroid)} records!')
+
+    u_coordinates = u_block_centroid[1:]
+    u_index = u_block_centroid[0]
+
+    dists = []
+
+    if weighted:
+        # Calc from point support
+        for kidx, point_array in k_point_support.items():
+            blocks = {
+                kidx: point_array,
+                u_index: u_point_support
+            }
+            distance = calc_block_to_block_distance(blocks)
+            dists.append(distance)
+    else:
+        # Calc from centroids
+        dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
+
+    # Create Kriging Data
+    kriging_data = _parse_pk_input(k_keys, k_centroids, dists)
+
+    # Sort by distance
+    kriging_data = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
+
+    # Get distances in max search radius
+    max_search_pos = np.argmax(kriging_data[:, 4] > max_radius)
+    kriging_input = kriging_data[:max_search_pos]
+
+    # check number of observations
+    if len(kriging_input) < nn:
+        kriging_input = kriging_data[:nn]
+
+    # get total points' value in each id from prepared datasets and append it to the array
+
+    for idx, rec in enumerate(kriging_input):
+        block_id = rec[0]
+        ps_total = np.sum(k_point_support[block_id][:, -1])
+        kriging_input[idx][-1] = ps_total
+
+    return kriging_input
+
+
+def _parse_pk_input(indexes, centroids_and_values, distances):
+    """
+    Function parses given arrays into PK input.
+
+    Parameters
+    ----------
+    indexes : Collection
+
+    centroids_and_values : Collection
+
+    distances : Collection
+
+    Returns
+    -------
+    : numpy array
+        [[id, cx, cy, value, distance to unknown centroid, 0]]
+    """
+
+    if isinstance(distances[0], Dict):
+        dists = []
+        for idx, rec in enumerate(distances):
+            kk = indexes[idx]
+            dists.append(
+                rec[kk][1]
+            )
+        distances = dists
+    elif isinstance(distances[0], np.ndarray):
+        distances = [d[0] for d in distances]
+
+    nones = [0 for _ in indexes]
+
+    data = list(
+        zip(
+            indexes,
+            centroids_and_values[:, 0],
+            centroids_and_values[:, 1],
+            centroids_and_values[:, 2],
+            distances,
+            nones
+        )
+    )
+
+    data = np.array(data)
+    return data
