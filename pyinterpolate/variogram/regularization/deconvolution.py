@@ -604,7 +604,7 @@ class Deconvolution:
         if self.final_theoretical_model is None:
             raise RuntimeError('You cannot export any model if you not transform data.')
 
-        self.final_theoretical_model.export_model(fname)
+        self.final_theoretical_model.to_json(fname)
 
     def plot_variograms(self):
         """

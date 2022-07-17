@@ -14,20 +14,23 @@ AREAL_INPUT = {
 }
 
 POINT_SUPPORT_INPUT = {
-    0: np.array(
-        [[0.1, 0.1, 5],
-         [-0.1, -0.1, 10]]
-    ),
-    1: np.array(
-        [[0.1, 1.1, 3],
-         [0.1, 0.9, 3],
-         [0.1, 0.5, 4],
-         [0.1, 1.5, 10]]
-    ),
-    2: np.array(
-        [[1.1, 0.1, 4],
-         [0.9, 0.1, 15]]
-    )
+    'data': {
+        0: np.array(
+            [[0.1, 0.1, 5],
+             [-0.1, -0.1, 10]]
+        ),
+        1: np.array(
+            [[0.1, 1.1, 3],
+             [0.1, 0.9, 3],
+             [0.1, 0.5, 4],
+             [0.1, 1.5, 10]]
+        ),
+        2: np.array(
+            [[1.1, 0.1, 4],
+             [0.9, 0.1, 15]]
+        )
+    }
+
 }
 
 U_PT = np.array([3, 2, 2])
@@ -47,7 +50,10 @@ EXPECTED_RESULTS_WEIGHTED = np.array(
      [2, 1, 0, 2, 2, 19]]
 )
 
-EXPECTED_RESULTS_NON_WEIGHTED = EXPECTED_RESULTS_WEIGHTED
+EXPECTED_RESULTS_NON_WEIGHTED = np.array(
+    [[0, 0, 1, 1, 2, 15],
+     [1, 1, 0, 2, 2, 20]]
+)
 
 
 class TestSelectPoissonKrigingData(unittest.TestCase):
@@ -75,5 +81,5 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
                                                max_radius=MAX_RADIUS,
                                                weighted=False)
         prepared_as_int = prepared.astype(int)
-        array_equal = np.array_equal(prepared_as_int, EXPECTED_RESULTS_WEIGHTED)
+        array_equal = np.array_equal(prepared_as_int, EXPECTED_RESULTS_NON_WEIGHTED)
         self.assertTrue(array_equal)

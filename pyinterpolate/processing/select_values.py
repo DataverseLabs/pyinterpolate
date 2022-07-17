@@ -333,16 +333,17 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
     """
 
     # Get distances from all centroids to the unknown block centroid
-    k_centroids = k_blocks['data'][:, 1:]
-    k_keys = k_blocks['data'][:, 0]
+    k_centroids = np.array([x[1:] for x in k_blocks['data']])
 
     if not isinstance(u_block_centroid, np.ndarray):
         u_block_centroid = np.array(u_block_centroid)
 
     if len(u_block_centroid) != 3:
-        raise AttributeError(
-            f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
-            f'But provided array has {len(u_block_centroid)} records!')
+        u_block_centroid = u_block_centroid.flatten()
+        if len(u_block_centroid) != 3:
+            raise AttributeError(
+                f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
+                f'But provided array has {len(u_block_centroid)} record(s)!')
 
     u_coordinates = u_block_centroid[1:]
     u_index = u_block_centroid[0]
@@ -351,7 +352,7 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     if weighted:
         # Calc from point support
-        for kidx, point_array in k_point_support.items():
+        for kidx, point_array in k_point_support['data'].items():
             blocks = {
                 kidx: point_array,
                 u_index: u_point_support
@@ -363,7 +364,7 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
         dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
 
     # Create Kriging Data
-    kriging_data = _parse_pk_input(k_keys, k_centroids, dists)
+    kriging_data = _parse_pk_input(k_centroids, dists)
 
     # Sort by distance
     kriging_data = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
@@ -380,20 +381,25 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     for idx, rec in enumerate(kriging_input):
         block_id = rec[0]
-        ps_total = np.sum(k_point_support[block_id][:, -1])
+        try:
+            points_within_block = k_point_support['data'][block_id]
+        except KeyError as kex:
+            if isinstance(k_point_support, Dict):
+                points_within_block = k_point_support[block_id]
+            else:
+                raise kex
+        ps_total = np.sum(points_within_block[:, -1])
         kriging_input[idx][-1] = ps_total
 
     return kriging_input
 
 
-def _parse_pk_input(indexes, centroids_and_values, distances):
+def _parse_pk_input(centroids_and_values, distances):
     """
     Function parses given arrays into PK input.
 
     Parameters
     ----------
-    indexes : Collection
-
     centroids_and_values : Collection
 
     distances : Collection
@@ -403,17 +409,20 @@ def _parse_pk_input(indexes, centroids_and_values, distances):
     : numpy array
         [[id, cx, cy, value, distance to unknown centroid, 0]]
     """
+    indexes = []
+    dists = []
 
-    if isinstance(distances[0], Dict):
+    if isinstance(distances[0], dict):
         dists = []
-        for idx, rec in enumerate(distances):
-            kk = indexes[idx]
+        for rec in distances:
+            k0 = list(rec.keys())[0]
             dists.append(
-                rec[kk][1]
+                rec[k0][1]
             )
-        distances = dists
-    elif isinstance(distances[0], np.ndarray):
-        distances = [d[0] for d in distances]
+            indexes.append(k0)
+    elif isinstance(distances, np.ndarray):
+        indexes = [x[0] for x in centroids_and_values]
+        dists = [x[0] for x in distances]
 
     nones = [0 for _ in indexes]
 
@@ -423,7 +432,7 @@ def _parse_pk_input(indexes, centroids_and_values, distances):
             centroids_and_values[:, 0],
             centroids_and_values[:, 1],
             centroids_and_values[:, 2],
-            distances,
+            dists,
             nones
         )
     )
