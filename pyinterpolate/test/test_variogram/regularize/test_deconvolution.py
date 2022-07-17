@@ -5,7 +5,8 @@ from pyinterpolate.processing.point.structure import get_point_support_from_file
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram.regularization.deconvolution import Deconvolution
 
-DATASET = '../../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+OUTPUT = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -64,6 +65,12 @@ class TestDeconvolution(unittest.TestCase):
 
         self.assertTrue(dcv.final_theoretical_model is not None)
         self.assertEqual(len(dcv.deviations), 3)
+
+        try:
+            with open(OUTPUT, 'r') as ostream:
+                pass
+        except FileNotFoundError:
+            dcv.export_model(OUTPUT)
 
     def test_fit_transform(self):
         dcv1 = Deconvolution(verbose=False)

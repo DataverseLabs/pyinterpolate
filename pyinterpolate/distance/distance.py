@@ -20,7 +20,7 @@ def calc_block_to_block_distance(blocks: Dict) -> Dict:
                       {block id : [distances to other blocks]}. Block ids in the order from the list of
                       distances.
     """
-    block_keys = sorted(list(blocks.keys()))
+    block_keys = list(blocks.keys())
     block_distances = dict()
     for k_i in block_keys:
         i_block = blocks[k_i]

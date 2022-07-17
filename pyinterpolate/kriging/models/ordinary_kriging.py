@@ -5,7 +5,7 @@ from typing import List, Union, Tuple
 import numpy as np
 
 # Pyinterpolate
-from pyinterpolate.kriging.utils.matrices import get_predictions, solve_weights
+from pyinterpolate.kriging.utils.process import get_predictions, solve_weights
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -72,6 +72,8 @@ def ordinary_kriging(
     weights = np.r_[predicted_with_ones_col, p_ones_row]
 
     output_weights = solve_weights(weights, k, allow_approximate_solutions)
+
+    zhat = np.nan
     try:
         zhat = dataset[:, -2].dot(output_weights[:-1])
     except ValueError:

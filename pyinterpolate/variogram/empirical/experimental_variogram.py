@@ -5,7 +5,6 @@ import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
 
-from pyinterpolate.processing.polygon.structure import PolygonDataClass
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
@@ -17,10 +16,10 @@ class ExperimentalVariogram:
 
     Parameters
     ----------
-    input_array : numpy array, list, dict, PolygonDataClass
+    input_array : numpy array, list, tuple
                   As a list and numpy array: coordinates and their values: (pt x, pt y, value),
                   as a dict: polyset = {'points': numpy array with coordinates and their values},
-                  as a PolygonDataClass: PolygonDataClass.polyset['points']
+                  as a Blocks: Blocks.polyset['points']
 
     step_size : float
                 distance between lags within each points are included in the calculations.
@@ -167,7 +166,7 @@ class ExperimentalVariogram:
     """
 
     def __init__(self,
-                 input_array: Union[np.ndarray, list, tuple, PolygonDataClass, dict],
+                 input_array: Union[np.ndarray, list, tuple],
                  step_size: float,
                  max_range: float,
                  weights=None,
@@ -178,11 +177,10 @@ class ExperimentalVariogram:
                  is_variance=True):
 
         self.input_array = None  # core structure
-        # Structures for areal data
-        self.polyset = None
-        self.polygon_data_class = None
-
-        self._parse_input_array(input_array)
+        if isinstance(input_array, np.ndarray):
+            self.input_array = input_array
+        else:
+            self.input_array = np.array(input_array)
 
         # Object main attributes
         self.experimental_semivariance_array = None
@@ -304,36 +302,6 @@ class ExperimentalVariogram:
             direction=self.direct,
             tolerance=self.tol
         )
-
-    def _parse_input_array(self, input_array) -> None:
-        """
-        Method parses input array into a valid structure.
-
-        Parameters
-        ----------
-        input_array : numpy array, list, dict, PolygonDataClass
-                      As a list and numpy array: coordinates and their values: (pt x, pt y, value),
-                      as a dict: polyset = {'points': numpy array with coordinates and their values},
-                      as a PolygonDataClass: PolygonDataClass.polyset['points']
-        """
-
-        if isinstance(input_array, PolygonDataClass):
-            self.input_array = input_array.polyset['points']
-            self.polygon_data_class = input_array
-            self.polyset = None
-        elif isinstance(input_array, dict):
-            # Check if it is a valid dict
-            self.input_array = input_array['points']
-            self.polyset = input_array
-            self.polygon_data_class = None
-        elif isinstance(input_array, np.ndarray):
-            self.input_array = input_array
-            self.polyset = None
-            self.polygon_data_class = None
-        else:
-            self.input_array = np.array(input_array)
-            self.polyset = None
-            self.polygon_data_class = None
 
     def __repr__(self):
         cname = 'ExperimentalVariogram'

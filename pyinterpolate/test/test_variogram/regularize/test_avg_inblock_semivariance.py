@@ -5,13 +5,13 @@ import numpy as np
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
 from pyinterpolate.processing.point.structure import get_point_support_from_files
-from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_block_centroids_from_polyset
+from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
 from pyinterpolate.variogram.regularization.block.avg_inblock_semivariances import calculate_average_semivariance
 
 
-DATASET = '../../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -88,7 +88,7 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
 
     def test_avg_from_inblock_real_world_data(self):
         # Variogram model
-        bc = get_block_centroids_from_polyset(AREAL_INPUT)
+        bc = AREAL_INPUT['data'][:, 1:]
         experimental_variogram_of_areal_data = build_experimental_variogram(bc,
                                                                             step_size=STEP_SIZE,
                                                                             max_range=MAX_RANGE)

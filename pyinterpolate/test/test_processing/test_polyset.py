@@ -2,6 +2,7 @@ import unittest
 from typing import Dict
 
 import geopandas as gpd
+import numpy as np
 
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_polyset_from_geodataframe
 from pyinterpolate.processing.utils.exceptions import WrongGeometryTypeError
@@ -35,12 +36,13 @@ class TestPolyset(unittest.TestCase):
         polyset = get_polyset_from_geodataframe(gdf, 'value', use_index=True)
 
         # Test keys
-        kk = {'blocks', 'info'}
+        kk = {'geometry', 'info', 'data'}
         check_keys = set(polyset.keys()) == kk
         self.assertTrue(check_keys)
 
-        # Test points
-        self.assertIsInstance(polyset['blocks'], Dict)
+        # Test instances
+        self.assertIsInstance(polyset['geometry'], Dict)
+        self.assertIsInstance(polyset['data'], np.ndarray)
 
         # Test info
         info_keys = {'index_name', 'geometry_name', 'value_name', 'crs'}

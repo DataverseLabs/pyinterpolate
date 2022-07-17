@@ -6,7 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
-from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
 from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances import \
@@ -24,24 +23,19 @@ class AggregatedVariogram:
     Parameters
     ----------
     aggregated_data : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+                      Dictionary retrieved from the Blocks, it's structure is defined as:
+                      polyset = {
+                          'geometry': {
+                              'block index': geometry
+                          }
+                          'data': [[index centroid.x, centroid.y value]],
+                          'info': {
+                              'index_name': the name of the index column,
+                              'geometry_name': the name of the geometry column,
+                              'value_name': the name of the value column,
+                              'crs': CRS of a dataset
+                          }
+                      }
 
     agg_step_size : float
                     Step size between lags.
@@ -457,7 +451,7 @@ class AggregatedVariogram:
         """
 
         gammas = build_experimental_variogram(
-            input_array=get_block_centroids_from_polyset(self.aggregated_data),
+            input_array=self.aggregated_data['data'][:, 1:],
             step_size=self.agg_step_size,
             max_range=self.agg_max_range,
             weights=None,
@@ -472,10 +466,10 @@ def regularize(aggregated_data: Dict,
                agg_step_size: float,
                agg_max_range: float,
                point_support: Dict,
-               average_inblock_semivariances = None,
-               semivariance_between_point_supports = None,
-               experimental_block_variogram = None,
-               theoretical_block_model = None,
+               average_inblock_semivariances=None,
+               semivariance_between_point_supports=None,
+               experimental_block_variogram=None,
+               theoretical_block_model=None,
                agg_direction: float = 0,
                agg_tolerance: float = 1,
                variogram_weighting_method: str = 'closest',
@@ -488,24 +482,19 @@ def regularize(aggregated_data: Dict,
     Parameters
     ----------
     aggregated_data : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+                      Dictionary retrieved from the Blocks, it's structure is defined as:
+                      polyset = {
+                          'geometry': {
+                              'block index': geometry
+                          }
+                          'data': [[index centroid.x, centroid.y value]],
+                          'info': {
+                              'index_name': the name of the index column,
+                              'geometry_name': the name of the geometry column,
+                              'value_name': the name of the value column,
+                              'crs': CRS of a dataset
+                          }
+                      }
 
     agg_step_size : float
                     Step size between lags.

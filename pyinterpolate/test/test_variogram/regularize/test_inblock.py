@@ -1,7 +1,7 @@
 import unittest
 from typing import Dict
 
-from pyinterpolate.processing.polygon.structure import get_polyset_from_file, get_block_centroids_from_polyset
+from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.block.inblock_semivariance import calculate_inblock_semivariance
@@ -34,7 +34,7 @@ class TestDeconvolution(unittest.TestCase):
 
     def test_calculate_inblock(self):
         # Variogram model
-        bc = get_block_centroids_from_polyset(AREAL_INPUT)
+        bc = AREAL_INPUT['data'][:, 1:]
         experimental_variogram_of_areal_data = build_experimental_variogram(bc,
                                                                             step_size=STEP_SIZE,
                                                                             max_range=MAX_RANGE)

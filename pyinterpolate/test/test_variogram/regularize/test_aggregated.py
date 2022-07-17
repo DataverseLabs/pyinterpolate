@@ -7,7 +7,7 @@ from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram.regularization.aggregated import AggregatedVariogram, regularize
 
 
-DATASET = '../../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'

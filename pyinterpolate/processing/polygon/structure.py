@@ -7,50 +7,7 @@ import pandas as pd
 from pyinterpolate.processing.utils.exceptions import IndexColNotUniqueError, WrongGeometryTypeError
 
 
-def get_block_centroids_from_polyset(polyset: Dict) -> np.ndarray:
-    """
-
-    Parameters
-    ----------
-    polyset : dict
-              Prepared dict with Polygon data. It's structure is:
-              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                        'index_name': the name of the index column,
-                        'geometry_name': the name of the geometry column,
-                        'value_name': the name of the value column,
-                        'crs': CRS of a dataset
-                }
-            }
-
-    Returns
-    -------
-    ds : numpy array
-         [[x, y, value],
-          [...],
-         ]
-    """
-    value_column_name = polyset['info']['value_name']
-    out = []
-    for rec in list(polyset['blocks'].keys()):
-        val = polyset['blocks'][rec][value_column_name]
-        cx = polyset['blocks'][rec]['centroid.x']
-        cy = polyset['blocks'][rec]['centroid.y']
-        out.append([cx, cy, val])
-
-    ds = np.array(out)
-    return ds
-
-
-class PolygonDataClass:
+class Blocks:
     """
     Class stores and prepares aggregated data.
 
@@ -63,22 +20,18 @@ class PolygonDataClass:
     ----------
     polyset : dict
               Prepared dict with Polygon data. It's structure is:
-              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                        'index_name': the name of the index column,
-                        'geometry_name': the name of the geometry column,
-                        'value_name': the name of the value column,
-                        'crs': CRS of a dataset
-                }
-            }
+                  polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
 
     control_geometry : bool
                        Test if given geometries are all Polygon or MultiPolygon type.
@@ -93,7 +46,7 @@ class PolygonDataClass:
 
     Examples
     --------
-    >>> geocls = PolygonDataClass()
+    >>> geocls = Blocks()
     >>> geocls.from_file('testfile.shp', value_col='val', geometry_col='geometry', index_col='idx')
     >>> parsed = geocls.polyset
     >>> print(list(parsed.keys()))
@@ -123,24 +76,19 @@ class PolygonDataClass:
     def _parse(dataset, val_col: str, geo_col: str, idx_col: str):
         """
         polyset : dict
-              Prepared dict with Polygon data. It's structure is:
-              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                        'index_name': the name of the index column,
-                        'geometry_name': the name of the geometry column,
-                        'value_name': the name of the value column,
-                        'crs': CRS of a dataset
-                }
-            }
-
+                  Prepared dict with Polygon data. It's structure is:
+                  polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
         """
         pd.options.mode.chained_assignment = None  # Disable setting with copy warning
         cx = 'centroid.x'
@@ -153,13 +101,16 @@ class PolygonDataClass:
         dataset[cx] = cxs
         dataset[cy] = cys
 
-        dataset.set_index(idx_col, inplace=True)
+        _data = dataset[[idx_col, cx, cy, val_col]].values
+        _geometries = dataset[[idx_col, geo_col]].copy()
+        _geometries.set_index(idx_col, inplace=True)
 
         # Group data
-        ds = dataset.transpose().to_dict()
+        _geometry = _geometries.transpose().to_dict()
 
         datadict = {
-            'blocks': ds,
+            'geometry': _geometry,
+            'data': _data,
             'info': {
                 'index_name': idx_col,
                 'geometry_name': geo_col,
@@ -289,7 +240,7 @@ def get_polyset_from_geodataframe(gdf: gpd.GeoDataFrame,
                                   value_col: str,
                                   geometry_col: str = 'geometry',
                                   use_index=True,
-                                  index_col: Union[str, None] = None):
+                                  index_col: Union[str, None] = None) -> Dict:
     """
     Function prepares polyset object from GeoDataFrame.
 
@@ -313,25 +264,21 @@ def get_polyset_from_geodataframe(gdf: gpd.GeoDataFrame,
     -------
     polyset : dict
               Prepared dict with Polygon data. It's structure is:
-              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                        'index_name': the name of the index column,
-                        'geometry_name': the name of the geometry column,
-                        'value_name': the name of the value column,
-                        'crs': CRS of a dataset
-                }
-            }
+                  polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
 
     """
-    polyclass = PolygonDataClass()
+    polyclass = Blocks()
     polyclass.from_geodataframe(gdf, value_col, geometry_col, use_index, index_col=index_col)
     return polyclass.polyset
 
@@ -340,7 +287,7 @@ def get_polyset_from_file(fpath: str,
                           value_col: str,
                           geometry_col: str = 'geometry',
                           index_col: str = None,
-                          layer_name: str = None):
+                          layer_name: str = None) -> Dict:
     """
     Function prepares polyset object from spatial file.
 
@@ -366,24 +313,20 @@ def get_polyset_from_file(fpath: str,
     -------
     polyset : dict
               Prepared dict with Polygon data. It's structure is:
-              polyset = {
-                'blocks': {
-                    'block index': {
-                        'value_name': float,
-                        'geometry_name': MultiPolygon | Polygon,
-                        'centroid.x': float,
-                        'centroid.y': float
-                    }
-                }
-                'info': {
-                        'index_name': the name of the index column,
-                        'geometry_name': the name of the geometry column,
-                        'value_name': the name of the value column,
-                        'crs': CRS of a dataset
-                }
-            }
+                  polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
 
     """
-    polyclass = PolygonDataClass()
+    polyclass = Blocks()
     polyclass.from_file(fpath, value_col, geometry_col, index_col, layer_name)
     return polyclass.polyset

@@ -1,9 +1,9 @@
-from typing import Iterable
+from typing import Iterable, Dict
 
 import numpy as np
 from scipy.linalg import fractional_matrix_power
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance
 
 
 def _rotation_matrix(angle: float) -> np.array:
@@ -275,3 +275,167 @@ def select_kriging_data(unknown_position: Iterable,
         prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
 
     return prepared_data
+
+
+def select_poisson_kriging_data(u_block_centroid: np.ndarray,
+                                u_point_support: np.ndarray,
+                                k_blocks: Dict,
+                                k_point_support: Dict,
+                                nn: int,
+                                max_radius: float,
+                                weighted: bool) -> np.ndarray:
+    """
+    Function prepares data for the Poisson Kriging Process.
+
+    Parameters
+    ----------
+    u_block_centroid : numpy array or List
+                       [index, centroid.x, centroid.y]
+
+    u_point_support : numpy array
+                      Numpy array of points within block [[x, y, point support value]]
+
+    k_blocks : Dict
+               Dictionary retrieved from the Blocks, it's structure is defined as:
+               polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
+
+    k_point_support : Dict
+                      Point support data as a Dict:
+
+                        point_support = {
+                            'area_id': [numpy array with points]
+                        }
+
+    nn : int
+         The minimum number of neighbours that potentially affect block.
+
+    max_radius : float
+                 The maximum radius of search for the closest neighbors.
+
+    weighted : bool
+               Are distances between blocks weighted by point support?
+
+    Returns
+    -------
+    dataset : numpy array
+              [block id, cx, cy, value, distance to unknown, aggregated point support sum]
+    """
+
+    # Get distances from all centroids to the unknown block centroid
+    k_centroids = np.array([x[1:] for x in k_blocks['data']])
+
+    if not isinstance(u_block_centroid, np.ndarray):
+        u_block_centroid = np.array(u_block_centroid)
+
+    if len(u_block_centroid) != 3:
+        u_block_centroid = u_block_centroid.flatten()
+        if len(u_block_centroid) != 3:
+            raise AttributeError(
+                f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
+                f'But provided array has {len(u_block_centroid)} record(s)!')
+
+    u_coordinates = u_block_centroid[1:]
+    u_index = u_block_centroid[0]
+
+    dists = []
+
+    if weighted:
+        # Calc from point support
+        for kidx, point_array in k_point_support['data'].items():
+            blocks = {
+                kidx: point_array,
+                u_index: u_point_support
+            }
+            distance = calc_block_to_block_distance(blocks)
+            dists.append(distance)
+    else:
+        # Calc from centroids
+        dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
+
+    # Create Kriging Data
+    kriging_data = _parse_pk_input(k_centroids, dists)
+
+    # Sort by distance
+    kriging_data = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
+
+    # Get distances in max search radius
+    max_search_pos = np.argmax(kriging_data[:, 4] > max_radius)
+    kriging_input = kriging_data[:max_search_pos]
+
+    # check number of observations
+    if len(kriging_input) < nn:
+        kriging_input = kriging_data[:nn]
+
+    # get total points' value in each id from prepared datasets and append it to the array
+
+    for idx, rec in enumerate(kriging_input):
+        block_id = rec[0]
+        try:
+            points_within_block = k_point_support['data'][block_id]
+        except KeyError as kex:
+            if isinstance(k_point_support, Dict):
+                points_within_block = k_point_support[block_id]
+            else:
+                raise kex
+        ps_total = np.sum(points_within_block[:, -1])
+        kriging_input[idx][-1] = ps_total
+
+    return kriging_input
+
+
+def _parse_pk_input(centroids_and_values, distances):
+    """
+    Function parses given arrays into PK input.
+
+    Parameters
+    ----------
+    centroids_and_values : Collection
+
+    distances : Collection
+
+    Returns
+    -------
+    : numpy array
+        [[id, cx, cy, value, distance to unknown centroid, 0]]
+    """
+    indexes = []
+    dists = []
+
+    if isinstance(distances[0], dict):
+        dists = []
+        for rec in distances:
+            k0 = list(rec.keys())[0]
+            dists.append(
+                rec[k0][1]
+            )
+            indexes.append(k0)
+    elif isinstance(distances, np.ndarray):
+        indexes = [x[0] for x in centroids_and_values]
+        dists = [x[0] for x in distances]
+
+    nones = [0 for _ in indexes]
+
+    data = list(
+        zip(
+            indexes,
+            centroids_and_values[:, 0],
+            centroids_and_values[:, 1],
+            centroids_and_values[:, 2],
+            dists,
+            nones
+        )
+    )
+
+    data = np.array(data)
+    return data
