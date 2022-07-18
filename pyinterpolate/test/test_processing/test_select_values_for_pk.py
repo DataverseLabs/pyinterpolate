@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from pyinterpolate.processing.select_values import select_poisson_kriging_data
+from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
 
 AREAL_INPUT = {
     'geometry': None,
@@ -59,13 +59,13 @@ EXPECTED_RESULTS_NON_WEIGHTED = np.array(
 class TestSelectPoissonKrigingData(unittest.TestCase):
 
     def test_case_weighted(self):
-        prepared = select_poisson_kriging_data(u_block_centroid=U_PT,
-                                               u_point_support=U_PS,
-                                               k_blocks=AREAL_INPUT,
-                                               k_point_support=POINT_SUPPORT_INPUT,
-                                               nn=NN,
-                                               max_radius=MAX_RADIUS,
-                                               weighted=WEIGHTED)
+        prepared = select_centroid_poisson_kriging_data(u_block_centroid=U_PT,
+                                                        u_point_support=U_PS,
+                                                        k_blocks=AREAL_INPUT,
+                                                        k_point_support=POINT_SUPPORT_INPUT,
+                                                        nn=NN,
+                                                        max_radius=MAX_RADIUS,
+                                                        weighted=WEIGHTED)
 
         self.assertIsInstance(prepared, np.ndarray)
         prepared_as_int = prepared.astype(int)
@@ -73,13 +73,13 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
         self.assertTrue(array_equal)
 
     def test_case_non_weighted(self):
-        prepared = select_poisson_kriging_data(u_block_centroid=U_PT,
-                                               u_point_support=U_PS,
-                                               k_blocks=AREAL_INPUT,
-                                               k_point_support=POINT_SUPPORT_INPUT,
-                                               nn=NN,
-                                               max_radius=MAX_RADIUS,
-                                               weighted=False)
+        prepared = select_centroid_poisson_kriging_data(u_block_centroid=U_PT,
+                                                        u_point_support=U_PS,
+                                                        k_blocks=AREAL_INPUT,
+                                                        k_point_support=POINT_SUPPORT_INPUT,
+                                                        nn=NN,
+                                                        max_radius=MAX_RADIUS,
+                                                        weighted=False)
         prepared_as_int = prepared.astype(int)
         array_equal = np.array_equal(prepared_as_int, EXPECTED_RESULTS_NON_WEIGHTED)
         self.assertTrue(array_equal)

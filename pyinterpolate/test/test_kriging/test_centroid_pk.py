@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import centroid_poisson_kriging, weights_array
+from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import centroid_poisson_kriging
 from pyinterpolate.processing.point.structure import get_point_support_from_files
 from pyinterpolate.processing.polygon.structure import get_polyset_from_file
 from pyinterpolate.variogram import TheoreticalVariogram
@@ -127,17 +127,3 @@ class TestCentroidPK(unittest.TestCase):
                                             number_of_neighbors=3,
                                             max_neighbors_radius=3)
         self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 399, 0]))
-
-
-class TestWeightingArray(unittest.TestCase):
-
-    def test_weighting_method(self):
-        blocks = np.array([1, 2, 3, 4, 5])
-        points = np.array([10, 20, 10, 20, 10])
-
-        shape = (5, 5)
-
-        weights = weights_array(shape, blocks, points)
-        expected_arr = np.ones(shape=shape)
-        np.fill_diagonal(expected_arr, 3)
-        self.assertTrue(np.array_equal(weights, expected_arr))

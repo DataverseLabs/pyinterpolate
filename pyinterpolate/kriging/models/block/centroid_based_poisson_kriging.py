@@ -2,7 +2,8 @@ from typing import Dict, List
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
-from pyinterpolate.processing.select_values import select_poisson_kriging_data
+from pyinterpolate.kriging.models.block.weight import weights_array
+from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -66,11 +67,11 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     Returns
     -------
     results : List
-              [prediction, error, unknown block index]
+              [unknown block index, prediction, error]
 
     """
     # Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]
-    kriging_data = select_poisson_kriging_data(
+    kriging_data = select_centroid_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_blocks=blocks,
@@ -130,29 +131,3 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     # Prepare output
     results = [unknown_block[0], zhat, sigma]
     return results
-
-
-def weights_array(predicted_semivariances_shape, block_vals, point_support_vals) -> np.array:
-    """
-    Function calculates additional diagonal weights for the matrix of predicted semivariances.
-
-    Parameters
-    ----------
-    predicted_semivariances_shape : Tuple
-                                    The size of semivariances array (nrows x ncols).
-
-    block_vals : numpy array
-
-    point_support_vals : numpy array
-
-    Returns
-    -------
-    : numpy array
-        The mask with zeros and diagonal weights.
-    """
-
-    weighted_array = np.sum(block_vals * point_support_vals)
-    weight = weighted_array / np.sum(point_support_vals)
-    w = np.ones(shape=predicted_semivariances_shape)
-    np.fill_diagonal(w, weight)
-    return w

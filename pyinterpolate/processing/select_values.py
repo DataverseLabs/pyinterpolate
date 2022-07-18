@@ -277,15 +277,14 @@ def select_kriging_data(unknown_position: Iterable,
     return prepared_data
 
 
-def select_poisson_kriging_data(u_block_centroid: np.ndarray,
-                                u_point_support: np.ndarray,
-                                k_blocks: Dict,
-                                k_point_support: Dict,
-                                nn: int,
-                                max_radius: float,
-                                weighted: bool) -> np.ndarray:
+def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
+                                    u_point_support: np.ndarray,
+                                    k_blocks: Dict,
+                                    k_point_support: Dict,
+                                    nn: int,
+                                    max_radius: float):
     """
-    Function prepares data for the Poisson Kriging Process.
+    Function prepares data for the centroid-based Poisson Kriging Process.
 
     Parameters
     ----------
@@ -314,7 +313,69 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
                       Point support data as a Dict:
 
                         point_support = {
-                            'area_id': [numpy array with points]
+                            'data': {
+                                'area_id': [numpy array with points]
+                            }
+                            'info': {...}
+                        }
+
+    nn : int
+         The minimum number of neighbours that potentially affect block.
+
+    max_radius : float
+                 The maximum radius of search for the closest neighbors.
+
+    Returns
+    -------
+    datasets : List[numpy array, numpy array]
+               [array[block id, block value],
+    #           array[[know point support val, unknown point support val, distance between points], ...]]]
+    """
+    indexes = list(k_point_support['data'].keys())
+    block_values = []
+
+
+def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
+                                         u_point_support: np.ndarray,
+                                         k_blocks: Dict,
+                                         k_point_support: Dict,
+                                         nn: int,
+                                         max_radius: float,
+                                         weighted: bool) -> np.ndarray:
+    """
+    Function prepares data for the centroid-based Poisson Kriging Process.
+
+    Parameters
+    ----------
+    u_block_centroid : numpy array or List
+                       [index, centroid.x, centroid.y]
+
+    u_point_support : numpy array
+                      Numpy array of points within block [[x, y, point support value]]
+
+    k_blocks : Dict
+               Dictionary retrieved from the Blocks, it's structure is defined as:
+               polyset = {
+                      'geometry': {
+                          'block index': geometry
+                      }
+                      'data': [[index centroid.x, centroid.y value]],
+                      'info': {
+                          'index_name': the name of the index column,
+                          'geometry_name': the name of the geometry column,
+                          'value_name': the name of the value column,
+                          'crs': CRS of a dataset
+                      }
+                  }
+
+    k_point_support : Dict
+                      Point support data as a Dict:
+
+                        point_support = {
+                            'data': {
+                                'area_id': [numpy array with points]
+                            }
+                            'info': {...}
                         }
 
     nn : int
