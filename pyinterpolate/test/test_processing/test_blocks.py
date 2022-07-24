@@ -5,11 +5,11 @@ import geopandas as gpd
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 
 
-SHAPEFILE = '../samples/areal_data/test_areas_pyinterpolate.shp'
-GEOJSON = '../samples/areal_data/test_areas_pyinterpolate.geojson'
-SHAPEFILE_PTS = '../samples/point_data/shapefile/test_points_pyinterpolate.shp'
+SHAPEFILE = 'samples/areal_data/test_areas_pyinterpolate.shp'
+GEOJSON = 'samples/areal_data/test_areas_pyinterpolate.geojson'
+SHAPEFILE_PTS = 'samples/point_data/shapefile/test_points_pyinterpolate.shp'
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
+DATASET = 'samples/regularization/cancer_data.gpkg'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'

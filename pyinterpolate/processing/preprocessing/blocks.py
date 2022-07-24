@@ -50,6 +50,8 @@ class Blocks:
         self.value_column_name = None
         self.index_column_name = None
         self.geometry_column_name = None
+        self.cx = 'centroid.x'
+        self.cy = 'centroid.y'
 
     @staticmethod
     def _check_index(ds, idx_col):
@@ -58,8 +60,7 @@ class Blocks:
         if dsl != nuniq:
             raise IndexColNotUniqueError(dsl, nuniq)
 
-    @staticmethod
-    def _parse(dataset, val_col, geo_col, idx_col):
+    def _parse(self, dataset, val_col, geo_col, idx_col):
         """
         dataset : gpd.GeoDataFrame
                   GeoDataFrame with selected index, value and geometry columns and calculated centroid x and
@@ -67,17 +68,15 @@ class Blocks:
         """
 
         pd.options.mode.chained_assignment = None  # Disable setting with copy warning
-        cx = 'centroid.x'
-        cy = 'centroid.y'
 
         # Build centroids
         centroids = dataset[geo_col].centroid
         cxs = centroids.x
         cys = centroids.y
-        dataset[cx] = cxs
-        dataset[cy] = cys
+        dataset[self.cx] = cxs
+        dataset[self.cy] = cys
 
-        return dataset[[idx_col, geo_col, val_col, cx, cy]]
+        return dataset[[idx_col, geo_col, val_col, self.cx, self.cy]]
 
     def set_names(self, val_col, geom_col, idx_col):
         self.value_column_name = val_col
