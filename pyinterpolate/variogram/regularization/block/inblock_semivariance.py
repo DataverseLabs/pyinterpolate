@@ -1,9 +1,11 @@
 from multiprocessing import Manager, Pool
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
 
+import geopandas as gpd
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.processing.preprocessing.blocks import PointSupport
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
 
@@ -39,45 +41,23 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     return average_block_semivariance
 
 
-def multi_inblock_semivariance(output_dict: Dict, block: Tuple, variogram_model: TheoreticalVariogram):
-    """
-    Function calculates inblock semivariance and updates given dict with a results.
-
-    Parameters
-    ----------
-    output_dict : Dict
-
-    block : Tuple
-            (area id, points array)
-
-    variogram_model : TheoreticalVariogram
-
-    """
-    semi = inblock_semivariance(block[1], variogram_model)
-    output_dict[block[0]] = semi
-
-
-def calculate_inblock_semivariance(point_support: Dict,
-                                   variogram_model: TheoreticalVariogram,
-                                   n_workers=1) -> Dict:
+def calculate_inblock_semivariance(point_support: Union[PointSupport, gpd.GeoDataFrame, np.ndarray],
+                                   variogram_model: TheoreticalVariogram) -> Dict:
     """
     Method calculates inblock semivariance of a given areas.
 
 
     Parameters
     ----------
-    point_support : Dict
-                    Point support data as a Dict:
-
-                    point_support = {
-                        'area_id': [numpy array with points]
-                    }
+    point_support : geopandas GeoDataFrame | Point Support | numpy array
+                    Point support data. It can be provided:
+                        - directly as PointSupport object,
+                        - GeoDataFrame (then GeoDataFrame must have columns: 'ds' - values, 'x' - point
+                          geometry x, 'y' - point geometry y, 'index' - block indexes,
+                        - numpy array [block index, coordinate x, coordinate y, value].
 
     variogram_model : TheoreticalVariogram
                       Modeled variogram fitted to the areal data.
-
-    n_workers : int, default = 1
-                Set to > 1 to parallelize calculations.
 
     Returns
     -------
@@ -99,21 +79,21 @@ def calculate_inblock_semivariance(point_support: Dict,
     #       10^2x10^2:10^4x10^4. It must be investigated further in the future!
 
     inblock_semivariances = {}
-    # Sequential version
-    if n_workers == 1:
-        for area in list(point_support.keys()):
-            inblock_semi = inblock_semivariance(point_support[area], variogram_model)
-            inblock_semivariances[area] = inblock_semi
-    # Multiprocessing version
+
+    # Use func for different types of input
+
+    if isinstance(point_support, PointSupport):
+        pass
+    elif isinstance(point_support, gpd.GeoDataFrame):
+        pass
+    elif isinstance(point_support, np.ndarray):
+        pass
     else:
-        manager = Manager()
-        inblock_semivariances = manager.dict()
-        pool = Pool(n_workers)
-
-        for pointset in point_support.items():
-            pool.apply_async(multi_inblock_semivariance, args=(inblock_semivariances, pointset, variogram_model))
-
-        pool.close()
-        pool.join()
+        raise TypeError(f'Point support type {type(point_support)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame or numpy array. See docs.')
 
     return inblock_semivariances.copy()
+
+
+def _calculate_inblock_semivariance_from_point_support_class(point_support, variogram_model):
+    block_indexes =
