@@ -2,6 +2,7 @@ from typing import Dict, Union
 
 import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.processing.preprocessing.blocks import PointSupport
@@ -39,7 +40,7 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     return average_block_semivariance
 
 
-def calculate_inblock_semivariance(point_support: Union[PointSupport, gpd.GeoDataFrame, np.ndarray],
+def calculate_inblock_semivariance(point_support: Union[Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                                    variogram_model: TheoreticalVariogram) -> Dict:
     """
     Method calculates inblock semivariance of a given areas.
@@ -50,9 +51,10 @@ def calculate_inblock_semivariance(point_support: Union[PointSupport, gpd.GeoDat
     point_support : geopandas GeoDataFrame | Point Support | numpy array
                     Point support data. It can be provided:
                         - directly as PointSupport object,
-                        - GeoDataFrame (then GeoDataFrame must have columns: 'ds' - values, 'x' - point
+                        - GeoDataFrame | DataFrame (then DataFrame must have columns: 'ds' - values, 'x' - point
                           geometry x, 'y' - point geometry y, 'index' - block indexes,
-                        - numpy array [block index, coordinate x, coordinate y, value].
+                        - numpy array [block index, coordinate x, coordinate y, value],
+                        - Dict: {block id: [[point x, point y, value]]}.
 
     variogram_model : TheoreticalVariogram
                       Modeled variogram fitted to the areal data.
@@ -79,21 +81,23 @@ def calculate_inblock_semivariance(point_support: Union[PointSupport, gpd.GeoDat
     if isinstance(point_support, PointSupport):
         inblock_semivariances = _calculate_inblock_semivariance_from_point_support_class(point_support,
                                                                                          variogram_model)
-    elif isinstance(point_support, gpd.GeoDataFrame):
-        inblock_semivariances = _calculate_inblock_semivariance_from_geodataframe(point_support,
-                                                                                  variogram_model)
+    elif isinstance(point_support, gpd.GeoDataFrame) or isinstance(point_support, pd.DataFrame):
+        inblock_semivariances = _calculate_inblock_semivariance_from_dataframe(point_support,
+                                                                               variogram_model)
     elif isinstance(point_support, np.ndarray):
         inblock_semivariances = _calculate_inblock_semivariance_from_numpy_array(point_support,
                                                                                  variogram_model)
+    elif isinstance(point_support, Dict):
+        inblock_semivariances = _calculate_inblock_semivariance_from_dict(point_support, variogram_model)
     else:
         raise TypeError(f'Point support type {type(point_support)} not recognized. You may use PointSupport,'
-                        f' Geopandas GeoDataFrame or numpy array. See docs.')
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
 
     return inblock_semivariances.copy()
 
 
-def _calculate_inblock_semivariance_from_geodataframe(point_support: gpd.GeoDataFrame,
-                                                      variogram_model: TheoreticalVariogram):
+def _calculate_inblock_semivariance_from_dataframe(point_support: Union[gpd.GeoDataFrame, pd.DataFrame],
+                                                   variogram_model: TheoreticalVariogram):
     """
     Method calculates inblock semivariance of a given areas from the GeoDataFrame object. GeoDataFrame must have
     columns: 'ds' - values, 'x' - point geometry x, 'y' - point geometry y, 'index' - block indexes.
@@ -101,7 +105,7 @@ def _calculate_inblock_semivariance_from_geodataframe(point_support: gpd.GeoData
 
     Parameters
     ----------
-    point_support : GeoDataFrame
+    point_support : Union[gpd.GeoDataFrame, pd.DataFrame]
                     Columns: x, y, ds, index
 
     variogram_model : TheoreticalVariogram
@@ -127,6 +131,37 @@ def _calculate_inblock_semivariance_from_geodataframe(point_support: gpd.GeoData
         data_points = data_points[
             ['x', 'y', 'ds']
         ].values
+
+        inblock = inblock_semivariance(data_points, variogram_model)
+        inblock_semivariances[unique_area] = inblock
+
+    return inblock_semivariances
+
+
+def _calculate_inblock_semivariance_from_dict(point_support: Dict, variogram_model: TheoreticalVariogram):
+    """
+    Method calculates inblock semivariance of a given areas from the Dict.
+
+
+    Parameters
+    ----------
+    point_support : Dict
+                    {area id: [[x, y, value]]}
+
+    variogram_model : TheoreticalVariogram
+                      Modeled variogram fitted to the areal data.
+
+    Returns
+    -------
+    inblock_semivariances : Dict
+                            {area id: the average inblock semivariance}
+    """
+
+    inblock_semivariances = {}
+    unique_areas = list(point_support.keys())
+
+    for unique_area in unique_areas:
+        data_points = point_support[unique_area]
 
         inblock = inblock_semivariance(data_points, variogram_model)
         inblock_semivariances[unique_area] = inblock
