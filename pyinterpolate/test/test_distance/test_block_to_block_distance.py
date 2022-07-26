@@ -1,5 +1,5 @@
 import unittest
-from typing import Tuple, Dict
+from typing import Dict
 
 import numpy as np
 from pyinterpolate.distance.distance import calc_block_to_block_distance

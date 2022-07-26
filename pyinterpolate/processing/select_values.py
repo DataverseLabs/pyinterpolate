@@ -1,9 +1,15 @@
-from typing import Iterable, Dict
+from typing import Iterable, Dict, Union
 
+import geopandas as gpd
 import numpy as np
+import pandas as pd
+
 from scipy.linalg import fractional_matrix_power
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
+from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg, point_support_to_dict, \
+    block_dataframe_to_dict, block_arr_to_dict
 
 
 def _rotation_matrix(angle: float) -> np.array:
@@ -335,10 +341,30 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
     block_values = []
 
 
+def _transform_ps(ps, idx_col=None, x_col=None, y_col=None, val_col=None):
+    if isinstance(ps, PointSupport):
+        return point_support_to_dict(ps)
+    elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
+        expected_cols = {'x', 'y', 'ds', 'index'}
+
+        if not expected_cols.issubset(set(ps.columns)):
+            raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                           f'It has {ps.columns} instead.')
+        return block_dataframe_to_dict(ps)
+    elif isinstance(ps, np.ndarray):
+        return block_arr_to_dict(ps)
+    elif isinstance(ps, Dict):
+        return ps
+    else:
+        raise TypeError(f'Blocks data type {type(ps)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
+
+
 def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
                                          u_point_support: np.ndarray,
-                                         k_blocks: Dict,
-                                         k_point_support: Dict,
+                                         k_blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                                         k_point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame,
+                                                                PointSupport],
                                          nn: int,
                                          max_radius: float,
                                          weighted: bool) -> np.ndarray:
@@ -353,30 +379,18 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     u_point_support : numpy array
                       Numpy array of points within block [[x, y, point support value]]
 
-    k_blocks : Dict
-               Dictionary retrieved from the Blocks, it's structure is defined as:
-               polyset = {
-                      'geometry': {
-                          'block index': geometry
-                      }
-                      'data': [[index centroid.x, centroid.y value]],
-                      'info': {
-                          'index_name': the name of the index column,
-                          'geometry_name': the name of the geometry column,
-                          'value_name': the name of the value column,
-                          'crs': CRS of a dataset
-                      }
-                  }
+    k_blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+               Blocks with aggregated data.
+               * Blocks: Blocks() class object.
+               * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+                 Geometry column with polygons is not used and optional.
+               * numpy array: [[block index, centroid x, centroid y, value]].
 
-    k_point_support : Dict
-                      Point support data as a Dict:
-
-                        point_support = {
-                            'data': {
-                                'area_id': [numpy array with points]
-                            }
-                            'info': {...}
-                        }
+    k_point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                      * Dict: {block id: [[point x, point y, value]]}
+                      * numpy array: [[block id, x, y, value]]
+                      * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                      * PointSupport
 
     nn : int
          The minimum number of neighbours that potentially affect block.
@@ -394,7 +408,8 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     """
 
     # Get distances from all centroids to the unknown block centroid
-    k_centroids = np.array([x[1:] for x in k_blocks['data']])
+    k_point_support_dict = _transform_ps(ps=k_point_support)
+    k_centroids = get_areal_centroids_from_agg(k_blocks)
 
     if not isinstance(u_block_centroid, np.ndarray):
         u_block_centroid = np.array(u_block_centroid)
@@ -412,8 +427,9 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     dists = []
 
     if weighted:
-        # Calc from point support
-        for kidx, point_array in k_point_support['data'].items():
+        # Calc weighted distance from point support
+
+        for kidx, point_array in k_point_support_dict.items():
             blocks = {
                 kidx: point_array,
                 u_index: u_point_support
@@ -439,16 +455,9 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         kriging_input = kriging_data[:nn]
 
     # get total points' value in each id from prepared datasets and append it to the array
-
     for idx, rec in enumerate(kriging_input):
         block_id = rec[0]
-        try:
-            points_within_block = k_point_support['data'][block_id]
-        except KeyError as kex:
-            if isinstance(k_point_support, Dict):
-                points_within_block = k_point_support[block_id]
-            else:
-                raise kex
+        points_within_block = k_point_support_dict[block_id]
         ps_total = np.sum(points_within_block[:, -1])
         kriging_input[idx][-1] = ps_total
 

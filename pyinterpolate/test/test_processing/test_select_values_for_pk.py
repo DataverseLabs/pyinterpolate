@@ -3,18 +3,13 @@ import numpy as np
 
 from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
 
-AREAL_INPUT = {
-    'geometry': None,
-    'data': np.array(
+AREAL_INPUT = np.array(
         [[0, 0, 0, 0],
          [1, 0, 1, 1],
          [2, 1, 0, 2]]
-    ),
-    'info': None
-}
+    )
 
 POINT_SUPPORT_INPUT = {
-    'data': {
         0: np.array(
             [[0.1, 0.1, 5],
              [-0.1, -0.1, 10]]
@@ -29,8 +24,6 @@ POINT_SUPPORT_INPUT = {
             [[1.1, 0.1, 4],
              [0.9, 0.1, 15]]
         )
-    }
-
 }
 
 U_PT = np.array([3, 2, 2])

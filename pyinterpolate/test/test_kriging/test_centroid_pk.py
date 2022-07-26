@@ -1,10 +1,10 @@
+# TODO: more tests for a different types of input
 import unittest
 
 import numpy as np
 
 from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import centroid_poisson_kriging
-from pyinterpolate.processing.point.structure import get_point_support_from_files
-from pyinterpolate.processing.polygon.structure import get_polyset_from_file
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram import TheoreticalVariogram
 
 DATASET = 'samples/regularization/cancer_data.gpkg'
@@ -19,40 +19,50 @@ MAX_RANGE = 400000
 NN = 32
 
 
-def select_unknown_blocks_and_ps(areal_input, point_support, block_id=None):
+def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
 
-    areal_input = areal_input.copy()
-    point_support = point_support.copy()
+    ar_x = areal_input.cx
+    ar_y = areal_input.cy
+    ar_val = areal_input.value_column_name
+    ps_val = point_support.value_column
+    ps_x = point_support.x_col
+    ps_y = point_support.y_col
+    idx_col = areal_input.index_column_name
 
-    if block_id is None:
-        sample_key = np.random.choice(list(point_support['data'].keys()))
-    else:
-        sample_key = block_id
+    areal_input = areal_input.data.copy()
+    point_support = point_support.point_support.copy()
 
-    unkn_ps = point_support['data'][sample_key].copy()
-    unkn_area = areal_input['data'][areal_input['data'][:, 0] == sample_key]
-    unkn_area = unkn_area[0][:-1]
+    sample_key = np.random.choice(list(point_support[block_id].unique()))
 
-    del point_support['data'][sample_key]
-    new_data = [x for x in areal_input['data'] if x[0] != sample_key]
-    areal_input['data'] = new_data
-    return areal_input, point_support, unkn_area, unkn_ps
+    unkn_ps = point_support[point_support[block_id] == sample_key][[ps_x, ps_y, ps_val]].values
+    known_poses = point_support[point_support[block_id] != sample_key]
+    known_poses.rename(columns={
+        ps_x: 'x', ps_y: 'y', ps_val: 'ds', idx_col: 'index'
+    }, inplace=True)
+
+    unkn_area = areal_input[areal_input[block_id] == sample_key][[idx_col, ar_x, ar_y]].values
+    known_areas = areal_input[areal_input[block_id] != sample_key]
+    known_areas.rename(columns={
+        ar_x: 'centroid.x', ar_y: 'centroid.y', ar_val: 'ds', idx_col: 'index'
+    }, inplace=True)
+
+    return known_areas, known_poses, unkn_area, unkn_ps
 
 
-AREAL_INPUT = get_polyset_from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID,
-                                    layer_name=POLYGON_LAYER)
-POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATASET,
-                                                   polygon_file=DATASET,
-                                                   point_support_geometry_col=GEOMETRY_COL,
-                                                   point_support_val_col=POP10,
-                                                   polygon_geometry_col=GEOMETRY_COL,
-                                                   polygon_index_col=POLYGON_ID,
-                                                   use_point_support_crs=True,
-                                                   dropna=True,
-                                                   point_support_layer_name=POPULATION_LAYER,
-                                                   polygon_layer_name=POLYGON_LAYER)
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
+POINT_SUPPORT_INPUT = PointSupport()
+POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
+                               blocks_file=DATASET,
+                               point_support_geometry_col=GEOMETRY_COL,
+                               point_support_val_col=POP10,
+                               blocks_geometry_col=GEOMETRY_COL,
+                               blocks_index_col=POLYGON_ID,
+                               use_point_support_crs=True,
+                               point_support_layer_name=POPULATION_LAYER,
+                               blocks_layer_name=POLYGON_LAYER)
 
-AREAL_INP, PS_INP, UNKN_AREA, UNKN_PS = select_unknown_blocks_and_ps(AREAL_INPUT, POINT_SUPPORT_INPUT)
+AREAL_INP, PS_INP, UNKN_AREA, UNKN_PS = select_unknown_blocks_and_ps(AREAL_INPUT, POINT_SUPPORT_INPUT, POLYGON_ID)
 
 THEORETICAL_VARIOGRAM = TheoreticalVariogram()
 THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
@@ -71,20 +81,15 @@ class TestCentroidPK(unittest.TestCase):
         self.assertTrue(pk_model)
 
     def test_flow_2(self):
-        known_blocks = {
-            'geometry': None,
-            'data': np.array([
+        known_blocks = np.array([
                 [1.0, 1, 1, 100],
                 [2.0, 0, 1, 100],
                 [3.0, 1, 0, 200],
                 [4.0, 5, 1, 500],
                 [5.0, 4, 2, 800]
-            ]),
-            'info': None
-        }
+            ])
 
         ps = {
-            'data': {
                 1.0: np.array([
                     [0.9, 1.1, 1000],
                     [1.1, 0.9, 2000],
@@ -109,8 +114,6 @@ class TestCentroidPK(unittest.TestCase):
                     [3.8, 2.3, 600],
                     [4.2, 1.7, 1000]
                 ])
-            },
-            'info': None
         }
 
         ublock = np.array([6.0, 3, 1])

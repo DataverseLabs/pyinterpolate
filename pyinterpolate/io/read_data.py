@@ -126,7 +126,7 @@ def read_block(
                    Name of the value column (header title).
 
     geometry_col_name : str, default='geometry'
-                        Name of the column with blocks - polygons.
+                        Name of the column with blocks - blocks.
 
     id_col_name: str or None, default=None, optional
                  Name of the colum with unique indexes.

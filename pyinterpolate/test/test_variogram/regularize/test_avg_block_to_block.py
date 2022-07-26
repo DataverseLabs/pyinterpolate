@@ -3,8 +3,7 @@ import unittest
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
-from pyinterpolate.processing.point.structure import get_point_support_from_files
-from pyinterpolate.processing.polygon.structure import get_polyset_from_file
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram import TheoreticalVariogram, build_experimental_variogram
 from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances import \
     average_block_to_block_semivariances
@@ -21,45 +20,49 @@ POLYGON_VALUE = 'rate'
 MAX_RANGE = 400000
 STEP_SIZE = 40000
 
-AREAL_INPUT = get_polyset_from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
-POINT_SUPPORT_INPUT = get_point_support_from_files(point_support_data_file=DATASET,
-                                                   polygon_file=DATASET,
-                                                   point_support_geometry_col=GEOMETRY_COL,
-                                                   point_support_val_col=POP10,
-                                                   polygon_geometry_col=GEOMETRY_COL,
-                                                   polygon_index_col=POLYGON_ID,
-                                                   use_point_support_crs=True,
-                                                   dropna=True,
-                                                   point_support_layer_name=POPULATION_LAYER,
-                                                   polygon_layer_name=POLYGON_LAYER)
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
+POINT_SUPPORT_INPUT = PointSupport()
+POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
+                               blocks_file=DATASET,
+                               point_support_geometry_col=GEOMETRY_COL,
+                               point_support_val_col=POP10,
+                               blocks_geometry_col=GEOMETRY_COL,
+                               blocks_index_col=POLYGON_ID,
+                               use_point_support_crs=True,
+                               point_support_layer_name=POPULATION_LAYER,
+                               blocks_layer_name=POLYGON_LAYER)
+
+bc = AREAL_INPUT.data[[AREAL_INPUT.cx, AREAL_INPUT.cy, AREAL_INPUT.value_column_name]].values
+experimental_variogram_of_areal_data = build_experimental_variogram(bc,
+                                                                    step_size=STEP_SIZE,
+                                                                    max_range=MAX_RANGE)
+
+theoretical_model = TheoreticalVariogram()
+theoretical_model.autofit(experimental_variogram_of_areal_data,
+                          number_of_ranges=64,
+                          number_of_sills=64,
+                          deviation_weighting='closest')
 
 
 class TestAverageBlockToBlockSemivariance(unittest.TestCase):
 
     def test_real_world_data(self):
-        # Get variogram model
-        bc = AREAL_INPUT['data'][:, 1:]
-        experimental_variogram_of_areal_data = build_experimental_variogram(bc,
-                                                                            step_size=STEP_SIZE,
-                                                                            max_range=MAX_RANGE)
-        theoretical_model = TheoreticalVariogram()
-        theoretical_model.autofit(experimental_variogram_of_areal_data,
-                                  number_of_ranges=64,
-                                  number_of_sills=64,
-                                  deviation_weighting='closest')
-
         # Calc block to block distances
-        b2b_distances = calc_block_to_block_distance(POINT_SUPPORT_INPUT['data'])
+        cls = [POLYGON_ID, POINT_SUPPORT_INPUT.x_col, POINT_SUPPORT_INPUT.y_col, POINT_SUPPORT_INPUT.value_column]
+
+        b2b_distances = calc_block_to_block_distance(
+            POINT_SUPPORT_INPUT.point_support[cls].values
+        )
 
         # Calc block to block
         b_semivars = calculate_block_to_block_semivariance(
-            point_support=POINT_SUPPORT_INPUT['data'],
+            point_support=POINT_SUPPORT_INPUT,
             block_to_block_distances=b2b_distances,
             semivariogram_model=theoretical_model
         )
 
         # Calc avg
-        # TODO: remove fromiter
         b_arr = np.array(list(b_semivars.values()), dtype=float)
         lags = np.arange(STEP_SIZE, MAX_RANGE, STEP_SIZE)
 
