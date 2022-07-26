@@ -1,15 +1,19 @@
-from typing import Dict, List
+from typing import Dict, List, Union
+
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.kriging.models.block.weight import weights_array
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
 def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
-                             blocks: Dict,
-                             point_support: Dict,
+                             blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                             point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                              unknown_block: np.ndarray,
                              unknown_block_point_support: np.ndarray,
                              number_of_neighbors: int,
@@ -24,27 +28,18 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     semivariogram_model : TheoreticalVariogram
                           Fitted variogram.
 
-    blocks : Dict
-             Dictionary retrieved from the Blocks, it's structure is defined as:
-             polyset = {
-                      'geometry': {
-                          'block index': geometry
-                      }
-                      'data': [[index centroid.x, centroid.y value]],
-                      'info': {
-                          'index_name': the name of the index column,
-                          'geometry_name': the name of the geometry column,
-                          'value_name': the name of the value column,
-                          'crs': CRS of a dataset
-                      }
-                  }
+    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+             Blocks with aggregated data.
+             * Blocks: Blocks() class object.
+             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+               Geometry column with polygons is not used and optional.
+             * numpy array: [[block index, centroid x, centroid y, value]].
 
-    point_support : Dict
-                    Point support data as a Dict:
-
-                        point_support = {
-                            'area_id': [numpy array with points]
-                        }
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
 
     unknown_block : numpy array
                     [index, centroid.x, centroid.y]

@@ -1,3 +1,4 @@
+# TODO: more tests for a different types of input
 import unittest
 
 import numpy as np
@@ -6,8 +7,8 @@ from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import ce
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram import TheoreticalVariogram
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -31,18 +32,18 @@ def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
     areal_input = areal_input.data.copy()
     point_support = point_support.point_support.copy()
 
-    sample_key = np.random.choice(list(point_support[block_id].keys()))
+    sample_key = np.random.choice(list(point_support[block_id].unique()))
 
-    unkn_ps = point_support[point_support[block_id] == sample_key]
+    unkn_ps = point_support[point_support[block_id] == sample_key][[ps_x, ps_y, ps_val]].values
     known_poses = point_support[point_support[block_id] != sample_key]
     known_poses.rename(columns={
         ps_x: 'x', ps_y: 'y', ps_val: 'ds', idx_col: 'index'
     }, inplace=True)
 
-    unkn_area = areal_input[areal_input[block_id] == sample_key][[ar_x, ar_y, ar_val]].values
+    unkn_area = areal_input[areal_input[block_id] == sample_key][[idx_col, ar_x, ar_y]].values
     known_areas = areal_input[areal_input[block_id] != sample_key]
     known_areas.rename(columns={
-        ar_x: 'x', ar_y: 'y', ar_val: 'ds', idx_col: 'index'
+        ar_x: 'centroid.x', ar_y: 'centroid.y', ar_val: 'ds', idx_col: 'index'
     }, inplace=True)
 
     return known_areas, known_poses, unkn_area, unkn_ps
@@ -80,20 +81,15 @@ class TestCentroidPK(unittest.TestCase):
         self.assertTrue(pk_model)
 
     def test_flow_2(self):
-        known_blocks = {
-            'geometry': None,
-            'data': np.array([
+        known_blocks = np.array([
                 [1.0, 1, 1, 100],
                 [2.0, 0, 1, 100],
                 [3.0, 1, 0, 200],
                 [4.0, 5, 1, 500],
                 [5.0, 4, 2, 800]
-            ]),
-            'info': None
-        }
+            ])
 
         ps = {
-            'data': {
                 1.0: np.array([
                     [0.9, 1.1, 1000],
                     [1.1, 0.9, 2000],
@@ -118,8 +114,6 @@ class TestCentroidPK(unittest.TestCase):
                     [3.8, 2.3, 600],
                     [4.2, 1.7, 1000]
                 ])
-            },
-            'info': None
         }
 
         ublock = np.array([6.0, 3, 1])
