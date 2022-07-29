@@ -15,7 +15,6 @@ POP10 = 'POP10'
 GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'FIPS'
 POLYGON_VALUE = 'rate'
-MAX_RANGE = 400000
 NN = 32
 
 
@@ -76,8 +75,7 @@ class TestCentroidPK(unittest.TestCase):
                                             point_support=PS_INP,
                                             unknown_block=UNKN_AREA,
                                             unknown_block_point_support=UNKN_PS,
-                                            number_of_neighbors=NN,
-                                            max_neighbors_radius=MAX_RANGE)
+                                            number_of_neighbors=NN)
         self.assertTrue(pk_model)
 
     def test_flow_2(self):
@@ -127,6 +125,5 @@ class TestCentroidPK(unittest.TestCase):
                                             point_support=ps,
                                             unknown_block=ublock,
                                             unknown_block_point_support=u_ps,
-                                            number_of_neighbors=3,
-                                            max_neighbors_radius=3)
+                                            number_of_neighbors=4)
         self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 399, 0]))

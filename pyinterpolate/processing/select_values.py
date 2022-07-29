@@ -363,8 +363,7 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
                                     u_point_support: np.ndarray,
                                     k_point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame,
                                                            PointSupport],
-                                    nn: int,
-                                    max_radius: float) -> Dict:
+                                    nn: int) -> Dict:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
@@ -385,9 +384,6 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
     nn : int
          The minimum number of neighbours that potentially affect block.
 
-    max_radius : float
-                 The maximum radius of search for the closest neighbors.
-
     Returns
     -------
     datasets : Dict
@@ -403,7 +399,6 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
     distances_between_known_and_unknown = _calculate_weighted_distances(k_point_support_dict,
                                                                         u_index,
                                                                         u_point_support)
-
     kdata = []
     for kidx in k_idxs:
         for rec in distances_between_known_and_unknown:
@@ -413,16 +408,18 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
                 break
 
     kdata = np.array(kdata)
-    sorted_kdata = kdata[kdata[:, -1].argsort()]
+    sorted_kdata = kdata[kdata[:, 1].argsort()]
 
-    max_search_pos = np.argmax(sorted_kdata[:, -1] > max_radius)
-    output_areas = sorted_kdata[:max_search_pos]
+    # max_search_pos = np.argmax(sorted_kdata[:, -1] > max_radius)
+    # output_areas = sorted_kdata[:max_search_pos]
 
-    if len(output_areas) < nn:
-        output_areas = sorted_kdata[:nn]
+    # if len(output_areas) != nn:
+    output_areas = sorted_kdata[:nn]
 
-    for idx in output_areas[:, 0]:
-        point_s = k_point_support[idx]
+    idxs = [idx for idx in k_idxs if idx in output_areas[:, 0]]
+
+    for idx in idxs:
+        point_s = k_point_support_dict[idx]
         distances = calc_point_to_point_distance(u_point_support[:, :-1], point_s[:, :-1])
         fdistances = distances.flatten()
         ldist = len(fdistances)
@@ -440,7 +437,6 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
                                          k_point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame,
                                                                 PointSupport],
                                          nn: int,
-                                         max_radius: float,
                                          weighted: bool) -> np.ndarray:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
@@ -468,9 +464,6 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     nn : int
          The minimum number of neighbours that potentially affect block.
-
-    max_radius : float
-                 The maximum radius of search for the closest neighbors.
 
     weighted : bool
                Are distances between blocks weighted by point support?
@@ -500,13 +493,8 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     # Sort by distance
     kriging_data = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
 
-    # Get distances in max search radius
-    max_search_pos = np.argmax(kriging_data[:, 4] > max_radius)
-    kriging_input = kriging_data[:max_search_pos]
-
     # check number of observations
-    if len(kriging_input) < nn:
-        kriging_input = kriging_data[:nn]
+    kriging_input = kriging_data[:nn]
 
     # get total points' value in each id from prepared datasets and append it to the array
     for idx, rec in enumerate(kriging_input):
@@ -520,6 +508,10 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
 
 def _calculate_weighted_distances(k_point_support_dict, u_index, u_point_support):
     dists = []
+
+    if isinstance(u_index, np.ndarray):
+        u_index = u_index[0]
+
     for kidx, point_array in k_point_support_dict.items():
         blocks = {
             kidx: point_array,

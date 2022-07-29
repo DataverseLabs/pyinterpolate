@@ -35,7 +35,6 @@ U_PS = np.array(
 )
 
 NN = 2
-MAX_RADIUS = 2
 WEIGHTED = True
 
 EXPECTED_RESULTS_WEIGHTED = np.array(
@@ -57,7 +56,6 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
                                                         k_blocks=AREAL_INPUT,
                                                         k_point_support=POINT_SUPPORT_INPUT,
                                                         nn=NN,
-                                                        max_radius=MAX_RADIUS,
                                                         weighted=WEIGHTED)
 
         self.assertIsInstance(prepared, np.ndarray)
@@ -71,7 +69,6 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
                                                         k_blocks=AREAL_INPUT,
                                                         k_point_support=POINT_SUPPORT_INPUT,
                                                         nn=NN,
-                                                        max_radius=MAX_RADIUS,
                                                         weighted=False)
         prepared_as_int = prepared.astype(int)
         array_equal = np.array_equal(prepared_as_int, EXPECTED_RESULTS_NON_WEIGHTED)

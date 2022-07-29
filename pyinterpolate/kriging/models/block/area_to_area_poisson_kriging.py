@@ -84,8 +84,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
                     point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                     unknown_block: np.ndarray,
                     unknown_block_point_support: np.ndarray,
-                    number_of_neighbors: int,
-                    max_neighbors_radius: float):
+                    number_of_neighbors: int):
     """
     Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
 
@@ -116,9 +115,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
-    max_neighbors_radius : float
-                           The maximum radius of search for the closest neighbors.
-
 
     Returns
     -------
@@ -133,9 +129,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_point_support=point_support,
-        nn=number_of_neighbors,
-        max_radius=max_neighbors_radius,
-    )
+        nn=number_of_neighbors)
 
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
     avg_semivariances = b2b_semivariance.calculate_average_semivariance(kriging_data)
@@ -188,10 +182,15 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     # Calculate prediction error
 
+    if isinstance(unknown_block[0], np.ndarray):
+        u_idx = unknown_block[0][0]
+    else:
+        u_idx = unknown_block[0]
+
     distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
-        unknown_block[0]: distances_within_unknown_block
-    })[unknown_block[0]]
+        u_idx: distances_within_unknown_block
+    })[u_idx]
 
     sig_base = (w.T * k_ones)[0]
     sigmasq = semivariance_within_unknown - sig_base
@@ -199,4 +198,4 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         sigma = 0
     else:
         sigma = np.sqrt(sigmasq)
-    return unknown_block[0], zhat, sigma
+    return u_idx, zhat, sigma

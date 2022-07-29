@@ -14,6 +14,6 @@ class TestWeightingArray(unittest.TestCase):
         shape = (5, 5)
 
         weights = weights_array(shape, blocks, points)
-        expected_arr = np.ones(shape=shape)
+        expected_arr = np.zeros(shape=shape)
         np.fill_diagonal(expected_arr, 3)
         self.assertTrue(np.array_equal(weights, expected_arr))

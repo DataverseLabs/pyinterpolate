@@ -17,7 +17,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                              unknown_block: np.ndarray,
                              unknown_block_point_support: np.ndarray,
                              number_of_neighbors: int,
-                             max_neighbors_radius: float,
                              is_weighted_by_point_support=True,
                              raise_when_anomalies=False) -> List:
     """
@@ -50,9 +49,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
-    max_neighbors_radius : float
-                           The maximum radius of search for the closest neighbors.
-
     is_weighted_by_point_support : bool, default = True
                                    Are distances between blocks weighted by point support?
 
@@ -72,7 +68,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         k_blocks=blocks,
         k_point_support=point_support,
         nn=number_of_neighbors,
-        max_radius=max_neighbors_radius,
         weighted=is_weighted_by_point_support
     )
 
