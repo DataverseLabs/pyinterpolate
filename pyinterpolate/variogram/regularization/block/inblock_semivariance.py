@@ -1,9 +1,11 @@
-from multiprocessing import Manager, Pool
-from typing import Dict, Tuple
+from typing import Dict, Union
 
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.processing.preprocessing.blocks import PointSupport
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
 
@@ -29,7 +31,6 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     flattened_distances = distances_between_points.flatten()
     semivariances = variogram_model.predict(flattened_distances)
 
-
     # TODO: part below to test with very large datasets
     # unique_distances, uniq_count = np.unique(distances_between_points, return_counts=True)  # Array is flattened here
     # semivariances = variogram_model.predict(unique_distances)
@@ -39,45 +40,24 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     return average_block_semivariance
 
 
-def multi_inblock_semivariance(output_dict: Dict, block: Tuple, variogram_model: TheoreticalVariogram):
-    """
-    Function calculates inblock semivariance and updates given dict with a results.
-
-    Parameters
-    ----------
-    output_dict : Dict
-
-    block : Tuple
-            (area id, points array)
-
-    variogram_model : TheoreticalVariogram
-
-    """
-    semi = inblock_semivariance(block[1], variogram_model)
-    output_dict[block[0]] = semi
-
-
-def calculate_inblock_semivariance(point_support: Dict,
-                                   variogram_model: TheoreticalVariogram,
-                                   n_workers=1) -> Dict:
+def calculate_inblock_semivariance(point_support: Union[Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                                   variogram_model: TheoreticalVariogram) -> Dict:
     """
     Method calculates inblock semivariance of a given areas.
 
 
     Parameters
     ----------
-    point_support : Dict
-                    Point support data as a Dict:
-
-                    point_support = {
-                        'area_id': [numpy array with points]
-                    }
+    point_support : geopandas GeoDataFrame | Point Support | numpy array
+                    Point support data. It can be provided:
+                        - directly as PointSupport object,
+                        - GeoDataFrame | DataFrame (then DataFrame must have columns: 'ds' - values, 'x' - point
+                          geometry x, 'y' - point geometry y, 'index' - block indexes,
+                        - numpy array [block index, coordinate x, coordinate y, value],
+                        - Dict: {block id: [[point x, point y, value]]}.
 
     variogram_model : TheoreticalVariogram
                       Modeled variogram fitted to the areal data.
-
-    n_workers : int, default = 1
-                Set to > 1 to parallelize calculations.
 
     Returns
     -------
@@ -98,22 +78,164 @@ def calculate_inblock_semivariance(point_support: Dict,
     # TODO: It seems that multiprocessing gives the best results for point support matrices between
     #       10^2x10^2:10^4x10^4. It must be investigated further in the future!
 
-    inblock_semivariances = {}
-    # Sequential version
-    if n_workers == 1:
-        for area in list(point_support.keys()):
-            inblock_semi = inblock_semivariance(point_support[area], variogram_model)
-            inblock_semivariances[area] = inblock_semi
-    # Multiprocessing version
+    if isinstance(point_support, PointSupport):
+        inblock_semivariances = _calculate_inblock_semivariance_from_point_support_class(point_support,
+                                                                                         variogram_model)
+    elif isinstance(point_support, gpd.GeoDataFrame) or isinstance(point_support, pd.DataFrame):
+        inblock_semivariances = _calculate_inblock_semivariance_from_dataframe(point_support,
+                                                                               variogram_model)
+    elif isinstance(point_support, np.ndarray):
+        inblock_semivariances = _calculate_inblock_semivariance_from_numpy_array(point_support,
+                                                                                 variogram_model)
+    elif isinstance(point_support, Dict):
+        inblock_semivariances = _calculate_inblock_semivariance_from_dict(point_support, variogram_model)
     else:
-        manager = Manager()
-        inblock_semivariances = manager.dict()
-        pool = Pool(n_workers)
-
-        for pointset in point_support.items():
-            pool.apply_async(multi_inblock_semivariance, args=(inblock_semivariances, pointset, variogram_model))
-
-        pool.close()
-        pool.join()
+        raise TypeError(f'Point support type {type(point_support)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
 
     return inblock_semivariances.copy()
+
+
+def _calculate_inblock_semivariance_from_dataframe(point_support: Union[gpd.GeoDataFrame, pd.DataFrame],
+                                                   variogram_model: TheoreticalVariogram):
+    """
+    Method calculates inblock semivariance of a given areas from the GeoDataFrame object. GeoDataFrame must have
+    columns: 'ds' - values, 'x' - point geometry x, 'y' - point geometry y, 'index' - block indexes.
+
+
+    Parameters
+    ----------
+    point_support : Union[gpd.GeoDataFrame, pd.DataFrame]
+                    Columns: x, y, ds, index
+
+    variogram_model : TheoreticalVariogram
+                      Modeled variogram fitted to the areal data.
+
+    Returns
+    -------
+    inblock_semivariances : Dict
+                            {area id: the average inblock semivariance}
+    """
+
+    expected_cols = {'x', 'y', 'ds', 'index'}
+    if not expected_cols.issubset(set(point_support.columns)):
+        raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                       f'It has {point_support.columns} instead.')
+
+    inblock_semivariances = {}
+    unique_areas = point_support['index'].unique()
+
+    for unique_area in unique_areas:
+        data_points = point_support[point_support['index'] == unique_area]
+
+        data_points = data_points[
+            ['x', 'y', 'ds']
+        ].values
+
+        inblock = inblock_semivariance(data_points, variogram_model)
+        inblock_semivariances[unique_area] = inblock
+
+    return inblock_semivariances
+
+
+def _calculate_inblock_semivariance_from_dict(point_support: Dict, variogram_model: TheoreticalVariogram):
+    """
+    Method calculates inblock semivariance of a given areas from the Dict.
+
+
+    Parameters
+    ----------
+    point_support : Dict
+                    {area id: [[x, y, value]]}
+
+    variogram_model : TheoreticalVariogram
+                      Modeled variogram fitted to the areal data.
+
+    Returns
+    -------
+    inblock_semivariances : Dict
+                            {area id: the average inblock semivariance}
+    """
+
+    inblock_semivariances = {}
+    unique_areas = list(point_support.keys())
+
+    for unique_area in unique_areas:
+        data_points = point_support[unique_area]
+
+        inblock = inblock_semivariance(data_points, variogram_model)
+        inblock_semivariances[unique_area] = inblock
+
+    return inblock_semivariances
+
+
+def _calculate_inblock_semivariance_from_numpy_array(point_support: np.ndarray,
+                                                     variogram_model: TheoreticalVariogram):
+    """
+    Method calculates inblock semivariance of a given areas from the numpy array.
+
+
+    Parameters
+    ----------
+    point_support : numpy array
+                    [block index, x, y, value]
+
+    variogram_model : TheoreticalVariogram
+                      Modeled variogram fitted to the areal data.
+
+    Returns
+    -------
+    inblock_semivariances : Dict
+                            {area id: the average inblock semivariance}
+    """
+
+    inblock_semivariances = {}
+    unique_areas = np.unique(point_support[:, 0])
+
+    for unique_area in unique_areas:
+        data_points = point_support[point_support[:, 0] == unique_area]
+
+        data_points = data_points[:, 1:]
+
+        inblock = inblock_semivariance(data_points, variogram_model)
+        inblock_semivariances[unique_area] = inblock
+
+    return inblock_semivariances
+
+
+def _calculate_inblock_semivariance_from_point_support_class(point_support: PointSupport,
+                                                             variogram_model: TheoreticalVariogram):
+    """
+    Method calculates inblock semivariance of a given areas from the PointSupport object.
+
+
+    Parameters
+    ----------
+    point_support : PointSupport
+                    Point support data.
+
+    variogram_model : TheoreticalVariogram
+                      Modeled variogram fitted to the areal data.
+
+    Returns
+    -------
+    inblock_semivariances : Dict
+                            {area id: the average inblock semivariance}
+    """
+
+    inblock_semivariances = {}
+    unique_areas = (point_support.point_support[point_support.block_index_column]).unique()
+
+    for unique_area in unique_areas:
+        data_points = point_support.point_support[
+            point_support.point_support[point_support.block_index_column] == unique_area
+            ]
+
+        data_points = data_points[
+            [point_support.x_col, point_support.y_col, point_support.value_column]
+        ].values
+
+        inblock = inblock_semivariance(data_points, variogram_model)
+        inblock_semivariances[unique_area] = inblock
+
+    return inblock_semivariances

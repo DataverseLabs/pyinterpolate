@@ -1,10 +1,14 @@
-from typing import Dict
+from typing import Dict, Union
 
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 from tqdm import trange
 import matplotlib.pyplot as plt
 
 from pyinterpolate.processing.checks import check_limits
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
+from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg
 from pyinterpolate.variogram import build_experimental_variogram, TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.regularization.aggregated import regularize
 
@@ -51,23 +55,18 @@ class Deconvolution:
 
     Attributes
     ----------
-    ps : Dict
-         Point support data as a Dict: point_support = {'area_id': [numpy array with points]}
+    ps : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+         * Dict: {block id: [[point x, point y, value]]}
+         * numpy array: [[block id, x, y, value]]
+         * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+         * PointSupport
 
-    agg : Dict
-          Dictionary retrieved from the Blocks, it's structure is defined as:
-          polyset = {
-                      'geometry': {
-                          'block index': geometry
-                      }
-                      'data': [[index centroid.x, centroid.y value]],
-                      'info': {
-                          'index_name': the name of the index column,
-                          'geometry_name': the name of the geometry column,
-                          'value_name': the name of the value column,
-                          'crs': CRS of a dataset
-                      }
-                  }
+    agg : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+          Blocks with aggregated data.
+          * Blocks: Blocks() class object.
+          * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+            Geometry column with polygons is not used and optional.
+          * numpy array: [[block index, centroid x, centroid y, value]].
 
     initial_regularized_variogram : numpy array
                                     [lag, semivariance]
@@ -235,8 +234,8 @@ class Deconvolution:
         self.regularized_models = []  # List with numpy arrays with regularized models
 
     def fit(self,
-            agg_dataset: Dict,
-            point_support_dataset: Dict,
+            agg_dataset: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+            point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
             agg_step_size: float,
             agg_max_range: float,
             agg_direction: float = 0,
@@ -248,27 +247,18 @@ class Deconvolution:
 
         Parameters
         ----------
-        agg_dataset : Dict
-                      Dictionary retrieved from the Blocks, it's structure is defined as:
-                      polyset = {
-                          'geometry': {
-                              'block index': geometry
-                          }
-                          'data': [[index centroid.x, centroid.y value]],
-                          'info': {
-                              'index_name': the name of the index column,
-                              'geometry_name': the name of the geometry column,
-                              'value_name': the name of the value column,
-                              'crs': CRS of a dataset
-                          }
-                      }
+        agg_dataset : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+                      Blocks with aggregated data.
+                      * Blocks: Blocks() class object.
+                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+                        Geometry column with polygons is not used and optional.
+                      * numpy array: [[block index, centroid x, centroid y, value]].
 
-        point_support_dataset : Dict
-                                Point support data as a Dict:
-
-                                    point_support = {
-                                      'area_id': [numpy array with points]
-                                    }
+        point_support_dataset : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                                * Dict: {block id: [[point x, point y, value]]}
+                                * numpy array: [[block id, x, y, value]]
+                                * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                                * PointSupport
 
         agg_step_size : float
                         Step size between lags.
@@ -316,7 +306,7 @@ class Deconvolution:
         self.weighting_method = variogram_weighting_method
 
         # Compute experimental variogram of areal data
-        areal_centroids = self.agg['data'][:, 1:]
+        areal_centroids = get_areal_centroids_from_agg(self.agg)
 
         self.initial_experimental_variogram = build_experimental_variogram(
             input_array=areal_centroids,
@@ -489,8 +479,8 @@ class Deconvolution:
         self.was_transformed = True
 
     def fit_transform(self,
-                      agg_dataset: Dict,
-                      point_support_dataset: Dict,
+                      agg_dataset: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                      point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                       agg_step_size: float,
                       agg_max_range: float,
                       agg_direction: float = 0,
@@ -505,27 +495,18 @@ class Deconvolution:
 
         Parameters
         ----------
-        agg_dataset : Dict
-                      Dictionary retrieved from the Blocks, it's structure is defined as:
-                      polyset = {
-                          'geometry': {
-                              'block index': geometry
-                          }
-                          'data': [[index centroid.x, centroid.y value]],
-                          'info': {
-                              'index_name': the name of the index column,
-                              'geometry_name': the name of the geometry column,
-                              'value_name': the name of the value column,
-                              'crs': CRS of a dataset
-                          }
-                      }
+        agg_dataset : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+                      Blocks with aggregated data.
+                      * Blocks: Blocks() class object.
+                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+                        Geometry column with polygons is not used and optional.
+                      * numpy array: [[block index, centroid x, centroid y, value]].
 
-        point_support_dataset : Dict
-                                Point support data as a Dict:
-
-                                    point_support = {
-                                      'area_id': [numpy array with points]
-                                    }
+        point_support_dataset : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                                * Dict: {block id: [[point x, point y, value]]}
+                                * numpy array: [[block id, x, y, value]]
+                                * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                                * PointSupport
 
         agg_step_size : float
                         Step size between lags.

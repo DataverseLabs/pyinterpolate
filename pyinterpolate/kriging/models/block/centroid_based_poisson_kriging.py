@@ -1,18 +1,22 @@
-from typing import Dict, List
+from typing import Dict, List, Union
+
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
-from pyinterpolate.processing.select_values import select_poisson_kriging_data
+from pyinterpolate.kriging.models.block.weight import weights_array
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
+from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
 def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
-                             blocks: Dict,
-                             point_support: Dict,
+                             blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                             point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                              unknown_block: np.ndarray,
                              unknown_block_point_support: np.ndarray,
                              number_of_neighbors: int,
-                             max_neighbors_radius: float,
                              is_weighted_by_point_support=True,
                              raise_when_anomalies=False) -> List:
     """
@@ -23,27 +27,18 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     semivariogram_model : TheoreticalVariogram
                           Fitted variogram.
 
-    blocks : Dict
-             Dictionary retrieved from the Blocks, it's structure is defined as:
-             polyset = {
-                      'geometry': {
-                          'block index': geometry
-                      }
-                      'data': [[index centroid.x, centroid.y value]],
-                      'info': {
-                          'index_name': the name of the index column,
-                          'geometry_name': the name of the geometry column,
-                          'value_name': the name of the value column,
-                          'crs': CRS of a dataset
-                      }
-                  }
+    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+             Blocks with aggregated data.
+             * Blocks: Blocks() class object.
+             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+               Geometry column with polygons is not used and optional.
+             * numpy array: [[block index, centroid x, centroid y, value]].
 
-    point_support : Dict
-                    Point support data as a Dict:
-
-                        point_support = {
-                            'area_id': [numpy array with points]
-                        }
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
 
     unknown_block : numpy array
                     [index, centroid.x, centroid.y]
@@ -54,9 +49,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
-    max_neighbors_radius : float
-                           The maximum radius of search for the closest neighbors.
-
     is_weighted_by_point_support : bool, default = True
                                    Are distances between blocks weighted by point support?
 
@@ -66,17 +58,16 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     Returns
     -------
     results : List
-              [prediction, error, unknown block index]
+              [unknown block index, prediction, error]
 
     """
     # Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]
-    kriging_data = select_poisson_kriging_data(
+    kriging_data = select_centroid_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_blocks=blocks,
         k_point_support=point_support,
         nn=number_of_neighbors,
-        max_radius=max_neighbors_radius,
         weighted=is_weighted_by_point_support
     )
 
@@ -130,29 +121,3 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     # Prepare output
     results = [unknown_block[0], zhat, sigma]
     return results
-
-
-def weights_array(predicted_semivariances_shape, block_vals, point_support_vals) -> np.array:
-    """
-    Function calculates additional diagonal weights for the matrix of predicted semivariances.
-
-    Parameters
-    ----------
-    predicted_semivariances_shape : Tuple
-                                    The size of semivariances array (nrows x ncols).
-
-    block_vals : numpy array
-
-    point_support_vals : numpy array
-
-    Returns
-    -------
-    : numpy array
-        The mask with zeros and diagonal weights.
-    """
-
-    weighted_array = np.sum(block_vals * point_support_vals)
-    weight = weighted_array / np.sum(point_support_vals)
-    w = np.ones(shape=predicted_semivariances_shape)
-    np.fill_diagonal(w, weight)
-    return w
