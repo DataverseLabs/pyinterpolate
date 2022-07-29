@@ -194,6 +194,35 @@ def create_min_max_array(value: float,
     return min_max_steps
 
 
+def get_aggregated_point_support_values(ps, indexes):
+    k_point_support_dict = _transform_ps(ps=ps)
+
+    total_values = []
+    for idx in indexes:
+        _ps = k_point_support_dict[idx]
+        tot = np.sum(_ps[:, -1])
+        total_values.append(tot)
+
+    return np.array(total_values)
+
+
+def get_distances_within_unknown(point_support: np.ndarray):
+
+    distances = calc_point_to_point_distance(point_support[:, :-1])
+    fdistances = distances.flatten()
+
+    values = []
+    for v1 in point_support:
+        for v2 in point_support:
+            values.append([v1[-1], v2[-1]])
+
+    values = np.array(values)
+
+    values_and_distances = np.array(list(zip(values[:, 0], values[:, 1], fdistances)))
+
+    return np.array(values_and_distances)
+
+
 def get_study_max_range(input_coordinates: np.ndarray) -> float:
     """Function calculates max range of a study area.
 
@@ -214,6 +243,53 @@ def get_study_max_range(input_coordinates: np.ndarray) -> float:
     study_range = (max_x - min_x)**2 + (max_y - min_y)**2
     study_range = np.sqrt(study_range)
     return study_range
+
+
+def prepare_ata_pk_known_areas(point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
+                               blocks_ids: Iterable) -> Dict:
+    """
+    Function prepares data for semivariogram calculation between neighbors of unknown block.
+
+    Parameters
+    ----------
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
+
+    blocks_ids : Iterable
+                 Blocks - neighbours.
+
+    Returns
+    -------
+    : Dict
+        {(block a, block b): [block a value, block b value, distance between points]}
+    """
+    k_point_support_dict = _transform_ps(ps=point_support)
+
+    datasets = {}
+
+    for bid_a in blocks_ids:
+        ps_a = k_point_support_dict[bid_a]
+        coordinates_a = ps_a[:, :-1]
+        values_a = ps_a[:, -1]
+        for bid_b in blocks_ids:
+            ps_b = k_point_support_dict[bid_b]
+            coordinates_b = ps_b[:, :-1]
+            values_b = ps_b[:, -1]
+            if bid_a != bid_b:
+                distances = calc_point_to_point_distance(coordinates_a, coordinates_b)
+            else:
+                distances = np.zeros(len(values_a) * len(values_b))
+            fdistances = distances.flatten()
+            ldist = len(fdistances)
+            a_values_arr = np.resize(values_a, ldist)
+            b_values_arr = np.resize(values_b, ldist)
+            out_arr = list(zip(a_values_arr, b_values_arr, fdistances))
+            datasets[(bid_a, bid_b)] = np.array(out_arr)
+
+    return datasets
 
 
 def select_kriging_data(unknown_position: Iterable,
@@ -285,10 +361,10 @@ def select_kriging_data(unknown_position: Iterable,
 
 def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
                                     u_point_support: np.ndarray,
-                                    k_blocks: Dict,
-                                    k_point_support: Dict,
+                                    k_point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame,
+                                                           PointSupport],
                                     nn: int,
-                                    max_radius: float):
+                                    max_radius: float) -> Dict:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
@@ -300,30 +376,11 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
     u_point_support : numpy array
                       Numpy array of points within block [[x, y, point support value]]
 
-    k_blocks : Dict
-               Dictionary retrieved from the Blocks, it's structure is defined as:
-               polyset = {
-                      'geometry': {
-                          'block index': geometry
-                      }
-                      'data': [[index centroid.x, centroid.y value]],
-                      'info': {
-                          'index_name': the name of the index column,
-                          'geometry_name': the name of the geometry column,
-                          'value_name': the name of the value column,
-                          'crs': CRS of a dataset
-                      }
-                  }
-
-    k_point_support : Dict
-                      Point support data as a Dict:
-
-                        point_support = {
-                            'data': {
-                                'area_id': [numpy array with points]
-                            }
-                            'info': {...}
-                        }
+    k_point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                      * Dict: {block id: [[point x, point y, value]]}
+                      * numpy array: [[block id, x, y, value]]
+                      * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                      * PointSupport
 
     nn : int
          The minimum number of neighbours that potentially affect block.
@@ -333,31 +390,48 @@ def select_ata_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     Returns
     -------
-    datasets : List[numpy array, numpy array]
-               [array[block id, block value],
-    #           array[[know point support val, unknown point support val, distance between points], ...]]]
+    datasets : Dict
+               {known block id: [known pt val, unknown pt val, distance between points]}
     """
-    indexes = list(k_point_support['data'].keys())
-    block_values = []
+    k_point_support_dict = _transform_ps(ps=k_point_support)
 
+    datasets = {}
+    u_index = u_block_centroid[0]
 
-def _transform_ps(ps, idx_col=None, x_col=None, y_col=None, val_col=None):
-    if isinstance(ps, PointSupport):
-        return point_support_to_dict(ps)
-    elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
-        expected_cols = {'x', 'y', 'ds', 'index'}
+    # Get closest areas
+    k_idxs = list(k_point_support_dict.keys())
+    distances_between_known_and_unknown = _calculate_weighted_distances(k_point_support_dict,
+                                                                        u_index,
+                                                                        u_point_support)
 
-        if not expected_cols.issubset(set(ps.columns)):
-            raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
-                           f'It has {ps.columns} instead.')
-        return block_dataframe_to_dict(ps)
-    elif isinstance(ps, np.ndarray):
-        return block_arr_to_dict(ps)
-    elif isinstance(ps, Dict):
-        return ps
-    else:
-        raise TypeError(f'Blocks data type {type(ps)} not recognized. You may use PointSupport,'
-                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
+    kdata = []
+    for kidx in k_idxs:
+        for rec in distances_between_known_and_unknown:
+            if kidx in rec:
+                val = rec[kidx][1]
+                kdata.append([kidx, val])
+                break
+
+    kdata = np.array(kdata)
+    sorted_kdata = kdata[kdata[:, -1].argsort()]
+
+    max_search_pos = np.argmax(sorted_kdata[:, -1] > max_radius)
+    output_areas = sorted_kdata[:max_search_pos]
+
+    if len(output_areas) < nn:
+        output_areas = sorted_kdata[:nn]
+
+    for idx in output_areas[:, 0]:
+        point_s = k_point_support[idx]
+        distances = calc_point_to_point_distance(u_point_support[:, :-1], point_s[:, :-1])
+        fdistances = distances.flatten()
+        ldist = len(fdistances)
+        u_values_arr = np.resize(u_point_support[:, -1], ldist)
+        k_values_arr = np.resize(point_s[:, -1], ldist)
+        out_arr = list(zip(k_values_arr, u_values_arr, fdistances))
+        datasets[idx] = np.array(out_arr)
+
+    return datasets
 
 
 def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
@@ -411,31 +485,11 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     k_point_support_dict = _transform_ps(ps=k_point_support)
     k_centroids = get_areal_centroids_from_agg(k_blocks)
 
-    if not isinstance(u_block_centroid, np.ndarray):
-        u_block_centroid = np.array(u_block_centroid)
-
-    if len(u_block_centroid) != 3:
-        u_block_centroid = u_block_centroid.flatten()
-        if len(u_block_centroid) != 3:
-            raise AttributeError(
-                f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
-                f'But provided array has {len(u_block_centroid)} record(s)!')
-
-    u_coordinates = u_block_centroid[1:]
-    u_index = u_block_centroid[0]
-
-    dists = []
+    u_index, u_coordinates = _transform_and_test_u_block_centroid(u_block_centroid)
 
     if weighted:
         # Calc weighted distance from point support
-
-        for kidx, point_array in k_point_support_dict.items():
-            blocks = {
-                kidx: point_array,
-                u_index: u_point_support
-            }
-            distance = calc_block_to_block_distance(blocks)
-            dists.append(distance)
+        dists = _calculate_weighted_distances(k_point_support_dict, u_index, u_point_support)
     else:
         # Calc from centroids
         dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
@@ -462,6 +516,34 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         kriging_input[idx][-1] = ps_total
 
     return kriging_input
+
+
+def _calculate_weighted_distances(k_point_support_dict, u_index, u_point_support):
+    dists = []
+    for kidx, point_array in k_point_support_dict.items():
+        blocks = {
+            kidx: point_array,
+            u_index: u_point_support
+        }
+        distance = calc_block_to_block_distance(blocks)
+        dists.append(distance)
+    return dists
+
+
+def _transform_and_test_u_block_centroid(u_block_centroid):
+    if not isinstance(u_block_centroid, np.ndarray):
+        u_block_centroid = np.array(u_block_centroid)
+
+    if len(u_block_centroid) != 3:
+        u_block_centroid = u_block_centroid.flatten()
+        if len(u_block_centroid) != 3:
+            raise AttributeError(
+                f'Parameter u_block_centroid should have three records: index, coordinate x, coordinate y. '
+                f'But provided array has {len(u_block_centroid)} record(s)!')
+
+    u_coordinates = u_block_centroid[1:]
+    u_index = u_block_centroid[0]
+    return u_index, u_coordinates
 
 
 def _parse_pk_input(centroids_and_values, distances):
@@ -509,3 +591,22 @@ def _parse_pk_input(centroids_and_values, distances):
 
     data = np.array(data)
     return data
+
+
+def _transform_ps(ps, idx_col=None, x_col=None, y_col=None, val_col=None):
+    if isinstance(ps, PointSupport):
+        return point_support_to_dict(ps)
+    elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
+        expected_cols = {'x', 'y', 'ds', 'index'}
+
+        if not expected_cols.issubset(set(ps.columns)):
+            raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                           f'It has {ps.columns} instead.')
+        return block_dataframe_to_dict(ps)
+    elif isinstance(ps, np.ndarray):
+        return block_arr_to_dict(ps)
+    elif isinstance(ps, Dict):
+        return ps
+    else:
+        raise TypeError(f'Blocks data type {type(ps)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
