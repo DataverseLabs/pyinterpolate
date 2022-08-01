@@ -15,7 +15,7 @@ POP10 = 'POP10'
 GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'FIPS'
 POLYGON_VALUE = 'rate'
-NN = 8
+NN = 4
 
 
 def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
@@ -68,15 +68,17 @@ THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
 
 class TestATAPK(unittest.TestCase):
 
-    # def test_flow_1(self):
-    #     pk_output = area_to_area_pk(semivariogram_model=THEORETICAL_VARIOGRAM,
-    #                                 blocks=AREAL_INP,
-    #                                 point_support=PS_INP,
-    #                                 unknown_block=UNKN_AREA,
-    #                                 unknown_block_point_support=UNKN_PS,
-    #                                 number_of_neighbors=NN)
-    #
-    #     self.assertTrue(pk_output)
+    def test_flow_1(self):
+        pk_output = area_to_point_pk(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                     blocks=AREAL_INP,
+                                     point_support=PS_INP,
+                                     unknown_block=UNKN_AREA,
+                                     unknown_block_point_support=UNKN_PS,
+                                     number_of_neighbors=NN)
+
+        self.assertIsInstance(pk_output, np.ndarray)
+        self.assertTrue(len(pk_output[0][0]) == 2)
+        self.assertEqual(len(pk_output[0]), 3)
 
     def test_flow_2(self):
         known_blocks = np.array([
@@ -126,4 +128,13 @@ class TestATAPK(unittest.TestCase):
                                     unknown_block=ublock,
                                     unknown_block_point_support=u_ps,
                                     number_of_neighbors=4)
-        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 399, 0]))
+
+        expected_output = np.array([
+            [(2.8, 0.9), 133.33, 0.03],
+            [(3.2, 1.1), 266.67, 0.03]
+        ])
+
+        for idx, val in enumerate(pk_model):
+            self.assertEqual(val[0], expected_output[idx][0])
+            self.assertAlmostEqual(val[1], expected_output[idx][1], places=2)
+            self.assertAlmostEqual(val[2], expected_output[idx][2], places=2)

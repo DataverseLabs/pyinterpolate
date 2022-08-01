@@ -243,8 +243,8 @@ def get_study_max_range(input_coordinates: np.ndarray) -> float:
     return study_range
 
 
-def prepare_ata_pk_known_areas(point_support_dict: Dict,
-                               blocks_ids: Iterable) -> Dict:
+def prepare_pk_known_areas(point_support_dict: Dict,
+                           blocks_ids: Iterable) -> Dict:
     """
     Function prepares data for semivariogram calculation between neighbors of unknown block.
 

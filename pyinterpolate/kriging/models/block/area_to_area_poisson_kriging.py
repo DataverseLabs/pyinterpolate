@@ -6,7 +6,7 @@ import pandas as pd
 
 from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlock2BlockSemivariance
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
-from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_ata_pk_known_areas,\
+from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
     get_aggregated_point_support_values, get_distances_within_unknown
 from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict
 from pyinterpolate.variogram import TheoreticalVariogram
@@ -82,7 +82,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     prepared_ids = list(avg_semivariances.keys())
 
     # {(known block id a, known block id b): [pt a val, pt b val, distance between points]}
-    distances_between_known_areas = prepare_ata_pk_known_areas(dps, prepared_ids)
+    distances_between_known_areas = prepare_pk_known_areas(dps, prepared_ids)
 
     semivariances_between_known_areas = b2b_semivariance.calculate_average_semivariance(
         distances_between_known_areas)
