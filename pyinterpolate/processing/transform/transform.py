@@ -190,3 +190,22 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
                      point_support.point_support[point_support.block_index_column] == _id
                      ][cls].values[:, 1:]
     return d
+
+
+def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None):
+    if isinstance(ps, PointSupport):
+        return point_support_to_dict(ps)
+    elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
+        expected_cols = {'x', 'y', 'ds', 'index'}
+
+        if not expected_cols.issubset(set(ps.columns)):
+            raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                           f'It has {ps.columns} instead.')
+        return block_dataframe_to_dict(ps)
+    elif isinstance(ps, np.ndarray):
+        return block_arr_to_dict(ps)
+    elif isinstance(ps, Dict):
+        return ps
+    else:
+        raise TypeError(f'Blocks data type {type(ps)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')

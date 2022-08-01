@@ -54,7 +54,7 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
         prepared = select_centroid_poisson_kriging_data(u_block_centroid=U_PT,
                                                         u_point_support=U_PS,
                                                         k_blocks=AREAL_INPUT,
-                                                        k_point_support=POINT_SUPPORT_INPUT,
+                                                        k_point_support_dict=POINT_SUPPORT_INPUT,
                                                         nn=NN,
                                                         weighted=WEIGHTED)
 
@@ -67,7 +67,7 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
         prepared = select_centroid_poisson_kriging_data(u_block_centroid=U_PT,
                                                         u_point_support=U_PS,
                                                         k_blocks=AREAL_INPUT,
-                                                        k_point_support=POINT_SUPPORT_INPUT,
+                                                        k_point_support_dict=POINT_SUPPORT_INPUT,
                                                         nn=NN,
                                                         weighted=False)
         prepared_as_int = prepared.astype(int)

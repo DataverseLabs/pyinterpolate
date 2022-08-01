@@ -8,6 +8,7 @@ from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.kriging.models.block.weight import weights_array
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
+from pyinterpolate.processing.transform.transform import transform_ps_to_dict
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -62,11 +63,16 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     """
     # Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]
+    if isinstance(point_support, Dict):
+        dps = point_support
+    else:
+        dps = transform_ps_to_dict(point_support)
+
     kriging_data = select_centroid_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_blocks=blocks,
-        k_point_support=point_support,
+        k_point_support_dict=dps,
         nn=number_of_neighbors,
         weighted=is_weighted_by_point_support
     )
