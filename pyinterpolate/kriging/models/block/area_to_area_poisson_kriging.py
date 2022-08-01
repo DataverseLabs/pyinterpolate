@@ -1,82 +1,15 @@
-from typing import Dict, Union, Tuple
+from typing import Dict, Union
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from pyinterpolate.kriging.models.block.weight import weights_array
+from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlock2BlockSemivariance
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
-from pyinterpolate.processing.select_values import select_ata_poisson_kriging_data, prepare_ata_pk_known_areas,\
+from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
     get_aggregated_point_support_values, get_distances_within_unknown
-from pyinterpolate.processing.transform.transform import get_areal_values_from_agg
+from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict
 from pyinterpolate.variogram import TheoreticalVariogram
-
-
-class WeightedBlock2BlockSemivariance:
-
-    def __init__(self, semivariance_model):
-        self.semivariance_model = semivariance_model
-
-    def _avg_smv(self, datarows: np.ndarray) -> Tuple:
-        """
-        Function calculates weight and partial semivariance of a data row [point value a, point value b, distance]
-
-        Parameters
-        ----------
-        datarows : numpy array
-                   [point value a, point value b, distance between points]
-
-        Returns
-        -------
-        : Tuple[float, float]
-            [Weighted sum of semivariances, Weights sum]
-        """
-
-        predictions = self.semivariance_model.predict(datarows[:, -1])
-        weights = datarows[:, 0] * datarows[:, 1]
-        summed_weights = np.sum(weights)
-        summed_semivariances = np.sum(
-            predictions * weights
-        )
-
-        return summed_semivariances, summed_weights
-
-    def calculate_average_semivariance(self, data_points: Dict) -> Dict:
-        """
-        Function calculates the average semivariance.
-
-        Parameters
-        ----------
-        data_points : Dict
-                      {area id: numpy array with [pt a value, pt b value, distance between a and b]}
-
-        Returns
-        -------
-        weighted_semivariances : Dict
-                                 {area_id: weighted semivariance}
-
-        Notes
-        -----
-
-        Weighted semivariance is calculated as:
-
-        (1)
-
-        $$\gamma_{w}=\frac{1}{\sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'}} * \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
-
-        where:
-        * $w_{ss'}$ - product of point-support weights from block a and block b.
-        * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
-        """
-        k = {}
-        for idx, prediction_input in data_points.items():
-            w_sem = self._avg_smv(prediction_input)
-            w_sem_sum = w_sem[0]
-            w_sem_weights_sum = w_sem[1]
-
-            k[idx] = w_sem_sum / w_sem_weights_sum
-
-        return k
 
 
 def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
@@ -123,12 +56,18 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     """
     # Prepare Kriging Data
-    # {known block id: [known pt val, unknown pt val, distance between points]}
+    # {known block id: [(unknown x, unknown y), [unknown val, known val, distance between points]]}
 
-    kriging_data = select_ata_poisson_kriging_data(
+    # Transform point support to dict
+    if isinstance(point_support, Dict):
+        dps = point_support
+    else:
+        dps = transform_ps_to_dict(point_support)
+
+    kriging_data = select_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
-        k_point_support=point_support,
+        k_point_support_dict=dps,
         nn=number_of_neighbors)
 
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
@@ -143,7 +82,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     prepared_ids = list(avg_semivariances.keys())
 
     # {(known block id a, known block id b): [pt a val, pt b val, distance between points]}
-    distances_between_known_areas = prepare_ata_pk_known_areas(point_support, prepared_ids)
+    distances_between_known_areas = prepare_pk_known_areas(dps, prepared_ids)
 
     semivariances_between_known_areas = b2b_semivariance.calculate_average_semivariance(
         distances_between_known_areas)
@@ -160,7 +99,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     # Add diagonal weights
     values = get_areal_values_from_agg(blocks, prepared_ids)
-    aggregated_ps = get_aggregated_point_support_values(point_support, prepared_ids)
+    aggregated_ps = get_aggregated_point_support_values(dps, prepared_ids)
     weights = weights_array(predicted.shape, values, aggregated_ps)
     weighted_and_predicted = predicted + weights
 
