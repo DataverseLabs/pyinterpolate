@@ -111,20 +111,48 @@ class WeightedBlock2PointSemivariance:
 
         return weighted_block_smv
 
-    def calculate_average_semivariance(self, data_points: Dict):
+    def calculate_average_semivariance(self, data_points: Dict) -> np.ndarray:
         """
-        Function calculates average semivariance between block (Pi) and single point from a different block Pj.
+        Function calculates average semivariance a single point from block Pj and all points from block Pi.
 
         Parameters
         ----------
         data_points : Dict
-                      {known block id: [(unknown x, unknown y), [unknown val, known val, distance between points]]}
+                      {
+                          known block id:
+                              [(unknown x, unknown y), array(unknown val, known val, distance between points)]
+                      }
+                      or
+                      {
+                          block Pi id:
+                              [
+                                  (block Pj point support point x_n, block Pj point support point y_n),
+                                  array(
+                                      [value of unknown block (Pj) point-support point n,
+                                      value of known block (Pi) point-support point i,
+                                      distance between (x_n, y_n) and (x_i, y_i)],
+                                      [value of unknown block (Pj) point-support point n,
+                                      value of known block (Pi) point-support point i+1,
+                                      distance between (x_n, y_n) and (x_i+1, y_i+1)],
+                                      [...]
+                                      )
+                              ]
+                      }
 
 
         Returns
         -------
         point_to_block_semivariances : numpy array
-                                       Predicted and weighted semivariances for each passed point.
+                                       Predicted and weighted semivariances for each unknown block point support
+                                       against known blocks.
+                                       array(
+                                            [unknown point 1 (n) semivariance against point support from block 1,
+                                            unknown point 2 (n+1) semivariance against point support from block 1,
+                                            ...],
+                                            [unknown point 1 (n) semivariance against point support from block 2,
+                                            unknown point 2 (n+1) semivariance against point support from block 2,
+                                            ...],
+                                       )
 
         Notes
         -----
@@ -154,6 +182,12 @@ class WeightedBlock2PointSemivariance:
                 pts_per_area.append(pt_output)
             point_to_blocks_smvs.append(pts_per_area)
         return np.array(point_to_blocks_smvs)
+
+
+def add_ones(array: np.ndarray) -> np.ndarray:
+    ones = np.ones(np.shape(array)[1])
+    list_with_ones = np.vstack((array, ones))
+    return list_with_ones
 
 
 def weights_array(predicted_semivariances_shape, block_vals, point_support_vals) -> np.array:

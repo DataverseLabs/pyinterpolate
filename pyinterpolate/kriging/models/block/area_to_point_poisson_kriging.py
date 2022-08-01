@@ -4,7 +4,8 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from pyinterpolate.kriging.models.block.weight import WeightedBlock2BlockSemivariance, WeightedBlock2PointSemivariance
+from pyinterpolate.kriging.models.block.weight import WeightedBlock2BlockSemivariance, WeightedBlock2PointSemivariance, \
+    add_ones
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_poisson_kriging_data
 from pyinterpolate.processing.transform.transform import transform_ps_to_dict
@@ -73,11 +74,24 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     # Get block to block weighted semivariances
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
+    # {known area_id: weighted block-to-block semivariance between unknown area and known area}
     avg_b2b_semivariances = b2b_semivariance.calculate_average_semivariance(kriging_data)
 
     # Get block to point weighted semivariances
     b2p_semivariance = WeightedBlock2PointSemivariance(semivariance_model=semivariogram_model)
-    avg_b2p_semivariances = b2p_semivariance.calculate_average_semivariance(kriging_data)
+    # array(
+    #     [unknown point 1 (n) semivariance against point support from block 1,
+    #      unknown point 2 (n+1) semivariance against point support from block 1,
+    #      ...],
+    #     [unknown point 1 (n) semivariance against point support from block 2,
+    #      unknown point 2 (n+1) semivariance against point support from block 2,
+    #      ...],
+    # )
+    avg_b2p_semivariances = add_ones(b2p_semivariance.calculate_average_semivariance(kriging_data))
+
+
+
+    return avg_b2b_semivariances, avg_b2p_semivariances
 
 
 
