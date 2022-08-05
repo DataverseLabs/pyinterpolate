@@ -1,12 +1,14 @@
 from copy import deepcopy
-from typing import Dict
+from typing import Dict, Union
 
-import numpy
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 from pyinterpolate.distance.distance import calc_block_to_block_distance
-from pyinterpolate.processing.polygon.structure import get_block_centroids_from_polyset
+from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
+from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg
 from pyinterpolate.variogram import TheoreticalVariogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances import \
@@ -23,25 +25,12 @@ class AggregatedVariogram:
 
     Parameters
     ----------
-    aggregated_data : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+                      Blocks with aggregated data.
+                      * Blocks: Blocks() class object.
+                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+                        Geometry column with polygons is not used and optional.
+                      * numpy array: [[block index, centroid x, centroid y, value]].
 
     agg_step_size : float
                     Step size between lags.
@@ -49,12 +38,11 @@ class AggregatedVariogram:
     agg_max_range : float
                     Maximal distance of analysis.
 
-    point_support : Dict
-                    Point support data as a Dict:
-
-                        point_support = {
-                          'area_id': [numpy array with points]
-                        }
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
 
     agg_direction : float (in range [0, 360]), optional, default=0
                     direction of semivariogram, values from 0 to 360 degrees:
@@ -65,9 +53,9 @@ class AggregatedVariogram:
 
     agg_tolerance : float (in range [0, 1]), optional, default=1
                     If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                    the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                    for 0 tolerance.
+                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
+                    then the bin is selected as an elliptical area with major axis pointed in the same direction as
+                    the line for 0 tolerance.
                     * The minor axis size is (tolerance * step_size)
                     * The major axis size is ((1 - tolerance) * step_size)
                     * The baseline point is at a center of the ellipse.
@@ -89,8 +77,8 @@ class AggregatedVariogram:
 
     Attributes
     ----------
-    aggregated_data : Dict
-                      See aggregared_data parameter,
+    aggregated_data : Union[Blocks, Dict, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+                      See aggregared_data parameter.
 
     agg_step_size : float
                     See agg_step_size parameter.
@@ -108,7 +96,7 @@ class AggregatedVariogram:
     agg_direction : float, default = 0
                     See agg_direction parameter.
 
-    point_support : Dict
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
                     See point_support parameter.
 
     weighting_method : str, default = 'closest'
@@ -162,10 +150,10 @@ class AggregatedVariogram:
     """
 
     def __init__(self,
-                 aggregated_data: Dict,
+                 aggregated_data: Union[Blocks, pd.DataFrame, gpd.GeoDataFrame, np.ndarray],
                  agg_step_size: float,
                  agg_max_range: float,
-                 point_support: Dict,
+                 point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                  agg_direction: float = 0,
                  agg_tolerance: float = 1,
                  variogram_weighting_method: str = 'closest',
@@ -456,8 +444,10 @@ class AggregatedVariogram:
         gammas : ExperimentalVariogram
         """
 
+        ds = get_areal_centroids_from_agg(self.aggregated_data)
+
         gammas = build_experimental_variogram(
-            input_array=get_block_centroids_from_polyset(self.aggregated_data),
+            input_array=ds,
             step_size=self.agg_step_size,
             max_range=self.agg_max_range,
             weights=None,
@@ -468,44 +458,31 @@ class AggregatedVariogram:
         return gammas
 
 
-def regularize(aggregated_data: Dict,
+def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                agg_step_size: float,
                agg_max_range: float,
                point_support: Dict,
-               average_inblock_semivariances = None,
-               semivariance_between_point_supports = None,
-               experimental_block_variogram = None,
-               theoretical_block_model = None,
+               average_inblock_semivariances=None,
+               semivariance_between_point_supports=None,
+               experimental_block_variogram=None,
+               theoretical_block_model=None,
                agg_direction: float = 0,
                agg_tolerance: float = 1,
                variogram_weighting_method: str = 'closest',
                verbose: bool = False,
-               log_process: bool = False) -> numpy.ndarray:
+               log_process: bool = False) -> np.ndarray:
     """
     Function is an alias to AggregatedVariogram class and performs semivariogram regularization. Function returns
     regularized variogram.
 
     Parameters
     ----------
-    aggregated_data : Dict
-                      Dictionary retrieved from the PolygonDataClass, it's structure is defined as:
-
-                          polyset = {
-                                    'blocks': {
-                                        'block index': {
-                                            'value_name': float,
-                                            'geometry_name': MultiPolygon | Polygon,
-                                            'centroid.x': float,
-                                            'centroid.y': float
-                                        }
-                                    }
-                                    'info': {
-                                            'index_name': the name of the index column,
-                                            'geometry_name': the name of the geometry column,
-                                            'value_name': the name of the value column,
-                                            'crs': CRS of a dataset
-                                    }
-                                }
+    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+                      Blocks with aggregated data.
+                      * Blocks: Blocks() class object.
+                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+                        Geometry column with polygons is not used and optional.
+                      * numpy array: [[block index, centroid x, centroid y, value]].
 
     agg_step_size : float
                     Step size between lags.
@@ -513,12 +490,11 @@ def regularize(aggregated_data: Dict,
     agg_max_range : float
                     Maximal distance of analysis.
 
-    point_support : Dict
-                    Point support data as a Dict:
-
-                        point_support = {
-                          'area_id': [numpy array with points]
-                        }
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
 
     average_inblock_semivariances : np.ndarray, optional
                                     The mean semivariance between the blocks. See Notes to learn more.
@@ -541,9 +517,9 @@ def regularize(aggregated_data: Dict,
 
     agg_tolerance : float (in range [0, 1]), optional, default=1
                     If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                    the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                    for 0 tolerance.
+                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
+                    then the bin is selected as an elliptical area with major axis pointed in the same direction as
+                    the line for 0 tolerance.
                     * The minor axis size is (tolerance * step_size)
                     * The major axis size is ((1 - tolerance) * step_size)
                     * The baseline point is at a center of the ellipse.

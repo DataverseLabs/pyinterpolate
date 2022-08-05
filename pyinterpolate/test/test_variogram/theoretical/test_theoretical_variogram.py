@@ -59,7 +59,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
         variogram = TheoreticalVariogram()
         variogram.autofit(empirical_variogram=ARMSTRONG_VARIOGRAM, model_types='all')
         expected_sill = 12.85
-        expected_range = 4.16
+        expected_range = 4.13
         self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
         self.assertAlmostEqual(expected_range, variogram.rang, places=2)
 

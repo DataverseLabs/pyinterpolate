@@ -1,18 +1,24 @@
-from typing import Dict
+from typing import Dict, Union
 
+import geopandas as gpd
 import numpy as np
+import pandas as pd
+
 
 from scipy.spatial.distance import cdist
 
+from pyinterpolate.processing.preprocessing.blocks import PointSupport
+from pyinterpolate.processing.transform.transform import point_support_to_dict, block_dataframe_to_dict
 
-def calc_block_to_block_distance(blocks: Dict) -> Dict:
+
+def _calc_b2b_dist_from_array(blocks: np.ndarray) -> Dict:
     """
     Function calculates distances between blocks.
 
     Parameters
     ----------
-    blocks : Dict
-             {block id: [[point x, point y, value]]}
+    blocks : numpy array
+             * numpy array: [[block id, point x, point y, value]]
 
     Returns
     -------
@@ -20,7 +26,70 @@ def calc_block_to_block_distance(blocks: Dict) -> Dict:
                       {block id : [distances to other blocks]}. Block ids in the order from the list of
                       distances.
     """
-    block_keys = sorted(list(blocks.keys()))
+
+    block_keys = np.unique(blocks[:, 0])
+    block_distances = dict()
+    for k_i in block_keys:
+        i_block = blocks[blocks[:, 0] == k_i][:, 1:]
+        distances = []
+        for k_j in block_keys:
+            j_block = blocks[blocks[:, 0] == k_j][:, 1:]
+            if k_i == k_j:
+                distances.append(0)
+            else:
+                value = _calculate_block_to_block_distance(i_block, j_block)
+                distances.append(value)
+        block_distances[k_i] = distances
+
+    return block_distances
+
+
+def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame]) -> Dict:
+    """
+    Function calculates distances between blocks.
+
+    Parameters
+    ----------
+    blocks : Dict
+             * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+
+    Returns
+    -------
+    block_distances : Dict
+                      {block id : [distances to other blocks]}. Block ids in the order from the list of
+                      distances.
+    """
+
+    expected_cols = {'x', 'y', 'ds', 'index'}
+
+    if not expected_cols.issubset(set(blocks.columns)):
+        raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                       f'It has {blocks.columns} instead.')
+
+    dsdict = block_dataframe_to_dict(blocks)
+
+    bdists = _calc_b2b_dist_from_dict(dsdict)
+
+    return bdists
+
+
+def _calc_b2b_dist_from_dict(blocks: Dict) -> Dict:
+    """
+    Function calculates distances between blocks.
+
+    Parameters
+    ----------
+    blocks : Dict
+             * Dict: {block id: [[point x, point y, value]]}
+
+    Returns
+    -------
+    block_distances : Dict
+                      {block id : [distances to other blocks]}. Block ids in the order from the list of
+                      distances.
+    """
+
+    block_keys = list(blocks.keys())
     block_distances = dict()
     for k_i in block_keys:
         i_block = blocks[k_i]
@@ -33,6 +102,59 @@ def calc_block_to_block_distance(blocks: Dict) -> Dict:
                 value = _calculate_block_to_block_distance(i_block, j_block)
                 distances.append(value)
         block_distances[k_i] = distances
+
+    return block_distances
+
+
+def _calc_b2b_dist_from_ps(blocks: PointSupport) -> Dict:
+    """
+    Function calculates distances between blocks.
+
+    Parameters
+    ----------
+    blocks : PointSupport
+
+    Returns
+    -------
+    block_distances : Dict
+                      {block id : [distances to other blocks]}. Block ids in the order from the list of
+                      distances.
+    """
+    dsdict = point_support_to_dict(point_support=blocks)
+    block_distances = _calc_b2b_dist_from_dict(dsdict)
+    return block_distances
+
+
+def calc_block_to_block_distance(blocks: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]) -> Dict:
+    """
+    Function calculates distances between blocks.
+
+    Parameters
+    ----------
+    blocks : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+             * Dict: {block id: [[point x, point y, value]]}
+             * numpy array: [[block id, x, y, value]]
+             * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+             * PointSupport
+
+    Returns
+    -------
+    block_distances : Dict
+                      {block id : [distances to other blocks]}. Block ids in the order from the list of
+                      distances.
+    """
+
+    if isinstance(blocks, Dict):
+        block_distances = _calc_b2b_dist_from_dict(blocks)
+    elif isinstance(blocks, np.ndarray):
+        block_distances = _calc_b2b_dist_from_array(blocks)
+    elif isinstance(blocks, pd.DataFrame) or isinstance(blocks, gpd.GeoDataFrame):
+        block_distances = _calc_b2b_dist_from_dataframe(blocks)
+    elif isinstance(blocks, PointSupport):
+        block_distances = _calc_b2b_dist_from_ps(blocks)
+    else:
+        raise TypeError(f'Blocks data type {type(blocks)} not recognized. You may use PointSupport,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
 
     return block_distances
 

@@ -1,5 +1,5 @@
 import unittest
-from typing import Tuple, Dict
+from typing import Dict
 
 import numpy as np
 from pyinterpolate.distance.distance import calc_block_to_block_distance
@@ -16,7 +16,5 @@ class TestBlockToBlockFn(unittest.TestCase):
 
     def test_calculate_block_to_block(self):
         distances = calc_block_to_block_distance(BLOCKS)
-        self.assertIsInstance(distances, Tuple)
-        self.assertIsInstance(distances[0], Dict)
-        self.assertIsInstance(distances[1], Tuple)
-        self.assertEqual(distances[1], (0, 1, 2))
+        self.assertIsInstance(distances, Dict)
+        self.assertEqual(len(list(distances.keys())), len(distances[0]))

@@ -1,8 +1,13 @@
-from typing import Dict, Collection
+from typing import Dict, Collection, Union
 
+import geopandas as gpd
 import numpy as np
+import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.processing.preprocessing.blocks import PointSupport
+from pyinterpolate.processing.transform.transform import block_arr_to_dict, block_dataframe_to_dict, \
+    point_support_to_dict
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -39,21 +44,35 @@ def block_pair_semivariance(block_a: Collection,
     return semivariance_between_blocks
 
 
-def calculate_block_to_block_semivariance(point_support: Dict,
-                                          block_to_block_distances: Dict,
-                                          semivariogram_model: TheoreticalVariogram):
+def _check_point_support(point_support: Union[Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]):
+    if isinstance(point_support, np.ndarray):
+        return block_arr_to_dict(point_support)
+    elif isinstance(point_support, pd.DataFrame) or isinstance(point_support, gpd.GeoDataFrame):
+        return block_dataframe_to_dict(point_support)
+    elif isinstance(point_support, PointSupport):
+        return point_support_to_dict(point_support)
+    elif isinstance(point_support, Dict):
+        return point_support
+    else:
+        raise TypeError(f'Unknown point support type {type(point_support)}. Expected types are: '
+                        f'Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray.')
+
+
+def calculate_block_to_block_semivariance(
+        point_support: Union[Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+        block_to_block_distances: Dict,
+        semivariogram_model: TheoreticalVariogram):
     """
     Function calculates semivariance between blocks based on their point support and weighted distance between
         block centroids.
 
     Parameters
     ----------
-    point_support : Dict
-                    Point support dict in the form:
-
-                    point_support = {
-                          'area_id': [numpy array with points and their values]
-                    }
+    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+                    * Dict: {block id: [[point x, point y, value]]}
+                    * numpy array: [[block id, x, y, value]]
+                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+                    * PointSupport
 
     block_to_block_distances : Dict
                                {block id : [distances to other blocks in order of keys]}
@@ -67,6 +86,10 @@ def calculate_block_to_block_semivariance(point_support: Dict,
                        {(block id a, block id b): [distance, semivariance, number of point pairs between blocks]}
     """
 
+    # Prepare data
+    point_support = _check_point_support(point_support)
+
+    # Run
     blocks_ids = list(block_to_block_distances.keys())
     semivariances_b2b = {}
 
@@ -81,7 +104,7 @@ def calculate_block_to_block_semivariance(point_support: Dict,
             else:
                 if (pair not in semivariances_b2b) and (rev_pair in semivariances_b2b):
                     # Check if semivar is not actually calculated and skip calculations if it is
-                    semivariances_b2b[pair] = semivariances_b2b[rev_pair].copy()
+                    semivariances_b2b[pair] = semivariances_b2b[rev_pair]
                 else:
                     # Distance from one block to other
                     distance = block_to_block_distances[first_block_id][sec_indx]
