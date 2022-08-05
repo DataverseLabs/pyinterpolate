@@ -209,3 +209,36 @@ def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None)
     else:
         raise TypeError(f'Blocks data type {type(ps)} not recognized. You may use PointSupport,'
                         f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
+
+
+def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]):
+    """
+    Parameters
+    ----------
+    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+             Blocks with aggregated data.
+             * Blocks: Blocks() class object.
+             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
+               Geometry column with polygons is not used and optional.
+             * numpy array: [[block index, centroid x, centroid y, value]].
+
+    Returns
+    -------
+    bdict : Dict
+            Blocks transformed to dictionary.
+    """
+    if isinstance(blocks, Blocks):
+        bvalues = blocks.data[[blocks.index_column_name, blocks.cx, blocks.cy, blocks.value_column_name]].values
+        return bvalues
+    elif isinstance(blocks, pd.DataFrame) or isinstance(blocks, gpd.GeoDataFrame):
+        expected_cols = {'centroid.x', 'centroid.y', 'ds', 'index'}
+
+        if not expected_cols.issubset(set(blocks.columns)):
+            raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
+                           f'It has {blocks.columns} instead.')
+
+        bvalues = blocks.data[['index', 'centroid.x', 'centroid.y', 'ds']].values
+        return bvalues
+    else:
+        raise TypeError(f'Blocks data type {type(blocks)} not recognized. You may use Blocks,'
+                        f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')

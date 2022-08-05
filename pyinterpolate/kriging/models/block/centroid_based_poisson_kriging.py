@@ -19,7 +19,8 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                              unknown_block_point_support: np.ndarray,
                              number_of_neighbors: int,
                              is_weighted_by_point_support=True,
-                             raise_when_anomalies=False) -> List:
+                             raise_when_negative_prediction=True,
+                             raise_when_negative_error=True) -> List:
     """
     Function performs centroid-based Poisson Kriging of blocks (areal) data.
 
@@ -53,13 +54,20 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     is_weighted_by_point_support : bool, default = True
                                    Are distances between blocks weighted by point support?
 
-    raise_when_anomalies : bool, default = False
-                           Raise ValueError if kriging weights are negative.
+    raise_when_negative_prediction : bool, default=True
+                                     Raise error when prediction is negative.
+
+    raise_when_negative_error : bool, default=True
+                                Raise error when prediction error is negative.
 
     Returns
     -------
     results : List
               [unknown block index, prediction, error]
+
+    Raises
+    ------
+    ValueError : Prediction or prediction error are negative.
 
     """
     # Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]
@@ -113,17 +121,26 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     zhat = values.dot(w[:-1])
 
+    if raise_when_negative_prediction:
+        if zhat < 0:
+            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
+                             f'grid, samples, number of neighbors or semivariogram model type.')
+
     sigmasq = (w.T * semivars)[0]
 
     if sigmasq < 0:
-        if raise_when_anomalies:
-            msg = f'Predicted variance is below 0 == {sigmasq}. Check your dataset for clustered data or change ' \
-                  f'the variogram model type'
-            raise ValueError(msg)
+        if raise_when_negative_error:
+            raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
+                             f'Check your sampling grid, samples, number of neighbors or semivariogram model type.')
         sigma = 0
     else:
         sigma = np.sqrt(sigmasq)
 
     # Prepare output
-    results = [unknown_block[0], zhat, sigma]
+    if isinstance(unknown_block[0], np.ndarray):
+        u_idx = unknown_block[0][0]
+    else:
+        u_idx = unknown_block[0]
+
+    results = [u_idx, zhat, sigma]
     return results

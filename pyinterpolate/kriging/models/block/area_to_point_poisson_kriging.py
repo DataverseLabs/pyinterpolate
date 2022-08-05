@@ -18,7 +18,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                      point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                      unknown_block: np.ndarray,
                      unknown_block_point_support: np.ndarray,
-                     number_of_neighbors: int):
+                     number_of_neighbors: int,
+                     raise_when_negative_prediction=True,
+                     raise_when_negative_error=True):
     """
     Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
 
@@ -49,11 +51,21 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
+    raise_when_negative_prediction : bool, default=True
+                                     Raise error when prediction is negative.
+
+    raise_when_negative_error : bool, default=True
+                                Raise error when prediction error is negative.
+
 
     Returns
     -------
     results : List
               [(unknown point coordinates), prediction, error]
+
+    Raises
+    ------
+    ValueError : Prediction or prediction error are negative.
 
     """
     # Get total point-support value of the unknown area
@@ -140,6 +152,11 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         zhat = values.dot(w[:-1])
 
+        if raise_when_negative_prediction:
+            if zhat < 0:
+                raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
+                                 f'grid, samples, number of neighbors or semivariogram model type.')
+
         if (zhat < 0) or (zhat == np.nan):
             zhat = 0
 
@@ -149,11 +166,14 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         # Calculate error
         sigmasq = (w.T * point)[0]
         if sigmasq < 0:
-            # TODO: Alert user, change number of neighbors, do spatial resampling etc.
+            if raise_when_negative_error:
+                raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
+                                 f'Check your sampling grid, samples, number of neighbors or semivariogram model '
+                                 f'type.')
             sigma = 0
         else:
             sigma = np.sqrt(sigmasq)
 
         predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), zhat, sigma])
 
-    return np.array(predicted_points)
+    return predicted_points

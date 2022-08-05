@@ -63,7 +63,7 @@ class WeightedBlock2BlockSemivariance:
         k = {}
         for idx, prediction_input in data_points.items():
 
-            if len(prediction_input) == 2:
+            if isinstance(prediction_input[0][0], Tuple):
                 _input = prediction_input[1]
             else:
                 _input = prediction_input

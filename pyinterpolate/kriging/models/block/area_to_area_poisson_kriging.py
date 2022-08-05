@@ -1,3 +1,4 @@
+# TODO: log errors
 from typing import Dict, Union
 
 import geopandas as gpd
@@ -17,7 +18,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
                     point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                     unknown_block: np.ndarray,
                     unknown_block_point_support: np.ndarray,
-                    number_of_neighbors: int):
+                    number_of_neighbors: int,
+                    raise_when_negative_prediction=True,
+                    raise_when_negative_error=True):
     """
     Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
 
@@ -48,11 +51,20 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
+    raise_when_negative_prediction : bool, default=True
+                                     Raise error when prediction is negative.
+
+    raise_when_negative_error : bool, default=True
+                                Raise error when prediction error is negative.
 
     Returns
     -------
     results : List
               [unknown block index, prediction, error]
+
+    Raises
+    ------
+    ValueError : Prediction or prediction error are negative.
 
     """
     # Prepare Kriging Data
@@ -119,6 +131,11 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     zhat = values.dot(w[:-1])
 
+    if raise_when_negative_prediction:
+        if zhat < 0:
+            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
+                             f'grid, samples, number of neighbors or semivariogram model type.')
+
     # Calculate prediction error
 
     if isinstance(unknown_block[0], np.ndarray):
@@ -126,14 +143,21 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     else:
         u_idx = unknown_block[0]
 
+    # TODO: check this operation (semivariance_within_unknown)
     distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
+
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
         u_idx: distances_within_unknown_block
     })[u_idx]
 
     sig_base = (w.T * k_ones)[0]
+
     sigmasq = semivariance_within_unknown - sig_base
+
     if sigmasq < 0:
+        if raise_when_negative_error:
+            raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
+                             f'Check your sampling grid, samples, number of neighbors or semivariogram model type.')
         sigma = 0
     else:
         sigma = np.sqrt(sigmasq)
