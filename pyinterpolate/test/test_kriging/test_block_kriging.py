@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 import geopandas as gpd
 
-from pyinterpolate.kriging.block_regularization import RegularizedBlock
+from pyinterpolate.pipelines.block_filtering import BlockPK
 from pyinterpolate.processing.preprocessing.blocks import PointSupport, Blocks
 from pyinterpolate.variogram import TheoreticalVariogram
 
@@ -39,18 +39,18 @@ class TestRegularizedBlock(unittest.TestCase):
 
     def test_real_data(self):
 
-        block_reg_object_ata = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                                blocks=AREAL_INPUT,
-                                                point_support=POINT_SUPPORT_INPUT,
-                                                kriging_type='ata')
-        block_reg_object_atp = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                                blocks=AREAL_INPUT,
-                                                point_support=POINT_SUPPORT_INPUT,
-                                                kriging_type='atp')
-        block_reg_object_cb = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                               blocks=AREAL_INPUT,
-                                               point_support=POINT_SUPPORT_INPUT,
-                                               kriging_type='cb')
+        block_reg_object_ata = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                       blocks=AREAL_INPUT,
+                                       point_support=POINT_SUPPORT_INPUT,
+                                       kriging_type='ata')
+        block_reg_object_atp = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                       blocks=AREAL_INPUT,
+                                       point_support=POINT_SUPPORT_INPUT,
+                                       kriging_type='atp')
+        block_reg_object_cb = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                      blocks=AREAL_INPUT,
+                                      point_support=POINT_SUPPORT_INPUT,
+                                      kriging_type='cb')
 
         # Run models
         # ATA
@@ -104,18 +104,18 @@ class TestRegularizedBlock(unittest.TestCase):
             ])
         }
 
-        block_reg_object_ata = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                                blocks=known_blocks,
-                                                point_support=ps,
-                                                kriging_type='ata')
-        block_reg_object_atp = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                                blocks=known_blocks,
-                                                point_support=ps,
-                                                kriging_type='atp')
-        block_reg_object_cb = RegularizedBlock(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                               blocks=known_blocks,
-                                               point_support=ps,
-                                               kriging_type='cb')
+        block_reg_object_ata = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                       blocks=known_blocks,
+                                       point_support=ps,
+                                       kriging_type='ata')
+        block_reg_object_atp = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                       blocks=known_blocks,
+                                       point_support=ps,
+                                       kriging_type='atp')
+        block_reg_object_cb = BlockPK(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                      blocks=known_blocks,
+                                      point_support=ps,
+                                      kriging_type='cb')
 
         # Run models
         # ATA

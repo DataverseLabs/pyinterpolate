@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 
-from pyinterpolate.kriging.kriging import kriging
+from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.test.test_kriging.consts import prepare_test_data
 
 

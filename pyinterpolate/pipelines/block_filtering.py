@@ -16,7 +16,7 @@ from pyinterpolate.processing.transform.transform import transform_ps_to_dict, t
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
-class RegularizedBlock:
+class BlockPK:
     """
     Class is an object that can be used for Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging
     regularization.
@@ -78,7 +78,8 @@ class RegularizedBlock:
         Regularize blocks.
     """
 
-    def __init__(self, semivariogram_model: TheoreticalVariogram,
+    def __init__(self,
+                 semivariogram_model: TheoreticalVariogram,
                  blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                  point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                  kriging_type='ata'):
