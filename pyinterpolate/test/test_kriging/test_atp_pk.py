@@ -1,5 +1,6 @@
 # TODO: more tests for a different types of input
 import unittest
+from typing import List
 
 import numpy as np
 
@@ -7,8 +8,8 @@ from pyinterpolate.kriging.models.block.area_to_point_poisson_kriging import are
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram import TheoreticalVariogram
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -74,9 +75,10 @@ class TestATAPK(unittest.TestCase):
                                      point_support=PS_INP,
                                      unknown_block=UNKN_AREA,
                                      unknown_block_point_support=UNKN_PS,
-                                     number_of_neighbors=NN)
+                                     number_of_neighbors=NN,
+                                     raise_when_negative_error=False)
 
-        self.assertIsInstance(pk_output, np.ndarray)
+        self.assertIsInstance(pk_output, List)
         self.assertTrue(len(pk_output[0][0]) == 2)
         self.assertEqual(len(pk_output[0]), 3)
 
@@ -127,7 +129,8 @@ class TestATAPK(unittest.TestCase):
                                     point_support=ps,
                                     unknown_block=ublock,
                                     unknown_block_point_support=u_ps,
-                                    number_of_neighbors=4)
+                                    number_of_neighbors=4,
+                                    raise_when_negative_error=False)
 
         expected_output = np.array([
             [(2.8, 0.9), 133.33, 0.03],

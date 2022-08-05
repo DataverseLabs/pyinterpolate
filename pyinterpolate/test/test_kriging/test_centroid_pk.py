@@ -75,7 +75,8 @@ class TestCentroidPK(unittest.TestCase):
                                             point_support=PS_INP,
                                             unknown_block=UNKN_AREA,
                                             unknown_block_point_support=UNKN_PS,
-                                            number_of_neighbors=NN)
+                                            number_of_neighbors=NN,
+                                            raise_when_negative_error=False)
         self.assertTrue(pk_model)
 
     def test_flow_2(self):

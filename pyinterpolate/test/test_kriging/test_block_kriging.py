@@ -8,8 +8,8 @@ from pyinterpolate.processing.preprocessing.blocks import PointSupport, Blocks
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
