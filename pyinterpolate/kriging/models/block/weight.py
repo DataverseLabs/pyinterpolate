@@ -6,6 +6,47 @@ from pyinterpolate.variogram import TheoreticalVariogram
 
 
 class WeightedBlock2BlockSemivariance:
+    """
+    Class calculates the average weighted block-to-block semivariance.
+
+    Parameters
+    ----------
+    semivariance_model : TheoreticalVariogram
+                         Fitted variogram model.
+
+    Attributes
+    ----------
+    semivariance_model : TheoreticalVariogram
+                         See semivariance_model parameter.
+
+    Methods
+    -------
+    calculate_average_semivariance(datarows: Dict)
+        Function calculates the average semivariance from a given set of points and distances between them.
+
+    Notes
+    -----
+
+    Weighted semivariance is calculated as:
+
+    (1)
+
+    $$\gamma_{v_{i}, v_{j}}
+        =
+        \frac{1}{\sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'}} *
+            \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
+
+    where:
+    * $w_{ss'}$ - product of point-support weights from block a and block b.
+    * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
+
+    Examples
+    --------
+    avg_semivar = WeightedBlock2BlockSemivariance(variogram_model)
+    semivars = avg_semivar.calculate_average_semivariance(blocks_data)
+    print(semivars)
+    >>> {'block x': 200, 'block y': 300}
+    """
 
     def __init__(self, semivariance_model):
         self.semivariance_model = semivariance_model
@@ -46,19 +87,6 @@ class WeightedBlock2BlockSemivariance:
         -------
         weighted_semivariances : Dict
                                  {area_id: weighted semivariance}
-
-        Notes
-        -----
-
-        Weighted semivariance is calculated as:
-
-        (1)
-
-        $$\gamma_{v_{i}, v_{j}}=\frac{1}{\sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'}} * \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
-
-        where:
-        * $w_{ss'}$ - product of point-support weights from block a and block b.
-        * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
         """
         k = {}
         for idx, prediction_input in data_points.items():
@@ -78,6 +106,47 @@ class WeightedBlock2BlockSemivariance:
 
 
 class WeightedBlock2PointSemivariance:
+    """
+    Class calculates the average weighted block-to-point semivariance.
+
+    Parameters
+    ----------
+    semivariance_model : TheoreticalVariogram
+                         Fitted variogram model.
+
+    Attributes
+    ----------
+    semivariance_model : TheoreticalVariogram
+                         See semivariance_model parameter.
+
+    Methods
+    -------
+    calculate_average_semivariance(datarows: Dict)
+        Function calculates the average semivariance from a given set of points and distances between them.
+
+    Notes
+    -----
+    Weighted semivariance is calculated as:
+
+        (1)
+
+    $$\gamma_{v_{i}, u_{s}}
+        =
+        \frac{1}{\sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'}} *
+            \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
+
+    where:
+        * $w_{ss'}$ - product of point-support weights from block a and block b.
+        * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
+        * $P_{j}=1$ - only one semivariance value between a single point and all other points at a time.
+
+    Examples
+    --------
+    avg_semivar = WeightedBlock2PointSemivariance(variogram_model)
+    semivars = avg_semivar.calculate_average_semivariance(blocks_data)
+    print(semivars)
+    >>> ([[100, 200], [300, 200], [200, 100]])
+    """
 
     def __init__(self, semivariance_model: TheoreticalVariogram):
         self.semivariance_model = semivariance_model
@@ -153,19 +222,6 @@ class WeightedBlock2PointSemivariance:
                                             unknown point 2 (n+1) semivariance against point support from block 2,
                                             ...],
                                        )
-
-        Notes
-        -----
-        Weighted semivariance is calculated as:
-
-            (1)
-
-        $$\gamma_{v_{i}, u_{s}}=\frac{1}{\sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'}} * \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
-
-        where:
-            * $w_{ss'}$ - product of point-support weights from block a and block b.
-            * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
-            * $P_{j}=1$ - only one semivariance value between a single point and all other points at a time.
         """
 
         point_to_blocks_smvs = []
@@ -185,6 +241,17 @@ class WeightedBlock2PointSemivariance:
 
 
 def add_ones(array: np.ndarray) -> np.ndarray:
+    """Function adds rows of ones to a given array.
+
+    Parameters
+    ----------
+    array : numpy array
+            Array of size MxN (M rows, N cols)
+    Returns
+    -------
+    list_with_ones : numpy array
+                     Array of size M+1xN (M+1 rows, N cols) where the last row are N ones.
+    """
     ones = np.ones(np.shape(array)[1])
     list_with_ones = np.vstack((array, ones))
     return list_with_ones
@@ -200,13 +267,15 @@ def weights_array(predicted_semivariances_shape, block_vals, point_support_vals)
                                     The size of semivariances array (nrows x ncols).
 
     block_vals : numpy array
+                 Array with values to calculate diagonal weight.
 
     point_support_vals : numpy array
+                         Array with values to calculate diagonal weight.
 
     Returns
     -------
     : numpy array
-        The mask with zeros and diagonal weights.
+        The mask with zeros and diagonal weight of size (nrows x ncols).
     """
 
     weighted_array = np.sum(block_vals * point_support_vals)

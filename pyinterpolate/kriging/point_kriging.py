@@ -16,14 +16,62 @@ def kriging(observations: np.ndarray,
             neighbors_range: Union[float, None] = None,
             min_no_neighbors: int = 1,
             max_no_neighbors: int = -1,
-            process_mean: Union[float, None] = None,
-            allow_approx_solutions = False,
-            number_of_workers: int = -1) -> np.ndarray:
+            sk_mean: Union[float, None] = None,
+            allow_approx_solutions=False,
+            number_of_workers: int = 1) -> np.ndarray:
+    """Function manages Ordinary Kriging and Simple Kriging predictions.
+
+    Parameters
+    ----------
+    observations : numpy array
+                   Known points and their values.
+
+    theoretical_model : TheoreticalVariogram
+                        Fitted variogram model.
+
+    points : numpy array
+             Coordinates with missing values (to estimate results).
+
+    how : str, default='ok'
+          * 'ok': ordinary kriging,
+          * 'sk': simple kriging - if set then sk_mean parameter must be provided.
+
+    neighbors_range : float, default=None
+                      Maximum distance where we search for point neighbors. If None given then range is selected from
+                      the theoretical_model rang attribute.
+
+    min_no_neighbors : int, default = 1
+                       Minimum number of neighbors to estimate unknown value; value is used when insufficient number of
+                       neighbors is within neighbors_range.
+
+    max_no_neighbors : int, default = -1
+                       Maximum number of n-closest neighbors used for interpolation if there are too many neighbors
+                       in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
+                       all possible neighbors will be used.
+
+    sk_mean : float, default=None
+              The mean value of a process over a study area. Should be know before processing. That's why Simple
+              Kriging has limited number of applications. You must have multiple samples and well-known area to
+              know this parameter.
+
+    allow_approx_solutions : bool, default=False
+                             Allows the approximation of kriging weights based on the OLS algorithm.
+                             Not recommended to set to True if you don't know what you are doing!
+
+    number_of_workers : int, default=1
+                        How many processing workers can be used for predictions. It recommended to increase it only for
+                        a very large number of interpolated points (~10k+).
+
+    Returns
+    -------
+    : numpy array
+        Predictions [predicted value, variance error, longitude (x), latitude (y)]
+    """
 
     # Check model type
-    if how == 'sk' and process_mean is None:
+    if how == 'sk' and sk_mean is None:
         raise AttributeError('You have chosen simple kriging "sk" as a baseline for your '
-                             'interpolation but you did not set process_mean parameter. You must do it '
+                             'interpolation but you did not set sk_mean parameter. You must do it '
                              'to perform calculations properly.')
 
     if number_of_workers == -1:
@@ -60,7 +108,7 @@ def kriging(observations: np.ndarray,
                 theoretical_model,
                 observations,
                 point,
-                process_mean,
+                sk_mean,
                 neighbors_range=neighbors_range,
                 min_no_neighbors=min_no_neighbors,
                 max_no_neighbors=max_no_neighbors,
@@ -70,31 +118,3 @@ def kriging(observations: np.ndarray,
     predictions = dask.delayed()(results)
     predictions = np.array(predictions.compute(num_workers=number_of_workers))
     return np.array(predictions)
-
-
-if __name__ == '__main__':
-    # Import data for tests
-    from datetime import datetime
-    from sample_data.data import SampleData
-    from pyinterpolate.io.read_data import read_csv
-    from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram
-    from pyinterpolate.variogram.theoretical.semivariogram import build_theoretical_variogram
-
-    sd = SampleData()
-    dem = read_csv(sd.dem, val_col_name='dem', lat_col_name='latitude', lon_col_name='longitude')
-
-    # Create variogram
-    experimental_model = build_experimental_variogram(dem, 0.01, 0.2)
-    theoretical_model = build_theoretical_variogram(experimental_model, 'spherical', sill=500, rang=0.125)
-
-    # Krige
-    gridx = np.linspace(np.min(dem[:, 0]), np.max(dem[:, 0]), 100)
-    gridy = np.linspace(np.min(dem[:, 1]), np.max(dem[:, 1]), 100)
-
-    grid = np.column_stack([gridx, gridy])
-
-    t0 = datetime.now()
-    c = kriging(observations=dem, theoretical_model=theoretical_model, points=grid)
-    tx = datetime.now()
-    tdelta_dask = (tx - t0).seconds
-    print(tdelta_dask)

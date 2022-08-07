@@ -8,8 +8,7 @@ def inverse_distance_weighting(known_points: np.ndarray,
                                unknown_location: Iterable,
                                number_of_neighbours=-1,
                                power=2.) -> float:
-    """
-    Function performs Inverse Distance Weighting with a given set of points and an unknown location.
+    """Inverse Distance Weighting with a given set of points and an unknown location.
 
     Parameters
     ----------
@@ -39,19 +38,17 @@ def inverse_distance_weighting(known_points: np.ndarray,
 
     Raises
     ------
-    ValueError : Power parameter set to be smaller than 0.
-
-    ValueError : Less than 2 neighbours or more than the number of known_points neighbours are given in
-                 number_of_neighbours parameter.
+    ValueError
+        * Power parameter set to be smaller than 0.
+        * Less than 2 neighbours or more than the number of known_points neighbours are given in
+        number_of_neighbours parameter.
     """
 
-    # Test power
-
+    # Check power parameter
     if power < 0:
         raise ValueError('Power cannot be smaller than 0')
 
-    # Test number of neighbours
-
+    # Check number of neighbours parameter
     if number_of_neighbours == -1:
         number_of_closest = len(known_points)
     elif (number_of_neighbours >= 2) and (number_of_neighbours <= len(known_points)):
@@ -60,7 +57,7 @@ def inverse_distance_weighting(known_points: np.ndarray,
         raise ValueError(f'Number of closest neighbors must be between 2 and the number of known points '
                          f'({len(known_points)}) and {number_of_neighbours} neighbours were given instead.')
 
-    # Unknown loc
+    # Pre-process unknown location parameter
     if not isinstance(unknown_location, np.ndarray):
         unknown_location = np.array(unknown_location)
 
@@ -68,7 +65,6 @@ def inverse_distance_weighting(known_points: np.ndarray,
         unknown_location = unknown_location[np.newaxis, ...]
 
     # Calculate distances
-
     distances = calc_point_to_point_distance(unknown_location, known_points[:, :-1])
 
     # Check if any distance is equal to 0 - then return this value
@@ -79,13 +75,15 @@ def inverse_distance_weighting(known_points: np.ndarray,
         return result
 
     # Get n closest neighbours...
-
     sdists = distances.argsort()
     sdists = sdists[0, :number_of_closest]
     dists = distances[0, sdists]
     values = known_points[sdists].copy()
     values = values[:, -1]
+
+    # Create weights
     weights = 1 / dists**power
 
+    # Estimate value
     result = np.sum(weights * values) / np.sum(weights)
     return result
