@@ -108,7 +108,9 @@ def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
     -----
     Equation:
 
-    (1) $\gamma = c0 + c * (7 * (\frac{a}{h})^{2} - 8.75 * (\frac{a}{h})^{3} + 3.5 * (\frac{a}{h})^{5} - 0.75 * (\frac{a}{h})^{7})$, $0 < a <= h$;, $0 < a <= h$;
+    (1) $\gamma = c0 + c *
+         (7 * (\frac{a}{h})^{2} - 8.75 * (\frac{a}{h})^{3} + 3.5 * (\frac{a}{h})^{5} - 0.75 * (\frac{a}{h})^{7})$,
+         $0 < a <= h$;, $0 < a <= h$;
     (2) $\gamma = c0 + c$, $a > h$;
     (3) $\gamma = 0$, $a = 0$.
 

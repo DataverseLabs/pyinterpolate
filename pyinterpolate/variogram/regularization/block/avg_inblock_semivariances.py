@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict
 
 import numpy as np
 
@@ -53,9 +53,6 @@ def calculate_average_semivariance(block_to_block_distances: Dict,
 
     inblock_semivariances : Dict
                             {area id: the inblock semivariance}
-
-    block_lags : numpy array
-                 Numpy array of lags between blocks.
 
     block_step_size : float
                       Step size between lags.
