@@ -296,7 +296,7 @@ class BlockToBlockKrigingComparison:
         ok_results = []
         sk_results = []
 
-        for i in tqdm(range(self.iters)):
+        for _ in tqdm(range(self.iters)):
             # Generate training and test set
             sets = self._divide_train_test(arr_bl, dict_ps)
 

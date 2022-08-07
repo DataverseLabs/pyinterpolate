@@ -75,7 +75,8 @@ class BlockPK:
     Methods
     -------
     regularize()
-        Regularize blocks.
+        Regularize blocks (you should use it for data deconvolution - with ATP PK, or for data filtering - with
+        ATA, C-B PK).
     """
 
     def __init__(self,
