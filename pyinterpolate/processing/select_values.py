@@ -334,21 +334,17 @@ def select_kriging_data(unknown_position: Iterable,
     # Prepare data for kriging
     neighbors_and_dists = np.c_[data_array, dists.T]
     prepared_data = neighbors_and_dists[neighbors_and_dists[:, -1] <= neighbors_range, :]
+    sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
 
-    len_prep = len(prepared_data)
+    len_prep = len(sorted_neighbors_and_dists)
 
-    if max_number_of_neighbors == -1:
-        # Get all neighbors
-        return prepared_data
-
-    if len_prep < min_number_of_neighbors:
-        # Get minimal number of neighbors
-        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
-        prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
+    if len_prep > min_number_of_neighbors:
+        if len_prep > max_number_of_neighbors:
+            prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
+        else:
+            prepared_data = sorted_neighbors_and_dists
     else:
-        # Get max number of neighbors
-        sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
-        prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
+        prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
 
     return prepared_data
 
@@ -356,7 +352,8 @@ def select_kriging_data(unknown_position: Iterable,
 def select_poisson_kriging_data(u_block_centroid: np.ndarray,
                                 u_point_support: np.ndarray,
                                 k_point_support_dict: Dict,
-                                nn: int) -> Dict:
+                                nn: int,
+                                max_range: float) -> Dict:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
@@ -372,7 +369,10 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
                            * Dict: {block id: [[point x, point y, value]]}
 
     nn : int
-         The minimum number of neighbours that potentially affect block.
+         Maximum number of neighbours that potentially affect block.
+
+    max_range : float
+                The maximum range of influence (it should be set to semivariogram range).
 
     Returns
     -------
@@ -399,11 +399,14 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
     kdata = np.array(kdata)
     sorted_kdata = kdata[kdata[:, 1].argsort()]
 
-    # max_search_pos = np.argmax(sorted_kdata[:, -1] > max_radius)
-    # output_areas = sorted_kdata[:max_search_pos]
+    max_search_pos = np.argmax(sorted_kdata[:, -1] > max_range)
+    output_areas = sorted_kdata[:max_search_pos]
 
-    # if len(output_areas) != nn:
-    output_areas = sorted_kdata[:nn]
+    if len(output_areas) > nn:
+        output_areas = sorted_kdata[:nn]
+
+    if len(output_areas) <= 1:
+        output_areas = sorted_kdata[:2]
 
     idxs = [idx for idx in k_idxs if idx in output_areas[:, 0]]
 
@@ -428,6 +431,7 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
                                          k_blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                                          k_point_support_dict: Dict,
                                          nn: int,
+                                         max_range: float,
                                          weighted: bool) -> np.ndarray:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
@@ -452,6 +456,9 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     nn : int
          The minimum number of neighbours that potentially affect block.
+
+    max_range : float
+                The maximum range of influence (it should be set to semivariogram range).
 
     weighted : bool
                Are distances between blocks weighted by point support?
@@ -481,10 +488,16 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     kriging_data = _parse_pk_input(k_centroids, dists)
 
     # Sort by distance
-    kriging_data = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
+    sorted_kdata = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
 
-    # check number of observations
-    kriging_input = kriging_data[:nn]
+    max_search_pos = np.argmax(sorted_kdata[:, 4] > max_range)
+    kriging_input = sorted_kdata[:max_search_pos]
+
+    if len(kriging_input) > nn:
+        kriging_input = sorted_kdata[:nn]
+
+    if len(kriging_input) <= 1:
+        kriging_input = sorted_kdata[:2]
 
     # get total points' value in each id from prepared datasets and append it to the array
     for idx, rec in enumerate(kriging_input):

@@ -82,6 +82,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         k_blocks=blocks,
         k_point_support_dict=dps,
         nn=number_of_neighbors,
+        max_range=semivariogram_model.rang,
         weighted=is_weighted_by_point_support
     )
 
@@ -126,7 +127,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
             raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or semivariogram model type.')
 
-    sigmasq = (w.T * semivars)[0]
+    sigmasq = np.matmul(w.T, semivars)
 
     if sigmasq < 0:
         if raise_when_negative_error:

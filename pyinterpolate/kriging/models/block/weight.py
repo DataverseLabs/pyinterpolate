@@ -212,5 +212,6 @@ def weights_array(predicted_semivariances_shape, block_vals, point_support_vals)
     weighted_array = np.sum(block_vals * point_support_vals)
     weight = weighted_array / np.sum(point_support_vals)
     w = np.zeros(shape=predicted_semivariances_shape)
+
     np.fill_diagonal(w, weight)
     return w

@@ -76,7 +76,8 @@ class TestATAPK(unittest.TestCase):
                                      unknown_block=UNKN_AREA,
                                      unknown_block_point_support=UNKN_PS,
                                      number_of_neighbors=NN,
-                                     raise_when_negative_error=False)
+                                     raise_when_negative_error=False,
+                                     raise_when_negative_prediction=False)
 
         self.assertIsInstance(pk_output, List)
         self.assertTrue(len(pk_output[0][0]) == 2)
@@ -133,11 +134,10 @@ class TestATAPK(unittest.TestCase):
                                     raise_when_negative_error=False)
 
         expected_output = np.array([
-            [(2.8, 0.9), 133.33, 0.03],
-            [(3.2, 1.1), 266.67, 0.03]
+            [(2.8, 0.9), 216.67, 0.],
+            [(3.2, 1.1), 433.33, 0.]
         ])
 
-        for idx, val in enumerate(pk_model):
-            self.assertEqual(val[0], expected_output[idx][0])
-            self.assertAlmostEqual(val[1], expected_output[idx][1], places=2)
-            self.assertAlmostEqual(val[2], expected_output[idx][2], places=2)
+        self.assertEqual(pk_model[0][0], expected_output[0][0])
+        self.assertAlmostEqual(pk_model[0][1], expected_output[0][1], places=2)
+        self.assertAlmostEqual(pk_model[1][1], expected_output[1][1], places=2)

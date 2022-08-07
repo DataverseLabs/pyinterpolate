@@ -56,7 +56,8 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
                                                         k_blocks=AREAL_INPUT,
                                                         k_point_support_dict=POINT_SUPPORT_INPUT,
                                                         nn=NN,
-                                                        weighted=WEIGHTED)
+                                                        weighted=WEIGHTED,
+                                                        max_range=2)
 
         self.assertIsInstance(prepared, np.ndarray)
         prepared_as_int = prepared.astype(int)
@@ -69,7 +70,8 @@ class TestSelectPoissonKrigingData(unittest.TestCase):
                                                         k_blocks=AREAL_INPUT,
                                                         k_point_support_dict=POINT_SUPPORT_INPUT,
                                                         nn=NN,
-                                                        weighted=False)
+                                                        weighted=False,
+                                                        max_range=2)
         prepared_as_int = prepared.astype(int)
         array_equal = np.array_equal(prepared_as_int, EXPECTED_RESULTS_NON_WEIGHTED)
         self.assertTrue(array_equal)

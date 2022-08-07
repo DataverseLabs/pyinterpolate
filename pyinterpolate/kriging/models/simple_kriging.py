@@ -69,7 +69,11 @@ def simple_kriging(
                                             min_no_neighbors,
                                             max_no_neighbors)
 
-    output_weights = solve_weights(predicted, k, allow_approximate_solutions)
+    try:
+        output_weights = solve_weights(predicted, k, allow_approximate_solutions)
+    except np.linalg.LinAlgError as err_numpy:
+        # TODO: log k, predicted, dataset
+        return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
 
     r = dataset[:, -2] - process_mean
     zhat = r.dot(output_weights)

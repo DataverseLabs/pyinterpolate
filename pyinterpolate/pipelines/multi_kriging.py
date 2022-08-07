@@ -1,12 +1,15 @@
-from typing import Union, Dict
+from typing import Union, Dict, List
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 
+from tqdm import tqdm
+
 from pyinterpolate.kriging.models.block import area_to_area_pk, centroid_poisson_kriging
 from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
+from pyinterpolate.processing.transform.transform import transform_ps_to_dict, transform_blocks_to_numpy
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -39,9 +42,19 @@ class BlockToBlockKrigingComparison:
                           The mean value of a process over a study area. Should be know before processing.
                           If not provided then Simple Kriging estimator is skipped.
 
+    raise_when_negative_prediction : bool, default = True
+                                     Raise error when prediction is negative.
+
+    raise_when_negative_error : bool, default=True
+                                Raise error when prediction error is negative.
+
     training_set_frac : float, default = 0.8
                         How many values sampled as a known points set in each iteration. Could be any fraction within
                         (0:1) range.
+
+    allow_approx_solutions : bool, default = False
+                             Allows the approximation of kriging weights based on the OLS algorithm.
+                             Not recommended to set to True if you don't know what you are doing!
 
     iters : int, default = 20
             How many tests to perform over random samples of a data.
@@ -57,8 +70,40 @@ class BlockToBlockKrigingComparison:
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
                     See point_support parameter.
 
+    no_of_neighbors : int
+                      See no_of_neighbors parameter.
 
+    neighbors_range : float
+                      See neighbors_range parameter.
 
+    simple_kriging_mean : float
+                          See simple_kriging_mean parameter.
+
+    raise_when_negative_prediction : bool, default = True
+                                     See raise_when_negative_prediction parameter.
+
+    raise_when_negative_error : bool, default=True
+                                See raise_when_negative_error parameter.
+
+    training_set_frac : float
+                        See training_set_frac parameter.
+
+    iters : int
+            See iters parameter.
+
+    common_indexes : Set
+                     Indexes that are common for blocks and point support.
+
+    training_set_indexes : List[List]
+                           List of lists of indexes used in a random sampling for a training set.
+
+    results : Dict
+              Results for each type of Block Kriging method.
+
+    Methods
+    -------
+    run_tests() : Compares different types of Kriging, returns Dict with the mean root mean squared error of each
+                  iteration.
     """
 
     def __init__(self,
@@ -68,7 +113,10 @@ class BlockToBlockKrigingComparison:
                  no_of_neighbors: int = 16,
                  neighbors_range: float = None,
                  simple_kriging_mean: float = None,
+                 raise_when_negative_prediction=True,
+                 raise_when_negative_error=True,
                  training_set_frac=0.8,
+                 allow_approx_solutions=False,
                  iters=20):
 
         self.variogram = variogram
@@ -77,193 +125,216 @@ class BlockToBlockKrigingComparison:
         self.no_of_neighbors = no_of_neighbors
         self.neighbors_range = neighbors_range
         self.simple_kriging_mean = simple_kriging_mean
+        self.raise_when_negative_prediction = raise_when_negative_prediction
+        self.raise_when_negative_error = raise_when_negative_error
         self.training_set_frac = training_set_frac
+        self.allow_approx_solutions = allow_approx_solutions
         self.iters = iters
-        self.random_seeds = []
+        self.common_indexes = None
+        self.training_set_indexes = []
 
-        self.k_types = {
-            'PK-ata': 0.,
-            'PK-centroid': 0.,
-            'OK': 0.,
-            'SK': 0.
+        self.results = {
+            'PK-ata': np.nan,
+            'PK-centroid': np.nan,
+            'OK': np.nan,
+            'SK': np.nan
         }
 
-        self.evaluation_output = {}  # {range: k_types and values}
+    def _divide_train_test(self, arr_bl, dict_ps) -> List:
+        """
+        Function divides data into a training and a test set.
 
-    def _divide_train_test(self):
-        all_ids = self.areas[:, 0]
-        training_set_size = int(len(all_ids) * self.frac)
-        training_ids = np.random.choice(all_ids,
-                                        size=training_set_size,
-                                        replace=False)
-        training_areas = np.array(
-            [a for a in self.areas if a[0] in training_ids]
+        Parameters
+        ----------
+        arr_bl : numpy array
+
+        dict_ps : Dict
+
+        Returns
+        -------
+        sets : List
+               [training_block_arr, training_point_support, test_block_arr, test_point_support]
+        """
+
+        # Get IDs - only those that are present in the blocks and point support!
+        common_ids = set(dict_ps.keys()) & set(arr_bl[:, 0])
+        self.common_indexes = common_ids.copy()
+
+        # Get IDs for a training and test sets
+        number_of_samples = int(len(self.common_indexes) * self.training_set_frac)
+        training_set_ids = np.random.choice(list(self.common_indexes), number_of_samples, replace=False)
+        test_set_ids = [x for x in self.common_indexes if x not in training_set_ids]
+
+        training_block_arr = np.array(
+            [x for x in arr_bl if x[0] in training_set_ids]
         )
-        test_areas = np.array(
-            [a for a in self.areas if a[0] not in training_ids]
-        )
-        training_pts = np.array(
-            [pt for pt in self.points if pt[0] in training_ids]
-        )
-        test_pts = np.array(
-            [pt for pt in self.points if pt[0] not in training_ids]
+        test_block_arr = np.array(
+            [x for x in arr_bl if x[0] in test_set_ids]
         )
 
-        output = [training_areas, training_pts,
-                  test_areas, test_pts]
-        return output
+        training_point_support = {}
+        test_point_support = {}
 
-    def _run_pk_ata(self, training_areas, training_points, test_areas, test_points, number_of_obs):
+        for idx, value in dict_ps.items():
+            if idx in training_set_ids:
+                training_point_support[idx] = value
+            else:
+                test_point_support[idx] = value
+
+        result = [training_block_arr, training_point_support, test_block_arr, test_point_support]
+
+        return result
+
+    def _run_pk_ata(self, training_areas, training_points, test_areas, test_points):
         # Poisson Kriging model Area-to-area
-
-        kriging_model = ArealKriging(semivariogram_model=self.semivariance,
-                                     known_areas=training_areas,
-                                     known_areas_points=training_points)
-        pk_pred = []
+        pk_preds = []
         for unknown_area in test_areas:
-            unknown_pts = test_points[test_points[:, 0] == unknown_area[0]][0]
+            uidx = unknown_area[0]
+            uval = unknown_area[-1]
+            result = area_to_area_pk(semivariogram_model=self.variogram,
+                                     blocks=training_areas,
+                                     point_support=training_points,
+                                     unknown_block=unknown_area[:-1],
+                                     unknown_block_point_support=test_points[uidx],
+                                     number_of_neighbors=self.no_of_neighbors,
+                                     raise_when_negative_prediction=self.raise_when_negative_prediction,
+                                     raise_when_negative_error=self.raise_when_negative_error)
 
-            # Predict
-            predicted = kriging_model.predict(unknown_pts, number_of_obs, self.radius)
             err = np.sqrt(
-                (unknown_area[-1] - predicted[0])**2
+                (uval - result[1]) ** 2
             )
-            pk_pred.append(err)
-        return np.mean(pk_pred)
+            pk_preds.append(err)
 
-    def _run_pk_centroid(self, training_areas, training_points, test_areas, test_points, number_of_obs):
+        return np.mean(pk_preds)
+
+    def _run_pk_centroid(self, training_areas, training_points, test_areas, test_points):
         # Poisson Kriging centroid based approach
-
-        kriging_model = CentroidPoissonKriging(semivariogram_model=self.semivariance,
-                                               known_areas=training_areas,
-                                               known_areas_points=training_points)
-
-        c_pred = []
+        pk_preds = []
         for unknown_area in test_areas:
-            unknown_pts = test_points[test_points[:, 0] == unknown_area[0]][0]
+            uidx = unknown_area[0]
+            uval = unknown_area[-1]
 
-            # Predict
-            try:
-                predicted = kriging_model.predict(unknown_area, unknown_pts, number_of_obs,
-                                                  self.radius, True)
-                err = np.sqrt(
-                    (unknown_area[-1] - predicted[0]) ** 2
-                )
-                c_pred.append(err)
-            except ValueError:
-                err = unknown_area[-1]
-                c_pred.append(err)
-        return np.mean(c_pred)
+            result = centroid_poisson_kriging(semivariogram_model=self.variogram,
+                                              blocks=training_areas,
+                                              point_support=training_points,
+                                              unknown_block=unknown_area[:-1],
+                                              unknown_block_point_support=test_points[uidx],
+                                              number_of_neighbors=self.no_of_neighbors,
+                                              raise_when_negative_prediction=self.raise_when_negative_prediction,
+                                              raise_when_negative_error=self.raise_when_negative_error)
 
-    def _run_ok_point(self, training_areas, test_areas, number_of_obs):
-        # Ordinary and Simple Kriging
+            err = np.sqrt(
+                (uval - result[1]) ** 2
+            )
+            pk_preds.append(err)
 
-        kriging_data = training_areas[:, -3:]
-        p_kriging = Krige(semivariogram_model=self.semivariance,
-                          known_points=kriging_data)
+        return np.mean(pk_preds)
 
-        o_pred = []
-        for unknown_area in test_areas:
-            unknown_centroids = unknown_area[-3:-1]
+    def _run_ok_point(self, training_areas, test_areas):
+        # Ordinary Kriging - only blocks data
+        test_pts = test_areas[:, 1:-1]
+        k_obs = training_areas[:, 1:]
 
-            # Predict
-            try:
-                predicted = p_kriging.ordinary_kriging(unknown_centroids, number_of_obs)
-                err = np.sqrt(
-                    (unknown_area[-1] - predicted[0]) ** 2
-                )
-                o_pred.append(err)
-            except ValueError:
-                err = unknown_area[-1]
-                o_pred.append(err)
+        results = kriging(observations=k_obs,
+                          theoretical_model=self.variogram,
+                          points=test_pts,
+                          how='ok',
+                          neighbors_range=self.neighbors_range,
+                          max_no_neighbors=self.no_of_neighbors,
+                          allow_approx_solutions=self.allow_approx_solutions)
 
-        return np.mean(o_pred)
+        mean_error = np.mean(np.sqrt(
+            (test_areas[:, -1] - results[:, 0]) ** 2
+        ))
 
-    def _run_sk_point(self, training_areas, test_areas, number_of_obs):
-        # Ordinary and Simple Kriging
+        return mean_error
 
-        kriging_data = training_areas[:, -3:]
-        p_kriging = Krige(semivariogram_model=self.semivariance,
-                          known_points=kriging_data)
+    def _run_sk_point(self, training_areas, test_areas):
+        # Simple Kriging
 
-        s_pred = []
-        for unknown_area in test_areas:
-            unknown_centroids = unknown_area[-3:-1]
+        test_pts = test_areas[:, 1:-1]
+        k_obs = training_areas[:, 1:]
 
-            # Predict
-            try:
-                predicted = p_kriging.simple_kriging(unknown_centroids, number_of_obs,
-                                                     global_mean=self.simple_kriging_mean)
-                err = np.sqrt(
-                    (unknown_area[-1] - predicted[0]) ** 2
-                )
-                s_pred.append(err)
-            except ValueError:
-                err = unknown_area[-1]
-                s_pred.append(err)
+        results = kriging(observations=k_obs,
+                          theoretical_model=self.variogram,
+                          points=test_pts,
+                          how='sk',
+                          neighbors_range=self.neighbors_range,
+                          max_no_neighbors=self.no_of_neighbors,
+                          process_mean=self.simple_kriging_mean,
+                          allow_approx_solutions=self.allow_approx_solutions)
 
-        return np.mean(s_pred)
+        mean_error = np.mean(np.sqrt(
+            (test_areas[:, -1] - results[:, 0]) ** 2
+        ))
+
+        return mean_error
 
     def run_tests(self):
         """
-        Method compares area-to-area, area-to-point and centroid based area Poisson Kriging.
+        Method compares ordinary, simple, area-to-area and centroid-based block Poisson Kriging.
         """
-        for number_of_obs in self.ranges:
-            pk_evals = []
-            ck_evals = []
-            ok_evals = []
-            sk_evals = []
 
-            for i in range(self.iters):
-                # Generate training and test set
-                sets = self._divide_train_test()
+        # Prepare data for testing
 
-                # Poisson Kriging
-                pk_eval = self._run_pk_ata(sets[0], sets[1], sets[2], sets[3], number_of_obs)
-                pk_evals.append(pk_eval)
+        # Transform point support to dict
+        if isinstance(self.point_support, Dict):
+            dict_ps = self.point_support
+        else:
+            dict_ps = transform_ps_to_dict(self.point_support)
 
-                # Centroid-based PK
-                c_eval = self._run_pk_centroid(sets[0], sets[1], sets[2], sets[3], number_of_obs)
-                ck_evals.append(c_eval)
+        # Transform Blocks to array
+        if isinstance(self.blocks, np.ndarray):
+            arr_bl = self.blocks
+        else:
+            # Here IDE (PyCharm) gets type inspection wrong...
+            # noinspection PyTypeChecker
+            arr_bl = transform_blocks_to_numpy(self.blocks)
 
-                # Ordinary Kriging
-                ok_eval = self._run_ok_point(sets[0], sets[2], number_of_obs)
-                ok_evals.append(ok_eval)
+        pk_ata_results = []
+        pk_cb_results = []
+        ok_results = []
+        sk_results = []
 
-                # Simple Kriging
-                if self.simple_kriging_mean is None:
-                    pass
-                else:
-                    sk_eval = self._run_sk_point(sets[0], sets[2], number_of_obs)
-                    sk_evals.append(sk_eval[1])
+        for i in tqdm(range(self.iters)):
+            # Generate training and test set
+            sets = self._divide_train_test(arr_bl, dict_ps)
 
-            # Mean of values
+            # Poisson Kriging
+            pk_res = self._run_pk_ata(*sets)
+            pk_ata_results.append(pk_res)
 
-            pk_rmse = np.mean(pk_evals)
-            ck_rmse = np.mean(ck_evals)
-            ok_rmse = np.mean(ok_evals)
+            # Centroid-based PK
+            cb_res = self._run_pk_centroid(*sets)
+            pk_cb_results.append(cb_res)
 
-            # Simple Kriging case
+            # Ordinary Kriging
+            ok_res = self._run_ok_point(sets[0], sets[2])
+            ok_results.append(ok_res)
+
+            # Simple Kriging
             if self.simple_kriging_mean is None:
-                sk_rmse = np.nan
+                pass
             else:
-                sk_rmse = np.mean(sk_evals)
+                sk_res = self._run_sk_point(sets[0], sets[2])
+                sk_results.append(sk_res)
 
-            # Update dict
-            d = self.k_types.copy()
+        # Mean of values
 
-            d['PK-ata'] = float(pk_rmse)
-            d['PK-centroid'] = float(ck_rmse)
-            d['OK'] = float(ok_rmse)
-            d['SK'] = float(sk_rmse)
+        pk_rmse = np.mean(pk_ata_results)
+        ck_rmse = np.mean(pk_cb_results)
+        ok_rmse = np.mean(ok_results)
 
-            self.evaluation_output[number_of_obs] = d
+        # Simple Kriging case
+        if self.simple_kriging_mean is None:
+            sk_rmse = np.nan
+        else:
+            sk_rmse = np.mean(sk_results)
 
-            # Inform
-            print('Evaluation metrics updated')
-            print('Number of ranges:', number_of_obs)
-            print('ROOT MEAN SQUARED ERROR VALUES')
-            print('Poisson Kriging ATA -', pk_rmse)
-            print('Poisson Kriging centroids -', ck_rmse)
-            print('Ordinary Kriging -', ok_rmse)
-            print('Simple Kriging -', sk_rmse)
+        # Update dict
+        self.results['PK-ata'] = float(pk_rmse)
+        self.results['PK-centroid'] = float(ck_rmse)
+        self.results['OK'] = float(ok_rmse)
+        self.results['SK'] = float(sk_rmse)
+
+        return self.results

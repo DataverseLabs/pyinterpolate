@@ -192,7 +192,7 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     return d
 
 
-def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None):
+def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None) -> Dict:
     if isinstance(ps, PointSupport):
         return point_support_to_dict(ps)
     elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
@@ -211,7 +211,7 @@ def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None)
                         f' Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.')
 
 
-def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]):
+def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]) -> np.ndarray:
     """
     Parameters
     ----------
@@ -224,8 +224,8 @@ def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFra
 
     Returns
     -------
-    bdict : Dict
-            Blocks transformed to dictionary.
+    bvalues : numpy array
+              Blocks transformed to numpy array [[block index, centroid x, centroid y, value]].
     """
     if isinstance(blocks, Blocks):
         bvalues = blocks.data[[blocks.index_column_name, blocks.cx, blocks.cy, blocks.value_column_name]].values

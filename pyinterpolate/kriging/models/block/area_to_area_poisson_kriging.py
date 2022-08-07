@@ -1,4 +1,5 @@
 # TODO: log errors
+# TODO: control negative predictions and errors
 from typing import Dict, Union
 
 import geopandas as gpd
@@ -80,7 +81,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_point_support_dict=dps,
-        nn=number_of_neighbors)
+        nn=number_of_neighbors,
+        max_range=semivariogram_model.rang
+    )
 
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
     avg_semivariances = b2b_semivariance.calculate_average_semivariance(kriging_data)
@@ -150,7 +153,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         u_idx: distances_within_unknown_block
     })[u_idx]
 
-    sig_base = (w.T * k_ones)[0]
+    sig_base = np.matmul(w.T, k_ones)
 
     sigmasq = semivariance_within_unknown - sig_base
 

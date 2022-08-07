@@ -126,5 +126,6 @@ class TestCentroidPK(unittest.TestCase):
                                             point_support=ps,
                                             unknown_block=ublock,
                                             unknown_block_point_support=u_ps,
-                                            number_of_neighbors=4)
-        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 399, 0]))
+                                            number_of_neighbors=4,
+                                            raise_when_negative_error=False)
+        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 649, 0]))

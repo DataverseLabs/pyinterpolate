@@ -1,3 +1,4 @@
+# TODO: Check negative predictions and weights
 from typing import Union, Dict
 
 import geopandas as gpd
@@ -83,7 +84,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_point_support_dict=dps,
-        nn=number_of_neighbors)
+        nn=number_of_neighbors,
+        max_range=semivariogram_model.rang
+    )
 
     prepared_ids = list(kriging_data.keys())
 
@@ -164,7 +167,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         zhat = (zhat * point_pop) / tot_unknown_value
 
         # Calculate error
-        sigmasq = (w.T * point)[0]
+        sigmasq = np.matmul(w.T, point)
         if sigmasq < 0:
             if raise_when_negative_error:
                 raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '

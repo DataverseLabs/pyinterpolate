@@ -74,6 +74,7 @@ def ordinary_kriging(
     output_weights = solve_weights(weights, k, allow_approximate_solutions)
 
     zhat = np.nan
+
     try:
         zhat = dataset[:, -2].dot(output_weights[:-1])
     except ValueError:

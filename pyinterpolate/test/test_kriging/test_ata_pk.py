@@ -75,7 +75,8 @@ class TestATAPK(unittest.TestCase):
                                     unknown_block=UNKN_AREA,
                                     unknown_block_point_support=UNKN_PS,
                                     number_of_neighbors=NN,
-                                    raise_when_negative_error=False)
+                                    raise_when_negative_error=False,
+                                    raise_when_negative_prediction=False)
 
         self.assertTrue(pk_output)
 
@@ -126,6 +127,6 @@ class TestATAPK(unittest.TestCase):
                                    point_support=ps,
                                    unknown_block=ublock,
                                    unknown_block_point_support=u_ps,
-                                   number_of_neighbors=4,
+                                   number_of_neighbors=8,
                                    raise_when_negative_error=False)
-        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 399, 0]))
+        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 649, 16]))

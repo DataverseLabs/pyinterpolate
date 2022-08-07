@@ -17,6 +17,7 @@ def kriging(observations: np.ndarray,
             min_no_neighbors: int = 1,
             max_no_neighbors: int = -1,
             process_mean: Union[float, None] = None,
+            allow_approx_solutions = False,
             number_of_workers: int = -1) -> np.ndarray:
 
     # Check model type
@@ -51,7 +52,8 @@ def kriging(observations: np.ndarray,
                 point,
                 neighbors_range=neighbors_range,
                 min_no_neighbors=min_no_neighbors,
-                max_no_neighbors=max_no_neighbors
+                max_no_neighbors=max_no_neighbors,
+                allow_approximate_solutions=allow_approx_solutions
             )
         elif how == 'sk':
             prediction = dask.delayed(model)(
@@ -61,7 +63,8 @@ def kriging(observations: np.ndarray,
                 process_mean,
                 neighbors_range=neighbors_range,
                 min_no_neighbors=min_no_neighbors,
-                max_no_neighbors=max_no_neighbors
+                max_no_neighbors=max_no_neighbors,
+                allow_approximate_solutions=allow_approx_solutions
             )
         results.append(prediction)
     predictions = dask.delayed()(results)
