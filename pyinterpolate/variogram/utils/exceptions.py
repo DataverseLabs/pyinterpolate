@@ -24,7 +24,8 @@ class VariogramModelNotSetError(Exception):
     """
 
     def __init__(self):
-        self.msg = 'Theoretical Variogram model is not set. You should fit() or autofit() TheoreticalVariogram model first.'
+        self.msg = 'Theoretical Variogram model is not set. You should fit() or autofit() TheoreticalVariogram ' \
+                   'model first.'
 
     def __str__(self):
         return self.msg

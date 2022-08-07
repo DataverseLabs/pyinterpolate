@@ -20,9 +20,12 @@ def check_limits(value: float, lower_limit=0, upper_limit=1, exclusive_lower=Tru
 
     Raises
     ------
-    ValueError : Value is outside the limits.
+    ValueError
+        Value is outside given limits.
 
-    # TODO: tests
+    TODO
+    ----
+    Tests
     """
 
     msg = f'Value {value} is outside the limits {lower_limit}:{upper_limit}. Lower limit is excluded: ' \

@@ -2,11 +2,9 @@ import numpy as np
 from collections import OrderedDict
 from shapely.geometry import Point
 
+from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
-
-# Temp
-from pyinterpolate.distance.distance import calc_point_to_point_distance
 
 
 def omnidirectional_point_cloud(input_array: np.array,
@@ -30,18 +28,6 @@ def omnidirectional_point_cloud(input_array: np.array,
     -------
     variogram_cloud : dict
                       {Lag: array of semivariances within a given lag}
-
-    See Also
-    --------
-    TODO
-
-    Notes
-    -----
-    TODO
-
-    Examples
-    --------
-    TODO
     """
     distances = calc_point_to_point_distance(input_array[:, :-1])
     lags = np.arange(step_size, max_range, step_size)
@@ -101,18 +87,6 @@ def directional_point_cloud(input_array: np.array,
     -------
     variogram_cloud : dict
                       {Lag: array of semivariances within a given lag}
-
-    See Also
-    --------
-    TODO
-
-    Notes
-    -----
-    TODO
-
-    Examples
-    --------
-    TODO
     """
 
     variogram_cloud = OrderedDict()
@@ -188,18 +162,6 @@ def get_variogram_point_cloud(input_array: np.array,
     -------
     variogram_cloud : dict
                       {Lag: array of semivariances within a given lag}
-
-    See Also
-    --------
-    TODO
-
-    Notes
-    -----
-    TODO
-
-    Examples
-    --------
-    TODO
     """
 
     # START:VALIDATION

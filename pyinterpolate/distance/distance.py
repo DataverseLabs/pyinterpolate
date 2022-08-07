@@ -12,13 +12,12 @@ from pyinterpolate.processing.transform.transform import point_support_to_dict, 
 
 
 def _calc_b2b_dist_from_array(blocks: np.ndarray) -> Dict:
-    """
-    Function calculates distances between blocks.
+    """Function calculates distances between blocks.
 
     Parameters
     ----------
     blocks : numpy array
-             * numpy array: [[block id, point x, point y, value]]
+             [[block id, point x, point y, value]]
 
     Returns
     -------
@@ -45,13 +44,12 @@ def _calc_b2b_dist_from_array(blocks: np.ndarray) -> Dict:
 
 
 def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame]) -> Dict:
-    """
-    Function calculates distances between blocks.
+    """Function calculates distances between blocks.
 
     Parameters
     ----------
-    blocks : Dict
-             * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+    blocks : Union[pd.DataFrame, gpd.GeoDataFrame]
+             DataFrame and GeoDataFrame: columns={x, y, ds, index}
 
     Returns
     -------
@@ -74,13 +72,12 @@ def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame])
 
 
 def _calc_b2b_dist_from_dict(blocks: Dict) -> Dict:
-    """
-    Function calculates distances between blocks.
+    """Function calculates distances between blocks.
 
     Parameters
     ----------
     blocks : Dict
-             * Dict: {block id: [[point x, point y, value]]}
+             Dict: {block id: [[point x, point y, value]]}
 
     Returns
     -------
@@ -107,8 +104,7 @@ def _calc_b2b_dist_from_dict(blocks: Dict) -> Dict:
 
 
 def _calc_b2b_dist_from_ps(blocks: PointSupport) -> Dict:
-    """
-    Function calculates distances between blocks.
+    """Function calculates distances between blocks.
 
     Parameters
     ----------
@@ -126,8 +122,7 @@ def _calc_b2b_dist_from_ps(blocks: PointSupport) -> Dict:
 
 
 def calc_block_to_block_distance(blocks: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]) -> Dict:
-    """
-    Function calculates distances between blocks.
+    """Function calculates distances between blocks.
 
     Parameters
     ----------
@@ -160,8 +155,7 @@ def calc_block_to_block_distance(blocks: Union[Dict, np.ndarray, gpd.GeoDataFram
 
 
 def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray) -> float:
-    """
-    Function calculates distance between two blocks based on how they are divided (into the point support grid).
+    """Function calculates distance between two blocks based on how they are divided (into the point support grid).
 
     Parameters
     ----------
@@ -210,9 +204,22 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     return distances_sum
 
 
-# TEMPORARY FUNCTIONS
 def calc_point_to_point_distance(points_a, points_b=None):
-    """temporary function for pt to pt distance estimation"""
+    """Function calculates distances between two group of points of a single group to itself.
+
+    Parameters
+    ----------
+    points_a : numpy array
+               Numpy array with point coordinates.
+
+    points_b : numpy array, default=None
+               Point coordinates. If provided then algorithm calculates distances between points_a against points_b.
+
+    Returns
+    -------
+    distances : numpy array
+                Array with distances from each point to other point.
+    """
 
     if points_b is None:
         distances = cdist(points_a, points_a, 'euclidean')

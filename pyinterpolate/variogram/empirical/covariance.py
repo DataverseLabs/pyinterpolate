@@ -1,12 +1,11 @@
 import numpy as np
+
+from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
 
-# Temp
-from pyinterpolate.distance.distance import calc_point_to_point_distance
 
-
-def _form_empty_output(lag: float) -> list:
+def _create_empty_output(lag: float) -> list:
     """Function returns empty output for the case where no neighbors are selected.
 
     Parameters
@@ -59,7 +58,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            output = _form_empty_output(h)
+            output = _create_empty_output(h)
             covariances_and_lags.append(output)
         else:
             vals_0 = points[distances_in_range[0], 2]
@@ -149,7 +148,7 @@ def directional_covariogram(points: np.array,
                 covars_per_lag.extend(covars)
 
         if len(covars_per_lag) == 0:
-            output = _form_empty_output(h)
+            output = _create_empty_output(h)
             covariances_and_lags.append(output)
         else:
             lag_mean = np.mean(values_per_lag)

@@ -261,7 +261,7 @@ class BlockToBlockKrigingComparison:
                           how='sk',
                           neighbors_range=self.neighbors_range,
                           max_no_neighbors=self.no_of_neighbors,
-                          process_mean=self.simple_kriging_mean,
+                          sk_mean=self.simple_kriging_mean,
                           allow_approx_solutions=self.allow_approx_solutions)
 
         mean_error = np.mean(np.sqrt(
@@ -296,7 +296,7 @@ class BlockToBlockKrigingComparison:
         ok_results = []
         sk_results = []
 
-        for i in tqdm(range(self.iters)):
+        for _ in tqdm(range(self.iters)):
             # Generate training and test set
             sets = self._divide_train_test(arr_bl, dict_ps)
 

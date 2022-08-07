@@ -15,12 +15,14 @@ def average_block_to_block_semivariances(semivariances_array: np.ndarray,
                           [lag, semivariance, number of point pairs between blocks]
 
     lags : numpy array
+           Array of lags.
 
     step_size : float
 
     Returns
     -------
     averaged : numpy array
+               [lag, mean semivariances in a range, number of point pairs in range]
     """
 
     averaged = []

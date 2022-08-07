@@ -151,8 +151,8 @@ def read_block(
     Raises
     ------
     TypeError
-        - EPSG and CRS are provided both (should be one),
-        - Provided column name does not exist in a dataset.
+        * EPSG and CRS are provided both (should be one),
+        * Provided column name does not exist in a dataset.
 
     Examples
     --------

@@ -21,7 +21,7 @@ def _rotation_matrix(angle: float) -> np.array:
 
     Returns
     -------
-    numpy array
+    : numpy array
         The rotation matrix.
     """
     theta = np.radians(angle)
@@ -33,9 +33,10 @@ def _rotation_matrix(angle: float) -> np.array:
 
 def _select_distances(distances_array: np.array, weighting_matrix: np.array, lag: float, step_size: float) -> np.array:
     """Function mutiplies each point from the distances array with weighting matrix to check
-       if point is within ellipse.
+    if point is within ellipse.
 
     Parameters
+    ----------
     distances_array : numpy array
                       Array with distances between points.
 
@@ -77,9 +78,9 @@ def select_points_within_ellipse(ellipse_center: np.array,
                                  theta: float,
                                  minor_axis_size: float) -> np.array:
     """Function checks which points from other points are within point range described as an ellipse with
-        center in point, semi-major axis of length step_size and semi-minor axis of length
-        step_size * tolerance and angle of semi-major axis calculated as angle of direction from
-        NS axis (0 radian angle) of a dataset.
+    center in point, semi-major axis of length step_size and semi-minor axis of length
+    step_size * tolerance and angle of semi-major axis calculated as angle of direction from
+    NS axis (0 radian angle) of a dataset.
 
     Parameters
     ----------
@@ -168,9 +169,9 @@ def create_min_max_array(value: float,
                          max_scaling_factor: float,
                          number_of_steps: int) -> np.array:
     """Function prepares a numpy array of N equidistant values between (a:b), where:
-        N - number of steps,
-        a - min_scaling_factor * value
-        b - max_scaling_factor * value
+    * N - number of steps,
+    * a - min_scaling_factor * value,
+    * b - max_scaling_factor * value.
 
     Parameters
     ----------
@@ -184,8 +185,7 @@ def create_min_max_array(value: float,
 
     Returns
     -------
-    numpy array
-
+    : numpy array
     """
     min_step = value * min_scaling_factor
     max_step = value * max_scaling_factor
@@ -194,6 +194,21 @@ def create_min_max_array(value: float,
 
 
 def get_aggregated_point_support_values(ps: Dict, indexes):
+    """Function sums total point support values.
+
+    Parameters
+    ----------
+    ps : Dict
+         Point-support data.
+
+    indexes : List
+              List with block indexes to sum point-support values.
+
+    Returns
+    -------
+    : numpy array
+        Summed values of blocks' point support in the same order as given indexes List.
+    """
 
     total_values = []
     for idx in indexes:
@@ -205,6 +220,18 @@ def get_aggregated_point_support_values(ps: Dict, indexes):
 
 
 def get_distances_within_unknown(point_support: np.ndarray):
+    """Function calculates distances between unknown block point support points.
+
+    Parameters
+    ----------
+    point_support : numpy array
+                    [[x1, y1, value1], ..., [x-n, y-n, value-n]]
+
+    Returns
+    -------
+    : numpy array
+        [[value1, value-n, distance between points 1-n], ..., [value-n, value1, distance between points n-1]]
+    """
 
     distances = calc_point_to_point_distance(point_support[:, :-1])
     fdistances = distances.flatten()
@@ -227,10 +254,12 @@ def get_study_max_range(input_coordinates: np.ndarray) -> float:
     Parameters
     ----------
     input_coordinates : numpy array
+                        [y, x] or [rows, cols]
 
     Returns
     -------
     study_range : float
+                  It is the extent of a study area.
     """
 
     min_x = min(input_coordinates[:, 1])
@@ -299,7 +328,7 @@ def select_kriging_data(unknown_position: Iterable,
     unknown_position : Iterable
                        List, tuple or array with x, y coordinates.
 
-    data_array : np.ndarray
+    data_array : numpy array
                  Known points.
 
     neighbors_range : float
@@ -319,9 +348,9 @@ def select_kriging_data(unknown_position: Iterable,
 
     Returns
     -------
-    : np.ndarray
-      Dataset of the length min_number_of_neighbors <= length <= max_number_of_neighbors. Each record is created from
-      the position, value and distance to the unknown point `[[x, y, value, distance to unknown position]]`.
+    : numpy array
+        Dataset of the length min_number_of_neighbors <= length <= max_number_of_neighbors. Each record is created from
+        the position, value and distance to the unknown point `[[x, y, value, distance to unknown position]]`.
 
     """
 
@@ -334,7 +363,7 @@ def select_kriging_data(unknown_position: Iterable,
     # Prepare data for kriging
     neighbors_and_dists = np.c_[data_array, dists.T]
     prepared_data = neighbors_and_dists[neighbors_and_dists[:, -1] <= neighbors_range, :]
-    sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+    sorted_neighbors_and_dists = prepared_data[prepared_data[:, -1].argsort()]
 
     len_prep = len(sorted_neighbors_and_dists)
 

@@ -394,10 +394,6 @@ def calculate_semivariance(points: np.array,
                 oxo
                  o
                  o
-
-    Examples
-    --------
-    # TODO
     """
 
     # START:VALIDATION
