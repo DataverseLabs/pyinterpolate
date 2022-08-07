@@ -261,7 +261,7 @@ class BlockToBlockKrigingComparison:
                           how='sk',
                           neighbors_range=self.neighbors_range,
                           max_no_neighbors=self.no_of_neighbors,
-                          process_mean=self.simple_kriging_mean,
+                          sk_mean=self.simple_kriging_mean,
                           allow_approx_solutions=self.allow_approx_solutions)
 
         mean_error = np.mean(np.sqrt(

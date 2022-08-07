@@ -33,7 +33,7 @@ class TestKrige(unittest.TestCase):
         ds = np.delete(dataset, [18, 27], axis=0)
 
         kriged = kriging(observations=ds, theoretical_model=theoretical,
-                         points=u_points, how='sk', min_no_neighbors=4, process_mean=float(pmean))
+                         points=u_points, how='sk', min_no_neighbors=4, sk_mean=float(pmean))
 
         for idx, known_value in enumerate(known_values):
             output = kriged[idx][0]
@@ -62,7 +62,7 @@ class TestKrige(unittest.TestCase):
         known_values = [dataset[18, -1], dataset[27, -1]]
 
         kriged = kriging(observations=dataset, theoretical_model=theoretical,
-                         points=u_points, how='sk', min_no_neighbors=4, process_mean=float(pmean))
+                         points=u_points, how='sk', min_no_neighbors=4, sk_mean=float(pmean))
 
         for idx, known_value in enumerate(known_values):
             output = kriged[idx][0]
