@@ -4,6 +4,9 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
+
+from scipy.spatial.distance import cdist
+
 from pyinterpolate.processing.preprocessing.blocks import PointSupport
 from pyinterpolate.processing.transform.transform import point_support_to_dict, block_dataframe_to_dict
 
@@ -199,3 +202,27 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     wdist = dist * w
     distances_sum = np.sum(wdist) / np.sum(w)
     return distances_sum
+
+
+def calc_point_to_point_distance(points_a, points_b=None):
+    """Function calculates distances between two group of points of a single group to itself.
+
+    Parameters
+    ----------
+    points_a : numpy array
+               Numpy array with point coordinates.
+
+    points_b : numpy array, default=None
+               Point coordinates. If provided then algorithm calculates distances between points_a against points_b.
+
+    Returns
+    -------
+    distances : numpy array
+                Array with distances from each point to other point.
+    """
+
+    if points_b is None:
+        distances = cdist(points_a, points_a, 'euclidean')
+    else:
+        distances = cdist(points_a, points_b, 'euclidean')
+    return distances
