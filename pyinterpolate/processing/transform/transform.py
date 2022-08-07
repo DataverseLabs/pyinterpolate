@@ -8,13 +8,12 @@ from pyinterpolate.processing.preprocessing.blocks import PointSupport, Blocks
 
 
 def block_arr_to_dict(arr: np.ndarray):
-    """
-    Function transforms block array into a dict.
+    """Function transforms block array into a dict.
 
     Parameters
     ----------
     arr : numpy array
-        [block idx, x, y, value]
+          [block idx, x, y, value]
 
     Returns
     -------
@@ -30,7 +29,10 @@ def block_arr_to_dict(arr: np.ndarray):
 
 
 def block_dataframe_to_dict(block_df: Union[pd.DataFrame, gpd.GeoDataFrame],
-                            idx_col='index', x_col='x', y_col='y', value_col='ds') -> Dict:
+                            idx_col='index',
+                            x_col='x',
+                            y_col='y',
+                            value_col='ds') -> Dict:
     """
 
     Parameters
@@ -38,16 +40,16 @@ def block_dataframe_to_dict(block_df: Union[pd.DataFrame, gpd.GeoDataFrame],
     block_df : Union[DataFrame, GeoDataFrame]
 
     idx_col : any, default='index'
-        Index column name.
+              Index column name.
 
     x_col : any, default='x'
-        X coordinates.
+            X coordinates.
 
     y_col : any, default='y'
-        Y coordinates.
+            Y coordinates.
 
     value_col : any, default='ds'
-        Values.
+                Values.
 
     Returns
     -------
@@ -123,7 +125,7 @@ def get_areal_values_from_agg(
     Returns
     -------
     : numpy array
-        [val]
+        [values]
     """
     if isinstance(aggregated_data, Blocks):
         val = aggregated_data.value_column_name
@@ -192,7 +194,26 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     return d
 
 
-def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None) -> Dict:
+def transform_ps_to_dict(ps) -> Dict:
+    """
+
+    Parameters
+    ----------
+    ps : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+         * Dict: {block id: [[point x, point y, value]]}
+         * numpy array: [[block id, x, y, value]]
+         * DataFrame and GeoDataFrame: columns={x, y, ds, index}
+         * PointSupport
+
+    Returns
+    -------
+    : Dict
+        Point Support as a Dict: {block id: [[point x, point y, value]]}
+
+    TODO
+    ----
+    Allow user to pass any column names for DF and GDF data types.
+    """
     if isinstance(ps, PointSupport):
         return point_support_to_dict(ps)
     elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
@@ -212,7 +233,8 @@ def transform_ps_to_dict(ps, idx_col=None, x_col=None, y_col=None, val_col=None)
 
 
 def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]) -> np.ndarray:
-    """
+    """Function transforms blocks data into numpy array.
+
     Parameters
     ----------
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]

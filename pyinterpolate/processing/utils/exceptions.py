@@ -31,7 +31,8 @@ class WrongGeometryTypeError(Exception):
     gtype : Any
             Wrong geometry type.
 
-    Attributes:
+    Attributes
+    ----------
     msg : str
     """
 

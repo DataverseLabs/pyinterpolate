@@ -53,7 +53,7 @@ class TestBlockToBlockKrigingComparison(unittest.TestCase):
 
         test_results = output_results.run_tests()
         for value in test_results.values():
-            self.assertTrue(value >= 0)
+            self.assertFalse(np.isnan(value))
 
     def test_artificial_data(self):
         known_blocks = np.array([

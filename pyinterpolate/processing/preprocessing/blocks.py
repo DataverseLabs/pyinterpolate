@@ -1,4 +1,4 @@
-# TODO: Blocks & PointSupport | EPSG:4087 as a default projection ? Warn user if spherical coordinates are used (instead of metric)
+# TODO: Blocks & PointSupport | EPSG:4087 as a default projection ? Warn user if spherical coordinates are used
 # TODO: Blocks | add GPKG layers as with Point Support
 # TODO: PointSupport | Fn skips points that are not assigned to any area, maybe log it somewhere...
 from typing import Union
@@ -10,8 +10,7 @@ from pyinterpolate.processing.utils.exceptions import IndexColNotUniqueError
 
 
 class Blocks:
-    """
-    Class stores and prepares aggregated data.
+    """Class stores and prepares aggregated data.
 
     Attributes
     ----------
@@ -61,10 +60,27 @@ class Blocks:
             raise IndexColNotUniqueError(dsl, nuniq)
 
     def _parse(self, dataset, val_col, geo_col, idx_col):
-        """
+        """Parser.
+
+        Parameters
+        ----------
         dataset : gpd.GeoDataFrame
                   GeoDataFrame with selected index, value and geometry columns and calculated centroid x and
                   centroid y coordinates.
+
+        val_col : Any
+                  Name of the column with block rates.
+
+        geo_col : Any
+                  Name of the column with a block geometry.
+
+        idx_col : Any
+                  Name of the column with the index.
+
+        Returns
+        -------
+        dataset : gpd.GeoDataFrame
+                  dataset[[idx_col, geo_col, val_col, self.cx, self.cy]]
         """
 
         pd.options.mode.chained_assignment = None  # Disable setting with copy warning
@@ -112,7 +128,8 @@ class Blocks:
 
         Raises
         ------
-        IndexColNotUniqueError : Raised when given index column is not unique.
+        IndexColNotUniqueError
+            Raised when given index column is not unique.
 
         """
 
@@ -161,7 +178,8 @@ class Blocks:
 
         Raises
         ------
-        IndexColNotUniqueError : Raised when given index column is not unique.
+        IndexColNotUniqueError
+            Given index column values are not unique.
 
         """
         if index_col is not None:
@@ -184,8 +202,7 @@ class Blocks:
 
 
 class PointSupport:
-    """
-    Class prepares the point support data in relation to block dataset.
+    """Class prepares the point support data in relation to block dataset.
 
     Attributes
     ----------

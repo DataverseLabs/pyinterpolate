@@ -76,6 +76,7 @@ class TestCentroidPK(unittest.TestCase):
                                             unknown_block=UNKN_AREA,
                                             unknown_block_point_support=UNKN_PS,
                                             number_of_neighbors=NN,
+                                            raise_when_negative_prediction=False,
                                             raise_when_negative_error=False)
         self.assertTrue(pk_model)
 
