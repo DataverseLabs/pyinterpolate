@@ -475,10 +475,10 @@ class TheoreticalVariogram:
         """
 
         _model = self.variogram_models[self.name]
-
         predicted = _model(
             distances, self.nugget, self.sill, self.rang
         )
+
         return predicted
 
     # Plotting and visualization

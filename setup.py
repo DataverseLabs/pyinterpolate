@@ -16,14 +16,21 @@ with open(path.join(here, '__init__.py'), 'r') as f:
 version = re.search("__version__ = '(.*)'", init_py).groups()[0]
 
 requirements = [
-    # Python 3.7
-    'geopandas',
-    'pandas',
-    'numpy',
-    'scipy==1.6.3',
-    'tqdm',
-    'descartes',
-    'matplotlib'
+    # Python 3.8, 3.9, 3.10 & MacOS
+    'geopandas==0.11.1; python_version>="3.8"; sys_platform=="darwin"',
+    'pandas==1.4.3; python_version>="3.8"; sys_platform=="darwin"',
+    'numpy==1.23.1; python_version>="3.8"; sys_platform=="darwin"',
+    'scipy==1.9.0; python_version>="3.8"; sys_platform=="darwin"',
+    'tqdm==4.64.0; python_version>="3.8"; sys_platform=="darwin"',
+    'descartes==1.1.0; python_version>="3.8"; sys_platform=="darwin"',
+    'matplotlib==3.5.2; python_version>="3.8"; sys_platform=="darwin"',
+    'prettytable==3.3.0; python_version>="3.8"; sys_platform=="darwin"',
+    # Python 3.8 & MacOS
+    'dask==2022.2.1; python_version=="3.8"; sys_platform=="darwin"',
+    # Python 3.9, 3.10 & MacOS
+    'dask==2022.2.1; python_version>="3.9"; sys_platform=="darwin"',
+    # Python 3.8, 3.9, 3.10 & Linux
+
 ]
 
 dev_requirements = {
@@ -47,7 +54,7 @@ setup(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: GIS',
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 3.7 :: 3.8 :: 3.9 :: 3.10',
+        'Programming Language :: Python :: 3.8 :: 3.9 :: 3.10',
     ],
     keywords=['Spatial interpolation', 'Kriging', 'Area Kriging', 'Block Kriging', 'Poisson Kriging', 'Geostatistics'],
     packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts', 'paper', 'docs',

@@ -362,16 +362,15 @@ def select_kriging_data(unknown_position: Iterable,
 
     # Prepare data for kriging
     neighbors_and_dists = np.c_[data_array, dists.T]
-    prepared_data = neighbors_and_dists[neighbors_and_dists[:, -1] <= neighbors_range, :]
-    sorted_neighbors_and_dists = prepared_data[prepared_data[:, -1].argsort()]
+    sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
+    prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1] <= neighbors_range, :]
 
-    len_prep = len(sorted_neighbors_and_dists)
+
+    len_prep = len(prepared_data)
 
     if len_prep > min_number_of_neighbors:
         if len_prep > max_number_of_neighbors:
-            prepared_data = sorted_neighbors_and_dists[:max_number_of_neighbors]
-        else:
-            prepared_data = sorted_neighbors_and_dists
+            prepared_data = prepared_data[:max_number_of_neighbors]
     else:
         prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
 
