@@ -15,6 +15,23 @@ with open(path.join(here, '__init__.py'), 'r') as f:
     init_py = f.read()
 version = re.search("__version__ = '(.*)'", init_py).groups()[0]
 
+requirements = [
+    # Python 3.7
+    'geopandas',
+    'pandas',
+    'numpy',
+    'scipy==1.6.3',
+    'tqdm',
+    'descartes',
+    'matplotlib'
+]
+
+dev_requirements = {
+    'dev': [
+        'nbsphinx'
+    ]
+}
+
 setup(
     name='pyinterpolate',
     version=version,
@@ -22,9 +39,9 @@ setup(
     long_description=long_desc,
     long_description_content_type='text/markdown',
     url='https://github.com/szymon-datalions/pyinterpolate',
-    download_url='https://github.com/DataverseLabs/pyinterpolate/archive/v0.2.tar.gz',
+    download_url='https://github.com/DataverseLabs/pyinterpolate/archive/v0.3.tar.gz',
     author='Szymon Moliński',
-    author_email='simon@ml-gis-service.com',
+    author_email='simon@dataverselabs.com',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
@@ -36,11 +53,11 @@ setup(
     packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts', 'paper', 'docs',
         'sample_data', 'developer']),
 
-    install_requires=[],
+    install_requires=requirements,
+    extras_require=dev_requirements,
     project_urls={
 	'Webpage': 'https://pyinterpolate.com',
-        'Bug Reports': 'https://github.com/szymon-datalions/pyinterpolate/issues',
-        'Sponsor page': 'https://datalions.eu/',
-        'Source': 'https://github.com/szymon-datalions/pyinterpolate/',
+        'Bug Reports': 'https://github.com/DataverseLabs/pyinterpolate/issues',
+        'Source': 'https://github.com/DataverseLabs/pyinterpolate',
     },
 )
