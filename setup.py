@@ -1,8 +1,6 @@
 import re
-import sys
 from setuptools import setup, find_packages
 from os import path
-
 
 here = path.abspath(path.dirname(__file__))
 
@@ -33,6 +31,8 @@ requirements = [
     'dask==2022.8.0; python_version>="3.9"; sys_platform=="darwin"',
     # Python 3.8 & Linux
     'dask==2022.8.0; python_version>="3.8"; sys_platform=="linux"',
+    # Python 3.8 & Windows
+    'dask==2022.8.0; python_version>="3.8"; sys_platform=="win32"',
     # Python 3.7 & Linux
     'numpy==1.21.6; python_version=="3.7"; sys_platform=="linux"',
     'pandas==1.3.5; python_version=="3.7"; sys_platform=="linux"',
@@ -55,7 +55,7 @@ requirements = [
     'dask==2021.10.0; python_version=="3.7"; sys_platform=="darwin"',
     'prettytable==3.3.0; python_version=="3.7"; sys_platform=="darwin"',
     'rtree==1.0.0; python_version=="3.7"; sys_platform=="darwin"'
-    ]
+]
 
 dev_requirements = {
     'dev': [
@@ -82,12 +82,12 @@ setup(
     ],
     keywords=['Spatial interpolation', 'Kriging', 'Area Kriging', 'Block Kriging', 'Poisson Kriging', 'Geostatistics'],
     packages=find_packages(exclude=['data', 'test', 'tutorials', 'new_concepts', 'paper', 'docs',
-        'sample_data', 'developer']),
+                                    'sample_data', 'developer']),
 
     install_requires=requirements,
     extras_require=dev_requirements,
     project_urls={
-	'Webpage': 'https://pyinterpolate.com',
+        'Webpage': 'https://pyinterpolate.com',
         'Bug Reports': 'https://github.com/DataverseLabs/pyinterpolate/issues',
         'Source': 'https://github.com/DataverseLabs/pyinterpolate',
     },
