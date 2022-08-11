@@ -134,7 +134,7 @@ def interpolate_raster(data,
                                                   tolerance=tolerance)
 
         ts = TheoreticalVariogram()
-        ts.autofit(empirical_variogram=evariogram)
+        ts.autofit(experimental_variogram=evariogram)
     else:
         ts = semivariogram_model
 

@@ -428,7 +428,7 @@ class AggregatedVariogram:
         """
         theoretical_model = TheoreticalVariogram()
         theoretical_model.autofit(
-            empirical_variogram=self.experimental_variogram,
+            experimental_variogram=self.experimental_variogram,
             model_types='all',
             deviation_weighting=self.weighting_method
         )

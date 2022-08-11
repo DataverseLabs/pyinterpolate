@@ -20,7 +20,7 @@ test_points = test_set[:, :-1]
 
 ex = build_experimental_variogram(train_set, step_size=0.2, max_range=4)
 tv = TheoreticalVariogram()
-tv.autofit(empirical_variogram=ex)
+tv.autofit(experimental_variogram=ex)
 
 
 def krigeme():
