@@ -4,7 +4,7 @@ from prettytable import PrettyTable
 
 import matplotlib.pyplot as plt
 
-from pyinterpolate.variogram.empirical.cloud import get_variogram_point_cloud
+from pyinterpolate.variogram.empirical.cloud import build_variogram_point_cloud
 
 
 class VariogramCloud:
@@ -68,6 +68,10 @@ class VariogramCloud:
 
     Methods
     -------
+    # TODO
+    calculate_experimental_variogram()
+        Method calculates experimental variogram from a point cloud.
+
     describe()
         calculates statistics for point clouds. It is invoked by default by class __str__() method.
 
@@ -226,12 +230,12 @@ class VariogramCloud:
             raise KeyError(msg)
 
     def _calculate_point_cloud(self):
-        self.experimental_point_cloud = get_variogram_point_cloud(input_array=self.input_array,
-                                                                  step_size=self.step,
-                                                                  max_range=self.mx_rng,
-                                                                  direction=self.direct,
-                                                                  tolerance=self.tol)
-        self.lags = np.array(sorted(self.experimental_point_cloud.keys()))
+        self.experimental_point_cloud = build_variogram_point_cloud(input_array=self.input_array,
+                                                                    step_size=self.step,
+                                                                    max_range=self.mx_rng,
+                                                                    direction=self.direct,
+                                                                    tolerance=self.tol)
+        self.lags = np.array(list(self.experimental_point_cloud.keys()))
         self.points_per_lag = []
         for lag in self.lags:
             length = len(self.experimental_point_cloud[lag])
@@ -242,9 +246,9 @@ class VariogramCloud:
         self.__dist_plots(title_box, 'box')
 
     def _scatter_plot(self):
-        plot_data = self.__prep_scatterplot_data()
+        ds = self.__prep_scatterplot_data()
         plt.figure(figsize=(14, 8))
-        plt.scatter(x=plot_data[:, 0], y=plot_data[:, 1])
+        plt.scatter(x=ds[:, 0], y=ds[: 1])
         plt.title('Variogram Point Cloud per lag.')
         plt.show()
 
@@ -276,7 +280,11 @@ class VariogramCloud:
         if kind == 'box':
             ax.boxplot(plot_data_values)
         elif kind == 'violin':
-            vplot = ax.violinplot(plot_data_values, showmeans=True, showmedians=True, showextrema=True)
+            vplot = ax.violinplot(plot_data_values,
+                                  positions=plabels,
+                                  showmeans=True,
+                                  showmedians=True,
+                                  showextrema=True)
             vplot['cmeans'].set_color('orange')
             vplot['cmedians'].set(color='black', ls='dashed')
             vplot['cmins'].set(color='black')
@@ -311,17 +319,19 @@ class VariogramCloud:
             rows.append(row)
         return rows
 
-    def __prep_distplot_data(self) -> tuple:
-        data = [x for x in self.experimental_point_cloud.values()]
+    def __prep_distplot_data(self):
+        data = list(self.experimental_point_cloud.values())
         x_tick_labels = list(self.experimental_point_cloud.keys())
         return data, x_tick_labels
 
     def __prep_scatterplot_data(self) -> np.array:
-        data = []
-        for lag in self.lags:
-            data.extend([[lag, x] for x in self.experimental_point_cloud[lag]])
-        data = np.array(data)
-        return data
+        ds = []
+        for idx, values in self.experimental_point_cloud.items():
+            l = len(values)
+            idxs = np.ones(l) * idx
+            ds.append(list(zip(idxs, values)))
+
+        return np.asarray(ds)
 
     @staticmethod
     def __str_empty():

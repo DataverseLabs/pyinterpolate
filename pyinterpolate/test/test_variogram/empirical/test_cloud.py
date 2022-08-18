@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from pyinterpolate.variogram.empirical.cloud import get_variogram_point_cloud
+from pyinterpolate.variogram.empirical.cloud import build_variogram_point_cloud
 
 from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data, EmpiricalVariogramTestData,\
     EmpiricalSemivarianceData
@@ -15,7 +15,7 @@ class TestVariogramPointCloud(unittest.TestCase):
 
     # OMNIDIRECTIONAL CASES
     def test_instance(self):
-        cloud = get_variogram_point_cloud(
+        cloud = build_variogram_point_cloud(
             gen_data.input_data_we,
             step_size=gen_data.param_step_size,
             max_range=gen_data.param_max_range
@@ -23,7 +23,7 @@ class TestVariogramPointCloud(unittest.TestCase):
         self.assertIsInstance(cloud, dict)
 
     def test_output_we_omni(self):
-        cloud = get_variogram_point_cloud(
+        cloud = build_variogram_point_cloud(
             gen_data.input_data_we,
             step_size=gen_data.param_step_size,
             max_range=gen_data.param_max_range
@@ -45,7 +45,7 @@ class TestVariogramPointCloud(unittest.TestCase):
         self.assertTrue(are_close, msg)
 
     def test_zeros(self):
-        cloud = get_variogram_point_cloud(
+        cloud = build_variogram_point_cloud(
             gen_data.input_zeros,
             step_size=gen_data.param_step_size,
             max_range=gen_data.param_max_range
@@ -58,11 +58,11 @@ class TestVariogramPointCloud(unittest.TestCase):
 
     # DIRECTIONAL CASES
     def test_directional_we_lag1(self):
-        smvs = get_variogram_point_cloud(input_array=armstrong_arr,
-                                         step_size=1,
-                                         max_range=2,
-                                         direction=90,
-                                         tolerance=0.1)
+        smvs = build_variogram_point_cloud(input_array=armstrong_arr,
+                                           step_size=1,
+                                           max_range=2,
+                                           direction=90,
+                                           tolerance=0.1)
         lag1_test_values = next(iter(smvs.items()))[1]
         smv = np.mean(lag1_test_values) / 2
 
@@ -72,11 +72,11 @@ class TestVariogramPointCloud(unittest.TestCase):
         self.assertAlmostEqual(smv, expected_output, places=2, msg=err_msg)
 
     def test_calculate_semivariance_NE_SW_lag2(self):
-        smvs = get_variogram_point_cloud(input_array=armstrong_arr,
-                                         step_size=1,
-                                         max_range=3,
-                                         direction=45,
-                                         tolerance=0.01)
+        smvs = build_variogram_point_cloud(input_array=armstrong_arr,
+                                           step_size=1,
+                                           max_range=3,
+                                           direction=45,
+                                           tolerance=0.01)
 
         lag2_test_values = np.nan  # It will throw error when no assigned
         for lag, values in smvs.items():
