@@ -146,7 +146,7 @@ class VariogramCloud:
     def describe(self) -> dict:
         """
         Method calculates basic statistcs of a data: count (point pairs number), average semivariance,
-            standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.
+        standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.
 
         Returns
         -------
@@ -248,7 +248,10 @@ class VariogramCloud:
     def _scatter_plot(self):
         ds = self.__prep_scatterplot_data()
         plt.figure(figsize=(14, 8))
-        plt.scatter(x=ds[:, 0], y=ds[: 1])
+        xs = ds[:, 0]
+        ys = ds[:, 1]
+        plt.scatter(x=xs,
+                    y=ys)
         plt.title('Variogram Point Cloud per lag.')
         plt.show()
 
@@ -278,13 +281,13 @@ class VariogramCloud:
         fig, ax = plt.subplots(figsize=(14, 8))
 
         if kind == 'box':
-            ax.boxplot(plot_data_values)
+            ax.boxplot(plot_data_values, showfliers=False)
         elif kind == 'violin':
             vplot = ax.violinplot(plot_data_values,
-                                  positions=plabels,
                                   showmeans=True,
                                   showmedians=True,
                                   showextrema=True)
+
             vplot['cmeans'].set_color('orange')
             vplot['cmedians'].set(color='black', ls='dashed')
             vplot['cmins'].set(color='black')
@@ -294,16 +297,9 @@ class VariogramCloud:
                        vplot['cmins'],
                        vplot['cmaxes']], ['mean', 'median', 'min & max'], loc='upper left')
 
-
-        ax.xaxis.set_ticks(plabels)
-        no_of_digits = max([len(str(x)) for x in plabels])
-
-        if 3 < no_of_digits < 6:
-            ax.tick_params(axis='x', labelrotation=30)
-        elif 6 <= no_of_digits < 10:
-            ax.tick_params(axis='x', labelrotation=45)
-        elif no_of_digits >= 10:
-            ax.tick_params(axis='x', labelrotation=90)
+        str_plabels = [str(f'{plabel:.2f}') for plabel in plabels]
+        ax.set_xticks(np.arange(1, len(plabels) + 1))
+        ax.set_xticklabels(str_plabels)
 
         plt.title(title_label)
         plt.show()
@@ -327,11 +323,12 @@ class VariogramCloud:
     def __prep_scatterplot_data(self) -> np.array:
         ds = []
         for idx, values in self.experimental_point_cloud.items():
-            l = len(values)
-            idxs = np.ones(l) * idx
-            ds.append(list(zip(idxs, values)))
+            vals_l = len(values)
+            idxs = np.ones(vals_l) * idx
+            elems = list(zip(idxs, values))
+            ds.extend(elems)
 
-        return np.asarray(ds)
+        return np.array(ds)
 
     @staticmethod
     def __str_empty():
