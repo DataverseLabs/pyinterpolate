@@ -36,7 +36,7 @@ def detect_outliers_iqr(dataset: np.ndarray,
         raise ValueError(msg)
 
     lower_limit = np.quantile(dataset, q=0.25) - (np.std(dataset) * iqr_lower)
-    upper_limit = np.quantile(dataset, q=0.75) - (np.std(dataset) * iqr_upper)
+    upper_limit = np.quantile(dataset, q=0.75) + (np.std(dataset) * iqr_upper)
 
     mask = (dataset > upper_limit) | (dataset < lower_limit)
     return mask
