@@ -4,6 +4,7 @@ from prettytable import PrettyTable
 
 import matplotlib.pyplot as plt
 
+from pyinterpolate.processing.transform.statistics import remove_outliers
 from pyinterpolate.variogram.empirical.cloud import build_variogram_point_cloud
 
 
@@ -66,9 +67,11 @@ class VariogramCloud:
     tol : float
         Derived from the tolerance parameter.
 
+    calculate_on_creation : bool, default=True
+        Perform calculations of semivariogram point cloud when object is initialized.
+
     Methods
     -------
-    # TODO
     calculate_experimental_variogram()
         Method calculates experimental variogram from a point cloud.
 
@@ -77,6 +80,9 @@ class VariogramCloud:
 
     plot(kind='scatter')
         plots scatterplot, boxplot or violinplot of a point cloud.
+
+    remove_outliers()
+        Removes outliers from a semivariance scatterplots.
 
     __str__()
         prints basic info about the class parameters and calculates statistics for each lag.
@@ -121,7 +127,8 @@ class VariogramCloud:
     # +-----+--------------------+---------------------+--------------------+
     """
 
-    def __init__(self, input_array, step_size: float, max_range: float, direction=0, tolerance=1):
+    def __init__(self, input_array, step_size: float, max_range: float, direction=0, tolerance=1,
+                 calculate_on_creation=True):
 
         if not isinstance(input_array, np.ndarray):
             input_array = np.array(input_array)
@@ -130,6 +137,7 @@ class VariogramCloud:
         self.experimental_point_cloud = None
         self.lags = None
         self.points_per_lag = None
+        self.experimental_variogram = None
 
         self.step = step_size
         self.mx_rng = max_range
@@ -137,11 +145,46 @@ class VariogramCloud:
         self.tol = tolerance
 
         # Calculate pt cloud
-        self._calculate_point_cloud()
+        if calculate_on_creation:
+            self._calculate_point_cloud()
 
         # Addtional params
         self.fnames = ['lag', 'count', 'avg semivariance', 'std', 'min', '25%', 'median', '75%', 'max', 'skewness',
                        'kurtosis']
+
+    def calculate_experimental_variogram(self):
+        """
+        Method transforms the experimental point cloud into the experimental variogram.
+
+        Raises
+        ------
+        RunetimeError
+            The attribute experimental_point_cloud is not calculated.
+        """
+        experimental_semivariogram = []
+
+        if self.experimental_point_cloud is None:
+            raise RuntimeError('You must calculate experimental_point_cloud first before you remove outliers.')
+
+        for _key, _values in self.experimental_point_cloud.items():
+            try:
+                mean_semivariance_value = np.mean(_values) / 2
+                length = len(_values)
+            except ZeroDivisionError:
+                # There are no points for this lag
+                mean_semivariance_value = 0
+                length = 0
+            # Check if any nan
+            if np.isnan(mean_semivariance_value):
+                mean_semivariance_value = 0
+                length = 0
+
+            experimental_semivariogram.append([_key, mean_semivariance_value, length])
+
+        experimental_semivariogram = np.array(experimental_semivariogram)
+
+        self.experimental_variogram = experimental_semivariogram
+        return experimental_semivariogram
 
     def describe(self) -> dict:
         """
@@ -228,6 +271,71 @@ class VariogramCloud:
         else:
             msg = f'Plot kind {kind} is not available. Use "scatter", "box" or "violin" instead.'
             raise KeyError(msg)
+
+    def remove_outliers(self, method='zscore',
+                        z_lower_limit=-3,
+                        z_upper_limit=3,
+                        iqr_lower_limit=1.5,
+                        iqr_upper_limit=1.5,
+                        inplace=False):
+        """
+
+        Parameters
+        ----------
+        method : str, default='zscore'
+            Method used to detect outliers. Can be 'zscore' or 'iqr'.
+
+        z_lower_limit : float
+            Number of standard deviations from the mean to the left side of a distribution. Must be lower than 0.
+
+        z_upper_limit : float
+            Number of standard deviations from the mean to the right side of a distribution. Must be greater than 0.
+
+        iqr_lower_limit : float
+            Number of standard deviations from the 1st quartile into the lowest values. Must be greater or
+            equal to zero.
+
+        iqr_upper_limit : float
+            Number of standard deviations from the 3rd quartile into the largest values. Must be greater or
+            equal to zero.
+
+        inplace : bool, default=False
+            If set to True then method updates experimental_point_cloud attribute of the existing object and returns
+            nothing. Else new VariogramCloud object is returned.
+
+        Returns
+        -------
+        cleaned : VariogramCloud
+            VariogramCloud object with removed outliers from the experimental_point_cloud attribute.
+
+        Raises
+        ------
+        RunetimeError
+            The attribute experimental_point_cloud is not calculated.
+        """
+        if self.experimental_point_cloud is None:
+            raise RuntimeError('You must calculate experimental_point_cloud first before you remove outliers.')
+
+        processed = remove_outliers(self.experimental_point_cloud, method=method,
+                                    z_lower_limit=z_lower_limit, z_upper_limit=z_upper_limit,
+                                    iqr_lower_limit=iqr_lower_limit, iqr_upper_limit=iqr_upper_limit)
+
+        if inplace:
+            self.experimental_point_cloud = processed
+        else:
+            vc = VariogramCloud(input_array=self.input_array.copy(),
+                                step_size=self.step,
+                                max_range=self.mx_rng, direction=0, tolerance=1, calculate_on_creation=False)
+            vc.experimental_point_cloud = processed
+            vc.lags = self.lags.copy()
+            new_points_per_lag = []
+
+            for lag in self.lags:
+                length = len(processed[lag])
+                new_points_per_lag.append(length)
+
+            vc.points_per_lag = new_points_per_lag
+            return vc
 
     def _calculate_point_cloud(self):
         self.experimental_point_cloud = build_variogram_point_cloud(input_array=self.input_array,
