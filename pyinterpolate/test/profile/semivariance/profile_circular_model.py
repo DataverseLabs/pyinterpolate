@@ -4,7 +4,7 @@ import numpy as np
 from pyinterpolate.variogram.theoretical.models.variogram_models import circular_model
 
 
-lags = np.linspace(20000, 25000, 100000)
+lags = np.linspace(20000, 100000, 100000)
 
 
 def profile_circular():

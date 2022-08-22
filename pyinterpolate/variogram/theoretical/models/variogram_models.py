@@ -64,19 +64,14 @@ def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
     [1] McBratney, A. B., Webster R. Choosing Functions for Semivariograms of Soil Properties and Fitting Them to
     Sampling Estimates. Journal of Soil Science 37: 617–639. 1986.
 
-
     """
 
     pic = 2 / np.pi
     ar = lags / rang
-    ar = ar.astype(np.complex)
     ns = nugget + sill
-
-    gamma = np.where(
-        lags < rang,
-        nugget + sill * (1 - (pic * np.arccos(ar)).real + (pic * ar) * np.sqrt(1 - ar ** 2).real),
-        ns
-    )
+    gamma = np.ones(len(ar)) * ns
+    poses = lags <= rang
+    gamma[poses] = nugget + sill * (1 - (pic * np.arccos(ar[poses])) + (pic * ar[poses]) * np.sqrt(1 - ar[poses] ** 2))
 
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)

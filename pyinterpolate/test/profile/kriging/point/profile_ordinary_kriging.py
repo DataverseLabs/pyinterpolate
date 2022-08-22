@@ -6,7 +6,7 @@ from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
 
-points = read_txt('../../samples/pl_dem.txt')
+points = read_txt('../../samples/pl_dem_epsg2180.txt')
 pts_size = len(points)
 train_size = int(pts_size / 2)
 idxs = np.arange(0, pts_size)
@@ -16,7 +16,7 @@ train_set = points[train_idxs]
 test_set = points[~train_idxs]
 test_points = test_set[:, :-1]
 
-ex = build_experimental_variogram(train_set, step_size=0.2, max_range=4)
+ex = build_experimental_variogram(train_set, step_size=1_000, max_range=10_000)
 tv = TheoreticalVariogram()
 tv.autofit(experimental_variogram=ex)
 
