@@ -14,8 +14,7 @@ with open(path.join(here, '__init__.py'), 'r') as f:
 version = re.search("__version__ = '(.*)'", init_py).groups()[0]
 
 # Python 3.7 will be deprecated from the next version of a package
-requirements = [
-    # Python 3.8, 3.9, 3.10, MacOS, Linux
+core_requirements = [
     'geopandas==0.11.1; python_version>="3.8"',
     'pandas==1.4.3; python_version>="3.8"',
     'numpy==1.23.1; python_version>="3.8"',
@@ -25,37 +24,42 @@ requirements = [
     'matplotlib==3.5.2; python_version>="3.8"',
     'prettytable==3.3.0; python_version>="3.8"',
     'rtree==1.0.0; python_version>="3.8"'
-    # Python 3.8 & MacOS
-    'dask==2022.2.1; python_version=="3.8"; sys_platform=="darwin"',
-    # Python 3.9, 3.10 & MacOS
-    'dask==2022.8.0; python_version>="3.9"; sys_platform=="darwin"',
-    # Python 3.8 & Linux
-    'dask==2022.8.0; python_version>="3.8"; sys_platform=="linux"',
-    # Python 3.8 & Windows
-    'dask==2022.8.0; python_version>="3.8"; sys_platform=="win32"',
-    # Python 3.7 & Linux
-    'numpy==1.21.6; python_version=="3.7"; sys_platform=="linux"',
-    'pandas==1.3.5; python_version=="3.7"; sys_platform=="linux"',
-    'geopandas==0.10.2; python_version=="3.7"; sys_platform=="linux"',
-    'descartes==1.1.0; python_version=="3.7"; sys_platform=="linux"',
-    'tqdm==4.64.0; python_version=="3.7"; sys_platform=="linux"',
-    'matplotlib==3.5.2; python_version=="3.7"; sys_platform=="linux"',
-    'scipy==1.7.3; python_version=="3.7"; sys_platform=="linux"',
-    'dask==2021.10.0; python_version=="3.7"; sys_platform=="linux"',
-    'prettytable==3.3.0; python_version=="3.7"; sys_platform=="linux"',
-    'rtree==1.0.0; python_version=="3.7"; sys_platform=="linux"'
-    # Python 3.7 & MacOS
-    'numpy==1.21.5; python_version=="3.7"; sys_platform=="darwin"',
-    'pandas==1.3.5; python_version=="3.7"; sys_platform=="darwin"',
-    'geopandas==0.10.2; python_version=="3.7"; sys_platform=="darwin"',
-    'descartes==1.1.0; python_version=="3.7"; sys_platform=="darwin"',
-    'tqdm==4.64.0; python_version=="3.7"; sys_platform=="darwin"',
-    'matplotlib==3.5.1; python_version=="3.7"; sys_platform=="darwin"',
-    'scipy==1.7.3; python_version=="3.7"; sys_platform=="darwin"',
-    'dask==2021.10.0; python_version=="3.7"; sys_platform=="darwin"',
-    'prettytable==3.3.0; python_version=="3.7"; sys_platform=="darwin"',
-    'rtree==1.0.0; python_version=="3.7"; sys_platform=="darwin"'
 ]
+
+dask_requirements = [
+    'dask==2022.2.1; python_version=="3.8" and sys_platform=="darwin"',
+    'dask==2022.8.0; python_version>="3.9" and sys_platform=="darwin"',
+    'dask==2022.8.0; python_version>="3.8" and sys_platform=="linux"'
+]
+
+python_37_linux_requirements = [
+    'numpy==1.21.6; python_version=="3.7" and sys_platform=="linux"',
+    'pandas==1.3.5; python_version=="3.7" and sys_platform=="linux"',
+    'geopandas==0.10.2; python_version=="3.7" and sys_platform=="linux"',
+    'descartes==1.1.0; python_version=="3.7" and sys_platform=="linux"',
+    'tqdm==4.64.0; python_version=="3.7" and sys_platform=="linux"',
+    'matplotlib==3.5.2; python_version=="3.7" and sys_platform=="linux"',
+    'scipy==1.7.3; python_version=="3.7" and sys_platform=="linux"',
+    'dask==2021.10.0; python_version=="3.7" and sys_platform=="linux"',
+    'prettytable==3.3.0; python_version=="3.7" and sys_platform=="linux"',
+    'rtree==1.0.0; python_version=="3.7" and sys_platform=="linux"'
+]
+
+python_37_macos_requirements = [
+    'numpy==1.21.5; python_version=="3.7" and sys_platform=="darwin"',
+    'pandas==1.3.5; python_version=="3.7" and sys_platform=="darwin"',
+    'geopandas==0.10.2; python_version=="3.7" and sys_platform=="darwin"',
+    'descartes==1.1.0; python_version=="3.7" and sys_platform=="darwin"',
+    'tqdm==4.64.0; python_version=="3.7" and sys_platform=="darwin"',
+    'matplotlib==3.5.1; python_version=="3.7" and sys_platform=="darwin"',
+    'scipy==1.7.3; python_version=="3.7" and sys_platform=="darwin"',
+    'dask==2021.10.0; python_version=="3.7" and sys_platform=="darwin"',
+    'prettytable==3.3.0; python_version=="3.7" and sys_platform=="darwin"',
+    'rtree==1.0.0; python_version=="3.7" and sys_platform=="darwin"'
+]
+
+
+requirements = core_requirements + dask_requirements + python_37_linux_requirements + python_37_macos_requirements
 
 dev_requirements = {
     'dev': [

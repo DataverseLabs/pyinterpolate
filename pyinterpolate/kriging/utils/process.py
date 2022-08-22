@@ -47,13 +47,7 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     Returns
     -------
     : List[predictions - unknown point, predictions - point to point, prepared Kriging data]
-
-    Raises
-    ------
-    VariogramModelNotSetError : Semivariogram model has not been set (it doesn't have a name)
     """
-    # Check if variogram model is valid
-    validate_theoretical_variogram(theoretical_model)
 
     # Check range
     if neighbors_range is None:

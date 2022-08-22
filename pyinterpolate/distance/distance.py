@@ -204,7 +204,7 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     return distances_sum
 
 
-def calc_point_to_point_distance(points_a, points_b=None):
+def calc_point_to_point_distance(points_a, points_b=None, allow_normalization=False):
     """Function calculates distances between two group of points of a single group to itself.
 
     Parameters

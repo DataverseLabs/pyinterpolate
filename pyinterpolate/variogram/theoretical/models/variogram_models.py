@@ -68,18 +68,15 @@ def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
     """
 
     pic = 2 / np.pi
-    gammas = []
+    ar = lags / rang
+    ns = nugget + sill
 
-    for _lag in lags:
-        if _lag <= rang:
-            lr = _lag / rang
-            val = nugget + sill*(1 - (pic * np.arccos(lr)) + (pic * lr) * np.sqrt(1 - lr**2))
-        else:
-            val = nugget + sill
+    gamma = np.where(
+        lags <= rang,
+        nugget + sill * (1 - (pic * np.arccos(ar)) + (pic * ar) * np.sqrt(1 - ar ** 2)),
+        ns
+    )
 
-        gammas.append(val)
-
-    gamma = np.array(gammas)
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
 

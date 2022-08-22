@@ -3,6 +3,11 @@ from typing import Union, List, Tuple
 import os
 import numpy as np
 import dask
+from dask.diagnostics import ProgressBar
+pbar = ProgressBar()
+pbar.register()
+
+from tqdm import tqdm
 
 from pyinterpolate.kriging.models.ordinary_kriging import ordinary_kriging
 from pyinterpolate.kriging.models.simple_kriging import simple_kriging
@@ -91,30 +96,59 @@ def kriging(observations: np.ndarray,
 
     results = []
 
-    for point in points:
-        prediction = [np.nan, np.nan, np.nan, np.nan]
-        if how == 'ok':
-            prediction = dask.delayed(model)(
-                theoretical_model,
-                observations,
-                point,
-                neighbors_range=neighbors_range,
-                min_no_neighbors=min_no_neighbors,
-                max_no_neighbors=max_no_neighbors,
-                allow_approximate_solutions=allow_approx_solutions
-            )
-        elif how == 'sk':
-            prediction = dask.delayed(model)(
-                theoretical_model,
-                observations,
-                point,
-                sk_mean,
-                neighbors_range=neighbors_range,
-                min_no_neighbors=min_no_neighbors,
-                max_no_neighbors=max_no_neighbors,
-                allow_approximate_solutions=allow_approx_solutions
-            )
-        results.append(prediction)
-    predictions = dask.delayed()(results)
-    predictions = np.array(predictions.compute(num_workers=number_of_workers))
-    return np.array(predictions)
+    if number_of_workers == 1:
+        # Don't use dask
+        for point in tqdm(points):
+            prediction = [np.nan, np.nan, np.nan, np.nan]
+            if how == 'ok':
+                prediction = model(
+                    theoretical_model,
+                    observations,
+                    point,
+                    neighbors_range=neighbors_range,
+                    min_no_neighbors=min_no_neighbors,
+                    max_no_neighbors=max_no_neighbors,
+                    allow_approximate_solutions=allow_approx_solutions
+                )
+            elif how == 'sk':
+                prediction = model(
+                    theoretical_model,
+                    observations,
+                    point,
+                    sk_mean,
+                    neighbors_range=neighbors_range,
+                    min_no_neighbors=min_no_neighbors,
+                    max_no_neighbors=max_no_neighbors,
+                    allow_approximate_solutions=allow_approx_solutions
+                )
+            results.append(prediction)
+        predictions = np.array(results)
+    else:
+        # Use dask
+        for point in points:
+            prediction = [np.nan, np.nan, np.nan, np.nan]
+            if how == 'ok':
+                prediction = dask.delayed(model)(
+                    theoretical_model,
+                    observations,
+                    point,
+                    neighbors_range=neighbors_range,
+                    min_no_neighbors=min_no_neighbors,
+                    max_no_neighbors=max_no_neighbors,
+                    allow_approximate_solutions=allow_approx_solutions
+                )
+            elif how == 'sk':
+                prediction = dask.delayed(model)(
+                    theoretical_model,
+                    observations,
+                    point,
+                    sk_mean,
+                    neighbors_range=neighbors_range,
+                    min_no_neighbors=min_no_neighbors,
+                    max_no_neighbors=max_no_neighbors,
+                    allow_approximate_solutions=allow_approx_solutions
+                )
+            results.append(prediction)
+        predictions = dask.delayed()(results)
+        predictions = np.array(predictions.compute(num_workers=number_of_workers))
+    return predictions
