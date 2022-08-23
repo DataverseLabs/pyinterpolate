@@ -4,14 +4,15 @@ import os
 import numpy as np
 import dask
 from dask.diagnostics import ProgressBar
-pbar = ProgressBar()
-pbar.register()
 
 from tqdm import tqdm
 
-from pyinterpolate.kriging.models.ordinary_kriging import ordinary_kriging
-from pyinterpolate.kriging.models.simple_kriging import simple_kriging
+from pyinterpolate.kriging.models.point.ordinary_kriging import ordinary_kriging
+from pyinterpolate.kriging.models.point.simple_kriging import simple_kriging
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
+
+pbar = ProgressBar()
+pbar.register()
 
 
 def kriging(observations: np.ndarray,
@@ -19,8 +20,8 @@ def kriging(observations: np.ndarray,
             points: Union[np.ndarray, List, Tuple],
             how: str = 'ok',
             neighbors_range: Union[float, None] = None,
-            min_no_neighbors: int = 1,
-            max_no_neighbors: int = -1,
+            no_neighbors: int = 4,
+            use_all_neighbors_in_range=False,
             sk_mean: Union[float, None] = None,
             allow_approx_solutions=False,
             number_of_workers: int = 1) -> np.ndarray:
@@ -45,14 +46,12 @@ def kriging(observations: np.ndarray,
                       Maximum distance where we search for point neighbors. If None given then range is selected from
                       the theoretical_model rang attribute.
 
-    min_no_neighbors : int, default = 1
-                       Minimum number of neighbors to estimate unknown value; value is used when insufficient number of
-                       neighbors is within neighbors_range.
+    no_neighbors : int, default = 4
+                   Number of the n-closest neighbors used for interpolation.
 
-    max_no_neighbors : int, default = -1
-                       Maximum number of n-closest neighbors used for interpolation if there are too many neighbors
-                       in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
-                       all possible neighbors will be used.
+    use_all_neighbors_in_range : bool, default = False
+                                 True: if number of neighbors within the neighbors_range is greater than the
+                                 number_of_neighbors then take all of them for modeling.
 
     sk_mean : float, default=None
               The mean value of a process over a study area. Should be know before processing. That's why Simple
@@ -106,8 +105,8 @@ def kriging(observations: np.ndarray,
                     observations,
                     point,
                     neighbors_range=neighbors_range,
-                    min_no_neighbors=min_no_neighbors,
-                    max_no_neighbors=max_no_neighbors,
+                    no_neighbors=no_neighbors,
+                    use_all_neighbors_in_range=use_all_neighbors_in_range,
                     allow_approximate_solutions=allow_approx_solutions
                 )
             elif how == 'sk':
@@ -117,8 +116,8 @@ def kriging(observations: np.ndarray,
                     point,
                     sk_mean,
                     neighbors_range=neighbors_range,
-                    min_no_neighbors=min_no_neighbors,
-                    max_no_neighbors=max_no_neighbors,
+                    no_neighbors=no_neighbors,
+                    use_all_neighbors_in_range=use_all_neighbors_in_range,
                     allow_approximate_solutions=allow_approx_solutions
                 )
             results.append(prediction)
@@ -133,8 +132,8 @@ def kriging(observations: np.ndarray,
                     observations,
                     point,
                     neighbors_range=neighbors_range,
-                    min_no_neighbors=min_no_neighbors,
-                    max_no_neighbors=max_no_neighbors,
+                    no_neighbors=no_neighbors,
+                    use_all_neighbors_in_range=use_all_neighbors_in_range,
                     allow_approximate_solutions=allow_approx_solutions
                 )
             elif how == 'sk':
@@ -144,8 +143,8 @@ def kriging(observations: np.ndarray,
                     point,
                     sk_mean,
                     neighbors_range=neighbors_range,
-                    min_no_neighbors=min_no_neighbors,
-                    max_no_neighbors=max_no_neighbors,
+                    no_neighbors=no_neighbors,
+                    use_all_neighbors_in_range=use_all_neighbors_in_range,
                     allow_approximate_solutions=allow_approx_solutions
                 )
             results.append(prediction)

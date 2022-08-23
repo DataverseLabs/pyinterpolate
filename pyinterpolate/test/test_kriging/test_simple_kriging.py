@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from .consts import prepare_test_data, prepare_zeros_data
-from pyinterpolate.kriging.models.simple_kriging import simple_kriging
+from pyinterpolate.kriging.models.point.simple_kriging import simple_kriging
 
 
 class TestOrdinaryKriging(unittest.TestCase):
@@ -17,7 +17,7 @@ class TestOrdinaryKriging(unittest.TestCase):
                                 known_locations=ds,
                                 unknown_location=unknown_point,
                                 process_mean=float(pmean),
-                                min_no_neighbors=8)
+                                no_neighbors=8)
 
         diff = abs(known_value - kriged[0])
 
@@ -33,7 +33,7 @@ class TestOrdinaryKriging(unittest.TestCase):
                                known_locations=dataset,
                                unknown_location=unknown_point,
                                process_mean=0,
-                               min_no_neighbors=4)
+                               no_neighbors=4)
 
             self.assertTrue(np.isnan(v[0]) and np.isnan(v[1]))
 
@@ -46,6 +46,6 @@ class TestOrdinaryKriging(unittest.TestCase):
                                 known_locations=dataset,
                                 unknown_location=test_point,
                                 process_mean=float(pmean),
-                                min_no_neighbors=8)
+                                no_neighbors=8)
 
         self.assertAlmostEqual(kriged[0], expected_value, places=6)

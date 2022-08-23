@@ -14,8 +14,8 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
                     known_locations: np.ndarray,
                     unknown_location: Union[List, Tuple, np.ndarray],
                     neighbors_range=None,
-                    min_no_neighbors=1,
-                    max_no_neighbors=-1) -> List:
+                    no_neighbors=4,
+                    use_all_neighbors_in_range=False) -> List:
     """
     Function predicts semivariances for distances between points and unknown points, and between known points and
     returns two predicted arrays.
@@ -35,14 +35,12 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
                       Maximum distance where we search for point neighbors. If None given then range is selected from
                       the theoretical_model rang attribute.
 
-    min_no_neighbors : int, default = 1
-                       Minimum number of neighbors to estimate unknown value; value is used when insufficient number of
-                       neighbors is within neighbors_range.
+    no_neighbors : int, default = 4
+                   Number of the n-closest neighbors used for interpolation.
 
-    max_no_neighbors : int, default = -1
-                       Maximum number of n-closest neighbors used for interpolation if there are too many neighbors
-                       in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
-                       all possible neighbors will be used.
+    use_all_neighbors_in_range : bool, default = False
+                                 True: if number of neighbors within the neighbors_range is greater than the
+                                 number_of_neighbors then take all of them for modeling.
 
     Returns
     -------
@@ -56,8 +54,8 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     prepared_data = select_kriging_data(unknown_position=unknown_location,
                                         data_array=known_locations,
                                         neighbors_range=neighbors_range,
-                                        min_number_of_neighbors=min_no_neighbors,
-                                        max_number_of_neighbors=max_no_neighbors)
+                                        number_of_neighbors=no_neighbors,
+                                        use_all_neighbors_in_range=use_all_neighbors_in_range)
 
     n = len(prepared_data)
     unknown_distances = prepared_data[:, -1]

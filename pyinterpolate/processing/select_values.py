@@ -318,8 +318,8 @@ def prepare_pk_known_areas(point_support_dict: Dict,
 def select_kriging_data(unknown_position: Iterable,
                         data_array: np.ndarray,
                         neighbors_range: float,
-                        min_number_of_neighbors: int = 4,
-                        max_number_of_neighbors: int = -1) -> np.ndarray:
+                        number_of_neighbors: int = 4,
+                        use_all_neighbors_in_range: bool = False) -> np.ndarray:
     """
     Function prepares data for kriging - array of point position, value and distance to an unknown point.
 
@@ -335,22 +335,18 @@ def select_kriging_data(unknown_position: Iterable,
                       Range within neighbors are affecting the value, it should be close or the same as
                       the variogram range.
 
-    min_number_of_neighbors : int, default = 4
-                              Number of the n-closest neighbors used for interpolation. If within the
-                              neighbors_range is less neighbors than min_number_of_neighbors, then additional points are
-                              selected from outside the neighbors_range based on their position.
+    number_of_neighbors : int, default = 4
+                          Number of the n-closest neighbors used for interpolation.
 
-    max_number_of_neighbors : int, default = -1
-                              Maximum number of neighbors within neighbors_range. You should leave default value
-                              -1 if you want to include all available points. If your range of analysis catches multiple
-                              points, you may consider to set this parameter to some large integer value to speed-up
-                              the computations.
+    use_all_neighbors_in_range : bool, default = False
+                                 True: if number of neighbors within the neighbors_range is greater than the
+                                 number_of_neighbors then take all of them for modeling.
 
     Returns
     -------
     : numpy array
-        Dataset of the length min_number_of_neighbors <= length <= max_number_of_neighbors. Each record is created from
-        the position, value and distance to the unknown point `[[x, y, value, distance to unknown position]]`.
+        Dataset of the length number_of_neighbors <= length. Each record is created from the position, value and
+        distance to the unknown point `[[x, y, value, distance to unknown position]]`.
 
     """
 
@@ -365,16 +361,15 @@ def select_kriging_data(unknown_position: Iterable,
     sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
     prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1] <= neighbors_range, :]
 
-
     len_prep = len(prepared_data)
 
-    if len_prep > min_number_of_neighbors:
-        if len_prep > max_number_of_neighbors:
-            prepared_data = prepared_data[:max_number_of_neighbors]
-    else:
-        prepared_data = sorted_neighbors_and_dists[:min_number_of_neighbors]
+    if use_all_neighbors_in_range:
+        return prepared_data
 
-    return prepared_data
+    if len_prep > number_of_neighbors:
+        return prepared_data[:number_of_neighbors]
+    else:
+        return prepared_data
 
 
 def select_poisson_kriging_data(u_block_centroid: np.ndarray,

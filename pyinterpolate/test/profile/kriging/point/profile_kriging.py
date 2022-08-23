@@ -25,7 +25,8 @@ def krigeme():
     predictions = kriging(observations=train_set,
                           theoretical_model=tv,
                           points=test_points,
-                          min_no_neighbors=4,
+                          no_neighbors=4,
+                          use_all_neighbors_in_range=False,
                           number_of_workers=1)
     mse = np.mean((predictions[:, 0] - test_points[:, -1])**2)
     rmse = np.sqrt(mse)

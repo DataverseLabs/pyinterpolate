@@ -1,7 +1,7 @@
 import cProfile
 import numpy as np
 from pyinterpolate.io.read_data import read_txt
-from pyinterpolate.kriging.models.simple_kriging import simple_kriging
+from pyinterpolate.kriging.models.point.simple_kriging import simple_kriging
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 

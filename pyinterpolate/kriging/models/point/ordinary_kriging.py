@@ -14,8 +14,8 @@ def ordinary_kriging(
         known_locations: np.ndarray,
         unknown_location: Union[List, Tuple, np.ndarray],
         neighbors_range=None,
-        min_no_neighbors=1,
-        max_no_neighbors=-1,
+        no_neighbors=4,
+        use_all_neighbors_in_range=False,
         allow_approximate_solutions=False
 ) -> List:
     """
@@ -36,14 +36,12 @@ def ordinary_kriging(
                       Maximum distance where we search for point neighbors. If None given then range is selected from
                       the theoretical_model rang attribute.
 
-    min_no_neighbors : int, default = 1
-                       Minimum number of neighbors to estimate unknown value; value is used when insufficient number of
-                       neighbors is within neighbors_range.
+    no_neighbors : int, default = 4
+                   Number of the n-closest neighbors used for interpolation.
 
-    max_no_neighbors : int, default = -1
-                       Maximum number of n-closest neighbors used for interpolation if there are too many neighbors
-                       in neighbors_range. It speeds up calculations for large datasets. Default -1 means that
-                       all possible neighbors will be used.
+    use_all_neighbors_in_range : bool, default = False
+                                 True: if number of neighbors within the neighbors_range is greater than the
+                                 number_of_neighbors then take all of them for modeling.
 
     allow_approximate_solutions : bool, default = False
                                   Allows the approximation of kriging weights based on the OLS algorithm.
@@ -59,8 +57,8 @@ def ordinary_kriging(
                                             known_locations,
                                             unknown_location,
                                             neighbors_range,
-                                            min_no_neighbors,
-                                            max_no_neighbors)
+                                            no_neighbors,
+                                            use_all_neighbors_in_range)
 
     k_ones = np.ones(1)[0]
     k = np.r_[k, k_ones]
@@ -71,14 +69,13 @@ def ordinary_kriging(
     p_ones_row[0][-1] = 0.
     weights = np.r_[predicted_with_ones_col, p_ones_row]
 
-    output_weights = solve_weights(weights, k, allow_approximate_solutions)
-
-    zhat = np.nan
-
     try:
-        zhat = dataset[:, -2].dot(output_weights[:-1])
-    except ValueError:
-        print(dataset)
+        output_weights = solve_weights(weights, k, allow_approximate_solutions)
+    except np.linalg.LinAlgError as _:
+        # TODO: log k, predicted, dataset
+        return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
+
+    zhat = dataset[:, -2].dot(output_weights[:-1])
 
     sigma = np.matmul(output_weights.T, k)
 

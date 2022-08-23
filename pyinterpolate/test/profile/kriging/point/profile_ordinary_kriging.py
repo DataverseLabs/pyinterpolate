@@ -1,7 +1,7 @@
 import cProfile
 import numpy as np
 from pyinterpolate.io.read_data import read_txt
-from pyinterpolate.kriging.models.ordinary_kriging import ordinary_kriging
+from pyinterpolate.kriging.models.point.ordinary_kriging import ordinary_kriging
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
@@ -26,7 +26,7 @@ def krigeme():
         _ = ordinary_kriging(theoretical_model=tv,
                              known_locations=train_set,
                              unknown_location=uloc,
-                             min_no_neighbors=4)
+                             no_neighbors=4)
     return 0
 
 

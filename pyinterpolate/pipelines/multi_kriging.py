@@ -240,7 +240,7 @@ class BlockToBlockKrigingComparison:
                           points=test_pts,
                           how='ok',
                           neighbors_range=self.neighbors_range,
-                          max_no_neighbors=self.no_of_neighbors,
+                          no_neighbors=self.no_of_neighbors,
                           allow_approx_solutions=self.allow_approx_solutions)
 
         mean_error = np.mean(np.sqrt(
@@ -260,7 +260,7 @@ class BlockToBlockKrigingComparison:
                           points=test_pts,
                           how='sk',
                           neighbors_range=self.neighbors_range,
-                          max_no_neighbors=self.no_of_neighbors,
+                          no_neighbors=self.no_of_neighbors,
                           sk_mean=self.simple_kriging_mean,
                           allow_approx_solutions=self.allow_approx_solutions)
 
