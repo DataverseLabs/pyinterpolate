@@ -69,11 +69,7 @@ def ordinary_kriging(
     p_ones_row[0][-1] = 0.
     weights = np.r_[predicted_with_ones_col, p_ones_row]
 
-    try:
-        output_weights = solve_weights(weights, k, allow_approximate_solutions)
-    except np.linalg.LinAlgError as _:
-        # TODO: log k, predicted, dataset
-        return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
+    output_weights = solve_weights(weights, k, allow_approximate_solutions)
 
     zhat = dataset[:, -2].dot(output_weights[:-1])
 

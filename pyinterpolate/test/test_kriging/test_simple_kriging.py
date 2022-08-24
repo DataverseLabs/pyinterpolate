@@ -28,14 +28,19 @@ class TestOrdinaryKriging(unittest.TestCase):
         dataset, theoretical = prepare_zeros_data()
 
         for _ in range(0, 10):
-            unknown_point = [np.random.rand()*7, np.random.rand()*7]  # any point within (0-7)
-            v = simple_kriging(theoretical_model=theoretical,
-                               known_locations=dataset,
-                               unknown_location=unknown_point,
-                               process_mean=0,
-                               no_neighbors=4)
-
-            self.assertTrue(np.isnan(v[0]) and np.isnan(v[1]))
+            unknown_point = [np.random.rand() * 7, np.random.rand() * 7]  # any point within (0-7)
+            try:
+                _ = simple_kriging(theoretical_model=theoretical,
+                                   known_locations=dataset,
+                                   unknown_location=unknown_point,
+                                   no_neighbors=4,
+                                   process_mean=0)
+            except np.linalg.LinAlgError:
+                self.assertTrue(True)
+            else:
+                msg = 'Every test should raise LinAlgError because there are only zeros and algorithm creates the ' \
+                      'singular matrix.'
+                raise ValueError(msg)
 
     def test_value_known_location(self):
         dataset, theoretical = prepare_test_data()
