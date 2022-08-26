@@ -362,12 +362,15 @@ def select_kriging_data(unknown_position: Iterable,
     prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1] <= neighbors_range, :]
 
     len_prep = len(prepared_data)
+    is_more_than_0 = len_prep > 0
 
-    if use_all_neighbors_in_range:
+    if use_all_neighbors_in_range and is_more_than_0:
         return prepared_data
 
     if len_prep > number_of_neighbors:
-        return prepared_data[:number_of_neighbors]
+        return sorted_neighbors_and_dists[:number_of_neighbors]
+    elif not is_more_than_0:
+        return sorted_neighbors_and_dists[:number_of_neighbors]
     else:
         return prepared_data
 

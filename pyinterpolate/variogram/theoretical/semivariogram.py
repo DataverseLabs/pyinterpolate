@@ -1,7 +1,7 @@
 # Core python packages
 import json
 import warnings
-from typing import Collection, Union, Callable, Tuple, List
+from typing import Collection, Union, Callable, Tuple
 
 # Core calculations and visualization packages
 import numpy as np
@@ -29,7 +29,10 @@ class TheoreticalVariogram:
     Attributes
     ----------
     experimental_variogram : EmpiricalVariogram or None, default=None
-                          Empirical Variogram class and its attributes.
+                             Empirical Variogram class and its attributes.
+
+    experimental_array : numpy array, default=None
+                         Empirical variogram in a form of numpy array.
 
     variogram_models : dict
                        Dict with keys representing theoretical variogram models and values that
@@ -157,6 +160,7 @@ class TheoreticalVariogram:
         # Model parameters
         self.lags = None
         self.experimental_variogram = None
+        self.experimental_array = None
         self.fitted_model = None
 
         self.name = None
@@ -177,7 +181,7 @@ class TheoreticalVariogram:
     # Core functions
 
     def fit(self,
-            experimental_variogram: ExperimentalVariogram,
+            experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
             model_type: str,
             sill: float,
             rang: float,
@@ -205,9 +209,9 @@ class TheoreticalVariogram:
                Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
                to observations variance.
 
-        rang : float, default=0
-                 Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
-                 variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
+        rang : float
+               Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
+               variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
 
         nugget : float, default=0.
                  Nugget parameter (bias at a zero distance).
@@ -236,8 +240,13 @@ class TheoreticalVariogram:
             if warn_about_set_params:
                 warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
 
-        self.experimental_variogram = experimental_variogram
-        self.lags = experimental_variogram.lags
+        if isinstance(experimental_variogram, ExperimentalVariogram):
+            self.experimental_variogram = experimental_variogram
+            self.lags = experimental_variogram.lags
+            self.experimental_array = experimental_variogram.experimental_semivariance_array
+        elif isinstance(experimental_variogram, np.ndarray):
+            self.experimental_array = experimental_variogram
+            self.lags = experimental_variogram[:, 0]
 
         # Check model type
 
@@ -269,7 +278,7 @@ class TheoreticalVariogram:
         return _theoretical_values, _error
 
     def autofit(self,
-                experimental_variogram: Union[ExperimentalVariogram, np.ndarray, List],
+                experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
                 model_types: Union[str, list] = 'all',
                 nugget=0,
                 rang=None,
@@ -291,7 +300,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         experimental_variogram : ExperimentalVariogram
-                                 Prepared Empirical Variogram or array
+                                 Prepared Empirical Variogram or array.
 
         model_types : str or list
                       List of models of string with a model name. Available models:
@@ -392,9 +401,13 @@ class TheoreticalVariogram:
             if warn_about_set_params:
                 warnings.warn('Semivariogram parameters have been set earlier, you are going to overwrite them')
 
-        self.experimental_variogram = experimental_variogram
-
-        self.lags = self.experimental_variogram.lags
+        if isinstance(experimental_variogram, ExperimentalVariogram):
+            self.experimental_variogram = experimental_variogram
+            self.lags = experimental_variogram.lags
+            self.experimental_array = experimental_variogram.experimental_semivariance_array
+        elif isinstance(experimental_variogram, np.ndarray):
+            self.experimental_array = experimental_variogram
+            self.lags = experimental_variogram[:, 0]
 
         # Check model type and set models
         mtypes = self._check_models_type_autofit(model_types)
@@ -403,7 +416,10 @@ class TheoreticalVariogram:
         if rang is None:
             check_ranges(min_range, max_range)
             if self.study_max_range is None:
-                self.study_max_range = get_study_max_range(self.experimental_variogram.input_array[:, :-1])
+                if self.experimental_variogram is not None:
+                    self.study_max_range = get_study_max_range(self.experimental_variogram.input_array[:, :-1])
+                else:
+                    self.study_max_range = self.experimental_array[-1, 0]
 
             min_max_ranges = create_min_max_array(self.study_max_range, min_range, max_range, number_of_ranges)
         else:
@@ -411,7 +427,13 @@ class TheoreticalVariogram:
 
         if sill is None:
             check_sills(min_sill, max_sill)
-            var_sill = self.experimental_variogram.variance
+            if self.experimental_variogram is not None:
+                var_sill = self.experimental_variogram.variance
+            else:
+                ll = len(self.experimental_array)
+                pos = int(0.2 * ll)
+                var_sill = np.mean(self.experimental_array[-pos:, 1])
+
             min_max_sill = create_min_max_array(var_sill, min_sill, max_sill, number_of_sills)
         else:
             min_max_sill = [sill]
@@ -503,8 +525,8 @@ class TheoreticalVariogram:
             plt.figure(figsize=(12, 6))
 
             if experimental:
-                plt.scatter(self.lags,
-                            self.experimental_variogram.experimental_semivariances,
+                plt.scatter(self.experimental_array[:, 0],
+                            self.experimental_array[:, 1],
                             marker='8', c='#66c2a5')
                 legend = ['Experimental Semivariances', 'Theoretical Model']
 
@@ -569,7 +591,7 @@ class TheoreticalVariogram:
             'smape': np.nan
         }
 
-        _real_values = self.experimental_variogram.experimental_semivariance_array[:, 1].copy()
+        _real_values = self.experimental_array[:, 1].copy()
 
         # Get Forecast Biast
         if bias:
@@ -580,7 +602,7 @@ class TheoreticalVariogram:
         if rmse:
             if deviation_weighting != 'equal':
                 if deviation_weighting == 'dense':
-                    points_per_lag = self.experimental_variogram.experimental_semivariance_array[:, -1]
+                    points_per_lag = self.experimental_array[:, -1]
                     _rmse = weighted_root_mean_squared_error(fitted_values, _real_values, deviation_weighting,
                                                              lag_points_distribution=points_per_lag)
                 else:
@@ -697,13 +719,13 @@ class TheoreticalVariogram:
 
             header = '\n'.join(text_list) + '\n' + '\n'
 
-            if self.experimental_variogram is not None:
+            if self.experimental_array is not None:
                 # Build pretty table
                 pretty_table = PrettyTable()
                 pretty_table.field_names = ["lag", "theoretical", "experimental", "bias (y-y')"]
 
                 records = []
-                for idx, record in enumerate(self.experimental_variogram.experimental_semivariance_array):
+                for idx, record in enumerate(self.experimental_array):
                     lag = record[0]
                     experimental_semivar = record[1]
                     theoretical_semivar = self.fitted_model[idx][1]
@@ -719,7 +741,7 @@ class TheoreticalVariogram:
 
     def __repr__(self):
         cname = 'TheoreticalVariogram'
-        input_params = f'empirical_variogram={self.experimental_variogram}'
+        input_params = f'empirical_variogram={self.experimental_variogram},experimental_array={self.experimental_array}'
         repr_val = cname + '(' + input_params + ')'
         return repr_val
 
@@ -833,7 +855,7 @@ class TheoreticalVariogram:
         : numpy array
         """
 
-        lags = self.experimental_variogram.lags
+        lags = self.experimental_array[:, 0]
         fitted_values = model_fn(lags, nugget, sill, rang)
         modeled = np.zeros(shape=(len(lags), 2))
         modeled[:, 0] = lags
