@@ -293,7 +293,8 @@ class TheoreticalVariogram:
                 deviation_weighting='equal',
                 auto_update_attributes=True,
                 warn_about_set_params=True,
-                verbose=False):
+                verbose=False,
+                return_params=True):
         """
         Method tries to find the optimal range, sill and model of theoretical semivariogram.
 
@@ -366,6 +367,9 @@ class TheoreticalVariogram:
 
         verbose : bool, default = False
                   Show iteration results.
+
+        return_params : bool, default = True
+                        Return model parameters.
 
 
         Returns
@@ -480,7 +484,8 @@ class TheoreticalVariogram:
         if auto_update_attributes:
             self._update_attributes(**optimal_parameters)
 
-        return optimal_parameters
+        if return_params:
+            return optimal_parameters
 
     def predict(self, distances: np.ndarray) -> np.ndarray:
         """

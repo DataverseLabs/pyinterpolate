@@ -593,6 +593,7 @@ class Deconvolution:
         semivariogram regularization with transform() method.
         """
         lags = self.initial_experimental_variogram.lags
+
         plt.figure(figsize=(12, 12))
         plt.plot(lags,
                  self.initial_experimental_variogram.experimental_semivariances, 'bo')
@@ -600,14 +601,18 @@ class Deconvolution:
                  self.initial_theoretical_agg_model.predict(lags), color='r',
                  linestyle='--')
 
-        plt.plot(lags, self.final_optimal_variogram[:, 1], 'go')
+        if self.final_optimal_variogram is not None:
+            plt.plot(lags, self.final_optimal_variogram[:, 1], 'go')
 
-        plt.plot(lags,
-                 self.final_theoretical_model.predict(lags), color='black', linestyle='dotted')
-        plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
-                    'Regularized data points, iteration {}'.format(self.iter),
-                    'Optimized theoretical point support model'])
-        plt.title('Semivariograms comparison. Deviation value: {}'.format(self.optimal_deviation))
+            plt.plot(lags,
+                     self.final_theoretical_model.predict(lags), color='black', linestyle='dotted')
+            plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
+                        'Regularized data points, iteration {}'.format(self.iter),
+                        'Optimized theoretical point support model'])
+            plt.title('Semivariograms comparison. Deviation value: {}'.format(self.optimal_deviation))
+        else:
+            plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data'])
+            plt.title('Semivariograms comparison')
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
         plt.show()

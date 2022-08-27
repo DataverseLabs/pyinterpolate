@@ -18,7 +18,8 @@ def simple_kriging(
         neighbors_range=None,
         no_neighbors=1,
         use_all_neighbors_in_range=False,
-        allow_approximate_solutions=False
+        allow_approximate_solutions=False,
+        err_to_nan=False
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -54,6 +55,9 @@ def simple_kriging(
                                   Allows the approximation of kriging weights based on the OLS algorithm.
                                   Not recommended to set to True if you don't know what you are doing!
 
+    err_to_nan : bool, default=False
+                 Singular matrix error in solve kriging system to NAN.
+
     Returns
     -------
     : numpy array
@@ -68,7 +72,13 @@ def simple_kriging(
                                             no_neighbors,
                                             use_all_neighbors_in_range)
 
-    output_weights = solve_weights(predicted, k, allow_approximate_solutions)
+    if err_to_nan:
+        try:
+            output_weights = solve_weights(predicted, k, allow_approximate_solutions)
+        except np.linalg.LinAlgError as _:
+            return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
+    else:
+        output_weights = solve_weights(predicted, k, allow_approximate_solutions)
 
     r = dataset[:, -2] - process_mean
     zhat = r.dot(output_weights)
