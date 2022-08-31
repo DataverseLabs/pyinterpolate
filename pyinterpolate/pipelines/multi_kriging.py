@@ -1,3 +1,19 @@
+"""
+Block data interpolation with a different kriging techniques.
+
+Functions
+---------
+A. BlockToBlockKrigingComparison
+    Class compares different block kriging models and techniques.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+
+TODO
+----
+* tests
+"""
 from typing import Union, Dict, List
 
 import geopandas as gpd

@@ -3,12 +3,12 @@ The module contains functions that use public APIs to get data samples for exper
 
 Functions
 ---------
-download_air_quality_poland()
+A. download_air_quality_poland()
     The function reads air pollution data available from Polish sensor networks and returns GeoDataFrame with readings.
 
 Authors
 -------
-* download_air_quality_poland: Sean Lim | @seanjunheng2
+1. (A., ) -> Sean Lim | @seanjunheng2
 
 TODO
 ----

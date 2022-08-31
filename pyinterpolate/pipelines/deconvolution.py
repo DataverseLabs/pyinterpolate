@@ -1,3 +1,19 @@
+"""
+Regularization: blocks to point support.
+
+Functions
+---------
+A. smooth_area_to_point_pk()
+    Transform block data into point-support representation.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+
+TODO
+----
+* tests
+"""
 from typing import Union, Dict, Any
 
 import geopandas as gpd
