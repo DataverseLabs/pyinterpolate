@@ -1,3 +1,15 @@
+"""
+Controls point kriging interpolation and parallelize it.
+
+Functions
+---------
+A. kriging()
+    Point kriging on arrays.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+"""
 from typing import Union, List, Tuple
 
 import os

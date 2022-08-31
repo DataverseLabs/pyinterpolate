@@ -1,4 +1,20 @@
-# TODO: Check negative predictions and weights
+"""
+Area-to-point Poisson Kriging function.
+
+Functions
+---------
+A. area_to_point_pk()
+    Area-to-point Poisson Kriging interpolation and deconvolution.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+
+TODO
+----
+* log errors
+* control negative predictions and errors
+"""
 from typing import Union, Dict
 
 import geopandas as gpd

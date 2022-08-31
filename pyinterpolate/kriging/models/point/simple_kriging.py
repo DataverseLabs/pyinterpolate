@@ -1,4 +1,18 @@
-# TODO: log k, predicted, dataset
+"""
+Perform point simple kriging.
+
+Functions
+---------
+A. simple_kriging()
+
+Authors
+-------
+1. (A.,) -> Szymon Moliński | @SimonMolinsky
+
+TODO
+----
+* log k, predicted, dataset
+"""
 # Python core
 from typing import List, Union, Tuple
 

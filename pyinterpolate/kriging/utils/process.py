@@ -1,3 +1,18 @@
+"""
+Solves kriging weights and gets per-distance weights from a semivariogram model.
+
+Functions
+---------
+A. get_predictions()
+    Predicts semivariance at a given distance.
+
+B. solve_weights()
+    Solves kriging weights.
+
+Authors
+-------
+1. (A., B.,) -> Szymon Moliński | @SimonMolinsky
+"""
 import warnings
 from typing import List, Union, Tuple
 

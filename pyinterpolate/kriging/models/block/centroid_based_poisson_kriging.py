@@ -1,3 +1,15 @@
+"""
+Centroid-based Poisson Kriging function.
+
+Functions
+---------
+A. centroid_poisson_kriging()
+    Centroid-based Poisson Kriging interpolation.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict, List, Union
 
 import geopandas as gpd

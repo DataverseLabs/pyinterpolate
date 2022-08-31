@@ -1,5 +1,20 @@
-# TODO: log errors
-# TODO: control negative predictions and errors
+"""
+Area-to-area Poisson Kriging function.
+
+Functions
+---------
+A. area_to_area_pk()
+    Area-to-area Poisson Kriging interpolation.
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+
+TODO
+----
+* log errors
+* control negative predictions and errors
+"""
 from typing import Dict, Union
 
 import geopandas as gpd
