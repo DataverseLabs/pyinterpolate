@@ -1,3 +1,10 @@
+"""
+Additional exceptions and warnings for the variogram module.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 import warnings
 
 

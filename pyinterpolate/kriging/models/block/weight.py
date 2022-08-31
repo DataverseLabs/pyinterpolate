@@ -1,23 +1,9 @@
 """
 Array weighting classes and functions designed to solve kriging system for block Poisson Kriging models.
 
-Functions
----------
-A. add_ones()
-    Add a row with ones to 2D array.
-
-B. weights_array()
-    Prepares diagonal weights (inblock semivariances) for a weighting array used later for interpolation.
-
-C. WeightedBlock2BlockSemivariance
-    The class calculates the average weighted block-to-block semivariance.
-
-D. WeightedBlock2PointSemivariance
-    The class calculates the average weighted block-to-point semivariance.
-
 Authors
 -------
-1. (A., B., C., D.) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 from typing import Tuple, Dict
 import numpy as np

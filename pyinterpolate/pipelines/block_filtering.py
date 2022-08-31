@@ -1,14 +1,9 @@
 """
 The Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging.
 
-Functions
----------
-A. BlockPK
-    Class that can be used for Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging regularization.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

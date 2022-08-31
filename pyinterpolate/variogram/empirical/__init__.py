@@ -40,8 +40,7 @@ TODO
 """
 
 
-from pyinterpolate.variogram.empirical.cloud import build_variogram_point_cloud
+from pyinterpolate.variogram.empirical.cloud import build_variogram_point_cloud, VariogramCloud
 from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram, ExperimentalVariogram
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
-from pyinterpolate.variogram.empirical.variogram_cloud import VariogramCloud

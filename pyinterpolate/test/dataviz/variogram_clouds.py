@@ -3,7 +3,7 @@ import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.io import read_txt
-from pyinterpolate.variogram.empirical.variogram_cloud import VariogramCloud
+from pyinterpolate.variogram import VariogramCloud
 
 
 def test_with_armstrong_data():

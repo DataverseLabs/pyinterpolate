@@ -1,20 +1,9 @@
 """
 Statistical functions.
 
-Functions
----------
-A. detect_outliers_iqr()
-    Detect outliers in a dataset with the algorithm that monitors inter-quartile range.
-
-B. detect_outliers_z_score()
-    Detect outliers in a dataset with the algorithm that monitors Z-scores.
-
-C. remove_outliers()
-    Detect and remove outliers in a dataset with IQR / Z-score detection methods.
-
 Authors
 -------
-1. (A., B., C.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 from typing import Union, Iterable, Dict, List
 

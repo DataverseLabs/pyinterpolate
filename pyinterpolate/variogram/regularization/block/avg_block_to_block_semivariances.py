@@ -1,3 +1,10 @@
+"""
+Functions for calculating the average block-to-block semivariances
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 import numpy as np
 
 from pyinterpolate.processing.select_values import select_values_in_range

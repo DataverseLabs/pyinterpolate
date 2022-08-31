@@ -1,17 +1,9 @@
 """
 Distance calculation functions.
 
-Functions
----------
-A. calc_block_to_block_distance()
-    Calculates weighted (by point support) distance between blocks.
-
-B. calc_point_to_point_distance()
-    Calculates euclidean distance between points, based on the `scipy.spatial.distance.cdist`.
-
 Authors
 -------
-1. (A., B.) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 
 from typing import Dict, Union

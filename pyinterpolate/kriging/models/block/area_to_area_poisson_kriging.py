@@ -1,14 +1,9 @@
 """
 Area-to-area Poisson Kriging function.
 
-Functions
----------
-A. area_to_area_pk()
-    Area-to-area Poisson Kriging interpolation.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

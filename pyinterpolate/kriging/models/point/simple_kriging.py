@@ -1,13 +1,9 @@
 """
 Perform point simple kriging.
 
-Functions
----------
-A. simple_kriging()
-
 Authors
 -------
-1. (A.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

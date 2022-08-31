@@ -1,17 +1,9 @@
 """
 Kriging warnings.
 
-Functions
----------
-A. ZerosMatrixWarning
-    Warns when weights for kriging system are only zeros.
-
-B. LeastSquaresApproximationWarning
-    Warns if user sets LSA for the interpolation if LinAlgError is raised by numpy (NOT RECOMMENDED!)
-
 Authors
 -------
-1. (A., B.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 class ZerosMatrixWarning(Warning):
     """

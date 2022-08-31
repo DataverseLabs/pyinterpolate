@@ -1,41 +1,9 @@
 """
 Data transformation and selection.
 
-Functions
----------
-A. select_points_within_ellipse()
-    Select the closest neighbors from a directional variogram.
-
-B. select_values_in_range()
-    Select the closest neighbors within a range.
-
-C. create_min_max_array()
-    Function prepares a numpy array of N equidistant values.
-
-D. get_aggregated_point_support_values()
-    Function sums total point support values.
-
-E. get_distances_within_unknown()
-    Function calculates distances between unknown block point support points.
-
-F. get_study_max_range()
-    Function calculates max range of a study area.
-
-G. prepare_pk_known_areas()
-    Function prepares data for semivariogram calculation between neighbors of unknown block.
-
-H. select_kriging_data()
-    Function prepares data for kriging - array of point position, value and distance to an unknown point.
-
-I. select_poisson_kriging_data()
-    Function prepares data for the centroid-based Poisson Kriging Process.
-
-J. select_centroid_poisson_kriging_data()
-    Function prepares data for the centroid-based Poisson Kriging Process.
-
 Authors
 -------
-1. (A.:J.) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 from typing import Iterable, Dict, Union
 

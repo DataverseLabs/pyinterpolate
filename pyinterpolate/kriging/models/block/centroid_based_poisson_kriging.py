@@ -1,14 +1,9 @@
 """
 Centroid-based Poisson Kriging function.
 
-Functions
----------
-A. centroid_poisson_kriging()
-    Centroid-based Poisson Kriging interpolation.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 from typing import Dict, List, Union
 

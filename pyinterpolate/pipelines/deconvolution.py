@@ -1,14 +1,9 @@
 """
 Regularization: blocks to point support.
 
-Functions
----------
-A. smooth_area_to_point_pk()
-    Transform block data into point-support representation.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

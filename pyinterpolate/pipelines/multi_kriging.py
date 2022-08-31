@@ -1,14 +1,9 @@
 """
 Block data interpolation with a different kriging techniques.
 
-Functions
----------
-A. BlockToBlockKrigingComparison
-    Class compares different block kriging models and techniques.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

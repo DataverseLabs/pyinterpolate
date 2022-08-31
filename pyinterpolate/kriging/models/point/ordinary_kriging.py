@@ -1,13 +1,9 @@
 """
 Perform point ordinary kriging.
 
-Functions
----------
-A. ordinary_kriging()
-
 Authors
 -------
-1. (A.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 # Python core
 from typing import List, Union, Tuple

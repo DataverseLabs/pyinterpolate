@@ -1,3 +1,10 @@
+"""
+Functions for calculating experimental semivariances.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 import numpy as np
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance, \

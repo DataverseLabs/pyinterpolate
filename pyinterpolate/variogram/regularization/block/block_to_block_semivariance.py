@@ -1,3 +1,10 @@
+"""
+Functions for calculating the semivariances between blocks' point supports.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict, Collection, Union
 
 import geopandas as gpd

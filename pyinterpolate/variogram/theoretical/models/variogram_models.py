@@ -1,3 +1,11 @@
+"""
+Variogram models.
+
+Authors
+-------
+1. Scott Gallacher | @scottgallacher-3
+2. Szymon Moliński | @SimonMolinsky
+"""
 import numpy as np
 
 

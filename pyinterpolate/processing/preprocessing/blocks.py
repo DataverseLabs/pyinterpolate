@@ -1,17 +1,9 @@
 """
 Core data structures for block interpolation.
 
-Functions
----------
-A. Blocks
-    Block data structure.
-
-B. PointSupport
-    Point-support data structure.
-
 Authors
 -------
-1. (A., B.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

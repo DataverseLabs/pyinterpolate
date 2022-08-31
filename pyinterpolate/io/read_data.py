@@ -1,20 +1,9 @@
 """
 Read and load data.
 
-Functions
----------
-A. read_txt()
-   Reads point data from txt file.
-
-B. read_csv()
-    Reads point data from csv file.
-
-C. read_block()
-    Reads and parses block data.
-
 Authors
 -------
-1. (A., B., C.) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 import geopandas as gpd
 import numpy as np

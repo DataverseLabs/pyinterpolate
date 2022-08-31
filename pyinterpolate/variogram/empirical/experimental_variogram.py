@@ -1,3 +1,10 @@
+"""
+The main class for experimental semivariogram.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from typing import Union
 
 import matplotlib.pyplot as plt

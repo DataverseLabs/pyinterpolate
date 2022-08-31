@@ -1,14 +1,9 @@
 """
-Tests for data.
-
-Functions
----------
-A. check_limits()
-    Function checks if value is within given limits. If not then ValueError is raised.
+Tests for a data range.
 
 Authors
 -------
-1. (A.,) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 """
 
 

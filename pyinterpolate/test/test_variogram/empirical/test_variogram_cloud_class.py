@@ -5,7 +5,7 @@ import numpy as np
 # Package modules
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 # Tested module
-from pyinterpolate.variogram.empirical.variogram_cloud import VariogramCloud
+from pyinterpolate.variogram import VariogramCloud
 # Test data
 from pyinterpolate.test.test_variogram.empirical.consts import get_armstrong_data, EmpiricalVariogramTestData,\
     EmpiricalSemivarianceData, VariogramPointCloudClassData

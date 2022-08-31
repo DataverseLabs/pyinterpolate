@@ -1,3 +1,10 @@
+"""
+Functions for calculating the inblock semivariances.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict
 
 import numpy as np

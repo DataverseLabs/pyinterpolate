@@ -1,3 +1,10 @@
+"""
+Semivariogram regularization & deconvolution process.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict, Union
 
 import geopandas as gpd

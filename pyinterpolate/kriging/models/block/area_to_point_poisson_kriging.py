@@ -1,14 +1,9 @@
 """
 Area-to-point Poisson Kriging function.
 
-Functions
----------
-A. area_to_point_pk()
-    Area-to-point Poisson Kriging interpolation and deconvolution.
-
 Authors
 -------
-1. (A., ) -> Szymon Moliński | @SimonMolinsky
+1. Szymon Moliński | @SimonMolinsky
 
 TODO
 ----

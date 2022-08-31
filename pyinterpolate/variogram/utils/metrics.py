@@ -1,3 +1,10 @@
+"""
+Error metrics for the variogram model autofit.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 import warnings
 import numpy as np
 from pyinterpolate.variogram.utils.exceptions import UndefinedSMAPEWarning

@@ -1,3 +1,10 @@
+"""
+Class to work with blocks & point support datasets and transformations.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from copy import deepcopy
 from typing import Dict, Union
 

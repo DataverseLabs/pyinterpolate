@@ -1,14 +1,9 @@
 """
 The module contains functions that use public APIs to get data samples for experiments.
 
-Functions
----------
-A. download_air_quality_poland()
-    The function reads air pollution data available from Polish sensor networks and returns GeoDataFrame with readings.
-
 Authors
 -------
-1. (A., ) -> Sean Lim | @seanjunheng2
+1. Sean Lim | @seanjunheng2
 
 TODO
 ----

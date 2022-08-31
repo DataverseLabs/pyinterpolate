@@ -1,3 +1,10 @@
+"""
+Raster interpolation with ordinary kriging.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict
 
 import numpy as np

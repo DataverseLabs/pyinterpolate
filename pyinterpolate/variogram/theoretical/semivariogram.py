@@ -1,3 +1,14 @@
+"""
+TheoreticalVariogram class.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+
+Contributors
+------------
+1. Ethem Turgut | @ethmtrgt
+"""
 # Core python packages
 import json
 import warnings

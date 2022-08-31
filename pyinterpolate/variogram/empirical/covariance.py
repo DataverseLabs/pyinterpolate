@@ -1,3 +1,10 @@
+"""
+The experimental covariance.
+
+Authors
+-------
+1. Szymon Moliński | @SimonMolinsky
+"""
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
