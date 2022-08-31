@@ -1,3 +1,17 @@
+"""
+Tests for data.
+
+Functions
+---------
+A. check_limits()
+    Function checks if value is within given limits. If not then ValueError is raised.
+
+Authors
+-------
+1. (A.,) -> Szymon Moliński | @SimonMolinsky
+"""
+
+
 def check_limits(value: float, lower_limit=0, upper_limit=1, exclusive_lower=True, exclusive_upper=True):
     """
     Function checks if value is within given limits. If not then ValueError is raised.

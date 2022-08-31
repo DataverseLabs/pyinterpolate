@@ -1,3 +1,20 @@
+"""
+Data transforming functions.
+
+Functions
+---------
+A. block_arr_to_dict()
+B. block_dataframe_to_dict()
+C. get_areal_centroids_from_agg()
+D. get_areal_values_from_agg()
+E. point_support_to_dict()
+F. transform_ps_to_dict()
+G. transform_blocks_to_numpy()
+
+Authors
+-------
+1. (A., B., C., D., E., F., G.) -> Szymon Moliński | @SimonMolinsky
+"""
 from typing import Dict, Union
 
 import geopandas as gpd

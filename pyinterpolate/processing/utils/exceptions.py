@@ -1,3 +1,20 @@
+"""
+Additional exceptions.
+
+Functions
+---------
+A. IndexColNotUniqueError
+    Given index column stores non-unique values.
+
+B. WrongGeometryTypeError
+    Block data has different geometries than Polygon or MultiPolygon.
+
+Authors
+-------
+1. (A., B.) -> Szymon Moliński | @SimonMolinsky
+"""
+
+
 class IndexColNotUniqueError(Exception):
     """
     Raised when given index column is not unique.
