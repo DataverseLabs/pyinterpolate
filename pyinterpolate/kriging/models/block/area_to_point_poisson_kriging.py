@@ -21,7 +21,8 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                      unknown_block_point_support: np.ndarray,
                      number_of_neighbors: int,
                      raise_when_negative_prediction=True,
-                     raise_when_negative_error=True):
+                     raise_when_negative_error=True,
+                     err_to_nan=True):
     """
     Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
 
@@ -57,6 +58,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     raise_when_negative_error : bool, default=True
                                 Raise error when prediction error is negative.
+
+    err_to_nan : bool, default=True
+                 ValueError to NaN.
 
 
     Returns
@@ -155,13 +159,14 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         zhat = values.dot(w[:-1])
 
-        if raise_when_negative_prediction:
-            if zhat < 0:
-                raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
-                                 f'grid, samples, number of neighbors or semivariogram model type.')
-
-        if (zhat < 0) or (zhat == np.nan):
-            zhat = 0
+        if zhat < 0:
+            if raise_when_negative_prediction:
+                if err_to_nan:
+                    predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), np.nan, np.nan])
+                    continue
+                else:
+                    raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your '
+                                     f'sampling grid, samples, number of neighbors or semivariogram model type.')
 
         point_pop = unknown_block_point_support[idx, -1]
         zhat = (zhat * point_pop) / tot_unknown_value
@@ -170,10 +175,15 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         sigmasq = np.matmul(w.T, point)
         if sigmasq < 0:
             if raise_when_negative_error:
-                raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
-                                 f'Check your sampling grid, samples, number of neighbors or semivariogram model '
-                                 f'type.')
-            sigma = 0
+                if err_to_nan:
+                    predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), zhat, np.nan])
+                    continue
+                else:
+                    raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
+                                     f'Check your sampling grid, samples, number of neighbors or semivariogram model '
+                                     f'type.')
+            else:
+                sigma = 0
         else:
             sigma = np.sqrt(sigmasq)
 

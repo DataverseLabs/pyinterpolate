@@ -47,6 +47,7 @@ class TestBlockToBlockKrigingComparison(unittest.TestCase):
                                                        training_set_frac=0.6,
                                                        raise_when_negative_error=False,
                                                        raise_when_negative_prediction=False,
+                                                       allow_approx_solutions=True,
                                                        iters=2)
         for value in output_results.results.values():
             self.assertTrue(np.isnan(value))

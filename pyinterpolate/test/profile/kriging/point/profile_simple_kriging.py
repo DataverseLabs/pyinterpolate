@@ -1,7 +1,7 @@
 import cProfile
 import numpy as np
 from pyinterpolate.io.read_data import read_txt
-from pyinterpolate.kriging.models.simple_kriging import simple_kriging
+from pyinterpolate.kriging.models.point.simple_kriging import simple_kriging
 from pyinterpolate.variogram.empirical import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
 
@@ -20,7 +20,7 @@ test_points = test_set[:, :-1]
 
 ex = build_experimental_variogram(train_set, step_size=0.2, max_range=4)
 tv = TheoreticalVariogram()
-tv.autofit(empirical_variogram=ex)
+tv.autofit(experimental_variogram=ex)
 
 
 def krigeme():

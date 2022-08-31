@@ -64,22 +64,17 @@ def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
     [1] McBratney, A. B., Webster R. Choosing Functions for Semivariograms of Soil Properties and Fitting Them to
     Sampling Estimates. Journal of Soil Science 37: 617–639. 1986.
 
-
     """
 
     pic = 2 / np.pi
-    gammas = []
+    ar = lags / rang
+    ns = nugget + sill
+    gamma = np.ones(len(ar)) * ns
+    poses = lags <= rang
+    arp = ar[poses]
+    ar2 = np.power(arp, 2)
+    gamma[poses] = nugget + sill * (1 - (pic * np.arccos(arp)) + (pic * arp) * np.sqrt(1 - ar2))
 
-    for _lag in lags:
-        if _lag <= rang:
-            lr = _lag / rang
-            val = nugget + sill*(1 - (pic * np.arccos(lr)) + (pic * lr) * np.sqrt(1 - lr**2))
-        else:
-            val = nugget + sill
-
-        gammas.append(val)
-
-    gamma = np.array(gammas)
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
 
@@ -128,17 +123,31 @@ def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
 
     """
 
-    ar = lags / rang
-    a1 = 7 * ar ** 2
-    a2 = -8.75 * ar ** 3
-    a3 = 3.5 * ar ** 5
-    a4 = -0.75 * ar ** 7
+    # ar = lags / rang
+    # a1 = 7 * ar * ar
+    # a2 = -8.75 * ar ** 3
+    # a3 = 3.5 * ar ** 5
+    # a4 = -0.75 * ar ** 7
 
-    gamma = np.where(
-        (lags <= rang),
-        nugget + sill * (a1 + a2 + a3 + a4),
-        nugget + sill
-    )
+    ar = lags / rang
+    ns = nugget + sill
+    gamma = np.ones(len(ar)) * ns
+    poses = lags <= rang
+    arp = ar[poses]
+
+    arp2 = np.power(arp, 2) * 7
+    arp3 = np.power(arp, 3) * -8.75
+    arp5 = np.power(arp, 5) * 3.5
+    arp7 = np.power(arp, 7) * -0.75
+    arp_sum = arp2 + arp3 + arp5 + arp7
+
+    gamma[poses] = nugget + sill * arp_sum
+
+    # gamma = np.where(
+    #     (lags <= rang),
+    #     nugget + sill * (a1 + a2 + a3 + a4),
+    #     nugget + sill
+    # )
 
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)

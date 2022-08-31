@@ -164,4 +164,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         sigma = 0
     else:
         sigma = np.sqrt(sigmasq)
-    return u_idx, zhat, sigma
+
+    results = [u_idx, zhat, sigma]
+    return results

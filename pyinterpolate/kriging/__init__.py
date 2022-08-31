@@ -1,0 +1,1 @@
+from .point_kriging import kriging

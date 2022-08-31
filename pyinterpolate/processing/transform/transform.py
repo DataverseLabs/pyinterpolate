@@ -194,7 +194,7 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     return d
 
 
-def transform_ps_to_dict(ps) -> Dict:
+def transform_ps_to_dict(ps: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]) -> Dict:
     """
 
     Parameters

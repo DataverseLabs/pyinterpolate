@@ -69,6 +69,18 @@ class TestEmpiricalSemivariance(unittest.TestCase):
         str_output = ''.join(variogram_cloud.__str__()).split()
         self.assertEqual(str_output, cls_data.class_output)
 
+    def test_calculate_variogram(self):
+        variogram_cloud = VariogramCloud(
+            input_array=armstrong_arr,
+            step_size=gen_data.param_step_size,
+            max_range=gen_data.param_max_range
+        )
+        exp_var = variogram_cloud.calculate_experimental_variogram()
+        semivars = calculate_semivariance(armstrong_arr, gen_data.param_step_size, gen_data.param_max_range)
+
+        are_equal = np.array_equal(exp_var, semivars)
+        self.assertTrue(are_equal)
+
     def test_description(self):
         variogram_cloud = VariogramCloud(
             input_array=armstrong_arr,
@@ -79,6 +91,21 @@ class TestEmpiricalSemivariance(unittest.TestCase):
         desc = variogram_cloud.describe()
 
         self.assertEqual(desc[1], cls_data.describe_output[1])
+
+    def test_remove_outliers(self):
+        variogram_cloud = VariogramCloud(
+            input_array=armstrong_arr,
+            step_size=gen_data.param_step_size,
+            max_range=gen_data.param_max_range
+        )
+        with_removed = variogram_cloud.remove_outliers(z_lower_limit=-1, z_upper_limit=1, inplace=False)
+
+        base_points_per_lag = variogram_cloud.points_per_lag
+        processed_pp_lag = with_removed.points_per_lag
+
+        for idx, l_base in enumerate(base_points_per_lag):
+            l_proc = processed_pp_lag[idx]
+            self.assertNotEqual(l_base, l_proc)
 
     def test__repr__(self):
         variogram_cloud = VariogramCloud(
