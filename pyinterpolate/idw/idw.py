@@ -1,3 +1,16 @@
+"""
+Distance calculation functions.
+
+Functions
+---------
+A. inverse_distance_weighting()
+    Interpolate missing values from n-closest neighbors with the Inverse Distance Weighting function:
+    https://ml-gis-service.com/index.php/2020/11/05/spatial-interpolation-101-introduction-to-inverse-distance-weighting-interpolation-technique/
+
+Authors
+-------
+1. (A., ) -> Szymon Moliński | @SimonMolinsky
+"""
 from typing import Iterable
 
 import numpy as np
