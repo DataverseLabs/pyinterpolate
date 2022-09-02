@@ -28,6 +28,7 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                             blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                             point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                             number_of_neighbors: int,
+                            max_range = None,
                             crs: Any = None,
                             raise_when_negative_prediction=True,
                             raise_when_negative_error=True,
@@ -55,6 +56,9 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
+
+    max_range : float, deault=None
+                The maximum distance to search for neighbors.
 
     crs : Any, default=None
           CRS of data.
@@ -104,6 +108,7 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                                    unknown_block=u_area[0][:-1],
                                    unknown_block_point_support=u_points,
                                    number_of_neighbors=number_of_neighbors,
+                                   max_range=max_range,
                                    raise_when_negative_prediction=raise_when_negative_prediction,
                                    raise_when_negative_error=raise_when_negative_error,
                                    err_to_nan=err_to_nan)

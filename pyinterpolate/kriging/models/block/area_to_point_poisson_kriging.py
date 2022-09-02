@@ -31,6 +31,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                      unknown_block: np.ndarray,
                      unknown_block_point_support: np.ndarray,
                      number_of_neighbors: int,
+                     max_range=None,
                      raise_when_negative_prediction=True,
                      raise_when_negative_error=True,
                      err_to_nan=True):
@@ -64,6 +65,10 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     number_of_neighbors : int
                           The minimum number of neighbours that potentially affect block.
 
+    max_range : float
+                The maximum distance to search for a neighbors, if None given then algorithm uses the theoretical
+                variogram range.
+
     raise_when_negative_prediction : bool, default=True
                                      Raise error when prediction is negative.
 
@@ -95,12 +100,18 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     # Prepare Kriging Data
     # {known block id: [unknown_pt_idx_coordinates, known pt val, unknown pt val, distance between points]}
+
+    if max_range is None:
+        rng = semivariogram_model.rang
+    else:
+        rng = max_range
+
     kriging_data = select_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
         k_point_support_dict=dps,
         nn=number_of_neighbors,
-        max_range=semivariogram_model.rang
+        max_range=rng
     )
 
     prepared_ids = list(kriging_data.keys())
