@@ -134,8 +134,8 @@ class TestATAPK(unittest.TestCase):
                                     raise_when_negative_error=False)
 
         expected_output = np.array([
-            [(2.8, 0.9), 216.67, 0.],
-            [(3.2, 1.1), 433.33, 0.]
+            [(2.8, 0.9), 133.33, 0.],
+            [(3.2, 1.1), 266.67, 0.]
         ])
 
         self.assertEqual(pk_model[0][0], expected_output[0][0])

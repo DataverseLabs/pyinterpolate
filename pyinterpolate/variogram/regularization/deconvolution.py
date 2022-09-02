@@ -363,7 +363,7 @@ class Deconvolution:
             print('Regularization fit process ends')
 
     def transform(self,
-                  max_iters=5,
+                  max_iters=25,
                   limit_deviation_ratio=0.1,
                   minimum_deviation_decrease=0.01,
                   reps_deviation_decrease=3):
@@ -493,7 +493,7 @@ class Deconvolution:
                       agg_direction: float = 0,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
-                      max_iters=5,
+                      max_iters=25,
                       limit_deviation_ratio=0.1,
                       minimum_deviation_decrease=0.01,
                       reps_deviation_decrease=3):
@@ -601,7 +601,7 @@ class Deconvolution:
         """
         lags = self.initial_experimental_variogram.lags
 
-        plt.figure(figsize=(12, 12))
+        plt.figure(figsize=(12, 6))
         plt.plot(lags,
                  self.initial_experimental_variogram.experimental_semivariances, 'bo')
         plt.plot(lags,
@@ -625,7 +625,7 @@ class Deconvolution:
         plt.show()
 
     def plot_deviations(self):
-        plt.figure(figsize=(12, 12))
+        plt.figure(figsize=(12, 6))
         plt.plot(
             np.arange(len(self.deviations)),
             [x / self.initial_deviation for x in self.deviations]
@@ -635,7 +635,7 @@ class Deconvolution:
         plt.show()
 
     def plot_weights(self):
-        plt.figure(figsize=(12, 12))
+        plt.figure(figsize=(12, 6))
         plt.plot(
             np.arange(len(self.weights)),
             [np.mean(weight) for weight in self.weights]

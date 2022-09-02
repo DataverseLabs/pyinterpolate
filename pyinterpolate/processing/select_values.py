@@ -435,7 +435,7 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
     max_search_pos = np.argmax(sorted_kdata[:, -1] > max_range)
     output_areas = sorted_kdata[:max_search_pos]
 
-    if len(output_areas) > nn:
+    if len(output_areas) < nn:
         output_areas = sorted_kdata[:nn]
 
     if len(output_areas) <= 1:
