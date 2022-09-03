@@ -1,0 +1,679 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
+        <title>pyinterpolate.processing.preprocessing.blocks - Pyinterpolate 0.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../index.html"><div class="brand">Pyinterpolate 0.3.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../../index.html">
+  
+  
+  <span class="sidebar-brand-text">Pyinterpolate 0.3.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <h1>Source code for pyinterpolate.processing.preprocessing.blocks</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core data structures for block interpolation.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">TODO</span>
+<span class="sd">----</span>
+<span class="sd">* Blocks &amp; PointSupport | EPSG:4087 as a default projection ? Warn user if spherical coordinates are used</span>
+<span class="sd">* Blocks | add GPKG layers as with Point Support</span>
+<span class="sd">* PointSupport | Fn skips points that are not assigned to any area, maybe log it somewhere...</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.utils.exceptions</span> <span class="kn">import</span> <span class="n">IndexColNotUniqueError</span>
+
+
+<div class="viewcode-block" id="Blocks"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks">[docs]</a><span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class stores and prepares aggregated data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : gpd.GeoDataFrame</span>
+<span class="sd">           Dataset with block values.</span>
+
+<span class="sd">    value_column_name : Any</span>
+<span class="sd">                        Name of the column with block rates.</span>
+
+<span class="sd">    geometry_column_name : Any</span>
+<span class="sd">                           Name of the column with a block geometry.</span>
+
+<span class="sd">    index_column_name : Any</span>
+<span class="sd">                        Name of the column with the index.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    from_file(fpath, value_col, geometry_col, index_col)</span>
+<span class="sd">        Reads and parses data from spatial file supported by GeoPandas.</span>
+
+<span class="sd">    from_geodataframe(gdf, value_col, geometry_col, use_index)</span>
+<span class="sd">        Reads and parses data from GeoPandas GeoDataFrame.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; geocls = Blocks()</span>
+<span class="sd">    &gt;&gt;&gt; geocls.from_file(&#39;testfile.shp&#39;, value_col=&#39;val&#39;, geometry_col=&#39;geometry&#39;, index_col=&#39;idx&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; parsed_columns = geocls.data.columns</span>
+<span class="sd">    &gt;&gt;&gt; print(list(parsed_columns))</span>
+<span class="sd">    (idx, val, geometry, centroid.x, centroid.y)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="s1">&#39;centroid.x&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="s1">&#39;centroid.y&#39;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_check_index</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
+        <span class="n">dsl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">nuniq</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">idx_col</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dsl</span> <span class="o">!=</span> <span class="n">nuniq</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IndexColNotUniqueError</span><span class="p">(</span><span class="n">dsl</span><span class="p">,</span> <span class="n">nuniq</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_col</span><span class="p">,</span> <span class="n">geo_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parser.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset : gpd.GeoDataFrame</span>
+<span class="sd">                  GeoDataFrame with selected index, value and geometry columns and calculated centroid x and</span>
+<span class="sd">                  centroid y coordinates.</span>
+
+<span class="sd">        val_col : Any</span>
+<span class="sd">                  Name of the column with block rates.</span>
+
+<span class="sd">        geo_col : Any</span>
+<span class="sd">                  Name of the column with a block geometry.</span>
+
+<span class="sd">        idx_col : Any</span>
+<span class="sd">                  Name of the column with the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dataset : gpd.GeoDataFrame</span>
+<span class="sd">                  dataset[[idx_col, geo_col, val_col, self.cx, self.cy]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">chained_assignment</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Disable setting with copy warning</span>
+
+        <span class="c1"># Build centroids</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">geo_col</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span>
+        <span class="n">cxs</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">cys</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cxs</span>
+        <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cy</span><span class="p">]</span> <span class="o">=</span> <span class="n">cys</span>
+
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">[[</span><span class="n">idx_col</span><span class="p">,</span> <span class="n">geo_col</span><span class="p">,</span> <span class="n">val_col</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cy</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="Blocks.set_names"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks.set_names">[docs]</a>    <span class="k">def</span> <span class="nf">set_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val_col</span><span class="p">,</span> <span class="n">geom_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="n">val_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="o">=</span> <span class="n">idx_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span> <span class="o">=</span> <span class="n">geom_col</span></div>
+
+<div class="viewcode-block" id="Blocks.from_file"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">fpath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                  <span class="n">value_col</span><span class="p">,</span>
+                  <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+                  <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads areal dataset from a file supported by GeoPandas.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fpath : str</span>
+<span class="sd">                Path to the spatial file.</span>
+
+<span class="sd">        value_col : Any</span>
+<span class="sd">                    The name of a column with values.</span>
+
+<span class="sd">        geometry_col : default=&#39;geometry&#39;</span>
+<span class="sd">                       The name of a column with blocks.</span>
+
+<span class="sd">        index_col : default = None</span>
+<span class="sd">                    Index column name. It could be any unique value from a dataset. If not given then index is taken</span>
+<span class="sd">                    from the index array of GeoDataFrame and it is named &#39;index&#39;.</span>
+
+<span class="sd">        layer_name : Any, Optional</span>
+<span class="sd">                     The name of a layer with data if provided input is a gpkg file.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IndexColNotUniqueError</span>
+<span class="sd">            Raised when given index column is not unique.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[[</span><span class="n">index_col</span><span class="p">,</span> <span class="n">geometry_col</span><span class="p">,</span> <span class="n">value_col</span><span class="p">]]</span>
+            <span class="c1"># Check indices</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_index</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">index_col</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">index_col</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">index_col</span> <span class="o">=</span> <span class="s1">&#39;index&#39;</span>
+                <span class="n">dataset</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">index_col</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+        <span class="c1"># Update polyset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">val_col</span><span class="o">=</span><span class="n">value_col</span><span class="p">,</span> <span class="n">geo_col</span><span class="o">=</span><span class="n">geometry_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_names</span><span class="p">(</span><span class="n">val_col</span><span class="o">=</span><span class="n">value_col</span><span class="p">,</span> <span class="n">geom_col</span><span class="o">=</span><span class="n">geometry_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="o">=</span><span class="n">index_col</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.from_geodataframe"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks.from_geodataframe">[docs]</a>    <span class="k">def</span> <span class="nf">from_geodataframe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                          <span class="n">gdf</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                          <span class="n">value_col</span><span class="p">,</span>
+                          <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+                          <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads areal dataset from a GeoDataFrame supported by GeoPandas.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gdf : gpd.GeoDataFrame</span>
+
+<span class="sd">        value_col : Any</span>
+<span class="sd">                    The name of a column with values.</span>
+
+<span class="sd">        geometry_col : Any, default = &#39;geometry&#39;</span>
+<span class="sd">                       The name of a column with blocks.</span>
+
+<span class="sd">        index_col : Any, default = None</span>
+<span class="sd">                    If set then a specific column is treated as an index.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        IndexColNotUniqueError</span>
+<span class="sd">            Given index column values are not unique.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_index</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">index_col</span><span class="p">)</span>
+            <span class="n">idx_name</span> <span class="o">=</span> <span class="n">index_col</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="n">idx_name</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+                <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">idx_name</span> <span class="o">=</span> <span class="s1">&#39;index&#39;</span>
+                <span class="n">gdf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">idx_name</span>
+                <span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span>
+                                <span class="n">val_col</span><span class="o">=</span><span class="n">value_col</span><span class="p">,</span>
+                                <span class="n">geo_col</span><span class="o">=</span><span class="n">geometry_col</span><span class="p">,</span>
+                                <span class="n">idx_col</span><span class="o">=</span><span class="n">idx_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_names</span><span class="p">(</span><span class="n">val_col</span><span class="o">=</span><span class="n">value_col</span><span class="p">,</span> <span class="n">geom_col</span><span class="o">=</span><span class="n">geometry_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="o">=</span><span class="n">idx_name</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PointSupport"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport">[docs]</a><span class="k">class</span> <span class="nc">PointSupport</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class prepares the point support data in relation to block dataset.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    point_support : gpd.GeoDataFrame</span>
+<span class="sd">                    Dataset with point support values and indexes of blocks (where point falls into).</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    from_files()</span>
+<span class="sd">        Loads point support and polygon data from files.</span>
+
+<span class="sd">    from_geodataframes()</span>
+<span class="sd">        Loads point support and polygon data from dataframe.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    TODO: info about regualarization process</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    import geopandas as gpd</span>
+<span class="sd">    from pyinterpolate.processing.point.structure import PointSupport</span>
+
+
+<span class="sd">    POPULATION_DATA = &quot;path to the point support file&quot;</span>
+<span class="sd">    POLYGON_DATA = &quot;path to the polygon data&quot;</span>
+<span class="sd">    GEOMETRY_COL = &quot;geometry&quot;</span>
+<span class="sd">    POP10 = &quot;POP10&quot;</span>
+<span class="sd">    POLYGON_ID = &quot;FIPS&quot;</span>
+
+<span class="sd">    gdf_points = gpd.read_file(POPULATION_DATA)</span>
+<span class="sd">    gdf_polygons = gpd.read_file(POLYGON_DATA)</span>
+<span class="sd">    point_support = PointSupport()</span>
+<span class="sd">    out = point_support.from_geodataframes(gdf_points,</span>
+<span class="sd">                                           gdf_polygons,</span>
+<span class="sd">                                           point_support_geometry_col=GEOMETRY_COL,</span>
+<span class="sd">                                           point_support_val_col=POP10,</span>
+<span class="sd">                                           blocks_geometry_col=GEOMETRY_COL,</span>
+<span class="sd">                                           blocks_index_col=POLYGON_ID)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_support</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_column</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_index_column</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_col</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_col</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+
+<div class="viewcode-block" id="PointSupport.from_files"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport.from_files">[docs]</a>    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">point_support_data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="n">blocks_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                   <span class="n">point_support_geometry_col</span><span class="p">,</span>
+                   <span class="n">point_support_val_col</span><span class="p">,</span>
+                   <span class="n">blocks_geometry_col</span><span class="p">,</span>
+                   <span class="n">blocks_index_col</span><span class="p">,</span>
+                   <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                   <span class="n">point_support_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">blocks_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Methods prepares the point support data from files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        point_support_data_file : str</span>
+<span class="sd">                                  Path to the file with point support data. Reads all files processed by the GeoPandas.</span>
+
+<span class="sd">        blocks_file : str</span>
+<span class="sd">                      Path to the file with polygon data. Reads all files processed by GeoPandas.</span>
+
+<span class="sd">        point_support_geometry_col : Any</span>
+<span class="sd">                                     The name of the point support geometry column.</span>
+
+<span class="sd">        point_support_val_col : Any</span>
+<span class="sd">                                The name of the point support column with values.</span>
+
+<span class="sd">        blocks_geometry_col : Any</span>
+<span class="sd">                              The name of the polygon geometry column.</span>
+
+<span class="sd">        blocks_index_col : Any</span>
+<span class="sd">                           The name of polygon&#39;s index column (must be unique!).</span>
+
+<span class="sd">        use_point_support_crs : bool, default = True</span>
+<span class="sd">                                If set to False then the point support crs is transformed to the same crs as polygon</span>
+<span class="sd">                                dataset.</span>
+
+<span class="sd">        point_support_layer_name : Any, default = None</span>
+<span class="sd">                                   If provided file is .gpkg then this parameter must be provided.</span>
+
+<span class="sd">        blocks_layer_name  : Any, default = None</span>
+<span class="sd">                             If provided file is .gpkg then this parameter must be provided.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Load data</span>
+        <span class="k">if</span> <span class="n">point_support_data_file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
+            <span class="n">point_support</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">point_support_layer_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">point_support</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">blocks_file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
+            <span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">blocks_file</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">blocks_layer_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">blocks_file</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">from_geodataframes</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span>
+                                <span class="n">blocks</span><span class="p">,</span>
+                                <span class="n">point_support_val_col</span><span class="o">=</span><span class="n">point_support_val_col</span><span class="p">,</span>
+                                <span class="n">blocks_geometry_col</span><span class="o">=</span><span class="n">blocks_geometry_col</span><span class="p">,</span>
+                                <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">blocks_index_col</span><span class="p">,</span>
+                                <span class="n">point_support_geometry_col</span><span class="o">=</span><span class="n">point_support_geometry_col</span><span class="p">,</span>
+                                <span class="n">use_point_support_crs</span><span class="o">=</span><span class="n">use_point_support_crs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PointSupport.from_geodataframes"><a class="viewcode-back" href="../../../../pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport.from_geodataframes">[docs]</a>    <span class="k">def</span> <span class="nf">from_geodataframes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                           <span class="n">point_support_dataframe</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">],</span>
+                           <span class="n">blocks_dataframe</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                           <span class="n">point_support_geometry_col</span><span class="p">,</span>
+                           <span class="n">point_support_val_col</span><span class="p">,</span>
+                           <span class="n">blocks_geometry_col</span><span class="p">,</span>
+                           <span class="n">blocks_index_col</span><span class="p">,</span>
+                           <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Methods prepares the point support data from files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        point_support_dataframe : GeoDataFrame or GeoSeries</span>
+
+
+<span class="sd">        blocks_dataframe : GeoDataFrame</span>
+<span class="sd">                           Block data with block indexes and geometries.</span>
+
+<span class="sd">        point_support_geometry_col : Any</span>
+<span class="sd">                                     The name of the point support geometry column.</span>
+
+<span class="sd">        point_support_val_col : Any</span>
+<span class="sd">                                The name of the point support column with values.</span>
+
+<span class="sd">        point_support_val_col : Any</span>
+<span class="sd">                                The name of the point support column with values.</span>
+
+<span class="sd">        blocks_geometry_col : Any</span>
+<span class="sd">                              The name of the polygon geometry column.</span>
+
+<span class="sd">        blocks_index_col : Any</span>
+<span class="sd">                           The name of polygon&#39;s index column (must be unique!).</span>
+
+<span class="sd">        use_point_support_crs : bool, default = True</span>
+<span class="sd">                                If set to False then the point support crs is transformed to the same crs as polygon</span>
+<span class="sd">                                dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Select data</span>
+        <span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_data</span><span class="p">(</span><span class="n">point_support_dataframe</span><span class="p">,</span>
+                                                  <span class="n">blocks_dataframe</span><span class="p">,</span>
+                                                  <span class="n">point_support_geometry_col</span><span class="p">,</span>
+                                                  <span class="n">point_support_val_col</span><span class="p">,</span>
+                                                  <span class="n">blocks_geometry_col</span><span class="p">,</span>
+                                                  <span class="n">blocks_index_col</span><span class="p">)</span>
+
+        <span class="c1"># Transform CRS</span>
+        <span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_crs</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">use_point_support_crs</span><span class="p">)</span>
+
+        <span class="c1"># Merge data</span>
+        <span class="n">joined</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Clean data</span>
+        <span class="n">joined</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">joined</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[[</span><span class="s1">&#39;index_right&#39;</span><span class="p">,</span> <span class="n">point_support_geometry_col</span><span class="p">,</span> <span class="n">point_support_val_col</span><span class="p">]]</span>
+        <span class="n">joined</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dtypes</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span>
+                                  <span class="n">blocks</span><span class="p">,</span>
+                                  <span class="n">point_support</span><span class="p">,</span>
+                                  <span class="n">point_support_val_col</span><span class="p">,</span>
+                                  <span class="s1">&#39;index_right&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">blocks_index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">blocks_index_col</span> <span class="o">!=</span> <span class="s1">&#39;index_right&#39;</span><span class="p">:</span>
+            <span class="n">joined</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index_right&#39;</span><span class="p">:</span> <span class="n">blocks_index_col</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Set x, y coordinates</span>
+        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+
+        <span class="c1"># Set attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_support</span> <span class="o">=</span> <span class="n">joined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column</span> <span class="o">=</span> <span class="n">point_support_geometry_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_column</span> <span class="o">=</span> <span class="n">point_support_val_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_index_column</span> <span class="o">=</span> <span class="n">blocks_index_col</span></div>
+
+    <span class="k">def</span> <span class="nf">_select_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">point_support</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                     <span class="n">blocks</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                     <span class="n">point_support_geometry_col</span><span class="p">,</span>
+                     <span class="n">point_support_value_col</span><span class="p">,</span>
+                     <span class="n">blocks_geometry_col</span><span class="p">,</span>
+                     <span class="n">blocks_index_col</span><span class="p">):</span>
+
+        <span class="n">point_support</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_point_support</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span>
+                                                   <span class="n">point_support_geometry_col</span><span class="p">,</span>
+                                                   <span class="n">point_support_value_col</span><span class="p">)</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_select_blocks</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span>
+                                     <span class="n">blocks_geometry_col</span><span class="p">,</span>
+                                     <span class="n">blocks_index_col</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_select_point_support</span><span class="p">(</span><span class="n">point_support</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                              <span class="n">geometry_col</span><span class="p">,</span>
+                              <span class="n">value_col</span><span class="p">):</span>
+        <span class="n">point_support</span> <span class="o">=</span> <span class="n">point_support</span><span class="p">[[</span><span class="n">geometry_col</span><span class="p">,</span> <span class="n">value_col</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">point_support</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_select_blocks</span><span class="p">(</span><span class="n">polygon_data</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                       <span class="n">geometry_col</span><span class="p">,</span>
+                       <span class="n">index_col</span><span class="p">):</span>
+        <span class="n">polygon_data</span> <span class="o">=</span> <span class="n">polygon_data</span><span class="p">[[</span><span class="n">geometry_col</span><span class="p">,</span> <span class="n">index_col</span><span class="p">]]</span>
+        <span class="n">polygon_data</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">index_col</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">polygon_data</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_transform_crs</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">blocks</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">use_points</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">use_points</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">blocks</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">points</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
+                <span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">points</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">blocks</span><span class="o">.</span><span class="n">crs</span> <span class="o">!=</span> <span class="n">points</span><span class="o">.</span><span class="n">crs</span><span class="p">:</span>
+                <span class="n">points</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">points</span><span class="p">,</span> <span class="n">blocks</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_dtypes</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">point_support</span><span class="p">,</span> <span class="n">point_support_val_col</span><span class="p">,</span> <span class="n">blocks_id</span><span class="p">):</span>
+        <span class="n">index_dtype</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="n">val_dtype</span> <span class="o">=</span> <span class="n">point_support</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
+
+        <span class="n">joined</span><span class="p">[</span><span class="n">blocks_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">blocks_id</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">index_dtype</span><span class="p">)</span>
+        <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">val_dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">joined</span></div>
+</pre></div>
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Szymon Moliński
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/scripts/furo.js"></script>
+    </body>
+</html>

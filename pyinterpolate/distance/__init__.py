@@ -1,2 +1,1 @@
-from .calculate_distances import calc_point_to_point_distance
-from .calculate_distances import calc_block_to_block_distance
+from .distance import calc_point_to_point_distance, calc_block_to_block_distance

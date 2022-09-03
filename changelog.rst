@@ -1,10 +1,29 @@
-PyInterpolate
+Pyinterpolate
 =============
 
-PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies.
+Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 Changes by date
 ===============
+
+2022-09-04
+----------
+
+**version 0.3.0**
+
+* module `io_ops` renamed to `io`,
+* the refactored function `read_point_data` (old) into `read_txt`, new functions to read csv and blocks data,
+* the new objects to store block data and its point-support: `Blocks` and `PointSupport`,
+* Kriging is now supported by **functions**, not by classes, to speed up some calculations. In the future, classes will be introduced again,
+* user has much more control over the variograms development. `ExperimentalVariogram` class calculates *variance*, *covariance*, and *semivariance*, has own plotting function. `TheoreticalVariogram` has more models to fit, and gives more control to search for the best fit - the algorithm searches over ranges and sills. Nugget is still fixed,
+* module `pipelines` has the function for the block data smoothing (area-to-point Poisson Kriging), the class for block data filtering (area-to-area Poisson Kriging), the kriging comparison class, and method to download sample air pollution data,
+* there are many small changes and API transformations... The package is faster and more stable,
+* it works with Python 3.7, 3.8, 3.9, and 3.10,
+* Ordinary and Simple Kriging of large datasets may be performed in parallel,
+* the package has a few warnings and raises custom errors,
+* `setup.py` is removed, now package installs from `setup.cfg`,
+* data structures are more complex, but they allow user to be more flexible with an input.
+
 
 2021-12-XX
 ----------

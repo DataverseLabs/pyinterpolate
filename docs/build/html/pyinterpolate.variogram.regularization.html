@@ -1,0 +1,954 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
+        <title>pyinterpolate.variogram.regularization package - Pyinterpolate 0.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Pyinterpolate 0.3.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Pyinterpolate 0.3.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="pyinterpolate-variogram-regularization-package">
+<h1>pyinterpolate.variogram.regularization package<a class="headerlink" href="#pyinterpolate-variogram-regularization-package" title="Permalink to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html">pyinterpolate.variogram.regularization.block package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#module-pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances">pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#authors">Authors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#module-pyinterpolate.variogram.regularization.block.avg_inblock_semivariances">pyinterpolate.variogram.regularization.block.avg_inblock_semivariances module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#id1">Authors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#module-pyinterpolate.variogram.regularization.block.block_to_block_semivariance">pyinterpolate.variogram.regularization.block.block_to_block_semivariance module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#id2">Authors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#module-pyinterpolate.variogram.regularization.block.inblock_semivariance">pyinterpolate.variogram.regularization.block.inblock_semivariance module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#id3">Authors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pyinterpolate.variogram.regularization.block.html#module-pyinterpolate.variogram.regularization.block">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.aggregated">
+<span id="pyinterpolate-variogram-regularization-aggregated-module"></span><h2>pyinterpolate.variogram.regularization.aggregated module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.aggregated" title="Permalink to this heading">#</a></h2>
+<p>Class to work with blocks &amp; point support datasets and transformations.</p>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AggregatedVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregated_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class calculates semivariance of aggregated counts.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>aggregated_data</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>agg_step_size</strong> (<em>float</em>) – Step size between lags.</p></li>
+<li><p><strong>agg_max_range</strong> (<em>float</em>) – Maximal distance of analysis.</p></li>
+<li><p><strong>point_support</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>agg_direction</strong> (<em>float (in range [0, 360]), optional, default=0</em>) – direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p></li>
+<li><p><strong>agg_tolerance</strong> (<em>float (in range [0, 1]), optional, default=1</em>) – If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0
+then the bin is selected as an elliptical area with major axis pointed in the same direction as
+the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p></li>
+<li><p><strong>variogram_weighting_method</strong> (<em>str, default = “closest”</em>) – Method used to weight error at a given lags. Available methods:
+- equal: no weighting,
+- closest: lags at a close range have bigger weights,
+- distant: lags that are further away have bigger weights,
+- dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</li>
+<li><p><strong>verbose</strong> (<em>bool, default = False</em>) – Print steps performed by the algorithm.</p></li>
+<li><p><strong>log_process</strong> (<em>bool, default = False</em>) – Log process info (Level DEBUG).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>aggregated_data</strong> (<em>Union</em><em>[</em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><em>Blocks</em></a><em>, </em><em>Dict</em><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><em>np.ndarray</em><em>]</em>) – See aggregared_data parameter.</p></li>
+<li><p><strong>agg_step_size</strong> (<em>float</em>) – See agg_step_size parameter.</p></li>
+<li><p><strong>agg_max_range</strong> (<em>float</em>) – See agg_max_range parameter.</p></li>
+<li><p><strong>agg_lags</strong> (<em>numpy array</em>) – Lags calculates as a set of equidistant points from agg_step_size to agg_max_range with a step of size
+agg_step_size.</p></li>
+<li><p><strong>agg_tolerance</strong> (<em>float</em><em>, </em><em>default = 1</em>) – See agg_tolerance parameter.</p></li>
+<li><p><strong>agg_direction</strong> (<em>float</em><em>, </em><em>default = 0</em>) – See agg_direction parameter.</p></li>
+<li><p><strong>point_support</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>np.ndarray</em><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><em>PointSupport</em></a><em>]</em>) – See point_support parameter.</p></li>
+<li><p><strong>weighting_method</strong> (<em>str</em><em>, </em><em>default = 'closest'</em>) – See variogram_weighting_method parameter.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>default = False</em>) – See vebose parameter.</p></li>
+<li><p><strong>log_process</strong> (<em>bool</em><em>, </em><em>default = False</em>) – See log_process parameter.</p></li>
+<li><p><strong>experimental_variogram</strong> (<a class="reference internal" href="pyinterpolate.variogram.empirical.html#pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram" title="pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram"><em>ExperimentalVariogram</em></a>) – The experimental variogram calculated from blocks (their centroids).</p></li>
+<li><p><strong>theoretical_model</strong> (<a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><em>TheoreticalVariogram</em></a>) – The theoretical model derived from blocks’ centroids.</p></li>
+<li><p><strong>inblock_semivariance</strong> (<em>Dict</em>) – {area id: the average inblock semivariance}</p></li>
+<li><p><strong>avg_inblock_semivariance</strong> (<em>numpy array</em>) – [lag, average inblocks semivariances, number of blocks within a lag]</p></li>
+<li><p><strong>block_to_block_semivariance</strong> (<em>Dict</em>) – {(block i, block j): [distance, semivariance, number of point pairs between blocks]}</p></li>
+<li><p><strong>avg_block_to_block_semivariance</strong> (<em>numpy array</em>) – [lag, semivariance, number of point pairs between blocks].</p></li>
+<li><p><strong>regularized_variogram</strong> (<em>numpy array</em>) – [lag, semivariance]</p></li>
+<li><p><strong>distances_between_blocks</strong> (<em>Dict</em>) – Weighted distances between all blocks: {block id : [distances to other blocks]}.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.regularize">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.regularize" title="Permalink to this definition">#</a></dt>
+<dd><p>Method performs semivariogram regularization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.show_semivariograms">
+<span class="sig-name descname"><span class="pre">show_semivariograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.show_semivariograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.show_semivariograms" title="Permalink to this definition">#</a></dt>
+<dd><p>Shows experimental variogram, theoretical model, average inblock semivariance,
+average block to block semivariance and regularized variogram.</p>
+</dd></dl>
+
+<p class="rubric">References</p>
+<p>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+Units, Mathematical Geology 40(1), 101-128, 2008</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.calculate_avg_inblock_semivariance">
+<span class="sig-name descname"><span class="pre">calculate_avg_inblock_semivariance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.calculate_avg_inblock_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.calculate_avg_inblock_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Method calculates the average semivariance within blocks gamma_h(v, v).</p>
+<dl class="simple">
+<dt>avg_inblock_semivariance<span class="classifier">numpy array</span></dt><dd><p>[lag, semivariance, number of block pairs]</p>
+</dd>
+</dl>
+<p>$$gamma_h(v, v) =</p>
+</div></blockquote>
+<p>rac{1}{(2*N(h))} sum_{a=1}^{N(h)} [gamma(v_{a}, v_{a}) + gamma(v_{a+h}, v_{a+h})]$$</p>
+<blockquote>
+<div><p>where:
+- $gamma(v_{a}, v_{a})$ is semivariance within a block $a$,
+- $gamma(v_{a+h}, v_{a+h})$ is samivariance within a block at a distance $h$ from the block $a$.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.calculate_avg_semivariance_between_blocks">
+<span class="sig-name descname"><span class="pre">calculate_avg_semivariance_between_blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.calculate_avg_semivariance_between_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.calculate_avg_semivariance_between_blocks" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><dl class="simple">
+<dt>Function calculates semivariance between areas based on their division into smaller blocks. It is</dt><dd><p>gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>avg_block_to_block_semivariance<span class="classifier">numpy array</span></dt><dd><p>The average semivariance between neighboring blocks point-supports:
+[lag, semivariance, number of block pairs within a range]</p>
+</dd>
+</dl>
+<p>Block-to-block semivariance is calculated as:</p>
+<p>$$gamma(v_{a}, v_{a+h})=</p>
+</div></blockquote>
+<p>rac{1}{P_{a}P_{a+h}}sum_{s=1}^{P_{a}}sum_{s’=1}^{P_{a+h}}gamma(u_{s}, u_{s’})$$</p>
+<blockquote>
+<div><dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p>$gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of block $a$ and paired block $a+h$.</p></li>
+<li><p>$P_{a}$ and $P_{a+h}$ - number of support points within block $a$ and block $a+h$.</p></li>
+<li><p>$gamma(u_{s}, u_{s’})$ - semivariance of point supports between blocks.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Then average block-to-block semivariance is calculated as:</p>
+<p>$$gamma_{h}(v, v_{h}) =</p>
+</div></blockquote>
+<p>rac{1}{N(h)}sum_{a=1}^{N(h)}gamma(v_{a}, v_{a+h})$$</p>
+<blockquote>
+<div><dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p>$gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances for a lag $h$,</p></li>
+<li><p>$gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired block at a distance $h$.</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">average_inblock_semivariances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariance_between_point_supports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experimental_block_variogram</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theoretical_block_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Method regularizes point support model. Procedure is described in [1].</p>
+<dl class="simple">
+<dt>average_inblock_semivariances<span class="classifier">np.ndarray, optional</span></dt><dd><p>The mean semivariance between the blocks. See Notes to learn more.</p>
+</dd>
+<dt>semivariance_between_point_supports<span class="classifier">np.ndarray, optional</span></dt><dd><p>Semivariance between all blocks calculated from the theoretical model.</p>
+</dd>
+<dt>experimental_block_variogram<span class="classifier">np.ndarray, optional</span></dt><dd><p>The experimental semivariance between area centroids.</p>
+</dd>
+<dt>theoretical_block_model<span class="classifier">TheoreticalVariogram, optional</span></dt><dd><p>Modeled variogram.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>regularized_model<span class="classifier">numpy array</span></dt><dd><p>[lag, semivariance, number of point pairs]</p>
+</dd>
+</dl>
+<p>Function has the form:</p>
+<blockquote>
+<div><p>gamma_v(h) = gamma(v, v_h) - gamma_h(v, v)</p>
+</div></blockquote>
+<p>where:
+- gamma_v(h) - regularized variogram,
+- gamma(v, v_h) - variogram value between any two blocks separated by the distance h (calculated from their</p>
+<blockquote>
+<div><p>point support),</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>gamma_h(v, v) - average inblock semivariance between blocks.</p></li>
+</ul>
+<p>Average inblock semivariance between blocks:</p>
+<blockquote>
+<div><p>$$gamma_h(v, v) =</p>
+</div></blockquote>
+</div></blockquote>
+<p>rac{1}{(2*N(h))} sum_{a=1}^{N(h)} [gamma(v_{a}, v_{a}) + gamma(v_{a+h}, v_{a+h})]$$</p>
+<blockquote>
+<div><p>where:
+- $gamma(v_{a}, v_{a})$ and $gamma(v_{a+h}, v_{a+h})$ are the inblock semivariances of block $a$ and</p>
+<blockquote>
+<div><p>block $a+h$ separated by the distance $h$.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units,</dt><dd><p>Mathematical Geology 40(1), 101-128, 2008</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.regularize_variogram">
+<span class="sig-name descname"><span class="pre">regularize_variogram</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.regularize_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram.regularize_variogram" title="Permalink to this definition">#</a></dt>
+<dd><p>Function regularizes semivariograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reg_variogram</strong> – [lag, semivariance]</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy array</p>
+</dd>
+</dl>
+<p>:raises ValueError : Semivariance at a given lag is below zero:</p>
+<p class="rubric">Notes</p>
+<p>Regularized semivariogram is a difference between the average block to block semivariance $gamma(v, v_{h})$
+and the average inblock semivariances $gamma{h}(v, v)$ at a given lag $h$.</p>
+<p>$$gamma_{v}(h)=gamma(v, v_{h}) - gamma{h}(v, v)$$</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">show_semivariograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.show_semivariograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Method plots:</dt><dd><ul class="simple">
+<li><p>experimental variogram,</p></li>
+<li><p>theoretical model,</p></li>
+<li><p>average inblock semivariance,</p></li>
+<li><p>average block-to-block semivariance,</p></li>
+<li><p>regularized variogram.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:raises AttributeError : semivariogram regularization process has not been performed.:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.aggregated.regularize">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregated_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_inblock_semivariances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariance_between_point_supports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experimental_block_variogram</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theoretical_block_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_process</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/aggregated.html#regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.aggregated.regularize" title="Permalink to this definition">#</a></dt>
+<dd><p>Function is an alias to AggregatedVariogram class and performs semivariogram regularization. Function returns
+regularized variogram.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>aggregated_data</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>agg_step_size</strong> (<em>float</em>) – Step size between lags.</p></li>
+<li><p><strong>agg_max_range</strong> (<em>float</em>) – Maximal distance of analysis.</p></li>
+<li><p><strong>point_support</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>average_inblock_semivariances</strong> (<em>np.ndarray, optional</em>) – The mean semivariance between the blocks. See Notes to learn more.</p></li>
+<li><p><strong>semivariance_between_point_supports</strong> (<em>np.ndarray, optional</em>) – Semivariance between all blocks calculated from the theoretical model.</p></li>
+<li><p><strong>experimental_block_variogram</strong> (<em>np.ndarray, optional</em>) – The experimental semivariance between area centroids.</p></li>
+<li><p><strong>theoretical_block_model</strong> (<em>TheoreticalVariogram, optional</em>) – Modeled variogram.</p></li>
+<li><p><strong>agg_direction</strong> (<em>float (in range [0, 360]), optional, default=0</em>) – direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p></li>
+<li><p><strong>agg_tolerance</strong> (<em>float (in range [0, 1]), optional, default=1</em>) – If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0
+then the bin is selected as an elliptical area with major axis pointed in the same direction as
+the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p></li>
+<li><p><strong>variogram_weighting_method</strong> (<em>str, default = “closest”</em>) – Method used to weight error at a given lags. Available methods:
+- equal: no weighting,
+- closest: lags at a close range have bigger weights,
+- distant: lags that are further away have bigger weights,
+- dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</li>
+<li><p><strong>verbose</strong> (<em>bool, default = False</em>) – Print steps performed by the algorithm.</p></li>
+<li><p><strong>log_process</strong> (<em>bool, default = False</em>) – Log process info (Level DEBUG).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>regularized</strong> – [lag, semivariance]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram" title="pyinterpolate.variogram.regularization.aggregated.AggregatedVariogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AggregatedVariogram</span></code></a></dt><dd><p>core class for block semivariogram regularization</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<p>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+Units, Mathematical Geology 40(1), 101-128, 2008</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.deconvolution">
+<span id="pyinterpolate-variogram-regularization-deconvolution-module"></span><h2>pyinterpolate.variogram.regularization.deconvolution module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.deconvolution" title="Permalink to this heading">#</a></h2>
+<p>Semivariogram regularization &amp; deconvolution process.</p>
+<section id="id2">
+<h3>Authors<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Deconvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class performs deconvolution of semivariogram of areal data. Whole procedure is based on the iterative process
+described in: [1].</p>
+<p>Steps to regularize semivariogram:
+- initialize your object (no parameters),
+- use fit() method to build initial point support model,
+- use transform() method to perform semivariogram regularization,
+- save deconvoluted semivariogram model with export_model() method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ps</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>np.ndarray</em><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><em>PointSupport</em></a><em>]</em>) – <ul>
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</p></li>
+<li><p><strong>agg</strong> (<em>Union</em><em>[</em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><em>Blocks</em></a><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><em>np.ndarray</em><em>]</em>) – <p>Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul>
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</p></li>
+<li><p><strong>initial_regularized_variogram</strong> (<em>numpy array</em>) – [lag, semivariance]</p></li>
+<li><p><strong>initial_theoretical_agg_model</strong> (<a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><em>TheoreticalVariogram</em></a>) – </p></li>
+<li><p><strong>initial_theoretical_model_prediction</strong> (<em>numpy array</em>) – [lag, semivariance]</p></li>
+<li><p><strong>initial_experimental_variogram</strong> (<em>numpy array</em>) – [lag, semivariance, number of pairs]</p></li>
+<li><p><strong>final_theoretical_model</strong> (<a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><em>TheoreticalVariogram</em></a>) – </p></li>
+<li><p><strong>final_optimal_variogram</strong> (<em>numpy array</em>) – [lag, semivariance]</p></li>
+<li><p><strong>agg_step</strong> (<em>float</em>) – Step size between lags.</p></li>
+<li><p><strong>agg_rng</strong> (<em>float</em>) – Maximal distance of analysis.</p></li>
+<li><p><strong>ranges</strong> (<em>numpy array</em>) – np.arange(agg_step, agg_rng, agg_step)</p></li>
+<li><p><strong>direction</strong> (<em>float</em><em> (</em><em>in range</em><em> [</em><em>0</em><em>, </em><em>360</em><em>]</em><em>)</em>) – Direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em><em> (</em><em>in range</em><em> [</em><em>0</em><em>, </em><em>1</em><em>]</em><em>)</em>) – If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0
+then the bin is selected as an elliptical area with major axis pointed in the same direction as
+the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p></li>
+<li><p><strong>weighting_method</strong> (<em>str</em>) – <p>Method used to weight error at a given lags. Available methods:
+* equal: no weighting,
+* closest: lags at a close range have bigger weights,
+* distant: lags that are further away have bigger weights,
+* dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>deviations</strong> (<em>List</em>) – List of deviations per iteration. The first element is the initial deviation.</p></li>
+<li><p><strong>weights</strong> (<em>List</em>) – List of weights applied to lags in each iteration.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Should algorithm print() process steps into a terminal.</p></li>
+<li><p><strong>store_models</strong> (<em>bool</em>) – Should theoretical and regularized models be stored in each iteration.</p></li>
+<li><p><strong>theoretical_models</strong> (<em>List</em>) – List with theoretical models parameters.</p></li>
+<li><p><strong>regularized_models</strong> (<em>List</em>) – List with numpy arrays with regularized models.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.fit" title="Permalink to this definition">#</a></dt>
+<dd><p>Fits areal data and the point support data into a model, initializes the experimental semivariogram,
+the theoretical semivariogram model, regularized point support model, and deviation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.transform" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs semivariogram regularization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.fit_transform" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs fit() and transform() at one time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.export_model">
+<span class="sig-name descname"><span class="pre">export_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.export_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.export_model" title="Permalink to this definition">#</a></dt>
+<dd><p>Exports regularized (or fitted) model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_variograms">
+<span class="sig-name descname"><span class="pre">plot_variograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_variograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_variograms" title="Permalink to this definition">#</a></dt>
+<dd><p>Plots semivariances before and after regularization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_deviations">
+<span class="sig-name descname"><span class="pre">plot_deviations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_deviations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_deviations" title="Permalink to this definition">#</a></dt>
+<dd><p>Plots each deviation divided by the initial deviation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_weights">
+<span class="sig-name descname"><span class="pre">plot_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.Deconvolution.plot_weights" title="Permalink to this definition">#</a></dt>
+<dd><p>Plots the mean weight value per lag.</p>
+</dd></dl>
+
+<p class="rubric">References</p>
+<p>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+Units, Mathematical Geology 40(1), 101-128, 2008</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span> <span class="o">=</span> <span class="n">Deconvolution</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">agg_dataset</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">point_support_dataset</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">agg_step_size</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">agg_max_range</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_deviations</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_weights</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="s1">&#39;results.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">export_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.export_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Permalink to this definition">#</a></dt>
+<dd><p>Function exports final theoretical model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – File name for model parameters (nugget, sill, range, model type)</p>
+</dd>
+</dl>
+<p>:raises RunetimeError : model is not transformed.:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'closest'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Permalink to this definition">#</a></dt>
+<dd><p>Function fits given areal data variogram into point support variogram - it is the first step of regularization
+process.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>agg_dataset</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>point_support_dataset</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>agg_step_size</strong> (<em>float</em>) – Step size between lags.</p></li>
+<li><p><strong>agg_max_range</strong> (<em>float</em>) – Maximal distance of analysis.</p></li>
+<li><p><strong>agg_direction</strong> (<em>float (in range [0, 360]), optional, default=0</em>) – direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p></li>
+<li><p><strong>agg_tolerance</strong> (<em>float (in range [0, 1]), optional, default=1</em>) – If tolerance is 0 then points must be placed at a single line with the beginning in the origin
+of the coordinate system and the angle given by y axis and direction parameter. If tolerance
+is &gt; 0 then the bin is selected as an elliptical area with major axis pointed in the same
+direction as the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p></li>
+<li><p><strong>variogram_weighting_method</strong> (<em>str, default = “closest”</em>) – Method used to weight error at a given lags. Available methods:
+* equal: no weighting,
+* closest: lags at a close range have bigger weights,
+* distant: lags that are further away have bigger weights,
+* dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id5">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Permalink to this definition">#</a></dt>
+<dd><p>Method performs fit() and transform() operations at once.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>agg_dataset</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>point_support_dataset</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>agg_step_size</strong> (<em>float</em>) – Step size between lags.</p></li>
+<li><p><strong>agg_max_range</strong> (<em>float</em>) – Maximal distance of analysis.</p></li>
+<li><p><strong>agg_direction</strong> (<em>float (in range [0, 360]), optional, default=0</em>) – direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p></li>
+<li><p><strong>agg_tolerance</strong> (<em>float (in range [0, 1]), optional, default=1</em>) – If tolerance is 0 then points must be placed at a single line with the beginning in the origin
+of the coordinate system and the angle given by y axis and direction parameter. If tolerance
+is &gt; 0 then the bin is selected as an elliptical area with major axis pointed in the same
+direction as the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p></li>
+<li><p><strong>variogram_weighting_method</strong> (<em>str, default = “closest”</em>) – Method used to weight error at a given lags. Available methods:
+- equal: no weighting,
+- closest: lags at a close range have bigger weights,
+- distant: lags that are further away have bigger weights,
+- dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</li>
+<li><p><strong>max_iters</strong> (<em>int, default = 25</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>limit_deviation_ratio</strong> (<em>float, default = 0.01</em>) – Minimal ratio of model deviation to initial deviation when algorithm is stopped.
+Parameter must be set in the limits (0, 1).</p></li>
+<li><p><strong>minimum_deviation_decrease</strong> (<em>float, default = 0.001</em>) – The minimum ratio of the difference between model deviation and optimal deviation
+to the optimal deviation: <a href="#id10"><span class="problematic" id="id11">|dev - opt_dev|</span></a> / opt_dev.
+Parameter must be set in the limits (0, 1).</p></li>
+<li><p><strong>reps_deviation_decrease</strong> (<em>int, default = 3</em>) – How many repetitions of small deviation decrease before termination of the algorithm.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id6">
+<span class="sig-name descname"><span class="pre">plot_deviations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_deviations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id7">
+<span class="sig-name descname"><span class="pre">plot_variograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_variograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Permalink to this definition">#</a></dt>
+<dd><p>Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
+semivariogram regularization with transform() method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">plot_weights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Permalink to this definition">#</a></dt>
+<dd><p>Method performs semivariogram regularization after model fitting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_iters</strong> (<em>int, default = 25</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>limit_deviation_ratio</strong> (<em>float, default = 0.1</em>) – Minimal ratio of model deviation to initial deviation when algorithm is stopped.
+Parameter must be set in the limits (0, 1).</p></li>
+<li><p><strong>minimum_deviation_decrease</strong> (<em>float, default = 0.01</em>) – The minimum ratio of the difference between model deviation and optimal deviation
+to the optimal deviation: <a href="#id12"><span class="problematic" id="id13">|dev - opt_dev|</span></a> / opt_dev.
+Parameter must be set in the limits (0, 1).</p></li>
+<li><p><strong>reps_deviation_decrease</strong> (<em>int, default = 3</em>) – How many repetitions of small deviation decrease before termination of the algorithm.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:raises AttributeError : initial_regularized_model is undefined (user didn’t perform fit() method).:
+:raises ValueError : limit_deviation_ratio or minimum_deviation_decrease parameters &lt;= 0 or &gt;= 1.:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.deconvolution.calculate_deviation">
+<span class="sig-name descname"><span class="pre">calculate_deviation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theoretical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">regularized</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/deconvolution.html#calculate_deviation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.deconvolution.calculate_deviation" title="Permalink to this definition">#</a></dt>
+<dd><p>Function calculates deviation between initial block variogram model and the regularized point support model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theoretical</strong> (<em>TheoreticalVariogram</em>)</p></li>
+<li><p><strong>regularized</strong> (<em>numpy array</em>) – [lag, semivariance]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>deviation</strong> – <a href="#id14"><span class="problematic" id="id15">|Regularized - Theoretical|</span></a> / Theoretical</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyinterpolate.variogram.regularization" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Szymon Moliński
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">pyinterpolate.variogram.regularization package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.aggregated">pyinterpolate.variogram.regularization.aggregated module</a><ul>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.deconvolution">pyinterpolate.variogram.regularization.deconvolution module</a><ul>
+<li><a class="reference internal" href="#id2">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

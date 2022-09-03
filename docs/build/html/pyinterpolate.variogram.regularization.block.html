@@ -1,0 +1,502 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
+        <title>pyinterpolate.variogram.regularization.block package - Pyinterpolate 0.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Pyinterpolate 0.3.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Pyinterpolate 0.3.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="pyinterpolate-variogram-regularization-block-package">
+<h1>pyinterpolate.variogram.regularization.block package<a class="headerlink" href="#pyinterpolate-variogram-regularization-block-package" title="Permalink to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances">
+<span id="pyinterpolate-variogram-regularization-block-avg-block-to-block-semivariances-module"></span><h2>pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances" title="Permalink to this heading">#</a></h2>
+<p>Functions for calculating the average block-to-block semivariances</p>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances.average_block_to_block_semivariances">
+<span class="sig-name descname"><span class="pre">average_block_to_block_semivariances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariances_array</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/avg_block_to_block_semivariances.html#average_block_to_block_semivariances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances.average_block_to_block_semivariances" title="Permalink to this definition">#</a></dt>
+<dd><p>Function averages block to block semivariances over specified lags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>semivariances_array</strong> (<em>numpy array</em>) – [lag, semivariance, number of point pairs between blocks]</p></li>
+<li><p><strong>lags</strong> (<em>numpy array</em>) – Array of lags.</p></li>
+<li><p><strong>step_size</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>averaged</strong> – [lag, mean semivariances in a range, number of point pairs in range]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.block.avg_inblock_semivariances">
+<span id="pyinterpolate-variogram-regularization-block-avg-inblock-semivariances-module"></span><h2>pyinterpolate.variogram.regularization.block.avg_inblock_semivariances module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.block.avg_inblock_semivariances" title="Permalink to this heading">#</a></h2>
+<p>Functions for calculating the inblock semivariances.</p>
+<section id="id1">
+<h3>Authors<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.avg_inblock_semivariances.calculate_average_semivariance">
+<span class="sig-name descname"><span class="pre">calculate_average_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_to_block_distances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inblock_semivariances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/avg_inblock_semivariances.html#calculate_average_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.avg_inblock_semivariances.calculate_average_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Function calculates average inblock semivariance between blocks.</p>
+<dl class="simple">
+<dt>block_to_block_distances<span class="classifier">Dict</span></dt><dd><p>{block id : [distances to other blocks in order of keys]}</p>
+</dd>
+<dt>inblock_semivariances<span class="classifier">Dict</span></dt><dd><p>{area id: the inblock semivariance}</p>
+</dd>
+<dt>block_step_size<span class="classifier">float</span></dt><dd><p>Step size between lags.</p>
+</dd>
+<dt>block_max_range<span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>avg_block_to_block_semivariance<span class="classifier">numpy array</span></dt><dd><p>[lag, semivariance, number of blocks within lag]</p>
+</dd>
+</dl>
+<p>Average inblock semivariance between blocks is defined as:</p>
+<p>$$gamma_{h}(v, v) =</p>
+</div></blockquote>
+<p>rac{1}{2*N(h)} sum_{a=1}^{N(h)} gamma(v_{a}, v_{a}) + gamma(v_{a_h}, v_{a_h})$$</p>
+<blockquote>
+<div><dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p>$gamma_{h}(v, v)$ - average inblock semivariance per lag,</p></li>
+<li><p>$N(h)$ - number of block pairs within a lag,</p></li>
+<li><p>$gamma(v_{a}, v_{a})$ - inblock semivariance of block a,</p></li>
+<li><p>$gamma(v_{a_h}, v_{a_h})$ - inblock semivariance of neighbouring block at a distance h.</p></li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.avg_inblock_semivariances.group_distances">
+<span class="sig-name descname"><span class="pre">group_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_to_block_distances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/avg_inblock_semivariances.html#group_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.avg_inblock_semivariances.group_distances" title="Permalink to this definition">#</a></dt>
+<dd><p>Function prepares lag-neighbor-blocks Dict for semivariance calculations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_to_block_distances</strong> (<em>Dict</em>) – {block id: [distances to all blocks in an order of dict ids]}</p></li>
+<li><p><strong>lags</strong> (<em>numpy array</em>) – Array with lags.</p></li>
+<li><p><strong>step_size</strong> (<em>float</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>grouped_lags</strong> – {lag: {area id: [list of neighbors within a lag]}}</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.block.block_to_block_semivariance">
+<span id="pyinterpolate-variogram-regularization-block-block-to-block-semivariance-module"></span><h2>pyinterpolate.variogram.regularization.block.block_to_block_semivariance module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.block.block_to_block_semivariance" title="Permalink to this heading">#</a></h2>
+<p>Functions for calculating the semivariances between blocks’ point supports.</p>
+<section id="id2">
+<h3>Authors<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.block_to_block_semivariance.block_pair_semivariance">
+<span class="sig-name descname"><span class="pre">block_pair_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Collection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/block_to_block_semivariance.html#block_pair_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.block_to_block_semivariance.block_pair_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><p>Function calculates average semivariance between two blocks based on the counts inside the block.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_a</strong> (<em>Collection</em>) – Block A points in the form of array with each record [x, y].</p></li>
+<li><p><strong>block_b</strong> (<em>Collection</em>) – Block B points in the form of array with each record [x, y].</p></li>
+<li><p><strong>semivariogram_model</strong> (<em>TheoreticalVariogram</em>) – Fitted theoretical variogram model from TheoreticalVariogram class.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>semivariance_between_blocks</strong> – The average semivariance between blocks (calculated from point every point from
+block a to every point in block b).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.block_to_block_semivariance.calculate_block_to_block_semivariance">
+<span class="sig-name descname"><span class="pre">calculate_block_to_block_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_to_block_distances</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/block_to_block_semivariance.html#calculate_block_to_block_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.block_to_block_semivariance.calculate_block_to_block_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Function calculates semivariance between blocks based on their point support and weighted distance between</dt><dd><p>block centroids.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point_support</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul>
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>block_to_block_distances</strong> (<em>Dict</em>) – {block id : [distances to other blocks in order of keys]}</p></li>
+<li><p><strong>semivariogram_model</strong> (<em>TheoreticalVariogram</em>) – Fitted variogram model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>semivariances_b2b</strong> – {(block id a, block id b): [distance, semivariance, number of point pairs between blocks]}</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.block.inblock_semivariance">
+<span id="pyinterpolate-variogram-regularization-block-inblock-semivariance-module"></span><h2>pyinterpolate.variogram.regularization.block.inblock_semivariance module<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.block.inblock_semivariance" title="Permalink to this heading">#</a></h2>
+<p>Functions for calculating the inblock point-support semivariance.</p>
+<section id="id3">
+<h3>Authors<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.inblock_semivariance.calculate_inblock_semivariance">
+<span class="sig-name descname"><span class="pre">calculate_inblock_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/inblock_semivariance.html#calculate_inblock_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.inblock_semivariance.calculate_inblock_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><blockquote>
+<div><p>Method calculates inblock semivariance of a given areas.</p>
+<dl class="simple">
+<dt>point_support<span class="classifier">geopandas GeoDataFrame | Point Support | numpy array</span></dt><dd><dl class="simple">
+<dt>Point support data. It can be provided:</dt><dd><ul class="simple">
+<li><p>directly as PointSupport object,</p></li>
+<li><p>GeoDataFrame | DataFrame (then DataFrame must have columns: ‘ds’ - values, ‘x’ - point
+geometry x, ‘y’ - point geometry y, ‘index’ - block indexes,</p></li>
+<li><p>numpy array [block index, coordinate x, coordinate y, value],</p></li>
+<li><p>Dict: {block id: [[point x, point y, value]]}.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>variogram_model<span class="classifier">TheoreticalVariogram</span></dt><dd><p>Modeled variogram fitted to the areal data.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>inblock_semivariances<span class="classifier">Dict</span></dt><dd><p>{area id: the average inblock semivariance}</p>
+</dd>
+</dl>
+<p>$$gamma(v, v) =</p>
+</div></blockquote>
+<p>rac{1}{P^{2}} * sum_{s}^{P} sum_{s’}^{P} gamma(u_{s}, u_{s}’)$$</p>
+<blockquote>
+<div><p>where:
+- $gamma(v, v)$ is the average semivariance within a block,
+- $P$ is a number of points used to discretize the block $v$,
+- $u_{s}$ is a point u within the block $v$,
+- $gamma(u_{s}, u_{s}’)$ is a semivariance between point $u_{s}$ and $u_{s}’$ inside the block $v$.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.variogram.regularization.block.inblock_semivariance.inblock_semivariance">
+<span class="sig-name descname"><span class="pre">inblock_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points_of_block</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/pyinterpolate/variogram/regularization/block/inblock_semivariance.html#inblock_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.variogram.regularization.block.inblock_semivariance.inblock_semivariance" title="Permalink to this definition">#</a></dt>
+<dd><p>Function calculates inblock semivariance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points_of_block</strong> (<em>numpy array</em>)</p></li>
+<li><p><strong>variogram_model</strong> (<em>TheoreticalVariogram</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>average_block_semivariance</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.variogram.regularization.block">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyinterpolate.variogram.regularization.block" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Szymon Moliński
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">pyinterpolate.variogram.regularization.block package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances">pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances module</a><ul>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.block.avg_inblock_semivariances">pyinterpolate.variogram.regularization.block.avg_inblock_semivariances module</a><ul>
+<li><a class="reference internal" href="#id1">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.block.block_to_block_semivariance">pyinterpolate.variogram.regularization.block.block_to_block_semivariance module</a><ul>
+<li><a class="reference internal" href="#id2">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.block.inblock_semivariance">pyinterpolate.variogram.regularization.block.inblock_semivariance module</a><ul>
+<li><a class="reference internal" href="#id3">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.variogram.regularization.block">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>
