@@ -1,1 +1,1 @@
-from .interpolate_raster import interpolate_raster, show_data
+from pyinterpolate.viz.raster import interpolate_raster
