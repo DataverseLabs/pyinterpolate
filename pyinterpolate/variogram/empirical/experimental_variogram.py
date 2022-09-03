@@ -130,12 +130,6 @@ class ExperimentalVariogram:
     plot()
         Shows experimental variances.
 
-    __str__()
-        Prints basic info about the class parameters.
-
-    __repr__()
-        Reproduces class initialization with an input data.
-
     See Also
     --------
     calculate_covariance : function to calculate experimental covariance and variance of a given set of points.

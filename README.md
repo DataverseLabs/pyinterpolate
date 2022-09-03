@@ -1,11 +1,11 @@
-![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Build Status](https://travis-ci.com/szymon-datalions/pyinterpolate.svg?branch=master) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
+![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate/badge)](https://www.codefactor.io/repository/github/szymon-datalions/pyinterpolate)
 
-![Pyinterpolate](https://github.com/szymon-datalions/pyinterpolate/blob/main/logo.png?raw=true  "Pyinterpolate logo")
+![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov03.jpg?raw=true  "Pyinterpolate logo")
 
-**version 0.2.3** - *Jezero Crater*
+**version 0.3.0** - *Kyiv*
 ---------------------------------------
 
-PyInterpolate is designed as the Python library for geostatistics. It's role is to provide access to spatial statistics tools used in a wide range of studies. This package helps you **interpolate spatial data** with *Kriging* technique. In the close future you'll use more spatial interpolation tools.
+Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 If you’re:
 
@@ -27,91 +27,88 @@ Pyinterpolate allows you to perform:
 1. Ordinary Kriging and Simple Kriging (spatial interpolation from points),
 2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
 3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
-
 How it works
 --------------
 
-Package allows o perform multiple spatial interpolation tasks. The flow of analysis is usually the same for each interpolation method:
+The package has multiple spatial interpolation functions. The flow of analysis is usually the same for each method:
 
 **[1.]** Read and prepare data.
 
 ```python
-from pyinterpolate.io import read_point_data
+from pyinterpolate import read_txt
 
-point_data = read_point_data('xyz_txt_file.txt')
+point_data = read_txt('dem.txt')
 ```
 
-**[2.]** Analyze data, Semivariance calculation.
+**[2.]** Analyze data, calculate the experimental variogram.
 
 ```python
-from pyinterpolate.semivariance import calculate_semivariance
+from pyinterpolate import build_experimental_variogram
 
-search_radius = 0.01
-max_range = 0.32
+search_radius = 500
+max_range = 40000
 
-experimental_semivariogram = calculate_semivariance(
-	data=point_data,
-	step_size=search_radius,
-	max_range=max_range)
+experimental_semivariogram = build_experimental_variogram(input_array=point_data,
+                                                          step_size=search_radius,
+                                                          max_range=max_range)
 ```
 
-**[3.]** Data transformation, theoretical semivariogram.
+**[3.]** Data transformation, fit theoretical variogram.
 
 ```python
-from pyinterpolate.semivariance impJezero Craterort TheoreticalSemivariogram
-semivar = TheoreticalSemivariogram(points_array=point_data, empirical_semivariance=experimental_semivariogram)
-number_of_ranges = 32
+from pyinterpolate import build_theoretical_variogram
 
-semivar.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
+                                      model_type='spherical',
+                                      sill=400,
+                                      rang=20000,
+                                      nugget=0)
 ```
 
 **[4.]** Interpolation.
 
 ```python
-from pyinterpolate.kriging import Krige
+from pyinterpolate import kriging
 
-model = Krige(semivariogram_model=semivar, known_points=point_data)
-unknown_point = (12.1, -5.9)
-
-ok_pred = model.ordinary_kriging(unknown_location=unknown_point, number_of_neighbours=32)
+unknown_point = (20000, 65000)
+prediction = kriging(observations=point_data,
+                     theoretical_model=semivar,
+                     points=[unknown_point],
+                     how='ok',
+                     no_neighbors=32)
 ```
 
 **[5.]** Error and uncertainty analysis.
 
 ```python
-real_val = 10  # Some real, known observation at a given point
-squared_error = (real_val - ok_pred[0])**2
-print(squared_error)
+print(prediction)  # [predicted, variance error, lon, lat]
 ```
 
 ```bash
->> 48.72
+>> [211.23, 0.89, 20000, 60000]
 ```
 
-With **pyinterpolate** you are able to retrieve point support model from areal aggregates. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. It was done with Area-to-Point Poisson Kriging technique from package. Countries along the world presents infections as areal sums to protect privacy of infected people. But this kind of representaion introduces bias to the decision-making process. To overcome this bias you may use Poisson Kriging. Areal aggregates of COVID-19 infection rate are transformed to new point support semivariogram created from population density blocks. As output we get population at risk map:
-
+With **pyinterpolate**, we can retrieve the point support model from blocks. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:
 ![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/szymon-datalions/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
-
-
 
 Status
 ------
 
-Beta version: package is tested and the main structure is preserved but future changes are very likely to occur.
+Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.
 
 
 Setup
 -----
 
-Setup by pip: pip install pyinterpolate / **Python 3.7** is required!
+Setup with *pip*: `pip install pyinterpolate`
 
-Detailed instructions how to setup package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed there most common problems related to third-party packages.
+Detailed instructions on how to install the package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed out there most common problems related to third-party packages.
 
-You may follow those setup steps to create conda environment with package for your tests:
+You may follow those setup steps to create a *conda* environment with the package for your work:
 
 ### Recommended - conda installation
 
-[1.] First install system dependencies to use package (```libspatialindex_c.so```):
+[1.] First, install system dependencies to use the package (```libspatialindex_c.so```):
 
 LINUX:
 
@@ -125,17 +122,17 @@ MAC OS:
 brew install spatialindex
 ```
 
-[2.] Next step is to create conda enviornment with Python 3.7, pip and notebook packages and activate your environment:
+[2.] Next step is to create conda environment with Python >= 3.7. Recommended is Python 3.10. Additionally, we install `pip` and `notebook` packages, and then activate our environment:
 
 ```
-conda create -n [YOUR NAME] -c conda-forge python=3.7 pip notebook
+conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pip notebook
 ```
 
 ```
-conda activate [YOUR NAME]
+conda activate [YOUR ENV NAME]
 ```
 
-[3.] In the next step install **pyinterpolate** and its dependencies with ```pip```:
+[3.] In the next step, we install **pyinterpolate** and its dependencies with `pip` (conda distribution is under development and will be available soon):
 
 ```
 pip install pyinterpolate
@@ -145,33 +142,31 @@ pip install pyinterpolate
 
 ### pip installation
 
-With **Python==3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+With **Python>=3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
 
 ```
 pip install pyinterpolate
 ```
 
-A world of advice is to use Virtual Environment for the installation.
+A world of advice, you should use Virtual Environment for the installation - every time and within every operating system. You may consider PipEnv too.
 
 Tests and contribution
 ------------------------
 
-All tests are grouped in `test` directory. To run them you must have installed `unittest` package. More about test and contribution is here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
-
-
-
+All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
 
 Commercial and scientific projects where library has been used
 --------------------------------------------------------------
 
 * Tick-Borne Disease Detector (Data Lions company) for the European Space Agency (2019-2020).
-* B2C project related to the prediction of demand for specific flu medications,
-* B2G project related to the large-scale infrastructure maintenance.
+* B2C project related to the prediction of demand for specific flu medications (2020),
+* B2G project related to the large-scale infrastructure maintenance (2020-2021),
+* E-commerce reporting and analysis, building a spatial / temporal profile of customer (2022+)
 
 Community
 ---------
 
-Join our community in Discord: [Discord Server PyInterpolate](https://discord.gg/3EMuRkj)
+Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
 
 
 Bibliography
@@ -188,57 +183,58 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 Requirements and dependencies
 -----------------------------
 
-* Python 3.7.6
+Core requirements and dependencies are:
 
-* Numpy 1.18.3
+* Python >= 3.7
+* descartes
+* geopandas
+* matplotlib
+* numpy
+* tqdm
+* pyproj
+* scipy
+* shapely
+* fiona
+* rtree
+* prettytable
+* pandas
+* dask
+* requests
 
-* Scipy 1.4.1
+You may check a specific version of requirements in the `setup.cfg` file.
 
-* GeoPandas 0.7.0
-
-* Fiona 1.18.13.post1 (Mac OS) / Fiona 1.8 (Linux)
-
-* Rtree 0.9.4 (Mac OS), Rtree >= 0.8 & < 0.9 (Linux)
-
-* Descartes 1.1.0
-
-* Pyproj 2.6.0
-
-* Shapely 1.7.0
-
-* Matplotlib 3.2.1
 
 Package structure
 -----------------
 
 High level overview:
 
- - [ ] pyinterpolate
-    - [x] **distance** - distance calculation,
-    - [x] **idw** - inverse distance weighting interpolation,
-    - [x] **io_ops** - reads and prepares input spatial datasets,
-    - [x] **transform** - transforms spatial datasets,
-    - [x] **viz** - interpolation of smooth surfaces from points into rasters,
-    - [x] **kriging** - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,
-    - [x] **misc** - compare different kriging techniques,
-    - [x] **semivariance** - calculate semivariance, fit semivariograms and regularize semivariogram,
-    - [x] **tutorials** - tutorials (Basic, Intermediate and Advanced)
+ - [x] `pyinterpolate`
+    - [x] `distance` - distance calculation,
+    - [x] `idw` - inverse distance weighting interpolation,
+    - [x] `io` - reads and prepares input spatial datasets,
+    - [x] `kriging` - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,
+    - [x] `pipelines` - a complex functions to smooth a block data, download sample data, compare different kriging techniques, and filter blocks,
+    - [x] `processing` - core data structures of the package: `Blocks` and `PointSupport`, and additional functions used for internal processes,
+    - [x] `variogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution,
+    - [x] `viz` - interpolation of smooth surfaces from points into rasters.
+ - [x] `tutorials` - tutorials (Basic, Intermediate and Advanced).
 
 Functions documentation
 -----------------------
 
-Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/
+Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/ (Be careful! At this moment, documentation is under development!)
 
 
 Development
 ------------------
 
-- multi core processing (speed up calculations),
-- code refactoring to be more close to the **GeoPandas** package style,
-- set to work with the newer versions of Python and Windows OS.
+- API documentation,
+- Dedicated webpage,
+- Check Issues and TODOs :)
 
 
 Known Bugs
 -----------------
 
-- Package may crash with very large dataset (memory issues). Operations are performed with numpy arrays and for datasets larger than 10 000 points there could be a memory issue ([Issue page](https://github.com/szymon-datalions/pyinterpolate/issues/64))
+- *(sector clear)*

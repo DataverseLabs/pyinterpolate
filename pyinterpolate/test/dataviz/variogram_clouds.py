@@ -23,17 +23,3 @@ def test_with_armstrong_data():
     vc.plot('box')
     vc.plot('scatter')
     vc.plot('violin')
-
-
-if __name__ == '__main__':
-    test_with_armstrong_data()
-    dem = read_txt('../samples/point_data/txt/pl_dem_epsg2180.txt')
-    dem = dem[:100, :]
-    distances = calc_point_to_point_distance(dem[:, :-1])
-    maximum_range = np.max(distances) / 4
-    steps = 16
-    step_size = maximum_range / steps
-    vc = VariogramCloud(input_array=dem, step_size=step_size, max_range=maximum_range)
-    vc.plot('box')
-    vc.plot('scatter')
-    vc.plot('violin')
