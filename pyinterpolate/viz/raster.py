@@ -164,7 +164,7 @@ def interpolate_raster(data,
                 theoretical_model=ts,
                 points=interpolation_points,
                 how='ok',
-                min_no_neighbors=number_of_neighbors)
+                no_neighbors=number_of_neighbors)
 
     for idx, row in enumerate(k):
         val = row[0]
