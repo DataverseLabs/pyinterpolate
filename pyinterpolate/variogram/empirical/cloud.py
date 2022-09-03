@@ -274,12 +274,6 @@ class VariogramCloud:
     remove_outliers()
         Removes outliers from a semivariance scatterplots.
 
-    __str__()
-        prints basic info about the class parameters and calculates statistics for each lag.
-
-    __repr__()
-        reproduces class initialization with an input data.
-
     See Also
     --------
     get_variogram_point_cloud : function to calculate variogram point cloud, class VariogramCloud is a wrapper

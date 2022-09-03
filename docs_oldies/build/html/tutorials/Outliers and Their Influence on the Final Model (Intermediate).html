@@ -1,0 +1,1151 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Outliers and Their Influence on the Final Model - tutorial &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Poisson Kriging - centroid based approach - tutorial" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" />
+    <link rel="prev" title="Semivariogram regularization - tutorial" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<section id="Outliers-and-Their-Influence-on-the-Final-Model---tutorial">
+<h1>Outliers and Their Influence on the Final Model - tutorial<a class="headerlink" href="#Outliers-and-Their-Influence-on-the-Final-Model---tutorial" title="Permalink to this heading">¶</a></h1>
+<section id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Read point data and take 10% of it as a sample for the further analysis (dataset A),</p></li>
+<li><p>Check if outliers are present in a data and create additional dataset without outliers (dataset B),</p></li>
+<li><p>Create the Variogram Point Cloud model for the datasets A and B,</p></li>
+<li><p>Remove outliers from the datasets A and B,</p></li>
+<li><p>Create four Ordinary Kriging models and compare their performance.</p></li>
+</ol>
+</section>
+<section id="Level:-Intermediate">
+<h2>Level: Intermediate<a class="headerlink" href="#Level:-Intermediate" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2021-08-22</p></td>
+<td><p>Initial release</p></td>
+<td><p>&#64;szymon-datalions</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
+<p>Outliers may affect our analysis and the final interpolation results. In this tutorial we learn about their influence on the final model and we compare interpolation error for different scenarios where data is treated in a different ways.</p>
+<p>We are able to remove too high or too low values at the preprocessing stage (check part 2 of the tutorial) or we can remove outliers directly from the variogram point cloud (part 4). Results from each type of preprocessing (and a raw dataset analysis) are different and we are going to compare them.</p>
+<p>We use:</p>
+<ul class="simple">
+<li><p>DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">sample_data/point_data/poland_dem_gorzow_wielkopolski</span></code>.</p></li>
+</ul>
+</section>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from pyinterpolate.distance import calc_point_to_point_distance
+from pyinterpolate.io_ops import read_point_data
+from pyinterpolate.kriging import Krige
+from pyinterpolate.semivariance import build_variogram_point_cloud, show_variogram_cloud, remove_outliers
+from pyinterpolate.semivariance import calc_semivariance_from_pt_cloud
+from pyinterpolate.semivariance import TheoreticalSemivariogram
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1)-Read-point-data-and-divide-it-into-training-and-test-set">
+<h2>1) Read point data and divide it into training and test set<a class="headerlink" href="#1)-Read-point-data-and-divide-it-into-training-and-test-set" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Read data from file
+
+dem = read_point_data(&#39;../sample_data/point_data/poland_dem_gorzow_wielkopolski&#39;, data_type=&#39;txt&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Divide data into training and test set
+
+def create_train_test(data, training_fraction):
+    idxs = np.arange(0, len(data))
+    number_of_training_samples = int(len(data) * training_fraction)
+    training_idxs = np.random.choice(idxs, size=number_of_training_samples, replace=False)
+    test_idxs = [i for i in idxs if i not in training_idxs]
+    training_set = data[training_idxs, :]
+    test_set = data[test_idxs, :]
+
+    return training_set, test_set
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train, test = create_train_test(dem, 0.1)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>train
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[15.32961159, 52.69870089, 26.50076103],
+       [15.33317125, 52.69062817, 21.09065437],
+       [15.14925544, 52.78377491, 52.66115952],
+       ...,
+       [15.22756798, 52.56374162, 58.7893219 ],
+       [15.31735053, 52.75355397, 83.29890442],
+       [15.29638809, 52.5900297 , 46.89881134]])
+</pre></div></div>
+</div>
+</section>
+<section id="2)-Check-outliers:-analyze-distribution-of-the-values">
+<h2>2) Check outliers: analyze distribution of the values<a class="headerlink" href="#2)-Check-outliers:-analyze-distribution-of-the-values" title="Permalink to this heading">¶</a></h2>
+<p>To find if our dataset contains outliers we are going to inspect all values in the <code class="docutils literal notranslate"><span class="pre">train</span></code> set. At the beginning we plot data distribution with the <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Distribution plot
+
+plt.figure(figsize=(10, 6))
+plt.violinplot(train[:, -1])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_9_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_9_0.png" />
+</div>
+</div>
+<blockquote>
+<div><p><strong>NOTE:</strong> Your plot may be different than presented in the tutorial. Why is that? Because we take a random sample of 10% of values and after each iteration the algorithm takes different points for the analysis.</p>
+</div></blockquote>
+<p><strong>Clarification:</strong></p>
+<p>Investigation of the plot tells us that our data is:</p>
+<ul class="simple">
+<li><p>grouped around the lowest values, and most of the values are below 50 meters,</p></li>
+<li><p>has (probably) three different distributions mixed together, it can be a sign that Digital Elevation Model covers three different types of the elevation. One is grouped around 20 meters, next around 50 meters and the faintest is visible around 70 meters.</p></li>
+</ul>
+<p><strong>Violinplot</strong> is good for the distribution analysis. Especially if we are looking for the complex patterns in the dataset. But reading outliers from it may be challenging and we should change a plot type to understand if outliers exist in a dataset. The good choice is the <code class="docutils literal notranslate"><span class="pre">boxplot</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Boxplot
+
+plt.figure(figsize=(10, 6))
+plt.boxplot(train[:, -1])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_11_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_11_0.png" />
+</div>
+</div>
+<p><strong>Boxplot</strong> is a special and very useful tool for the data visualization and analysis. Let’s analyze this plot from the bottom up to the top.</p>
+<blockquote>
+<div><p><strong>NOTE:</strong> Boxplot represents values sorted in the ascending order and their statistical properties: quartiles, median and outliers.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>The bottom whisker (horizontal line) represents the lower range of values in our dataset,</p></li>
+<li><p>The box lower line is the first quartile of a data or, in other words, 25% of values of our dataset are below this point. We name it Q1.</p></li>
+<li><p>The middle line is a median of our dataset. We name it Q2 or median.</p></li>
+<li><p>The upper line is the third quartile of a data or, in other words, 75% of values are below this point,</p></li>
+<li><p>The top whisker represents the upper range of values in our dataset. We name it Q3.</p></li>
+<li><p>Individual points (if they are exist then we see them as a points below the bottom whisker or above the top whisker) are considered as outliers. They could be outliers in the upper range as well as lower range of our data. Long distance between Q1 and the bottom whisker and/or between Q3 and the top whisker is an indicator of potential outliers. Package <strong>matplotlib</strong> calculates potential outliers based on the absolute distance from the Q1 or Q3 to the whiskers. Points below or above this
+distance are treated as outliers. The outlier distance is calculated as the <span class="math notranslate nohighlight">\(weight * (Q3 - Q1)\)</span> where we can set <code class="docutils literal notranslate"><span class="pre">weight</span></code> but other parameters are read directly from the data.</p></li>
+</ul>
+<p>We use this knowledge to remove outliers from the dataset with the assumption that <em>outliers are rather anomalies than unbiased readings</em>. We will perform the outlier removal from the data with a more <em>aggresive</em> assumption than it is done in <strong>matplotlib</strong> and we set weight to the <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create training set without outliers
+
+q1 = np.quantile(train[:, -1], 0.25)
+q3 = np.quantile(train[:, -1], 0.75)
+
+top_limit = q3 + (q3 - q1)
+
+train_without_outliers = train[train[:, -1] &lt; top_limit]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&#39;Length of the full training set is {} records&#39;.format(len(train)))
+print(&#39;Length of the pre-processed training set is {} records&#39;.format(len(train_without_outliers)))
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Length of the full training set is 689 records
+Length of the pre-processed training set is 683 records
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(16, 6))
+ax[0].violinplot(train_without_outliers[:, -1])
+ax[0].set_title(&#39;Distribution of the training set without outliers&#39;)
+ax[1].boxplot(train_without_outliers[:, -1])
+ax[1].set_title(&#39;Statistics of the training set without outliers&#39;)
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_15_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_15_0.png" />
+</div>
+</div>
+<p><strong>Clarification</strong>: with our data processing we have cut some records from the baseline training dataset. Distribution plot (<code class="docutils literal notranslate"><span class="pre">violinplot</span></code>) has shorter tail and ends more abruptly; and a <code class="docutils literal notranslate"><span class="pre">boxplot</span></code> of the new data doesn’t have any outliers. The one important thing to notice is that the observations are still skewed but this is not a problem for this concrete tutorial.</p>
+<blockquote>
+<div><p><strong>NOTE</strong>: if you are eager to know how to deal with the skewed datasets we recommend article <a class="reference external" href="https://anatomisebiostats.com/biostatistics-blog/transforming-skewed-data/">Transforming Skewed Data</a>.</p>
+</div></blockquote>
+</section>
+<section id="3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">
+<h2>3) Create the Variogram Point Cloud model for datasets A and B<a class="headerlink" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B" title="Permalink to this heading">¶</a></h2>
+<p>Now we are making one step further and we will transform both datasets with- and without- outliers and calculate variogram point clouds from these. Then we compare both variogram point clouds.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def get_variogram_point_cloud(dataset, max_range, number_of_lags=16):
+    distances = calc_point_to_point_distance(dem[:, :-1])
+    step_size = max_range / number_of_lags
+    cloud = build_variogram_point_cloud(dataset, step_size, max_range)
+    return cloud
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>full_distance = np.max(calc_point_to_point_distance(train[:, :-1]))
+
+cloud_full = get_variogram_point_cloud(train, full_distance)
+cloud_processed = get_variogram_point_cloud(train_without_outliers, full_distance)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Show variogram cloud: initial training dataset
+
+show_variogram_cloud(cloud_full, plot_type=&#39;boxplot&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_20_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_20_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Show variogram cloud: pre-processed training dataset
+
+show_variogram_cloud(cloud_processed, plot_type=&#39;boxplot&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_21_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_21_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> a quick look into the results shows that each lag is full of outliers in the top part of the semivariances values. Processed dataset has lowest absolute semivariance than the raw readings. Both variograms have a similar shape. Dispersion of semivariances seems to be very high in both cases. It is especially alarming when we consider the shortest distances where abrupt changes in the elevation are not so likely.</p>
+<p>In the next cell we will check a standard deviation of the lag variances.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for k, v in cloud_full.items():
+    print(&#39;Lag {:.2f}&#39;.format(k))
+
+    v_raw = int(np.std(v))
+    v_pro = int(np.std(cloud_processed[k]))
+    v_smape = 100 * (np.abs(v_raw - v_pro) / (0.5 * (v_raw + v_pro)))
+
+    print(&#39;Standard Deviation raw dataset:&#39;, v_raw)
+    print(&#39;Standard Deviation processed dataset:&#39;, v_pro)
+    print(&#39;Symmetric Mean Absolute Percentage Error of Variances: {:.2f}&#39;.format(v_smape))
+    print(&#39;&#39;)
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Lag 0.00
+Standard Deviation raw dataset: 83
+Standard Deviation processed dataset: 84
+Symmetric Mean Absolute Percentage Error of Variances: 1.20
+
+Lag 0.02
+Standard Deviation raw dataset: 312
+Standard Deviation processed dataset: 313
+Symmetric Mean Absolute Percentage Error of Variances: 0.32
+
+Lag 0.04
+Standard Deviation raw dataset: 508
+Standard Deviation processed dataset: 500
+Symmetric Mean Absolute Percentage Error of Variances: 1.59
+
+Lag 0.06
+Standard Deviation raw dataset: 626
+Standard Deviation processed dataset: 594
+Symmetric Mean Absolute Percentage Error of Variances: 5.25
+
+Lag 0.08
+Standard Deviation raw dataset: 686
+Standard Deviation processed dataset: 643
+Symmetric Mean Absolute Percentage Error of Variances: 6.47
+
+Lag 0.10
+Standard Deviation raw dataset: 686
+Standard Deviation processed dataset: 641
+Symmetric Mean Absolute Percentage Error of Variances: 6.78
+
+Lag 0.12
+Standard Deviation raw dataset: 666
+Standard Deviation processed dataset: 619
+Symmetric Mean Absolute Percentage Error of Variances: 7.32
+
+Lag 0.14
+Standard Deviation raw dataset: 637
+Standard Deviation processed dataset: 588
+Symmetric Mean Absolute Percentage Error of Variances: 8.00
+
+Lag 0.16
+Standard Deviation raw dataset: 617
+Standard Deviation processed dataset: 573
+Symmetric Mean Absolute Percentage Error of Variances: 7.39
+
+Lag 0.18
+Standard Deviation raw dataset: 611
+Standard Deviation processed dataset: 575
+Symmetric Mean Absolute Percentage Error of Variances: 6.07
+
+Lag 0.20
+Standard Deviation raw dataset: 622
+Standard Deviation processed dataset: 584
+Symmetric Mean Absolute Percentage Error of Variances: 6.30
+
+Lag 0.22
+Standard Deviation raw dataset: 645
+Standard Deviation processed dataset: 599
+Symmetric Mean Absolute Percentage Error of Variances: 7.40
+
+Lag 0.24
+Standard Deviation raw dataset: 633
+Standard Deviation processed dataset: 590
+Symmetric Mean Absolute Percentage Error of Variances: 7.03
+
+Lag 0.26
+Standard Deviation raw dataset: 556
+Standard Deviation processed dataset: 537
+Symmetric Mean Absolute Percentage Error of Variances: 3.48
+
+Lag 0.28
+Standard Deviation raw dataset: 486
+Standard Deviation processed dataset: 470
+Symmetric Mean Absolute Percentage Error of Variances: 3.35
+
+Lag 0.30
+Standard Deviation raw dataset: 355
+Standard Deviation processed dataset: 345
+Symmetric Mean Absolute Percentage Error of Variances: 2.86
+
+</pre></div></div>
+</div>
+<p><strong>Clarification:</strong> The differences (sMAPE) per lag vary a lot. We can see that the preprocessing of raw values introduces the information lost. It is especially painful for the closest neighbors. It doesn’t mean that the preprocessing of raw observations is not recommended but it is a good idea to include the <strong>spatial component</strong> in the outliers detection process.</p>
+<p>Not everything is wrong. Data cleaning has lowered the semivariances dispersion for the middle lags (where we have the largest number of point pairs for the analysis).</p>
+<p>At this point we are not able to judge which dataset is better for the modeling. Instead we are going to remove outliers from the both <strong>variograms</strong> (instead of the <strong>raw data</strong>).</p>
+</section>
+<section id="4)-Remove-outliers-from-the-variograms">
+<h2>4) Remove outliers from the variograms<a class="headerlink" href="#4)-Remove-outliers-from-the-variograms" title="Permalink to this heading">¶</a></h2>
+<p>In this step we are going to use <strong>pyinterpolate’s</strong> function <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to build additional two variogram point clouds from the raw and processed datasets. We delete the top part outliers of the <strong>semivariance values</strong> rather than the raw readings.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>raw_without_outliers = remove_outliers(cloud_full, exclude_part=&#39;top&#39;, weight=1.25)
+prep_without_outliers = remove_outliers(cloud_processed, exclude_part=&#39;top&#39;, weight=1.25)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data_raw = [x for x in cloud_full.values()]
+data_raw_not_out = [x for x in raw_without_outliers.values()]
+data_prep = [x for x in cloud_processed.values()]
+data_prep_not_out = [x for x in prep_without_outliers.values()]
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(nrows=2, ncols=2, figsize=(16, 14))
+
+ax[0, 0].boxplot(data_raw)
+ax[0, 0].set_title(&#39;Semi-variances Distribution in the Raw Dataset&#39;)
+ax[0, 0].set_xlabel(&#39;Lag number&#39;)
+ax[0, 0].set_ylabel(&#39;Semivariance value&#39;)
+
+ax[0, 1].boxplot(data_raw_not_out)
+ax[0, 1].set_title(&#39;Raw Dataset after the Outliers Detection and Removal&#39;)
+ax[0, 1].set_xlabel(&#39;Lag number&#39;)
+ax[0, 1].set_ylabel(&#39;Semivariance value&#39;)
+
+ax[1, 0].boxplot(data_prep)
+ax[1, 0].set_title(&#39;Semi-variances Distribution in the Pre-processed Dataset&#39;)
+ax[1, 0].set_xlabel(&#39;Lag number&#39;)
+ax[1, 0].set_ylabel(&#39;Semivariance value&#39;)
+
+ax[1, 1].boxplot(data_prep_not_out)
+ax[1, 1].set_title(&#39;Pre-processed Dataset after the Outliers Detection and Removal&#39;)
+ax[1, 1].set_xlabel(&#39;Lag number&#39;)
+ax[1, 1].set_ylabel(&#39;Semivariance value&#39;)
+
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_28_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_28_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> Comparison of multiple variogram clouds could be hard. We see that the largest semivariances are present in the raw data. A heavily processed data has the lowest number of outliers. The medians in each dataset are distributed over a similar pattern. How is it similar? We can check it if we transform the variogram point cloud into the experimental semivariogram. Pyinterpolate has function for it: <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code>. We use it and compare four plots of
+semivariances to gain more insight into the transformations.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>raw_semivar = calc_semivariance_from_pt_cloud(cloud_full)
+raw_semivar_not_out = calc_semivariance_from_pt_cloud(raw_without_outliers)
+prep_semivar = calc_semivariance_from_pt_cloud(cloud_processed)
+prep_semivar_not_out = calc_semivariance_from_pt_cloud(prep_without_outliers)
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.figure(figsize=(14, 6))
+plt.plot(raw_semivar[:, 1])
+plt.plot(raw_semivar_not_out[:, 1])
+plt.plot(prep_semivar[:, 1])
+plt.plot(prep_semivar_not_out[:, 1])
+plt.title(&#39;Comparison of experimental semivariograms created with the different data preprocessing techniques&#39;)
+plt.ylabel(&#39;Semivariance&#39;)
+plt.xlabel(&#39;Lag number&#39;)
+plt.legend([&#39;Raw&#39;, &#39;Raw - remove_outliers()&#39;, &#39;Pre-processed&#39;, &#39;Pre-processed - remove_outliers()&#39;])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_31_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_31_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> An understanding of those plots is not an easy task. Let’s divide reasoning into multiple points:</p>
+<ul class="simple">
+<li><p>Raw dataset and preprocessed raw dataset show a similar pattern, the differences are more pronounced for the distant lags than for the closest point pairs,</p></li>
+<li><p>Datasets with the cleaned variograms are different from the raw data. The absolute semivariance values per lag are smaller and the semivariogram pattern is slightly different. What is interesting is that the possible two distributions within the dataset are more visible in the case of cleaned variograms (one distribution with a peak around 6th lag and other with a peak around 13th lag).</p></li>
+<li><p>The differences between semivariograms are mostly visible at larger distances. For the closest point pairs differences are smaller.</p></li>
+</ul>
+<p>Semivariograms visual inspection does not infor us of the modeling performance but we can assume that models will be slightly different. Let’s test this assumption!</p>
+</section>
+<section id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
+<h2>5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance<a class="headerlink" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>number_of_ranges = 16
+
+# Fit different semivariogram models into prepared datasets and variograms
+
+# Raw
+raw_theo = TheoreticalSemivariogram(points_array=train,
+                                    empirical_semivariance=raw_semivar)
+_ = raw_theo.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+
+# Raw with cleaned variogram
+raw_theo_no_out = TheoreticalSemivariogram(points_array=train,
+                                           empirical_semivariance=raw_semivar_not_out)
+_ = raw_theo_no_out.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+
+# Preprocessed
+prep_theo = TheoreticalSemivariogram(points_array=train_without_outliers,
+                                     empirical_semivariance=prep_semivar)
+_ = prep_theo.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+
+# Preprocessed with cleaned variogram
+prep_theo_no_out = TheoreticalSemivariogram(points_array=train_without_outliers,
+                                            empirical_semivariance=prep_semivar_not_out)
+_ = prep_theo_no_out.find_optimal_model(weighted=False, number_of_ranges=number_of_ranges)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set Kriging models
+
+# Raw
+raw_model = Krige(semivariogram_model=raw_theo, known_points=train)
+
+# Raw &amp; cleaned
+c_raw_model = Krige(semivariogram_model=raw_theo_no_out, known_points=train)
+
+# Preprocessed
+prep_model = Krige(semivariogram_model=prep_theo, known_points=train_without_outliers)
+
+# Preprocessed &amp; cleaned
+c_prep_model = Krige(semivariogram_model=prep_theo_no_out, known_points=train_without_outliers)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Build test function
+
+def test_kriging_model(model, test_set, nn=16):
+    &quot;&quot;&quot;
+    Function tests performance of a given kriging model.
+
+    INPUT:
+
+    :param model: (Krige) Kriging model,
+    :param test_set: (array),
+    :param nn: (int) default=16, number of neighbors.
+
+    OUTPUT:
+
+    :returns: (list) root mean squared errors of prediction
+    &quot;&quot;&quot;
+    rmses = []
+    for pt in test_set:
+        coordinates = pt[:-1]
+        value = pt[-1]
+
+        predicted = model.ordinary_kriging(coordinates, nn)[0]
+
+        error = np.sqrt((value - predicted)**2)
+        rmses.append(error)
+    return rmses
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>r_test = test_kriging_model(raw_model, test)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cr_test = test_kriging_model(c_raw_model, test)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>p_test = test_kriging_model(prep_model, test)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cp_test = test_kriging_model(c_prep_model, test)
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.DataFrame(data=np.array([r_test, cr_test, p_test, cp_test]).transpose(),
+                  columns=[&#39;Raw&#39;, &#39;Raw-cleaned&#39;, &#39;Preprocessed&#39;, &#39;Preprocessed-cleaned&#39;])
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(12, 7))
+ax.boxplot(df)
+ax.set_xticklabels([&#39;Raw&#39;,
+                    &#39;Raw-cleaned&#39;,
+                    &#39;Preprocessed&#39;,
+                    &#39;Preprocessed-cleaned&#39;])
+plt.show()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_42_0.png" src="../_images/tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_42_0.png" />
+</div>
+</div>
+<p>It is very hard to distinguish any differences in the figure but we can use <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method of <strong>pandas</strong> to get the columns statistic:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df.describe()
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Raw</th>
+      <th>Raw-cleaned</th>
+      <th>Preprocessed</th>
+      <th>Preprocessed-cleaned</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>6206.000000</td>
+      <td>6206.000000</td>
+      <td>6206.000000</td>
+      <td>6206.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>2.936283</td>
+      <td>2.936742</td>
+      <td>2.956846</td>
+      <td>2.957840</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>3.686328</td>
+      <td>3.685557</td>
+      <td>3.707982</td>
+      <td>3.708420</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000491</td>
+      <td>0.000152</td>
+      <td>0.000491</td>
+      <td>0.000152</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.617843</td>
+      <td>0.614906</td>
+      <td>0.614773</td>
+      <td>0.612816</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>1.607936</td>
+      <td>1.602791</td>
+      <td>1.617333</td>
+      <td>1.616114</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>3.812796</td>
+      <td>3.813395</td>
+      <td>3.839099</td>
+      <td>3.854755</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>36.599110</td>
+      <td>36.602001</td>
+      <td>36.599110</td>
+      <td>36.602001</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p><strong>Clarification:</strong> In this particular case the final statistics goes hand in hand with the initial assumptions that:</p>
+<p><strong>a)</strong> Raw dataset has lowest error of prediction. The rationale behind it is that if we throw away the observations at the preprocessing step we risk an information lost. It could damage our model.</p>
+<p><strong>b)</strong> Raw dataset with the <strong>cleaned variogram</strong> is the best one. We have removed the point pairs with the largest error. In reality we got rid off the potentially wrong measurements where at one point elevation is small and it’s neighbour is very high.</p>
+<blockquote>
+<div><p><strong>NOTE:</strong> Example in this tutorial is related to the Digital Elevation Model which was preprocessed by the data provider (<em>Copernicus Land Monitoring Services</em>). You shouldn’t get impression that the raw data preprocessing and filtering is not required for the analysis. There are cases where the sensor may produce unreliable and biased results, as example a saturated pixel from the satellite camera. It is better to remove it with the specific noise-filtering algorithm before the variogram
+point cloud development.</p>
+</div></blockquote>
+<hr class="docutils" />
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Pyinterpolate</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_documentation.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms.html">Algorithms Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribution.html">Contribution to Pyinterpolate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Tutorials</a><ul>
+      <li>Previous: <a href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="previous chapter">Semivariogram regularization - tutorial</a></li>
+      <li>Next: <a href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" title="next chapter">Poisson Kriging - centroid based approach - tutorial</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Szymon Moliński.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorials/Outliers and Their Influence on the Final Model (Intermediate).ipynb.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

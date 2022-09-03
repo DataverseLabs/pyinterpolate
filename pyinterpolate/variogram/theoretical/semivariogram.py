@@ -115,12 +115,6 @@ class TheoreticalVariogram:
     plot()
         Shows theoretical model.
 
-    __str__()
-        Prints basic info about the class parameters.
-
-    __repr__()
-        Reproduces class initialization with an input experimental variogram.
-
     See Also
     --------
     ExperimentalVariogram : class to calculate experimental variogram and more.
