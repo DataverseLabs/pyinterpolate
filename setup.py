@@ -40,7 +40,7 @@ setup(
         'descartes==1.1.0',
         'geopandas==0.9.0',
         'matplotlib==3.4.2',
-        'numpy==1.20.3',
+        'numpy==1.22.0',
         'pyproj==3.1.0',
         'scipy==1.6.3',
         'shapely==1.7.1',
