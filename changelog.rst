@@ -7,6 +7,7 @@ Changes by date
 ===============
 
 2022-09-04
+----------
 
 **version 0.3.0**
 
@@ -23,12 +24,37 @@ Changes by date
 * `setup.py` is removed, now package installs from `setup.cfg`,
 * data structures are more complex, but they allow user to be more flexible with an input.
 
-2021-XX-XX
+
+2021-12-XX
 ----------
 
-**version 0.2.3.XX**
+**version 0.2.5**
+
+* neighbors selection (lags counting) has been changed,
+* `TheoreticalSemivariogram` searches for optimal sill in a grid search algorithm,
+* corrected error in `Krige` class; now calculation of error variance is correct.
+
+2021-12-11
+----------
+
+**version 0.2.4**
+
+* `self.points_values` chenged to `self.points_array` in `TheoreticalSemivariogram` class,
+* `NaN` values are tested and checked in `calc_semivariance_from_pt_cloud()` function,
+* new semivariogram models included in the package: **cubic**, **circular**, **power**,
+* corrected calculation of the closest neighbors for kriging interpolation,
+* changed `prepare_kriging_data()` function,
+* the new optional parameter `check_coordinates` (**bool**) of `calc_point_to_point_distance()` function to control the coordinates uniqueness tests. This test is very resource-consuming and should be avoided in a normal work and it should be performed before data injection into the modeling pipeline.
+* the new `dev/profiling/` directory to test and profile parts of a code.
+
+2021-08-23
+----------
+
+**version 0.2.3.post1**
 
 * the outliers removal function: you can choose side for outlier detection and remove. Default is top, available are: both, top, down,
+* the outliers removal function: changed algorithm,
+* new tutorial about outliers and their influence on the final model.
 
 2021-05-13
 ----------

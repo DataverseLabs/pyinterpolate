@@ -6,7 +6,7 @@ This appendix to the paper presents sample pipeline of analysis. It is presented
 
 Breast cancer rates are taken from the *Incidence Rate Report for U.S.* counties and were clipped to the counties of the Northeastern part of U.S. [1]. Observations are age-adjusted and multiplied by 100,000 for the period 2013-2017.
 
-Population centroids are retrieved from the *U.S. Census Blocks 2010* [2]. Breast cancer affects only females but for this example the whole population for an area was included. Raw and transformed datasets are available in a [dedicated Github repository](https://github.com/szymon-datalions/pyinterpolate-paper/tree/main/paper-examples/example-use-case).
+Population centroids are retrieved from the *U.S. Census Blocks 2010* [2]. Breast cancer affects only females but for this example the whole population for an area was included. Raw and transformed datasets are available in a [dedicated Github repository](https://github.com/SimonMolinsky/pyinterpolate-paper/tree/main/paper-examples/example-use-case).
 
 Presented work is Area-to-Point Poisson Kriging of Breast Cancer areal aggregates dataset and transformation of those areal aggregates into population-specific blocks (points). This process requires two main steps: **semivariogram regularization** and **Poisson Kriging**.
 
@@ -18,11 +18,11 @@ The initial step of analysis is data preparation. Pyinterpolate transforms passe
 
 Experimental semivariogram model of data must be retrieved at the beginning of analysis. Semivariance of areal centroids (Figure 1) and semivariance of point support (Figure 2) should be checked to be sure that process is spatially correlated, especially at the scale of point support. User selects the maximum range of analysis - *study extent* - and step size for each lag. The package calculates experimental semivariance based on the provided input.
 
-![Experimental semivariogram of areal centroids.\label{fig2}](fig2.png)
+![Experimental semivariogram of areal centroids.\label{Figure 1}](experimental_areal.png)
 
 *Figure 1: Experimental semivariogram of areal centroids.*
 
-![Experimental semivariogram of point support.\label{fig3}](fig3.png)
+![Experimental semivariogram of point support.\label{Figure 2}](experimental_pop.png)
 
 *Figure 2: Experimental semivariogram of point support.*
 
@@ -36,11 +36,11 @@ Deconvolution of areal semivariogram is a more complex problem and it's algorith
 
 Experimental semivariogram and theoretical model of areal data along with first output of regularization may be checked before the main loop to be sure that process can be modeled with Kriging method. Figure 3 presents initial (baseline) semivariograms and Figure 4 shows those after regularization. After the procedure we are able to export model for the Poisson Kriging interpolation.
 
-![Semivariograms after fit procedure.\label{fig4}](fig4.png)
+![Semivariograms after fit procedure.\label{Figure 3}](fit0.png)
 
-*Figure 3: Semivariograms after fit procedure.*
+*Figure 3: Semivariograms after the initial fit procedure - deviation is big and it needs to be corrected.*
 
-![Semivariograms after regularization.\label{fig5}](fig5.png)
+![Semivariograms after regularization.\label{Figure 4}](reg.png)
 
 *Figure 4: Semivariograms after complete regularization.*
 
@@ -52,13 +52,13 @@ With theoretical semivariogram we are able to model data with Kriging. Poisson K
 
 Whole process may take a while, especially if there are many support points. Method `regularize_data()` returns *GeoDataFrame* object with `[id, geometry, estimated value, estimated prediction error, rmse]` columns. It may be plotted with *matplotlib* and as a result **population at risk** map is generated (Figure 5). Finally, point support map may be saved as a shapefile.
 
-![Breast cancer population at risk map in Northeastern United States state.\label{fig6}](fig6.png)
+![Breast cancer population at risk map in Northeastern United States state.\label{Figure 5}](smoothed.png)
 
 *Figure 5: Breast cancer population at risk map in Northeastern United States state.*
 
 Comparison of input and output data in this example is presented in Figure 6. Output values and error of variance may be used later for reporting and / or as the elements of larger modeling infrastructure.
 
- ![Report output.\label{fig7}](fig1_example.png)
+ ![Report output.\label{Figure 6}](fig1_example.png)
  
  *Figure 6: Sample report output.*
  

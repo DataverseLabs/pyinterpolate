@@ -27,6 +27,7 @@ Pyinterpolate allows you to perform:
 1. Ordinary Kriging and Simple Kriging (spatial interpolation from points),
 2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
 3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
+
 How it works
 --------------
 
@@ -180,8 +181,14 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 - Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008
 - Deutsch C.V., Correcting for Negative Weights in Ordinary Kriging, Computers & Geosciences Vol.22, No.7, pp. 765-773, 1996
 
-Requirements and dependencies
------------------------------
+
+How to cite
+-----------
+Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
+
+
+Requirements and dependencies (v 0.2.5)
+---------------------------------------
 
 Core requirements and dependencies are:
 
@@ -202,7 +209,6 @@ Core requirements and dependencies are:
 * requests
 
 You may check a specific version of requirements in the `setup.cfg` file.
-
 
 Package structure
 -----------------
