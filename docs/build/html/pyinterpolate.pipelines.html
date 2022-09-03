@@ -1,0 +1,549 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
+        <title>pyinterpolate.pipelines package - Pyinterpolate 0.3.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="index.html"><div class="brand">Pyinterpolate 0.3.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
+  
+  
+  <span class="sidebar-brand-text">Pyinterpolate 0.3.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
+  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="pyinterpolate-pipelines-package">
+<h1>pyinterpolate.pipelines package<a class="headerlink" href="#pyinterpolate-pipelines-package" title="Permalink to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="module-pyinterpolate.pipelines.block_filtering">
+<span id="pyinterpolate-pipelines-block-filtering-module"></span><h2>pyinterpolate.pipelines.block_filtering module<a class="headerlink" href="#module-pyinterpolate.pipelines.block_filtering" title="Permalink to this heading">#</a></h2>
+<p>The Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging.</p>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.block_filtering.BlockPK">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlockPK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kriging_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ata'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/pipelines/block_filtering.html#BlockPK"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.block_filtering.BlockPK" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class is an object that can be used for Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging
+regularization.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>semivariogram_model</strong> (<em>TheoreticalVariogram</em>) – Fitted variogram model.</p></li>
+<li><p><strong>blocks</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>point_support</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>kriging_type</strong> (<em>str, default=’ata’</em>) – Poisson Kriging operation. Available methods:
+* ‘ata’: Area-to-Area Poisson Kriging.
+* ‘atp’: Area-to-Point Poisson Kriging.
+* ‘cb’: Centroid-based Poisson Kriging.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Variables<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>semivariogram_model</strong> (<a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><em>TheoreticalVariogram</em></a>) – See semivariogram_model parameter.</p></li>
+<li><p><strong>blocks</strong> (<em>Union</em><em>[</em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><em>Blocks</em></a><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><em>np.ndarray</em><em>]</em>) – See blocks parameter.</p></li>
+<li><p><strong>point_support</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>np.ndarray</em><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><em>PointSupport</em></a><em>]</em>) – See point_support parameter.</p></li>
+<li><p><strong>kriging_type</strong> (<em>str</em><em>, </em><em>default='ata'</em>) – See kriging_type parameter.</p></li>
+<li><p><strong>geo_ds</strong> (<em>geopandas GeoDataFrame</em>) – Regularized set of blocks: [‘id’, ‘geometry’, ‘reg.est’, ‘reg.err’, ‘rmse’]</p></li>
+<li><p><strong>statistics</strong> (<em>Dict</em>) – ‘RMSE’: root mean squared error of regularization,
+‘time’: time (in seconds) of the regularization process.</p></li>
+<li><p><strong>raise_when_negative_prediction</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Raise error when prediction is negative.</p></li>
+<li><p><strong>raise_when_negative_error</strong> (<em>bool</em><em>, </em><em>default=True</em>) – Raise error when prediction error is negative.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.block_filtering.BlockPK.regularize">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/pipelines/block_filtering.html#BlockPK.regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.block_filtering.BlockPK.regularize" title="Permalink to this definition">#</a></dt>
+<dd><p>Regularize blocks (you should use it for data deconvolution - with ATP PK, or for data filtering - with
+ATA, C-B PK).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/pipelines/block_filtering.html#BlockPK.regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
+<dd><p>Function regularizes whole dataset and creates new values and error maps based on the kriging type. Function
+does not predict unknown and missing values, areas with NaN are skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>number_of_neighbors</strong> (<em>int</em>) – The minimum number of neighbours that potentially affect block.</p></li>
+<li><p><strong>data_crs</strong> (<em>str, default=None</em>) – Data crs, look into: <a class="reference external" href="https://geopandas.org/projections.html">https://geopandas.org/projections.html</a>. If None given then returned
+GeoDataFrame doesn’t have a crs.</p></li>
+<li><p><strong>raise_when_negative_prediction</strong> (<em>bool, default=True</em>) – Raise error when prediction is negative.</p></li>
+<li><p><strong>raise_when_negative_error</strong> (<em>bool, default=True</em>) – Raise error when prediction error is negative.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>regularized</strong> – Regularized set of blocks: [‘id’, ‘geometry’, ‘reg.est’, ‘reg.err’, ‘rmse’]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.pipelines.deconvolution">
+<span id="pyinterpolate-pipelines-deconvolution-module"></span><h2>pyinterpolate.pipelines.deconvolution module<a class="headerlink" href="#module-pyinterpolate.pipelines.deconvolution" title="Permalink to this heading">#</a></h2>
+<p>Regularization: blocks to point support.</p>
+<section id="id2">
+<h3>Authors<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.deconvolution.smooth_area_to_point_pk">
+<span class="sig-name descname"><span class="pre">smooth_area_to_point_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_to_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="_modules/pyinterpolate/pipelines/deconvolution.html#smooth_area_to_point_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.deconvolution.smooth_area_to_point_pk" title="Permalink to this definition">#</a></dt>
+<dd><p>Function smooths blocks data into their point support values.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul>
+<li><p><strong>semivariogram_model</strong> (<em>TheoreticalVariogram</em>) – Regularized variogram.</p></li>
+<li><p><strong>blocks</strong> (<em>Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</em>) – Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</li>
+<li><p><strong>point_support</strong> (<em>Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</em>) –</p>
+<ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</li>
+<li><p><strong>number_of_neighbors</strong> (<em>int</em>) – The minimum number of neighbours that potentially affect block.</p></li>
+<li><p><strong>max_range</strong> (<em>float, deault=None</em>) – The maximum distance to search for neighbors.</p></li>
+<li><p><strong>crs</strong> (<em>Any, default=None</em>) – CRS of data.</p></li>
+<li><p><strong>raise_when_negative_prediction</strong> (<em>bool, default=True</em>) – Raise error when prediction is negative.</p></li>
+<li><p><strong>raise_when_negative_error</strong> (<em>bool, default=True</em>) – Raise error when prediction error is negative.</p></li>
+<li><p><strong>err_to_nan</strong> (<em>bool, default=True</em>) – ValueError to NaN.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>results</strong> – columns=[area_id, geometry (Point), prediction, error]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>gpd.GeoDataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.pipelines.multi_kriging">
+<span id="pyinterpolate-pipelines-multi-kriging-module"></span><h2>pyinterpolate.pipelines.multi_kriging module<a class="headerlink" href="#module-pyinterpolate.pipelines.multi_kriging" title="Permalink to this heading">#</a></h2>
+<p>Block data interpolation with a different kriging techniques.</p>
+<section id="id4">
+<h3>Authors<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Szymon Moliński | &#64;SimonMolinsky</p></li>
+</ol>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.multi_kriging.BlockToBlockKrigingComparison">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlockToBlockKrigingComparison</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><span class="pre">TheoreticalVariogram</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><span class="pre">Blocks</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">GeoDataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataFrame</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><span class="pre">PointSupport</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_of_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simple_kriging_mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">training_set_frac</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approx_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/pipelines/multi_kriging.html#BlockToBlockKrigingComparison"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.multi_kriging.BlockToBlockKrigingComparison" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class compares different block kriging models and techniques.</p>
+<dl>
+<dt>blocks<span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</dd>
+<dt>point_support<span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</dd>
+<dt>no_of_neighbors<span class="classifier">int, default = 16</span></dt><dd><p>Maximum number of n-closest neighbors used for interpolation.</p>
+</dd>
+<dt>neighbors_range<span class="classifier">float, default = None</span></dt><dd><p>Maximum distance where we search for point neighbors. If None given then range is selected from
+the theoretical_model rang attribute. If there is less neighbors than no_of_neighbors within
+the range then algorithm selects additional points outside the neighbors_range.</p>
+</dd>
+<dt>simple_kriging_mean<span class="classifier">float, default = None</span></dt><dd><p>The mean value of a process over a study area. Should be know before processing.
+If not provided then Simple Kriging estimator is skipped.</p>
+</dd>
+<dt>raise_when_negative_prediction<span class="classifier">bool, default = True</span></dt><dd><p>Raise error when prediction is negative.</p>
+</dd>
+<dt>raise_when_negative_error<span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
+</dd>
+<dt>training_set_frac<span class="classifier">float, default = 0.8</span></dt><dd><p>How many values sampled as a known points set in each iteration. Could be any fraction within
+(0:1) range.</p>
+</dd>
+<dt>allow_approx_solutions<span class="classifier">bool, default = False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS algorithm.
+Not recommended to set to True if you don’t know what you are doing!</p>
+</dd>
+<dt>iters<span class="classifier">int, default = 20</span></dt><dd><p>How many tests to perform over random samples of a data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variogram</strong> (<a class="reference internal" href="pyinterpolate.variogram.theoretical.html#pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram" title="pyinterpolate.variogram.theoretical.semivariogram.TheoreticalVariogram"><em>TheoreticalVariogram</em></a>) – See variogram parameter.</p></li>
+<li><p><strong>blocks</strong> (<em>Union</em><em>[</em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.Blocks" title="pyinterpolate.processing.preprocessing.blocks.Blocks"><em>Blocks</em></a><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><em>np.ndarray</em><em>]</em>) – See blocks parameter.</p></li>
+<li><p><strong>point_support</strong> (<em>Union</em><em>[</em><em>Dict</em><em>, </em><em>np.ndarray</em><em>, </em><em>gpd.GeoDataFrame</em><em>, </em><em>pd.DataFrame</em><em>, </em><a class="reference internal" href="pyinterpolate.processing.preprocessing.html#pyinterpolate.processing.preprocessing.blocks.PointSupport" title="pyinterpolate.processing.preprocessing.blocks.PointSupport"><em>PointSupport</em></a><em>]</em>) – See point_support parameter.</p></li>
+<li><p><strong>no_of_neighbors</strong> (<em>int</em>) – See no_of_neighbors parameter.</p></li>
+<li><p><strong>neighbors_range</strong> (<em>float</em>) – See neighbors_range parameter.</p></li>
+<li><p><strong>simple_kriging_mean</strong> (<em>float</em>) – See simple_kriging_mean parameter.</p></li>
+<li><p><strong>raise_when_negative_prediction</strong> (<em>bool</em><em>, </em><em>default = True</em>) – See raise_when_negative_prediction parameter.</p></li>
+<li><p><strong>raise_when_negative_error</strong> (<em>bool</em><em>, </em><em>default=True</em>) – See raise_when_negative_error parameter.</p></li>
+<li><p><strong>training_set_frac</strong> (<em>float</em>) – See training_set_frac parameter.</p></li>
+<li><p><strong>iters</strong> (<em>int</em>) – See iters parameter.</p></li>
+<li><p><strong>common_indexes</strong> (<em>Set</em>) – Indexes that are common for blocks and point support.</p></li>
+<li><p><strong>training_set_indexes</strong> (<em>List</em><em>[</em><em>List</em><em>]</em>) – List of lists of indexes used in a random sampling for a training set.</p></li>
+<li><p><strong>results</strong> (<em>Dict</em>) – Results for each type of Block Kriging method.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">run_tests()</span> <span class="pre">:</span> <span class="pre">Compares</span> <span class="pre">different</span> <span class="pre">types</span> <span class="pre">of</span> <span class="pre">Kriging,</span> <span class="pre">returns</span> <span class="pre">Dict</span> <span class="pre">with</span> <span class="pre">the</span> <span class="pre">mean</span> <span class="pre">root</span> <span class="pre">mean</span> <span class="pre">squared</span> <span class="pre">error</span> <span class="pre">of</span> <span class="pre">each</span></span></dt>
+<dd><p>iteration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.multi_kriging.BlockToBlockKrigingComparison.run_tests">
+<span class="sig-name descname"><span class="pre">run_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyinterpolate/pipelines/multi_kriging.html#BlockToBlockKrigingComparison.run_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.multi_kriging.BlockToBlockKrigingComparison.run_tests" title="Permalink to this definition">#</a></dt>
+<dd><p>Method compares ordinary, simple, area-to-area and centroid-based block Poisson Kriging.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.pipelines.samples">
+<span id="pyinterpolate-pipelines-samples-module"></span><h2>pyinterpolate.pipelines.samples module<a class="headerlink" href="#module-pyinterpolate.pipelines.samples" title="Permalink to this heading">#</a></h2>
+<p>The module contains functions that use public APIs to get data samples for experiments.</p>
+<section id="id6">
+<h3>Authors<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Sean Lim | &#64;seanjunheng2</p></li>
+</ol>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyinterpolate.pipelines.samples.download_air_quality_poland">
+<span class="sig-name descname"><span class="pre">download_air_quality_poland</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/pyinterpolate/pipelines/samples.html#download_air_quality_poland"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyinterpolate.pipelines.samples.download_air_quality_poland" title="Permalink to this definition">#</a></dt>
+<dd><p>Function downloads air quality data from Polish (Central Europe) stations. (EPSG:4326)</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dataset</strong> (<em>str</em>) –</p>
+<dl class="simple">
+<dt>The observed compound from the following list:</dt><dd><ul class="simple">
+<li><p>‘CO’: carbon monoxide,</p></li>
+<li><p>‘SO2’: sulfur dioxide,</p></li>
+<li><p>‘PM2.5’:  particulate matter with size &lt;= 2.5 micrometers,</p></li>
+<li><p>‘PM10’: particulate matter with size &lt;= 10 micrometers,</p></li>
+<li><p>‘NO2’: nitrogen dioxide,</p></li>
+<li><p>‘03’: ozone,</p></li>
+<li><p>‘C6H6’: benzene.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>final_df</strong> (<em>DataFrame</em>) – columns = [station_id, x, y, reading name]</p></li>
+<li><p><em>Authors</em></p></li>
+<li><p><em>——-</em></p></li>
+<li><p><em>Sean Lim | &#64;seanjunheng2</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="module-pyinterpolate.pipelines">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyinterpolate.pipelines" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2022, Szymon Moliński
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">pyinterpolate.pipelines package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pyinterpolate.pipelines.block_filtering">pyinterpolate.pipelines.block_filtering module</a><ul>
+<li><a class="reference internal" href="#authors">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.pipelines.deconvolution">pyinterpolate.pipelines.deconvolution module</a><ul>
+<li><a class="reference internal" href="#id2">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.pipelines.multi_kriging">pyinterpolate.pipelines.multi_kriging module</a><ul>
+<li><a class="reference internal" href="#id4">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.pipelines.samples">pyinterpolate.pipelines.samples module</a><ul>
+<li><a class="reference internal" href="#id6">Authors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pyinterpolate.pipelines">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/furo.js"></script>
+    </body>
+</html>

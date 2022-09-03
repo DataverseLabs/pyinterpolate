@@ -5,11 +5,8 @@
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
-sys.path.append(os.path.abspath(
-    os.path.join(__file__, "../../pyinterpolate")
-))
-sys.setrecursionlimit(1500)
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -22,16 +19,15 @@ release = '0.3.0'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.todo',
-              'sphinx.ext.mathjax',
-              'sphinx.ext.ifconfig',
-              'sphinx.ext.viewcode',
-              'sphinx.ext.githubpages',
-              'sphinx.ext.napoleon', ]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.githubpages', 'sphinx.ext.napoleon',]
 
 templates_path = ['_templates']
-exclude_patterns = ['pyinterpolate/test']
+exclude_patterns = ['*/test', '*__*__*']
+add_module_names = False
+
+napoleon_google_docstring = False
+napoleon_use_param = False
+napoleon_use_ivar = True
 
 
 
