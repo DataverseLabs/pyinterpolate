@@ -5,9 +5,6 @@ Authors
 -------
 1. Sean Lim | @seanjunheng2
 
-TODO
-----
-- add requests to setup / requirements
 """
 
 import requests
@@ -44,6 +41,7 @@ def download_air_quality_poland(dataset: str) -> pd.DataFrame:
     ----
     - tutorial that uses this fn
     - remove too broad exception
+    - profile and speed-up this fn
     """
     assert dataset in ['CO', 'SO2', 'PM2.5', 'PM10', 'NO2', 'O3', 'C6H6']
 
