@@ -2,8 +2,6 @@ import unittest
 import pandas as pd
 from pyinterpolate.pipelines.samples import download_air_quality_poland
 
-
-# TODO: this test is very slow, it must be refactored or controlled
 # class TestDownloadAirQualityDataPoland(unittest.TestCase):
 #
 #     def test_download_air_quality_data_poland(self):

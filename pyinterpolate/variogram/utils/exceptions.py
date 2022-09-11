@@ -147,12 +147,6 @@ def check_ranges(minr: float, maxr: float):
         msg = f'Maximum range ratio should be lower than 1, but it is {maxr}'
         raise ValueError(msg)
 
-    # Check if max is larger than 0.5 and throw warning if it is
-    # TODO: it may be removed later
-    if maxr > 0.5:
-        msg = f'Maximum range ratio is greater than the half of area smaller distance, it could introduce bias'
-        warnings.warn(msg)
-
 
 def check_sills(mins: float, maxs: float):
     # Check if min is lower or equal to max

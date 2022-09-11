@@ -7,8 +7,6 @@ Authors
 
 TODO
 ----
-* Blocks & PointSupport | EPSG:4087 as a default projection ? Warn user if spherical coordinates are used
-* Blocks | add GPKG layers as with Point Support
 * PointSupport | Fn skips points that are not assigned to any area, maybe log it somewhere...
 """
 from typing import Union

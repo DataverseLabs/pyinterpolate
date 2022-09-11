@@ -79,8 +79,4 @@ Bibliography
 [3] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 [4] McBratney, A. B., Webster R. Choosing Functions for Semivariograms of Soil Properties and Fitting Them
     to Sampling Estimates. Journal of Soil Science 37: 617–639. 1986.
-
-
-TODO
-----
 """
