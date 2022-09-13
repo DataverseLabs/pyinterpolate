@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Setup" href="setup/setup.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>Pyinterpolate 0.3.0 documentation</title>
@@ -154,7 +154,10 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Setup</a></li>
+</ul>
+
 </div>
 </div>
 
@@ -191,6 +194,10 @@
 <section id="version-0-3-0-kyiv">
 <h2><strong>version 0.3.0</strong> - <em>Kyiv</em><a class="headerlink" href="#version-0-3-0-kyiv" title="Permalink to this heading">#</a></h2>
 <img alt="The pyinterpolate logo with the name Kyiv and the version of package." src="_images/logov03.jpg" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The last documentation update: <em>2022-09-13</em></p>
+</div>
 <p><strong>Pyinterpolate</strong> is the Python library for <strong>geostatistics</strong>. The package provides access to spatial statistics tools used in various studies. This package helps you <strong>interpolate spatial data</strong> with the <em>Kriging</em> technique.</p>
 <p>If you’re:</p>
 <ul class="simple">
@@ -212,7 +219,18 @@
 <li><p><em>Ordinary Kriging</em> and <em>Simple Kriging</em> (spatial interpolation from points),</p></li>
 <li><p><em>Centroid-based Poisson Kriging</em> of polygons (spatial interpolation from blocks and areas),</p></li>
 <li><p><em>Area-to-area</em> and <em>Area-to-point Poisson Kriging</em> of Polygons (spatial interpolation and data deconvolution from areas to points).</p></li>
+<li><p><em>Inverse Distance Weighting</em>.</p></li>
+<li><p><em>Semivariogram regularization and deconvolution</em>.</p></li>
+<li><p><em>Semivariogram modeling and analysis</em>.</p></li>
 </ol>
+</section>
+<section id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Setup</a></li>
+</ul>
+</div>
 </section>
 <section id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading">#</a></h2>
@@ -260,7 +278,7 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>  <span class="c1"># [predicted, variance error, lon, lat]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="p">[</span><span class="mf">211.23</span><span class="p">,</span> <span class="mf">0.89</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="mi">60000</span><span class="p">]</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt; [211.23, 0.89, 20000, 60000]</span>
 </pre></div>
 </div>
 <p>With <strong>pyinterpolate</strong>, we can retrieve the point support model from blocks. Example from the <em>Tick-borne Disease Detector</em> study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:</p>
@@ -269,44 +287,6 @@
 <section id="status">
 <h2>Status<a class="headerlink" href="#status" title="Permalink to this heading">#</a></h2>
 <p>Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.</p>
-</section>
-<section id="setup">
-<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
-<p>Setup with <em>pip</em>: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyinterpolate</span></code></p>
-<p>Detailed instructions on how to install the package are presented in the file <a class="reference external" href="https://github.com/DataverseLabs/pyinterpolate/blob/main/SETUP.md">SETUP.md</a>. We pointed out there most common problems related to third-party packages.</p>
-<p>You may follow those setup steps to create a <em>conda</em> environment with the package for your work:</p>
-<section id="recommended-conda-installation">
-<h3>Recommended - conda installation<a class="headerlink" href="#recommended-conda-installation" title="Permalink to this heading">#</a></h3>
-<p>[1.] First, install system dependencies to use the package (<code class="docutils literal notranslate"><span class="pre">libspatialindex_c.so</span></code>):</p>
-<p>LINUX:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libspatialindex</span><span class="o">-</span><span class="n">dev</span>
-</pre></div>
-</div>
-<p>MAC OS:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">brew</span> <span class="n">install</span> <span class="n">spatialindex</span>
-</pre></div>
-</div>
-<p>[2.] Next step is to create conda environment with Python &gt;= 3.7. Recommended is Python 3.10. Additionally, we install <code class="docutils literal notranslate"><span class="pre">pip</span></code> and <code class="docutils literal notranslate"><span class="pre">notebook</span></code> packages, and then activate our environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="p">[</span><span class="n">YOUR</span> <span class="n">ENV</span> <span class="n">NAME</span><span class="p">]</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.10</span> <span class="n">pip</span> <span class="n">notebook</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">activate</span> <span class="p">[</span><span class="n">YOUR</span> <span class="n">ENV</span> <span class="n">NAME</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>[3.] In the next step, we install <strong>pyinterpolate</strong> and its dependencies with <cite>pip</cite> (conda distribution is under development and will be available soon):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
-</pre></div>
-</div>
-<p>[4.] You are ready to use the package!</p>
-</section>
-<section id="pip-installation">
-<h3>pip installation<a class="headerlink" href="#pip-installation" title="Permalink to this heading">#</a></h3>
-<p>With <strong>Python&gt;=3.7</strong> and system <code class="docutils literal notranslate"><span class="pre">`libspatialindex_c.so`</span></code> dependencies you may install package by simple command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pyinterpolate</span>
-</pre></div>
-</div>
-<p>A world of advice, you should use the <em>Virtual Environment</em> for the installation - every time and within every operating system. You may consider PipEnv too.</p>
-</section>
 </section>
 <section id="tests-and-contribution">
 <h2>Tests and contribution<a class="headerlink" href="#tests-and-contribution" title="Permalink to this heading">#</a></h2>
@@ -406,7 +386,15 @@
       <footer>
         
         <div class="related-pages">
-          
+          <a class="next-page" href="setup/setup.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Setup</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
           
         </div>
         <div class="bottom-of-page">
@@ -442,13 +430,9 @@
             <ul>
 <li><a class="reference internal" href="#">Pyinterpolate</a><ul>
 <li><a class="reference internal" href="#version-0-3-0-kyiv"><strong>version 0.3.0</strong> - <em>Kyiv</em></a></li>
+<li><a class="reference internal" href="#contents">Contents</a></li>
 <li><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li><a class="reference internal" href="#status">Status</a></li>
-<li><a class="reference internal" href="#setup">Setup</a><ul>
-<li><a class="reference internal" href="#recommended-conda-installation">Recommended - conda installation</a></li>
-<li><a class="reference internal" href="#pip-installation">pip installation</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#tests-and-contribution">Tests and contribution</a></li>
 <li><a class="reference internal" href="#commercial-and-scientific-projects-where-library-has-been-used">Commercial and scientific projects where library has been used</a></li>
 <li><a class="reference internal" href="#community">Community</a></li>

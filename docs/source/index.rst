@@ -12,6 +12,9 @@ Pyinterpolate
 .. image:: imgs/logov03.jpg
   :alt: The pyinterpolate logo with the name Kyiv and the version of package.
 
+.. note::
+   The last documentation update: *2022-09-13*
+
 **Pyinterpolate** is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 If you’re:
@@ -34,6 +37,17 @@ Pyinterpolate allows you to perform:
 1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
 2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
 3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
+4. *Inverse Distance Weighting*.
+5. *Semivariogram regularization and deconvolution*.
+6. *Semivariogram modeling and analysis*.
+
+Contents
+--------
+
+.. toctree::
+   :maxdepth: 1
+
+   setup/setup
 
 How it works
 ------------
@@ -95,7 +109,7 @@ The package has multiple spatial interpolation functions. The flow of analysis i
    print(prediction)  # [predicted, variance error, lon, lat]
 
 
-.. code-block::
+.. code-block:: console
 
    >> [211.23, 0.89, 20000, 60000]
 
@@ -111,64 +125,6 @@ Status
 Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.
 
 
-Setup
------
-
-Setup with *pip*: ``pip install pyinterpolate``
-
-Detailed instructions on how to install the package are presented in the file `SETUP.md <https://github.com/DataverseLabs/pyinterpolate/blob/main/SETUP.md>`_. We pointed out there most common problems related to third-party packages.
-
-You may follow those setup steps to create a *conda* environment with the package for your work:
-
-Recommended - conda installation
-................................
-
-[1.] First, install system dependencies to use the package (``libspatialindex_c.so``):
-
-LINUX:
-
-.. code-block::
-
-   sudo apt install libspatialindex-dev
-
-MAC OS:
-
-.. code-block::
-
-   brew install spatialindex
-
-[2.] Next step is to create conda environment with Python >= 3.7. Recommended is Python 3.10. Additionally, we install ``pip`` and ``notebook`` packages, and then activate our environment:
-
-.. code-block::
-
-   conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pip notebook
-
-
-.. code-block::
-
-   conda activate [YOUR ENV NAME]
-
-
-[3.] In the next step, we install **pyinterpolate** and its dependencies with `pip` (conda distribution is under development and will be available soon):
-
-.. code-block::
-
-   pip install pyinterpolate
-
-
-[4.] You are ready to use the package!
-
-pip installation
-................
-
-With **Python>=3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
-
-.. code-block::
-
-   pip install pyinterpolate
-
-
-A world of advice, you should use the *Virtual Environment* for the installation - every time and within every operating system. You may consider PipEnv too.
 
 Tests and contribution
 ------------------------

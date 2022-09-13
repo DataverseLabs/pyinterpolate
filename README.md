@@ -24,9 +24,12 @@ Then this package may be useful for you. You could use it for:
 
 Pyinterpolate allows you to perform:
 
-1. Ordinary Kriging and Simple Kriging (spatial interpolation from points),
-2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
-3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
+1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
+2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
+3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
+4. *Inverse Distance Weighting*.
+5. *Semivariogram regularization and deconvolution*.
+6. *Semivariogram modeling and analysis*.
 
 How it works
 --------------
