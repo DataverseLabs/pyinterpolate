@@ -116,7 +116,7 @@ Setup
 
 Setup with *pip*: ``pip install pyinterpolate``
 
-Detailed instructions on how to install the package are presented in the file `SETUP.md <https://github.com/DataverseLabs/pyinterpolate/blob/master/SETUP.md>`_. We pointed out there most common problems related to third-party packages.
+Detailed instructions on how to install the package are presented in the file `SETUP.md <https://github.com/DataverseLabs/pyinterpolate/blob/main/SETUP.md>`_. We pointed out there most common problems related to third-party packages.
 
 You may follow those setup steps to create a *conda* environment with the package for your work:
 
@@ -173,7 +173,7 @@ A world of advice, you should use the *Virtual Environment* for the installation
 Tests and contribution
 ------------------------
 
-All tests are grouped in the ``test`` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
+All tests are grouped in the ``test`` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: `CONTRIBUTION.md <https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md>`_
 
 Commercial and scientific projects where library has been used
 --------------------------------------------------------------
@@ -186,7 +186,7 @@ Commercial and scientific projects where library has been used
 Community
 ---------
 
-Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
+Join our community in Discord: `Discord Server Pyinterpolate <https://discord.gg/3EMuRkj>`_
 
 
 Bibliography
@@ -244,12 +244,6 @@ High level overview:
     - [x] ``variogram`` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution,
     - [x] ``viz`` - interpolation of smooth surfaces from points into rasters.
  - [x] ``tutorials`` - tutorials (Basic, Intermediate and Advanced).
-
-Functions documentation
------------------------
-
-Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/ (Be careful! At this moment, documentation is under development!)
-
 
 Development
 ------------------
