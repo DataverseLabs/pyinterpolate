@@ -41,6 +41,11 @@ Pyinterpolate allows you to perform:
 5. *Semivariogram regularization and deconvolution*.
 6. *Semivariogram modeling and analysis*.
 
+With ``pyinterpolate`` we can retrieve the point support model from blocks. The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:
+
+.. image:: imgs/deconvoluted_risk_areas.jpg
+  :alt: Covid-19 infection risk in Poland for 14th April, 2020.
+
 Contents
 --------
 
@@ -48,76 +53,7 @@ Contents
    :maxdepth: 1
 
    setup/setup
-
-How it works
-------------
-
-The package has multiple spatial interpolation functions. The flow of analysis is usually the same for each method:
-
-**[1.] Read and prepare data.**
-
-.. code-block:: python
-
-   from pyinterpolate import read_txt
-
-
-   point_data = read_txt('dem.txt')
-
-
-**[2.] Analyze data, calculate the experimental variogram.**
-
-.. code-block:: python
-
-   from pyinterpolate import build_experimental_variogram
-
-   search_radius = 500
-   max_range = 40000
-
-   experimental_semivariogram = build_experimental_variogram(input_array=point_data,
-                                                             step_size=search_radius,
-                                                             max_range=max_range)
-
-**[3.] Data transformation, fit theoretical variogram.**
-
-.. code-block:: python
-
-   from pyinterpolate import build_theoretical_variogram
-
-   semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
-                                         model_type='spherical',
-                                         sill=400,
-                                         rang=20000,
-                                         nugget=0)
-
-**[4.] Interpolation.**
-
-.. code-block:: python
-
-   from pyinterpolate import kriging
-
-   unknown_point = (20000, 65000)
-   prediction = kriging(observations=point_data,
-                        theoretical_model=semivar,
-                        points=[unknown_point],
-                        how='ok',
-                        no_neighbors=32)
-
-**[5.] Error and uncertainty analysis.**
-
-.. code-block:: python
-
-   print(prediction)  # [predicted, variance error, lon, lat]
-
-
-.. code-block:: console
-
-   >> [211.23, 0.89, 20000, 60000]
-
-
-With **pyinterpolate**, we can retrieve the point support model from blocks. Example from the *Tick-borne Disease Detector* study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:
-
-.. image:: imgs/deconvoluted_risk_areas.jpg
-  :alt: Covid-19 infection risk in Poland for 14th April, 2020.
+   usage/quickstart
 
 Status
 ------
