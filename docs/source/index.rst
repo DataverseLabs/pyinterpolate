@@ -54,12 +54,12 @@ Contents
 
    setup/setup
    usage/quickstart
+   usage/tutorials
 
 Status
 ------
 
 Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.
-
 
 
 Tests and contribution
