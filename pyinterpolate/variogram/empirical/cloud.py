@@ -136,8 +136,8 @@ def directional_point_cloud(input_array: np.array,
 def build_variogram_point_cloud(input_array: np.array,
                                 step_size: float,
                                 max_range: float,
-                                direction=0,
-                                tolerance=1) -> dict:
+                                direction=0.0,
+                                tolerance=1.0) -> dict:
     """
     Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point
         against other point within range specified by step_size parameter.
@@ -317,6 +317,9 @@ class VariogramCloud:
 
         if not isinstance(input_array, np.ndarray):
             input_array = np.array(input_array)
+
+        # Validate input array
+        validate_points(input_array)
 
         self.input_array = input_array
         self.experimental_point_cloud = None

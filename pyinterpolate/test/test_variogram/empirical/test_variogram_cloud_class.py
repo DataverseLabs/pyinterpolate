@@ -121,4 +121,17 @@ class TestEmpiricalSemivariance(unittest.TestCase):
                          new_cloud.describe(),
                          msg=msg)
 
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'input_array': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5
+        }
+
+        self.assertRaises(ValueError, VariogramCloud, **kwargs)
+
     # TODO: test plots (future)

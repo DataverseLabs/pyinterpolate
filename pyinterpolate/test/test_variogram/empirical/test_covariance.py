@@ -105,6 +105,20 @@ class TestCovariance(unittest.TestCase):
                   f'the NE-SW direction.'
         self.assertAlmostEqual(lag1_test_value, expected_output, places=2, msg=err_msg)
 
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'points': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5,
+            'get_c0': False
+        }
+
+        self.assertRaises(ValueError, calculate_covariance, **kwargs)
+
 
 if __name__ == '__main__':
     unittest.main()

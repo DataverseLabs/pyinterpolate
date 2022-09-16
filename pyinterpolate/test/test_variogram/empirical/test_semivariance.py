@@ -115,6 +115,21 @@ class TestSemivariance(unittest.TestCase):
                   f'{expected_output} and calculated output is {smv}'
         self.assertTrue(arr_check, err_msg)
 
+    ### RAISES
+
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'points': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5
+        }
+
+        self.assertRaises(ValueError, calculate_semivariance, **kwargs)
+
 
 if __name__ == '__main__':
     unittest.main()

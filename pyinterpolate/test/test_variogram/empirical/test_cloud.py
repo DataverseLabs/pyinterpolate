@@ -90,6 +90,19 @@ class TestVariogramPointCloud(unittest.TestCase):
                   f'the NE-SW direction.'
         self.assertAlmostEqual(smv, expected_output, places=2, msg=err_msg)
 
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'input_array': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5
+        }
+
+        self.assertRaises(ValueError, build_variogram_point_cloud, **kwargs)
+
 
 if __name__ == '__main__':
     unittest.main()
