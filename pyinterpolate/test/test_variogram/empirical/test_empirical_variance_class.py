@@ -190,3 +190,16 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
         self.assertTrue(are_close, msg='Expeced difference c(0) - c(h) should be close to the '
                                        'semivariances at y(h) for a given dataset.')
+
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'input_array': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5
+        }
+
+        self.assertRaises(ValueError, ExperimentalVariogram, **kwargs)

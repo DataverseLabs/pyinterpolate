@@ -178,6 +178,7 @@ class ExperimentalVariogram:
                  is_variance=True):
 
         self.input_array = None  # core structure
+
         if isinstance(input_array, np.ndarray):
             self.input_array = input_array
         else:

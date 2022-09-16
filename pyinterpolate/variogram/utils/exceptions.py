@@ -7,6 +7,8 @@ Authors
 """
 import warnings
 
+import numpy as np
+
 
 class MetricsTypeSelectionError(Exception):
     """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
@@ -90,13 +92,18 @@ def validate_direction(direction):
 
 def validate_points(points):
     """
-    Check dimensions of provided arrays and data types.
+    * Check dimensions of provided arrays and data types.
+    * Check if there are any NaN values.
     """
 
     dims = points.shape
     msg = 'Provided array must have 3 columns: [x, y, value]'
     if dims[1] != 3:
         raise AttributeError(msg)
+
+    if np.isnan(points[:, -1]).any():
+        msg = 'Provided dataset contains NaNs, remove records with missing values before processing'
+        raise ValueError(msg)
 
 
 def validate_tolerance(tolerance):
