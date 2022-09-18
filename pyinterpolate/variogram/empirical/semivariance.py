@@ -110,17 +110,13 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
                     - 45 or 225 is NE-SW,
                     - 135 or 315 is NW-SE.
 
-    tolerance : float
-                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
-                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
-                semivariance is estimated from elliptical area with major axis with the same direction as the line
-                for 0 tolerance and minor axis of a size:
-                    (tolerance * step_size)
-                and major axis (pointed in NS direction):
-                    ((1 - tolerance) * step_size)
-                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-                semivariogram.
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
 
     Returns
     -------
@@ -208,17 +204,13 @@ def directional_semivariogram(points: np.array,
                     - 45 or 225 is NE-SW,
                     - 135 or 315 is NW-SE.
 
-    tolerance : float
-                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
-                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
-                semivariance is estimated from elliptical area with major axis with the same direction as the line
-                for 0 tolerance and minor axis of a size:
-                    (tolerance * step_size)
-                and major axis (pointed in NS direction):
-                    ((1 - tolerance) * step_size)
-                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-                semivariogram.
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
 
     Returns
     -------
@@ -297,16 +289,12 @@ def calculate_semivariance(points: np.array,
                     - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
-                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
-                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
-                semivariance is estimated from elliptical area with major axis with the same direction as the line
-                for 0 tolerance and minor axis of a size:
-                    (tolerance * step_size)
-                and major axis (pointed in NS direction):
-                    ((1 - tolerance) * step_size)
-                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-                semivariogram.
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
 
     Returns
     -------

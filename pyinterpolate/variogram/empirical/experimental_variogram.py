@@ -45,15 +45,13 @@ class ExperimentalVariogram:
                 * 45 or 225 is NE-SW direction,
                 * 135 or 315 is NW-SE direction.
 
-    tolerance : float (in range [0, 1]), optional, default=1
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
 
     is_semivariance : bool, optional, default=True
                       should semivariance be calculated?
@@ -178,6 +176,7 @@ class ExperimentalVariogram:
                  is_variance=True):
 
         self.input_array = None  # core structure
+
         if isinstance(input_array, np.ndarray):
             self.input_array = input_array
         else:
