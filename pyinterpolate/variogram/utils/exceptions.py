@@ -110,8 +110,8 @@ def validate_tolerance(tolerance):
     """
     Check if tolerance is between zero and one.
     """
-    if tolerance < 0 or tolerance > 1:
-        msg = 'Provided tolerance should be between 0 (straight line) and 1 (circle).'
+    if tolerance <= 0 or tolerance > 1:
+        msg = 'Provided tolerance should be larger than 0 (a straight line) and smaller or equal to 1 (a circle).'
         raise ValueError(msg)
 
 
