@@ -80,22 +80,16 @@ class TestDirectionalSelection(unittest.TestCase):
                 self.assertTrue(is_point_equal, msg=err_msg)
 
     def test_NE_SW_selection(self):
-        points = [
-            [2, 2]
-        ]
-        selections = []
-        for pt in points:
-            selection = select_points_within_ellipse(ellipse_center=pt,
-                                                     other_points=INPUT_ARRAY[:, :-1],
-                                                     lag=3,
-                                                     step_size=1,
-                                                     theta=45,
-                                                     minor_axis_size=0.01)
-            output = INPUT_ARRAY[selection]
-            selections.append(output)
-        for idx, unit_output in enumerate(selections):
-            expected = EXPECTED_NE_SW
-            is_point_equal = np.equal(unit_output, expected).all()
-            err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
-                      f' Wrong point is: {unit_output[:-1]}'
-            self.assertTrue(is_point_equal, msg=err_msg)
+        point = np.array([2, 2])
+        selection = select_points_within_ellipse(ellipse_center=point,
+                                                 other_points=INPUT_ARRAY[:, :-1],
+                                                 lag=3,
+                                                 step_size=1,
+                                                 theta=45,
+                                                 minor_axis_size=0.01)
+        output = INPUT_ARRAY[selection]
+
+        is_point_equal = np.equal(output, EXPECTED_NE_SW).all()
+        err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
+                 f' Wrong point is: {output}'
+        self.assertTrue(is_point_equal, msg=err_msg)
