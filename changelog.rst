@@ -13,6 +13,8 @@ Changes by date
 
 * experimental variogram, covariogram, and variogram cloud function and classes check if there are NaN's in the input data and raise `ValueError`,
 * the length of major and minor axes of a directional variogram ellipsis are calculated differently from the `tolerance` parameter, (now we have a less of chaos),
+* tutorial for directional variograms (Basic),
+*
 
 2022-09-04
 ----------
