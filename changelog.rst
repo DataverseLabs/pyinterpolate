@@ -6,6 +6,17 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-XX-XX
+----------
+
+**version 0.3.1**
+
+* experimental variogram, covariogram, and variogram cloud function and classes check if there are NaN's in the input data and raise `ValueError`,
+* the length of major and minor axes of a directional variogram ellipsis are calculated differently from the `tolerance` parameter, (now we have a less of chaos),
+* tutorial for directional variograms (Basic),
+* updated `download_air_quality_poland()` function, now it can store downloaded data,
+*
+
 2022-09-04
 ----------
 
@@ -25,7 +36,7 @@ Changes by date
 * data structures are more complex, but they allow user to be more flexible with an input.
 
 
-2021-12-XX
+2021-12-31
 ----------
 
 **version 0.2.5**

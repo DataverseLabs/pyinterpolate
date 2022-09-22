@@ -62,8 +62,8 @@ class TestVariogramPointCloud(unittest.TestCase):
                                            step_size=1,
                                            max_range=2,
                                            direction=90,
-                                           tolerance=0.1)
-        lag1_test_values = next(iter(smvs.items()))[1]
+                                           tolerance=0.01)
+        lag1_test_values = smvs[1]
         smv = np.mean(lag1_test_values) / 2
 
         expected_output = sem_data.output_armstrong_we_lag1
@@ -78,17 +78,30 @@ class TestVariogramPointCloud(unittest.TestCase):
                                            direction=45,
                                            tolerance=0.01)
 
-        lag2_test_values = np.nan  # It will throw error when no assigned
+        lagx_test_values = np.nan  # It will throw error when no assigned
         for lag, values in smvs.items():
             if lag == 2:
-                lag2_test_values = values.copy()
+                lagx_test_values = values.copy()
                 break
 
-        smv = np.mean(lag2_test_values) / 2
+        smv = np.mean(lagx_test_values) / 2
         expected_output = sem_data.output_armstrong_ne_sw_lag2
         err_msg = f'Calculated semivariance for lag 1 should be equal to {expected_output} for ' \
                   f'the NE-SW direction.'
         self.assertAlmostEqual(smv, expected_output, places=2, msg=err_msg)
+
+    def test_raises_value_error(self):
+        pts = np.array([[0, 0, np.nan], [1, 1, 2]])
+
+        kwargs = {
+            'input_array': pts,
+            'step_size': 1,
+            'max_range': 3,
+            'direction': 45,
+            'tolerance': 0.5
+        }
+
+        self.assertRaises(ValueError, build_variogram_point_cloud, **kwargs)
 
 
 if __name__ == '__main__':

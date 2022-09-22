@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 
-def download_air_quality_poland(dataset: str) -> pd.DataFrame:
+def download_air_quality_poland(dataset: str, export=False, export_path='air_quality_sample.csv') -> pd.DataFrame:
     """
     Function downloads air quality data from Polish (Central Europe) stations. (EPSG:4326)
 
@@ -28,6 +28,11 @@ def download_air_quality_poland(dataset: str) -> pd.DataFrame:
             - '03': ozone,
             - 'C6H6': benzene.
 
+    export : bool, default = False
+        Export loaded dataset into a csv file.
+
+    export_path : str, default = 'air_quality_sample.csv'
+
     Returns
     -------
     final_df : DataFrame
@@ -39,9 +44,7 @@ def download_air_quality_poland(dataset: str) -> pd.DataFrame:
 
     TODO
     ----
-    - tutorial that uses this fn
     - remove too broad exception
-    - profile and speed-up this fn
     """
     assert dataset in ['CO', 'SO2', 'PM2.5', 'PM10', 'NO2', 'O3', 'C6H6']
 
@@ -78,5 +81,8 @@ def download_air_quality_poland(dataset: str) -> pd.DataFrame:
     final_df = final_df.drop(['id'], axis=1).rename(
         columns={lat_col: 'y', lon_col: 'x', station_id_col: 'station_id'}
     )
+
+    if export:
+        final_df.to_csv(export_path, index='station_id')
 
     return final_df
