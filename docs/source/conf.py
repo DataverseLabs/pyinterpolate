@@ -28,6 +28,8 @@ extensions = [
     'sphinx.ext.githubpages',
     'sphinx.ext.napoleon',
     'sphinx_copybutton',
+    'sphinx.ext.githubpages',
+    'nbsphinx'
 ]
 
 templates_path = ['_templates']
@@ -37,8 +39,6 @@ add_module_names = False
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
