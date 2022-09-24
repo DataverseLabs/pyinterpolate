@@ -55,17 +55,7 @@ Contents
    setup/setup
    usage/quickstart
    usage/tutorials
-   usage/use_cases
    api/api
-   cite/cite
-   community/community
-   development/contributors
-   development/how_to_contribute
-   development/status
-   development/dependencies
-   development/bugs
-   development/next_release
-   development/changelog
 
 Status
 ------
