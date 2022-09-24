@@ -5,9 +5,10 @@
 
 import os
 import sys
+import sphinx_bootstrap_theme
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
-import sphinx_bootstrap_theme
+
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -19,6 +20,8 @@ release = '0.3.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
+
+master_doc = 'index'
 
 extensions = [
     'sphinx.ext.autodoc',
