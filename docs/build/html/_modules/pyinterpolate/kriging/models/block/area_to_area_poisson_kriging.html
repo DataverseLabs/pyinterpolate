@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.kriging.models.block.area_to_area_poisson_kriging &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../../../index.html">
+          Pyinterpolate</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../api/api.html">API</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pyinterpolate.kriging.models.block.area_to_area_poisson_kriging</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Area-to-area Poisson Kriging function.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">TODO</span>
+<span class="sd">----</span>
+<span class="sd">* log errors</span>
+<span class="sd">* control negative predictions and errors</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.models.block.weight</span> <span class="kn">import</span> <span class="n">weights_array</span><span class="p">,</span> <span class="n">WeightedBlock2BlockSemivariance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_poisson_kriging_data</span><span class="p">,</span> <span class="n">prepare_pk_known_areas</span><span class="p">,</span>\
+    <span class="n">get_aggregated_point_support_values</span><span class="p">,</span> <span class="n">get_distances_within_unknown</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">get_areal_values_from_agg</span><span class="p">,</span> <span class="n">transform_ps_to_dict</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
+
+
+<div class="viewcode-block" id="area_to_area_pk"><a class="viewcode-back" href="../../../../../api/api.html#pyinterpolate.area_to_area_pk">[docs]</a><span class="k">def</span> <span class="nf">area_to_area_pk</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
+                    <span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Blocks</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                    <span class="n">point_support</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">],</span>
+                    <span class="n">unknown_block</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                    <span class="n">unknown_block_point_support</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                    <span class="n">number_of_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                    <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    semivariogram_model : TheoreticalVariogram</span>
+<span class="sd">        A fitted variogram.</span>
+
+<span class="sd">    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
+<span class="sd">        Blocks with aggregated data.</span>
+<span class="sd">          * ``Blocks``: ``Blocks()`` class object.</span>
+<span class="sd">          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">            Geometry column with polygons is not used.</span>
+<span class="sd">          * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.</span>
+
+<span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+<span class="sd">        The point support of polygons.</span>
+<span class="sd">          * ``Dict``: ``{block id: [[point x, point y, value]]}``,</span>
+<span class="sd">          * ``numpy array``: ``[[block id, x, y, value]]``,</span>
+<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,</span>
+<span class="sd">          * ``PointSupport``.</span>
+
+<span class="sd">    unknown_block : numpy array</span>
+<span class="sd">        ``[index, centroid.x, centroid.y]``</span>
+
+<span class="sd">    unknown_block_point_support : numpy array</span>
+<span class="sd">        Points within block ``[[x, y, point support value]]``</span>
+
+<span class="sd">    number_of_neighbors : int</span>
+<span class="sd">        The minimum number of neighbours that can potentially affect block.</span>
+
+<span class="sd">    raise_when_negative_prediction : bool, default=True</span>
+<span class="sd">        Raise error when prediction is negative.</span>
+
+<span class="sd">    raise_when_negative_error : bool, default=True</span>
+<span class="sd">        Raise error when prediction error is negative.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    results : List</span>
+<span class="sd">        ``[unknown block index, prediction, error]``</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Prediction or prediction error are negative.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Prepare Kriging Data</span>
+    <span class="c1"># {known block id: [(unknown x, unknown y), [unknown val, known val, distance between points]]}</span>
+
+    <span class="c1"># Transform point support to dict</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="n">dps</span> <span class="o">=</span> <span class="n">point_support</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dps</span> <span class="o">=</span> <span class="n">transform_ps_to_dict</span><span class="p">(</span><span class="n">point_support</span><span class="p">)</span>
+
+    <span class="n">kriging_data</span> <span class="o">=</span> <span class="n">select_poisson_kriging_data</span><span class="p">(</span>
+        <span class="n">u_block_centroid</span><span class="o">=</span><span class="n">unknown_block</span><span class="p">,</span>
+        <span class="n">u_point_support</span><span class="o">=</span><span class="n">unknown_block_point_support</span><span class="p">,</span>
+        <span class="n">k_point_support_dict</span><span class="o">=</span><span class="n">dps</span><span class="p">,</span>
+        <span class="n">nn</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+        <span class="n">max_range</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="o">.</span><span class="n">rang</span>
+    <span class="p">)</span>
+
+    <span class="n">b2b_semivariance</span> <span class="o">=</span> <span class="n">WeightedBlock2BlockSemivariance</span><span class="p">(</span><span class="n">semivariance_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">)</span>
+    <span class="n">avg_semivariances</span> <span class="o">=</span> <span class="n">b2b_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">(</span><span class="n">kriging_data</span><span class="p">)</span>
+
+    <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">avg_semivariances</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">k_ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">k_ones</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">k</span>
+
+    <span class="c1"># Prepare blocks for calculation</span>
+    <span class="n">prepared_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">avg_semivariances</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+    <span class="c1"># {(known block id a, known block id b): [pt a val, pt b val, distance between points]}</span>
+    <span class="n">distances_between_known_areas</span> <span class="o">=</span> <span class="n">prepare_pk_known_areas</span><span class="p">(</span><span class="n">dps</span><span class="p">,</span> <span class="n">prepared_ids</span><span class="p">)</span>
+
+    <span class="n">semivariances_between_known_areas</span> <span class="o">=</span> <span class="n">b2b_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">(</span>
+        <span class="n">distances_between_known_areas</span><span class="p">)</span>
+
+    <span class="c1"># Create array</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">idx_a</span> <span class="ow">in</span> <span class="n">prepared_ids</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx_b</span> <span class="ow">in</span> <span class="n">prepared_ids</span><span class="p">:</span>
+            <span class="n">row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">semivariances_between_known_areas</span><span class="p">[(</span><span class="n">idx_a</span><span class="p">,</span> <span class="n">idx_b</span><span class="p">)])</span>
+        <span class="n">predicted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+
+    <span class="c1"># Add diagonal weights</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">get_areal_values_from_agg</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">prepared_ids</span><span class="p">)</span>
+    <span class="n">aggregated_ps</span> <span class="o">=</span> <span class="n">get_aggregated_point_support_values</span><span class="p">(</span><span class="n">dps</span><span class="p">,</span> <span class="n">prepared_ids</span><span class="p">)</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">weights_array</span><span class="p">(</span><span class="n">predicted</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">aggregated_ps</span><span class="p">)</span>
+    <span class="n">weighted_and_predicted</span> <span class="o">=</span> <span class="n">predicted</span> <span class="o">+</span> <span class="n">weights</span>
+
+    <span class="c1"># Prepare weights matrix</span>
+    <span class="n">p_ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">predicted</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">predicted_with_ones_col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">weighted_and_predicted</span><span class="p">,</span> <span class="n">p_ones</span><span class="p">]</span>
+    <span class="n">p_ones_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">predicted_with_ones_col</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">p_ones_row</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">predicted_with_ones_col</span><span class="p">,</span> <span class="n">p_ones_row</span><span class="p">]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">k_ones</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">k_ones</span> <span class="o">=</span> <span class="n">k_ones</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">k_ones</span><span class="p">)</span>
+
+    <span class="n">zhat</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">raise_when_negative_prediction</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">zhat</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted value is </span><span class="si">{</span><span class="n">zhat</span><span class="si">}</span><span class="s1"> and it should not be lower than 0. Check your sampling &#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;grid, samples, number of neighbors or semivariogram model type.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Calculate prediction error</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknown_block</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">u_idx</span> <span class="o">=</span> <span class="n">unknown_block</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u_idx</span> <span class="o">=</span> <span class="n">unknown_block</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">distances_within_unknown_block</span> <span class="o">=</span> <span class="n">get_distances_within_unknown</span><span class="p">(</span><span class="n">unknown_block_point_support</span><span class="p">)</span>
+
+    <span class="n">semivariance_within_unknown</span> <span class="o">=</span> <span class="n">b2b_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">({</span>
+        <span class="n">u_idx</span><span class="p">:</span> <span class="n">distances_within_unknown_block</span>
+    <span class="p">})[</span><span class="n">u_idx</span><span class="p">]</span>
+
+    <span class="n">sig_base</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">k_ones</span><span class="p">)</span>
+
+    <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">semivariance_within_unknown</span> <span class="o">-</span> <span class="n">sig_base</span>
+
+    <span class="k">if</span> <span class="n">sigmasq</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_when_negative_error</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted error value is </span><span class="si">{</span><span class="n">sigmasq</span><span class="si">}</span><span class="s1"> and it should not be lower than 0. &#39;</span>
+                             <span class="sa">f</span><span class="s1">&#39;Check your sampling grid, samples, number of neighbors or semivariogram model type.&#39;</span><span class="p">)</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">u_idx</span><span class="p">,</span> <span class="n">zhat</span><span class="p">,</span> <span class="n">sigma</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">results</span></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2022, Szymon Moliński.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

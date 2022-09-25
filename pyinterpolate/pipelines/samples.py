@@ -36,7 +36,7 @@ def download_air_quality_poland(dataset: str, export=False, export_path='air_qua
     Returns
     -------
     final_df : DataFrame
-        columns = [station_id, x, y, reading name]
+        columns = ``[station_id, x, y, reading name]``
 
     Authors
     -------

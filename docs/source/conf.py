@@ -29,19 +29,22 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    'sphinx.ext.napoleon',
+    # 'sphinx.ext.napoleon',
     'sphinx_copybutton',
     'sphinx.ext.githubpages',
-    'nbsphinx'
+    'nbsphinx',
+    'numpydoc'
 ]
 
 templates_path = ['_templates']
 exclude_patterns = ['*/test', '*__*__*']
 add_module_names = False
 
-napoleon_google_docstring = False
-napoleon_use_param = False
-napoleon_use_ivar = True
+# napoleon_google_docstring = False
+# napoleon_use_param = False
+# napoleon_use_ivar = False
+
+autodoc_typehints = 'none'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

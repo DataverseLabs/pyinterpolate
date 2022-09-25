@@ -32,36 +32,36 @@ def ordinary_kriging(
     Parameters
     ----------
     theoretical_model : TheoreticalVariogram
-                        Trained theoretical variogram model.
+        A trained theoretical variogram model.
 
     known_locations : numpy array
-                      Array with the known locations.
+        The known locations.
 
     unknown_location : Union[List, Tuple, numpy array]
-                       Point where you want to estimate value (x, y) <-> (lon, lat)
+        Point where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
-    neighbors_range : float, default = None
-                      Maximum distance where we search for point neighbors. If None given then range is selected from
-                      the theoretical_model rang attribute.
+    neighbors_range : float, default=None
+        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
+        the ``theoretical_model`` ``rang`` attribute.
 
     no_neighbors : int, default = 4
-                   Number of the n-closest neighbors used for interpolation.
+        The number of the **n-closest neighbors** used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-                                 True: if number of neighbors within the neighbors_range is greater than the
-                                 number_of_neighbors then take all of them for modeling.
+        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
+        ``number_of_neighbors`` parameter then take all of them anyway.
 
-    allow_approximate_solutions : bool, default = False
-                                  Allows the approximation of kriging weights based on the OLS algorithm.
-                                  Not recommended to set to True if you don't know what you are doing!
+    allow_approx_solutions : bool, default=False
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing.
 
     err_to_nan : bool, default=False
-                 Singular matrix error in solve kriging system to NAN.
+        Return ``NaN`` if algorithm detects singular matrix.
 
     Returns
     -------
     : numpy array
-        [predicted value, variance error, longitude (x), latitude (y)]
+        ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
 
     k, predicted, dataset = get_predictions(theoretical_model,

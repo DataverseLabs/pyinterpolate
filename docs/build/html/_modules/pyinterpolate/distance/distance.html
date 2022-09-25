@@ -238,22 +238,28 @@
     <span class="k">return</span> <span class="n">block_distances</span>
 
 
-<span class="k">def</span> <span class="nf">calc_block_to_block_distance</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<div class="viewcode-block" id="calc_block_to_block_distance"><a class="viewcode-back" href="../../../api/api.html#pyinterpolate.calc_block_to_block_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_block_to_block_distance</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    blocks : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
-<span class="sd">             * Dict: {block id: [[point x, point y, value]]}</span>
-<span class="sd">             * numpy array: [[block id, x, y, value]]</span>
-<span class="sd">             * DataFrame and GeoDataFrame: columns={x, y, ds, index}</span>
-<span class="sd">             * PointSupport</span>
+<span class="sd">        The point support of polygons.</span>
+<span class="sd">          * ``Dict``: ``{block id: [[point x, point y, value]]}``,</span>
+<span class="sd">          * ``numpy array``: ``[[block id, x, y, value]]``,</span>
+<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,</span>
+<span class="sd">          * ``PointSupport``.</span>
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    block_distances : Dict</span>
-<span class="sd">                      {block id : [distances to other blocks]}. Block ids in the order from the list of</span>
-<span class="sd">                      distances.</span>
+<span class="sd">        Ordered block ids (the order from the list of distances): {block id : [distances to other]}.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Wrong input&#39;s data type.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
@@ -268,7 +274,7 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Blocks data type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span><span class="si">}</span><span class="s1"> not recognized. You may use PointSupport,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39; Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">block_distances</span>
+    <span class="k">return</span> <span class="n">block_distances</span></div>
 
 
 <span class="k">def</span> <span class="nf">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">block_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">block_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
@@ -321,21 +327,23 @@
     <span class="k">return</span> <span class="n">distances_sum</span>
 
 
-<div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/api.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">allow_normalization</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/api.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function calculates distances between two group of points of a single group to itself.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    points_a : numpy array</span>
-<span class="sd">               Numpy array with point coordinates.</span>
+<span class="sd">        The point coordinates.</span>
 
 <span class="sd">    points_b : numpy array, default=None</span>
-<span class="sd">               Point coordinates. If provided then algorithm calculates distances between points_a against points_b.</span>
+<span class="sd">        Other point coordinates. If provided then algorithm calculates distances between ``points_a`` against</span>
+<span class="sd">        ``points_b``.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    distances : numpy array</span>
-<span class="sd">                Array with distances from each point to other point.</span>
+<span class="sd">        The distances from each point from the ``points_a`` to other point (from the same ``points_a`` or from the</span>
+<span class="sd">        other set of points ``points_b``).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">points_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

@@ -135,16 +135,22 @@ def calc_block_to_block_distance(blocks: Union[Dict, np.ndarray, gpd.GeoDataFram
     Parameters
     ----------
     blocks : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-             * Dict: {block id: [[point x, point y, value]]}
-             * numpy array: [[block id, x, y, value]]
-             * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-             * PointSupport
+        The point support of polygons.
+          * ``Dict``: ``{block id: [[point x, point y, value]]}``,
+          * ``numpy array``: ``[[block id, x, y, value]]``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``PointSupport``.
+
 
     Returns
     -------
     block_distances : Dict
-                      {block id : [distances to other blocks]}. Block ids in the order from the list of
-                      distances.
+        Ordered block ids (the order from the list of distances): {block id : [distances to other]}.
+
+    Raises
+    ------
+    TypeError
+        Wrong input's data type.
     """
 
     if isinstance(blocks, Dict):
@@ -212,21 +218,23 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     return distances_sum
 
 
-def calc_point_to_point_distance(points_a, points_b=None, allow_normalization=False):
+def calc_point_to_point_distance(points_a, points_b=None):
     """Function calculates distances between two group of points of a single group to itself.
 
     Parameters
     ----------
     points_a : numpy array
-               Numpy array with point coordinates.
+        The point coordinates.
 
     points_b : numpy array, default=None
-               Point coordinates. If provided then algorithm calculates distances between points_a against points_b.
+        Other point coordinates. If provided then algorithm calculates distances between ``points_a`` against
+        ``points_b``.
 
     Returns
     -------
     distances : numpy array
-                Array with distances from each point to other point.
+        The distances from each point from the ``points_a`` to other point (from the same ``points_a`` or from the
+        other set of points ``points_b``).
     """
 
     if points_b is None:
