@@ -181,50 +181,50 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    data : numpy array</span>
-<span class="sd">           [coordinate x, coordinate y, value].</span>
+<span class="sd">        ``[coordinate x, coordinate y, value]``.</span>
 
 <span class="sd">    dim : int</span>
-<span class="sd">          Number of pixels (points) of a larger dimension (it could be width or height). Ratio is preserved.</span>
+<span class="sd">        Number of pixels (points) of a larger dimension (it could be width or height). Ratio is preserved.</span>
 
 <span class="sd">    number_of_neighbors : int, default=16</span>
-<span class="sd">                          Number of points used to interpolate data.</span>
+<span class="sd">        Number of points used to interpolate data.</span>
 
 <span class="sd">    semivariogram_model : TheoreticalVariogram, default=None</span>
-<span class="sd">                          Variogram model, if not provided then it is estimated from a given dataset.</span>
+<span class="sd">        Variogram model, if not provided then it is estimated from a given dataset.</span>
 
-<span class="sd">    direction : float, default=0</span>
-<span class="sd">                Direction of semivariogram, values from 0 to 360 degrees:</span>
-<span class="sd">                    - 0 or 180: is NS,</span>
-<span class="sd">                    - 90 or 270 is EW,</span>
-<span class="sd">                    - 45 or 225 is NE-SW,</span>
-<span class="sd">                    - 135 or 315 is NW-SE.</span>
+<span class="sd">    direction : float (in range [0, 360]), default = 0</span>
+<span class="sd">        A direction of semivariogram, values from 0 to 360 degrees:</span>
 
-<span class="sd">    tolerance : float, default=1</span>
-<span class="sd">                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance</span>
-<span class="sd">                is 0 then points must be placed at a single line with beginning in the origin of coordinate system</span>
-<span class="sd">                and angle given by y axis and direction parameter. If tolerance is greater than 0 then</span>
-<span class="sd">                semivariance is estimated from elliptical area with major axis with the same direction as the line</span>
-<span class="sd">                for 0 tolerance and minor axis of a size:</span>
-<span class="sd">                    (tolerance * step_size)</span>
-<span class="sd">                and major axis (pointed in NS direction):</span>
-<span class="sd">                    ((1 - tolerance) * step_size)</span>
-<span class="sd">                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional</span>
-<span class="sd">                semivariogram.</span>
+<span class="sd">        * 0 or 180: is NS direction,</span>
+<span class="sd">        * 90 or 270 is EW direction,</span>
+<span class="sd">        * 45 or 225 is NE-SW direction,</span>
+<span class="sd">        * 135 or 315 is NW-SE direction.</span>
+
+<span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
+<span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0`` then</span>
+<span class="sd">        the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance:</span>
+
+<span class="sd">        * the major axis size == ``step_size``,</span>
+<span class="sd">        * the minor axis size is ``tolerance * step_size``,</span>
+<span class="sd">        * the baseline point is at a center of the ellipse,</span>
+<span class="sd">        * the ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    : Dict</span>
-<span class="sd">        {</span>
-<span class="sd">            &#39;result&#39;: numpy array of interpolated values,</span>
-<span class="sd">            &#39;error&#39;: numpy array of interpolation errors,</span>
-<span class="sd">            &#39;params&#39;: {</span>
-<span class="sd">                &#39;pixel size&#39;: float,</span>
-<span class="sd">                &#39;min x&#39;: float,</span>
-<span class="sd">                &#39;max x&#39;: float,</span>
-<span class="sd">                &#39;min y&#39;: float,</span>
-<span class="sd">                &#39;max y&#39;: float</span>
-<span class="sd">            }</span>
-<span class="sd">        }</span>
+<span class="sd">    raster_dict : Dict</span>
+<span class="sd">        A dictionary with keys:</span>
+
+<span class="sd">        * **&#39;result&#39;**: numpy array of interpolated values,</span>
+<span class="sd">        * **&#39;error&#39;**: numpy array of interpolation errors,</span>
+<span class="sd">        * **&#39;params&#39;**:</span>
+<span class="sd">            * &#39;pixel size&#39;,</span>
+<span class="sd">            * &#39;min x&#39;,</span>
+<span class="sd">            * &#39;max x&#39;,</span>
+<span class="sd">            * &#39;min y&#39;,</span>
+<span class="sd">            * &#39;max y&#39;</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Set dimension</span>
@@ -285,7 +285,7 @@
     <span class="n">kriged_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output_vals</span><span class="p">)</span>
     <span class="n">kriged_errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output_errs</span><span class="p">)</span>
 
-    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">raster_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;result&#39;</span><span class="p">:</span> <span class="n">kriged_matrix</span><span class="p">,</span>
         <span class="s1">&#39;error&#39;</span><span class="p">:</span> <span class="n">kriged_errors</span><span class="p">,</span>
         <span class="s1">&#39;params&#39;</span><span class="p">:</span> <span class="p">{</span>
@@ -297,7 +297,7 @@
         <span class="p">}</span>
     <span class="p">}</span>
 
-    <span class="k">return</span> <span class="n">d</span></div>
+    <span class="k">return</span> <span class="n">raster_dict</span></div>
 </pre></div>
 
     </div>

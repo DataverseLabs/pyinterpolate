@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Block - Poisson Kriging &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Inverse Distance Weighting" href="../../idw/idw.html" />
+    <link rel="prev" title="Point Kriging" href="../point/point_kriging.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../idw/idw.html" title="Inverse Distance Weighting"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../point/point_kriging.html" title="Point Kriging"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../kriging.html" accesskey="U">Kriging</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Block - Poisson Kriging</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="block-poisson-kriging">
+<h1>Block - Poisson Kriging<a class="headerlink" href="#block-poisson-kriging" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">centroid_poisson_kriging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_weighted_by_point_support</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/centroid_based_poisson_kriging.html#centroid_poisson_kriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function performs centroid-based Poisson Kriging of blocks (areal) data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>A fitted variogram.</p>
+</dd>
+<dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="simple">
+<dt>Blocks with aggregated data.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><dl class="simple">
+<dt>The point support of polygons.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+</dd>
+<dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
+</dd>
+<dt><strong>number_of_neighbors</strong><span class="classifier">int</span></dt><dd><p>The minimum number of neighbours that can potentially affect block.</p>
+</dd>
+<dt><strong>is_weighted_by_point_support</strong><span class="classifier">bool, default = True</span></dt><dd><p>Are distances between blocks weighted by the point support?</p>
+</dd>
+<dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
+</dd>
+<dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>results</strong><span class="classifier">List</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[unknown</span> <span class="pre">block</span> <span class="pre">index,</span> <span class="pre">prediction,</span> <span class="pre">error]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>Prediction or prediction error are negative.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">area_to_area_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_area_poisson_kriging.html#area_to_area_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>A fitted variogram.</p>
+</dd>
+<dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="simple">
+<dt>Blocks with aggregated data.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><dl class="simple">
+<dt>The point support of polygons.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+</dd>
+<dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
+</dd>
+<dt><strong>number_of_neighbors</strong><span class="classifier">int</span></dt><dd><p>The minimum number of neighbours that can potentially affect block.</p>
+</dd>
+<dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
+</dd>
+<dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>results</strong><span class="classifier">List</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[unknown</span> <span class="pre">block</span> <span class="pre">index,</span> <span class="pre">prediction,</span> <span class="pre">error]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>Prediction or prediction error are negative.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">area_to_point_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">err_to_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_point_poisson_kriging.html#area_to_point_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function predicts areal value in the unknown location based on the area-to-area Poisson Kriging</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>A fitted variogram.</p>
+</dd>
+<dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="simple">
+<dt>Blocks with aggregated data.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><dl class="simple">
+<dt>The point support of polygons.</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+</dd>
+<dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
+</dd>
+<dt><strong>number_of_neighbors</strong><span class="classifier">int</span></dt><dd><p>The minimum number of neighbours that can potentially affect block.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float , default=None</span></dt><dd><p>The maximum distance to search for a neighbors, if <code class="docutils literal notranslate"><span class="pre">None</span></code> given then algorithm uses
+the theoretical variogram’s range.</p>
+</dd>
+<dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
+</dd>
+<dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
+</dd>
+<dt><strong>err_to_nan</strong><span class="classifier">bool, default=True</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">ValueError</span></code> to <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>results</strong><span class="classifier">List</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[(unknown</span> <span class="pre">point</span> <span class="pre">coordinates),</span> <span class="pre">prediction,</span> <span class="pre">error]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>Prediction or prediction error are negative.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../point/point_kriging.html"
+                          title="previous chapter">Point Kriging</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../idw/idw.html"
+                          title="next chapter">Inverse Distance Weighting</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/kriging/block/block_kriging.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../idw/idw.html" title="Inverse Distance Weighting"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../point/point_kriging.html" title="Point Kriging"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../kriging.html" >Kriging</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Block - Poisson Kriging</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

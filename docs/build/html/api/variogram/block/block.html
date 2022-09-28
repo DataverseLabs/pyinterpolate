@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Block &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Deconvolution" href="../deconvolution/deconvolution.html" />
+    <link rel="prev" title="Theoretical" href="../theoretical/theoretical.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../deconvolution/deconvolution.html" title="Deconvolution"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../theoretical/theoretical.html" title="Theoretical"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../variogram.html" accesskey="U">Variogram</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Block</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="block">
+<h1>Block<a class="headerlink" href="#block" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AggregatedVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregated_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class calculates semivariance of aggregated counts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>aggregated_data</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>Blocks with aggregated data.</p>
+<ul class="simple">
+<li><p>Blocks: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p>GeoDataFrame and DataFrame must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used.</p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>agg_step_size</strong><span class="classifier">float</span></dt><dd><p>Step size between lags.</p>
+</dd>
+<dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
+</dd>
+<dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><ul class="simple">
+<li><p>Dict: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code></p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code></p></li>
+<li><p>DataFrame and GeoDataFrame: columns = <code class="docutils literal notranslate"><span class="pre">{x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code></p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is NS direction,</p></li>
+<li><p>90 or 270 is EW direction,</p></li>
+<li><p>45 or 225 is NE-SW direction,</p></li>
+<li><p>135 or 315 is NW-SE direction.</p></li>
+</ul>
+</dd>
+<dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>
+then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+for 0 tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">agg_step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span> <span class="pre">*</span> <span class="pre">agg_step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agg_tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>variogram_weighting_method</strong><span class="classifier">str, default = “closest”</span></dt><dd><p>Method used to weight error at a given lags. Available methods:</p>
+<ul class="simple">
+<li><p><strong>equal</strong>: no weighting,</p></li>
+<li><p><strong>closest</strong>: lags at a close range have bigger weights,</p></li>
+<li><p><strong>distant</strong>: lags that are further away have bigger weights,</p></li>
+<li><p><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</p></li>
+</ul>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default = False</span></dt><dd><p>Print steps performed by the algorithm.</p>
+</dd>
+<dt><strong>log_process</strong><span class="classifier">bool, default = False</span></dt><dd><p>Log process info (Level <code class="docutils literal notranslate"><span class="pre">DEBUG</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+Units, Mathematical Geology 40(1), 101-128, 2008</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>aggregated_data</strong><span class="classifier">Union[Blocks, Dict, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">aggregared_data</span></code> parameter.</p>
+</dd>
+<dt><strong>agg_step_size</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_step_size</span></code> parameter.</p>
+</dd>
+<dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_max_range</span></code> parameter.</p>
+</dd>
+<dt><strong>agg_lags</strong><span class="classifier">numpy array</span></dt><dd><p>Lags calculated as a set of equidistant points from <code class="docutils literal notranslate"><span class="pre">agg_step_size</span></code> to <code class="docutils literal notranslate"><span class="pre">agg_max_range</span></code> with a step of size
+<code class="docutils literal notranslate"><span class="pre">agg_step_size</span></code>.</p>
+</dd>
+<dt><strong>agg_tolerance</strong><span class="classifier">float, default = 1</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> parameter.</p>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float, default = 0</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_direction</span></code> parameter.</p>
+</dd>
+<dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">point_support</span></code> parameter.</p>
+</dd>
+<dt><strong>weighting_method</strong><span class="classifier">str, default = ‘closest’</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">variogram_weighting_method</span></code> parameter.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default = False</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">verbose</span></code> parameter.</p>
+</dd>
+<dt><strong>log_process</strong><span class="classifier">bool, default = False</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">log_process</span></code> parameter.</p>
+</dd>
+<dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>The experimental variogram calculated from blocks (their centroids).</p>
+</dd>
+<dt><strong>theoretical_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>The theoretical model derived from blocks’ centroids.</p>
+</dd>
+<dt><strong>inblock_semivariance</strong><span class="classifier">Dict</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{area</span> <span class="pre">id:</span> <span class="pre">the</span> <span class="pre">average</span> <span class="pre">inblock</span> <span class="pre">semivariance}</span></code></p>
+</dd>
+<dt><strong>avg_inblock_semivariance</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">average</span> <span class="pre">inblocks</span> <span class="pre">semivariances,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">blocks</span> <span class="pre">within</span> <span class="pre">a</span> <span class="pre">lag]</span></code></p>
+</dd>
+<dt><strong>block_to_block_semivariance</strong><span class="classifier">Dict</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">{(block</span> <span class="pre">i,</span> <span class="pre">block</span> <span class="pre">j):</span> <span class="pre">[distance,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs</span> <span class="pre">between</span> <span class="pre">blocks]}</span></code></p>
+</dd>
+<dt><strong>avg_block_to_block_semivariance</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs</span> <span class="pre">between</span> <span class="pre">blocks]</span></code>.</p>
+</dd>
+<dt><strong>regularized_variogram</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance]</span></code></p>
+</dd>
+<dt><strong>distances_between_blocks</strong><span class="classifier">Dict</span></dt><dd><p>Weighted distances between all blocks: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id</span> <span class="pre">:</span> <span class="pre">[distances</span> <span class="pre">to</span> <span class="pre">other</span> <span class="pre">blocks]}</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>regularize()</strong></p></td>
+<td><p>Method performs semivariogram regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show_semivariograms()</strong></p></td>
+<td><p>Shows experimental variogram, theoretical model, average inblock semivariance, average block to block semivariance and regularized variogram.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_avg_inblock_semivariance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.calculate_avg_inblock_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><blockquote>
+<div><p>Method calculates the average semivariance within blocks <span class="math notranslate nohighlight">\(\gamma_h(v, v)\)</span>.
+The average inblock semivariance is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_h(v, v) = \]</div>
+</div></blockquote>
+<p>rac{1}{(2*N(h))} sum_{a=1}^{N(h)} [gamma(v_{a}, v_{a}) + gamma(v_{a+h}, v_{a+h})]</p>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\gamma(v_{a}, v_{a})\)</span> is semivariance within a block <span class="math notranslate nohighlight">\(a\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma(v_{a+h}, v_{a+h})\)</span> is samivariance within a block at a distance <span class="math notranslate nohighlight">\(h\)</span> from the block <span class="math notranslate nohighlight">\(a\)</span>.</p></li>
+</ul>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>avg_inblock_semivariance</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">block</span> <span class="pre">pairs]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">calculate_avg_semivariance_between_blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.calculate_avg_semivariance_between_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><blockquote>
+<div><p>Function calculates semivariance between areas based on their division into smaller blocks. It is
+<span class="math notranslate nohighlight">\(\gamma(v, v_h)\)</span> - semivariogram value between any two blocks separated by the distance h.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>avg_block_to_block_semivariance</strong><span class="classifier">numpy array</span></dt><dd><p>The average semivariance between neighboring blocks point-supports:
+<code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">block</span> <span class="pre">pairs</span> <span class="pre">within</span> <span class="pre">a</span> <span class="pre">range]</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>rac{1}{P_{a}P_{a+h}}sum_{s=1}^{P_{a}}sum_{s’=1}^{P_{a+h}}gamma(u_{s}, u_{s’})</p>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\gamma(v_{a}, v_{a+h})\)</span> - block-to-block semivariance of block <span class="math notranslate nohighlight">\(a\)</span> and paired block <span class="math notranslate nohighlight">\(a+h\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_{a}$ and $P_{a+h}\)</span> - number of support points within block <span class="math notranslate nohighlight">\(a\)</span> and block <span class="math notranslate nohighlight">\(a+h\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma(u_{s}, u_{s'})\)</span> - semivariance of point supports between blocks.</p></li>
+</ul>
+<p>Then average block-to-block semivariance is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{h}(v, v_{h}) = \]</div>
+</div></blockquote>
+<p>rac{1}{N(h)}sum_{a=1}^{N(h)}gamma(v_{a}, v_{a+h})</p>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\gamma_{h}(v, v_{h})\)</span> - averaged block-to-block semivariances for a lag <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\gamma(v_{a}, v_{a+h})\)</span> - semivariance of block <span class="math notranslate nohighlight">\(a\)</span> and paired block at a distance <span class="math notranslate nohighlight">\(h\)</span>.</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">regularize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">average_inblock_semivariances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariance_between_point_supports</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">experimental_block_variogram</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theoretical_block_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.regularize"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><blockquote>
+<div><p>Method regularizes point support model. Procedure is described in [1].</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>average_inblock_semivariances</strong><span class="classifier">np.ndarray, default = None</span></dt><dd><p>The mean semivariance between the blocks. See Notes to learn more.</p>
+</dd>
+<dt><strong>semivariance_between_point_supports</strong><span class="classifier">np.ndarray, default = None</span></dt><dd><p>Semivariance between all blocks calculated from the theoretical model.</p>
+</dd>
+<dt><strong>experimental_block_variogram</strong><span class="classifier">np.ndarray, default = None</span></dt><dd><p>The experimental semivariance between area centroids.</p>
+</dd>
+<dt><strong>theoretical_block_model</strong><span class="classifier">TheoreticalVariogram, default = None</span></dt><dd><p>A modeled variogram.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>regularized_model</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>rac{1}{(2*N(h))} sum_{a=1}^{N(h)} [gamma(v_{a}, v_{a}) + gamma(v_{a+h}, v_{a+h})]</p>
+<blockquote>
+<div><p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\gamma(v_{a}, v_{a})\)</span> and <span class="math notranslate nohighlight">\(\gamma(v_{a+h}, v_{a+h})\)</span> are inblock semivariances of block</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(a\)</span> and block <span class="math notranslate nohighlight">\(a+h\)</span> separated by the distance <span class="math notranslate nohighlight">\(h\)</span>.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">regularize_variogram</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.regularize_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function regularizes semivariograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>reg_variogram</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance]</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>Semivariance at a given lag is below zero.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Regularized semivariogram is a difference between the average block to block semivariance
+<span class="math notranslate nohighlight">\(\gamma(v, v_{h})\)</span> and the average inblock semivariances <span class="math notranslate nohighlight">\(\gamma{h}(v, v)\)</span> at a given lag
+<span class="math notranslate nohighlight">\(h\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show_semivariograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram.show_semivariograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method plots:</p>
+<ul class="simple">
+<li><p>experimental variogram,</p></li>
+<li><p>theoretical model,</p></li>
+<li><p>average inblock semivariance,</p></li>
+<li><p>average block-to-block semivariance,</p></li>
+<li><p>regularized variogram.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AttributeError</dt><dd><p>The semivariogram regularization process has not been performed.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../theoretical/theoretical.html"
+                          title="previous chapter">Theoretical</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../deconvolution/deconvolution.html"
+                          title="next chapter">Deconvolution</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/variogram/block/block.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../deconvolution/deconvolution.html" title="Deconvolution"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../theoretical/theoretical.html" title="Theoretical"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../variogram.html" >Variogram</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Block</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

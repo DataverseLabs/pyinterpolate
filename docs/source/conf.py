@@ -49,6 +49,6 @@ autodoc_typehints = 'none'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'bootstrap'
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-html_static_path = ['_static']
+html_theme = 'classic'
+# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+# html_static_path = ['_static']

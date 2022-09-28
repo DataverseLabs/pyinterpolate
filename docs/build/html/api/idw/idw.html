@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Inverse Distance Weighting &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Pipelines" href="../pipelines/pipelines.html" />
+    <link rel="prev" title="Block - Poisson Kriging" href="../kriging/block/block_kriging.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../pipelines/pipelines.html" title="Pipelines"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../kriging/block/block_kriging.html" title="Block - Poisson Kriging"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" accesskey="U">API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Inverse Distance Weighting</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="inverse-distance-weighting">
+<h1>Inverse Distance Weighting<a class="headerlink" href="#inverse-distance-weighting" title="Permalink to this heading">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">inverse_distance_weighting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_location</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/idw/idw.html#inverse_distance_weighting"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Inverse Distance Weighting with a given set of points and an unknown location.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>known_points</strong><span class="classifier">numpy array</span></dt><dd><p>The MxN array, where <strong>M</strong> is a number of rows (points) and <strong>N</strong> is the number of columns, where the last
+column represents a value of a known point. (It could be <strong>(N-1)</strong>-dimensional data).</p>
+</dd>
+<dt><strong>unknown_location</strong><span class="classifier">Iterable</span></dt><dd><p>Array or list with coordinates of the unknown point. It’s length is N-1 (number of dimensions). The unknown
+location <cite>shape</cite> should be the same as the <code class="docutils literal notranslate"><span class="pre">known_points</span></code> parameter <cite>shape</cite>, if not, then new dimension
+is added once - vector of points <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y]]</span></code> for 2-dimensional data.</p>
+</dd>
+<dt><strong>number_of_neighbours</strong><span class="classifier">int, default = -1</span></dt><dd><p>If default value <strong>(-1)</strong> then all known points will be used to estimate value at the unknown location.
+Can be any number within the limits <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">len(known_points)]</span></code>,</p>
+</dd>
+<dt><strong>power</strong><span class="classifier">float, default = 2.</span></dt><dd><p>Power value must be larger or equal to 0. It controls weight assigned to each known point. Larger power means
+stronger influence of the closest neighbors, but it decreases quickly.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>result</strong><span class="classifier">float</span></dt><dd><p>The estimated value.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>Power parameter set to be smaller than 0.</p>
+</dd>
+<dt>ValueError</dt><dd><p>Less than 2 neighbours or more than the number of <code class="docutils literal notranslate"><span class="pre">known_points</span></code> neighbours are given in the
+<code class="docutils literal notranslate"><span class="pre">number_of_neighbours</span></code> parameter.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../kriging/block/block_kriging.html"
+                          title="previous chapter">Block - Poisson Kriging</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../pipelines/pipelines.html"
+                          title="next chapter">Pipelines</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/idw/idw.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../pipelines/pipelines.html" title="Pipelines"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../kriging/block/block_kriging.html" title="Block - Poisson Kriging"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../api.html" >API</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Inverse Distance Weighting</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

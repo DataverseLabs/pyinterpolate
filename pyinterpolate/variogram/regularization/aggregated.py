@@ -33,111 +33,115 @@ class AggregatedVariogram:
     Parameters
     ----------
     aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-                      Blocks with aggregated data.
-                      * Blocks: Blocks() class object.
-                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-                        Geometry column with polygons is not used and optional.
-                      * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+
+        * Blocks: ``Blocks()`` class object.
+        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.
+          Geometry column with polygons is not used.
+        * numpy array: ``[[block index, centroid x, centroid y, value]]``.
 
     agg_step_size : float
-                    Step size between lags.
+        Step size between lags.
 
     agg_max_range : float
-                    Maximal distance of analysis.
+        Maximal distance of analysis.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
 
-    agg_direction : float (in range [0, 360]), optional, default=0
-                    direction of semivariogram, values from 0 to 360 degrees:
-                    * 0 or 180: is NS direction,
-                    * 90 or 270 is EW direction,
-                    * 45 or 225 is NE-SW direction,
-                    * 135 or 315 is NW-SE direction.
+        * Dict: ``{block id: [[point x, point y, value]]}``
+        * numpy array: ``[[block id, x, y, value]]``
+        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``
+        * PointSupport
 
-    agg_tolerance : float (in range [0, 1]), optional, default=1
-                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
-                    then the bin is selected as an elliptical area with major axis pointed in the same direction as
-                    the line for 0 tolerance.
-                    * The minor axis size is (tolerance * step_size)
-                    * The major axis size is ((1 - tolerance) * step_size)
-                    * The baseline point is at a center of the ellipse.
-                    Tolerance == 1 creates an omnidirectional semivariogram.
+    agg_direction : float (in range [0, 360]), default=0
+        A direction of semivariogram, values from 0 to 360 degrees:
+
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
+
+    agg_tolerance : float (in range [0, 1]), default=1
+        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
+
+        * The major axis size == ``agg_step_size``.
+        * The minor axis size is ``agg_tolerance * agg_step_size``
+        * The baseline point is at a center of the ellipse.
+        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.
 
     variogram_weighting_method : str, default = "closest"
-                                 Method used to weight error at a given lags. Available methods:
-                                 - equal: no weighting,
-                                 - closest: lags at a close range have bigger weights,
-                                 - distant: lags that are further away have bigger weights,
-                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,
-                                   lesser weight.
+        Method used to weight error at a given lags. Available methods:
+
+        - **equal**: no weighting,
+        - **closest**: lags at a close range have bigger weights,
+        - **distant**: lags that are further away have bigger weights,
+        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
     verbose : bool, default = False
-              Print steps performed by the algorithm.
+        Print steps performed by the algorithm.
 
     log_process : bool, default = False
-                  Log process info (Level DEBUG).
+        Log process info (Level ``DEBUG``).
 
     Attributes
     ----------
     aggregated_data : Union[Blocks, Dict, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-                      See aggregared_data parameter.
+        See ``aggregared_data`` parameter.
 
     agg_step_size : float
-                    See agg_step_size parameter.
+        See ``agg_step_size`` parameter.
 
     agg_max_range : float
-                    See agg_max_range parameter.
+        See ``agg_max_range`` parameter.
 
     agg_lags : numpy array
-               Lags calculates as a set of equidistant points from agg_step_size to agg_max_range with a step of size
-               agg_step_size.
+        Lags calculated as a set of equidistant points from ``agg_step_size`` to ``agg_max_range`` with a step of size
+        ``agg_step_size``.
 
     agg_tolerance : float, default = 1
-                    See agg_tolerance parameter.
+        See ``agg_tolerance`` parameter.
 
     agg_direction : float, default = 0
-                    See agg_direction parameter.
+        See ``agg_direction`` parameter.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    See point_support parameter.
+        See the ``point_support`` parameter.
 
     weighting_method : str, default = 'closest'
-                       See variogram_weighting_method parameter.
+        See the ``variogram_weighting_method`` parameter.
 
     verbose : bool, default = False
-              See vebose parameter.
+        See ``verbose`` parameter.
 
     log_process : bool, default = False
-                  See log_process parameter.
+        See the ``log_process`` parameter.
 
     experimental_variogram : ExperimentalVariogram
-                             The experimental variogram calculated from blocks (their centroids).
+        The experimental variogram calculated from blocks (their centroids).
 
     theoretical_model : TheoreticalVariogram
-                        The theoretical model derived from blocks' centroids.
+        The theoretical model derived from blocks' centroids.
 
     inblock_semivariance : Dict
-                           {area id: the average inblock semivariance}
+        ``{area id: the average inblock semivariance}``
 
     avg_inblock_semivariance : numpy array
-                               [lag, average inblocks semivariances, number of blocks within a lag]
+        ``[lag, average inblocks semivariances, number of blocks within a lag]``
 
     block_to_block_semivariance : Dict
-                                   {(block i, block j): [distance, semivariance, number of point pairs between blocks]}
+        ``{(block i, block j): [distance, semivariance, number of point pairs between blocks]}``
 
     avg_block_to_block_semivariance : numpy array
-                                      [lag, semivariance, number of point pairs between blocks].
+        ``[lag, semivariance, number of point pairs between blocks]``.
 
     regularized_variogram : numpy array
-                            [lag, semivariance]
+        ``[lag, semivariance]``
 
     distances_between_blocks : Dict
-                               Weighted distances between all blocks: {block id : [distances to other blocks]}.
+        Weighted distances between all blocks: ``{block id : [distances to other blocks]}``.
 
 
     Methods
@@ -194,20 +198,22 @@ class AggregatedVariogram:
 
     def calculate_avg_inblock_semivariance(self) -> np.ndarray:
         """
-        Method calculates the average semivariance within blocks gamma_h(v, v).
+        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`.
+        The average inblock semivariance is calculated as:
+
+        .. math::
+
+            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]
+
+        where:
+
+        - :math:`\gamma(v_{a}, v_{a})` is semivariance within a block :math:`a`,
+        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the block :math:`a`.
 
         Returns
         -------
         avg_inblock_semivariance : numpy array
-                                   [lag, semivariance, number of block pairs]
-
-        Notes
-        -----
-        $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$
-
-            where:
-            - $\gamma(v_{a}, v_{a})$ is semivariance within a block $a$,
-            - $\gamma(v_{a+h}, v_{a+h})$ is samivariance within a block at a distance $h$ from the block $a$.
+             ``[lag, semivariance, number of block pairs]``
 
         """
 
@@ -229,31 +235,38 @@ class AggregatedVariogram:
     def calculate_avg_semivariance_between_blocks(self) -> np.ndarray:
         """
         Function calculates semivariance between areas based on their division into smaller blocks. It is
-            gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.
+        :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.
 
         Returns
         -------
         avg_block_to_block_semivariance : numpy array
-                                          The average semivariance between neighboring blocks point-supports:
-                                          [lag, semivariance, number of block pairs within a range]
+            The average semivariance between neighboring blocks point-supports:
+            ``[lag, semivariance, number of block pairs within a range]``.
+
         Notes
         -----
         Block-to-block semivariance is calculated as:
 
-        $$\gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})$$
+        .. math::
+
+            \gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})
 
         where:
-            - $\gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of block $a$ and paired block $a+h$.
-            - $P_{a}$ and $P_{a+h}$ - number of support points within block $a$ and block $a+h$.
-            - $\gamma(u_{s}, u_{s'})$ - semivariance of point supports between blocks.
+
+        - :math:`\gamma(v_{a}, v_{a+h})` - block-to-block semivariance of block :math:`a` and paired block :math:`a+h`.
+        - :math:`P_{a}$ and $P_{a+h}` - number of support points within block :math:`a` and block :math:`a+h`.
+        - :math:`\gamma(u_{s}, u_{s'})` - semivariance of point supports between blocks.
 
         Then average block-to-block semivariance is calculated as:
 
-        $$\gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})$$
+        .. math::
+
+            \gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})
 
         where:
-            - $\gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances for a lag $h$,
-            - $\gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired block at a distance $h$.
+
+        - :math:`\gamma_{h}(v, v_{h})` - averaged block-to-block semivariances for a lag :math:`h`,
+        - :math:`\gamma(v_{a}, v_{a+h})` - semivariance of block :math:`a` and paired block at a distance :math:`h`.
         """
 
         # Check if distances between blocks are calculated
@@ -281,43 +294,49 @@ class AggregatedVariogram:
 
         Parameters
         ----------
-        average_inblock_semivariances : np.ndarray, optional
-                                        The mean semivariance between the blocks. See Notes to learn more.
+        average_inblock_semivariances : np.ndarray, default = None
+            The mean semivariance between the blocks. See Notes to learn more.
 
-        semivariance_between_point_supports : np.ndarray, optional
-                                              Semivariance between all blocks calculated from the theoretical model.
+        semivariance_between_point_supports : np.ndarray, default = None
+            Semivariance between all blocks calculated from the theoretical model.
 
-        experimental_block_variogram : np.ndarray, optional
-                                       The experimental semivariance between area centroids.
+        experimental_block_variogram : np.ndarray, default = None
+            The experimental semivariance between area centroids.
 
-        theoretical_block_model : TheoreticalVariogram, optional
-                                  Modeled variogram.
+        theoretical_block_model : TheoreticalVariogram, default = None
+            A modeled variogram.
 
 
         Returns
         -------
         regularized_model : numpy array
-                            [lag, semivariance, number of point pairs]
+            ``[lag, semivariance, number of point pairs]``
 
         Notes
         -----
         Function has the form:
 
-            gamma_v(h) = gamma(v, v_h) - gamma_h(v, v)
+        .. math::
+
+            \gamma_v(h) = \gamma(v, v_h) - \gamma_h(v, v)
 
         where:
-        - gamma_v(h) - regularized variogram,
-        - gamma(v, v_h) - variogram value between any two blocks separated by the distance h (calculated from their
-                          point support),
-        - gamma_h(v, v) - average inblock semivariance between blocks.
+
+        - :math:`\gamma_v(h)` - the regularized variogram,
+        - :math:`\gamma(v, v_h)` - a variogram value between any two blocks separated by the distance :math:`h`
+        (calculated from their point support),
+        - :math:`\gamma_h(v, v)` - average inblock semivariance between blocks.
 
         Average inblock semivariance between blocks:
 
-            $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$
+        .. math::
+
+            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]
 
         where:
-        - $\gamma(v_{a}, v_{a})$ and $\gamma(v_{a+h}, v_{a+h})$ are the inblock semivariances of block $a$ and
-          block $a+h$ separated by the distance $h$.
+
+        - :math:`\gamma(v_{a}, v_{a})` and :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block
+        :math:`a` and block :math:`a+h` separated by the distance :math:`h`.
 
         References
         ----------
@@ -359,18 +378,22 @@ class AggregatedVariogram:
         Returns
         -------
         reg_variogram : numpy array
-                        [lag, semivariance]
+            ``[lag, semivariance]``
 
         Raises
         ------
-        ValueError : Semivariance at a given lag is below zero
+        ValueError
+            Semivariance at a given lag is below zero.
 
         Notes
         -----
-        Regularized semivariogram is a difference between the average block to block semivariance $\gamma(v, v_{h})$
-        and the average inblock semivariances $\gamma{h}(v, v)$ at a given lag $h$.
+        Regularized semivariogram is a difference between the average block to block semivariance
+        :math:`\gamma(v, v_{h})` and the average inblock semivariances :math:`\gamma{h}(v, v)` at a given lag
+        :math:`h`.
 
-        $$\gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)$$
+        .. math::
+
+            \gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)
 
         """
 
@@ -389,15 +412,17 @@ class AggregatedVariogram:
     def show_semivariograms(self):
         """
         Method plots:
-            - experimental variogram,
-            - theoretical model,
-            - average inblock semivariance,
-            - average block-to-block semivariance,
-            - regularized variogram.
+
+        - experimental variogram,
+        - theoretical model,
+        - average inblock semivariance,
+        - average block-to-block semivariance,
+        - regularized variogram.
 
         Raises
         ------
-        AttributeError : semivariogram regularization process has not been performed.
+        AttributeError
+            The semivariogram regularization process has not been performed.
         """
 
         if self.regularized_variogram is None:
@@ -479,77 +504,69 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
                verbose: bool = False,
                log_process: bool = False) -> np.ndarray:
     """
-    Function is an alias to AggregatedVariogram class and performs semivariogram regularization. Function returns
+    Function is an alias for ``AggregatedVariogram`` class and performs semivariogram regularization. Function returns
     regularized variogram.
 
     Parameters
     ----------
     aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-                      Blocks with aggregated data.
-                      * Blocks: Blocks() class object.
-                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-                        Geometry column with polygons is not used and optional.
-                      * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+
+        * Blocks: ``Blocks()`` class object.
+        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.
+          Geometry column with polygons is not used.
+        * numpy array: ``[[block index, centroid x, centroid y, value]]``.
 
     agg_step_size : float
-                    Step size between lags.
+        Step size between lags.
 
     agg_max_range : float
-                    Maximal distance of analysis.
+        Maximal distance of analysis.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
 
-    average_inblock_semivariances : np.ndarray, optional
-                                    The mean semivariance between the blocks. See Notes to learn more.
+        * Dict: ``{block id: [[point x, point y, value]]}``
+        * numpy array: ``[[block id, x, y, value]]``
+        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``
+        * PointSupport
 
-    semivariance_between_point_supports : np.ndarray, optional
-                                          Semivariance between all blocks calculated from the theoretical model.
+    agg_direction : float (in range [0, 360]), default=0
+        A direction of semivariogram, values from 0 to 360 degrees:
 
-    experimental_block_variogram : np.ndarray, optional
-                                   The experimental semivariance between area centroids.
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
 
-    theoretical_block_model : TheoreticalVariogram, optional
-                              Modeled variogram.
+    agg_tolerance : float (in range [0, 1]), default=1
+        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
 
-    agg_direction : float (in range [0, 360]), optional, default=0
-                    direction of semivariogram, values from 0 to 360 degrees:
-                    * 0 or 180: is NS direction,
-                    * 90 or 270 is EW direction,
-                    * 45 or 225 is NE-SW direction,
-                    * 135 or 315 is NW-SE direction.
-
-    agg_tolerance : float (in range [0, 1]), optional, default=1
-                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0
-                    then the bin is selected as an elliptical area with major axis pointed in the same direction as
-                    the line for 0 tolerance.
-                    * The minor axis size is (tolerance * step_size)
-                    * The major axis size is ((1 - tolerance) * step_size)
-                    * The baseline point is at a center of the ellipse.
-                    Tolerance == 1 creates an omnidirectional semivariogram.
+        * The major axis size == ``agg_step_size``.
+        * The minor axis size is ``agg_tolerance * agg_step_size``
+        * The baseline point is at a center of the ellipse.
+        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.
 
     variogram_weighting_method : str, default = "closest"
-                                 Method used to weight error at a given lags. Available methods:
-                                 - equal: no weighting,
-                                 - closest: lags at a close range have bigger weights,
-                                 - distant: lags that are further away have bigger weights,
-                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,
-                                   lesser weight.
+        Method used to weight error at a given lags. Available methods:
+
+        - **equal**: no weighting,
+        - **closest**: lags at a close range have bigger weights,
+        - **distant**: lags that are further away have bigger weights,
+        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
     verbose : bool, default = False
-              Print steps performed by the algorithm.
+        Print steps performed by the algorithm.
 
     log_process : bool, default = False
-                  Log process info (Level DEBUG).
+        Log process info (Level ``DEBUG``).
 
     Returns
     -------
     regularized : numpy array
-                  [lag, semivariance]
+        ``[lag, semivariance]``
 
     See Also
     --------

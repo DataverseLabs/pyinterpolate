@@ -135,118 +135,122 @@
     <span class="n">calculate_block_to_block_semivariance</span>
 
 
-<div class="viewcode-block" id="AggregatedVariogram"><a class="viewcode-back" href="../../../../api/api.html#pyinterpolate.AggregatedVariogram">[docs]</a><span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a><span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates semivariance of aggregated counts.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
-<span class="sd">                      Blocks with aggregated data.</span>
-<span class="sd">                      * Blocks: Blocks() class object.</span>
-<span class="sd">                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</span>
-<span class="sd">                        Geometry column with polygons is not used and optional.</span>
-<span class="sd">                      * numpy array: [[block index, centroid x, centroid y, value]].</span>
+<span class="sd">        Blocks with aggregated data.</span>
+
+<span class="sd">        * Blocks: ``Blocks()`` class object.</span>
+<span class="sd">        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">          Geometry column with polygons is not used.</span>
+<span class="sd">        * numpy array: ``[[block index, centroid x, centroid y, value]]``.</span>
 
 <span class="sd">    agg_step_size : float</span>
-<span class="sd">                    Step size between lags.</span>
+<span class="sd">        Step size between lags.</span>
 
 <span class="sd">    agg_max_range : float</span>
-<span class="sd">                    Maximal distance of analysis.</span>
+<span class="sd">        Maximal distance of analysis.</span>
 
 <span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
-<span class="sd">                    * Dict: {block id: [[point x, point y, value]]}</span>
-<span class="sd">                    * numpy array: [[block id, x, y, value]]</span>
-<span class="sd">                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}</span>
-<span class="sd">                    * PointSupport</span>
 
-<span class="sd">    agg_direction : float (in range [0, 360]), optional, default=0</span>
-<span class="sd">                    direction of semivariogram, values from 0 to 360 degrees:</span>
-<span class="sd">                    * 0 or 180: is NS direction,</span>
-<span class="sd">                    * 90 or 270 is EW direction,</span>
-<span class="sd">                    * 45 or 225 is NE-SW direction,</span>
-<span class="sd">                    * 135 or 315 is NW-SE direction.</span>
+<span class="sd">        * Dict: ``{block id: [[point x, point y, value]]}``</span>
+<span class="sd">        * numpy array: ``[[block id, x, y, value]]``</span>
+<span class="sd">        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``</span>
+<span class="sd">        * PointSupport</span>
 
-<span class="sd">    agg_tolerance : float (in range [0, 1]), optional, default=1</span>
-<span class="sd">                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of</span>
-<span class="sd">                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0</span>
-<span class="sd">                    then the bin is selected as an elliptical area with major axis pointed in the same direction as</span>
-<span class="sd">                    the line for 0 tolerance.</span>
-<span class="sd">                    * The minor axis size is (tolerance * step_size)</span>
-<span class="sd">                    * The major axis size is ((1 - tolerance) * step_size)</span>
-<span class="sd">                    * The baseline point is at a center of the ellipse.</span>
-<span class="sd">                    Tolerance == 1 creates an omnidirectional semivariogram.</span>
+<span class="sd">    agg_direction : float (in range [0, 360]), default=0</span>
+<span class="sd">        A direction of semivariogram, values from 0 to 360 degrees:</span>
+
+<span class="sd">        * 0 or 180: is NS direction,</span>
+<span class="sd">        * 90 or 270 is EW direction,</span>
+<span class="sd">        * 45 or 225 is NE-SW direction,</span>
+<span class="sd">        * 135 or 315 is NW-SE direction.</span>
+
+<span class="sd">    agg_tolerance : float (in range [0, 1]), default=1</span>
+<span class="sd">        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance.</span>
+
+<span class="sd">        * The major axis size == ``agg_step_size``.</span>
+<span class="sd">        * The minor axis size is ``agg_tolerance * agg_step_size``</span>
+<span class="sd">        * The baseline point is at a center of the ellipse.</span>
+<span class="sd">        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.</span>
 
 <span class="sd">    variogram_weighting_method : str, default = &quot;closest&quot;</span>
-<span class="sd">                                 Method used to weight error at a given lags. Available methods:</span>
-<span class="sd">                                 - equal: no weighting,</span>
-<span class="sd">                                 - closest: lags at a close range have bigger weights,</span>
-<span class="sd">                                 - distant: lags that are further away have bigger weights,</span>
-<span class="sd">                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,</span>
-<span class="sd">                                   lesser weight.</span>
+<span class="sd">        Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">        - **equal**: no weighting,</span>
+<span class="sd">        - **closest**: lags at a close range have bigger weights,</span>
+<span class="sd">        - **distant**: lags that are further away have bigger weights,</span>
+<span class="sd">        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
 
 <span class="sd">    verbose : bool, default = False</span>
-<span class="sd">              Print steps performed by the algorithm.</span>
+<span class="sd">        Print steps performed by the algorithm.</span>
 
 <span class="sd">    log_process : bool, default = False</span>
-<span class="sd">                  Log process info (Level DEBUG).</span>
+<span class="sd">        Log process info (Level ``DEBUG``).</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    aggregated_data : Union[Blocks, Dict, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
-<span class="sd">                      See aggregared_data parameter.</span>
+<span class="sd">        See ``aggregared_data`` parameter.</span>
 
 <span class="sd">    agg_step_size : float</span>
-<span class="sd">                    See agg_step_size parameter.</span>
+<span class="sd">        See ``agg_step_size`` parameter.</span>
 
 <span class="sd">    agg_max_range : float</span>
-<span class="sd">                    See agg_max_range parameter.</span>
+<span class="sd">        See ``agg_max_range`` parameter.</span>
 
 <span class="sd">    agg_lags : numpy array</span>
-<span class="sd">               Lags calculates as a set of equidistant points from agg_step_size to agg_max_range with a step of size</span>
-<span class="sd">               agg_step_size.</span>
+<span class="sd">        Lags calculated as a set of equidistant points from ``agg_step_size`` to ``agg_max_range`` with a step of size</span>
+<span class="sd">        ``agg_step_size``.</span>
 
 <span class="sd">    agg_tolerance : float, default = 1</span>
-<span class="sd">                    See agg_tolerance parameter.</span>
+<span class="sd">        See ``agg_tolerance`` parameter.</span>
 
 <span class="sd">    agg_direction : float, default = 0</span>
-<span class="sd">                    See agg_direction parameter.</span>
+<span class="sd">        See ``agg_direction`` parameter.</span>
 
 <span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
-<span class="sd">                    See point_support parameter.</span>
+<span class="sd">        See the ``point_support`` parameter.</span>
 
 <span class="sd">    weighting_method : str, default = &#39;closest&#39;</span>
-<span class="sd">                       See variogram_weighting_method parameter.</span>
+<span class="sd">        See the ``variogram_weighting_method`` parameter.</span>
 
 <span class="sd">    verbose : bool, default = False</span>
-<span class="sd">              See vebose parameter.</span>
+<span class="sd">        See ``verbose`` parameter.</span>
 
 <span class="sd">    log_process : bool, default = False</span>
-<span class="sd">                  See log_process parameter.</span>
+<span class="sd">        See the ``log_process`` parameter.</span>
 
 <span class="sd">    experimental_variogram : ExperimentalVariogram</span>
-<span class="sd">                             The experimental variogram calculated from blocks (their centroids).</span>
+<span class="sd">        The experimental variogram calculated from blocks (their centroids).</span>
 
 <span class="sd">    theoretical_model : TheoreticalVariogram</span>
-<span class="sd">                        The theoretical model derived from blocks&#39; centroids.</span>
+<span class="sd">        The theoretical model derived from blocks&#39; centroids.</span>
 
 <span class="sd">    inblock_semivariance : Dict</span>
-<span class="sd">                           {area id: the average inblock semivariance}</span>
+<span class="sd">        ``{area id: the average inblock semivariance}``</span>
 
 <span class="sd">    avg_inblock_semivariance : numpy array</span>
-<span class="sd">                               [lag, average inblocks semivariances, number of blocks within a lag]</span>
+<span class="sd">        ``[lag, average inblocks semivariances, number of blocks within a lag]``</span>
 
 <span class="sd">    block_to_block_semivariance : Dict</span>
-<span class="sd">                                   {(block i, block j): [distance, semivariance, number of point pairs between blocks]}</span>
+<span class="sd">        ``{(block i, block j): [distance, semivariance, number of point pairs between blocks]}``</span>
 
 <span class="sd">    avg_block_to_block_semivariance : numpy array</span>
-<span class="sd">                                      [lag, semivariance, number of point pairs between blocks].</span>
+<span class="sd">        ``[lag, semivariance, number of point pairs between blocks]``.</span>
 
 <span class="sd">    regularized_variogram : numpy array</span>
-<span class="sd">                            [lag, semivariance]</span>
+<span class="sd">        ``[lag, semivariance]``</span>
 
 <span class="sd">    distances_between_blocks : Dict</span>
-<span class="sd">                               Weighted distances between all blocks: {block id : [distances to other blocks]}.</span>
+<span class="sd">        Weighted distances between all blocks: ``{block id : [distances to other blocks]}``.</span>
 
 
 <span class="sd">    Methods</span>
@@ -301,22 +305,24 @@
         <span class="c1"># Model parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_inblock_semivariance"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_inblock_semivariance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Method calculates the average semivariance within blocks gamma_h(v, v).</span>
+<span class="sd">        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`.</span>
+<span class="sd">        The average inblock semivariance is calculated as:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a})` is semivariance within a block :math:`a`,</span>
+<span class="sd">        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the block :math:`a`.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        avg_inblock_semivariance : numpy array</span>
-<span class="sd">                                   [lag, semivariance, number of block pairs]</span>
-
-<span class="sd">        Notes</span>
-<span class="sd">        -----</span>
-<span class="sd">        $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$</span>
-
-<span class="sd">            where:</span>
-<span class="sd">            - $\gamma(v_{a}, v_{a})$ is semivariance within a block $a$,</span>
-<span class="sd">            - $\gamma(v_{a+h}, v_{a+h})$ is samivariance within a block at a distance $h$ from the block $a$.</span>
+<span class="sd">             ``[lag, semivariance, number of block pairs]``</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -333,36 +339,43 @@
                                                                   <span class="bp">self</span><span class="o">.</span><span class="n">inblock_semivariance</span><span class="p">,</span>
                                                                   <span class="n">block_step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">,</span>
                                                                   <span class="n">block_max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">avg_inblock_semivariance</span>
+        <span class="k">return</span> <span class="n">avg_inblock_semivariance</span></div>
 
-    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_semivariance_between_blocks"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_semivariance_between_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function calculates semivariance between areas based on their division into smaller blocks. It is</span>
-<span class="sd">            gamma(v, v_h) - semivariogram value between any two blocks separated by the distance h.</span>
+<span class="sd">        :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        avg_block_to_block_semivariance : numpy array</span>
-<span class="sd">                                          The average semivariance between neighboring blocks point-supports:</span>
-<span class="sd">                                          [lag, semivariance, number of block pairs within a range]</span>
+<span class="sd">            The average semivariance between neighboring blocks point-supports:</span>
+<span class="sd">            ``[lag, semivariance, number of block pairs within a range]``.</span>
+
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        Block-to-block semivariance is calculated as:</span>
 
-<span class="sd">        $$\gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s&#39;=1}^{P_{a+h}}\gamma(u_{s}, u_{s&#39;})$$</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s&#39;=1}^{P_{a+h}}\gamma(u_{s}, u_{s&#39;})</span>
 
 <span class="sd">        where:</span>
-<span class="sd">            - $\gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of block $a$ and paired block $a+h$.</span>
-<span class="sd">            - $P_{a}$ and $P_{a+h}$ - number of support points within block $a$ and block $a+h$.</span>
-<span class="sd">            - $\gamma(u_{s}, u_{s&#39;})$ - semivariance of point supports between blocks.</span>
+
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a+h})` - block-to-block semivariance of block :math:`a` and paired block :math:`a+h`.</span>
+<span class="sd">        - :math:`P_{a}$ and $P_{a+h}` - number of support points within block :math:`a` and block :math:`a+h`.</span>
+<span class="sd">        - :math:`\gamma(u_{s}, u_{s&#39;})` - semivariance of point supports between blocks.</span>
 
 <span class="sd">        Then average block-to-block semivariance is calculated as:</span>
 
-<span class="sd">        $$\gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})$$</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})</span>
 
 <span class="sd">        where:</span>
-<span class="sd">            - $\gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances for a lag $h$,</span>
-<span class="sd">            - $\gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired block at a distance $h$.</span>
+
+<span class="sd">        - :math:`\gamma_{h}(v, v_{h})` - averaged block-to-block semivariances for a lag :math:`h`,</span>
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a+h})` - semivariance of block :math:`a` and paired block at a distance :math:`h`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Check if distances between blocks are calculated</span>
@@ -378,9 +391,9 @@
         <span class="n">avg_block_to_block_semivariance</span> <span class="o">=</span> <span class="n">average_block_to_block_semivariances</span><span class="p">(</span><span class="n">semivariances_array</span><span class="o">=</span><span class="n">semivars_arr</span><span class="p">,</span>
                                                                                <span class="n">lags</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span>
                                                                                <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">avg_block_to_block_semivariance</span>
+        <span class="k">return</span> <span class="n">avg_block_to_block_semivariance</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.regularize"><a class="viewcode-back" href="../../../../api/api.html#pyinterpolate.AggregatedVariogram.regularize">[docs]</a>    <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="AggregatedVariogram.regularize"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize">[docs]</a>    <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">average_inblock_semivariances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                    <span class="n">semivariance_between_point_supports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">experimental_block_variogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -390,43 +403,49 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        average_inblock_semivariances : np.ndarray, optional</span>
-<span class="sd">                                        The mean semivariance between the blocks. See Notes to learn more.</span>
+<span class="sd">        average_inblock_semivariances : np.ndarray, default = None</span>
+<span class="sd">            The mean semivariance between the blocks. See Notes to learn more.</span>
 
-<span class="sd">        semivariance_between_point_supports : np.ndarray, optional</span>
-<span class="sd">                                              Semivariance between all blocks calculated from the theoretical model.</span>
+<span class="sd">        semivariance_between_point_supports : np.ndarray, default = None</span>
+<span class="sd">            Semivariance between all blocks calculated from the theoretical model.</span>
 
-<span class="sd">        experimental_block_variogram : np.ndarray, optional</span>
-<span class="sd">                                       The experimental semivariance between area centroids.</span>
+<span class="sd">        experimental_block_variogram : np.ndarray, default = None</span>
+<span class="sd">            The experimental semivariance between area centroids.</span>
 
-<span class="sd">        theoretical_block_model : TheoreticalVariogram, optional</span>
-<span class="sd">                                  Modeled variogram.</span>
+<span class="sd">        theoretical_block_model : TheoreticalVariogram, default = None</span>
+<span class="sd">            A modeled variogram.</span>
 
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        regularized_model : numpy array</span>
-<span class="sd">                            [lag, semivariance, number of point pairs]</span>
+<span class="sd">            ``[lag, semivariance, number of point pairs]``</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
 <span class="sd">        Function has the form:</span>
 
-<span class="sd">            gamma_v(h) = gamma(v, v_h) - gamma_h(v, v)</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_v(h) = \gamma(v, v_h) - \gamma_h(v, v)</span>
 
 <span class="sd">        where:</span>
-<span class="sd">        - gamma_v(h) - regularized variogram,</span>
-<span class="sd">        - gamma(v, v_h) - variogram value between any two blocks separated by the distance h (calculated from their</span>
-<span class="sd">                          point support),</span>
-<span class="sd">        - gamma_h(v, v) - average inblock semivariance between blocks.</span>
+
+<span class="sd">        - :math:`\gamma_v(h)` - the regularized variogram,</span>
+<span class="sd">        - :math:`\gamma(v, v_h)` - a variogram value between any two blocks separated by the distance :math:`h`</span>
+<span class="sd">        (calculated from their point support),</span>
+<span class="sd">        - :math:`\gamma_h(v, v)` - average inblock semivariance between blocks.</span>
 
 <span class="sd">        Average inblock semivariance between blocks:</span>
 
-<span class="sd">            $$\gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]$$</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]</span>
 
 <span class="sd">        where:</span>
-<span class="sd">        - $\gamma(v_{a}, v_{a})$ and $\gamma(v_{a+h}, v_{a+h})$ are the inblock semivariances of block $a$ and</span>
-<span class="sd">          block $a+h$ separated by the distance $h$.</span>
+
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a})` and :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block</span>
+<span class="sd">        :math:`a` and block :math:`a+h` separated by the distance :math:`h`.</span>
 
 <span class="sd">        References</span>
 <span class="sd">        ----------</span>
@@ -461,25 +480,29 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span></div>
 
-    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram.regularize_variogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize_variogram">[docs]</a>    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function regularizes semivariograms.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        reg_variogram : numpy array</span>
-<span class="sd">                        [lag, semivariance]</span>
+<span class="sd">            ``[lag, semivariance]``</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
-<span class="sd">        ValueError : Semivariance at a given lag is below zero</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Semivariance at a given lag is below zero.</span>
 
 <span class="sd">        Notes</span>
 <span class="sd">        -----</span>
-<span class="sd">        Regularized semivariogram is a difference between the average block to block semivariance $\gamma(v, v_{h})$</span>
-<span class="sd">        and the average inblock semivariances $\gamma{h}(v, v)$ at a given lag $h$.</span>
+<span class="sd">        Regularized semivariogram is a difference between the average block to block semivariance</span>
+<span class="sd">        :math:`\gamma(v, v_{h})` and the average inblock semivariances :math:`\gamma{h}(v, v)` at a given lag</span>
+<span class="sd">        :math:`h`.</span>
 
-<span class="sd">        $$\gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)$$</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -493,20 +516,22 @@
                           <span class="sa">f</span><span class="s1">&#39;Semivariance value: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">reg_variogram</span>
+        <span class="k">return</span> <span class="n">reg_variogram</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.show_semivariograms"><a class="viewcode-back" href="../../../../api/api.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AggregatedVariogram.show_semivariograms"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots:</span>
-<span class="sd">            - experimental variogram,</span>
-<span class="sd">            - theoretical model,</span>
-<span class="sd">            - average inblock semivariance,</span>
-<span class="sd">            - average block-to-block semivariance,</span>
-<span class="sd">            - regularized variogram.</span>
+
+<span class="sd">        - experimental variogram,</span>
+<span class="sd">        - theoretical model,</span>
+<span class="sd">        - average inblock semivariance,</span>
+<span class="sd">        - average block-to-block semivariance,</span>
+<span class="sd">        - regularized variogram.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
-<span class="sd">        AttributeError : semivariogram regularization process has not been performed.</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            The semivariogram regularization process has not been performed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -588,77 +613,69 @@
                <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                <span class="n">log_process</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function is an alias to AggregatedVariogram class and performs semivariogram regularization. Function returns</span>
+<span class="sd">    Function is an alias for ``AggregatedVariogram`` class and performs semivariogram regularization. Function returns</span>
 <span class="sd">    regularized variogram.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
-<span class="sd">                      Blocks with aggregated data.</span>
-<span class="sd">                      * Blocks: Blocks() class object.</span>
-<span class="sd">                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</span>
-<span class="sd">                        Geometry column with polygons is not used and optional.</span>
-<span class="sd">                      * numpy array: [[block index, centroid x, centroid y, value]].</span>
+<span class="sd">        Blocks with aggregated data.</span>
+
+<span class="sd">        * Blocks: ``Blocks()`` class object.</span>
+<span class="sd">        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">          Geometry column with polygons is not used.</span>
+<span class="sd">        * numpy array: ``[[block index, centroid x, centroid y, value]]``.</span>
 
 <span class="sd">    agg_step_size : float</span>
-<span class="sd">                    Step size between lags.</span>
+<span class="sd">        Step size between lags.</span>
 
 <span class="sd">    agg_max_range : float</span>
-<span class="sd">                    Maximal distance of analysis.</span>
+<span class="sd">        Maximal distance of analysis.</span>
 
 <span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
-<span class="sd">                    * Dict: {block id: [[point x, point y, value]]}</span>
-<span class="sd">                    * numpy array: [[block id, x, y, value]]</span>
-<span class="sd">                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}</span>
-<span class="sd">                    * PointSupport</span>
 
-<span class="sd">    average_inblock_semivariances : np.ndarray, optional</span>
-<span class="sd">                                    The mean semivariance between the blocks. See Notes to learn more.</span>
+<span class="sd">        * Dict: ``{block id: [[point x, point y, value]]}``</span>
+<span class="sd">        * numpy array: ``[[block id, x, y, value]]``</span>
+<span class="sd">        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``</span>
+<span class="sd">        * PointSupport</span>
 
-<span class="sd">    semivariance_between_point_supports : np.ndarray, optional</span>
-<span class="sd">                                          Semivariance between all blocks calculated from the theoretical model.</span>
+<span class="sd">    agg_direction : float (in range [0, 360]), default=0</span>
+<span class="sd">        A direction of semivariogram, values from 0 to 360 degrees:</span>
 
-<span class="sd">    experimental_block_variogram : np.ndarray, optional</span>
-<span class="sd">                                   The experimental semivariance between area centroids.</span>
+<span class="sd">        * 0 or 180: is NS direction,</span>
+<span class="sd">        * 90 or 270 is EW direction,</span>
+<span class="sd">        * 45 or 225 is NE-SW direction,</span>
+<span class="sd">        * 135 or 315 is NW-SE direction.</span>
 
-<span class="sd">    theoretical_block_model : TheoreticalVariogram, optional</span>
-<span class="sd">                              Modeled variogram.</span>
+<span class="sd">    agg_tolerance : float (in range [0, 1]), default=1</span>
+<span class="sd">        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance.</span>
 
-<span class="sd">    agg_direction : float (in range [0, 360]), optional, default=0</span>
-<span class="sd">                    direction of semivariogram, values from 0 to 360 degrees:</span>
-<span class="sd">                    * 0 or 180: is NS direction,</span>
-<span class="sd">                    * 90 or 270 is EW direction,</span>
-<span class="sd">                    * 45 or 225 is NE-SW direction,</span>
-<span class="sd">                    * 135 or 315 is NW-SE direction.</span>
-
-<span class="sd">    agg_tolerance : float (in range [0, 1]), optional, default=1</span>
-<span class="sd">                    If tolerance is 0 then points must be placed at a single line with the beginning in the origin of</span>
-<span class="sd">                    the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0</span>
-<span class="sd">                    then the bin is selected as an elliptical area with major axis pointed in the same direction as</span>
-<span class="sd">                    the line for 0 tolerance.</span>
-<span class="sd">                    * The minor axis size is (tolerance * step_size)</span>
-<span class="sd">                    * The major axis size is ((1 - tolerance) * step_size)</span>
-<span class="sd">                    * The baseline point is at a center of the ellipse.</span>
-<span class="sd">                    Tolerance == 1 creates an omnidirectional semivariogram.</span>
+<span class="sd">        * The major axis size == ``agg_step_size``.</span>
+<span class="sd">        * The minor axis size is ``agg_tolerance * agg_step_size``</span>
+<span class="sd">        * The baseline point is at a center of the ellipse.</span>
+<span class="sd">        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.</span>
 
 <span class="sd">    variogram_weighting_method : str, default = &quot;closest&quot;</span>
-<span class="sd">                                 Method used to weight error at a given lags. Available methods:</span>
-<span class="sd">                                 - equal: no weighting,</span>
-<span class="sd">                                 - closest: lags at a close range have bigger weights,</span>
-<span class="sd">                                 - distant: lags that are further away have bigger weights,</span>
-<span class="sd">                                 - dense: error is weighted by the number of point pairs within a lag - more pairs,</span>
-<span class="sd">                                   lesser weight.</span>
+<span class="sd">        Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">        - **equal**: no weighting,</span>
+<span class="sd">        - **closest**: lags at a close range have bigger weights,</span>
+<span class="sd">        - **distant**: lags that are further away have bigger weights,</span>
+<span class="sd">        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
 
 <span class="sd">    verbose : bool, default = False</span>
-<span class="sd">              Print steps performed by the algorithm.</span>
+<span class="sd">        Print steps performed by the algorithm.</span>
 
 <span class="sd">    log_process : bool, default = False</span>
-<span class="sd">                  Log process info (Level DEBUG).</span>
+<span class="sd">        Log process info (Level ``DEBUG``).</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    regularized : numpy array</span>
-<span class="sd">                  [lag, semivariance]</span>
+<span class="sd">        ``[lag, semivariance]``</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    --------</span>

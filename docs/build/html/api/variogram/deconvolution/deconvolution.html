@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Deconvolution &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Kriging" href="../../kriging/kriging.html" />
+    <link rel="prev" title="Block" href="../block/block.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../kriging/kriging.html" title="Kriging"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../block/block.html" title="Block"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../variogram.html" accesskey="U">Variogram</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Deconvolution</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="deconvolution">
+<h1>Deconvolution<a class="headerlink" href="#deconvolution" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Deconvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class performs deconvolution of semivariogram of areal data. Whole procedure is based on the iterative process
+described in: [1].</p>
+<p>Steps to regularize semivariogram:</p>
+<ul class="simple">
+<li><p>initialize your object (no parameters),</p></li>
+<li><p>use <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method to build initial point support model,</p></li>
+<li><p>use <code class="docutils literal notranslate"><span class="pre">transform()</span></code> method to perform semivariogram regularization,</p></li>
+<li><p>save deconvoluted semivariogram model with <code class="docutils literal notranslate"><span class="pre">export_model()</span></code> method.</p></li>
+</ul>
+<p class="rubric">References</p>
+<p>[1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
+Units, Mathematical Geology 40(1), 101-128, 2008</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span> <span class="o">=</span> <span class="n">Deconvolution</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">agg_dataset</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">point_support_dataset</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">agg_step_size</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">agg_max_range</span><span class="o">=...</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_deviations</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">plot_weights</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dcv</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="s1">&#39;results.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ps</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><ul class="simple">
+<li><p>Dict: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code></p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code></p></li>
+<li><p>DataFrame and GeoDataFrame: columns = <code class="docutils literal notranslate"><span class="pre">{x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code></p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</dd>
+<dt><strong>agg</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>Blocks with aggregated data.</p>
+<ul class="simple">
+<li><p>Blocks: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p>GeoDataFrame and DataFrame must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used and optional.</p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>initial_regularized_variogram</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance]</span></code></p>
+</dd>
+<dt><strong>initial_theoretical_agg_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd></dd>
+<dt><strong>initial_theoretical_model_prediction</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance]</span></code></p>
+</dd>
+<dt><strong>initial_experimental_variogram</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">pairs]</span></code></p>
+</dd>
+<dt><strong>final_theoretical_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd></dd>
+<dt><strong>final_optimal_variogram</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance]</span></code></p>
+</dd>
+<dt><strong>agg_step</strong><span class="classifier">float</span></dt><dd><p>Step size between lags.</p>
+</dd>
+<dt><strong>agg_rng</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
+</dd>
+<dt><strong>ranges</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">np.arange(agg_step,</span> <span class="pre">agg_rng,</span> <span class="pre">agg_step)</span></code></p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360])</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is NS direction,</p></li>
+<li><p>90 or 270 is EW direction,</p></li>
+<li><p>45 or 225 is NE-SW direction,</p></li>
+<li><p>135 or 315 is NW-SE direction.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1])</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then
+the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+for 0 tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>weighting_method</strong><span class="classifier">str</span></dt><dd><p>Method used to weight error at a given lags. Available methods:</p>
+<ul class="simple">
+<li><p><strong>equal</strong>: no weighting,</p></li>
+<li><p><strong>closest</strong>: lags at a close range have bigger weights,</p></li>
+<li><p><strong>distant</strong>: lags that are further away have bigger weights,</p></li>
+<li><p><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</p></li>
+</ul>
+</dd>
+<dt><strong>deviations</strong><span class="classifier">List</span></dt><dd><p>List of deviations per iteration. The first element is the initial deviation.</p>
+</dd>
+<dt><strong>weights</strong><span class="classifier">List</span></dt><dd><p>List of weights applied to lags in each iteration.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Should algorithm <code class="docutils literal notranslate"><span class="pre">print()</span></code> process steps into a terminal.</p>
+</dd>
+<dt><strong>store_models</strong><span class="classifier">bool</span></dt><dd><p>Should theoretical and regularized models be stored after each iteration.</p>
+</dd>
+<dt><strong>theoretical_models</strong><span class="classifier">List</span></dt><dd><p>List with theoretical models parameters.</p>
+</dd>
+<dt><strong>regularized_models</strong><span class="classifier">List</span></dt><dd><p>List with numpy arrays with regularized models.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit()</strong></p></td>
+<td><p>Fits areal data and the point support data into a model, initializes the experimental semivariogram, the theoretical semivariogram model, regularized point support model, and deviation.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>transform()</strong></p></td>
+<td><p>Performs semivariogram regularization.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>fit_transform()</strong></p></td>
+<td><p>Performs fit() and transform() at one time.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>export_model()</strong></p></td>
+<td><p>Exports regularized (or fitted) model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot_variograms()</strong></p></td>
+<td><p>Plots semivariances before and after regularization.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>plot_deviations()</strong></p></td>
+<td><p>Plots each deviation divided by the initial deviation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot_weights()</strong></p></td>
+<td><p>Plots the mean weight value per lag.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">export_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.export_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function exports final theoretical model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname</strong><span class="classifier">str</span></dt><dd><p>File name for model parameters (nugget, sill, range, model type)</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>RunetimeError</strong><span class="classifier">model is not transformed.</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function fits given areal data variogram into point support variogram - it is the first step of regularization
+process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>agg_dataset</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>Blocks with aggregated data.</p>
+<ul class="simple">
+<li><p>Blocks: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</p></li>
+<li><p>GeoDataFrame and DataFrame must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+Geometry column with polygons is not used.</p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>point_support_dataset</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><ul class="simple">
+<li><p>Dict: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code></p></li>
+<li><p>numpy array: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code></p></li>
+<li><p>DataFrame and GeoDataFrame: columns = <code class="docutils literal notranslate"><span class="pre">{x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code></p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</dd>
+<dt><strong>agg_step_size</strong><span class="classifier">float</span></dt><dd><p>Step size between lags.</p>
+</dd>
+<dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is NS direction,</p></li>
+<li><p>90 or 270 is EW direction,</p></li>
+<li><p>45 or 225 is NE-SW direction,</p></li>
+<li><p>135 or 315 is NW-SE direction.</p></li>
+</ul>
+</dd>
+<dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the angle given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>
+then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+for 0 tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">agg_step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span> <span class="pre">*</span> <span class="pre">agg_step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">agg_tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>variogram_weighting_method</strong><span class="classifier">str, default = “closest”</span></dt><dd><p>Method used to weight error at a given lags. Available methods:</p>
+<ul class="simple">
+<li><p><strong>equal</strong>: no weighting,</p></li>
+<li><p><strong>closest</strong>: lags at a close range have bigger weights,</p></li>
+<li><p><strong>distant</strong>: lags that are further away have bigger weights,</p></li>
+<li><p><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method performs fit() and transform() operations at once.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>agg_dataset</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><p>Blocks with aggregated data.
+* Blocks: Blocks() class object.
+* GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.</p>
+<blockquote>
+<div><p>Geometry column with polygons is not used and optional.</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>numpy array: [[block index, centroid x, centroid y, value]].</p></li>
+</ul>
+</dd>
+<dt><strong>point_support_dataset</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><ul class="simple">
+<li><p>Dict: {block id: [[point x, point y, value]]}</p></li>
+<li><p>numpy array: [[block id, x, y, value]]</p></li>
+<li><p>DataFrame and GeoDataFrame: columns={x, y, ds, index}</p></li>
+<li><p>PointSupport</p></li>
+</ul>
+</dd>
+<dt><strong>agg_step_size</strong><span class="classifier">float</span></dt><dd><p>Step size between lags.</p>
+</dd>
+<dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>direction of semivariogram, values from 0 to 360 degrees:
+* 0 or 180: is NS direction,
+* 90 or 270 is EW direction,
+* 45 or 225 is NE-SW direction,
+* 135 or 315 is NW-SE direction.</p>
+</dd>
+<dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If tolerance is 0 then points must be placed at a single line with the beginning in the origin
+of the coordinate system and the angle given by y axis and direction parameter. If tolerance
+is &gt; 0 then the bin is selected as an elliptical area with major axis pointed in the same
+direction as the line for 0 tolerance.
+* The minor axis size is (tolerance * step_size)
+* The major axis size is ((1 - tolerance) * step_size)
+* The baseline point is at a center of the ellipse.
+Tolerance == 1 creates an omnidirectional semivariogram.</p>
+</dd>
+<dt><strong>variogram_weighting_method</strong><span class="classifier">str, default = “closest”</span></dt><dd><p>Method used to weight error at a given lags. Available methods:
+- equal: no weighting,
+- closest: lags at a close range have bigger weights,
+- distant: lags that are further away have bigger weights,
+- dense: error is weighted by the number of point pairs within a lag - more pairs,</p>
+<blockquote>
+<div><p>lesser weight.</p>
+</div></blockquote>
+</dd>
+<dt><strong>max_iters</strong><span class="classifier">int, default = 25</span></dt><dd><p>Maximum number of iterations.</p>
+</dd>
+<dt><strong>limit_deviation_ratio</strong><span class="classifier">float, default = 0.01</span></dt><dd><p>Minimal ratio of model deviation to initial deviation when algorithm is stopped.
+Parameter must be set in the limits (0, 1).</p>
+</dd>
+<dt><strong>minimum_deviation_decrease</strong><span class="classifier">float, default = 0.001</span></dt><dd><p>The minimum ratio of the difference between model deviation and optimal deviation
+to the optimal deviation: <a href="#id1"><span class="problematic" id="id2">|dev - opt_dev|</span></a> / opt_dev.
+Parameter must be set in the limits (0, 1).</p>
+</dd>
+<dt><strong>reps_deviation_decrease</strong><span class="classifier">int, default = 3</span></dt><dd><p>How many repetitions of small deviation decrease before termination of the algorithm.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_variograms</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.plot_variograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
+semivariogram regularization with transform() method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method performs semivariogram regularization after model fitting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>max_iters</strong><span class="classifier">int, default = 25</span></dt><dd><p>Maximum number of iterations.</p>
+</dd>
+<dt><strong>limit_deviation_ratio</strong><span class="classifier">float, default = 0.1</span></dt><dd><p>Minimal ratio of model deviation to initial deviation when algorithm is stopped.
+Parameter must be set within the limits <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1)</span></code>.</p>
+</dd>
+<dt><strong>minimum_deviation_decrease</strong><span class="classifier">float, default = 0.01</span></dt><dd><p>The minimum ratio of the difference between model deviation and optimal deviation
+to the optimal deviation: <code class="docutils literal notranslate"><span class="pre">|dev</span> <span class="pre">-</span> <span class="pre">opt_dev|</span> <span class="pre">/</span> <span class="pre">opt_dev</span></code>.
+Parameter must be set within the limits <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1)</span></code>.</p>
+</dd>
+<dt><strong>reps_deviation_decrease</strong><span class="classifier">int, default = 3</span></dt><dd><p>How many repetitions of small deviation decrease before termination of the algorithm.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>AttributeError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">initial_regularized_model</span></code> is undefined (user didn’t perform <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method).</p>
+</dd>
+<dt>ValueError</dt><dd><p><code class="docutils literal notranslate"><span class="pre">limit_deviation_ratio</span></code> or <code class="docutils literal notranslate"><span class="pre">minimum_deviation_decrease</span></code> parameters <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">0</span> <span class="pre">or</span> <span class="pre">&gt;=</span> <span class="pre">1</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../block/block.html"
+                          title="previous chapter">Block</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../../kriging/kriging.html"
+                          title="next chapter">Kriging</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/api/variogram/deconvolution/deconvolution.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../kriging/kriging.html" title="Kriging"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../block/block.html" title="Block"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../api.html" >API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../variogram.html" >Variogram</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Deconvolution</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>
