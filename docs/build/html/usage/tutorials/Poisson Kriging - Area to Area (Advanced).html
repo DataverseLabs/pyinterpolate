@@ -581,7 +581,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
@@ -609,14 +609,30 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets take a look into a map of areal counts</span>
 
 <span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_4_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_4_1.png" />
 </div>
 </div>
 <p><strong>Clarification</strong>: It is a good idea to look into the spatial patterns in a dataset and to visually check if our data do not have any NaN values. We use the geopandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.plot()</span></code> function with a color map that diverges regions based on the cancer incidence rates. The output choropleth map is not ideal, and (probably) it has a few unreliable results, for example:</p>
@@ -631,7 +647,7 @@ div.rendered_html tbody tr:hover {
 <h2>2) Load a semivariogram model<a class="headerlink" href="#2)-Load-a-semivariogram-model" title="Permalink to this heading">¶</a></h2>
 <p>In this step, we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regularization along with the Poisson Kriging, but it is a very long process, and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
@@ -644,7 +660,7 @@ div.rendered_html tbody tr:hover {
 <h2>3) Prepare training and test data.<a class="headerlink" href="#3)-Prepare-training-and-test-data." title="Permalink to this heading">¶</a></h2>
 <p>We simply remove 40% of random ID’s from the areal dataset (the same for points) and create four arrays: two training arrays with areal and point geometry and values and two test arrays with the same categories of data.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove 40% of rows (values) to test our model</span>
@@ -724,7 +740,7 @@ div.rendered_html tbody tr:hover {
 in the last part of the tutorial.</p>
 <p>Your work with Poisson Kriging (or Kriging) will usually be the same: - prepare training and test data, - use training data to train the semivariogram model, - test different hyperparameters with a test set to find the optimal number of neighbors which are affecting your area of analysis, - forecast into unknown areas OR perform data smoothing.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">number_of_obs</span> <span class="o">=</span> <span class="mi">4</span>
@@ -756,7 +772,7 @@ in the last part of the tutorial.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kriged_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predslist</span><span class="p">)</span>
@@ -770,8 +786,8 @@ in the last part of the tutorial.</p>
 <div class="section" id="5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction">
 <h2>5) Analyze Forecast Bias and Root Mean Squared Error of prediction<a class="headerlink" href="#5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction" title="Permalink to this heading">¶</a></h2>
 <p>The last step is the analysis of errors. We plot two histograms: forecast bias and root mean squared error then we calculate the base statistics of a dataset.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show histograms of errors</span>
@@ -780,21 +796,143 @@ in the last part of the tutorial.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:ylabel=&#39;Frequency&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_15_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_15_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="p">[</span><span class="s1">&#39;rmse&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;AxesSubplot:ylabel=&#39;Frequency&#39;&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_16_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_16_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>predicted</th>
+      <th>err</th>
+      <th>rmse</th>
+      <th>fb</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>31.000000</td>
+      <td>31.000000</td>
+      <td>31.000000</td>
+      <td>31.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>195.293053</td>
+      <td>10.222112</td>
+      <td>84.454371</td>
+      <td>-63.041440</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>148.382411</td>
+      <td>6.571080</td>
+      <td>140.731999</td>
+      <td>151.885122</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>8.260659</td>
+      <td>2.293724</td>
+      <td>0.557624</td>
+      <td>-739.860767</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>131.467583</td>
+      <td>4.642622</td>
+      <td>15.989738</td>
+      <td>-71.016311</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>153.766651</td>
+      <td>8.507552</td>
+      <td>26.512075</td>
+      <td>-20.569597</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>209.966311</td>
+      <td>13.863563</td>
+      <td>96.241622</td>
+      <td>0.031468</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>853.260767</td>
+      <td>25.933601</td>
+      <td>739.860767</td>
+      <td>128.739341</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <p><strong>Clarification</strong>: Analysis of <strong>Forecast Bias</strong> and <strong>Root Mean Squared Error</strong> - their distribution and basic properties - could be a handy tool to analyze model performance. However, consider that table above is a single test case (realization) and can be misleading. The good idea is to repeat the test dozens of times with a different training/test set division each time. After this, we average results from multiple tests and get insight into how our model behaves.</p>
 <p><strong>Note 1</strong>: Those results are not decisive. Our sample has been selected randomly, and there is a chance that it is not a spatially representative sample! (E.g., areas only from one region). The good idea is to repeat the experiment multiple times with other samples and average results to determine how well the model performs.</p>

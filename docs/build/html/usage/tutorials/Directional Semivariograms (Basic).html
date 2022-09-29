@@ -551,7 +551,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -572,7 +572,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="1)-Read-and-show-point-data">
 <h2>1) Read and show point data<a class="headerlink" href="#1)-Read-and-show-point-data" title="Permalink to this heading">¶</a></h2>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
@@ -587,77 +587,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="output_area rendered_html docutils container">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>station_id</th>
-      <th>y</th>
-      <th>x</th>
-      <th>PM2.5</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>659</td>
-      <td>50.529892</td>
-      <td>22.112467</td>
-      <td>7.12765</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>736</td>
-      <td>54.380279</td>
-      <td>18.620274</td>
-      <td>4.66432</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>861</td>
-      <td>54.167847</td>
-      <td>19.410942</td>
-      <td>3.00739</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>266</td>
-      <td>51.259431</td>
-      <td>22.569133</td>
-      <td>7.10000</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>355</td>
-      <td>51.856692</td>
-      <td>19.421231</td>
-      <td>2.00000</td>
-    </tr>
-  </tbody>
-</table>
-</div></div>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;samples/directional_variogram_PM25_20220922.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;station_id&#39;</span><span class="p">)</span>
@@ -666,7 +597,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -735,7 +666,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">df2gdf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -779,7 +710,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">df2gdf</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
@@ -788,7 +719,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -864,7 +795,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
@@ -872,7 +803,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -885,7 +816,7 @@ dtype: bool
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -893,7 +824,7 @@ dtype: bool
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2180</span><span class="p">)</span>
@@ -903,7 +834,7 @@ dtype: bool
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -946,7 +877,7 @@ tolerance.<ul>
 </li>
 </ol>
 <p>The best idea is to visualize it on a cartesian plane:</p>
-<img alt="The visualization of directional variogram calculation" src="../../_images/dir_semi_tutorial_graphics.jpg" />
+<p><img alt="The visualization of directional variogram calculation" src="../../_images/dir_semi_tutorial_graphics.jpg" /></p>
 <ul class="simple">
 <li>The top plane shows a unit circle that is the omnidirectional variogram (black circle). Within it we see two ellipses: one is bright-green and another is dark green.</li>
 <li>The bottom plane also shows a unit circle and two ellipses. The brighter yellow, and darker purple ellipse.</li>
@@ -962,7 +893,7 @@ tolerance.<ul>
 <div class="section" id="Case-1:-N-S-Direction">
 <h3>Case 1: N-S Direction<a class="headerlink" href="#Case-1:-N-S-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BIN_RADIUS</span> <span class="o">=</span> <span class="mi">60000</span>  <span class="c1"># meters</span>
@@ -972,7 +903,7 @@ tolerance.<ul>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inp_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gds</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
@@ -982,7 +913,7 @@ tolerance.<ul>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ns_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1008,7 +939,7 @@ tolerance.<ul>
 <div class="section" id="Case-2:-W-E-Direction">
 <h3>Case 2: W-E Direction<a class="headerlink" href="#Case-2:-W-E-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">we_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1034,7 +965,7 @@ tolerance.<ul>
 <div class="section" id="Case-3:-NE-SW-Direction">
 <h3>Case 3: NE-SW Direction<a class="headerlink" href="#Case-3:-NE-SW-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_sw_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1060,7 +991,7 @@ tolerance.<ul>
 <div class="section" id="Case-4:-NW-SE-Direction">
 <h3>Case 4: NW-SE Direction<a class="headerlink" href="#Case-4:-NW-SE-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_se_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1086,7 +1017,7 @@ tolerance.<ul>
 <div class="section" id="Case-5:-Isotropic-Variogram">
 <h3>Case 5: Isotropic Variogram<a class="headerlink" href="#Case-5:-Isotropic-Variogram" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iso_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1119,7 +1050,7 @@ tolerance.<ul>
 </ul>
 <p>We can visualize and compare all variograms at once, that we are sure that the y-axis is the same for every plot.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
