@@ -5,7 +5,6 @@
 
 import os
 import sys
-import sphinx_bootstrap_theme
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
 
@@ -29,7 +28,6 @@ extensions = [
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
-    # 'sphinx.ext.napoleon',
     'sphinx_copybutton',
     'sphinx.ext.githubpages',
     'nbsphinx',
@@ -40,10 +38,6 @@ templates_path = ['_templates']
 exclude_patterns = ['*/test', '*__*__*']
 add_module_names = False
 
-# napoleon_google_docstring = False
-# napoleon_use_param = False
-# napoleon_use_ivar = False
-
 autodoc_typehints = 'none'
 
 # -- Options for HTML output -------------------------------------------------
@@ -53,5 +47,8 @@ html_theme = 'sizzle'
 html_theme_options = {
     'globaltoc_collapse': True
 }
-# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-# html_static_path = ['_static']
+
+nbsphinx_execute_arguments = [
+    "--InlineBackend.figure_formats={'svg', 'pdf'}",
+    "--InlineBackend.rc=figure.dpi=96",
+]
