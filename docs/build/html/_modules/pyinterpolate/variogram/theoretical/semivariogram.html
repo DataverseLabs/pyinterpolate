@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -6,8 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.3.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/classic.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
@@ -16,96 +18,27 @@
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
     <link rel="index" title="Index" href="../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../search.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="../../../../_static/js/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" src="../../../../_static/js/jquery-fix.js"></script>
-<script type="text/javascript" src="../../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../../../_static/bootstrap-sphinx.js"></script>
-
+    <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.variogram.theoretical.semivariogram</a></li> 
+      </ul>
+    </div>  
 
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="../../../../index.html">
-          Pyinterpolate</a>
-        <span class="navbar-text navbar-version pull-left"><b></b></span>
-      </div>
-
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
             
-            
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="../../../../index.html">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api/api.html">API</a></li>
-</ul>
-</ul>
-</li>
-              
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Page <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"></ul>
-</li>
-              
-            
-            
-              
-                
-              
-            
-            
-            
-            
-              <li class="hidden-sm"></li>
-            
-          </ul>
-
-          
-            
-<form class="navbar-form navbar-right" action="../../../../search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-          
-        </div>
-    </div>
-  </div>
-
-<div class="container">
-  <div class="row">
-    <div class="body col-md-12 content" role="main">
-      
   <h1>Source code for pyinterpolate.variogram.theoretical.semivariogram</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">TheoreticalVariogram class.</span>
@@ -138,7 +71,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span>
 
 
-<div class="viewcode-block" id="TheoreticalVariogram"><a class="viewcode-back" href="../../../../api/api.html#pyinterpolate.TheoreticalVariogram">[docs]</a><span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a><span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Theoretical model of a spatial dissimilarity.</span>
 
 <span class="sd">    Parameters</span>
@@ -295,7 +228,7 @@
 
     <span class="c1"># Core functions</span>
 
-    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TheoreticalVariogram.fit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
             <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -392,9 +325,9 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">attrs_to_update</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span>
+        <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span></div>
 
-    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TheoreticalVariogram.autofit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                 <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
                 <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -617,9 +550,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">optimal_parameters</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">return_params</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">optimal_parameters</span>
+            <span class="k">return</span> <span class="n">optimal_parameters</span></div>
 
-    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.predict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method returns a semivariance per distance.</span>
 
@@ -638,11 +571,11 @@
             <span class="n">distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span>
         <span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">predicted</span>
+        <span class="k">return</span> <span class="n">predicted</span></div>
 
     <span class="c1"># Plotting and visualization</span>
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoreticalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots theoretical curve and (optionally) experimental scatter plot.</span>
 
@@ -672,11 +605,11 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
     <span class="c1"># Evaluation</span>
 
-    <span class="k">def</span> <span class="nf">calculate_model_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TheoreticalVariogram.calculate_model_error"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.calculate_model_error">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_model_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                               <span class="n">fitted_values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                               <span class="n">rmse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -763,11 +696,11 @@
             <span class="n">_smape</span> <span class="o">=</span> <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">)</span>
             <span class="n">model_error</span><span class="p">[</span><span class="s1">&#39;smape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_smape</span>
 
-        <span class="k">return</span> <span class="n">model_error</span>
+        <span class="k">return</span> <span class="n">model_error</span></div>
 
     <span class="c1"># I/O</span>
 
-    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.to_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Method exports the theoretical variogram parameters to a dictionary.</span>
 
 <span class="sd">        Returns</span>
@@ -791,9 +724,9 @@
                               <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
                               <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">modeled_parameters</span>
+        <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
-    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -803,9 +736,9 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoreticalVariogram.to_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_json">[docs]</a>    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method stores variogram parameters into a JSON file.</span>
 
@@ -822,9 +755,9 @@
         <span class="p">}</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
-            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_output</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_output</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoreticalVariogram.from_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_json">[docs]</a>    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method reads data from a JSON file.</span>
 
@@ -837,7 +770,7 @@
             <span class="n">json_input</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fin</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">json_input</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -1009,7 +942,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/api.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
                                 <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -1054,21 +987,40 @@
     <span class="k">return</span> <span class="n">theo</span></div>
 </pre></div>
 
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
     </div>
-      
-  </div>
 </div>
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
-      
-    </p>
-    <p>
-        &copy; Copyright 2022, Szymon Moliński.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br/>
-    </p>
-  </div>
-</footer>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.variogram.theoretical.semivariogram</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
   </body>
 </html>

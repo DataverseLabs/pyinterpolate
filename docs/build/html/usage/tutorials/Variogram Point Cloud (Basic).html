@@ -1,18 +1,42 @@
-
 <!DOCTYPE html>
+<html lang="en-gb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Variogram Point Cloud &#8212; Pyinterpolate 0.3.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
+<title>Pyinterpolate - Variogram Point Cloud</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+    <script>
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+      $(document).data('sizzle', {on_load: []});
+    </script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -21,34 +45,197 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Directional semivariograms" href="Directional%20Semivariograms%20%28Basic%29.html" />
-    <link rel="prev" title="Semivariogram models" href="Theoretical%20Models%20%28Basic%29.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="Directional%20Semivariograms%20%28Basic%29.html" title="Directional semivariograms"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Theoretical%20Models%20%28Basic%29.html" title="Semivariogram models"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Variogram Point Cloud</a></li> 
-      </ul>
-    </div>  
+    <script src="../../app-data.js"></script>
+<link rel="index" title="Index" href="../../genindex.html" />
+<link rel="search" title="Search" href="../../search.html" />
+<link rel="next" title="Directional semivariograms" href="Directional%20Semivariograms%20%28Basic%29.html" />
+<link rel="prev" title="Semivariogram models" href="Theoretical%20Models%20%28Basic%29.html" />
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+</head>
+<body class="full-height test">
+<noscript>
+  <div>
+    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
+  </div>
+</noscript>
+<div id="whole-page" class="container-fluid content full-height">
+  <div id="header-row" class="row">
+    <div id="header-container" class="col-md-12">
+      <div id="hdr-left">
+        <i class="fa fa-bars menu-toggle"></i>
+        
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.0 documentation</a>
+
+      </div>
+      <div id="hdr-centre" class="text-center stretch">
+        <h3 title="Variogram Point Cloud">Variogram Point Cloud</h3>
+        <h6>Variogram Point Cloud</h6>
+      </div>
+      <div id="hdr-search">
+        
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+      </div>
+
+      <div id="hdr-index">
+        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
+      </div>
+
+      <div id="hdr-source">
+        <a href="../../_sources/usage/tutorials/Variogram Point Cloud (Basic).ipynb.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
+      </div>
+
+      <div id="hdr-right">
+        
+  
+  <div class="prev-next">
+    
+      <div class="pull-left">
+        <a class="btn btn-default prev" href="Theoretical%20Models%20%28Basic%29.html" title="Previous chapter (Semivariogram models)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">Semivariogram models</span></a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default next" href="Directional%20Semivariograms%20%28Basic%29.html" title="Next chapter (Directional semivariograms)"><span class="btn-text">Directional semivariograms</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  
+      </div>
+      <div id="alt-hdr-right">
+
+        <a href="Theoretical%20Models%20%28Basic%29.html"><i class="fa fa-chevron-left mr-8"></i></a>
+
+
+        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+
+
+        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
+
+
+        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
+
+
+        <a href="Directional%20Semivariograms%20%28Basic%29.html"><i class="fa fa-chevron-right"></i></a>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="content-row" class="row">
+    <div id="page-content" class="col-md-12 flex-col">
+      <div id="content-container">
+        <div id="nav">
+          
+  <div class="navsidebar">
+    <div id="sidebar-search">
+      
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+    </div>
+      <div class="sidebar-block">
+        <div class="sidebar-tocheading">
+          <div class="pull-left">
+            <h2>Table Of Contents</h2>
+          </div>
+          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+        </div>
+        <div class="sidebar-toc">
+      
+          <div id="toc-filter" title="Type in here to show only matching topics">
+            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
+          </div>
+      
+        
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Estimation%20%28Basic%29.html">Semivariogram Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Variogram-Point-Cloud">Variogram Point Cloud</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data">1) Read point data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram">2) Set proper lag size with variogram cloud histogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Detect-and-remove-outliers">3) Detect and remove outliers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Calculate-experimental-semivariogram-from-point-cloud">4) Calculate experimental semivariogram from point cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Directional%20Semivariograms%20%28Basic%29.html">Directional semivariograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+        </div>
+      </div>
+  </div>
+        </div>
+        <div id="content" tabindex="0" class="stretch">
+          <div id="mnav">
+            
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Estimation%20%28Basic%29.html">Semivariogram Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Variogram-Point-Cloud">Variogram Point Cloud</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data">1) Read point data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram">2) Set proper lag size with variogram cloud histogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Detect-and-remove-outliers">3) Detect and remove outliers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Calculate-experimental-semivariogram-from-point-cloud">4) Calculate experimental semivariogram from point cloud</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Directional%20Semivariograms%20%28Basic%29.html">Directional semivariograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+          </div>
+          <div class="body">
             
   
 <style>
@@ -306,72 +493,77 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Variogram-Point-Cloud">
+<div class="section" id="Variogram-Point-Cloud">
 <h1>Variogram Point Cloud<a class="headerlink" href="#Variogram-Point-Cloud" title="Permalink to this heading">¶</a></h1>
-<section id="Table-of-Contents:">
+<div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Read point data,</p></li>
-<li><p>Create variogram point cloud,</p></li>
-<li><p>Detect and remove outliers.</p></li>
-<li><p>Calculate experimental semivariance from point cloud.</p></li>
+<li>Read point data,</li>
+<li>Create variogram point cloud,</li>
+<li>Detect and remove outliers.</li>
+<li>Calculate experimental semivariance from point cloud.</li>
 </ol>
-</section>
-<section id="Level:-Basic">
+</div>
+<div class="section" id="Level:-Basic">
 <h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this heading">¶</a></h2>
-</section>
-<section id="Changelog">
+</div>
+<div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Change description</p></th>
-<th class="head"><p>Author</p></th>
+<table>
+<colgroup>
+<col width="5%" />
+<col width="81%" />
+<col width="13%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>2022-08-17</p></td>
-<td><p>Updated to the version 0.3.0</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>2022-08-17</td>
+<td>Updated to the version 0.3.0</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-13</p></td>
-<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-12-13</td>
+<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-10-13</p></td>
-<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
-<td><p>&#64;ethmtrgt &amp; &#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-10-13</td>
+<td>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</td>
+<td>&#64;ethmtrgt &amp; &#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-08-22</p></td>
-<td><p>Refactored the Outlier Removal algorithm - quantile based algorithm</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-08-22</td>
+<td>Refactored the Outlier Removal algorithm - quantile based algorithm</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-08-10</p></td>
-<td><p>Refactored the Outlier Removal algorithm</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-08-10</td>
+<td>Refactored the Outlier Removal algorithm</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
-<td><p>Refactored TheoreticalSemivariogram class</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-05-11</td>
+<td>Refactored TheoreticalSemivariogram class</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
-<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-03-31</td>
+<td>Update related to the change of semivariogram weighting. Updated cancer rates data.</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="Introduction">
+</div>
+<div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
 <p>We will learn how to read and prepare data for semivariogram modeling, manually find the best step size between lags, and detect outliers in our data.</p>
 <p>Variogram Point Cloud analysis is an additional, essential data preparation step that may save you a lot of headaches with a more sophisticated analysis. You should learn about Variogram Point Cloud analysis before you move on to the semivariogram estimation and semivariogram fitting operations.</p>
 <p>We use:</p>
 <ul class="simple">
-<li><p>for points 1 and 2: DEM data stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code>,</p></li>
-<li><p>for points 3 and 4: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</p></li>
+<li>for points 1 and 2: DEM data stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code>,</li>
+<li>for points 3 and 4: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</li>
 </ul>
-</section>
-<section id="Import-packages">
+</div>
+<div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -384,8 +576,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="1)-Read-point-data">
+</div>
+<div class="section" id="1)-Read-point-data">
 <h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -423,8 +615,8 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
        [2.36826130e+05, 5.29497967e+05, 3.55447350e+01]])
 </pre></div></div>
 </div>
-</section>
-<section id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
+</div>
+<div class="section" id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
 <h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Permalink to this heading">¶</a></h2>
 <p>We will generate the Variogram Point Cloud. We calculate it for 16 lags and test different cloud variogram visualization methods.</p>
 <div class="nbinput nblast docutils container">
@@ -479,9 +671,9 @@ Lag 14019.051571621392 has 2559140 point pairs.
 <p>As we see, there are a lot of points per lag! Data is probably messy, but to be sure, we must check its distribution. What are those <strong>points per lag</strong>? They are a set of semivariances between all point pairs within a specific lag. This information helps us to understand if there are any undersampled ranges. Then, we can change <code class="docutils literal notranslate"><span class="pre">step_size</span></code> accordingly (to avoid a situation where one lag has the order of magnitude less/more point pairs than the other).</p>
 <p>We know points density per lag, great. Now we can analyze semivariances distribution per lag. The <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class has three plot types we use for analysis:</p>
 <ol class="arabic simple">
-<li><p><em>Scatter plot</em>. It shows the general dispersion of semivariances.</p></li>
-<li><p><em>Box plot</em> - an excellent tool for outliers detection. It shows dispersion and quartiles of semivariances per lag. We can check distribution differences and their deviation from normality or skewness.</p></li>
-<li><p><em>Violin plot</em>. It is a box plot on steroids. We can read all information like from the box plot, plus we see kernel density plots.</p></li>
+<li><em>Scatter plot</em>. It shows the general dispersion of semivariances.</li>
+<li><em>Box plot</em> - an excellent tool for outliers detection. It shows dispersion and quartiles of semivariances per lag. We can check distribution differences and their deviation from normality or skewness.</li>
+<li><em>Violin plot</em>. It is a box plot on steroids. We can read all information like from the box plot, plus we see kernel density plots.</li>
 </ol>
 <p>Let’s plot them all. The first is a scatter plot. It can take a while (we have thousands of point pairs), so now is a good time to prepare a beverage.</p>
 <div class="nbinput docutils container">
@@ -517,10 +709,10 @@ Lag 14019.051571621392 has 2559140 point pairs.
 </div>
 <p>The orange line in the middle of each box represents the median (50%) value per lag. The trend is more visible if we look into it. What else can be seen here?</p>
 <ol class="arabic simple">
-<li><p>Dispersion of values is greater with a distance, but at the same time, median and the <strong>3rd quartile</strong> of semivariance values are rising (<strong>3rd quartile</strong> is plotted as a horizontal line on a top of a box.</p></li>
-<li><p>The maximum value rises with a distance (it is a horizontal line on a top of a whisker).</p></li>
-<li><p>Data is skewed towards lower values of semivariance. Why? Because the median is closer to the bottom of a box than the center or the top.</p></li>
-<li><p>The <strong>1st quartile</strong> (25% of the lowest values) is higher for distant lags.</p></li>
+<li>Dispersion of values is greater with a distance, but at the same time, median and the <strong>3rd quartile</strong> of semivariance values are rising (<strong>3rd quartile</strong> is plotted as a horizontal line on a top of a box.</li>
+<li>The maximum value rises with a distance (it is a horizontal line on a top of a whisker).</li>
+<li>Data is skewed towards lower values of semivariance. Why? Because the median is closer to the bottom of a box than the center or the top.</li>
+<li>The <strong>1st quartile</strong> (25% of the lowest values) is higher for distant lags.</li>
 </ol>
 <p>We could stop our analysis here, but there is a better option to analyze data distribution than a box plot. We can use a violin plot:</p>
 <div class="nbinput docutils container">
@@ -540,8 +732,8 @@ Lag 14019.051571621392 has 2559140 point pairs.
 </div>
 <p>The violin plot supports our earlier assumptions, but we can learn more from it. For distant lags, a distribution starts to be multimodal. We see one mode around very low values of semivariance and another mode close to the 1st quartile. Multimodality may affect our outcomes, and maybe it tells us that there is more than one level of spatial dependency?</p>
 <p>There is still the elephant in the room. Our data is pulled up with outliers. Do you see long whiskers on the top of every distribution? We can let them be, but maybe the better idea is to clean it before we start Kriging? In the next paragraph, we will detect and remove outliers from a block dataset.</p>
-</section>
-<section id="3)-Detect-and-remove-outliers">
+</div>
+<div class="section" id="3)-Detect-and-remove-outliers">
 <h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Permalink to this heading">¶</a></h2>
 <p>With the idea of how the Variogram Point Cloud works, we can detect and “remove” outliers from our dataset. In this part of the tutorial, we use another dataset. It represents the breast cancer rates in counties of the Northeastern part of the U.S. Each county will be transformed into its centroid. Those centroids are not evenly spaced, and we expect the dataset may be modeled incorrectly for several steps.</p>
 <div class="nbinput docutils container">
@@ -708,9 +900,9 @@ Lag 527124.9655204691 has 4494 point pairs.
 distribution, and its skewness.</p>
 <p>The class <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> has internal method <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code>. With parameter <code class="docutils literal notranslate"><span class="pre">inplace</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code> we can overwrite the variogram point cloud, but if we set it to <code class="docutils literal notranslate"><span class="pre">False</span></code> and it will return a new <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> object with a cleaned variogram point cloud. Other parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code>: is a string with a method of removing outliers. We have two methods, one based on <strong>z-scores</strong> and the <strong>interquartile range</strong> method. Both have upper and lower bounds. The Z-score method is invoked with <code class="docutils literal notranslate"><span class="pre">method='zscore'</span></code>, and arguments for this function are <code class="docutils literal notranslate"><span class="pre">z_lower_limit</span></code> and <code class="docutils literal notranslate"><span class="pre">z_upper_limit</span></code> (number of standard deviations from the mean down and up, or negative and positive).</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">iqr_lower_limit</span></code>: how many standard deviations should be subtracted from the first quartile to set a limit of valid values,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">iqr_upper_limit</span></code>: how many standard deviations should be added to the 3rd quartile to set a limit of valid values.</p></li>
+<li><code class="docutils literal notranslate"><span class="pre">method</span></code>: is a string with a method of removing outliers. We have two methods, one based on <strong>z-scores</strong> and the <strong>interquartile range</strong> method. Both have upper and lower bounds. The Z-score method is invoked with <code class="docutils literal notranslate"><span class="pre">method='zscore'</span></code>, and arguments for this function are <code class="docutils literal notranslate"><span class="pre">z_lower_limit</span></code> and <code class="docutils literal notranslate"><span class="pre">z_upper_limit</span></code> (number of standard deviations from the mean down and up, or negative and positive).</li>
+<li><code class="docutils literal notranslate"><span class="pre">iqr_lower_limit</span></code>: how many standard deviations should be subtracted from the first quartile to set a limit of valid values,</li>
+<li><code class="docutils literal notranslate"><span class="pre">iqr_upper_limit</span></code>: how many standard deviations should be added to the 3rd quartile to set a limit of valid values.</li>
 </ul>
 <p>The values we will get will be within a limits:</p>
 <div class="math notranslate nohighlight">
@@ -740,8 +932,8 @@ distribution, and its skewness.</p>
 </div>
 </div>
 <p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is 6-7 times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
-</section>
-<section id="4)-Calculate-experimental-semivariogram-from-point-cloud">
+</div>
+<div class="section" id="4)-Calculate-experimental-semivariogram-from-point-cloud">
 <h2>4) Calculate experimental semivariogram from point cloud<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud" title="Permalink to this heading">¶</a></h2>
 <p>The last but not least property of the experimental variogram point cloud is that we may calculate semivariogram directly from it. The method for it is <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. Let’s compare outputs from two algorithms.</p>
 <div class="nbinput nblast docutils container">
@@ -772,85 +964,362 @@ True
 </div>
 <p>Both semivariograms are the same, but methods to obtain these were different.</p>
 <hr class="docutils" />
-</section>
-</section>
+</div>
+</div>
 
 
-            <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Variogram Point Cloud</a><ul>
-<li><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
-<li><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
-<li><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li><a class="reference internal" href="#Introduction">Introduction</a></li>
-<li><a class="reference internal" href="#Import-packages">Import packages</a></li>
-<li><a class="reference internal" href="#1)-Read-point-data">1) Read point data</a></li>
-<li><a class="reference internal" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram">2) Set proper lag size with variogram cloud histogram</a></li>
-<li><a class="reference internal" href="#3)-Detect-and-remove-outliers">3) Detect and remove outliers</a></li>
-<li><a class="reference internal" href="#4)-Calculate-experimental-semivariogram-from-point-cloud">4) Calculate experimental semivariogram from point cloud</a></li>
-</ul>
-</li>
-</ul>
+    </div>
+  </div>
+  <div id="footer-row" class="row">
+
+    <div class="col-md-12">
+        <span title="Built on 2022-09-28" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
+
+           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
+
+        >Sizzle</a> theme.</span>
+    </div>
 
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="Theoretical%20Models%20%28Basic%29.html"
-                          title="previous chapter">Semivariogram models</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="Directional%20Semivariograms%20%28Basic%29.html"
-                          title="next chapter">Directional semivariograms</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/usage/tutorials/Variogram Point Cloud (Basic).ipynb.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="Directional%20Semivariograms%20%28Basic%29.html" title="Directional semivariograms"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Theoretical%20Models%20%28Basic%29.html" title="Semivariogram models"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Variogram Point Cloud</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Szymon Moliński.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
-    </div>
-  </body>
+
+<div id="tooltips" class="hidden">
+</div>
+
+<script>
+$(document).ready(function() {
+  'use strict';
+  var $search = $('.search-query');
+
+  var $filter = $('#toc-filter-query');
+  var $toclist = $('.sidebar-toc > ul').find('li');
+
+  if ($toclist.length === 0) {
+    $toclist = $('.localtoc > ul').find('li');
+  }
+
+
+  var $nav = $('#nav');
+
+  //$('#whole-page').removeClass('hidden');
+  var nav_width = $nav.width();
+
+
+  var search_url = '../../search.html';
+
+  function perform_search(e) {
+    var $elem;
+
+    if (e.type === 'keypress') {
+      $elem = $(e.target);
+    }
+    else if (e.type === 'click') {
+      $elem = $(e.target).parents('.input-group').find('input');
+    }
+    var q = $elem.val().trim();
+
+    if (q) {
+      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
+
+      location.href = url;
+    }
+  }
+
+
+  function apply_filter() {
+    var s = $filter.val().trim().toLowerCase();
+
+    $toclist.find('a').removeClass('hidden');
+    $toclist.each(function() {
+      var $this = $(this);
+      var $link = $this.find('> a');
+      var t = $link.text().toLowerCase();
+      var show = t.indexOf(s) >= 0;
+
+      if (!show) {
+        $link.addClass('hidden');
+      }
+    });
+  }
+
+  $filter.on('keyup', function(e) {
+    apply_filter();
+  });
+
+
+
+  $search.on('keypress', function(e) {
+    if (e.which == 13) {
+      perform_search(e);
+    }
+  });
+  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
+  $(document).on('click', '.summary .fa-caret-right', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $next = $elem.next();
+    $elem.addClass('hidden');
+    $next.removeClass('hidden');
+  });
+  $(document).on('click', '.detail .fa-caret-down', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $prev = $elem.prev();
+    $elem.addClass('hidden');
+    $prev.removeClass('hidden');
+  });
+
+  $('#content').on('click', function() {
+    $('#mnav').hide();
+  });
+
+  var counter = 0;
+  var timer = null;
+
+  function show_nav() {
+    $('#content').off('mousemove', track_mouse);
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    $nav.show();
+  }
+
+  function track_mouse(e) {
+    var x = e.clientX;
+
+    if (x < 15) {
+      ++counter;
+      if (timer === null) {
+        timer = setTimeout(show_nav, 2000);
+      }
+    }
+    else {
+      counter = 0;
+    }
+    if (counter >= 20) {
+      show_nav();
+    }
+  };
+
+  function hide_nav() {
+    $nav.hide();
+    counter = 0;
+    $('#content').on('mousemove', track_mouse);
+  }
+
+  $('.hidetoc').on('click', hide_nav);
+
+  $(document).on('keyup', function(e) {
+    if (e.ctrlKey) {
+      if (e.which == 37) {      // Ctrl+left arrow
+        hide_nav();
+      }
+      else if (e.which == 39) { // Ctrl+right arrow
+        show_nav();
+      }
+    }
+  });
+
+  $('.menu-toggle').on('click', function(e) {
+    $('#mnav').toggle();
+  });
+
+  function scroll_nav(frag) {
+    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
+
+    var $link = $(sel);
+
+    if ($link.length > 0) {
+      $link[0].scrollIntoView({block: 'center'});
+    }
+  }
+
+  // If the navigator is long, then the item we clicked on to get here might
+  // not be in view. Try to scroll it into the view - a slight delay is needed
+  // to get it to sync properly with other stuff going on (as the page has just
+  // loaded). Hence the setTimeout with a timeout of 0.
+
+  function do_scroll() {
+    scroll_nav(window.location.hash);
+  }
+
+  setTimeout(do_scroll, 0);
+
+  function adjust_size() {
+    // we need to set the height explicitly so that scrolling regions in the
+    // content area work properly.
+    var h = $('#page-content').height();
+
+    $('#nav, #content').height(h);
+    if ($('#nav').is(':visible')) {
+      $('#mnav').hide();
+    }
+  }
+
+  adjust_size();
+
+  $(window).on('resize', adjust_size);
+
+  function focus_content() {
+    $('#content').focus();  // so that keyboard can be used to scroll, etc.
+  }
+
+  setTimeout(focus_content, 150);
+
+  var sizzle = $(document).data('sizzle');
+
+  function make_tooltip(id, h, b) {
+    var $e = $('<div>').attr('id', id);
+    var $b = $('<div>').addClass('tc-body').html(b);
+
+    if (h) {
+      var $h = $('<div>').addClass('tc-heading').html(h);
+      $e.append($h);
+    }
+    $e.append($b);
+    return $e;
+  }
+
+  var default_tt_options = {
+    theme: ['tooltipster-light', 'tooltipster-light-customized'],
+    interactive: true,
+    maxWidth: 600,
+    contentCloning: true
+  };
+
+  function activate_tooltips() {
+    var $tt = $('.tt');
+
+    //console.log('tt links:', $tt.length);
+    $tt.tooltipster(default_tt_options);
+  }
+
+
+
+  function add_glossary_tooltips() {
+    var links = $('a');  // can qualify with .reference.internal
+    var glinks = {};
+    var pat = /(.*)\.html#(term-.*)$/;
+    var found = false;  // links in this document
+
+    $.each(links, function(i, link) {
+        var $link = $(link);
+        var href = $link.attr('href');
+        var m = href.match(pat);
+
+        if (m) {
+          var s = m[1].replace(/^(\.\.\/)+/, '');
+
+          if (s === sizzle.app_data.glossary.document) {
+            var k = m[2];
+
+            if (k in glinks) {
+              glinks[k].push($link);
+            }
+            else {
+              glinks[k] = [$link];
+            }
+            found = true;
+          }
+        }
+    });
+    if (found) {
+      var $t = $('#tooltips');
+      var data = sizzle.app_data.glossary.terms;
+
+      $.each(glinks, function(k, v) {
+        var d = data[k];
+
+        if (d) {  // as a sanity check
+          var s = 'tc-'+ k;
+          var $e = make_tooltip(s, d.term, d.defn);
+          $t.append($e);
+
+          $.each(v, function(i, link) {
+            link.addClass('tt').attr('data-tooltip-content', '#' + s);
+          });
+        }
+      });
+    }
+  }
+
+  if (sizzle.app_data && sizzle.app_data.glossary &&
+      sizzle.app_data.glossary.document) {
+    add_glossary_tooltips();
+  }
+
+
+
+
+  function add_custom_tooltips() {
+    if (!sizzle.app_data) {
+      return;
+    }
+
+    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
+
+    if ($.isEmptyObject(info_tips)) {
+      return;
+    }
+
+    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
+
+    $('.tc-info').each(function() {
+      var $elem = $(this).prev();
+      var classes = $elem.attr('class');
+      var m = /\btci-([\S]+)/.exec(classes);
+
+      if (m !== null) {
+        var key = m[1];
+
+        if (key in info_tips) {
+          var v = info_tips[key];
+          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
+        }
+      }
+    });
+  }
+
+  add_custom_tooltips();
+
+  setTimeout(activate_tooltips, 1000);
+
+
+  // Clipboard copy for code blocks with captions
+
+  $('.code-block-caption').each(function() {
+    var $cap = $(this);
+    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
+    var $code = $cap.parent().find('.highlight');
+
+    $cap.append($btn);
+    $btn.find('.fa-clipboard').data('clip-text', $code.text());
+  });
+
+  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
+    'text': function(trigger) {
+      return $(trigger).data('clip-text');
+    }
+  });
+
+  clipboard.on('success', function(e) {
+    var $copied = $(e.trigger).prev();
+
+    $copied.removeClass('hidden');
+
+    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
+  });
+
+  if (sizzle.on_load) {
+    sizzle.on_load.forEach(function(f) {
+      f();
+    });
+  }
+});
+</script>
+</body>
 </html>

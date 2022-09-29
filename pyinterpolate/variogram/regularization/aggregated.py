@@ -197,9 +197,9 @@ class AggregatedVariogram:
         self.distances_between_blocks = None
 
     def calculate_avg_inblock_semivariance(self) -> np.ndarray:
-        """
-        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`.
-        The average inblock semivariance is calculated as:
+        r"""
+        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`. The average inblock
+        semivariance is calculated as:
 
         .. math::
 
@@ -207,7 +207,7 @@ class AggregatedVariogram:
 
         where:
 
-        - :math:`\gamma(v_{a}, v_{a})` is semivariance within a block :math:`a`,
+        - :math:`\gamma(v_{a}, v_{a})` is a semivariance within a block :math:`a`,
         - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the block :math:`a`.
 
         Returns
@@ -233,7 +233,7 @@ class AggregatedVariogram:
         return avg_inblock_semivariance
 
     def calculate_avg_semivariance_between_blocks(self) -> np.ndarray:
-        """
+        r"""
         Function calculates semivariance between areas based on their division into smaller blocks. It is
         :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.
 
@@ -289,7 +289,7 @@ class AggregatedVariogram:
                    semivariance_between_point_supports=None,
                    experimental_block_variogram=None,
                    theoretical_block_model=None) -> np.ndarray:
-        """
+        r"""
         Method regularizes point support model. Procedure is described in [1].
 
         Parameters
@@ -305,7 +305,6 @@ class AggregatedVariogram:
 
         theoretical_block_model : TheoreticalVariogram, default = None
             A modeled variogram.
-
 
         Returns
         -------
@@ -324,7 +323,7 @@ class AggregatedVariogram:
 
         - :math:`\gamma_v(h)` - the regularized variogram,
         - :math:`\gamma(v, v_h)` - a variogram value between any two blocks separated by the distance :math:`h`
-        (calculated from their point support),
+          (calculated from their point support),
         - :math:`\gamma_h(v, v)` - average inblock semivariance between blocks.
 
         Average inblock semivariance between blocks:
@@ -333,9 +332,7 @@ class AggregatedVariogram:
 
             \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]
 
-        where:
-
-        - :math:`\gamma(v_{a}, v_{a})` and :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block
+        where :math:`\gamma(v_{a}, v_{a})` and :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block
         :math:`a` and block :math:`a+h` separated by the distance :math:`h`.
 
         References
@@ -372,7 +369,7 @@ class AggregatedVariogram:
         return self.regularized_variogram
 
     def regularize_variogram(self) -> np.ndarray:
-        """
+        r"""
         Function regularizes semivariograms.
 
         Returns

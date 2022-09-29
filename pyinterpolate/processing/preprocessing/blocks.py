@@ -36,10 +36,10 @@ class Blocks:
 
     Methods
     -------
-    from_file(fpath, value_col, geometry_col, index_col)
+    from_file()
         Reads and parses data from spatial file supported by GeoPandas.
 
-    from_geodataframe(gdf, value_col, geometry_col, use_index)
+    from_geodataframe()
         Reads and parses data from GeoPandas ``GeoDataFrame``.
 
     Examples

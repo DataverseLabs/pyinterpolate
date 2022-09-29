@@ -5,6 +5,8 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
+from typing import Dict
+
 import numpy as np
 from collections import OrderedDict
 
@@ -381,29 +383,29 @@ class VariogramCloud:
         self.experimental_variogram = experimental_semivariogram
         return experimental_semivariogram
 
-    def describe(self) -> dict:
+    def describe(self) -> Dict:
         """
         Method calculates basic statistcs of a data: count (point pairs number), average semivariance,
         standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.
 
         Returns
         -------
-        statistics : dict
-                     statistics = {
-                         lag_number:
-                         {
-                             'count': point pairs count,
-                             'avg semivariance': mean semivariance,
-                             'std': standard deviation,
-                             'min': minimal variance,
-                             '25%': first quartile of variances,
-                             'median': second quartile of variances,
-                             '75%': third quartile of variances,
-                             'max': max variance,
-                             'skewness': skewness,
-                             'kurtosis': kurtosis
-                         }
-                     }
+        statistics : Dict
+            >>> statistics = {
+            ...      lag_number:
+            ...      {
+            ...          'count': point pairs count,
+            ...          'avg semivariance': mean semivariance,
+            ...          'std': standard deviation,
+            ...          'min': minimal variance,
+            ...          '25%': first quartile of variances,
+            ...          'median': second quartile of variances,
+            ...          '75%': third quartile of variances,
+            ...          'max': max variance,
+            ...          'skewness': skewness,
+            ...          'kurtosis': kurtosis
+            ...      }
+            ...  }
 
         """
 

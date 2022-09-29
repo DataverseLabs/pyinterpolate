@@ -510,68 +510,71 @@ class Deconvolution:
                       minimum_deviation_decrease=0.01,
                       reps_deviation_decrease=3):
         """
-        Method performs fit() and transform() operations at once.
+        Method performs ``fit()`` and ``transform()`` operations at once.
 
         Parameters
         ----------
         agg_dataset : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-                      Blocks with aggregated data.
-                      * Blocks: Blocks() class object.
-                      * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-                        Geometry column with polygons is not used and optional.
-                      * numpy array: [[block index, centroid x, centroid y, value]].
+            Blocks with aggregated data.
+
+            * Blocks: ``Blocks()`` class object.
+            * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.
+              Geometry column with polygons is not used.
+            * numpy array: ``[[block index, centroid x, centroid y, value]]``.
 
         point_support_dataset : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                                * Dict: {block id: [[point x, point y, value]]}
-                                * numpy array: [[block id, x, y, value]]
-                                * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                                * PointSupport
+
+            * Dict: ``{block id: [[point x, point y, value]]}``
+            * numpy array: ``[[block id, x, y, value]]``
+            * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``
+            * PointSupport
 
         agg_step_size : float
-                        Step size between lags.
+            Step size between lags.
 
         agg_max_range : float
-                        Maximal distance of analysis.
+            Maximal distance of analysis.
 
-        agg_direction : float (in range [0, 360]), optional, default=0
-                        direction of semivariogram, values from 0 to 360 degrees:
-                        * 0 or 180: is NS direction,
-                        * 90 or 270 is EW direction,
-                        * 45 or 225 is NE-SW direction,
-                        * 135 or 315 is NW-SE direction.
+        agg_direction : float (in range [0, 360]), default=0
+            A direction of semivariogram, values from 0 to 360 degrees:
+
+            * 0 or 180: is NS direction,
+            * 90 or 270 is EW direction,
+            * 45 or 225 is NE-SW direction,
+            * 135 or 315 is NW-SE direction.
 
         agg_tolerance : float (in range [0, 1]), optional, default=1
-                        If tolerance is 0 then points must be placed at a single line with the beginning in the origin
-                        of the coordinate system and the angle given by y axis and direction parameter. If tolerance
-                        is > 0 then the bin is selected as an elliptical area with major axis pointed in the same
-                        direction as the line for 0 tolerance.
-                        * The minor axis size is (tolerance * step_size)
-                        * The major axis size is ((1 - tolerance) * step_size)
-                        * The baseline point is at a center of the ellipse.
-                        Tolerance == 1 creates an omnidirectional semivariogram.
+            If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+            the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
+            then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+            for 0 tolerance.
+
+            * The major axis size == ``agg_step_size``.
+            * The minor axis size is ``agg_tolerance * agg_step_size``
+            * The baseline point is at a center of the ellipse.
+            * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.
 
         variogram_weighting_method : str, default = "closest"
-                                     Method used to weight error at a given lags. Available methods:
-                                     - equal: no weighting,
-                                     - closest: lags at a close range have bigger weights,
-                                     - distant: lags that are further away have bigger weights,
-                                     - dense: error is weighted by the number of point pairs within a lag - more pairs,
-                                       lesser weight.
+            Method used to weight error at a given lags. Available methods:
+
+            - **equal**: no weighting,
+            - **closest**: lags at a close range have bigger weights,
+            - **distant**: lags that are further away have bigger weights,
+            - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
         max_iters : int, default = 25
-                    Maximum number of iterations.
+            Maximum number of iterations.
 
         limit_deviation_ratio : float, default = 0.01
-                                Minimal ratio of model deviation to initial deviation when algorithm is stopped.
-                                Parameter must be set in the limits (0, 1).
+            Minimal ratio of model deviation to initial deviation when algorithm is stopped. Parameter must be set
+            within the limits ``(0, 1)``.
 
         minimum_deviation_decrease : float, default = 0.001
-                                     The minimum ratio of the difference between model deviation and optimal deviation
-                                     to the optimal deviation: |dev - opt_dev| / opt_dev.
-                                     Parameter must be set in the limits (0, 1).
+            The minimum ratio of the difference between model deviation and optimal deviation to the optimal
+            deviation: ``|dev - opt_dev| / opt_dev``. The parameter must be set within the limits ``(0, 1)``.
 
         reps_deviation_decrease : int, default = 3
-                                  How many repetitions of small deviation decrease before termination of the algorithm.
+            How many repetitions of small deviation decrease before termination of the algorithm.
         """
 
         self.fit(agg_dataset=agg_dataset,
@@ -594,11 +597,12 @@ class Deconvolution:
         Parameters
         ----------
         fname : str
-                File name for model parameters (nugget, sill, range, model type)
+            File name for model parameters (nugget, sill, range, model type)
 
         Raises
         ------
-        RunetimeError : model is not transformed.
+        RunetimeError
+            A model hasn't been transformed yet.
         """
 
         if self.final_theoretical_model is None:
@@ -609,7 +613,7 @@ class Deconvolution:
     def plot_variograms(self):
         """
         Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
-        semivariogram regularization with transform() method.
+        semivariogram regularization with ``transform()`` method.
         """
         lags = self.initial_experimental_variogram.lags
 

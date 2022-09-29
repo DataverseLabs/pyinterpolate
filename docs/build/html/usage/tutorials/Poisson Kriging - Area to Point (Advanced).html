@@ -1,18 +1,42 @@
-
 <!DOCTYPE html>
+<html lang="en-gb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Poisson Kriging - Area to Point Kriging &#8212; Pyinterpolate 0.3.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
+<title>Pyinterpolate - Poisson Kriging - Area to Point Kriging</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+    <script>
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+      $(document).data('sizzle', {on_load: []});
+    </script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -21,34 +45,189 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="API" href="../../api/api.html" />
-    <link rel="prev" title="Poisson Kriging - Area to Area Kriging" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../api/api.html" title="API"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" title="Poisson Kriging - Area to Area Kriging"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Poisson Kriging - Area to Point Kriging</a></li> 
-      </ul>
-    </div>  
+    <script src="../../app-data.js"></script>
+<link rel="index" title="Index" href="../../genindex.html" />
+<link rel="search" title="Search" href="../../search.html" />
+<link rel="next" title="How to cite" href="../../science/cite.html" />
+<link rel="prev" title="Poisson Kriging - Area to Area Kriging" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" />
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
+</head>
+<body class="full-height test">
+<noscript>
+  <div>
+    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
+  </div>
+</noscript>
+<div id="whole-page" class="container-fluid content full-height">
+  <div id="header-row" class="row">
+    <div id="header-container" class="col-md-12">
+      <div id="hdr-left">
+        <i class="fa fa-bars menu-toggle"></i>
+        
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.0 documentation</a>
+
+      </div>
+      <div id="hdr-centre" class="text-center stretch">
+        <h3 title="Poisson Kriging - Area to Point Kriging">Poisson Kriging - Area to Point Kriging</h3>
+        <h6>Poisson Kriging - Area to Point Kriging</h6>
+      </div>
+      <div id="hdr-search">
+        
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+      </div>
+
+      <div id="hdr-index">
+        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
+      </div>
+
+      <div id="hdr-source">
+        <a href="../../_sources/usage/tutorials/Poisson Kriging - Area to Point (Advanced).ipynb.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
+      </div>
+
+      <div id="hdr-right">
+        
+  
+  <div class="prev-next">
+    
+      <div class="pull-left">
+        <a class="btn btn-default prev" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" title="Previous chapter (Poisson Kriging - Area to Area Kriging)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">Poisson Kriging - Area to Area Kriging</span></a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default next" href="../../science/cite.html" title="Next chapter (How to cite)"><span class="btn-text">How to cite</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  
+      </div>
+      <div id="alt-hdr-right">
+
+        <a href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html"><i class="fa fa-chevron-left mr-8"></i></a>
+
+
+        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+
+
+        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
+
+
+        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
+
+
+        <a href="../../science/cite.html"><i class="fa fa-chevron-right"></i></a>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="content-row" class="row">
+    <div id="page-content" class="col-md-12 flex-col">
+      <div id="content-container">
+        <div id="nav">
+          
+  <div class="navsidebar">
+    <div id="sidebar-search">
+      
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+    </div>
+      <div class="sidebar-block">
+        <div class="sidebar-tocheading">
+          <div class="pull-left">
+            <h2>Table Of Contents</h2>
+          </div>
+          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+        </div>
+        <div class="sidebar-toc">
+      
+          <div id="toc-filter" title="Type in here to show only matching topics">
+            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
+          </div>
+      
+        
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html">Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Poisson-Kriging---Area-to-Point-Kriging">Poisson Kriging - Area to Point Kriging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Advanced">Level: Advanced</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-explore-data">1) Read and explore data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Load-semivariogram-model">2) Load semivariogram model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data.">3) Perform Area to Point smoothing of areal data.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Visualize-data">4) Visualize data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+        </div>
+      </div>
+  </div>
+        </div>
+        <div id="content" tabindex="0" class="stretch">
+          <div id="mnav">
+            
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html">Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Poisson-Kriging---Area-to-Point-Kriging">Poisson Kriging - Area to Point Kriging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Advanced">Level: Advanced</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-explore-data">1) Read and explore data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Load-semivariogram-model">2) Load semivariogram model</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data.">3) Perform Area to Point smoothing of areal data.</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Visualize-data">4) Visualize data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+          </div>
+          <div class="body">
             
   
 <style>
@@ -306,77 +485,81 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<section id="Poisson-Kriging---Area-to-Point-Kriging">
+<div class="section" id="Poisson-Kriging---Area-to-Point-Kriging">
 <h1>Poisson Kriging - Area to Point Kriging<a class="headerlink" href="#Poisson-Kriging---Area-to-Point-Kriging" title="Permalink to this heading">¶</a></h1>
-<section id="Table-of-Contents:">
+<div class="section" id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Load areal and point data,</p></li>
-<li><p>Load semivariogram (regularized),</p></li>
-<li><p>Build point-based map of better spatial resolution.</p></li>
+<li>Load areal and point data,</li>
+<li>Load semivariogram (regularized),</li>
+<li>Build point-based map of better spatial resolution.</li>
 </ol>
-</section>
-<section id="Level:-Advanced">
+</div>
+<div class="section" id="Level:-Advanced">
 <h2>Level: Advanced<a class="headerlink" href="#Level:-Advanced" title="Permalink to this heading">¶</a></h2>
-</section>
-<section id="Changelog">
+</div>
+<div class="section" id="Changelog">
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
-<table class="docutils align-default">
-<thead>
-<tr class="row-odd"><th class="head"><p>Date</p></th>
-<th class="head"><p>Change description</p></th>
-<th class="head"><p>Author</p></th>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="48%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
 </tr>
 </thead>
-<tbody>
-<tr class="row-even"><td><p>2022-08-27</p></td>
-<td><p>The tutorial was updated for the 0.3.0 version of the package</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tbody valign="top">
+<tr class="row-even"><td>2022-08-27</td>
+<td>The tutorial was updated for the 0.3.0 version of the package</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-14</p></td>
-<td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-12-14</td>
+<td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-12-13</p></td>
-<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-12-13</td>
+<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-11</p></td>
-<td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-12-11</td>
+<td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-05-28</p></td>
-<td><p>Updated paths for input/output data</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-05-28</td>
+<td>Updated paths for input/output data</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
-<td><p>Refactored TheoreticalSemivariogram class</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-odd"><td>2021-05-11</td>
+<td>Refactored TheoreticalSemivariogram class</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
-<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
-<td><p>&#64;SimonMolinsky</p></td>
+<tr class="row-even"><td>2021-03-31</td>
+<td>Update related to the change of semivariogram weighting. Updated cancer rates data.</td>
+<td>&#64;SimonMolinsky</td>
 </tr>
 </tbody>
 </table>
-</section>
-<section id="Introduction">
+</div>
+<div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
 <p>To start this tutorial, it is required to understand concepts in the <strong>Ordinary and Simple Kriging</strong> and <strong>Semivariogram Regularization</strong> tutorials. The good idea is to end <strong>Poisson Kriging - Centroid based</strong> and <strong>Poisson Kriging - Area to Area</strong> tutorials before this one.</p>
 <p>The Poisson Kriging technique is used to model spatial count data. We are analyzing a particular case where data is counted over areas. Those areas may have irregular shapes and sizes because they represent administrative regions.</p>
 <p>We will transform the areal rates of Breast Cancer in the Northeastern US counties into representative population blocks (point support).</p>
 <blockquote>
-<div><p>The breast cancer rates data and the point support population counts are located in the geopackage in a directory: <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</p>
-</div></blockquote>
+<div>The breast cancer rates data and the point support population counts are located in the geopackage in a directory: <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</div></blockquote>
 <p>The tutorial covers the following steps:</p>
 <ol class="arabic simple">
-<li><p>Read and explore data,</p></li>
-<li><p>Load semivariogram model,</p></li>
-<li><p>Perform Area to Point smoothing of areal data.</p></li>
-<li><p>Visualize points.</p></li>
+<li>Read and explore data,</li>
+<li>Load semivariogram model,</li>
+<li>Perform Area to Point smoothing of areal data.</li>
+<li>Visualize points.</li>
 </ol>
-</section>
-<section id="1)-Read-and-explore-data">
+</div>
+<div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -441,13 +624,13 @@ div.rendered_html tbody tr:hover {
 </div>
 <p><strong>Clarification</strong>: It is a good idea to look into the spatial patterns in a dataset and to visually check if our data do not have any NaN values. We use the geopandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.plot()</span></code> function with a color map that diverges regions based on the cancer incidence rates. The output choropleth map is not ideal, and (probably) it has a few unreliable results, for example:</p>
 <ul class="simple">
-<li><p>in counties with a small population, where the ratio number of cases to population size is high even if the number of cases is low,</p></li>
-<li><p>counties that are very big and sparsely populated may draw more of our attention instead of densely populated counties,</p></li>
-<li><p>transitions of colors (rates) between counties may be too abrupt, even if we know, that neighboring counties should have closer results.</p></li>
+<li>in counties with a small population, where the ratio number of cases to population size is high even if the number of cases is low,</li>
+<li>counties that are very big and sparsely populated may draw more of our attention instead of densely populated counties,</li>
+<li>transitions of colors (rates) between counties may be too abrupt, even if we know, that neighboring counties should have closer results.</li>
 </ul>
 <p>We can overcome those problems using Area-to-Point Kriging. Deconvoluted choropleth map is smoother than the colored polygon representation, and places where population is equal to zero are not included in the mapping.</p>
-</section>
-<section id="2)-Load-semivariogram-model">
+</div>
+<div class="section" id="2)-Load-semivariogram-model">
 <h2>2) Load semivariogram model<a class="headerlink" href="#2)-Load-semivariogram-model" title="Permalink to this heading">¶</a></h2>
 <p>In this step, we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regularization along with the Poisson Kriging, but it is a very long process, and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
@@ -459,13 +642,13 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</section>
-<section id="3)-Perform-Area-to-Point-smoothing-of-areal-data.">
+</div>
+<div class="section" id="3)-Perform-Area-to-Point-smoothing-of-areal-data.">
 <h2>3) Perform Area to Point smoothing of areal data.<a class="headerlink" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data." title="Permalink to this heading">¶</a></h2>
 <p>The process of map smoothing is straightforward. We use the <code class="docutils literal notranslate"><span class="pre">smooth_blocks()</span></code> function and pass into it a block and their point support. We pass into the function two interesting parameters:</p>
 <ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> (the most crucial parameter - how many neighbors are affecting your analysis area).</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">crs</span></code> (Coordinate Reference System). We may leave it as the <code class="docutils literal notranslate"><span class="pre">None</span></code>, but then returned <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> won’t have <strong>CRS</strong>. Be careful! The function doesn’t check if passed <strong>CRS</strong> is valid for given blocks and point support!</p></li>
+<li>The <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> (the most crucial parameter - how many neighbors are affecting your analysis area).</li>
+<li>The <code class="docutils literal notranslate"><span class="pre">crs</span></code> (Coordinate Reference System). We may leave it as the <code class="docutils literal notranslate"><span class="pre">None</span></code>, but then returned <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> won’t have <strong>CRS</strong>. Be careful! The function doesn’t check if passed <strong>CRS</strong> is valid for given blocks and point support!</li>
 </ul>
 <p>The method returns <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> with points and predicted values. It iteratively re-calculates each area risk and produces predictions per point. In Area to Area Kriging, those predictions are aggregated. Now we leave them and use them as a smooth map of areal risk.</p>
 <div class="nbinput docutils container">
@@ -570,8 +753,8 @@ div.rendered_html tbody tr:hover {
 </table>
 </div></div>
 </div>
-</section>
-<section id="4)-Visualize-data">
+</div>
+<div class="section" id="4)-Visualize-data">
 <h2>4) Visualize data<a class="headerlink" href="#4)-Visualize-data" title="Permalink to this heading">¶</a></h2>
 <p>The last step is data visualization. We use a choropleth map from the GeoPandas package, but you can store smoothed map to a spatial file of points and process it in a different place or with specific software (in our idea, the best for it is <strong>QGIS</strong>).</p>
 <div class="nbinput docutils container">
@@ -602,84 +785,362 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <hr class="docutils" />
-</section>
-</section>
+</div>
+</div>
 
 
-            <div class="clearer"></div>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <div>
-    <h3><a href="../../index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Poisson Kriging - Area to Point Kriging</a><ul>
-<li><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
-<li><a class="reference internal" href="#Level:-Advanced">Level: Advanced</a></li>
-<li><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li><a class="reference internal" href="#Introduction">Introduction</a></li>
-<li><a class="reference internal" href="#1)-Read-and-explore-data">1) Read and explore data</a></li>
-<li><a class="reference internal" href="#2)-Load-semivariogram-model">2) Load semivariogram model</a></li>
-<li><a class="reference internal" href="#3)-Perform-Area-to-Point-smoothing-of-areal-data.">3) Perform Area to Point smoothing of areal data.</a></li>
-<li><a class="reference internal" href="#4)-Visualize-data">4) Visualize data</a></li>
-</ul>
-</li>
-</ul>
+    </div>
+  </div>
+  <div id="footer-row" class="row">
+
+    <div class="col-md-12">
+        <span title="Built on 2022-09-28" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
+
+           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
+
+        >Sizzle</a> theme.</span>
+    </div>
 
   </div>
-  <div>
-    <h4>Previous topic</h4>
-    <p class="topless"><a href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html"
-                          title="previous chapter">Poisson Kriging - Area to Area Kriging</a></p>
-  </div>
-  <div>
-    <h4>Next topic</h4>
-    <p class="topless"><a href="../../api/api.html"
-                          title="next chapter">API</a></p>
-  </div>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/usage/tutorials/Poisson Kriging - Area to Point (Advanced).ipynb.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
 </div>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../api/api.html" title="API"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html" title="Poisson Kriging - Area to Area Kriging"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Tutorials</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Poisson Kriging - Area to Point Kriging</a></li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2022, Szymon Moliński.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
-    </div>
-  </body>
+
+<div id="tooltips" class="hidden">
+</div>
+
+<script>
+$(document).ready(function() {
+  'use strict';
+  var $search = $('.search-query');
+
+  var $filter = $('#toc-filter-query');
+  var $toclist = $('.sidebar-toc > ul').find('li');
+
+  if ($toclist.length === 0) {
+    $toclist = $('.localtoc > ul').find('li');
+  }
+
+
+  var $nav = $('#nav');
+
+  //$('#whole-page').removeClass('hidden');
+  var nav_width = $nav.width();
+
+
+  var search_url = '../../search.html';
+
+  function perform_search(e) {
+    var $elem;
+
+    if (e.type === 'keypress') {
+      $elem = $(e.target);
+    }
+    else if (e.type === 'click') {
+      $elem = $(e.target).parents('.input-group').find('input');
+    }
+    var q = $elem.val().trim();
+
+    if (q) {
+      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
+
+      location.href = url;
+    }
+  }
+
+
+  function apply_filter() {
+    var s = $filter.val().trim().toLowerCase();
+
+    $toclist.find('a').removeClass('hidden');
+    $toclist.each(function() {
+      var $this = $(this);
+      var $link = $this.find('> a');
+      var t = $link.text().toLowerCase();
+      var show = t.indexOf(s) >= 0;
+
+      if (!show) {
+        $link.addClass('hidden');
+      }
+    });
+  }
+
+  $filter.on('keyup', function(e) {
+    apply_filter();
+  });
+
+
+
+  $search.on('keypress', function(e) {
+    if (e.which == 13) {
+      perform_search(e);
+    }
+  });
+  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
+  $(document).on('click', '.summary .fa-caret-right', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $next = $elem.next();
+    $elem.addClass('hidden');
+    $next.removeClass('hidden');
+  });
+  $(document).on('click', '.detail .fa-caret-down', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $prev = $elem.prev();
+    $elem.addClass('hidden');
+    $prev.removeClass('hidden');
+  });
+
+  $('#content').on('click', function() {
+    $('#mnav').hide();
+  });
+
+  var counter = 0;
+  var timer = null;
+
+  function show_nav() {
+    $('#content').off('mousemove', track_mouse);
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    $nav.show();
+  }
+
+  function track_mouse(e) {
+    var x = e.clientX;
+
+    if (x < 15) {
+      ++counter;
+      if (timer === null) {
+        timer = setTimeout(show_nav, 2000);
+      }
+    }
+    else {
+      counter = 0;
+    }
+    if (counter >= 20) {
+      show_nav();
+    }
+  };
+
+  function hide_nav() {
+    $nav.hide();
+    counter = 0;
+    $('#content').on('mousemove', track_mouse);
+  }
+
+  $('.hidetoc').on('click', hide_nav);
+
+  $(document).on('keyup', function(e) {
+    if (e.ctrlKey) {
+      if (e.which == 37) {      // Ctrl+left arrow
+        hide_nav();
+      }
+      else if (e.which == 39) { // Ctrl+right arrow
+        show_nav();
+      }
+    }
+  });
+
+  $('.menu-toggle').on('click', function(e) {
+    $('#mnav').toggle();
+  });
+
+  function scroll_nav(frag) {
+    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
+
+    var $link = $(sel);
+
+    if ($link.length > 0) {
+      $link[0].scrollIntoView({block: 'center'});
+    }
+  }
+
+  // If the navigator is long, then the item we clicked on to get here might
+  // not be in view. Try to scroll it into the view - a slight delay is needed
+  // to get it to sync properly with other stuff going on (as the page has just
+  // loaded). Hence the setTimeout with a timeout of 0.
+
+  function do_scroll() {
+    scroll_nav(window.location.hash);
+  }
+
+  setTimeout(do_scroll, 0);
+
+  function adjust_size() {
+    // we need to set the height explicitly so that scrolling regions in the
+    // content area work properly.
+    var h = $('#page-content').height();
+
+    $('#nav, #content').height(h);
+    if ($('#nav').is(':visible')) {
+      $('#mnav').hide();
+    }
+  }
+
+  adjust_size();
+
+  $(window).on('resize', adjust_size);
+
+  function focus_content() {
+    $('#content').focus();  // so that keyboard can be used to scroll, etc.
+  }
+
+  setTimeout(focus_content, 150);
+
+  var sizzle = $(document).data('sizzle');
+
+  function make_tooltip(id, h, b) {
+    var $e = $('<div>').attr('id', id);
+    var $b = $('<div>').addClass('tc-body').html(b);
+
+    if (h) {
+      var $h = $('<div>').addClass('tc-heading').html(h);
+      $e.append($h);
+    }
+    $e.append($b);
+    return $e;
+  }
+
+  var default_tt_options = {
+    theme: ['tooltipster-light', 'tooltipster-light-customized'],
+    interactive: true,
+    maxWidth: 600,
+    contentCloning: true
+  };
+
+  function activate_tooltips() {
+    var $tt = $('.tt');
+
+    //console.log('tt links:', $tt.length);
+    $tt.tooltipster(default_tt_options);
+  }
+
+
+
+  function add_glossary_tooltips() {
+    var links = $('a');  // can qualify with .reference.internal
+    var glinks = {};
+    var pat = /(.*)\.html#(term-.*)$/;
+    var found = false;  // links in this document
+
+    $.each(links, function(i, link) {
+        var $link = $(link);
+        var href = $link.attr('href');
+        var m = href.match(pat);
+
+        if (m) {
+          var s = m[1].replace(/^(\.\.\/)+/, '');
+
+          if (s === sizzle.app_data.glossary.document) {
+            var k = m[2];
+
+            if (k in glinks) {
+              glinks[k].push($link);
+            }
+            else {
+              glinks[k] = [$link];
+            }
+            found = true;
+          }
+        }
+    });
+    if (found) {
+      var $t = $('#tooltips');
+      var data = sizzle.app_data.glossary.terms;
+
+      $.each(glinks, function(k, v) {
+        var d = data[k];
+
+        if (d) {  // as a sanity check
+          var s = 'tc-'+ k;
+          var $e = make_tooltip(s, d.term, d.defn);
+          $t.append($e);
+
+          $.each(v, function(i, link) {
+            link.addClass('tt').attr('data-tooltip-content', '#' + s);
+          });
+        }
+      });
+    }
+  }
+
+  if (sizzle.app_data && sizzle.app_data.glossary &&
+      sizzle.app_data.glossary.document) {
+    add_glossary_tooltips();
+  }
+
+
+
+
+  function add_custom_tooltips() {
+    if (!sizzle.app_data) {
+      return;
+    }
+
+    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
+
+    if ($.isEmptyObject(info_tips)) {
+      return;
+    }
+
+    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
+
+    $('.tc-info').each(function() {
+      var $elem = $(this).prev();
+      var classes = $elem.attr('class');
+      var m = /\btci-([\S]+)/.exec(classes);
+
+      if (m !== null) {
+        var key = m[1];
+
+        if (key in info_tips) {
+          var v = info_tips[key];
+          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
+        }
+      }
+    });
+  }
+
+  add_custom_tooltips();
+
+  setTimeout(activate_tooltips, 1000);
+
+
+  // Clipboard copy for code blocks with captions
+
+  $('.code-block-caption').each(function() {
+    var $cap = $(this);
+    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
+    var $code = $cap.parent().find('.highlight');
+
+    $cap.append($btn);
+    $btn.find('.fa-clipboard').data('clip-text', $code.text());
+  });
+
+  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
+    'text': function(trigger) {
+      return $(trigger).data('clip-text');
+    }
+  });
+
+  clipboard.on('success', function(e) {
+    var $copied = $(e.trigger).prev();
+
+    $copied.removeClass('hidden');
+
+    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
+  });
+
+  if (sizzle.on_load) {
+    sizzle.on_load.forEach(function(f) {
+      f();
+    });
+  }
+});
+</script>
+</body>
 </html>
