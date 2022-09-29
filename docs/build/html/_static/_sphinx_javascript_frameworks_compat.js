@@ -35,7 +35,7 @@ jQuery.urlencode = encodeURIComponent;
 /**
  * This function returns the parsed url parameters of the
  * current request. Multiple values per key are supported,
- * it will always return arrays of strings for the value parts.
+ * it will always return arrays of strings for the value doc_parts.
  */
 jQuery.getQueryParameters = function(s) {
     if (typeof s === 'undefined')
