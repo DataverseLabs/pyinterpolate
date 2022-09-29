@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Pyinterpolate - Directional semivariograms</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+    <script>
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+      $(document).data('sizzle', {on_load: []});
+    </script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../app-data.js"></script>
+<link rel="index" title="Index" href="../../genindex.html" />
+<link rel="search" title="Search" href="../../search.html" />
+<link rel="next" title="Ordinary and Simple Kriging" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" />
+<link rel="prev" title="Variogram Point Cloud" href="Variogram%20Point%20Cloud%20%28Basic%29.html" />
+
+</head>
+<body class="full-height test">
+<noscript>
+  <div>
+    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
+  </div>
+</noscript>
+<div id="whole-page" class="container-fluid content full-height">
+  <div id="header-row" class="row">
+    <div id="header-container" class="col-md-12">
+      <div id="hdr-left">
+        <i class="fa fa-bars menu-toggle"></i>
+        
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+
+      </div>
+      <div id="hdr-centre" class="text-center stretch">
+        <h3 title="Directional semivariograms">Directional semivariograms</h3>
+        <h6>Directional semivariograms</h6>
+      </div>
+      <div id="hdr-search">
+        
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+      </div>
+
+      <div id="hdr-index">
+        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
+      </div>
+
+      <div id="hdr-source">
+        <a href="../../_sources/usage/tutorials/Directional Semivariograms (Basic).ipynb.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
+      </div>
+
+      <div id="hdr-right">
+        
+  
+  <div class="prev-next">
+    
+      <div class="pull-left">
+        <a class="btn btn-default prev" href="Variogram%20Point%20Cloud%20%28Basic%29.html" title="Previous chapter (Variogram Point Cloud)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">Variogram Point Cloud</span></a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default next" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html" title="Next chapter (Ordinary and Simple Kriging)"><span class="btn-text">Ordinary and Simple Kriging</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  
+      </div>
+      <div id="alt-hdr-right">
+
+        <a href="Variogram%20Point%20Cloud%20%28Basic%29.html"><i class="fa fa-chevron-left mr-8"></i></a>
+
+
+        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+
+
+        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
+
+
+        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
+
+
+        <a href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html"><i class="fa fa-chevron-right"></i></a>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="content-row" class="row">
+    <div id="page-content" class="col-md-12 flex-col">
+      <div id="content-container">
+        <div id="nav">
+          
+  <div class="navsidebar">
+    <div id="sidebar-search">
+      
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+    </div>
+      <div class="sidebar-block">
+        <div class="sidebar-tocheading">
+          <div class="pull-left">
+            <h2>Table Of Contents</h2>
+          </div>
+          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+        </div>
+        <div class="sidebar-toc">
+      
+          <div id="toc-filter" title="Type in here to show only matching topics">
+            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
+          </div>
+      
+        
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Estimation%20%28Basic%29.html">Semivariogram Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Directional-semivariograms">Directional semivariograms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-show-point-data">1) Read and show point data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-semivariogram">2) Create the experimental semivariogram</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#Case-1:-N-S-Direction">Case 1: N-S Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-2:-W-E-Direction">Case 2: W-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NE-SW-Direction">Case 3: NE-SW Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NW-SE-Direction">Case 4: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-5:-Isotropic-Variogram">Case 5: Isotropic Variogram</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Compare-semivariograms">3) Compare semivariograms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+        </div>
+      </div>
+  </div>
+        </div>
+        <div id="content" tabindex="0" class="stretch">
+          <div id="mnav">
+            
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Estimation%20%28Basic%29.html">Semivariogram Estimation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Directional-semivariograms">Directional semivariograms</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-show-point-data">1) Read and show point data</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-semivariogram">2) Create the experimental semivariogram</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#Case-1:-N-S-Direction">Case 1: N-S Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-2:-W-E-Direction">Case 2: W-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NE-SW-Direction">Case 3: NE-SW Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NW-SE-Direction">Case 4: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-5:-Isotropic-Variogram">Case 5: Isotropic Variogram</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Compare-semivariograms">3) Compare semivariograms</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+          </div>
+          <div class="body">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Directional-semivariograms">
+<h1>Directional semivariograms<a class="headerlink" href="#Directional-semivariograms" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li>Read point data,</li>
+<li>Create directional and isotropic semivariograms,</li>
+<li>Compare semivariograms.</li>
+</ol>
+</div>
+<div class="section" id="Level:-Basic">
+<h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this heading">¶</a></h2>
+</div>
+<div class="section" id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
+<table>
+<colgroup>
+<col width="19%" />
+<col width="55%" />
+<col width="26%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>2022-09-22</td>
+<td>The first version of tutorial</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
+<p>In this tutorial, we will learn about directional semivariograms, how to set the angle of <code class="docutils literal notranslate"><span class="pre">direction</span></code> and what’s the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+<p>Not every spatial process may be described by isotropic semivariograms. Sometimes we see a specific trend in one direction (N-S, W-E, or NE-SW, NW-SE). A well performed analysis includes directions, that’s why we will learn how to write a code in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> that retrieves the directional variogram.</p>
+<p>We use the air pollution data downloaded with the package.</p>
+<blockquote>
+<div><strong>Note</strong>: if you you are a machine learning enthusiast it will be easier for you to understand <strong>direction</strong> as an additional feature used to model semivariance.</div></blockquote>
+</div>
+<div class="section" id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># IO - read text</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">download_air_quality_poland</span>
+<span class="c1"># Experimental variogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
+<span class="c1"># Theoretical Variogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1)-Read-and-show-point-data">
+<h2>1) Read and show point data<a class="headerlink" href="#1)-Read-and-show-point-data" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;PM2.5&#39;</span>
+
+<span class="c1"># This block is commented intentionally.</span>
+<span class="c1"># You may uncomment the last line and download a new dataset, but there is a high chance that you&#39;ll obtain</span>
+<span class="c1"># a different results! To be sure, that results are the same, use data stored in the</span>
+<span class="c1"># &#39;samples/directional_variogram_PM25_20220922.csv&#39; file. See next cell.</span>
+
+<span class="c1"># ds = download_air_quality_poland(DATASET)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;samples/directional_variogram_PM25_20220922.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;station_id&#39;</span><span class="p">)</span>
+<span class="n">ds</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y</th>
+      <th>x</th>
+      <th>PM2.5</th>
+    </tr>
+    <tr>
+      <th>station_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>659</th>
+      <td>50.529892</td>
+      <td>22.112467</td>
+      <td>7.12765</td>
+    </tr>
+    <tr>
+      <th>736</th>
+      <td>54.380279</td>
+      <td>18.620274</td>
+      <td>4.66432</td>
+    </tr>
+    <tr>
+      <th>861</th>
+      <td>54.167847</td>
+      <td>19.410942</td>
+      <td>3.00739</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>51.259431</td>
+      <td>22.569133</td>
+      <td>7.10000</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>51.856692</td>
+      <td>19.421231</td>
+      <td>2.00000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">df2gdf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function transforms DataFrame into GeoDataFrame.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    df : pandas DataFrame</span>
+
+<span class="sd">    lon_col : str, default = &#39;x&#39;</span>
+<span class="sd">        Longitude column name.</span>
+
+<span class="sd">    lat_col : str, default = &#39;y&#39;</span>
+<span class="sd">        Latitude column name.</span>
+
+<span class="sd">    epsg : Union[int, str], default = 4326</span>
+<span class="sd">        EPSG number of projection.</span>
+
+<span class="sd">    crs : str, default = None</span>
+<span class="sd">        Coordinate Reference System of data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gdf : GeoPandas GeoDataFrame</span>
+<span class="sd">        GeoDataFrame with set geometry column (&#39;geometry&#39;), CRS, and all columns from the passed DataFrame.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">lon_col</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">lat_col</span><span class="p">])</span>
+    <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gdf</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">df2gdf</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<span class="n">gds</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>y</th>
+      <th>x</th>
+      <th>PM2.5</th>
+      <th>geometry</th>
+    </tr>
+    <tr>
+      <th>station_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>659</th>
+      <td>50.529892</td>
+      <td>22.112467</td>
+      <td>7.12765</td>
+      <td>POINT (22.11247 50.52989)</td>
+    </tr>
+    <tr>
+      <th>736</th>
+      <td>54.380279</td>
+      <td>18.620274</td>
+      <td>4.66432</td>
+      <td>POINT (18.62027 54.38028)</td>
+    </tr>
+    <tr>
+      <th>861</th>
+      <td>54.167847</td>
+      <td>19.410942</td>
+      <td>3.00739</td>
+      <td>POINT (19.41094 54.16785)</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>51.259431</td>
+      <td>22.569133</td>
+      <td>7.10000</td>
+      <td>POINT (22.56913 51.25943)</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>51.856692</td>
+      <td>19.421231</td>
+      <td>2.00000</td>
+      <td>POINT (19.42123 51.85669)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+y           False
+x           False
+PM2.5        True
+geometry    False
+dtype: bool
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2180</span><span class="p">)</span>
+<span class="n">gds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">column</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PM2.5 concentrations in Poland&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" />
+</div>
+</div>
+</div>
+<div class="section" id="2)-Create-the-experimental-semivariogram">
+<h2>2) Create the experimental semivariogram<a class="headerlink" href="#2)-Create-the-experimental-semivariogram" title="Permalink to this heading">¶</a></h2>
+<p>If we recall the tutorial <code class="docutils literal notranslate"><span class="pre">Semivariogram</span> <span class="pre">Estimation</span></code>, there are three main parameters to set for the <code class="docutils literal notranslate"><span class="pre">build_experimental_variogram()</span></code> function:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal notranslate"><span class="pre">input_array</span></code>: <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> with coordinates and observed values, for example <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">0,</span> <span class="pre">10],</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">20]]</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">step_size</span></code>: we must divide our area of analysis into discrete <strong>lags</strong>. <strong>Lags</strong> are intervals (usually circular) within which we check if the point has a neighbor. For example, if we look into the lag <code class="docutils literal notranslate"><span class="pre">500</span></code>, then we are going to compare one point with other points in a distance <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1000]</span></code> from this point,</li>
+<li><code class="docutils literal notranslate"><span class="pre">max_range</span></code>: it is a tricky one, and it is hard to guess it at the first try. This parameter represents the possible <strong>maximum range of spatial dependency</strong>. This parameter shouldn’t exceed half of the extent.</li>
+</ol>
+<p>But that’s not everything!</p>
+<p>We didn’t use two other parameters:</p>
+<ol class="arabic simple" start="4">
+<li><code class="docutils literal notranslate"><span class="pre">direction</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 360]. We set the direction of semivariogram:<ul>
+<li>0 or 180: is NS direction,</li>
+<li>90 or 270 is EW direction,</li>
+<li>45 or 225 is NE-SW direction,</li>
+<li>135 or 315 is NW-SE direction.</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">tolerance</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 1]. If we leave <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> with default <strong>1</strong>, we will always get isotropic semivariogram. Other edge case is if we set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to <strong>0</strong>, then points must be placed on a single line with the beginning in the origin of the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0 and &lt; 1 then the bin is selected as an elliptical area with major axis pointed in the same direction as the line for 0
+tolerance.<ul>
+<li>The major axis size is <code class="docutils literal notranslate"><span class="pre">(tolerance</span> <span class="pre">*</span> <span class="pre">step_size)</span></code>,</li>
+<li>The minor axis size is <code class="docutils literal notranslate"><span class="pre">((1</span> <span class="pre">-</span> <span class="pre">tolerance)</span> <span class="pre">*</span> <span class="pre">step_size)</span></code>,</li>
+<li>The baseline point is at a center of the ellipse.</li>
+</ul>
+</li>
+</ol>
+<p>The best idea is to visualize it on a cartesian plane:</p>
+<p><img alt="The visualization of directional variogram calculation" src="../../_images/dir_semi_tutorial_graphics.jpg" /></p>
+<ul class="simple">
+<li>The top plane shows a unit circle that is the omnidirectional variogram (black circle). Within it we see two ellipses: one is bright-green and another is dark green.</li>
+<li>The bottom plane also shows a unit circle and two ellipses. The brighter yellow, and darker purple ellipse.</li>
+<li>The long arrows within both circles are radiuses of the omnidirectional variogram or <strong>the semi-major axis</strong> of a directional ellipse. It’s length is controlled by the <code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter. The short arrows are present only in the <strong>directional variograms</strong> and they are <strong>the semi-minor axes</strong>. Their length is controlled by <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter and it is always:<ul>
+<li>a fraction of <code class="docutils literal notranslate"><span class="pre">step_size</span></code>,</li>
+<li><strong>1</strong>, in this case a semivariogram is omnidirectional,</li>
+<li>a value very close to 0 (but not 0) - in this case ellipse falls into a line.</li>
+</ul>
+</li>
+<li>The good idea is to set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to 0.5 and then gradually make it smaller or larger (it depends on the spatial features).</li>
+</ul>
+<p>Now, when we understand how our parameters affect semivariogram bins range, we can start analysis. We will set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to 0.2 in each case to better visualize the effects of a leading direction.</p>
+<div class="section" id="Case-1:-N-S-Direction">
+<h3>Case 1: N-S Direction<a class="headerlink" href="#Case-1:-N-S-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BIN_RADIUS</span> <span class="o">=</span> <span class="mi">60000</span>  <span class="c1"># meters</span>
+<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>  <span class="c1"># meters</span>
+<span class="n">TOLERANCE</span> <span class="o">=</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inp_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gds</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                            <span class="n">gds</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                            <span class="n">gds</span><span class="p">[</span><span class="n">DATASET</span><span class="p">])))</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ns_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+<span class="p">)</span>
+
+<span class="n">ns_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Case-2:-W-E-Direction">
+<h3>Case 2: W-E Direction<a class="headerlink" href="#Case-2:-W-E-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">we_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+<span class="p">)</span>
+
+<span class="n">we_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Case-3:-NE-SW-Direction">
+<h3>Case 3: NE-SW Direction<a class="headerlink" href="#Case-3:-NE-SW-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_sw_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+<span class="p">)</span>
+
+<span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Case-4:-NW-SE-Direction">
+<h3>Case 4: NW-SE Direction<a class="headerlink" href="#Case-4:-NW-SE-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_se_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+<span class="p">)</span>
+
+<span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Case-5:-Isotropic-Variogram">
+<h3>Case 5: Isotropic Variogram<a class="headerlink" href="#Case-5:-Isotropic-Variogram" title="Permalink to this heading">¶</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iso_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span>
+<span class="p">)</span>
+
+<span class="n">iso_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" />
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="3)-Compare-semivariograms">
+<h2>3) Compare semivariograms<a class="headerlink" href="#3)-Compare-semivariograms" title="Permalink to this heading">¶</a></h2>
+<p>We have created a set of variograms. What did we observe?</p>
+<ul class="simple">
+<li>The <strong>NW-SE</strong> variogram is very weak at describing a short-range variation (compare it to the map of air pollution from the beginning of the tutorial. Points in this direction are rather similar).</li>
+<li>The <strong>W-E</strong> variogram seems to work well for a short range.</li>
+<li>The <strong>N-S</strong> variogram catches too much variability, lags are too short for this direction.</li>
+<li>The <strong>NE-SW</strong> variogram looks good, and shows approximately linear change of variability in a function of distance. It has the smallest variance from all variograms.</li>
+</ul>
+<p>We can visualize and compare all variograms at once, that we are sure that the y-axis is the same for every plot.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
+<span class="n">_ns</span> <span class="o">=</span> <span class="n">ns_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<span class="n">_we</span> <span class="o">=</span> <span class="n">we_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<span class="n">_nw_se</span> <span class="o">=</span> <span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<span class="n">_ne_sw</span> <span class="o">=</span> <span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<span class="n">_iso</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_iso</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ns</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#c2a5cf&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_we</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e7d4e8&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#5aae61&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ne_sw</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b7837&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariance models&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Isotropic&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;NS&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;WE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;NW-SE&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;NE-SW&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" />
+</div>
+</div>
+<p>What do you think about this comparison? Do you agree, that the <strong>NE-SW</strong> variogram is the best fit for a data?</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer-row" class="row">
+
+    <div class="col-md-12">
+        <span title="Built on 2022-09-29" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
+
+           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
+
+        >Sizzle</a> theme.</span>
+    </div>
+
+  </div>
+</div>
+
+<div id="tooltips" class="hidden">
+</div>
+
+<script>
+$(document).ready(function() {
+  'use strict';
+  var $search = $('.search-query');
+
+  var $filter = $('#toc-filter-query');
+  var $toclist = $('.sidebar-toc > ul').find('li');
+
+  if ($toclist.length === 0) {
+    $toclist = $('.localtoc > ul').find('li');
+  }
+
+
+  var $nav = $('#nav');
+
+  //$('#whole-page').removeClass('hidden');
+  var nav_width = $nav.width();
+
+
+  var search_url = '../../search.html';
+
+  function perform_search(e) {
+    var $elem;
+
+    if (e.type === 'keypress') {
+      $elem = $(e.target);
+    }
+    else if (e.type === 'click') {
+      $elem = $(e.target).parents('.input-group').find('input');
+    }
+    var q = $elem.val().trim();
+
+    if (q) {
+      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
+
+      location.href = url;
+    }
+  }
+
+
+  function apply_filter() {
+    var s = $filter.val().trim().toLowerCase();
+
+    $toclist.find('a').removeClass('hidden');
+    $toclist.each(function() {
+      var $this = $(this);
+      var $link = $this.find('> a');
+      var t = $link.text().toLowerCase();
+      var show = t.indexOf(s) >= 0;
+
+      if (!show) {
+        $link.addClass('hidden');
+      }
+    });
+  }
+
+  $filter.on('keyup', function(e) {
+    apply_filter();
+  });
+
+
+
+  $search.on('keypress', function(e) {
+    if (e.which == 13) {
+      perform_search(e);
+    }
+  });
+  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
+  $(document).on('click', '.summary .fa-caret-right', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $next = $elem.next();
+    $elem.addClass('hidden');
+    $next.removeClass('hidden');
+  });
+  $(document).on('click', '.detail .fa-caret-down', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $prev = $elem.prev();
+    $elem.addClass('hidden');
+    $prev.removeClass('hidden');
+  });
+
+  $('#content').on('click', function() {
+    $('#mnav').hide();
+  });
+
+  var counter = 0;
+  var timer = null;
+
+  function show_nav() {
+    $('#content').off('mousemove', track_mouse);
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    $nav.show();
+  }
+
+  function track_mouse(e) {
+    var x = e.clientX;
+
+    if (x < 15) {
+      ++counter;
+      if (timer === null) {
+        timer = setTimeout(show_nav, 2000);
+      }
+    }
+    else {
+      counter = 0;
+    }
+    if (counter >= 20) {
+      show_nav();
+    }
+  };
+
+  function hide_nav() {
+    $nav.hide();
+    counter = 0;
+    $('#content').on('mousemove', track_mouse);
+  }
+
+  $('.hidetoc').on('click', hide_nav);
+
+  $(document).on('keyup', function(e) {
+    if (e.ctrlKey) {
+      if (e.which == 37) {      // Ctrl+left arrow
+        hide_nav();
+      }
+      else if (e.which == 39) { // Ctrl+right arrow
+        show_nav();
+      }
+    }
+  });
+
+  $('.menu-toggle').on('click', function(e) {
+    $('#mnav').toggle();
+  });
+
+  function scroll_nav(frag) {
+    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
+
+    var $link = $(sel);
+
+    if ($link.length > 0) {
+      $link[0].scrollIntoView({block: 'center'});
+    }
+  }
+
+  // If the navigator is long, then the item we clicked on to get here might
+  // not be in view. Try to scroll it into the view - a slight delay is needed
+  // to get it to sync properly with other stuff going on (as the page has just
+  // loaded). Hence the setTimeout with a timeout of 0.
+
+  function do_scroll() {
+    scroll_nav(window.location.hash);
+  }
+
+  setTimeout(do_scroll, 0);
+
+  function adjust_size() {
+    // we need to set the height explicitly so that scrolling regions in the
+    // content area work properly.
+    var h = $('#page-content').height();
+
+    $('#nav, #content').height(h);
+    if ($('#nav').is(':visible')) {
+      $('#mnav').hide();
+    }
+  }
+
+  adjust_size();
+
+  $(window).on('resize', adjust_size);
+
+  function focus_content() {
+    $('#content').focus();  // so that keyboard can be used to scroll, etc.
+  }
+
+  setTimeout(focus_content, 150);
+
+  var sizzle = $(document).data('sizzle');
+
+  function make_tooltip(id, h, b) {
+    var $e = $('<div>').attr('id', id);
+    var $b = $('<div>').addClass('tc-body').html(b);
+
+    if (h) {
+      var $h = $('<div>').addClass('tc-heading').html(h);
+      $e.append($h);
+    }
+    $e.append($b);
+    return $e;
+  }
+
+  var default_tt_options = {
+    theme: ['tooltipster-light', 'tooltipster-light-customized'],
+    interactive: true,
+    maxWidth: 600,
+    contentCloning: true
+  };
+
+  function activate_tooltips() {
+    var $tt = $('.tt');
+
+    //console.log('tt links:', $tt.length);
+    $tt.tooltipster(default_tt_options);
+  }
+
+
+
+  function add_glossary_tooltips() {
+    var links = $('a');  // can qualify with .reference.internal
+    var glinks = {};
+    var pat = /(.*)\.html#(term-.*)$/;
+    var found = false;  // links in this document
+
+    $.each(links, function(i, link) {
+        var $link = $(link);
+        var href = $link.attr('href');
+        var m = href.match(pat);
+
+        if (m) {
+          var s = m[1].replace(/^(\.\.\/)+/, '');
+
+          if (s === sizzle.app_data.glossary.document) {
+            var k = m[2];
+
+            if (k in glinks) {
+              glinks[k].push($link);
+            }
+            else {
+              glinks[k] = [$link];
+            }
+            found = true;
+          }
+        }
+    });
+    if (found) {
+      var $t = $('#tooltips');
+      var data = sizzle.app_data.glossary.terms;
+
+      $.each(glinks, function(k, v) {
+        var d = data[k];
+
+        if (d) {  // as a sanity check
+          var s = 'tc-'+ k;
+          var $e = make_tooltip(s, d.term, d.defn);
+          $t.append($e);
+
+          $.each(v, function(i, link) {
+            link.addClass('tt').attr('data-tooltip-content', '#' + s);
+          });
+        }
+      });
+    }
+  }
+
+  if (sizzle.app_data && sizzle.app_data.glossary &&
+      sizzle.app_data.glossary.document) {
+    add_glossary_tooltips();
+  }
+
+
+
+
+  function add_custom_tooltips() {
+    if (!sizzle.app_data) {
+      return;
+    }
+
+    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
+
+    if ($.isEmptyObject(info_tips)) {
+      return;
+    }
+
+    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
+
+    $('.tc-info').each(function() {
+      var $elem = $(this).prev();
+      var classes = $elem.attr('class');
+      var m = /\btci-([\S]+)/.exec(classes);
+
+      if (m !== null) {
+        var key = m[1];
+
+        if (key in info_tips) {
+          var v = info_tips[key];
+          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
+        }
+      }
+    });
+  }
+
+  add_custom_tooltips();
+
+  setTimeout(activate_tooltips, 1000);
+
+
+  // Clipboard copy for code blocks with captions
+
+  $('.code-block-caption').each(function() {
+    var $cap = $(this);
+    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
+    var $code = $cap.parent().find('.highlight');
+
+    $cap.append($btn);
+    $btn.find('.fa-clipboard').data('clip-text', $code.text());
+  });
+
+  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
+    'text': function(trigger) {
+      return $(trigger).data('clip-text');
+    }
+  });
+
+  clipboard.on('success', function(e) {
+    var $copied = $(e.trigger).prev();
+
+    $copied.removeClass('hidden');
+
+    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
+  });
+
+  if (sizzle.on_load) {
+    sizzle.on_load.forEach(function(f) {
+      f();
+    });
+  }
+});
+</script>
+</body>
+</html>

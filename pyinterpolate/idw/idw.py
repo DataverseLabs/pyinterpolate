@@ -20,35 +20,35 @@ def inverse_distance_weighting(known_points: np.ndarray,
     Parameters
     ----------
     known_points : numpy array
-                   Array MxN, where M is a number of rows (points) and N is the number of columns, where last column
-                   represents value of a known point. (It could be multidimensional data).
+        The MxN array, where **M** is a number of rows (points) and **N** is the number of columns, where the last
+        column represents a value of a known point. (It could be **(N-1)**-dimensional data).
 
     unknown_location : Iterable
-                       Array or list with coordinates of the unknown point. It's length is N-1 (number of known_points
-                       columns - the value column). Unknown location dimension should be the same as known_points
-                       dimension, if not, then new dimension is added once - vector of points [x, y] becomes [[x, y]]
-                       for 2-dimensional data.
+        Array or list with coordinates of the unknown point. It's length is N-1 (number of dimensions). The unknown
+        location `shape` should be the same as the ``known_points`` parameter `shape`, if not, then new dimension
+        is added once - vector of points ``[x, y]`` becomes ``[[x, y]]`` for 2-dimensional data.
 
     number_of_neighbours : int, default = -1
-                           If default value (-1) then all known points will be used to estimate value at
-                           the unknown location. Can be any number within the limits [2, length(known_points)],
+        If default value **(-1)** then all known points will be used to estimate value at the unknown location.
+        Can be any number within the limits ``[2, len(known_points)]``,
 
     power : float, default = 2.
-            Power value must be larger or equal to 0, controls weight assigned to each known
-            point. Larger power means stronger influence of closest points to the unknown point, but it gets smaller
-            faster.
+        Power value must be larger or equal to 0. It controls weight assigned to each known point. Larger power means
+        stronger influence of the closest neighbors, but it decreases quickly.
 
     Returns
     -------
     result : float
-             Estimated value.
+        The estimated value.
 
     Raises
     ------
     ValueError
-        * Power parameter set to be smaller than 0.
-        * Less than 2 neighbours or more than the number of known_points neighbours are given in
-        number_of_neighbours parameter.
+        Power parameter set to be smaller than 0.
+
+    ValueError
+        Less than 2 neighbours or more than the number of ``known_points`` neighbours are given in the
+        ``number_of_neighbours`` parameter.
     """
 
     # Check power parameter

@@ -33,7 +33,7 @@ conda activate [NAME OF YOUR ENV]
 #### Step 3:
 
 ```
-conda install -c conda-forge python=3.7 pip notebook
+conda install -c conda-forge pip notebook
 ```
 
 #### Step 4:

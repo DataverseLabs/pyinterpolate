@@ -7,6 +7,8 @@ Authors
 """
 import warnings
 
+import numpy as np
+
 
 class MetricsTypeSelectionError(Exception):
     """Error invoked if user doesn't select any error type for the theoretical variogram modeling.
@@ -90,7 +92,8 @@ def validate_direction(direction):
 
 def validate_points(points):
     """
-    Check dimensions of provided arrays and data types.
+    * Check dimensions of provided arrays and data types.
+    * Check if there are any NaN values.
     """
 
     dims = points.shape
@@ -98,13 +101,17 @@ def validate_points(points):
     if dims[1] != 3:
         raise AttributeError(msg)
 
+    if np.isnan(points[:, -1]).any():
+        msg = 'Provided dataset contains NaNs, remove records with missing values before processing'
+        raise ValueError(msg)
+
 
 def validate_tolerance(tolerance):
     """
     Check if tolerance is between zero and one.
     """
-    if tolerance < 0 or tolerance > 1:
-        msg = 'Provided tolerance should be between 0 (straight line) and 1 (circle).'
+    if tolerance <= 0 or tolerance > 1:
+        msg = 'Provided tolerance should be larger than 0 (a straight line) and smaller or equal to 1 (a circle).'
         raise ValueError(msg)
 
 
@@ -146,12 +153,6 @@ def check_ranges(minr: float, maxr: float):
     if maxr > 1:
         msg = f'Maximum range ratio should be lower than 1, but it is {maxr}'
         raise ValueError(msg)
-
-    # Check if max is larger than 0.5 and throw warning if it is
-    # TODO: it may be removed later
-    if maxr > 0.5:
-        msg = f'Maximum range ratio is greater than the half of area smaller distance, it could introduce bias'
-        warnings.warn(msg)
 
 
 def check_sills(mins: float, maxs: float):

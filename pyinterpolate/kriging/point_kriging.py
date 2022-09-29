@@ -38,49 +38,50 @@ def kriging(observations: np.ndarray,
     Parameters
     ----------
     observations : numpy array
-                   Known points and their values.
+        Known points and their values.
 
     theoretical_model : TheoreticalVariogram
-                        Fitted variogram model.
+        Fitted variogram model.
 
     points : numpy array
-             Coordinates with missing values (to estimate results).
+        Coordinates with missing values (to estimate results).
 
     how : str, default='ok'
+        Select what kind of kriging you want to perform:
           * 'ok': ordinary kriging,
-          * 'sk': simple kriging - if set then sk_mean parameter must be provided.
+          * 'sk': simple kriging - if it is set then ``sk_mean`` parameter must be provided.
 
     neighbors_range : float, default=None
-                      Maximum distance where we search for point neighbors. If None given then range is selected from
-                      the theoretical_model rang attribute.
+        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
+        the ``theoretical_model`` ``rang`` attribute.
 
     no_neighbors : int, default = 4
-                   Number of the n-closest neighbors used for interpolation.
+        The number of the **n-closest neighbors** used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-                                 True: if number of neighbors within the neighbors_range is greater than the
-                                 number_of_neighbors then take all of them for modeling.
+        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
+        ``number_of_neighbors`` parameter then take all of them anyway.
 
     sk_mean : float, default=None
-              The mean value of a process over a study area. Should be know before processing. That's why Simple
-              Kriging has limited number of applications. You must have multiple samples and well-known area to
-              know this parameter.
+        The mean value of a process over a study area. Should be know before processing. That's why Simple
+        Kriging has a limited number of applications. You must have multiple samples and well-known area to
+        know this parameter.
 
     allow_approx_solutions : bool, default=False
-                             Allows the approximation of kriging weights based on the OLS algorithm.
-                             Not recommended to set to True if you don't know what you are doing!
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing.
 
     err_to_nan : bool, default=False
-                 Singular matrix error in solve kriging system to NAN.
+        Return ``NaN`` if algorithm detects singular matrix.
 
     number_of_workers : int, default=1
-                        How many processing workers can be used for predictions. It recommended to increase it only for
-                        a very large number of interpolated points (~10k+).
+        How many processing units can be used for predictions. Increase it only for a very large number of
+        interpolated points (~10k+).
 
     Returns
     -------
     : numpy array
-        Predictions [predicted value, variance error, longitude (x), latitude (y)]
+        Predictions ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
 
     # Check model type

@@ -5,6 +5,8 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
+from typing import Dict
+
 import numpy as np
 from collections import OrderedDict
 
@@ -85,15 +87,13 @@ def directional_point_cloud(input_array: np.array,
                 * 45 or 225 is NE-SW direction,
                 * 135 or 315 is NW-SE direction.
 
-    tolerance : float (in range [0, 1])
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
 
     Returns
     -------
@@ -136,8 +136,8 @@ def directional_point_cloud(input_array: np.array,
 def build_variogram_point_cloud(input_array: np.array,
                                 step_size: float,
                                 max_range: float,
-                                direction=0,
-                                tolerance=1) -> dict:
+                                direction=0.0,
+                                tolerance=1.0) -> dict:
     """
     Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point
         against other point within range specified by step_size parameter.
@@ -145,35 +145,40 @@ def build_variogram_point_cloud(input_array: np.array,
     Parameters
     ----------
     input_array : numpy array
-                  coordinates and their values: (pt x, pt y, value) or (Point(), value).
+        Spatial coordinates and their values: ``[pt x, pt y, value]`` or ``[shapely.Point(), value]``.
 
     step_size : float
-                distance between lags within each points are included in the calculations.
+        The distance between lags within each points are included in the calculations.
 
     max_range : float
-                maximum range of analysis.
+        The maximum range of analysis.
 
-    direction : float (in range [0, 360]), optional, default=0
-                direction of semivariogram, values from 0 to 360 degrees:
-                * 0 or 180: is NS direction,
-                * 90 or 270 is EW direction,
-                * 45 or 225 is NE-SW direction,
-                * 135 or 315 is NW-SE direction.
+    weights : numpy array or None, optional, default=None
+        Weights assigned to points, index of weight must be the same as index of point.
+
+    direction : float (in range [0, 360]), default=0
+        A direction of semivariogram, values from 0 to 360 degrees:
+
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
 
     tolerance : float (in range [0, 1]), optional, default=1
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
+
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     Returns
     -------
-    variogram_cloud : dict
-                      {Lag: array of semivariances within a given lag}
+    variogram_cloud : Dict
+        ``{Lag: array of semivariances within a given lag}``
     """
 
     # START:VALIDATION
@@ -205,45 +210,49 @@ class VariogramCloud:
     Parameters
     ----------
     input_array : numpy array
-                  coordinates and their values: (pt x, pt y, value) or (Point(), value).
+        Spatial coordinates and their values: ``[pt x, pt y, value]`` or ``[shapely.Point(), value]``.
 
     step_size : float
-                distance between lags within each points are included in the calculations.
+        The distance between lags within each points are included in the calculations.
 
     max_range : float
-                maximum range of analysis.
+        The maximum range of analysis.
+
+    weights : numpy array or None, optional, default=None
+        Weights assigned to points, index of weight must be the same as index of point.
 
     direction : float (in range [0, 360]), optional, default=0
-                direction of semivariogram, values from 0 to 360 degrees:
-                * 0 or 180: is NS direction,
-                * 90 or 270 is EW direction,
-                * 45 or 225 is NE-SW direction,
-                * 135 or 315 is NW-SE direction.
+        A direction of semivariogram, values from 0 to 360 degrees:
+
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
 
     tolerance : float (in range [0, 1]), optional, default=1
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
+
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     Attributes
     ----------
     input_array : numpy array
-                  The array with coordinates and observed values.
+        The array with coordinates and observed values.
 
     experimental_point_cloud : dict or None, default=None
-                               Dict with lag: variances
-                               {lag: [variances]}
+        Dict ``{lag: [variances]}``.
 
     lags : numpy array or None, default=None
-           The array of lags (upper bound for each lag).
+         The array of lags (upper bound for each lag).
 
     points_per_lag : int or None, default=None
-                     A number of points in each lag-bin.
+        A number of points in each lag-bin.
 
     step : float
         Derived from the step_size parameter.
@@ -318,6 +327,9 @@ class VariogramCloud:
         if not isinstance(input_array, np.ndarray):
             input_array = np.array(input_array)
 
+        # Validate input array
+        validate_points(input_array)
+
         self.input_array = input_array
         self.experimental_point_cloud = None
         self.lags = None
@@ -371,29 +383,29 @@ class VariogramCloud:
         self.experimental_variogram = experimental_semivariogram
         return experimental_semivariogram
 
-    def describe(self) -> dict:
+    def describe(self) -> Dict:
         """
         Method calculates basic statistcs of a data: count (point pairs number), average semivariance,
         standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.
 
         Returns
         -------
-        statistics : dict
-                     statistics = {
-                         lag_number:
-                         {
-                             'count': point pairs count,
-                             'avg semivariance': mean semivariance,
-                             'std': standard deviation,
-                             'min': minimal variance,
-                             '25%': first quartile of variances,
-                             'median': second quartile of variances,
-                             '75%': third quartile of variances,
-                             'max': max variance,
-                             'skewness': skewness,
-                             'kurtosis': kurtosis
-                         }
-                     }
+        statistics : Dict
+            >>> statistics = {
+            ...      lag_number:
+            ...      {
+            ...          'count': point pairs count,
+            ...          'avg semivariance': mean semivariance,
+            ...          'std': standard deviation,
+            ...          'min': minimal variance,
+            ...          '25%': first quartile of variances,
+            ...          'median': second quartile of variances,
+            ...          '75%': third quartile of variances,
+            ...          'max': max variance,
+            ...          'skewness': skewness,
+            ...          'kurtosis': kurtosis
+            ...      }
+            ...  }
 
         """
 

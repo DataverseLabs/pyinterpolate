@@ -541,7 +541,7 @@ Authors
 
 References
 ----------
-- [Docstrings in package](url)
+- [Docstrings in package.rst](url)
 - [Other tutorial](url)
 
 Bibliography

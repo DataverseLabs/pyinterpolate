@@ -2,7 +2,7 @@
 
 ![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov03.jpg?raw=true  "Pyinterpolate logo")
 
-**version 0.3.0** - *Kyiv*
+**version 0.3.1** - *Kyiv*
 ---------------------------------------
 
 Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
@@ -24,9 +24,12 @@ Then this package may be useful for you. You could use it for:
 
 Pyinterpolate allows you to perform:
 
-1. Ordinary Kriging and Simple Kriging (spatial interpolation from points),
-2. Centroid-based Kriging of Polygons (spatial interpolation from blocks and areas),
-3. Area-to-area and Area-to-point Poisson Kriging of Polygons (spatial interpolation and data deconvolution from areas to points).
+1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
+2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
+3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
+4. *Inverse Distance Weighting*.
+5. *Semivariogram regularization and deconvolution*.
+6. *Semivariogram modeling and analysis*.
 
 How it works
 --------------
@@ -90,7 +93,7 @@ print(prediction)  # [predicted, variance error, lon, lat]
 ```
 
 With **pyinterpolate**, we can retrieve the point support model from blocks. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:
-![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/szymon-datalions/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
+![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/DataverseLabs/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
 
 Status
 ------
@@ -103,7 +106,7 @@ Setup
 
 Setup with *pip*: `pip install pyinterpolate`
 
-Detailed instructions on how to install the package are presented in the file [SETUP.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/SETUP.md). We pointed out there most common problems related to third-party packages.
+Detailed instructions on how to install the package are presented in the file [SETUP.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/SETUP.md). We pointed out there most common problems related to third-party packages.
 
 You may follow those setup steps to create a *conda* environment with the package for your work:
 
@@ -154,7 +157,7 @@ A world of advice, you should use Virtual Environment for the installation - eve
 Tests and contribution
 ------------------------
 
-All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/szymon-datalions/pyinterpolate/blob/master/CONTRIBUTION.md)
+All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)
 
 Commercial and scientific projects where library has been used
 --------------------------------------------------------------
@@ -187,7 +190,7 @@ How to cite
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 
-Requirements and dependencies (v 0.2.5)
+Requirements and dependencies (v 0.3.0+)
 ---------------------------------------
 
 Core requirements and dependencies are:

@@ -24,106 +24,104 @@ class ExperimentalVariogram:
     Parameters
     ----------
     input_array : numpy array, list, tuple
-                  As a list and numpy array: coordinates and their values: (pt x, pt y, value),
-                  as a dict: polyset = {'points': numpy array with coordinates and their values},
-                  as a Blocks: Blocks.polyset['points']
+        * As a ``list`` and ``numpy array``: coordinates and their values: ``(pt x, pt y, value)``,
+        * as a ``dict``: ``polyset = {'points': numpy array with coordinates and their values}``,
+        * as a ``Blocks``: ``Blocks.polyset['points']``.
 
     step_size : float
-                distance between lags within each points are included in the calculations.
+        The distance between lags within each points are included in the calculations.
 
     max_range : float
-                maximum range of analysis.
+        The maximum range of analysis.
 
-    weights : numpy array or None, optional, default=None
-              weights assigned to points, index of weight must be the same as index of point, if provided then
-              the semivariogram is weighted.
+    weights : numpy array, default=None
+        Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), optional, default=0
-                direction of semivariogram, values from 0 to 360 degrees:
-                * 0 or 180: is NS direction,
-                * 90 or 270 is EW direction,
-                * 45 or 225 is NE-SW direction,
-                * 135 or 315 is NW-SE direction.
+    direction : float (in range [0, 360]), default=0
+        A direction of semivariogram, values from 0 to 360 degrees:
 
-    tolerance : float (in range [0, 1]), optional, default=1
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
+
+    tolerance : float (in range [0, 1]), default=1
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
+
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     is_semivariance : bool, optional, default=True
-                      should semivariance be calculated?
+        Should semivariance be calculated?
 
     is_covariance : bool, optional, default=True
-                    should covariance be calculated?
+        Should covariance be calculated?
 
     is_variance : bool, optional, default=True
-                  should variance be calculated?
+        Should variance be calculated?
 
     Attributes
     ----------
     input_array : numpy array
-                  The array with coordinates and observed values.
+        The array with coordinates and observed values.
 
     experimental_semivariance_array : numpy array or None, optional, default=None
-                                      The array of semivariance per lag in the form:
-                                      (lag, semivariance, number of points within lag).
+        The array of semivariance per lag in the form: ``(lag, semivariance, number of points within lag)``.
 
     experimental_covariance_array : numpy array or None, optional, default=None
-                                    The array of covariance per lag in the form:
-                                    (lag, covariance, number of points within lag).
+        The array of covariance per lag in the form: ``(lag, covariance, number of points within lag)``.
 
     experimental_semivariances : numpy array or None, optional, default=None
-                                 The array of semivariances.
+        The array of semivariances.
 
     experimental_covariances : numpy array or None, optional, default=None
-                               The array of covariances, optional, default=None
+        The array of covariances.
 
     variance_covariances_diff : numpy array or None, optional, default=None
-                                The array of differences c(0) - c(h).
+        The array of differences $c(0) - c(h)$.
 
     lags : numpy array or None, default=None
-           The array of lags (upper bound for each lag).
+        The array of lags (upper bound for each lag).
 
     points_per_lag : numpy array or None, default=None
-                     A number of points in each lag-bin.
+        A number of points in each lag-bin.
 
     variance : float or None, optional, default=None
-               The variance of a dataset, if data is second-order stationary then we are able to retrieve a semivariance
-               as a difference between the variance and the experimental covariance:
+        The variance of a dataset, if data is second-order stationary then we are able to retrieve a semivariance
+        s a difference between the variance and the experimental covariance:
 
-                    (Eq. 1)
+        .. math::
 
-                        g(h) = c(0) - c(h)
+            g(h) = c(0) - c(h)
 
-                        where:
+        where:
 
-                        g(h): semivariance at a given lag h,
-                        c(0): variance of a dataset,
-                        c(h): covariance of a dataset.
+        * :math:`g(h)`: semivariance at a given lag h,
+        * :math:`c(0)`: variance of a dataset,
+        * :math:`c(h)`: covariance of a dataset.
 
-                Important! Have in mind that it works only if process is second-order stationary (variance is the same
-                for each distance bin) and if the semivariogram has the upper bound.
-                See also: variance_covariances_diff attribute.
+        **Important!** Have in mind that it works only if process is second-order stationary (variance is the same
+        for each distance bin) and if the semivariogram has the upper bound.
 
     step : float
-        Derived from the step_size parameter.
+        Derived from the ``step_size`` parameter.
 
     mx_rng : float
-        Derived from the max_range parameter.
+        Derived from the ``max_range`` parameter.
 
     weights : numpy array or None
-        Derived from the weights paramtere.
+        Derived from the ``weights`` parameter.
 
     direct: float
-        Derived from the direction parameter.
+        Derived from the ``direction`` parameter.
 
     tol : float
-        Derived from the tolerance parameter.
+        Derived from the ``tolerance`` parameter.
 
     Methods
     -------
@@ -178,6 +176,7 @@ class ExperimentalVariogram:
                  is_variance=True):
 
         self.input_array = None  # core structure
+
         if isinstance(input_array, np.ndarray):
             self.input_array = input_array
         else:
@@ -226,22 +225,22 @@ class ExperimentalVariogram:
         Parameters
         ----------
         plot_semivariance : bool, default=True
-                            Show semivariance on a plot. If class attribute is_semivariance is set to False then
-                            semivariance is not plotted and warning is printed.
+            Show semivariance on a plot. If class attribute ``is_semivariance`` is set to ``False`` then semivariance is
+            not plotted and warning is printed.
 
         plot_covariance : bool, default=True
-                          Show covariance on a plot. If class attribute is_covariance is set to False then
-                          covariance is not plotted and warning is printed.
+            Show covariance on a plot. If class attribute ``is_covariance`` is set to ``False`` then covariance
+            is not plotted and warning is printed.
 
         plot_variance : bool, default=True
-                        Show variance level on a plot. If class attribute is_variance is set to False then
-                        variance is not plotted and warning is printed.
+            Show variance level on a plot. If class attribute ``is_variance`` is set to ``False`` then variance is
+            not plotted and warning is printed.
 
         Warns
         -----
         AttributeSetToFalseWarning
-            Warning invoked when plotting parameter for semivariance, covariance or variance is set to True but
-            class atrributes to calculate those indices are set to False.
+            Warning invoked when plotting parameter for semivariance, covariance or variance is set to ``True`` but
+            class atrributes to calculate those indices are set to ``False``.
         """
 
         # Validate parameters
@@ -380,46 +379,47 @@ def build_experimental_variogram(input_array: np.array,
                                  tolerance: float = 1) -> ExperimentalVariogram:
     """
     Function prepares:
-        - experimental semivariogram,
-        - experimental covariogram,
-        - variance.
+      - experimental semivariogram,
+      - experimental covariogram,
+      - variance.
 
     Parameters
     ----------
     input_array : numpy array
-                  coordinates and their values: (pt x, pt y, value) or (Point(), value).
+        Spatial coordinates and their values: ``[pt x, pt y, value]`` or ``[shapely.Point(), value]``.
 
     step_size : float
-                distance between lags within each points are included in the calculations.
+        The distance between lags within each points are included in the calculations.
 
     max_range : float
-                maximum range of analysis.
+        The maximum range of analysis.
 
     weights : numpy array or None, optional, default=None
-              weights assigned to points, index of weight must be the same as index of point, if provided then
-              the semivariogram is weighted.
+        Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), optional, default=0
-                direction of semivariogram, values from 0 to 360 degrees:
-                * 0 or 180: is NS direction,
-                * 90 or 270 is EW direction,
-                * 45 or 225 is NE-SW direction,
-                * 135 or 315 is NW-SE direction.
+    direction : float (in range [0, 360]), default = 0
+        A direction of semivariogram, values from 0 to 360 degrees:
+
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
 
     tolerance : float (in range [0, 1]), optional, default=1
-                If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
-                the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-                for 0 tolerance.
-                * The minor axis size is (tolerance * step_size)
-                * The major axis size is ((1 - tolerance) * step_size)
-                * The baseline point is at a center of the ellipse.
-                Tolerance == 1 creates an omnidirectional semivariogram.
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance:
+
+        * the major axis size == ``step_size``,
+        * the minor axis size is ``tolerance * step_size``,
+        * the baseline point is at a center of the ellipse,
+        * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     Returns
     -------
     semivariogram_stats : EmpiricalSemivariogram
-        The class with empirical semivariogram, empirical covariogram and variance
+        The class with empirical semivariogram, empirical covariogram and a variance.
 
     See Also
     --------
@@ -429,8 +429,8 @@ def build_experimental_variogram(input_array: np.array,
 
     Notes
     -----
-    Function is an alias for EmpiricalSemivariogram class and it forces calculations of all spatial statistics from a
-        given dataset.
+    Function is an alias for ``EmpiricalSemivariogram`` class and it forces calculations of all spatial statistics
+    from a given dataset.
 
     Examples
     --------
