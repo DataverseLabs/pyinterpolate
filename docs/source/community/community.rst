@@ -4,6 +4,6 @@ Community
 .. toctree::
    :maxdepth: 1
 
-   parts/contributors
-   parts/forum
-   parts/use_cases
+   doc_parts/contributors
+   doc_parts/forum
+   doc_parts/use_cases
