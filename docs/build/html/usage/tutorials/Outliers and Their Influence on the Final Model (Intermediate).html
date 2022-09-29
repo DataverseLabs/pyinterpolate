@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Pyinterpolate - Outliers and Their Influence on the Final Model</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
+<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+    <script>
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.3.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        LINK_SUFFIX: '.html',
+        HAS_SOURCE:  false,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+      $(document).data('sizzle', {on_load: []});
+    </script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../app-data.js"></script>
+<link rel="index" title="Index" href="../../genindex.html" />
+<link rel="search" title="Search" href="../../search.html" />
+<link rel="next" title="Poisson Kriging - centroid based approach" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" />
+<link rel="prev" title="Blocks to points Ordinary Kriging interpolation" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" />
+
+</head>
+<body class="full-height test">
+<noscript>
+  <div>
+    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
+  </div>
+</noscript>
+<div id="whole-page" class="container-fluid content full-height">
+  <div id="header-row" class="row">
+    <div id="header-container" class="col-md-12">
+      <div id="hdr-left">
+        <i class="fa fa-bars menu-toggle"></i>
+        
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+
+      </div>
+      <div id="hdr-centre" class="text-center stretch">
+        <h3 title="Outliers and Their Influence on the Final Model">Outliers and Their Influence on the Final Model</h3>
+        <h6>Outliers and Their Influence on the Final Model</h6>
+      </div>
+      <div id="hdr-search">
+        
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+      </div>
+
+      <div id="hdr-index">
+        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
+      </div>
+
+      <div id="hdr-source">
+        <a href="../../_sources/usage/tutorials/Outliers and Their Influence on the Final Model (Intermediate).ipynb.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
+      </div>
+
+      <div id="hdr-right">
+        
+  
+  <div class="prev-next">
+    
+      <div class="pull-left">
+        <a class="btn btn-default prev" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html" title="Previous chapter (Blocks to points Ordinary Kriging interpolation)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">Blocks to points Ordinary Kriging interpolation</span></a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default next" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html" title="Next chapter (Poisson Kriging - centroid based approach)"><span class="btn-text">Poisson Kriging - centroid based approach</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  
+      </div>
+      <div id="alt-hdr-right">
+
+        <a href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html"><i class="fa fa-chevron-left mr-8"></i></a>
+
+
+        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+
+
+        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
+
+
+        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
+
+
+        <a href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html"><i class="fa fa-chevron-right"></i></a>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="content-row" class="row">
+    <div id="page-content" class="col-md-12 flex-col">
+      <div id="content-container">
+        <div id="nav">
+          
+  <div class="navsidebar">
+    <div id="sidebar-search">
+      
+<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
+  <input type="text" class="form-control search-query" placeholder="Search docs ...">
+  <div class="input-group-addon">
+    <i class="fa fa-search"></i>
+  </div>
+</div>
+    </div>
+      <div class="sidebar-block">
+        <div class="sidebar-tocheading">
+          <div class="pull-left">
+            <h2>Table Of Contents</h2>
+          </div>
+          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+        </div>
+        <div class="sidebar-toc">
+      
+          <div id="toc-filter" title="Type in here to show only matching topics">
+            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
+          </div>
+      
+        
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Regularization%20%28Intermediate%29.html">Semivariogram regularization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html">Blocks to points Ordinary Kriging interpolation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Outliers-and-Their-Influence-on-the-Final-Model">Outliers and Their Influence on the Final Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Intermediate">Level: Intermediate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data-and-divide-it-into-training-and-test-set">1) Read point data and divide it into training and test set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Check-outliers:-analyze-the-distribution-of-the-values">2) Check outliers: analyze the distribution of the values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">3) Create the Variogram Point Cloud model for datasets A and B</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Remove-outliers-from-the-variograms">4) Remove outliers from the variograms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+        </div>
+      </div>
+  </div>
+        </div>
+        <div id="content" tabindex="0" class="stretch">
+          <div id="mnav">
+            
+  
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="Semivariogram%20Regularization%20%28Intermediate%29.html">Semivariogram regularization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html">Blocks to points Ordinary Kriging interpolation</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#Outliers-and-Their-Influence-on-the-Final-Model">Outliers and Their Influence on the Final Model</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Level:-Intermediate">Level: Intermediate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data-and-divide-it-into-training-and-test-set">1) Read point data and divide it into training and test set</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#2)-Check-outliers:-analyze-the-distribution-of-the-values">2) Check outliers: analyze the distribution of the values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">3) Create the Variogram Point Cloud model for datasets A and B</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Remove-outliers-from-the-variograms">4) Remove outliers from the variograms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+</ul>
+
+  
+          </div>
+          <div class="body">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+</style>
+<div class="section" id="Outliers-and-Their-Influence-on-the-Final-Model">
+<h1>Outliers and Their Influence on the Final Model<a class="headerlink" href="#Outliers-and-Their-Influence-on-the-Final-Model" title="Permalink to this heading">¶</a></h1>
+<div class="section" id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li>Read point data and take 10% of it as a sample for the further analysis (dataset A),</li>
+<li>Check if outliers are present in a data and create additional dataset without outliers (dataset B),</li>
+<li>Create the Variogram Point Cloud model for the datasets A and B,</li>
+<li>Remove outliers from the datasets A and B,</li>
+<li>Create four Ordinary Kriging models and compare their performance.</li>
+</ol>
+</div>
+<div class="section" id="Level:-Intermediate">
+<h2>Level: Intermediate<a class="headerlink" href="#Level:-Intermediate" title="Permalink to this heading">¶</a></h2>
+</div>
+<div class="section" id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
+<table>
+<colgroup>
+<col width="3%" />
+<col width="93%" />
+<col width="4%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Date</th>
+<th class="head">Change description</th>
+<th class="head">Author</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>2022-08-27</td>
+<td>The tutorial updated to the version 0.3.0 of the package</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2021-12-14</td>
+<td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-even"><td>2021-12-13</td>
+<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2021-12-11</td>
+<td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-even"><td>2021-10-13</td>
+<td>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</td>
+<td>&#64;ethmtrgt &amp;
+&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2021-08-22</td>
+<td>Initial release</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
+<p>Outliers may affect our analysis and the final interpolation results. In this tutorial, we learn about their influence on the final model and compare interpolation errors for different scenarios where data is cleaned differently.</p>
+<p>We can remove too high or too low values at the preprocessing stage (check part 2 of the tutorial) or remove outliers directly from the variogram point cloud (part 4). Results from each type of preprocessing (and a raw dataset analysis) are different, and we will compare them.</p>
+<p>We use:</p>
+<ul class="simple">
+<li>DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span><span class="p">,</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">kriging</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">VariogramCloud</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="1)-Read-point-data-and-divide-it-into-training-and-test-set">
+<h2>1) Read point data and divide it into training and test set<a class="headerlink" href="#1)-Read-point-data-and-divide-it-into-training-and-test-set" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read data from file</span>
+
+<span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Divide data into training and test set</span>
+
+<span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">training_fraction</span><span class="p">):</span>
+    <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">number_of_training_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">*</span> <span class="n">training_fraction</span><span class="p">)</span>
+    <span class="n">training_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">number_of_training_samples</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">test_idxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idxs</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">training_idxs</span><span class="p">]</span>
+    <span class="n">training_set</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">training_idxs</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">test_set</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">test_idxs</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">training_set</span><span class="p">,</span> <span class="n">test_set</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">create_train_test</span><span class="p">(</span><span class="n">dem</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.52181898e+05, 5.28855638e+05, 6.62898026e+01],
+       [2.48780126e+05, 5.48751410e+05, 6.61951981e+01],
+       [2.42233663e+05, 5.41828067e+05, 1.74626980e+01]])
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="2)-Check-outliers:-analyze-the-distribution-of-the-values">
+<h2>2) Check outliers: analyze the distribution of the values<a class="headerlink" href="#2)-Check-outliers:-analyze-the-distribution-of-the-values" title="Permalink to this heading">¶</a></h2>
+<p>We will inspect all values in the <code class="docutils literal notranslate"><span class="pre">train</span></code> set to determine if our dataset contains outliers. In the beginning, we plot data distribution with the <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Distribution plot</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_9_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_9_0.png" />
+</div>
+</div>
+<blockquote>
+<div><strong>NOTE:</strong> Your plot may be different than the tutorial’s. Why is that? Because we take a random sample of 10% of values, and after each iteration, the algorithm takes different points for the analysis.</div></blockquote>
+<p><strong>Clarification:</strong></p>
+<p>Investigation of the plot tells us that our data is:</p>
+<ul class="simple">
+<li>grouped around the lowest values, and most of the values are below 50 meters,</li>
+<li>has (probably) three different distributions mixed, which can be a sign that the Digital Elevation Model covers three different types of elevation. One is grouped around 20 meters, the next around 50 meters, and the faintest is visible around 70 meters.</li>
+</ul>
+<p><strong>Violinplot</strong> is suitable for the distribution analysis. Especially if we are looking for complex patterns in the dataset, reading outliers from it may be challenging. We should change a plot type to understand if outliers exist in a dataset. The excellent choice is the <code class="docutils literal notranslate"><span class="pre">boxplot</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Boxplot</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_11_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_11_0.png" />
+</div>
+</div>
+<p><strong>Boxplot</strong> is a unique and handy data visualization tool. Let’s analyze this plot from the bottom up to the top.</p>
+<blockquote>
+<div><strong>NOTE:</strong> Boxplot represents values sorted in ascending order and their statistical properties: quartiles, median, and outliers.</div></blockquote>
+<ul class="simple">
+<li>The bottom whisker (horizontal line) represents the lower range of values in our dataset,</li>
+<li>The box lower line is the first quartile of data or, in other words, 25% of values of our dataset are below this point. We name it Q1.</li>
+<li>The middle line is the median of our dataset, and we name it Q2 or median.</li>
+<li>The upper line is the third quartile of a data or, in other words, 75% of values are below this point,</li>
+<li>The top whisker represents the upper range of values in our dataset. We name it Q3.</li>
+<li>Individual points (if they exist, then we see them as points below the bottom whisker or above the top whisker) are considered outliers. They could be outliers in the upper range as well as lower range of our data. The significant distance between Q1 and the bottom whisker or between Q3 and the top whisker indicates potential outliers. Points below or above this distance are treated as outliers. The outlier distance is calculated as the <span class="math notranslate nohighlight">\(weight * (Q3 - Q1)\)</span> where we can set the
+<code class="docutils literal notranslate"><span class="pre">weight</span></code> manually, but other parameters are read directly from the data.</li>
+</ul>
+<p>We use this knowledge to remove outliers from the dataset, assuming that <em>outliers are anomalies rather than unbiased readings</em>. We will perform the outlier removal from the data assuming that outliers are placed one standard deviation from Q1 (down) and Q3 (up).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create training set without outliers</span>
+
+<span class="n">q1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.25</span><span class="p">)</span>
+<span class="n">q3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.75</span><span class="p">)</span>
+
+<span class="n">top_limit</span> <span class="o">=</span> <span class="n">q3</span> <span class="o">+</span> <span class="p">(</span><span class="n">q3</span> <span class="o">-</span> <span class="n">q1</span><span class="p">)</span>
+
+<span class="n">train_without_outliers</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">train</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">top_limit</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Length of the full training set is </span><span class="si">{}</span><span class="s1"> records&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Length of the pre-processed training set is </span><span class="si">{}</span><span class="s1"> records&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_without_outliers</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Length of the full training set is 689 records
+Length of the pre-processed training set is 682 records
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">train_without_outliers</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Distribution of the training set without outliers&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">train_without_outliers</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Statistics of the training set without outliers&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_15_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_15_0.png" />
+</div>
+</div>
+<p><strong>Clarification</strong>: We have cut some records from the baseline training dataset. The distribution plot (<code class="docutils literal notranslate"><span class="pre">violinplot</span></code>) has a shorter tail and ends more abruptly upwards. The <code class="docutils literal notranslate"><span class="pre">boxplot</span></code> of the new data doesn’t have any outliers. The one crucial thing to notice is that the observations are still skewed, but this is not a problem for this concrete tutorial.</p>
+<blockquote>
+<div><strong>NOTE</strong>: if you are eager to know how to deal with skewed datasets, we recommend the article <a class="reference external" href="https://anatomisebiostats.com/biostatistics-blog/transforming-skewed-data/">Transforming Skewed Data</a>.</div></blockquote>
+</div>
+<div class="section" id="3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B">
+<h2>3) Create the Variogram Point Cloud model for datasets A and B<a class="headerlink" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B" title="Permalink to this heading">¶</a></h2>
+<p>Now we are going one step further, and we will transform both datasets with- and without- outliers and calculate variogram point clouds. Then we compare both clouds.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_variogram_point_cloud</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">number_of_lags</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
+    <span class="n">step_size</span> <span class="o">=</span> <span class="n">max_range</span> <span class="o">/</span> <span class="n">number_of_lags</span>
+    <span class="n">max_range</span> <span class="o">=</span> <span class="n">max_range</span> <span class="o">+</span> <span class="n">step_size</span>
+    <span class="n">cloud</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span> <span class="n">calculate_on_creation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cloud</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">whole_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">cloud_raw</span> <span class="o">=</span> <span class="n">get_variogram_point_cloud</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">whole_distance</span><span class="p">)</span>
+<span class="n">cloud_processed</span> <span class="o">=</span> <span class="n">get_variogram_point_cloud</span><span class="p">(</span><span class="n">train_without_outliers</span><span class="p">,</span> <span class="n">whole_distance</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: initial training dataset</span>
+
+<span class="n">cloud_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_20_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_20_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: pre-processed training dataset</span>
+
+<span class="n">cloud_processed</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_21_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_21_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> a quick look into the results shows that calculated semivariances are skewed into significant positive values for each lag, but most profoundly within middle lags (~15:21 km). The processed dataset has lower semivariances than the raw readings, and both variograms have a similar shape.</p>
+<p>In the next cell, we will check a standard deviation of the per lag variances.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Lag </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+
+    <span class="n">v_raw</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">v_pro</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">cloud_processed</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+    <span class="n">v_smape</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v_raw</span> <span class="o">-</span> <span class="n">v_pro</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_raw</span> <span class="o">+</span> <span class="n">v_pro</span><span class="p">)))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Standard Deviation raw dataset:&#39;</span><span class="p">,</span> <span class="n">v_raw</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Standard Deviation processed dataset:&#39;</span><span class="p">,</span> <span class="n">v_pro</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Symmetric Mean Absolute Percentage Error of Variances: </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v_smape</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Lag 3671.48
+Standard Deviation raw dataset: 670
+Standard Deviation processed dataset: 668
+Symmetric Mean Absolute Percentage Error of Variances: 0.30
+
+Lag 7342.96
+Standard Deviation raw dataset: 1157
+Standard Deviation processed dataset: 1088
+Symmetric Mean Absolute Percentage Error of Variances: 6.15
+
+Lag 11014.44
+Standard Deviation raw dataset: 1327
+Standard Deviation processed dataset: 1222
+Symmetric Mean Absolute Percentage Error of Variances: 8.24
+
+Lag 14685.92
+Standard Deviation raw dataset: 1310
+Standard Deviation processed dataset: 1192
+Symmetric Mean Absolute Percentage Error of Variances: 9.43
+
+Lag 18357.40
+Standard Deviation raw dataset: 1243
+Standard Deviation processed dataset: 1108
+Symmetric Mean Absolute Percentage Error of Variances: 11.48
+
+Lag 22028.88
+Standard Deviation raw dataset: 922
+Standard Deviation processed dataset: 847
+Symmetric Mean Absolute Percentage Error of Variances: 8.48
+
+Lag 25700.36
+Standard Deviation raw dataset: 739
+Standard Deviation processed dataset: 676
+Symmetric Mean Absolute Percentage Error of Variances: 8.90
+
+Lag 29371.84
+Standard Deviation raw dataset: 622
+Standard Deviation processed dataset: 619
+Symmetric Mean Absolute Percentage Error of Variances: 0.48
+
+</pre></div></div>
+</div>
+<p><strong>Clarification:</strong> The differences (sMAPE) per lag vary greatly. We can see that the preprocessing of raw values introduces the information lost, and it is especially painful for the closest neighbors. It doesn’t mean that the preprocessing of raw observations is not recommended, but it is a good idea to include the <strong>spatial component</strong> in the outliers’ detection process.</p>
+<p>Not everything is wrong. Data cleaning has lowered the semivariances dispersion for the middle lags (where we have the largest number of point pairs for the analysis).</p>
+<p>At this point, we cannot judge which dataset is better for the modeling. Instead, we will remove outliers from both <strong>variograms</strong> (instead of the <strong>raw data</strong>).</p>
+</div>
+<div class="section" id="4)-Remove-outliers-from-the-variograms">
+<h2>4) Remove outliers from the variograms<a class="headerlink" href="#4)-Remove-outliers-from-the-variograms" title="Permalink to this heading">¶</a></h2>
+<p>In this step, we will use <strong>pyinterpolate’s</strong> function <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to build two additional variogram point clouds from the raw and processed datasets. We delete the top part outliers of the <strong>semivariance values</strong> rather than the raw readings.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_without_outliers</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">z_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">prep_without_outliers</span> <span class="o">=</span> <span class="n">cloud_processed</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">z_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">data_raw_not_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">raw_without_outliers</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">data_prep</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cloud_processed</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+<span class="n">data_prep_not_out</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">prep_without_outliers</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data_raw</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Semivariances Distribution in the Raw Dataset&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Lag number&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance value&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data_raw_not_out</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Raw Dataset after the Outliers Detection and Removal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Lag number&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance value&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data_prep</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Semivariances Distribution in the Preprocessed Dataset&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Lag number&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance value&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data_prep_not_out</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Preprocessed Dataset after the Outliers Detection and Removal&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Lag number&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance value&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_28_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_28_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> Comparison of multiple variogram clouds could be hard. We see that the largest semivariances are present in the raw data. Heavily processed data has the lowest number of outliers. The medians in each dataset are distributed over a similar pattern. How is it similar? We can check if we transform the variogram point cloud into the experimental semivariogram. Pyinterpolate has a method for it: <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. We use it and compare four plots of
+semivariances to gain more insight into the transformations.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_semivar</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+<span class="n">raw_semivar_not_out</span> <span class="o">=</span> <span class="n">raw_without_outliers</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+<span class="n">prep_semivar</span> <span class="o">=</span> <span class="n">cloud_processed</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+<span class="n">prep_semivar_not_out</span> <span class="o">=</span> <span class="n">prep_without_outliers</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">raw_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#a6611a&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">raw_semivar_not_out</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#dfc27d&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prep_semivar</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#80cdc1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">prep_semivar_not_out</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#018571&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariograms created with the different data preprocessing techniques&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Lag number&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Raw&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw | Filtered Semivariances&#39;</span><span class="p">,</span> <span class="s1">&#39;Preprocessed&#39;</span><span class="p">,</span> <span class="s1">&#39;Preprocessed | Filtered Semivariances&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_31_0.png" src="../../_images/usage_tutorials_Outliers_and_Their_Influence_on_the_Final_Model_(Intermediate)_31_0.png" />
+</div>
+</div>
+<p><strong>Clarification:</strong> An understanding of those plots is not an easy task. Let’s divide reasoning into multiple points:</p>
+<ul class="simple">
+<li>Raw dataset and preprocessed raw dataset show a similar pattern. The differences are more pronounced for the distant lags than for the closest point pairs,</li>
+<li>Datasets with the cleaned variograms are different from the raw data. The absolute semivariance values per lag are smaller, and the semivariogram pattern is slightly different. Interestingly, the possible two distributions within the dataset are more visible in the cleaned variograms (one distribution with a peak around the 6th lag and the other with a peak around the 13th lag).</li>
+<li>The differences between semivariograms are mostly visible at larger distances, and differences are minor for the closest point pairs.</li>
+<li><strong>Filtering semivariance</strong> sharply lowers the weights per lag, and <strong>removing outliers</strong> from the input data only slightly corrects variogram.</li>
+</ul>
+<p>Let’s check how different variograms work with real-world data.</p>
+</div>
+<div class="section" id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
+<h2>5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance<a class="headerlink" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance" title="Permalink to this heading">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit different semivariogram models into prepared datasets and variograms</span>
+
+<span class="c1"># Raw</span>
+<span class="n">raw_theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">raw_theo</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">raw_semivar</span><span class="p">,</span> <span class="n">return_params</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Raw with cleaned variogram</span>
+<span class="n">raw_theo_no_out</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">raw_theo_no_out</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">raw_semivar_not_out</span><span class="p">,</span> <span class="n">return_params</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Preprocessed</span>
+<span class="n">prep_theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">prep_theo</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">prep_semivar</span><span class="p">,</span> <span class="n">return_params</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Preprocessed with cleaned variogram</span>
+<span class="n">prep_theo_no_out</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">prep_theo_no_out</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">prep_semivar_not_out</span><span class="p">,</span> <span class="n">return_params</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging models</span>
+
+<span class="c1"># Raw</span>
+<span class="n">raw_model</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">raw_theo</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">test</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Raw &amp; cleaned</span>
+<span class="n">c_raw_model</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">raw_theo_no_out</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">test</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Preprocessed</span>
+<span class="n">prep_model</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">prep_theo</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">test</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Preprocessed &amp; cleaned</span>
+<span class="n">c_prep_model</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">prep_theo_no_out</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">test</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5801.53it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5687.02it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5837.23it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5653.52it/s]
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build test function</span>
+
+<span class="k">def</span> <span class="nf">calculate_model_deviation</span><span class="p">(</span><span class="n">modeled_values</span><span class="p">,</span> <span class="n">test_set</span><span class="p">):</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="p">((</span><span class="n">test_set</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">modeled_values</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mse</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r_test</span><span class="p">,</span> <span class="n">cr_test</span><span class="p">,</span> <span class="n">p_test</span><span class="p">,</span> <span class="n">cp_test</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
+                  <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Raw&#39;</span><span class="p">,</span> <span class="s1">&#39;Raw-cleaned&#39;</span><span class="p">,</span> <span class="s1">&#39;Preprocessed&#39;</span><span class="p">,</span> <span class="s1">&#39;Preprocessed-cleaned&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>We will use <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method from <strong>pandas</strong> to get the errors statistic:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Raw</th>
+      <th>Raw-cleaned</th>
+      <th>Preprocessed</th>
+      <th>Preprocessed-cleaned</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>6.204000e+03</td>
+      <td>5.649000e+03</td>
+      <td>6.204000e+03</td>
+      <td>5.743000e+03</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>2.015651e+01</td>
+      <td>1.189778e+03</td>
+      <td>2.015651e+01</td>
+      <td>1.190685e+03</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>6.110270e+01</td>
+      <td>2.607913e+04</td>
+      <td>6.110270e+01</td>
+      <td>5.246287e+04</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>9.665263e-10</td>
+      <td>3.905901e-07</td>
+      <td>9.665263e-10</td>
+      <td>7.310464e-08</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>3.685949e-01</td>
+      <td>1.012541e+00</td>
+      <td>3.685949e-01</td>
+      <td>1.043486e+00</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>2.316422e+00</td>
+      <td>7.738982e+00</td>
+      <td>2.316422e+00</td>
+      <td>7.942531e+00</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1.321455e+01</td>
+      <td>6.042991e+01</td>
+      <td>1.321455e+01</td>
+      <td>6.226737e+01</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1.083563e+03</td>
+      <td>1.193487e+06</td>
+      <td>1.083563e+03</td>
+      <td>3.957478e+06</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>The view of this table may be different each time you run this tutorial (and it is related to the training-test division process). For some cases, you may get better results for the cleaned dataset; for others, results will be better for raw data. That’s why we should always have a validation set to compare different scenarios. The other idea is to use all of the models and create a distribution of predictions and errors per point - we can use it later for decisions.</p>
+<blockquote>
+<div><strong>NOTE:</strong> The example in this tutorial is related to the Digital Elevation Model, which the data provider preprocessed (<em>Copernicus Land Monitoring Services</em>). You shouldn’t get the impression that raw data preprocessing and filtering are not required for the analysis. There are cases where the sensor may produce unreliable and biased results, such as a satellite camera’s saturated pixel. It is better to remove it with the specific noise-filtering algorithm before the variogram point cloud
+development.</div></blockquote>
+<hr class="docutils" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="footer-row" class="row">
+
+    <div class="col-md-12">
+        <span title="Built on 2022-09-29" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
+
+           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
+
+        >Sizzle</a> theme.</span>
+    </div>
+
+  </div>
+</div>
+
+<div id="tooltips" class="hidden">
+</div>
+
+<script>
+$(document).ready(function() {
+  'use strict';
+  var $search = $('.search-query');
+
+  var $filter = $('#toc-filter-query');
+  var $toclist = $('.sidebar-toc > ul').find('li');
+
+  if ($toclist.length === 0) {
+    $toclist = $('.localtoc > ul').find('li');
+  }
+
+
+  var $nav = $('#nav');
+
+  //$('#whole-page').removeClass('hidden');
+  var nav_width = $nav.width();
+
+
+  var search_url = '../../search.html';
+
+  function perform_search(e) {
+    var $elem;
+
+    if (e.type === 'keypress') {
+      $elem = $(e.target);
+    }
+    else if (e.type === 'click') {
+      $elem = $(e.target).parents('.input-group').find('input');
+    }
+    var q = $elem.val().trim();
+
+    if (q) {
+      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
+
+      location.href = url;
+    }
+  }
+
+
+  function apply_filter() {
+    var s = $filter.val().trim().toLowerCase();
+
+    $toclist.find('a').removeClass('hidden');
+    $toclist.each(function() {
+      var $this = $(this);
+      var $link = $this.find('> a');
+      var t = $link.text().toLowerCase();
+      var show = t.indexOf(s) >= 0;
+
+      if (!show) {
+        $link.addClass('hidden');
+      }
+    });
+  }
+
+  $filter.on('keyup', function(e) {
+    apply_filter();
+  });
+
+
+
+  $search.on('keypress', function(e) {
+    if (e.which == 13) {
+      perform_search(e);
+    }
+  });
+  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
+  $(document).on('click', '.summary .fa-caret-right', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $next = $elem.next();
+    $elem.addClass('hidden');
+    $next.removeClass('hidden');
+  });
+  $(document).on('click', '.detail .fa-caret-down', function(e) {
+    var $elem = $(e.target).parents('li');
+    var $prev = $elem.prev();
+    $elem.addClass('hidden');
+    $prev.removeClass('hidden');
+  });
+
+  $('#content').on('click', function() {
+    $('#mnav').hide();
+  });
+
+  var counter = 0;
+  var timer = null;
+
+  function show_nav() {
+    $('#content').off('mousemove', track_mouse);
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+    }
+    $nav.show();
+  }
+
+  function track_mouse(e) {
+    var x = e.clientX;
+
+    if (x < 15) {
+      ++counter;
+      if (timer === null) {
+        timer = setTimeout(show_nav, 2000);
+      }
+    }
+    else {
+      counter = 0;
+    }
+    if (counter >= 20) {
+      show_nav();
+    }
+  };
+
+  function hide_nav() {
+    $nav.hide();
+    counter = 0;
+    $('#content').on('mousemove', track_mouse);
+  }
+
+  $('.hidetoc').on('click', hide_nav);
+
+  $(document).on('keyup', function(e) {
+    if (e.ctrlKey) {
+      if (e.which == 37) {      // Ctrl+left arrow
+        hide_nav();
+      }
+      else if (e.which == 39) { // Ctrl+right arrow
+        show_nav();
+      }
+    }
+  });
+
+  $('.menu-toggle').on('click', function(e) {
+    $('#mnav').toggle();
+  });
+
+  function scroll_nav(frag) {
+    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
+
+    var $link = $(sel);
+
+    if ($link.length > 0) {
+      $link[0].scrollIntoView({block: 'center'});
+    }
+  }
+
+  // If the navigator is long, then the item we clicked on to get here might
+  // not be in view. Try to scroll it into the view - a slight delay is needed
+  // to get it to sync properly with other stuff going on (as the page has just
+  // loaded). Hence the setTimeout with a timeout of 0.
+
+  function do_scroll() {
+    scroll_nav(window.location.hash);
+  }
+
+  setTimeout(do_scroll, 0);
+
+  function adjust_size() {
+    // we need to set the height explicitly so that scrolling regions in the
+    // content area work properly.
+    var h = $('#page-content').height();
+
+    $('#nav, #content').height(h);
+    if ($('#nav').is(':visible')) {
+      $('#mnav').hide();
+    }
+  }
+
+  adjust_size();
+
+  $(window).on('resize', adjust_size);
+
+  function focus_content() {
+    $('#content').focus();  // so that keyboard can be used to scroll, etc.
+  }
+
+  setTimeout(focus_content, 150);
+
+  var sizzle = $(document).data('sizzle');
+
+  function make_tooltip(id, h, b) {
+    var $e = $('<div>').attr('id', id);
+    var $b = $('<div>').addClass('tc-body').html(b);
+
+    if (h) {
+      var $h = $('<div>').addClass('tc-heading').html(h);
+      $e.append($h);
+    }
+    $e.append($b);
+    return $e;
+  }
+
+  var default_tt_options = {
+    theme: ['tooltipster-light', 'tooltipster-light-customized'],
+    interactive: true,
+    maxWidth: 600,
+    contentCloning: true
+  };
+
+  function activate_tooltips() {
+    var $tt = $('.tt');
+
+    //console.log('tt links:', $tt.length);
+    $tt.tooltipster(default_tt_options);
+  }
+
+
+
+  function add_glossary_tooltips() {
+    var links = $('a');  // can qualify with .reference.internal
+    var glinks = {};
+    var pat = /(.*)\.html#(term-.*)$/;
+    var found = false;  // links in this document
+
+    $.each(links, function(i, link) {
+        var $link = $(link);
+        var href = $link.attr('href');
+        var m = href.match(pat);
+
+        if (m) {
+          var s = m[1].replace(/^(\.\.\/)+/, '');
+
+          if (s === sizzle.app_data.glossary.document) {
+            var k = m[2];
+
+            if (k in glinks) {
+              glinks[k].push($link);
+            }
+            else {
+              glinks[k] = [$link];
+            }
+            found = true;
+          }
+        }
+    });
+    if (found) {
+      var $t = $('#tooltips');
+      var data = sizzle.app_data.glossary.terms;
+
+      $.each(glinks, function(k, v) {
+        var d = data[k];
+
+        if (d) {  // as a sanity check
+          var s = 'tc-'+ k;
+          var $e = make_tooltip(s, d.term, d.defn);
+          $t.append($e);
+
+          $.each(v, function(i, link) {
+            link.addClass('tt').attr('data-tooltip-content', '#' + s);
+          });
+        }
+      });
+    }
+  }
+
+  if (sizzle.app_data && sizzle.app_data.glossary &&
+      sizzle.app_data.glossary.document) {
+    add_glossary_tooltips();
+  }
+
+
+
+
+  function add_custom_tooltips() {
+    if (!sizzle.app_data) {
+      return;
+    }
+
+    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
+
+    if ($.isEmptyObject(info_tips)) {
+      return;
+    }
+
+    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
+
+    $('.tc-info').each(function() {
+      var $elem = $(this).prev();
+      var classes = $elem.attr('class');
+      var m = /\btci-([\S]+)/.exec(classes);
+
+      if (m !== null) {
+        var key = m[1];
+
+        if (key in info_tips) {
+          var v = info_tips[key];
+          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
+        }
+      }
+    });
+  }
+
+  add_custom_tooltips();
+
+  setTimeout(activate_tooltips, 1000);
+
+
+  // Clipboard copy for code blocks with captions
+
+  $('.code-block-caption').each(function() {
+    var $cap = $(this);
+    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
+    var $code = $cap.parent().find('.highlight');
+
+    $cap.append($btn);
+    $btn.find('.fa-clipboard').data('clip-text', $code.text());
+  });
+
+  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
+    'text': function(trigger) {
+      return $(trigger).data('clip-text');
+    }
+  });
+
+  clipboard.on('success', function(e) {
+    var $copied = $(e.trigger).prev();
+
+    $copied.removeClass('hidden');
+
+    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
+  });
+
+  if (sizzle.on_load) {
+    sizzle.on_load.forEach(function(f) {
+      f();
+    });
+  }
+});
+</script>
+</body>
+</html>
