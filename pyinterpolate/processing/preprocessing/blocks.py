@@ -23,24 +23,24 @@ class Blocks:
     Attributes
     ----------
     data : gpd.GeoDataFrame
-           Dataset with block values.
+        Dataset with block values.
 
     value_column_name : Any
-                        Name of the column with block rates.
+        Name of the column with block rates.
 
     geometry_column_name : Any
-                           Name of the column with a block geometry.
+        Name of the column with a block geometry.
 
     index_column_name : Any
-                        Name of the column with the index.
+        Name of the column with the index.
 
     Methods
     -------
-    from_file(fpath, value_col, geometry_col, index_col)
+    from_file()
         Reads and parses data from spatial file supported by GeoPandas.
 
-    from_geodataframe(gdf, value_col, geometry_col, use_index)
-        Reads and parses data from GeoPandas GeoDataFrame.
+    from_geodataframe()
+        Reads and parses data from GeoPandas ``GeoDataFrame``.
 
     Examples
     --------
@@ -119,25 +119,25 @@ class Blocks:
         Parameters
         ----------
         fpath : str
-                Path to the spatial file.
+            Path to the spatial file.
 
         value_col : Any
-                    The name of a column with values.
+            The name of a column with values.
 
         geometry_col : default='geometry'
-                       The name of a column with blocks.
+            The name of a column with blocks.
 
         index_col : default = None
-                    Index column name. It could be any unique value from a dataset. If not given then index is taken
-                    from the index array of GeoDataFrame and it is named 'index'.
+            Index column name. It could be any unique value from a dataset. If not given then index is taken
+            from the index array of ``GeoDataFrame``, and it is named ``'index'``.
 
-        layer_name : Any, Optional
-                     The name of a layer with data if provided input is a gpkg file.
+        layer_name : Any, default = None
+            The name of a layer with data if provided input is a *gpkg* file.
 
         Raises
         ------
         IndexColNotUniqueError
-            Raised when given index column is not unique.
+            Raised when given index column has not unique values.
 
         """
 
@@ -176,13 +176,13 @@ class Blocks:
         gdf : gpd.GeoDataFrame
 
         value_col : Any
-                    The name of a column with values.
+            The name of a column with values.
 
         geometry_col : Any, default = 'geometry'
-                       The name of a column with blocks.
+            The name of a column with blocks.
 
         index_col : Any, default = None
-                    If set then a specific column is treated as an index.
+            If set then a specific column is treated as an index.
 
         Raises
         ------
@@ -215,7 +215,7 @@ class PointSupport:
     Attributes
     ----------
     point_support : gpd.GeoDataFrame
-                    Dataset with point support values and indexes of blocks (where point falls into).
+        Dataset with point support values and indexes of blocks (where points fall into).
 
     Methods
     -------
@@ -225,31 +225,31 @@ class PointSupport:
     from_geodataframes()
         Loads point support and polygon data from dataframe.
 
-    Notes
-    -----
-    TODO: info about regualarization process
-
     Examples
     --------
-    import geopandas as gpd
-    from pyinterpolate.processing.point.structure import PointSupport
+    >>> import geopandas as gpd
+    >>> from pyinterpolate.processing.point.structure import PointSupport
+    >>>
+    >>>
+    >>> POPULATION_DATA = "path to the point support file"
+    >>> POLYGON_DATA = "path to the polygon data"
+    >>> GEOMETRY_COL = "geometry"
+    >>> POP10 = "POP10"
+    >>> POLYGON_ID = "FIPS"
+    >>>
+    >>> gdf_points = gpd.read_file(POPULATION_DATA)
+    >>> gdf_polygons = gpd.read_file(POLYGON_DATA)
+    >>> point_support = PointSupport()
+    >>> out = point_support.from_geodataframes(gdf_points,
+    ...                                        gdf_polygons,
+    ...                                        point_support_geometry_col=GEOMETRY_COL,
+    ...                                        point_support_val_col=POP10,
+    ...                                        blocks_geometry_col=GEOMETRY_COL,
+    ...                                        blocks_index_col=POLYGON_ID)
 
-
-    POPULATION_DATA = "path to the point support file"
-    POLYGON_DATA = "path to the polygon data"
-    GEOMETRY_COL = "geometry"
-    POP10 = "POP10"
-    POLYGON_ID = "FIPS"
-
-    gdf_points = gpd.read_file(POPULATION_DATA)
-    gdf_polygons = gpd.read_file(POLYGON_DATA)
-    point_support = PointSupport()
-    out = point_support.from_geodataframes(gdf_points,
-                                           gdf_polygons,
-                                           point_support_geometry_col=GEOMETRY_COL,
-                                           point_support_val_col=POP10,
-                                           blocks_geometry_col=GEOMETRY_COL,
-                                           blocks_index_col=POLYGON_ID)
+    TODO
+    ----
+    - info about regualarization process into Notes
     """
 
     def __init__(self):
@@ -276,32 +276,31 @@ class PointSupport:
         Parameters
         ----------
         point_support_data_file : str
-                                  Path to the file with point support data. Reads all files processed by the GeoPandas.
+            Path to the file with point support data. Reads all files processed by the GeoPandas.
 
         blocks_file : str
-                      Path to the file with polygon data. Reads all files processed by GeoPandas.
+            Path to the file with polygon data. Reads all files processed by GeoPandas.
 
         point_support_geometry_col : Any
-                                     The name of the point support geometry column.
+            The name of the point support geometry column.
 
         point_support_val_col : Any
-                                The name of the point support column with values.
+            The name of the point support column with values.
 
         blocks_geometry_col : Any
-                              The name of the polygon geometry column.
+            The name of the polygon geometry column.
 
         blocks_index_col : Any
-                           The name of polygon's index column (must be unique!).
+            The name of polygon's index column (must be unique!).
 
         use_point_support_crs : bool, default = True
-                                If set to False then the point support crs is transformed to the same crs as polygon
-                                dataset.
+            If set to ``False`` then the point support crs is transformed to the same crs as polygon dataset.
 
         point_support_layer_name : Any, default = None
-                                   If provided file is .gpkg then this parameter must be provided.
+            If provided file is *.gpkg* then this parameter must be provided.
 
         blocks_layer_name  : Any, default = None
-                             If provided file is .gpkg then this parameter must be provided.
+            If provided file is *.gpkg* then this parameter must be provided.
         """
         # Load data
         if point_support_data_file.lower().endswith('.gpkg'):
@@ -339,26 +338,25 @@ class PointSupport:
 
 
         blocks_dataframe : GeoDataFrame
-                           Block data with block indexes and geometries.
+            Block data with block indexes and geometries.
 
         point_support_geometry_col : Any
-                                     The name of the point support geometry column.
+            The name of the point support geometry column.
 
         point_support_val_col : Any
-                                The name of the point support column with values.
+            The name of the point support column with values.
 
         point_support_val_col : Any
-                                The name of the point support column with values.
+            The name of the point support column with values.
 
         blocks_geometry_col : Any
-                              The name of the polygon geometry column.
+            The name of the polygon geometry column.
 
         blocks_index_col : Any
-                           The name of polygon's index column (must be unique!).
+            The name of polygon's index column (must be unique!).
 
         use_point_support_crs : bool, default = True
-                                If set to False then the point support crs is transformed to the same crs as polygon
-                                dataset.
+            If set to ``False`` then the point support crs is transformed to the same crs as polygon dataset.
         """
         # Select data
         point_support, blocks = self._select_data(point_support_dataframe,

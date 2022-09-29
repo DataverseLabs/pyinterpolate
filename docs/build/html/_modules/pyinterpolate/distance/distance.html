@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.distance.distance &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.distance.distance</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyinterpolate.distance.distance</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Distance calculation functions.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">PointSupport</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">point_support_to_dict</span><span class="p">,</span> <span class="n">block_dataframe_to_dict</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_array</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    blocks : numpy array</span>
+<span class="sd">             [[block id, point x, point y, value]]</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : Dict</span>
+<span class="sd">                      {block id : [distances to other blocks]}. Block ids in the order from the list of</span>
+<span class="sd">                      distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">block_keys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">blocks</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">block_distances</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">k_i</span> <span class="ow">in</span> <span class="n">block_keys</span><span class="p">:</span>
+        <span class="n">i_block</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">blocks</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">k_i</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">:]</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k_j</span> <span class="ow">in</span> <span class="n">block_keys</span><span class="p">:</span>
+            <span class="n">j_block</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">blocks</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">k_j</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="n">k_i</span> <span class="o">==</span> <span class="n">k_j</span><span class="p">:</span>
+                <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">i_block</span><span class="p">,</span> <span class="n">j_block</span><span class="p">)</span>
+                <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">block_distances</span><span class="p">[</span><span class="n">k_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
+
+    <span class="k">return</span> <span class="n">block_distances</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_dataframe</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    blocks : Union[pd.DataFrame, gpd.GeoDataFrame]</span>
+<span class="sd">             DataFrame and GeoDataFrame: columns={x, y, ds, index}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : Dict</span>
+<span class="sd">                      {block id : [distances to other blocks]}. Block ids in the order from the list of</span>
+<span class="sd">                      distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">expected_cols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;ds&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expected_cols</span><span class="o">.</span><span class="n">issubset</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">columns</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Given dataframe doesnt have all expected columns </span><span class="si">{</span><span class="n">expected_cols</span><span class="si">}</span><span class="s1">. &#39;</span>
+                       <span class="sa">f</span><span class="s1">&#39;It has </span><span class="si">{</span><span class="n">blocks</span><span class="o">.</span><span class="n">columns</span><span class="si">}</span><span class="s1"> instead.&#39;</span><span class="p">)</span>
+
+    <span class="n">dsdict</span> <span class="o">=</span> <span class="n">block_dataframe_to_dict</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+
+    <span class="n">bdists</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dict</span><span class="p">(</span><span class="n">dsdict</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">bdists</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_dict</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    blocks : Dict</span>
+<span class="sd">             Dict: {block id: [[point x, point y, value]]}</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : Dict</span>
+<span class="sd">                      {block id : [distances to other blocks]}. Block ids in the order from the list of</span>
+<span class="sd">                      distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">block_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">blocks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">block_distances</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">k_i</span> <span class="ow">in</span> <span class="n">block_keys</span><span class="p">:</span>
+        <span class="n">i_block</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">k_i</span><span class="p">]</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k_j</span> <span class="ow">in</span> <span class="n">block_keys</span><span class="p">:</span>
+            <span class="n">j_block</span> <span class="o">=</span> <span class="n">blocks</span><span class="p">[</span><span class="n">k_j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">k_i</span> <span class="o">==</span> <span class="n">k_j</span><span class="p">:</span>
+                <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">i_block</span><span class="p">,</span> <span class="n">j_block</span><span class="p">)</span>
+                <span class="n">distances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">block_distances</span><span class="p">[</span><span class="n">k_i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span>
+
+    <span class="k">return</span> <span class="n">block_distances</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">PointSupport</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    blocks : PointSupport</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : Dict</span>
+<span class="sd">                      {block id : [distances to other blocks]}. Block ids in the order from the list of</span>
+<span class="sd">                      distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dsdict</span> <span class="o">=</span> <span class="n">point_support_to_dict</span><span class="p">(</span><span class="n">point_support</span><span class="o">=</span><span class="n">blocks</span><span class="p">)</span>
+    <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dict</span><span class="p">(</span><span class="n">dsdict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">block_distances</span>
+
+
+<div class="viewcode-block" id="calc_block_to_block_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.calc_block_to_block_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_block_to_block_distance</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between blocks.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    blocks : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+<span class="sd">        The point support of polygons.</span>
+<span class="sd">          * ``Dict``: ``{block id: [[point x, point y, value]]}``,</span>
+<span class="sd">          * ``numpy array``: ``[[block id, x, y, value]]``,</span>
+<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,</span>
+<span class="sd">          * ``PointSupport``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : Dict</span>
+<span class="sd">        Ordered block ids (the order from the list of distances): {block id : [distances to other]}.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        Wrong input&#39;s data type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dict</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_array</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">):</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dataframe</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">):</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Blocks data type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span><span class="si">}</span><span class="s1"> not recognized. You may use PointSupport,&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39; Geopandas GeoDataFrame, Pandas DataFrame or numpy array. See docs.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">block_distances</span></div>
+
+
+<span class="k">def</span> <span class="nf">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">block_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">block_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distance between two blocks based on how they are divided (into the point support grid).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    block_1 : numpy array</span>
+
+<span class="sd">    block_2 : numpy array</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    weighted_distances : float</span>
+<span class="sd">                         Weighted distance between blocks.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The weighted distance between blocks is derived from the equation:</span>
+
+<span class="sd">    $$d(v_{a}, v_{b})=\frac{1}{\sum_{s=1}^{P_{a}} \sum_{s&#39;=1}^{P_{b}} n(u_{s}) n(u_{s&#39;})} *</span>
+<span class="sd">        \sum_{s=1}^{P_{a}} \sum_{s&#39;=1}^{P_{b}} n(u_{s})n(u_{s&#39;})||u_{s}-u_{s&#39;}||$$</span>
+
+<span class="sd">    where:</span>
+<span class="sd">    $P_{a}$ and $P_{b}$: number of points $u_{s}$ and $u_{s&#39;}$ used to discretize the two units $v_{a}$ and $v_{b}$,</span>
+<span class="sd">    $n(u_{s})$ and $n(u_{s&#39;})$ - population size in the cells $u_{s}$ and $u_{s&#39;}$.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units.</span>
+<span class="sd">           Math Geosci 40, 101–128 (2008). https://doi.org/10.1007/s11004-007-9129-1</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a_shape</span> <span class="o">=</span> <span class="n">block_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b_shape</span> <span class="o">=</span> <span class="n">block_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">block_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">bx</span> <span class="o">=</span> <span class="n">block_2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">ax</span> <span class="o">-</span> <span class="n">bx</span>
+    <span class="n">ay</span> <span class="o">=</span> <span class="n">block_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">by</span> <span class="o">=</span> <span class="n">block_2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">-</span> <span class="n">by</span>
+    <span class="n">aval</span> <span class="o">=</span> <span class="n">block_1</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">bval</span> <span class="o">=</span> <span class="n">block_2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">aval</span> <span class="o">*</span> <span class="n">bval</span>
+
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">wdist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">w</span>
+    <span class="n">distances_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wdist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distances_sum</span>
+
+
+<div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function calculates distances between two group of points of a single group to itself.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points_a : numpy array</span>
+<span class="sd">        The point coordinates.</span>
+
+<span class="sd">    points_b : numpy array, default=None</span>
+<span class="sd">        Other point coordinates. If provided then algorithm calculates distances between ``points_a`` against</span>
+<span class="sd">        ``points_b``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distances : numpy array</span>
+<span class="sd">        The distances from each point from the ``points_a`` to other point (from the same ``points_a`` or from the</span>
+<span class="sd">        other set of points ``points_b``).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">points_b</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_a</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distances</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.distance.distance</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

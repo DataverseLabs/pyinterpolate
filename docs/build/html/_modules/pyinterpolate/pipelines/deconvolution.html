@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.pipelines.deconvolution &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../../_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          Pyinterpolate</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/api.html">API</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for pyinterpolate.pipelines.deconvolution</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Regularization: blocks to point support.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">TODO</span>
+<span class="sd">----</span>
+<span class="sd">* tests</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.models.block</span> <span class="kn">import</span> <span class="n">area_to_point_pk</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">transform_ps_to_dict</span><span class="p">,</span> <span class="n">transform_blocks_to_numpy</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
+
+
+<span class="k">def</span> <span class="nf">smooth_area_to_point_pk</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
+                            <span class="n">blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Blocks</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                            <span class="n">point_support</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">],</span>
+                            <span class="n">number_of_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                            <span class="n">max_range</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">crs</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function smooths blocks data into their point support values.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    semivariogram_model : TheoreticalVariogram</span>
+<span class="sd">        The regularized variogram.</span>
+
+<span class="sd">    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
+<span class="sd">        Blocks with aggregated data.</span>
+<span class="sd">            * ``Blocks``: ``Blocks()`` class object.</span>
+<span class="sd">            * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">              Geometry column with polygons is not used.</span>
+<span class="sd">            * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.</span>
+
+<span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+<span class="sd">        The point support of polygons.</span>
+<span class="sd">          * ``Dict``: ``{block id: [[point x, point y, value]]}``,</span>
+<span class="sd">          * ``numpy array``: ``[[block id, x, y, value]]``,</span>
+<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,</span>
+<span class="sd">          * ``PointSupport``.</span>
+
+<span class="sd">    number_of_neighbors : int</span>
+<span class="sd">        The minimum number of neighbours that potentially affect block.</span>
+
+<span class="sd">    max_range : float, default=None</span>
+<span class="sd">        The maximum distance to search for neighbors.</span>
+
+<span class="sd">    crs : Any, default=None</span>
+<span class="sd">        CRS of data.</span>
+
+<span class="sd">    raise_when_negative_prediction : bool, default=True</span>
+<span class="sd">        Raise error when prediction is negative.</span>
+
+<span class="sd">    raise_when_negative_error : bool, default=True</span>
+<span class="sd">        Raise error when prediction error is negative.</span>
+
+<span class="sd">    err_to_nan : bool, default=True</span>
+<span class="sd">        ``ValueError`` to ``NaN``.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    results : gpd.GeoDataFrame</span>
+<span class="sd">        Columns = ``[area_id, geometry (Point), prediction, error]``.</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+<span class="sd">    - Check strange parameter number_of_neighbors (not min but max?)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Prepare data</span>
+    <span class="c1"># Transform point support to dict</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
+        <span class="n">dict_ps</span> <span class="o">=</span> <span class="n">point_support</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dict_ps</span> <span class="o">=</span> <span class="n">transform_ps_to_dict</span><span class="p">(</span><span class="n">point_support</span><span class="p">)</span>
+
+    <span class="c1"># Transform Blocks to array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">arr_bl</span> <span class="o">=</span> <span class="n">blocks</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Here IDE (PyCharm) gets type inspection wrong...</span>
+        <span class="c1"># noinspection PyTypeChecker</span>
+        <span class="n">arr_bl</span> <span class="o">=</span> <span class="n">transform_blocks_to_numpy</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+
+    <span class="n">rarr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">area_id</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">arr_bl</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]):</span>
+        <span class="n">k_areas</span> <span class="o">=</span> <span class="n">arr_bl</span><span class="p">[</span><span class="n">arr_bl</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">area_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">exclude_key</span> <span class="o">=</span> <span class="p">{</span><span class="n">area_id</span><span class="p">}</span>
+        <span class="n">k_points</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">dict_ps</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">dict_ps</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="o">-</span> <span class="n">exclude_key</span><span class="p">}</span>
+        <span class="n">u_area</span> <span class="o">=</span> <span class="n">arr_bl</span><span class="p">[</span><span class="n">arr_bl</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">area_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">u_points</span> <span class="o">=</span> <span class="n">dict_ps</span><span class="p">[</span><span class="n">area_id</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">area_to_point_pk</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">,</span>
+                                   <span class="n">blocks</span><span class="o">=</span><span class="n">k_areas</span><span class="p">,</span>
+                                   <span class="n">point_support</span><span class="o">=</span><span class="n">k_points</span><span class="p">,</span>
+                                   <span class="n">unknown_block</span><span class="o">=</span><span class="n">u_area</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">unknown_block_point_support</span><span class="o">=</span><span class="n">u_points</span><span class="p">,</span>
+                                   <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+                                   <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
+                                   <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">raise_when_negative_prediction</span><span class="p">,</span>
+                                   <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">raise_when_negative_error</span><span class="p">,</span>
+                                   <span class="n">err_to_nan</span><span class="o">=</span><span class="n">err_to_nan</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">pred_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">area_id</span><span class="p">,</span> <span class="n">Point</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+            <span class="n">rarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_arr</span><span class="p">)</span>
+
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rarr</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;area id&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;pred&#39;</span><span class="p">,</span> <span class="s1">&#39;err&#39;</span><span class="p">])</span>
+    <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gdf</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2022, Szymon Moliński.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

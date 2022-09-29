@@ -7,7 +7,7 @@ version: 2
 
 # Build documentation in the docs_oldies/ directory with Sphinx
 sphinx:
-  configuration: docs_oldies/source/conf.py
+  configuration: docs/source/conf.py
 
 # Build documentation with MkDocs
 #mkdocs:
@@ -21,8 +21,8 @@ formats:
 python:
   version: "3.8"
   install:
-    - requirements: docs_oldies/requirements.txt
+    - requirements: docs/requirements.txt
     - method: pip
       path: .
       extra_requirements:
-          - docs_oldies
+          - docs

@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.pipelines.samples &#8212; Pyinterpolate 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.pipelines.samples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyinterpolate.pipelines.samples</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The module contains functions that use public APIs to get data samples for experiments.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Sean Lim | @seanjunheng2</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="download_air_quality_poland"><a class="viewcode-back" href="../../../api/pipelines/data/download.html#pyinterpolate.download_air_quality_poland">[docs]</a><span class="k">def</span> <span class="nf">download_air_quality_poland</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">export</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">export_path</span><span class="o">=</span><span class="s1">&#39;air_quality_sample.csv&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function downloads air quality data from Polish (Central Europe) stations. (EPSG:4326)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : str</span>
+<span class="sd">        The observed compound from the following list:</span>
+<span class="sd">            - &#39;CO&#39;: carbon monoxide,</span>
+<span class="sd">            - &#39;SO2&#39;: sulfur dioxide,</span>
+<span class="sd">            - &#39;PM2.5&#39;:  particulate matter with size &lt;= 2.5 micrometers,</span>
+<span class="sd">            - &#39;PM10&#39;: particulate matter with size &lt;= 10 micrometers,</span>
+<span class="sd">            - &#39;NO2&#39;: nitrogen dioxide,</span>
+<span class="sd">            - &#39;03&#39;: ozone,</span>
+<span class="sd">            - &#39;C6H6&#39;: benzene.</span>
+
+<span class="sd">    export : bool, default = False</span>
+<span class="sd">        Export loaded dataset into a csv file.</span>
+
+<span class="sd">    export_path : str, default = &#39;air_quality_sample.csv&#39;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    final_df : DataFrame</span>
+<span class="sd">        columns = ``[station_id, x, y, reading name]``</span>
+
+<span class="sd">    Authors</span>
+<span class="sd">    -------</span>
+<span class="sd">    Sean Lim | @seanjunheng2</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+<span class="sd">    - remove too broad exception</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;CO&#39;</span><span class="p">,</span> <span class="s1">&#39;SO2&#39;</span><span class="p">,</span> <span class="s1">&#39;PM2.5&#39;</span><span class="p">,</span> <span class="s1">&#39;PM10&#39;</span><span class="p">,</span> <span class="s1">&#39;NO2&#39;</span><span class="p">,</span> <span class="s1">&#39;O3&#39;</span><span class="p">,</span> <span class="s1">&#39;C6H6&#39;</span><span class="p">]</span>
+
+    <span class="c1"># urls</span>
+    <span class="n">stations_list_url</span> <span class="o">=</span> <span class="s1">&#39;https://api.gios.gov.pl/pjp-api/rest/station/findAll&#39;</span>
+    <span class="n">sensors_list_url</span> <span class="o">=</span> <span class="s1">&#39;https://api.gios.gov.pl/pjp-api/rest/station/sensors/&#39;</span>
+    <span class="n">data_url</span> <span class="o">=</span> <span class="s1">&#39;https://api.gios.gov.pl/pjp-api/rest/data/getData/&#39;</span>
+
+    <span class="c1"># Cols</span>
+    <span class="n">lat_col</span> <span class="o">=</span> <span class="s1">&#39;gegrLat&#39;</span>
+    <span class="n">lon_col</span> <span class="o">=</span> <span class="s1">&#39;gegrLon&#39;</span>
+    <span class="n">station_id_col</span> <span class="o">=</span> <span class="s1">&#39;stationId&#39;</span>
+
+    <span class="n">api_output</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">stations_list_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="n">stations_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">json_normalize</span><span class="p">(</span><span class="n">api_output</span><span class="p">)[[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="p">,</span> <span class="n">lon_col</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="n">station_id_col</span><span class="p">})</span>
+
+    <span class="n">sensors_df</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">stations_df</span><span class="p">[</span><span class="n">station_id_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">api_output</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">sensors_list_url</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">sensors_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">json_normalize</span><span class="p">(</span><span class="n">api_output</span><span class="p">))</span>
+    <span class="n">sensors_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">sensors_df</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">values_df</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sensors_df</span><span class="p">[</span><span class="n">sensors_df</span><span class="p">[</span><span class="s1">&#39;param.paramCode&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">api_output</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">data_url</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values_df</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">api_output</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+            <span class="n">values_df</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">i</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
+    <span class="n">values_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">values_df</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">])</span>
+
+    <span class="n">final_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">sensors_df</span><span class="p">[[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">station_id_col</span><span class="p">]],</span> <span class="n">stations_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">station_id_col</span><span class="p">)</span>
+    <span class="n">final_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">final_df</span><span class="p">,</span> <span class="n">values_df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+    <span class="n">final_df</span> <span class="o">=</span> <span class="n">final_df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="n">lat_col</span><span class="p">:</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">lon_col</span><span class="p">:</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">station_id_col</span><span class="p">:</span> <span class="s1">&#39;station_id&#39;</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">export</span><span class="p">:</span>
+        <span class="n">final_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;station_id&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">final_df</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">Pyinterpolate 0.3.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyinterpolate.pipelines.samples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Szymon Moliński.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

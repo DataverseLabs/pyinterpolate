@@ -10,24 +10,22 @@ import numpy as np
 import pandas as pd
 
 
-def read_txt(
-        path: str, delim=',', skip_header=True
-) -> np.ndarray:
+def read_txt(path: str, delim=',', skip_header=True) -> np.ndarray:
     """Function reads data from a text file.
 
-    Provided data format should include: longitude (x), latitude (y), value.
-    Data read by a function is converted into numpy array.
+    Provided data format should include: **longitude (x)**, **latitude (y)**, **value**. Function converts data into
+    numpy array.
 
     Parameters
     ----------
     path : str
-           Path to the file.
+        Path to the file.
 
     delim : str, default=','
-            Delimiter that separates columns.
+        Delimiter that separates columns.
 
     skip_header : bool, default=True
-                  Skips the first row of a file if set to True.
+        Skips the first row of a file if set to ``True``.
 
     Returns
     -------
@@ -38,7 +36,6 @@ def read_txt(
     >>> path_to_the_data = 'path_to_the_data.txt'
     >>> data = read_txt(path_to_the_data, skip_header=False)
     >>> print(data[:2, :])
-
     [
         [15.11524 52.76515 91.275597]
         [15.11524 52.74279 96.548294]
@@ -62,29 +59,27 @@ def read_csv(
 ) -> np.ndarray:
     """Function reads data from a csv file.
 
-    Provided data format should include: latitude, longitude, value.
+    Provided data should include: **latitude**, **longitude**, **value**.
 
     Parameters
     ----------
-
     path : str
-           Path to the file.
+        Path to the file.
 
     val_col_name : str
-                   Name of the value column (header title).
+        Name of the value column (header title).
 
     lat_col_name : str
-                   Name of the latitude column (header title).
+        Name of the latitude column (header title).
 
     lon_col_name : str
-                   Name of the longitude column (header title).
+        Name of the longitude column (header title).
 
     delim : str, default=','
-            Delimiter that separates columns.
+        Delimiter that separates columns.
 
     Returns
     -------
-
     data_arr : numpy array
 
     Examples
@@ -92,7 +87,6 @@ def read_csv(
     >>> path_to_the_data = 'path_to_the_data.csv'
     >>> data = read_csv(path_to_the_data, val_col_name='value', lat_col_name='y', lon_col_name='x')
     >>> print(data[:2, :])
-
     [
         [15.11524 52.76515 91.275597]
         [15.11524 52.74279 96.548294]
@@ -119,47 +113,48 @@ def read_block(
 ) -> gpd.GeoDataFrame:
     """Function reads block data from files supported by fiona / geopandas.
 
-    Value column name must be provided. If geometry column has different name than 'geometry' then
-    it must be provided too. ID column name is optional, if not given then GeoDataFrame index is
-    treated as an id column. Optional parameters are epsg and crs. If any is set then data is reprojected
-    into a specific crs/epsg. Function return GeoDataFrame with columns: id, value, geometry, centroid.
+    Value column name must be provided. If geometry column has different name than `'geometry'` then
+    it must be provided too. ID column name is optional, if not given then ``GeoDataFrame`` `index` is
+    treated as an id column. Optional parameters are `epsg` and `crs`. If any is set then data is reprojected
+    into a specific `crs/epsg`.` Function returns ``GeoDataFrame`` with columns: ``[id, value, geometry, centroid]``.
 
     Parameters
     ----------
     path : str
-           Path to the file.
+        Path to the file.
 
     val_col_name : str
-                   Name of the value column (header title).
+        Name of the value column (header title).
 
     geometry_col_name : str, default='geometry'
-                        Name of the column with blocks - blocks.
+        Name of the column with polygons.
 
     id_col_name: str or None, default=None, optional
-                 Name of the colum with unique indexes.
+        Name of the colum with unique indexes.
 
 
-    centroid_col_name: str or None, default=None, optional
-                       Name of the column with block centroid. Centroids are calculated
-                       from MultiPolygons or Polygons later on but their accuracy may be limited.
-                       For most applications it does not matter.
+    centroid_col_name: str or None, default=None
+        Name of the column with block centroid. Centroids are calculated from ``MultiPolygon`` or ``Polygon``
+        later on but their accuracy may be limited. For most applications it does not matter.
 
-    epsg : str or None, default=None, optional
-           If provided then GeoDataFrame projection is set to it. You should choose if you provide EPSG or CRS.
+    epsg : str or None, default=None
+        If provided then ``GeoDataFrame`` projection is set to it. You should choose if you provide `EPSG` or `CRS`.
 
-    crs : str or None, default=None, optional
-          If provided then GeoDataFrame projection is set to. You should choose if you provide CRS or EPSG.
+    crs : str or None, default=None
+        If provided then ``GeoDataFrame`` projection is set to it. You should choose if you provide `CRS` or `EPSG`.
 
     Returns
     -------
     gpd : GeoDataFrame
-          columns=['id', 'geometry', 'value', 'centroid']
+        Returned output has columns: ``['id', 'geometry', 'value', 'centroid']``.
 
     Raises
     ------
     TypeError
-        * EPSG and CRS are provided both (should be one),
-        * Provided column name does not exist in a dataset.
+        `EPSG` and `CRS` are provided both (should be only one).
+
+    TypeError
+        Provided column name does not exist in a dataset.
 
     Examples
     --------

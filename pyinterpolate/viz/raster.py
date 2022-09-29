@@ -72,50 +72,50 @@ def interpolate_raster(data,
     Parameters
     ----------
     data : numpy array
-           [coordinate x, coordinate y, value].
+        ``[coordinate x, coordinate y, value]``.
 
     dim : int
-          Number of pixels (points) of a larger dimension (it could be width or height). Ratio is preserved.
+        Number of pixels (points) of a larger dimension (it could be width or height). Ratio is preserved.
 
     number_of_neighbors : int, default=16
-                          Number of points used to interpolate data.
+        Number of points used to interpolate data.
 
     semivariogram_model : TheoreticalVariogram, default=None
-                          Variogram model, if not provided then it is estimated from a given dataset.
+        Variogram model, if not provided then it is estimated from a given dataset.
 
-    direction : float, default=0
-                Direction of semivariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+    direction : float (in range [0, 360]), default = 0
+        A direction of semivariogram, values from 0 to 360 degrees:
 
-    tolerance : float, default=1
-                Value in range (0-1) normalized to [0 : 0.5] to select tolerance of semivariogram. If tolerance
-                is 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter. If tolerance is greater than 0 then
-                semivariance is estimated from elliptical area with major axis with the same direction as the line
-                for 0 tolerance and minor axis of a size:
-                    (tolerance * step_size)
-                and major axis (pointed in NS direction):
-                    ((1 - tolerance) * step_size)
-                and baseline point at a center of ellipse. Tolerance == 1 (normalized to 0.5) creates omnidirectional
-                semivariogram.
+        * 0 or 180: is NS direction,
+        * 90 or 270 is EW direction,
+        * 45 or 225 is NE-SW direction,
+        * 135 or 315 is NW-SE direction.
+
+    tolerance : float (in range [0, 1]), optional, default=1
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance:
+
+        * the major axis size == ``step_size``,
+        * the minor axis size is ``tolerance * step_size``,
+        * the baseline point is at a center of the ellipse,
+        * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     Returns
     -------
-    : Dict
-        {
-            'result': numpy array of interpolated values,
-            'error': numpy array of interpolation errors,
-            'params': {
-                'pixel size': float,
-                'min x': float,
-                'max x': float,
-                'min y': float,
-                'max y': float
-            }
-        }
+    raster_dict : Dict
+        A dictionary with keys:
+
+        * **'result'**: numpy array of interpolated values,
+        * **'error'**: numpy array of interpolation errors,
+        * **'params'**:
+            * 'pixel size',
+            * 'min x',
+            * 'max x',
+            * 'min y',
+            * 'max y'
+
     """
 
     # Set dimension
@@ -176,7 +176,7 @@ def interpolate_raster(data,
     kriged_matrix = np.array(output_vals)
     kriged_errors = np.array(output_errs)
 
-    d = {
+    raster_dict = {
         'result': kriged_matrix,
         'error': kriged_errors,
         'params': {
@@ -188,4 +188,4 @@ def interpolate_raster(data,
         }
     }
 
-    return d
+    return raster_dict

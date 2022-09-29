@@ -30,64 +30,65 @@ from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, c
 
 
 class TheoreticalVariogram:
-    """Theoretical model of spatial data dissimilarity.
+    """Theoretical model of a spatial dissimilarity.
 
     Parameters
     ----------
-    model_params : dict or None, default=None
-                   Dictionary with 'nugget', 'sill', 'range' and 'name' of the model.
+    model_params : Dict, default=None
+        Dictionary with ``'nugget'``, ``'sill'``, ``'range'`` and ``'name'`` of the model.
 
     Attributes
     ----------
-    experimental_variogram : EmpiricalVariogram or None, default=None
-                             Empirical Variogram class and its attributes.
+    experimental_variogram : EmpiricalVariogram, default=None
+        Empirical Variogram class and its attributes.
 
     experimental_array : numpy array, default=None
-                         Empirical variogram in a form of numpy array.
+        Empirical variogram in a form of numpy array.
 
-    variogram_models : dict
-                       Dict with keys representing theoretical variogram models and values that
-                       are pointing into a modeling methods. Available models:
-                           'circular',
-                           'cubic',
-                           'exponential',
-                           'gaussian',
-                           'linear',
-                           'power',
-                           'spherical'.
+    variogram_models : Dict
+        A dictionary with keys representing theoretical variogram models and values that are pointing into a modeling
+        functions. Available models:
+
+        - 'circular',
+        - 'cubic',
+        - 'exponential',
+        - 'gaussian',
+        - 'linear',
+        - 'power',
+        - 'spherical'.
 
     fitted_model : numpy array or None
-                   Trained theoretical values model. Array of [lag, variances].
+        Trained theoretical model values. Array of ``[lag, variances]``.
 
     name : str or None, default=None
-           Name of the chosen model. Available names are the same as keys in variogram_models attribute.
+        The name of the chosen model. Available names are the same as keys in ``variogram_models`` attribute.
 
     nugget : float, default=0
-             Nugget parameter (bias at a zero distance).
+        The nugget parameter (bias at a zero distance).
 
     sill : float, default=0
-           Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
-           to observations variance.
+        A value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
+        to observations variance.
 
     rang : float, default=0
-          Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
-          variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
+        The semivariogram range is a distance at which spatial correlation exists. It shouldn't be set at a distance
+        larger than a half of a study extent.
 
     rmse : float, default=0
-           Root mean squared error of the difference between the empirical observations and the modeled curve.
+        Root mean squared error of the difference between the empirical observations and the modeled curve.
 
     mae : bool, default=True
-          Mean Absolute Error of a model.
+        Mean Absolute Error of a model.
 
     bias : float, default=0
-           Forecast Bias of the estimation. Large positive value means that the estimated model usually underestimates
-           values and large negative value means that model overestimates predictions.
+        Forecast Bias of the modeled variogram vs experimental points. Large positive value means that the estimated
+        model underestimates values. A large negative value means that model overestimates predictions.
 
     smape : float, default=0
-            Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
+        Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
 
     are_params : bool
-                 Check if model parameters were given during initialization.
+        Check if model parameters were given during initialization.
 
     Methods
     -------
@@ -198,47 +199,49 @@ class TheoreticalVariogram:
         Parameters
         ----------
         experimental_variogram : ExperimentalVariogram
-                                 Prepared Empirical Variogram.
+            Prepared Empirical Variogram.
 
         model_type : str
-                     Model type. Available models:
-                    - 'circular',
-                    - 'cubic',
-                    - 'exponential',
-                    - 'gaussian',
-                    - 'linear',
-                    - 'power',
-                    - 'spherical'.
+            Model type. Available models:
 
-        sill : float
-               Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
-               to observations variance.
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical'.
 
-        rang : float
-               Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
-               variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
+        sill : float, default=0
+            A value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
+            to observations variance.
+
+        rang : float, default=0
+            The semivariogram range is a distance at which spatial correlation exists. It shouldn't be set at a distance
+            larger than a half of a study extent.
 
         nugget : float, default=0.
-                 Nugget parameter (bias at a zero distance).
+            Nugget parameter (bias at a zero distance).
 
         update_attrs : bool, default=True
-                       Should class attributes be updated?
+            Should class attributes be updated?
 
         warn_about_set_params: bool, default=True
-                               Should class invoke warning if model parameters has been set during initialization?
+            Should class invoke warning if model parameters has been set during initialization?
 
         Raises
         ------
-        KeyError : Model type not implemented
+        KeyError
+            Model type (function) not implemented.
 
         Warns
         -----
-        : Model parameters were given during initilization but program is forced to fit the new set of parameters.
+        * Model parameters were given during initialization but program is forced to fit the new set of parameters.
 
         Returns
         -------
-        : Tuple[ numpy array, dict ]
-            [ theoretical semivariances, {'rmse bias smape mae'}]
+        _theoretical_values, _error: Tuple[ numpy array, dict ]
+            ``[ theoretical semivariances, {'rmse bias smape mae'}]``
 
         """
         if self.are_params:
@@ -301,107 +304,122 @@ class TheoreticalVariogram:
                 verbose=False,
                 return_params=True):
         """
-        Method tries to find the optimal range, sill and model of theoretical semivariogram.
+        Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.
 
         Parameters
         ----------
         experimental_variogram : ExperimentalVariogram
-                                 Prepared Empirical Variogram or array.
+            Prepared Empirical Variogram or array.
 
         model_types : str or list
-                      List of models of string with a model name. Available models:
-                      - 'all' - the same as list with all models,
-                      - 'circular',
-                      - 'cubic',
-                      - 'exponential',
-                      - 'gaussian',
-                      - 'linear',
-                      - 'power',
-                      - 'spherical'.
+            List of modeling functions or a name of a single function. Available models:
+
+            - 'all' - the same as list with all models,
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical'.
 
         nugget : float, default = 0
-                 Nugget (bias) of a variogram. Default value is 0.
+            Nugget (bias) of a variogram. Default value is 0.
 
         rang : float, optional
-               If given, then range is fixed to this value.
+            If given, then range is fixed to this value.
 
         min_range : float, default = 0.1
-                    Minimal fraction of a variogram range, 0 < min_range <= max_range
+            The minimal fraction of a variogram range, ``0 < min_range <= max_range``.
 
         max_range : float, default = 0.5
-                    Maximum fraction of a variogram range, min_range <= max_range <= 1. Parameter max_range greater
-                    than 0.5 raises warning.
+            The maximum fraction of a variogram range, ``min_range <= max_range <= 1``. Parameter ``max_range`` greater
+            than **0.5** raises warning.
 
         number_of_ranges : int, default = 64
-                           How many equally spaced ranges are tested between min_range and max_range.
+            How many equally spaced ranges are tested between ``min_range`` and ``max_range``.
 
-        sill : float, optional
-               If given, then it is fixed to this value.
+        sill : float, default = None
+            If given, then sill is fixed to this value.
 
         min_sill : float, default = 0
-                   Minimal fraction of variogram variance at lag 0 to find a sill, 0 <= min_sill <= max_sill.
+            The minimal fraction of the variogram variance at lag 0 to find a sill, ``0 <= min_sill <= max_sill``.
 
         max_sill : float, default = 1
-                   Maximum fraction of variogram variance at lag 0 to find a sill. It should be lower or equal to 1. but
-                   it is possible to set it above. Warning is printed if max_sill is greater than 1,
-                   min_sill <= max_sill.
+            The maximum fraction of the variogram variance at lag 0 to find a sill. It *should be* lower or equal to 1.
+            It is possible to set it above 1, but then warning is printed.
 
         number_of_sills : int, default = 64
-                          How many equally spaced sill values are tested between min_sill and max_sill.
+            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
 
         error_estimator : str, default = 'rmse'
-                          Error estimation to choose the best model. Available options are:
-                          - 'rmse': Root Mean Squared Error,
-                          - 'mae': Mean Absolute Error,
-                          - 'bias': Forecast Bias,
-                          - 'smape': Symmetric Mean Absolute Percentage Error.
+            A model error estimation method. Available options are:
+
+            - 'rmse': Root Mean Squared Error,
+            - 'mae': Mean Absolute Error,
+            - 'bias': Forecast Bias,
+            - 'smape': Symmetric Mean Absolute Percentage Error.
 
         deviation_weighting : str, default = "equal"
-                              The name of a method used to weight error at a given lags. Works only with RMSE.
-                              Available methods:
-                              - equal: no weighting,
-                              - closest: lags at a close range have bigger weights,
-                              - distant: lags that are further away have bigger weights,
-                              - dense: error is weighted by the number of point pairs within a lag.
+            The name of a method used to weight error at a given lags. Works only with RMSE. Available methods:
+
+            - equal: no weighting,
+            - closest: lags at a close range have bigger weights,
+            - distant: lags that are further away have bigger weights,
+            - dense: error is weighted by the number of point pairs within a lag.
 
         auto_update_attributes : bool, default = True
-                                 Update sill, range, model type and nugget based on the best model.
+            Update sill, range, model type and nugget based on the best model.
 
         warn_about_set_params: bool, default=True
-                               Should class invoke warning if model parameters has been set during initialization?
+            Should class invoke warning if model parameters has been set during initialization?
 
         verbose : bool, default = False
-                  Show iteration results.
+            Show iteration results.
 
         return_params : bool, default = True
-                        Return model parameters.
+            Return model parameters.
 
 
         Returns
         -------
-        model_attributes : dict
-                           {
-                                'model_type': model name,
-                                'sill': model sill,
-                                'rang': model range,
-                                'nugget': model nugget,
-                                'error_type': type of error metrics,
-                                'error value': error value
-                           }
+        model_attributes : Dict
+            Attributes dict:
+
+            >>> {
+            ...     'model_type': model_name,
+            ...     'sill': model_sill,
+            ...     'rang': model_range,
+            ...     'nugget': model_nugget,
+            ...     'error_type': type_of_error_metrics,
+            ...     'error value': error_value
+            ... }
 
         Warns
         -----
-        SillOutsideSafeRangeWarning : max_sill > 1
+        SillOutsideSafeRangeWarning
+            Warning printed when ``max_sill > 1``.
 
-        RangeOutsideSafeDistanceWarning : max_range > 0.5
+        RangeOutsideSafeDistanceWarning
+            Warning printed when ``max_range > 0.5``.
 
-        : Model parameters were given during initilization but program is forced to fit the new set of parameters.
+        Warning
+            Model parameters were given during initilization but program is forced to fit the new set of parameters.
 
         Raises
         ------
-        ValueError : sill < 0 or range < 0 or range > 1.
+        ValueError
+            Raised when ``sill < 0`` or ``range < 0`` or ``range > 1``.
 
-        KeyError : wrong model name(s) or wrong error type name.
+        KeyError
+            Raised when wrong model name(s) are provided by the users.
+
+        KeyError
+            Raised when wrong error type is provided by the users.
+
+        TODO
+        ----
+        * add 'safe' models list to autofit() method
         """
 
         self.deviation_weighting = deviation_weighting
@@ -494,7 +512,7 @@ class TheoreticalVariogram:
 
     def predict(self, distances: np.ndarray) -> np.ndarray:
         """
-        Method returns semivariances for a given distances.
+        Method returns a semivariance per distance.
 
         Parameters
         ----------
@@ -517,16 +535,17 @@ class TheoreticalVariogram:
 
     def plot(self, experimental=True):
         """
-        Method plots theoretical curve and (optionally) experimental scatterplot.
+        Method plots theoretical curve and (optionally) experimental scatter plot.
 
         Parameters
         ----------
         experimental : bool
-                       Plot experimental observations.
+            Plot experimental observations.
 
         Raises
         ------
-        AttributeError : Model is not fitted yet
+        AttributeError
+            Model is not fitted yet, nothing to plot.
         """
         if self.fitted_model is None:
             raise AttributeError('Model has not been trained, nothing to plot.')
@@ -556,40 +575,44 @@ class TheoreticalVariogram:
                               smape=True,
                               deviation_weighting='equal') -> dict:
         """
+        Method calculates error associated with a difference between the theoretical model and
+        the experimental semivariogram.
 
         Parameters
         ----------
         fitted_values : numpy array
-                        [lag, fitted value]
+            ``[lag, fitted value]``
 
         rmse : bool, default=True
-               Root Mean Squared Error of a model.
+            Root Mean Squared Error of a model.
 
         bias : bool, default=True
-               Forecast Bias of a model.
+            Forecast Bias of a model.
 
         mae : bool, default=True
-              Mean Absolute Error of a model.
+            Mean Absolute Error of a model.
 
         smape : bool, default=True
-                Symmetric Mean Absolute Percentage Error of a model.
+            Symmetric Mean Absolute Percentage Error of a model.
 
         deviation_weighting : str, default = "equal"
-                              The name of a method used to weight error at a given lags. Works only with RMSE.
-                              Available methods:
-                              - equal: no weighting,
-                              - closest: lags at a close range have bigger weights,
-                              - distant: lags that are further away have bigger weights,
-                              - dense: error is weighted by the number of point pairs within a lag.
+            The name of a method used to **weight errors at a given lags**. Works only with RMSE.
+            Available methods:
+
+            - equal: no weighting,
+            - closest: lags at a close range have bigger weights,
+            - distant: lags that are further away have bigger weights,
+            - dense: error is weighted by the number of point pairs within a lag.
 
         Returns
         -------
-        model_errors : dict
-                       Dict with error values per model: rmse, bias, mae, smape.
+        model_errors : Dict
+            Dict with error values per model: rmse, bias, mae, smape.
 
         Raises
         ------
-        MetricsTypeSelectionError : User set all errors to False
+        MetricsTypeSelectionError
+            User has set all error types to ``False``.
         """
 
         # Check errors
@@ -636,16 +659,17 @@ class TheoreticalVariogram:
     # I/O
 
     def to_dict(self) -> dict:
-        """Method exports theoretical variogram parameters to dictionary.
+        """Method exports the theoretical variogram parameters to a dictionary.
 
         Returns
         -------
-        model_parameters : dict
-                           Dictionary with model 'name', 'nugget', 'sill' and 'range'.
+        model_parameters : Dict
+            Dictionary with model 'name', 'nugget', 'sill' and 'range'.
 
         Raises
         ------
-        AttributeError : Model parameters are not derived yet
+        AttributeError
+            The model parameters have not been derived yet.
         """
 
         if self.fitted_model is None:
@@ -661,12 +685,12 @@ class TheoreticalVariogram:
         return modeled_parameters
 
     def from_dict(self, parameters: dict) -> None:
-        """Method updates model with a given parameters.
+        """Method updates model with a given set of parameters.
 
         Parameters
         ----------
-        parameters : dict
-                     'name', 'nugget', 'sill', 'range'
+        parameters : Dict
+            Dictionary with model's: ``'name', 'nugget', 'sill', 'range'``.
         """
 
         self._set_model_parameters(parameters)
@@ -679,8 +703,6 @@ class TheoreticalVariogram:
         Parameters
         ----------
         fname : str
-                File to store a data.
-
         """
 
         json_output = {
@@ -700,7 +722,6 @@ class TheoreticalVariogram:
         Parameters
         ----------
         fname : str
-                File with a stored parameters.
         """
 
         with open(fname, 'r') as fin:
@@ -884,37 +905,38 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
                                 sill: float,
                                 rang: float,
                                 nugget: float = 0.) -> TheoreticalVariogram:
-    """Function is a wrapper into TheoreticalVariogram class and its fit() method.
+    """Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.
 
     Parameters
     ----------
     experimental_variogram : ExperimentalVariogram
 
     model_type : str
-                 Available types:
-                 - 'circular',
-                 - 'cubic',
-                 - 'exponential',
-                 - 'gaussian',
-                 - 'linear',
-                 - 'power',
-                 - 'spherical'.
+        Available types:
+
+        - 'circular',
+        - 'cubic',
+        - 'exponential',
+        - 'gaussian',
+        - 'linear',
+        - 'power',
+        - 'spherical'.
 
     sill : float
-           Value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
-           to observations variance.
+        The value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
+        to observations variance.
 
     rang : float
-           Semivariogram Range is a distance at which spatial correlation exists and often it is a distance when
-           variogram reaches sill. It shouldn't be set at a distance larger than a half of a study extent.
+        The semivariogram range is a distance at which spatial correlation exists. It shouldn't be set at a distance
+        larger than a half of a study extent.
 
     nugget : float, default=0.
-             Nugget parameter (bias at a zero distance).
+        The nugget parameter (bias at a zero distance).
 
     Returns
     -------
-    : TheoreticalVariogram
-
+    theo : TheoreticalVariogram
+        Fitted theoretical semivariogram model.
     """
     theo = TheoreticalVariogram()
     theo.fit(

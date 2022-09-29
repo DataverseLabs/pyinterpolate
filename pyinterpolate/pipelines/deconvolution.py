@@ -39,44 +39,49 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     Parameters
     ----------
     semivariogram_model : TheoreticalVariogram
-                          Regularized variogram.
+        The regularized variogram.
 
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             Blocks with aggregated data.
-             * Blocks: Blocks() class object.
-             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-               Geometry column with polygons is not used and optional.
-             * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+            * ``Blocks``: ``Blocks()`` class object.
+            * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.
+              Geometry column with polygons is not used.
+            * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
+        The point support of polygons.
+          * ``Dict``: ``{block id: [[point x, point y, value]]}``,
+          * ``numpy array``: ``[[block id, x, y, value]]``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``PointSupport``.
 
     number_of_neighbors : int
-                          The minimum number of neighbours that potentially affect block.
+        The minimum number of neighbours that potentially affect block.
 
-    max_range : float, deault=None
-                The maximum distance to search for neighbors.
+    max_range : float, default=None
+        The maximum distance to search for neighbors.
 
     crs : Any, default=None
-          CRS of data.
+        CRS of data.
 
     raise_when_negative_prediction : bool, default=True
-                                     Raise error when prediction is negative.
+        Raise error when prediction is negative.
 
     raise_when_negative_error : bool, default=True
-                                Raise error when prediction error is negative.
+        Raise error when prediction error is negative.
 
     err_to_nan : bool, default=True
-                 ValueError to NaN.
+        ``ValueError`` to ``NaN``.
 
 
     Returns
     -------
     results : gpd.GeoDataFrame
-              columns=[area_id, geometry (Point), prediction, error]
+        Columns = ``[area_id, geometry (Point), prediction, error]``.
+
+    TODO
+    ----
+    - Check strange parameter number_of_neighbors (not min but max?)
     """
 
     # Prepare data

@@ -34,58 +34,60 @@ class BlockPK:
     Parameters
     ----------
     semivariogram_model : TheoreticalVariogram
-                          Fitted variogram model.
+        The fitted variogram model.
 
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             Blocks with aggregated data.
-             * Blocks: Blocks() class object.
-             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-               Geometry column with polygons is not used and optional.
-             * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+            * ``Blocks``: ``Blocks()`` class object.
+            * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.
+              Geometry column with polygons is not used.
+            * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
+        The point support of polygons.
+          * ``Dict``: ``{block id: [[point x, point y, value]]}``,
+          * ``numpy array``: ``[[block id, x, y, value]]``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``PointSupport``.
 
     kriging_type : str, default='ata'
-                   Poisson Kriging operation. Available methods:
-                   * 'ata': Area-to-Area Poisson Kriging.
-                   * 'atp': Area-to-Point Poisson Kriging.
-                   * 'cb': Centroid-based Poisson Kriging.
+        A type of Poisson Kriging operation. Available methods:
+          * ``'ata'``: Area-to-Area Poisson Kriging.
+          * ``'atp'``: Area-to-Point Poisson Kriging.
+          * ``'cb'``: Centroid-based Poisson Kriging.
 
     Attributes
     ----------
     semivariogram_model : TheoreticalVariogram
-                          See semivariogram_model parameter.
+        See the ``semivariogram_model`` parameter.
 
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             See blocks parameter.
+        See the ``blocks`` parameter.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    See point_support parameter.
+        See the ``point_support`` parameter.
 
     kriging_type : str, default='ata'
-                   See kriging_type parameter.
+        See the ``kriging_type`` parameter.
 
     geo_ds : geopandas GeoDataFrame
-             Regularized set of blocks: ['id', 'geometry', 'reg.est', 'reg.err', 'rmse']
+        A regularized set of blocks: ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
 
     statistics : Dict
-                 'RMSE': root mean squared error of regularization,
-                 'time': time (in seconds) of the regularization process.
+        A dictionary with two keys:
+          * ``'RMSE'``: root mean squared error of regularization,
+          * ``'time'``: time (in seconds) of the regularization process.
 
     raise_when_negative_prediction : bool, default=True
-                                     Raise error when prediction is negative.
+        Raise error when prediction is negative.
 
     raise_when_negative_error : bool, default=True
-                                Raise error when prediction error is negative.
+        Raise error when prediction error is negative.
 
     Methods
     -------
     regularize()
-        Regularize blocks (you should use it for data deconvolution - with ATP PK, or for data filtering - with
+        Regularize blocks (you should use it for a data deconvolution - with ATP PK, or for a data filtering - with
         ATA, C-B PK).
     """
 
@@ -180,27 +182,27 @@ class BlockPK:
                    raise_when_negative_error=True):
         """
         Function regularizes whole dataset and creates new values and error maps based on the kriging type. Function
-        does not predict unknown and missing values, areas with NaN are skipped.
+        does not predict unknown and missing values, areas with ``NaN`` values are skipped.
 
         Parameters
         ----------
         number_of_neighbors : int
-                              The minimum number of neighbours that potentially affect block.
+            The minimum number of neighbours that potentially affect block.
 
         data_crs : str, default=None
-                   Data crs, look into: https://geopandas.org/projections.html. If None given then returned
-                   GeoDataFrame doesn't have a crs.
+            Data crs, look into: https://geopandas.org/projections.html. If None given then returned
+            GeoDataFrame doesn't have a crs.
 
         raise_when_negative_prediction : bool, default=True
-                                         Raise error when prediction is negative.
+            Raise error when prediction is negative.
 
         raise_when_negative_error : bool, default=True
-                                    Raise error when prediction error is negative.
+            Raise error when prediction error is negative.
 
         Returns
         -------
         regularized : gpd.GeoDataFrame
-                      Regularized set of blocks: ['id', 'geometry', 'reg.est', 'reg.err', 'rmse']
+            Regularized set of blocks: ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
         """
         t_start = datetime.now()
         # Transform point support to dict

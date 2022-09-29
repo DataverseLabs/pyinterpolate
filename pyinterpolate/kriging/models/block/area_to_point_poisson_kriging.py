@@ -36,58 +36,59 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                      raise_when_negative_error=True,
                      err_to_nan=True):
     """
-    Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
+    Function predicts areal value in the unknown location based on the area-to-area Poisson Kriging
 
     Parameters
     ----------
     semivariogram_model : TheoreticalVariogram
-                          Regularized variogram.
+        A fitted variogram.
 
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             Blocks with aggregated data.
-             * Blocks: Blocks() class object.
-             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-               Geometry column with polygons is not used and optional.
-             * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+          * ``Blocks``: ``Blocks()`` class object.
+          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.
+            Geometry column with polygons is not used.
+          * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
+        The point support of polygons.
+          * ``Dict``: ``{block id: [[point x, point y, value]]}``,
+          * ``numpy array``: ``[[block id, x, y, value]]``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``PointSupport``.
 
     unknown_block : numpy array
-                    [index, centroid.x, centroid.y]
+        ``[index, centroid.x, centroid.y]``
 
     unknown_block_point_support : numpy array
-                                  Points within block [[x, y, point support value]]
+        Points within block ``[[x, y, point support value]]``
 
     number_of_neighbors : int
-                          The minimum number of neighbours that potentially affect block.
+        The minimum number of neighbours that can potentially affect block.
 
-    max_range : float
-                The maximum distance to search for a neighbors, if None given then algorithm uses the theoretical
-                variogram range.
+    max_range : float , default=None
+        The maximum distance to search for a neighbors, if ``None`` given then algorithm uses
+        the theoretical variogram's range.
 
     raise_when_negative_prediction : bool, default=True
-                                     Raise error when prediction is negative.
+        Raise error when prediction is negative.
 
     raise_when_negative_error : bool, default=True
-                                Raise error when prediction error is negative.
+        Raise error when prediction error is negative.
 
     err_to_nan : bool, default=True
-                 ValueError to NaN.
+        ``ValueError`` to ``NaN``.
 
 
     Returns
     -------
     results : List
-              [(unknown point coordinates), prediction, error]
+        ``[(unknown point coordinates), prediction, error]``
 
     Raises
     ------
-    ValueError : Prediction or prediction error are negative.
-
+    ValueError
+        Prediction or prediction error are negative.
     """
     # Get total point-support value of the unknown area
     tot_unknown_value = np.sum(unknown_block_point_support[:, -1])

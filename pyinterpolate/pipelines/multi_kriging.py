@@ -28,93 +28,95 @@ class BlockToBlockKrigingComparison:
     """
     Class compares different block kriging models and techniques.
 
+    Parameters
+    ----------
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             Blocks with aggregated data.
-             * Blocks: Blocks() class object.
-             * GeoDataFrame and DataFrame must have columns: centroid.x, centroid.y, ds, index.
-               Geometry column with polygons is not used and optional.
-             * numpy array: [[block index, centroid x, centroid y, value]].
+        Blocks with aggregated data.
+            * ``Blocks``: ``Blocks()`` class object.
+            * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.
+              Geometry column with polygons is not used.
+            * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    * Dict: {block id: [[point x, point y, value]]}
-                    * numpy array: [[block id, x, y, value]]
-                    * DataFrame and GeoDataFrame: columns={x, y, ds, index}
-                    * PointSupport
+        The point support of polygons.
+          * ``Dict``: ``{block id: [[point x, point y, value]]}``,
+          * ``numpy array``: ``[[block id, x, y, value]]``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``PointSupport``.
 
     no_of_neighbors : int, default = 16
-                      Maximum number of n-closest neighbors used for interpolation.
+        The maximum number of n-closest neighbors used for interpolation.
 
     neighbors_range : float, default = None
-                      Maximum distance where we search for point neighbors. If None given then range is selected from
-                      the theoretical_model rang attribute. If there is less neighbors than no_of_neighbors within
-                      the range then algorithm selects additional points outside the neighbors_range.
+        Maximum distance where we search for point neighbors. If None given then range is selected from
+        the ``theoretical_model`` ``rang`` attribute. If algorithms picks less neighbors than ``no_of_neighbors``
+        within the range then additional points are selected outside the ``neighbors_range``.
 
     simple_kriging_mean : float, default = None
-                          The mean value of a process over a study area. Should be know before processing.
-                          If not provided then Simple Kriging estimator is skipped.
+        The mean value of a process over a study area. Should be known before processing. If not provided then
+        Simple Kriging estimator is skipped.
 
     raise_when_negative_prediction : bool, default = True
-                                     Raise error when prediction is negative.
+        Raise error when prediction is negative.
 
     raise_when_negative_error : bool, default=True
-                                Raise error when prediction error is negative.
+        Raise error when prediction error is negative.
 
     training_set_frac : float, default = 0.8
-                        How many values sampled as a known points set in each iteration. Could be any fraction within
-                        (0:1) range.
+        How many values sampled as a known points set in each iteration. Could be any fraction within ``(0:1)`` range.
 
     allow_approx_solutions : bool, default = False
-                             Allows the approximation of kriging weights based on the OLS algorithm.
-                             Not recommended to set to True if you don't know what you are doing!
+        Allows the approximation of kriging weights based on the OLS algorithm. Not recommended to set to ``True`` if
+        you don't know what you are doing!
 
     iters : int, default = 20
-            How many tests to perform over random samples of a data.
+        How many tests to perform over random samples of a data.
 
     Attributes
     ----------
     variogram : TheoreticalVariogram
-                See variogram parameter.
+        See ``variogram`` parameter.
 
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
-             See blocks parameter.
+        See ``blocks`` parameter.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
-                    See point_support parameter.
+        See ``point_support`` parameter.
 
     no_of_neighbors : int
-                      See no_of_neighbors parameter.
+        See ``no_of_neighbors`` parameter.
 
     neighbors_range : float
-                      See neighbors_range parameter.
+        See ``neighbors_range`` parameter.
 
     simple_kriging_mean : float
-                          See simple_kriging_mean parameter.
+        See ``simple_kriging_mean`` parameter.
 
     raise_when_negative_prediction : bool, default = True
-                                     See raise_when_negative_prediction parameter.
+        See ``raise_when_negative_prediction`` parameter.
 
     raise_when_negative_error : bool, default=True
-                                See raise_when_negative_error parameter.
+        See ``raise_when_negative_error`` parameter.
 
     training_set_frac : float
-                        See training_set_frac parameter.
+        See ``training_set_frac`` parameter.
 
     iters : int
-            See iters parameter.
+        See ``iters`` parameter.
 
     common_indexes : Set
-                     Indexes that are common for blocks and point support.
+        Indexes that are common for blocks and point support.
 
     training_set_indexes : List[List]
-                           List of lists of indexes used in a random sampling for a training set.
+        List of lists with indexes used in a random sampling for a training set.
 
     results : Dict
-              Results for each type of Block Kriging method.
+        Results for each type of Block Kriging method.
 
     Methods
     -------
-    run_tests() : Compares different types of Kriging, returns Dict with the mean root mean squared error of each
-                  iteration.
+    run_tests()
+        Compares different types of Kriging, returns Dict with the mean root mean squared error of each iteration.
     """
 
     def __init__(self,
