@@ -2,7 +2,7 @@
 
 ![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov03.jpg?raw=true  "Pyinterpolate logo")
 
-**version 0.3.0** - *Kyiv*
+**version 0.3.1** - *Kyiv*
 ---------------------------------------
 
 Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
@@ -190,7 +190,7 @@ How to cite
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 
-Requirements and dependencies (v 0.3.0)
+Requirements and dependencies (v 0.3.0+)
 ---------------------------------------
 
 Core requirements and dependencies are:
