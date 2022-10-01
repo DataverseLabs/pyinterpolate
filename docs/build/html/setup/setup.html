@@ -155,14 +155,13 @@
     <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#setup">Setup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation-guidelines">Installation guidelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#recommended-installation-in-conda-environment">Recommended - installation in conda environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pip-installation">pip installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conda">Conda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-additional-topics">Installation - additional topics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#working-with-notebooks">Working with Notebooks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-libspatialindex-c-so-dependency-error">The libspatialindex_c.so dependency error</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-install-package-within-a-virtual-environment">How to install package within a virtual environment?</a></li>
 </ul>
 </li>
 </ul>
@@ -188,14 +187,13 @@
     <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#setup">Setup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation-guidelines">Installation guidelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#recommended-installation-in-conda-environment">Recommended - installation in conda environment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pip-installation">pip installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conda">Conda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-additional-topics">Installation - additional topics</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#working-with-notebooks">Working with Notebooks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-libspatialindex-c-so-dependency-error">The libspatialindex_c.so dependency error</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-to-install-package-within-a-virtual-environment">How to install package within a virtual environment?</a></li>
 </ul>
 </li>
 </ul>
@@ -217,60 +215,25 @@
 <h1>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <div class="section" id="installation-guidelines">
 <h2>Installation guidelines<a class="headerlink" href="#installation-guidelines" title="Permalink to this heading">¶</a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="section" id="recommended-installation-in-conda-environment">
-<h3>Recommended - installation in conda environment<a class="headerlink" href="#recommended-installation-in-conda-environment" title="Permalink to this heading">¶</a></h3>
-<p><strong>[1.]</strong></p>
-<p>First, install system dependencies to use the package (<code class="docutils literal notranslate"><span class="pre">libspatialindex_c.so</span></code>):</p>
-<p><strong>Linux</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install libspatialindex-dev</span>
+<p>The package can be installed from <cite>conda</cite> and <cite>pip</cite>. <cite>Conda</cite> installation requires Python &gt;= 3.8, <cite>pip</cite> installation requires Python &gt;= 3.7.</p>
+<div class="section" id="conda">
+<h3>Conda<a class="headerlink" href="#conda" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install -c conda-forge pyinterpolate</span>
 </pre></div>
 </div>
-<p><strong>MacOS</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew install spatialindex</span>
-</pre></div>
 </div>
-<hr class="docutils" />
-<p><strong>[2.]</strong></p>
-<p>Next step is to create conda environment with Python &gt;= 3.7. Recommended is Python 3.10. Additionally, we install <code class="docutils literal notranslate"><span class="pre">pip</span></code> and <code class="docutils literal notranslate"><span class="pre">notebook</span></code> packages, and then activate our environment:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pip notebook</span>
-</pre></div>
-</div>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda activate [YOUR ENV NAME]</span>
-</pre></div>
-</div>
-<hr class="docutils" />
-<p><strong>[3.]</strong></p>
-<p>In the next step, we install <strong>pyinterpolate</strong> and its dependencies with <cite>pip</cite> (conda distribution is under development and will be available soon):</p>
+<div class="section" id="pip">
+<h3>pip<a class="headerlink" href="#pip" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install pyinterpolate</span>
 </pre></div>
 </div>
-<hr class="docutils" />
-<p><strong>[4.]</strong></p>
-<p>You are ready to use the package!</p>
-</div>
-<hr class="docutils" />
-<div class="section" id="pip-installation">
-<h3>pip installation<a class="headerlink" href="#pip-installation" title="Permalink to this heading">¶</a></h3>
-<p>With <strong>Python&gt;=3.7</strong> and system <code class="docutils literal notranslate"><span class="pre">`libspatialindex_c.so`</span></code> dependencies you may install package by simple command:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install pyinterpolate</span>
-</pre></div>
-</div>
-<p>A world of advice, you should use the <em>Virtual Environment</em> for the installation - every time and within every operating system. You may consider PipEnv too.</p>
 </div>
 </div>
-<hr class="docutils" />
 <div class="section" id="installation-additional-topics">
 <h2>Installation - additional topics<a class="headerlink" href="#installation-additional-topics" title="Permalink to this heading">¶</a></h2>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
 <div class="section" id="working-with-notebooks">
 <h3>Working with Notebooks<a class="headerlink" href="#working-with-notebooks" title="Permalink to this heading">¶</a></h3>
-<p>There is an additional step to run the package in Jupyter Notebooks. Before using <code class="docutils literal notranslate"><span class="pre">pip</span></code> you have to create <code class="docutils literal notranslate"><span class="pre">conda</span></code>
-environment and install required dependencies:</p>
+<p>Install <cite>pyinterpolate</cite>  along <cite>notebook</cite> in your conda environment:</p>
 <p><strong>Step 1</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda create -n [NAME OF YOUR ENV]</span>
 </pre></div>
@@ -280,11 +243,7 @@ environment and install required dependencies:</p>
 </pre></div>
 </div>
 <p><strong>Step 3</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install -c conda-forge pip notebook</span>
-</pre></div>
-</div>
-<p><strong>Step 4</strong>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install pyinterpolate</span>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install -c conda-forge notebook pyinterpolate</span>
 </pre></div>
 </div>
 <p>Now you are able to run library from a notebook.</p>
@@ -292,7 +251,8 @@ environment and install required dependencies:</p>
 <hr class="docutils" />
 <div class="section" id="the-libspatialindex-c-so-dependency-error">
 <h3>The libspatialindex_c.so dependency error<a class="headerlink" href="#the-libspatialindex-c-so-dependency-error" title="Permalink to this heading">¶</a></h3>
-<p>You could encounter the problem with <strong>rtree</strong> and <strong>GeoPandas</strong> packages installation. Both packages require a system dependency named <strong>libspatialindex_c.so</strong> and if it’s missing, then you must install it manually.</p>
+<p>With Python==3.7 installation <cite>rtree</cite> and <cite>GeoPandas</cite> that are requirements for pyinterpolate may be not installed properly
+because your operating system does not have <cite>libspatialindex_c.so</cite> file. In this case install it from terminal:</p>
 <p><strong>Linux</strong>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install libspatialindex-dev</span>
 </pre></div>
@@ -301,11 +261,6 @@ environment and install required dependencies:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">brew install spatialindex</span>
 </pre></div>
 </div>
-</div>
-<hr class="docutils" />
-<div class="section" id="how-to-install-package-within-a-virtual-environment">
-<h3>How to install package within a virtual environment?<a class="headerlink" href="#how-to-install-package-within-a-virtual-environment" title="Permalink to this heading">¶</a></h3>
-<p><em>Coming soon…</em></p>
 </div>
 </div>
 </div>
@@ -319,7 +274,7 @@ environment and install required dependencies:</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-09-29" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 

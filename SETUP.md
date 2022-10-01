@@ -1,13 +1,26 @@
-Installation
-------------
+# Installation
 
-Package is working with linux and mac os systems. To install it download package and open it in the terminal then type:
+## Conda
+
+Package is working on every operating system if you install it from the `conda` package manager with a command:
+
+```shell
+conda install -c conda-forge pyinterpolate
+```
+
+Conda installation requires Python in version >= 3.8.
+
+## Pip
+
+To install pyinterpolate from `pip` type in your terminal:
 
 ```
 pip install pyinterpolate
 ```
 
-This command runs **setup.py** file inside package and install requirements from the list provided there.
+## Q&A
+
+### Jupter Notebook
 
 *****
 
@@ -15,8 +28,7 @@ _I'd like to run Jupyter Notebooks, what should I do?_
 
 *****
 
-There is an additional step to run this library in Jupyter Notebooks. Before using pip you have to create conda
-environment and install required dependencies:
+Install `pyinterpolate`  along `notebook` in your conda environment:
 
 #### Step 1:
 
@@ -33,16 +45,13 @@ conda activate [NAME OF YOUR ENV]
 #### Step 3:
 
 ```
-conda install -c conda-forge pip notebook
-```
-
-#### Step 4:
-
-```
-pip install pyinterpolate
+conda install -c conda-forge notebook pyinterpolate
 ```
 
 Now you are able to run library from conda notebooks.
+
+
+### The libspatialindex_c.so dependency error
 
 *****
 
@@ -50,8 +59,8 @@ _libspatialindex_c.so dependency error_
 
 *****
 
-Sometimes **rtree** (and / or **GeoPandas**) which are requirements for pyinterpolate may be not installed properly
-because your operating system does not have **libspatialindex_c.so** file. In this case install it from terminal:
+With Python==3.7 installation `rtree` and `GeoPandas` that are requirements for pyinterpolate may be not installed properly
+because your operating system does not have `libspatialindex_c.so` file. In this case install it from terminal:
 
 LINUX:
 
@@ -64,11 +73,3 @@ MAC OS:
 ```
 brew install spatialindex
 ```
-
-*****
-
-_How to install package with virtual environment?_
-
-*****
-
-Coming soon...
