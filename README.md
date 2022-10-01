@@ -2,10 +2,13 @@
 
 ![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov03.jpg?raw=true  "Pyinterpolate logo")
 
-**version 0.3.1** - *Kyiv*
----------------------------------------
+# Pyinterpolate
 
-Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
+**version 0.3.1** - *Kyiv*
+
+---
+
+Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 If you’re:
 
@@ -31,8 +34,7 @@ Pyinterpolate allows you to perform:
 5. *Semivariogram regularization and deconvolution*.
 6. *Semivariogram modeling and analysis*.
 
-How it works
---------------
+## How it works
 
 The package has multiple spatial interpolation functions. The flow of analysis is usually the same for each method:
 
@@ -95,14 +97,14 @@ print(prediction)  # [predicted, variance error, lon, lat]
 With **pyinterpolate**, we can retrieve the point support model from blocks. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:
 ![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/DataverseLabs/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
 
-Status
-------
+## Status
 
 Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.
 
 
-Setup
------
+## Setup
+
+Setup with *conda*: `conda install -c conda-forge pyinterpolate`
 
 Setup with *pip*: `pip install pyinterpolate`
 
@@ -112,37 +114,19 @@ You may follow those setup steps to create a *conda* environment with the packag
 
 ### Recommended - conda installation
 
-[1.] First, install system dependencies to use the package (```libspatialindex_c.so```):
+[1.] Create conda environment with Python >= 3.8. Recommended is Python 3.10.
 
-LINUX:
-
-```
-sudo apt install libspatialindex-dev
+```shell
+conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pyinterpolate
 ```
 
-MAC OS:
-
-```
-brew install spatialindex
-```
-
-[2.] Next step is to create conda environment with Python >= 3.7. Recommended is Python 3.10. Additionally, we install `pip` and `notebook` packages, and then activate our environment:
-
-```
-conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pip notebook
-```
+[2.] Activate environment.
 
 ```
 conda activate [YOUR ENV NAME]
 ```
 
-[3.] In the next step, we install **pyinterpolate** and its dependencies with `pip` (conda distribution is under development and will be available soon):
-
-```
-pip install pyinterpolate
-```
-
-[4.] You are ready to use the package!
+[3.] You are ready to use the package!
 
 ### pip installation
 
@@ -152,29 +136,26 @@ With **Python>=3.7** and system ```libspatialindex_c.so``` dependencies you may 
 pip install pyinterpolate
 ```
 
-A world of advice, you should use Virtual Environment for the installation - every time and within every operating system. You may consider PipEnv too.
+A world of advice, you should **always** use Virtual Environment for the installation. You may consider using PipEnv too.
 
-Tests and contribution
-------------------------
+## Tests and contribution
 
 All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)
 
-Commercial and scientific projects where library has been used
---------------------------------------------------------------
+## Commercial and scientific projects where library has been used
 
 * Tick-Borne Disease Detector (Data Lions company) for the European Space Agency (2019-2020).
-* B2C project related to the prediction of demand for specific flu medications (2020),
-* B2G project related to the large-scale infrastructure maintenance (2020-2021),
-* E-commerce reporting and analysis, building a spatial / temporal profile of customer (2022+)
+* B2C project related to the prediction of demand for specific flu medications (2020).
+* B2G project related to the large-scale infrastructure maintenance (2020-2021).
+* E-commerce service for reporting and analysis, building spatial / temporal profiles of customers (2022+).
+* The external data augmentation for e-commerce services (2022+).
 
-Community
----------
+## Community
 
 Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
 
 
-Bibliography
-------------
+## Bibliography
 
 PyInterpolate was created thanks to many resources and all of them are pointed here:
 
@@ -185,17 +166,16 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 - Deutsch C.V., Correcting for Negative Weights in Ordinary Kriging, Computers & Geosciences Vol.22, No.7, pp. 765-773, 1996
 
 
-How to cite
------------
+## How to cite
+
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 
-Requirements and dependencies (v 0.3.0+)
----------------------------------------
+## Requirements and dependencies (v 0.3.+)
 
 Core requirements and dependencies are:
 
-* Python >= 3.7
+* Python >= 3.8 (Python 3.7 may be used with `pip` installation but it won't be supported in the future).
 * descartes
 * geopandas
 * matplotlib
@@ -213,8 +193,7 @@ Core requirements and dependencies are:
 
 You may check a specific version of requirements in the `setup.cfg` file.
 
-Package structure
------------------
+## Package structure
 
 High level overview:
 
@@ -229,21 +208,6 @@ High level overview:
     - [x] `viz` - interpolation of smooth surfaces from points into rasters.
  - [x] `tutorials` - tutorials (Basic, Intermediate and Advanced).
 
-Functions documentation
------------------------
+## API documentation
 
-Pyinterpolate https://pyinterpolate.readthedocs.io/en/latest/ (Be careful! At this moment, documentation is under development!)
-
-
-Development
-------------------
-
-- API documentation,
-- Dedicated webpage,
-- Check Issues and TODOs :)
-
-
-Known Bugs
------------------
-
-- *(sector clear)*
+https://pyinterpolate.readthedocs.io/en/latest/
