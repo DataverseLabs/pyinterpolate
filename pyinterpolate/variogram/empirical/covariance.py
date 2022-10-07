@@ -65,8 +65,12 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            output = _create_empty_output(h)
-            covariances_and_lags.append(output)
+            if h == lags[0]:
+                output = _create_empty_output(h)
+                covariances_and_lags.append(output)
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
         else:
             vals_0 = points[distances_in_range[0], 2]
             vals_h = points[distances_in_range[1], 2]
@@ -151,8 +155,12 @@ def directional_covariogram(points: np.array,
                 covars_per_lag.extend(covars)
 
         if len(covars_per_lag) == 0:
-            output = _create_empty_output(h)
-            covariances_and_lags.append(output)
+            if h == lags[0]:
+                output = _create_empty_output(h)
+                covariances_and_lags.append(output)
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
         else:
             lag_mean = np.mean(values_per_lag)
             lag_mean_squared = lag_mean * lag_mean

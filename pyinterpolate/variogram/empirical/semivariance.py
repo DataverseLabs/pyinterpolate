@@ -46,7 +46,11 @@ def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: f
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            semivariances_and_lags.append([h, 0, 0])
+            if h == lags[0]:
+                semivariances_and_lags.append([h, 0, 0])
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
         else:
 
             vals_0 = points[distances_in_range[0], 2]
@@ -157,7 +161,13 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
                 weight_of_points.extend(w_vals)
 
         if len(weighted_point_vals) == 0:
-            semivariances_and_lags.append([h, 0, 0])
+            if h == lags[0]:
+                semivariances_and_lags.append([h, 0, 0])
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
+            # TODO: remove after tests
+            # semivariances_and_lags.append([h, 0, 0])
         else:
             arr_nom_terms = np.array(weighted_nominator_terms)
             arr_denom_terms = np.array(weighted_denominator_terms)
@@ -243,7 +253,13 @@ def directional_semivariogram(points: np.array,
                     semivars_per_lag.extend(semivars)
 
             if len(semivars_per_lag) == 0:
-                semivariances_and_lags.append([h, 0, 0])
+                if h == lags[0]:
+                    semivariances_and_lags.append([h, 0, 0])
+                else:
+                    msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                    raise RuntimeError(msg)
+                # TODO: remove comment below after tests
+                # semivariances_and_lags.append([h, 0, 0])
             else:
                 average_semivariance = np.mean(semivars_per_lag) / 2
                 semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
