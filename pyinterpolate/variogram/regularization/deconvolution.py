@@ -342,9 +342,10 @@ class Deconvolution:
         )
         self.initial_theoretical_agg_model = theo_model_agg
         self.s2 = self.initial_theoretical_agg_model.sill
-        self.initial_theoretical_model_prediction = self.initial_theoretical_agg_model.predict(
-            self.initial_theoretical_agg_model.lags
-        )
+        self.initial_theoretical_model_prediction = self.initial_theoretical_agg_model.fitted_model[:, 1]
+        # self.initial_theoretical_model_prediction = self.initial_theoretical_agg_model.predict(
+        #     self.initial_theoretical_agg_model.lags
+        # )
 
         # Regularize
         self.initial_regularized_variogram = regularize(

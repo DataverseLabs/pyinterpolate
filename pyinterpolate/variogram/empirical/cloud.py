@@ -53,7 +53,11 @@ def omnidirectional_point_cloud(input_array: np.array,
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)
         if len(distances_in_range[0]) == 0:
-            variogram_cloud[h] = []
+            if h == lags[0]:
+                variogram_cloud[h] = []
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
         else:
             sems = (input_array[distances_in_range[0], 2] - input_array[distances_in_range[1], 2]) ** 2
             variogram_cloud[h] = sems
@@ -126,7 +130,11 @@ def directional_point_cloud(input_array: np.array,
                 variogram_vars_list.extend(svars)
 
         if len(variogram_vars_list) == 0:
-            variogram_cloud[h] = []
+            if h == lags[0]:
+                variogram_cloud[h] = []
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
         else:
             variogram_cloud[h] = variogram_vars_list
 

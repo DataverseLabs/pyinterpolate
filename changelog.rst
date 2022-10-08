@@ -6,6 +6,18 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-10-08
+----------
+
+**version 0.3.2**
+
+* new test dataset with regular blocks,
+* more tests for `Deconvolution`, `area_to_point_pk()`, `area_to_area_pk()`, and `centroid_based_pk()`,
+* if there are no values for a given lag in experimental variogram `RunetimeError()` is raised,
+* `average_block_to_block_semivariances()` appends 0 to the lags with 0 points,
+* `calculate_block_to_block_semivariance()` - valid calculation of number of point pairs.
+
+
 2022-09-29
 ----------
 
