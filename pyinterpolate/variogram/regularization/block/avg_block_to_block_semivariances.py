@@ -47,7 +47,7 @@ def average_block_to_block_semivariances(semivariances_array: np.ndarray,
         else:
             averaged.append([
                 lag,
-                np.nan,
+                0,
                 0
             ])
     averaged = np.array(averaged)

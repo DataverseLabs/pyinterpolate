@@ -14,6 +14,8 @@ Changes by date
 * new test dataset with regular blocks,
 * more tests for `Deconvolution`, `area_to_point_pk()`, `area_to_area_pk()`, and `centroid_based_pk()`,
 * if there are no values for a given lag in experimental variogram `RunetimeError()` is raised,
+* `average_block_to_block_semivariances()` appends 0 to the lags with 0 points,
+* `calculate_block_to_block_semivariance()` - valid calculation of number of point pairs.
 
 
 2022-09-29

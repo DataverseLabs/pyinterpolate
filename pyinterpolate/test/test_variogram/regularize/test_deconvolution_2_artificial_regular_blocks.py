@@ -42,66 +42,29 @@ class TestDeconvolution(unittest.TestCase):
 
         self.assertTrue(fitted is not None)
 
-        expected_deviation = 0.1582
+        expected_deviation = 0.4398
         self.assertAlmostEqual(initial_deviation, expected_deviation, 4)
 
-    # def test_transform(self):
-    #     dcv = Deconvolution(verbose=False)
-    #
-    #     self.assertTrue(dcv.initial_theoretical_agg_model is None)
-    #
-    #     dcv.fit(agg_dataset=AREAL_INPUT,
-    #             point_support_dataset=POINT_SUPPORT_INPUT,
-    #             agg_step_size=STEP_SIZE,
-    #             agg_max_range=MAX_RANGE,
-    #             variogram_weighting_method='closest')
-    #
-    #     self.assertTrue(dcv.initial_theoretical_agg_model is not None)
-    #
-    #     dcv.transform(max_iters=MAX_ITERS)
-    #
-    #     self.assertTrue(dcv.final_theoretical_model is not None)
-    #     self.assertEqual(len(dcv.deviations), 3)
-    #
-    #     try:
-    #         with open(OUTPUT, 'r') as ostream:
-    #             pass
-    #     except FileNotFoundError:
-    #         dcv.export_model(OUTPUT)
+    def test_transform(self):
+        dcv = Deconvolution(verbose=False)
 
-    # def test_fit_transform(self):
-    #     dcv1 = Deconvolution(verbose=False)
-    #     dcv2 = Deconvolution(verbose=False)
-    #
-    #     dcv1.fit(agg_dataset=AREAL_INPUT,
-    #              point_support_dataset=POINT_SUPPORT_INPUT,
-    #              agg_step_size=STEP_SIZE,
-    #              agg_max_range=MAX_RANGE,
-    #              variogram_weighting_method='closest')
-    #     dcv1.transform(max_iters=MAX_ITERS)
-    #
-    #     dcv2.fit_transform(agg_dataset=AREAL_INPUT,
-    #                        point_support_dataset=POINT_SUPPORT_INPUT,
-    #                        agg_step_size=STEP_SIZE,
-    #                        agg_max_range=MAX_RANGE,
-    #                        variogram_weighting_method='closest',
-    #                        max_iters=MAX_ITERS)
-    #
-    #     are_the_same = np.array_equal(dcv1.final_optimal_variogram, dcv2.final_optimal_variogram)
-    #     self.assertTrue(are_the_same)
-    #
-    # def test_fast_stop(self):
-    #     dcv = Deconvolution(verbose=True)
-    #
-    #     dcv.fit(agg_dataset=AREAL_INPUT,
-    #             point_support_dataset=POINT_SUPPORT_INPUT,
-    #             agg_step_size=STEP_SIZE,
-    #             agg_max_range=MAX_RANGE,
-    #             variogram_weighting_method='closest')
-    #
-    #     max_iters = 3
-    #     dcv.transform(max_iters=max_iters,
-    #                   limit_deviation_ratio=0.5,
-    #                   minimum_deviation_decrease=0.1)
-    #
-    #     self.assertNotEqual(dcv.iter, max_iters+1)
+        self.assertTrue(dcv.initial_theoretical_agg_model is None)
+
+        dcv.fit(agg_dataset=AREAL_INPUT,
+                point_support_dataset=POINT_SUPPORT_INPUT,
+                agg_step_size=STEP_SIZE,
+                agg_max_range=MAX_RANGE,
+                variogram_weighting_method='closest')
+
+        self.assertTrue(dcv.initial_theoretical_agg_model is not None)
+
+        dcv.transform(max_iters=MAX_ITERS)
+
+        self.assertTrue(dcv.final_theoretical_model is not None)
+        self.assertEqual(len(dcv.deviations), 3)
+
+        try:
+            with open(OUTPUT, 'r') as ostream:
+                pass
+        except FileNotFoundError:
+            dcv.export_model(OUTPUT)
