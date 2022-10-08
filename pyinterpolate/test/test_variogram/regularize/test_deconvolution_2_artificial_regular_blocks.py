@@ -1,13 +1,12 @@
 import unittest
-import numpy as np
 
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram.regularization.deconvolution import Deconvolution
 
 
-OUTPUT = '../../samples/regularization/regularized_variogram_regular_blocks.json'
-BLOCKS = '../../samples/areal_data/regular_grid.geojson'
-PS = '../../samples/areal_data/regular_ps.geojson'
+OUTPUT = 'samples/regularization/regularized_variogram_regular_blocks.json'
+BLOCKS = 'samples/areal_data/regular_grid.geojson'
+PS = 'samples/areal_data/regular_ps.geojson'
 POP = 'pop'
 GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'id'
@@ -61,10 +60,10 @@ class TestDeconvolution(unittest.TestCase):
         dcv.transform(max_iters=MAX_ITERS)
 
         self.assertTrue(dcv.final_theoretical_model is not None)
-        self.assertEqual(len(dcv.deviations), 3)
+        self.assertEqual(len(dcv.deviations), 11)
 
         try:
-            with open(OUTPUT, 'r') as ostream:
+            with open(OUTPUT, 'r') as _:
                 pass
         except FileNotFoundError:
             dcv.export_model(OUTPUT)
