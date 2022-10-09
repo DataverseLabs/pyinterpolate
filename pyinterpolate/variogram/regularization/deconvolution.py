@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union
+from typing import Dict, Union, List, Collection
 
 import geopandas as gpd
 import numpy as np
@@ -207,6 +207,7 @@ class Deconvolution:
         self.ranges = None
         self.tolerance = None
         self.weighting_method = None
+        self.model_types = None
 
         # Deviation and weights
         self.deviations = []
@@ -253,7 +254,8 @@ class Deconvolution:
             agg_max_range: float,
             agg_direction: float = 0,
             agg_tolerance: float = 1,
-            variogram_weighting_method: str = "closest") -> None:
+            variogram_weighting_method: str = "closest",
+            model_types: Union[str, List] = 'all') -> None:
         """
         Function fits given areal data variogram into point support variogram - it is the first step of regularization
         process.
@@ -307,6 +309,20 @@ class Deconvolution:
             - **closest**: lags at a close range have bigger weights,
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
+
+        model_types : str or List, default='all'
+            List of modeling functions or a name of a single function. Available models:
+
+            - 'all' - the same as list with all models,
+            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical',
+            - or a different set of the above.
         """
 
         if self.verbose:
@@ -321,6 +337,7 @@ class Deconvolution:
         self.direction = agg_direction
         self.tolerance = agg_tolerance
         self.weighting_method = variogram_weighting_method
+        self.model_types = self._parse_model_types(model_types)
 
         # Compute experimental variogram of areal data
         areal_centroids = get_areal_centroids_from_agg(self.agg)
@@ -337,7 +354,7 @@ class Deconvolution:
         theo_model_agg = TheoreticalVariogram()
         theo_model_agg.autofit(
             self.initial_experimental_variogram,
-            model_types='all',
+            model_types=self.model_types,
             deviation_weighting=self.weighting_method
         )
         self.initial_theoretical_agg_model = theo_model_agg
@@ -450,7 +467,7 @@ class Deconvolution:
                 temp_theoretical_semivariogram_model = TheoreticalVariogram()
                 temp_theoretical_semivariogram_model.autofit(
                     self._rescaled_to_exp_variogram(rescaled_experimental_variogram),
-                    model_types='all',
+                    model_types=self.model_types,
                     rang=self.initial_theoretical_agg_model.rang,
                     deviation_weighting=self.weighting_method
                 )
@@ -716,6 +733,51 @@ class Deconvolution:
         if dev_ratio <= self.min_deviation_ratio:
             return True
         return False
+
+    @staticmethod
+    def _parse_model_types(model_types):
+        """
+        The first level check and parser for model types.
+
+        Parameters
+        ----------
+        model_types : List or str
+
+        Returns
+        -------
+        mtypes : List
+        """
+
+        all_models = [
+                    'circular',
+                    'cubic',
+                    'exponential',
+                    'gaussian',
+                    'linear',
+                    'power',
+                    'spherical'
+        ]
+
+        basic_models = [
+            'exponential',
+            'linear',
+            'power',
+            'spherical'
+        ]
+
+        if isinstance(model_types, str):
+            if model_types == 'all':
+                return all_models
+            elif model_types == 'basic':
+                return basic_models
+            else:
+                return [model_types]
+
+        elif isinstance(model_types, Collection):
+            return model_types
+
+        else:
+            raise TypeError('Unknown Type of the input, model_types parameter takes str or List as an input.')
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
         """
