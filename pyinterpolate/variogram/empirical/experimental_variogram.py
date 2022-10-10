@@ -1,5 +1,5 @@
 """
-The main class for experimental semivariogram.
+Class for Experimental Variogram and helper class for DirectionalVariograms.
 
 Authors
 -------
@@ -15,6 +15,138 @@ from prettytable import PrettyTable
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
+
+
+class DirectionalVariogram:
+    """
+    Class prepares four directional variograms and one isotropic variogram.
+
+    Parameters
+    ----------
+    input_array : numpy array, list, tuple
+        * As a ``list`` and ``numpy array``: coordinates and their values: ``(pt x, pt y, value)``,
+        * as a ``dict``: ``polyset = {'points': numpy array with coordinates and their values}``,
+        * as a ``Blocks``: ``Blocks.polyset['points']``.
+
+    step_size : float
+        The distance between lags within each the points are included in the calculations.
+
+    max_range : float
+        The maximum range of analysis.
+
+    weights : numpy array, default=None
+        Weights assigned to the points, index of weight must be the same as index of point.
+
+    tolerance : float (in range [0, 1]), default=0.2
+        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
+        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        for 0 tolerance.
+
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
+
+    Attributes
+    ----------
+    ds : numpy array
+        See the ``input_array`` parameter.
+
+    step_size : float
+        See the ``step_size`` parameter.
+
+    max_range : float
+        See the ``max_range`` parameter.
+
+    tolerance : float
+        See the ``tolerance`` parameter.
+
+    weights : float
+        See the ``weights`` parameter.
+
+    directions : Dict
+        Dictionary where keys are directions: NS, WE, NE-SW, NW-SE, and values are angles: 0, 90, 45, 135.
+
+    directional_variograms : Dict
+        Dictionary with five variograms:
+
+        * ``ISO``: isotropic,
+        * ``NS``: North-South axis,
+        * ``WE``: West-East axis,
+        * ``NE-SW``: Northeastern-Southwestern axis,
+        * ``NW-SE``: Northwestern-Southeastern axis.
+
+    Methods
+    -------
+    get()
+        Returns copy of calculated directional variograms.
+
+    show()
+        Plot all variograms on a single plot.
+    """
+
+    def __init__(self, input_array: np.array, step_size: float, max_range: float, weights=None, tolerance=0.2):
+
+        self.ds = input_array
+        self.step_size = step_size
+        self.max_range = max_range
+        self.tolerance = tolerance
+        self.weights = weights
+
+        self.directions = {
+            'NS': 0,
+            'WE': 90,
+            'NE-SW': 45,
+            'NW-SE': 135
+        }
+
+        self.directional_variograms = {}
+
+        self._build_experimental_variograms()
+
+    def _build_experimental_variograms(self):
+
+        isotropic = build_experimental_variogram(self.ds, self.step_size, self.max_range, weights=self.weights)
+        self.directional_variograms['ISO'] = isotropic
+
+        for idx, val in self.directions.items():
+            variogram = build_experimental_variogram(self.ds,
+                                                     self.step_size,
+                                                     self.max_range,
+                                                     weights=self.weights,
+                                                     direction=val,
+                                                     tolerance=self.tolerance)
+            self.directional_variograms[idx] = variogram
+
+    def get(self):
+        return self.directional_variograms.copy()
+
+    def show(self):
+        if self.directional_variograms:
+            _lags = self.directional_variograms['ISO'].lags
+            _ns = self.directional_variograms['NS'].experimental_semivariances
+            _we = self.directional_variograms['WE'].experimental_semivariances
+            _nw_se = self.directional_variograms['NW-SE'].experimental_semivariances
+            _ne_sw = self.directional_variograms['NE-SW'].experimental_semivariances
+            _iso = self.directional_variograms['ISO'].experimental_semivariances
+
+            plt.figure(figsize=(20, 8))
+            plt.plot(_lags, _iso, color='#1b9e77')
+            plt.plot(_lags, _ns, '--', color='#d95f02')
+            plt.plot(_lags, _we, '--', color='#7570b3')
+            plt.plot(_lags, _nw_se, '--', color='#e7298a')
+            plt.plot(_lags, _ne_sw, '--', color='#66a61e')
+            plt.title('Comparison of experimental semivariance models')
+            plt.legend(['Isotropic',
+                        'NS',
+                        'WE',
+                        'NW-SE',
+                        'NE-SW'])
+            plt.xlabel('Distance')
+            plt.ylabel('Semivariance')
+            plt.show()
+
 
 
 class ExperimentalVariogram:

@@ -9,8 +9,9 @@ Changes by date
 2022-10-XX
 ----------
 
-* Semivariogram `Deconvolution` takes possible model types to test,
-*
+* Semivariogram `Deconvolution` takes possible model types as a parameter,
+* Semivariogram `Deconvolution` uses **basic** set of variogram models (*spherical*, *linear*, *power*, *exponential*),
+* New class: `DirectionalVariogram` calculates experimental variograms in four directions along with isotropic variogram,
 
 2022-10-08
 ----------

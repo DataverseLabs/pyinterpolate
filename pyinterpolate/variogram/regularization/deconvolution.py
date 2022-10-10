@@ -255,7 +255,7 @@ class Deconvolution:
             agg_direction: float = 0,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
-            model_types: Union[str, List] = 'all') -> None:
+            model_types: Union[str, List] = 'basic') -> None:
         """
         Function fits given areal data variogram into point support variogram - it is the first step of regularization
         process.
@@ -310,7 +310,7 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
-        model_types : str or List, default='all'
+        model_types : str or List, default='basic'
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
@@ -523,6 +523,7 @@ class Deconvolution:
                       agg_direction: float = 0,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
+                      model_types: Union[str, List] = 'basic',
                       max_iters=25,
                       limit_deviation_ratio=0.1,
                       minimum_deviation_decrease=0.01,
@@ -580,6 +581,20 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
+        model_types : str or List, default='basic'
+            List of modeling functions or a name of a single function. Available models:
+
+            - 'all' - the same as list with all models,
+            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical',
+            - or a different set of the above.
+
         max_iters : int, default = 25
             Maximum number of iterations.
 
@@ -601,7 +616,8 @@ class Deconvolution:
                  agg_max_range=agg_max_range,
                  agg_direction=agg_direction,
                  agg_tolerance=agg_tolerance,
-                 variogram_weighting_method=variogram_weighting_method)
+                 variogram_weighting_method=variogram_weighting_method,
+                 model_types=model_types)
 
         self.transform(max_iters=max_iters,
                        limit_deviation_ratio=limit_deviation_ratio,
