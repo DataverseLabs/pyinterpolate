@@ -24,7 +24,8 @@ class TestDirectionalVariogram(unittest.TestCase):
     def test_directions(self):
         dirvar = DirectionalVariogram(input_array=armstrong_arr,
                                       step_size=STEP_SIZE,
-                                      max_range=MAX_RANGE)
+                                      max_range=MAX_RANGE,
+                                      method='e')
         iso = dirvar.directional_variograms['ISO']
         ns = dirvar.directional_variograms['NS']
         we = dirvar.directional_variograms['WE']
