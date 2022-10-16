@@ -54,12 +54,12 @@ class AggregatedVariogram:
         * PointSupport
 
     agg_direction : float (in range [0, 360]), default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
+        Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -528,12 +528,12 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
         * PointSupport
 
     agg_direction : float (in range [0, 360]), default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
+        Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of

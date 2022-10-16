@@ -107,11 +107,12 @@ def directional_covariogram(points: np.array,
                 Distance between lags within a point pair is included in the calculation.
 
     direction : float
-                Direction of covariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -193,11 +194,12 @@ def calculate_covariance(points: np.array,
                 Maximum range of analysis. Lags are calculated from it as a points in range (0, max_range, step_size).
 
     direction : float
-                Direction of covariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
