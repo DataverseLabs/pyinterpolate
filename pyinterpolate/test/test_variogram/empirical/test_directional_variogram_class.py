@@ -41,10 +41,10 @@ class TestDirectionalVariogram(unittest.TestCase):
         self.assertTrue(the_same_lags)
 
         iso_output = [5.7, 8.4, 11.1, 12.1, 15.0]
-        ns_output = [5.0, 8.8, 8.5, 12.8, 13.0]
-        we_output = [6.4, 9.5, 8.1, 10.0, 10.7]
-        nesw_output = [0, 6.2, 11.0, 10.3, 11.8]
-        nwse_output = [0, 6.3, 11.5, 9.7, 10.7]
+        we_output = [5.0, 8.8, 8.5, 12.8, 13.0]
+        ns_output = [6.4, 9.5, 8.1, 10.0, 10.7]
+        nwse_output = [0, 6.2, 11.0, 10.3, 11.8]
+        nesw_output = [0, 6.3, 11.5, 9.7, 10.7]
 
         isovar = iso.experimental_semivariances
         nsvar = ns.experimental_semivariances

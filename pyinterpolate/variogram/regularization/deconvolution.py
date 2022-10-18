@@ -203,6 +203,7 @@ class Deconvolution:
         # Initial variogram parameters
         self.agg_step = None
         self.agg_rng = None
+        self.agg_nugget = None
         self.direction = None
         self.ranges = None
         self.tolerance = None
@@ -252,6 +253,7 @@ class Deconvolution:
             point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
             agg_step_size: float,
             agg_max_range: float,
+            agg_nugget: float = 0,
             agg_direction: float = 0,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
@@ -282,6 +284,9 @@ class Deconvolution:
 
         agg_max_range : float
             Maximal distance of analysis.
+
+        agg_nugget : float, default = 0
+            The nugget of a data.
 
         agg_direction : float (in range [0, 360]), optional, default=0
             Direction of semivariogram, values from 0 to 360 degrees:
@@ -333,6 +338,7 @@ class Deconvolution:
         self.ps = point_support_dataset
         self.agg_step = agg_step_size
         self.agg_rng = agg_max_range
+        self.agg_nugget = agg_nugget
         self.ranges = np.arange(agg_step_size, agg_max_range, agg_step_size)
         self.direction = agg_direction
         self.tolerance = agg_tolerance
@@ -354,6 +360,7 @@ class Deconvolution:
         theo_model_agg = TheoreticalVariogram()
         theo_model_agg.autofit(
             self.initial_experimental_variogram,
+            nugget=self.agg_nugget,
             model_types=self.model_types,
             deviation_weighting=self.weighting_method
         )
@@ -369,6 +376,7 @@ class Deconvolution:
             aggregated_data=self.agg,
             agg_step_size=self.agg_step,
             agg_max_range=self.agg_rng,
+            agg_nugget=self.agg_nugget,
             point_support=self.ps,
             theoretical_block_model=self.initial_theoretical_agg_model,
             experimental_block_variogram=self.initial_experimental_variogram.experimental_semivariance_array,
@@ -469,6 +477,7 @@ class Deconvolution:
                     self._rescaled_to_exp_variogram(rescaled_experimental_variogram),
                     model_types=self.model_types,
                     rang=self.initial_theoretical_agg_model.rang,
+                    nugget=self.agg_nugget,
                     deviation_weighting=self.weighting_method
                 )
 
@@ -477,6 +486,7 @@ class Deconvolution:
                     aggregated_data=self.agg,
                     agg_step_size=self.agg_step,
                     agg_max_range=self.agg_rng,
+                    agg_nugget=self.agg_nugget,
                     point_support=self.ps,
                     theoretical_block_model=temp_theoretical_semivariogram_model,
                     experimental_block_variogram=rescaled_experimental_variogram,
@@ -520,6 +530,7 @@ class Deconvolution:
                       point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                       agg_step_size: float,
                       agg_max_range: float,
+                      agg_nugget: float = 0,
                       agg_direction: float = 0,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
@@ -553,6 +564,9 @@ class Deconvolution:
 
         agg_max_range : float
             Maximal distance of analysis.
+
+        agg_nugget : float, default = 0
+            The nugget of a dataset.
 
         agg_direction : float (in range [0, 360]), default=0
             Direction of semivariogram, values from 0 to 360 degrees:
@@ -614,6 +628,7 @@ class Deconvolution:
                  point_support_dataset=point_support_dataset,
                  agg_step_size=agg_step_size,
                  agg_max_range=agg_max_range,
+                 agg_nugget=agg_nugget,
                  agg_direction=agg_direction,
                  agg_tolerance=agg_tolerance,
                  variogram_weighting_method=variogram_weighting_method,

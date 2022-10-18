@@ -1,8 +1,7 @@
 import unittest
 import numpy as np
 
-from pyinterpolate.processing.select_values import select_points_within_triangle, generate_triangles,\
-    select_points_within_ellipse
+from pyinterpolate.processing.select_values import select_points_within_triangle, generate_triangles
 
 
 INPUT_ARRAY = np.array(
@@ -36,20 +35,7 @@ class TestSelectionAlgorithms(unittest.TestCase):
 
         # Triangle B - create one
         ptb = np.array([[2.5, 3]])
-        trb = generate_triangles(ptb, 2, 90, 1.5)
+        trb = generate_triangles(ptb, 2, 0, 0.75)
 
         for edge in trb[0][0]:
             self.assertIn(edge, tra)
-
-        # Triangle C
-        trc = (
-            (2.5, 1.5), (4.5, 3.5), (5.5, 0.5)
-        )
-
-        ptc = np.array([[3.5, 2.5]])
-        trc_gen = generate_triangles(ptc, 2.84, 45, 1)
-
-        ell_gen = select_points_within_ellipse(ptc[0], INPUT_ARRAY[:, :-1],
-                                               lag=3, step_size=1.5, theta=45, minor_axis_size=0.1)
-        ell_sel = INPUT_ARRAY[ell_gen]
-        print(trc_gen[0][0])
