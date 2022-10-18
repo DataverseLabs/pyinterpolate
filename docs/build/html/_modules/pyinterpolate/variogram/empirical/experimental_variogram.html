@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -168,7 +169,7 @@
             
   <h1>Source code for pyinterpolate.variogram.empirical.experimental_variogram</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The main class for experimental semivariogram.</span>
+<span class="sd">Class for Experimental Variogram and helper class for DirectionalVariograms.</span>
 
 <span class="sd">Authors</span>
 <span class="sd">-------</span>
@@ -184,6 +185,149 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.covariance</span> <span class="kn">import</span> <span class="n">calculate_covariance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.semivariance</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_plot_attributes_for_experimental_variogram_class</span>
+
+
+<span class="k">class</span> <span class="nc">DirectionalVariogram</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class prepares four directional variograms and one isotropic variogram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_array : numpy array, list, tuple</span>
+<span class="sd">        * As a ``list`` and ``numpy array``: coordinates and their values: ``(pt x, pt y, value)``,</span>
+<span class="sd">        * as a ``dict``: ``polyset = {&#39;points&#39;: numpy array with coordinates and their values}``,</span>
+<span class="sd">        * as a ``Blocks``: ``Blocks.polyset[&#39;points&#39;]``.</span>
+
+<span class="sd">    step_size : float</span>
+<span class="sd">        The distance between lags within each the points are included in the calculations.</span>
+
+<span class="sd">    max_range : float</span>
+<span class="sd">        The maximum range of analysis.</span>
+
+<span class="sd">    weights : numpy array, default=None</span>
+<span class="sd">        Weights assigned to the points, index of weight must be the same as index of point.</span>
+
+<span class="sd">    tolerance : float (in range [0, 1]), default=0.2</span>
+<span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0`` then</span>
+<span class="sd">        the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance.</span>
+
+<span class="sd">        * The major axis size == ``step_size``.</span>
+<span class="sd">        * The minor axis size is ``tolerance * step_size``</span>
+<span class="sd">        * The baseline point is at a center of the ellipse.</span>
+<span class="sd">        * The ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    method : str, default = triangular</span>
+<span class="sd">        The method used for neighbors selection. Available methods:</span>
+
+<span class="sd">        * &quot;triangle&quot; or &quot;t&quot;, default method where a point neighbors are selected from a triangular area,</span>
+<span class="sd">        * &quot;ellipse&quot; or &quot;e&quot;, the most accurate method but also the slowest one.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : numpy array</span>
+<span class="sd">        See the ``input_array`` parameter.</span>
+
+<span class="sd">    step_size : float</span>
+<span class="sd">        See the ``step_size`` parameter.</span>
+
+<span class="sd">    max_range : float</span>
+<span class="sd">        See the ``max_range`` parameter.</span>
+
+<span class="sd">    tolerance : float</span>
+<span class="sd">        See the ``tolerance`` parameter.</span>
+
+<span class="sd">    weights : float</span>
+<span class="sd">        See the ``weights`` parameter.</span>
+
+<span class="sd">    directions : Dict</span>
+<span class="sd">        Dictionary where keys are directions: NS, WE, NE-SW, NW-SE, and values are angles: -90, 0, -45, 45.</span>
+
+<span class="sd">    method : str, default = triangular</span>
+<span class="sd">        See the ``method`` parameter.</span>
+
+<span class="sd">    directional_variograms : Dict</span>
+<span class="sd">        Dictionary with five variograms:</span>
+
+<span class="sd">        * ``ISO``: isotropic,</span>
+<span class="sd">        * ``NS``: North-South axis,</span>
+<span class="sd">        * ``WE``: West-East axis,</span>
+<span class="sd">        * ``NE-SW``: Northeastern-Southwestern axis,</span>
+<span class="sd">        * ``NW-SE``: Northwestern-Southeastern axis.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get()</span>
+<span class="sd">        Returns copy of calculated directional variograms.</span>
+
+<span class="sd">    show()</span>
+<span class="sd">        Plot all variograms on a single plot.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">input_array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span> <span class="o">=</span> <span class="n">step_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_range</span> <span class="o">=</span> <span class="n">max_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">directions</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;NS&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">90</span><span class="p">,</span>
+            <span class="s1">&#39;WE&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;NE-SW&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">45</span><span class="p">,</span>
+            <span class="s1">&#39;NW-SE&#39;</span><span class="p">:</span> <span class="mi">45</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_build_experimental_variograms</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_build_experimental_variograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">isotropic</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_range</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;ISO&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">isotropic</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span>
+                                                     <span class="bp">self</span><span class="o">.</span><span class="n">step_size</span><span class="p">,</span>
+                                                     <span class="bp">self</span><span class="o">.</span><span class="n">max_range</span><span class="p">,</span>
+                                                     <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
+                                                     <span class="n">direction</span><span class="o">=</span><span class="n">val</span><span class="p">,</span>
+                                                     <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span>
+                                                     <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">variogram</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">:</span>
+            <span class="n">_lags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;ISO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">lags</span>
+            <span class="n">_ns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;NS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+            <span class="n">_we</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;WE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+            <span class="n">_nw_se</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;NW-SE&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+            <span class="n">_ne_sw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;NE-SW&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+            <span class="n">_iso</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="s1">&#39;ISO&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_iso</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b9e77&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ns</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#d95f02&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_we</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#7570b3&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e7298a&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ne_sw</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#66a61e&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariance models&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Isotropic&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;NS&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;WE&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;NW-SE&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;NE-SW&#39;</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="ExperimentalVariogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram">[docs]</a><span class="k">class</span> <span class="nc">ExperimentalVariogram</span><span class="p">:</span>
@@ -207,12 +351,12 @@
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
 <span class="sd">    direction : float (in range [0, 360]), default=0</span>
-<span class="sd">        A direction of semivariogram, values from 0 to 360 degrees:</span>
-
-<span class="sd">        * 0 or 180: is NS direction,</span>
-<span class="sd">        * 90 or 270 is EW direction,</span>
-<span class="sd">        * 45 or 225 is NE-SW direction,</span>
-<span class="sd">        * 135 or 315 is NW-SE direction.</span>
+<span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
+<span class="sd">        </span>
+<span class="sd">        - 0 or 180: is E-W,</span>
+<span class="sd">        - 90 or 270 is N-S,</span>
+<span class="sd">        - 45 or 225 is NW-SE,</span>
+<span class="sd">        - 135 or 315 is NE-SW.</span>
 
 <span class="sd">    tolerance : float (in range [0, 1]), default=1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
@@ -224,6 +368,12 @@
 <span class="sd">        * The minor axis size is ``tolerance * step_size``</span>
 <span class="sd">        * The baseline point is at a center of the ellipse.</span>
 <span class="sd">        * The ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    method : str, default = triangular</span>
+<span class="sd">        The method used for neighbors selection. Available methods:</span>
+
+<span class="sd">        * &quot;triangle&quot; or &quot;t&quot;, default method where a point neighbors are selected from a triangular area,</span>
+<span class="sd">        * &quot;ellipse&quot; or &quot;e&quot;, the most accurate method but also the slowest one.</span>
 
 <span class="sd">    is_semivariance : bool, optional, default=True</span>
 <span class="sd">        Should semivariance be calculated?</span>
@@ -292,6 +442,9 @@
 <span class="sd">    tol : float</span>
 <span class="sd">        Derived from the ``tolerance`` parameter.</span>
 
+<span class="sd">    method : str</span>
+<span class="sd">        See the ``method`` parameter.</span>
+
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
 <span class="sd">    plot()</span>
@@ -340,6 +493,7 @@
                  <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
                  <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span>
                  <span class="n">is_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">is_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">is_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -366,6 +520,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">direct</span> <span class="o">=</span> <span class="n">direction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tol</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">__c_sem</span> <span class="o">=</span> <span class="n">is_semivariance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__c_cov</span> <span class="o">=</span> <span class="n">is_covariance</span>
@@ -409,7 +564,7 @@
 <span class="sd">        -----</span>
 <span class="sd">        AttributeSetToFalseWarning</span>
 <span class="sd">            Warning invoked when plotting parameter for semivariance, covariance or variance is set to ``True`` but</span>
-<span class="sd">            class atrributes to calculate those indices are set to ``False``.</span>
+<span class="sd">            class attributes to calculate those indices are set to ``False``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Validate parameters</span>
@@ -469,7 +624,8 @@
             <span class="n">max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mx_rng</span><span class="p">,</span>
             <span class="n">weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
             <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">direct</span><span class="p">,</span>
-            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tol</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tol</span><span class="p">,</span>
+            <span class="n">method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -545,7 +701,8 @@
                                  <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                  <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                  <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-                                 <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
+                                 <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function prepares:</span>
 <span class="sd">      - experimental semivariogram,</span>
@@ -567,12 +724,12 @@
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
 <span class="sd">    direction : float (in range [0, 360]), default = 0</span>
-<span class="sd">        A direction of semivariogram, values from 0 to 360 degrees:</span>
-
-<span class="sd">        * 0 or 180: is NS direction,</span>
-<span class="sd">        * 90 or 270 is EW direction,</span>
-<span class="sd">        * 45 or 225 is NE-SW direction,</span>
-<span class="sd">        * 135 or 315 is NW-SE direction.</span>
+<span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
+<span class="sd">        </span>
+<span class="sd">        - 0 or 180: is E-W,</span>
+<span class="sd">        - 90 or 270 is N-S,</span>
+<span class="sd">        - 45 or 225 is NW-SE,</span>
+<span class="sd">        - 135 or 315 is NE-SW.</span>
 
 <span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
@@ -584,6 +741,12 @@
 <span class="sd">        * the minor axis size is ``tolerance * step_size``,</span>
 <span class="sd">        * the baseline point is at a center of the ellipse,</span>
 <span class="sd">        * the ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    method : str, default = triangular</span>
+<span class="sd">        The method used for neighbors selection. Available methods:</span>
+
+<span class="sd">        * &quot;triangle&quot; or &quot;t&quot;, default method where a point neighbors are selected from a triangular area,</span>
+<span class="sd">        * &quot;ellipse&quot; or &quot;e&quot;, the most accurate method but also the slowest one.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -638,6 +801,7 @@
         <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span>
         <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
         <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
         <span class="n">is_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">is_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">is_variance</span><span class="o">=</span><span class="kc">True</span>
@@ -653,8 +817,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

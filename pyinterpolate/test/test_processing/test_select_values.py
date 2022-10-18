@@ -3,21 +3,26 @@ import numpy as np
 from pyinterpolate.processing.select_values import select_points_within_ellipse
 
 
-INPUT_ARRAY = np.array([[0, 0, 0], [0, 1, 1], [0, 2, 2], [0, 3, 3], [0, 4, 4],
-                        [1, 0, 5], [1, 1, 6], [1, 2, 7], [1, 3, 8], [1, 4, 9],
-                        [2, 0, 10], [2, 1, 11], [2, 2, 12], [2, 3, 13], [2, 4, 14],
-                        [3, 0, 15], [3, 1, 16], [3, 2, 17], [3, 3, 18], [3, 4, 19],
-                        [4, 0, 20], [4, 1, 21], [4, 2, 22], [4, 3, 23], [4, 4, 24]])
+INPUT_ARRAY = np.array(
+    [
+        [1, 5, 0], [2, 5, 1], [3, 5, 2], [4, 5, 3], [5, 5, 4],
+        [1, 4, 5], [2, 4, 6], [3, 4, 7], [4, 4, 8], [5, 4, 9],
+        [1, 3, 10], [2, 3, 11], [3, 3, 12], [4, 3, 13], [5, 3, 14],
+        [1, 2, 15], [2, 2, 16], [3, 2, 17], [4, 2, 18], [5, 2, 19],
+        [1, 1, 20], [2, 1, 21], [3, 1, 22], [4, 1, 23], [5, 1, 24]
+    ]
+)
 
 
-EXPECTED_NS = ([2, 2, 12], [4, 2, 22])  # FROM [3, 2, 17], one lag
-EXPECTED_WE = ([2, 0, 10], [2, 4, 14])  # FROM [2, 2, 12], two lags
-EXPECTED_NW_SE = ([[1, 4, 9]],
-                  [[0, 2, 2], [2, 4, 14]],
-                  [[1, 2, 7], [3, 4, 19]],
-                  [[2, 2, 12], [4, 4, 24]],
-                  [[3, 2, 17]])  # FROM column number 3, lag 1
-EXPECTED_NE_SW = ([[0, 4, 4], [4, 0, 20]])  # FROM [2, 2], lag 2
+EXPECTED_NS = ([1, 3, 10], [1, 1, 20])  # FROM [1, 2, ...], one lag
+EXPECTED_WE = ([1, 2, 15], [5, 2, 19])  # FROM [3, 2, ...], two lags
+EXPECTED_NW_SE = ([[4, 4, 8]],
+                  [[2, 5, 1], [4, 3, 13]],
+                  [[2, 4, 6], [4, 2, 18]],
+                  [[2, 3, 11], [4, 1, 23]],
+                  [[2, 2, 16]])  # FROM column number x=3, lag 1
+EXPECTED_NE_SW = ((1, 1, 20), (5, 5, 4))  # FROM [3, 3], lag 2
+
 
 def contains(arr1: np.array, arr2: np.array) -> bool:
     for r in arr2:
@@ -29,12 +34,12 @@ def contains(arr1: np.array, arr2: np.array) -> bool:
 class TestDirectionalSelection(unittest.TestCase):
 
     def test_NS_selection(self):
-        pt = np.array([3, 2])
+        pt = np.array([1, 2])
         selection = select_points_within_ellipse(ellipse_center=pt,
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=0,
                                                  step_size=1,
-                                                 theta=0,
+                                                 theta=-90,
                                                  minor_axis_size=0.01)
         output = INPUT_ARRAY[selection]
         for row in output:
@@ -43,12 +48,12 @@ class TestDirectionalSelection(unittest.TestCase):
             self.assertTrue(is_row_in_expected, msg=err_msg)
 
     def test_WE_selection(self):
-        pt = np.array([2, 2])
+        pt = np.array([3, 2])
         selection = select_points_within_ellipse(ellipse_center=pt,
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=2,
                                                  step_size=1,
-                                                 theta=90,
+                                                 theta=0,
                                                  minor_axis_size=0.1)
         output = INPUT_ARRAY[selection]
         for row in output:
@@ -67,7 +72,7 @@ class TestDirectionalSelection(unittest.TestCase):
                                                      other_points=INPUT_ARRAY[:, :-1],
                                                      lag=1,
                                                      step_size=1,
-                                                     theta=-45,
+                                                     theta=45,
                                                      minor_axis_size=0.01)
             output = INPUT_ARRAY[selection]
             selections.append(output)
@@ -80,16 +85,16 @@ class TestDirectionalSelection(unittest.TestCase):
                 self.assertTrue(is_point_equal, msg=err_msg)
 
     def test_NE_SW_selection(self):
-        point = np.array([2, 2])
+        point = np.array([3, 3])
         selection = select_points_within_ellipse(ellipse_center=point,
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=3,
                                                  step_size=1,
-                                                 theta=45,
+                                                 theta=-45,
                                                  minor_axis_size=0.01)
         output = INPUT_ARRAY[selection]
-
-        is_point_equal = np.equal(output, EXPECTED_NE_SW).all()
-        err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
-                 f' Wrong point is: {output}'
-        self.assertTrue(is_point_equal, msg=err_msg)
+        for pt in output:
+            tpt = (pt[0], pt[1], pt[2])
+            err_msg = f'Points in direction NW-SE and one step away from the third column were not detected!' \
+                      f' Wrong point is: {tpt}'
+            self.assertIn(tpt, EXPECTED_NE_SW)

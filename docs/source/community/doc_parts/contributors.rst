@@ -14,10 +14,11 @@ Maintainer(s)
 Contributors
 ------------
 
-1. **Sean Lim**, ``@seanjunheng2``
-2. **Scott Gallacher**, ``@scottgallacher-3``
-3. **Ethem Turgut**, ``@ethmtrgt``
-4. **Tobiasz Wojnar**, ``@TobiaszWojnar``
+1. **Lakshaya Inani**,  ``@Lakshayainani``
+2. **Sean Lim**, ``@seanjunheng2``
+3. **Scott Gallacher**, ``@scottgallacher-3``
+4. **Ethem Turgut**, ``@ethmtrgt``
+5. **Tobiasz Wojnar**, ``@TobiaszWojnar``
 
 Reviewers (JOSS)
 ----------------

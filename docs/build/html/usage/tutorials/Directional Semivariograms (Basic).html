@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -166,18 +167,22 @@
 <li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#A-directional-proces">A directional proces</a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-show-point-data">1) Read and show point data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-semivariogram">2) Create the experimental semivariogram</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#Case-1:-N-S-Direction">Case 1: N-S Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-2:-W-E-Direction">Case 2: W-E Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NE-SW-Direction">Case 3: NE-SW Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NW-SE-Direction">Case 4: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-1:-W-E-Direction">Case 1: W-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-2:-N-E-Direction">Case 2: N-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NW-SE-Direction">Case 3: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NE-SW-Direction">Case 4: NE-SW Direction</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#Case-5:-Isotropic-Variogram">Case 5: Isotropic Variogram</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="#3)-Compare-semivariograms">3) Compare semivariograms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Bonus:-Compare-calculation-times-and-results">4) Bonus: Compare calculation times and results</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
@@ -216,18 +221,22 @@
 <li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="#A-directional-proces">A directional proces</a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#1)-Read-and-show-point-data">1) Read and show point data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-semivariogram">2) Create the experimental semivariogram</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#Case-1:-N-S-Direction">Case 1: N-S Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-2:-W-E-Direction">Case 2: W-E Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NE-SW-Direction">Case 3: NE-SW Direction</a></li>
-<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NW-SE-Direction">Case 4: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-1:-W-E-Direction">Case 1: W-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-2:-N-E-Direction">Case 2: N-E Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-3:-NW-SE-Direction">Case 3: NW-SE Direction</a></li>
+<li class="toctree-l5"><a class="reference internal" href="#Case-4:-NE-SW-Direction">Case 4: NE-SW Direction</a></li>
 <li class="toctree-l5"><a class="reference internal" href="#Case-5:-Isotropic-Variogram">Case 5: Isotropic Variogram</a></li>
 </ul>
 </li>
 <li class="toctree-l4"><a class="reference internal" href="#3)-Compare-semivariograms">3) Compare semivariograms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#4)-Bonus:-Compare-calculation-times-and-results">4) Bonus: Compare calculation times and results</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
@@ -512,7 +521,8 @@ div.rendered_html tbody tr:hover {
 <ol class="arabic simple">
 <li>Read point data,</li>
 <li>Create directional and isotropic semivariograms,</li>
-<li>Compare semivariograms.</li>
+<li>Compare semivariograms,</li>
+<li>Compare triangular vs elliptical neighbors selection methods.</li>
 </ol>
 </div>
 <div class="section" id="Level:-Basic">
@@ -522,9 +532,9 @@ div.rendered_html tbody tr:hover {
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
 <table>
 <colgroup>
-<col width="19%" />
-<col width="55%" />
-<col width="26%" />
+<col width="18%" />
+<col width="59%" />
+<col width="23%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Date</th>
@@ -533,7 +543,11 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>2022-09-22</td>
+<tr class="row-even"><td>2022-10-17</td>
+<td>Bug update: directions are calculated in a valid way. New feature: added comparison between elliptical and triangular neighbors selection</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-09-22</td>
 <td>The first version of tutorial</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
@@ -542,11 +556,14 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
-<p>In this tutorial, we will learn about directional semivariograms, how to set the angle of <code class="docutils literal notranslate"><span class="pre">direction</span></code> and what’s the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+<p>In this tutorial, we will learn about directional semivariograms, how to set the angle of <code class="docutils literal notranslate"><span class="pre">direction</span></code> and what’s the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter. We compare two neighbor selection methods: <strong>triangular</strong> that is fast and <strong>elliptical</strong> that is accurate.</p>
+<div class="section" id="A-directional-proces">
+<h3>A directional proces<a class="headerlink" href="#A-directional-proces" title="Permalink to this heading">¶</a></h3>
 <p>Not every spatial process may be described by isotropic semivariograms. Sometimes we see a specific trend in one direction (N-S, W-E, or NE-SW, NW-SE). A well performed analysis includes directions, that’s why we will learn how to write a code in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> that retrieves the directional variogram.</p>
 <p>We use the air pollution data downloaded with the package.</p>
 <blockquote>
 <div><strong>Note</strong>: if you you are a machine learning enthusiast it will be easier for you to understand <strong>direction</strong> as an additional feature used to model semivariance.</div></blockquote>
+</div>
 </div>
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
@@ -859,13 +876,13 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 <li><code class="docutils literal notranslate"><span class="pre">max_range</span></code>: it is a tricky one, and it is hard to guess it at the first try. This parameter represents the possible <strong>maximum range of spatial dependency</strong>. This parameter shouldn’t exceed half of the extent.</li>
 </ol>
 <p>But that’s not everything!</p>
-<p>We didn’t use two other parameters:</p>
+<p>We didn’t use three other parameters:</p>
 <ol class="arabic simple" start="4">
 <li><code class="docutils literal notranslate"><span class="pre">direction</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 360]. We set the direction of semivariogram:<ul>
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is WE direction,</li>
+<li>90 or 270 is NS direction,</li>
+<li>45 or 225 is NW-SE direction,</li>
+<li>135 or 315 is NE-SW direction.</li>
 </ul>
 </li>
 <li><code class="docutils literal notranslate"><span class="pre">tolerance</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 1]. If we leave <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> with default <strong>1</strong>, we will always get isotropic semivariogram. Other edge case is if we set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to <strong>0</strong>, then points must be placed on a single line with the beginning in the origin of the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0 and &lt; 1 then the bin is selected as an elliptical area with major axis pointed in the same direction as the line for 0
@@ -873,6 +890,11 @@ tolerance.<ul>
 <li>The major axis size is <code class="docutils literal notranslate"><span class="pre">(tolerance</span> <span class="pre">*</span> <span class="pre">step_size)</span></code>,</li>
 <li>The minor axis size is <code class="docutils literal notranslate"><span class="pre">((1</span> <span class="pre">-</span> <span class="pre">tolerance)</span> <span class="pre">*</span> <span class="pre">step_size)</span></code>,</li>
 <li>The baseline point is at a center of the ellipse.</li>
+</ul>
+</li>
+<li><code class="docutils literal notranslate"><span class="pre">method</span></code>: it is <code class="docutils literal notranslate"><span class="pre">str</span></code> with possible values:<ul>
+<li><code class="docutils literal notranslate"><span class="pre">t</span></code> or <code class="docutils literal notranslate"><span class="pre">triangle</span></code> for triangular neighbors selection which is fast and recommended for a big dataset,</li>
+<li><code class="docutils literal notranslate"><span class="pre">e</span></code> or <code class="docutils literal notranslate"><span class="pre">ellipse</span></code> for elliptical neighbors selection which is accurate but slow, recommended for a small size datasets.</li>
 </ul>
 </li>
 </ol>
@@ -890,8 +912,8 @@ tolerance.<ul>
 <li>The good idea is to set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to 0.5 and then gradually make it smaller or larger (it depends on the spatial features).</li>
 </ul>
 <p>Now, when we understand how our parameters affect semivariogram bins range, we can start analysis. We will set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to 0.2 in each case to better visualize the effects of a leading direction.</p>
-<div class="section" id="Case-1:-N-S-Direction">
-<h3>Case 1: N-S Direction<a class="headerlink" href="#Case-1:-N-S-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="Case-1:-W-E-Direction">
+<h3>Case 1: W-E Direction<a class="headerlink" href="#Case-1:-W-E-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
@@ -913,18 +935,19 @@ tolerance.<ul>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ns_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">we_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
     <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
 
-<span class="n">ns_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">we_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -936,21 +959,22 @@ tolerance.<ul>
 </div>
 </div>
 </div>
-<div class="section" id="Case-2:-W-E-Direction">
-<h3>Case 2: W-E Direction<a class="headerlink" href="#Case-2:-W-E-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="Case-2:-N-E-Direction">
+<h3>Case 2: N-E Direction<a class="headerlink" href="#Case-2:-N-E-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">we_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
     <span class="n">direction</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
 
-<span class="n">we_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ne_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -962,21 +986,22 @@ tolerance.<ul>
 </div>
 </div>
 </div>
-<div class="section" id="Case-3:-NE-SW-Direction">
-<h3>Case 3: NE-SW Direction<a class="headerlink" href="#Case-3:-NE-SW-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="Case-3:-NW-SE-Direction">
+<h3>Case 3: NW-SE Direction<a class="headerlink" href="#Case-3:-NW-SE-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_sw_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_se_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
     <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
 
-<span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -988,21 +1013,22 @@ tolerance.<ul>
 </div>
 </div>
 </div>
-<div class="section" id="Case-4:-NW-SE-Direction">
-<h3>Case 4: NW-SE Direction<a class="headerlink" href="#Case-4:-NW-SE-Direction" title="Permalink to this heading">¶</a></h3>
+<div class="section" id="Case-4:-NE-SW-Direction">
+<h3>Case 4: NE-SW Direction<a class="headerlink" href="#Case-4:-NE-SW-Direction" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_se_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_sw_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
     <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
 
-<span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1017,7 +1043,7 @@ tolerance.<ul>
 <div class="section" id="Case-5:-Isotropic-Variogram">
 <h3>Case 5: Isotropic Variogram<a class="headerlink" href="#Case-5:-Isotropic-Variogram" title="Permalink to this heading">¶</a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iso_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -1043,14 +1069,14 @@ tolerance.<ul>
 <h2>3) Compare semivariograms<a class="headerlink" href="#3)-Compare-semivariograms" title="Permalink to this heading">¶</a></h2>
 <p>We have created a set of variograms. What did we observe?</p>
 <ul class="simple">
-<li>The <strong>NW-SE</strong> variogram is very weak at describing a short-range variation (compare it to the map of air pollution from the beginning of the tutorial. Points in this direction are rather similar).</li>
-<li>The <strong>W-E</strong> variogram seems to work well for a short range.</li>
-<li>The <strong>N-S</strong> variogram catches too much variability, lags are too short for this direction.</li>
-<li>The <strong>NE-SW</strong> variogram looks good, and shows approximately linear change of variability in a function of distance. It has the smallest variance from all variograms.</li>
+<li>The <strong>NE-SW</strong> variogram is very weak at describing a short-range variation (compare it to the map of air pollution from the beginning of the tutorial. Points in this direction are rather similar).</li>
+<li>The <strong>N-S</strong> variogram seems to work well for a short range.</li>
+<li>The <strong>W-E</strong> variogram catches too much variability, lags are too short for this direction.</li>
+<li>The <strong>NW-SE</strong> variogram looks good, and shows approximately linear change of variability in a function of distance. It has the smallest variance from all variograms.</li>
 </ul>
 <p>We can visualize and compare all variograms at once, that we are sure that the y-axis is the same for every plot.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
@@ -1085,7 +1111,110 @@ tolerance.<ul>
 <img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" />
 </div>
 </div>
-<p>What do you think about this comparison? Do you agree, that the <strong>NE-SW</strong> variogram is the best fit for a data?</p>
+<p>What do you think about this comparison? Do you agree, that the <strong>NW-SE</strong> variogram is the best fit for a data?</p>
+</div>
+<div class="section" id="4)-Bonus:-Compare-calculation-times-and-results">
+<h2>4) Bonus: Compare calculation times and results<a class="headerlink" href="#4)-Bonus:-Compare-calculation-times-and-results" title="Permalink to this heading">¶</a></h2>
+<p>Let’s compare calculation times and results from two methods of neighbors interpolation: <code class="docutils literal notranslate"><span class="pre">t</span></code> (triangular) and <code class="docutils literal notranslate"><span class="pre">e</span></code> (elliptical). We use for it <strong>NW-SE</strong> direction.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0e</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="c1"># Here elliptical</span>
+
+<span class="n">nw_se_variogram_elliptical</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
+<span class="p">)</span>
+
+<span class="n">tfin_e</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0e</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="c1"># Here triangular</span>
+
+<span class="n">nw_se_variogram_triangular</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span>
+<span class="p">)</span>
+
+<span class="n">tfin_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0t</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span> <span class="o">/</span> <span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The triangular method is 1.3064327539647926 times faster than the elliptical selection.
+</pre></div></div>
+</div>
+<p>For this scenario the triangular method is 1.3x faster than the elliptical selection, but with the larger number of points and point pairs this difference will can be greater, and triangular selection is 5x faster for a big datasets.</p>
+<p>Are variograms different? Let’s compare!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
+<span class="n">_nw_se_ell</span> <span class="o">=</span> <span class="n">nw_se_variogram_elliptical</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<span class="n">_nw_se_tri</span> <span class="o">=</span> <span class="n">nw_se_variogram_triangular</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se_ell</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se_tri</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariance models for NW-SE direction.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Elliptical selection&#39;</span><span class="p">,</span> <span class="s1">&#39;Triangular selection&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" />
+</div>
+</div>
+<p>The general shape is the same but variance of a semivariogram from a triangular selection is lower; it is harder to distinguish the covariance between neighboring points, and it could be dangerously close to the nugget effect. You should consider this (especially) in automatic calculations to avoid a strange results or models that are not better than a simple IDW technique.</p>
+<p>But semivariogram for elliptical selection can have a different parameters than for the triangular selection. If you choose a different step size and tolerance, the shape of semivariogram may change and it could better describe dissimilarities.</p>
+<hr class="docutils" />
 </div>
 </div>
 
@@ -1098,8 +1227,8 @@ tolerance.<ul>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-08" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

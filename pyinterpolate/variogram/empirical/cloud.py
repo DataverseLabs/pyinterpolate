@@ -84,12 +84,12 @@ def directional_point_cloud(input_array: np.array,
     max_range : float
                 maximum range of analysis.
 
-    direction : float (in range [0, 360])
-                direction of semivariogram, values from 0 to 360 degrees:
-                * 0 or 180: is NS direction,
-                * 90 or 270 is EW direction,
-                * 45 or 225 is NE-SW direction,
-                * 135 or 315 is NW-SE direction.
+    direction : float
+        Direction of semivariogram, values from 0 to 360 degrees:
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -165,12 +165,11 @@ def build_variogram_point_cloud(input_array: np.array,
         Weights assigned to points, index of weight must be the same as index of point.
 
     direction : float (in range [0, 360]), default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
-
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        Direction of semivariogram, values from 0 to 360 degrees:
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -230,12 +229,12 @@ class VariogramCloud:
         Weights assigned to points, index of weight must be the same as index of point.
 
     direction : float (in range [0, 360]), optional, default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
+        Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of

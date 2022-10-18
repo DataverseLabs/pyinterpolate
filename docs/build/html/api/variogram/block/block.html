@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -225,7 +226,7 @@
 <h1>Block<a class="headerlink" href="#block" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">AggregatedVariogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">aggregated_data</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">point_support</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">log_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">AggregatedVariogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">aggregated_data</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">point_support</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">log_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/aggregated.html#AggregatedVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class calculates semivariance of aggregated counts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -251,12 +252,12 @@ Geometry column with polygons is not used.</li>
 <li>PointSupport</li>
 </ul>
 </dd>
-<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -269,6 +270,8 @@ for 0 tolerance.</p>
 <li>The baseline point is at a center of the ellipse.</li>
 <li><code class="docutils literal notranslate"><span class="pre">agg_tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</li>
 </ul>
+</dd>
+<dt><strong>agg_nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>The nugget of blocks data.</p>
 </dd>
 <dt><strong>variogram_weighting_method</strong><span class="classifier">str, default = “closest”</span></dt><dd><p>Method used to weight error at a given lags. Available methods:</p>
 <ul class="simple">
@@ -307,6 +310,8 @@ Units, Mathematical Geology 40(1), 101-128, 2008</p>
 <dt><strong>agg_tolerance</strong><span class="classifier">float, default = 1</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> parameter.</p>
 </dd>
 <dt><strong>agg_direction</strong><span class="classifier">float, default = 0</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_direction</span></code> parameter.</p>
+</dd>
+<dt><strong>agg_nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">agg_nugget</span></code> parameter.</p>
 </dd>
 <dt><strong>point_support</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">point_support</span></code> parameter.</p>
 </dd>
@@ -534,8 +539,8 @@ semivariance is calculated as:</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-08" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

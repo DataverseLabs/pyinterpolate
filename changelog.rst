@@ -6,6 +6,19 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-10-18
+----------
+
+**version 0.3.3**
+
+* Semivariogram `Deconvolution` takes possible model types as a parameter,
+* Semivariogram `Deconvolution` uses **basic** set of variogram models (*spherical*, *linear*, *power*, *exponential*),
+* New class: `DirectionalVariogram` calculates experimental variograms in four directions along with isotropic variogram,
+* Corrected directions (angles were described wrong 0 degrees is W-E, -90 deg is N-S direction),
+* Directional variogram calculations are faster due to the change of selection method (only non-weighted case in this release),
+* Numpy's `sqrt()` method casts ints into floats (see `Issue 306 <https://github.com/DataverseLabs/pyinterpolate/issues/306>`_),
+* Users can pass a nugget for `autofit()` method of `TheoreticalVariogram()` class, the same for `Deconvolution()` process.
+
 2022-10-08
 ----------
 

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -380,7 +381,7 @@
     <span class="n">bval</span> <span class="o">=</span> <span class="n">block_2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">aval</span> <span class="o">*</span> <span class="n">bval</span>
 
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
     <span class="n">wdist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">w</span>
     <span class="n">distances_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wdist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
@@ -421,8 +422,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

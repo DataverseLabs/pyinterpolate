@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -627,9 +628,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.47717773e+05, 5.31852300e+05, 5.00042839e+01],
-       [2.47323863e+05, 5.30465628e+05, 4.95027008e+01],
-       [2.52893928e+05, 5.52322827e+05, 7.23619156e+01]])
+array([[2.41072366e+05, 5.45673236e+05, 2.37716274e+01],
+       [2.43985371e+05, 5.37952271e+05, 1.69050941e+01],
+       [2.41426973e+05, 5.43785689e+05, 1.81482887e+01]])
 </pre></div></div>
 </div>
 </div>
@@ -726,7 +727,7 @@ array([[2.47717773e+05, 5.31852300e+05, 5.00042839e+01],
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Length of the full training set is 689 records
-Length of the pre-processed training set is 672 records
+Length of the pre-processed training set is 681 records
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -757,7 +758,7 @@ Length of the pre-processed training set is 672 records
 <h2>3) Create the Variogram Point Cloud model for datasets A and B<a class="headerlink" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B" title="Permalink to this heading">¶</a></h2>
 <p>Now we are going one step further, and we will transform both datasets with- and without- outliers and calculate variogram point clouds. Then we compare both clouds.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_variogram_point_cloud</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">number_of_lags</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
@@ -768,7 +769,7 @@ Length of the pre-processed training set is 672 records
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">whole_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
@@ -779,7 +780,7 @@ Length of the pre-processed training set is 672 records
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: initial training dataset</span>
@@ -796,7 +797,7 @@ Length of the pre-processed training set is 672 records
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: pre-processed training dataset</span>
@@ -815,7 +816,7 @@ Length of the pre-processed training set is 672 records
 <p><strong>Clarification:</strong> a quick look into the results shows that calculated semivariances are skewed into significant positive values for each lag, but most profoundly within middle lags (~15:21 km). The processed dataset has lower semivariances than the raw readings, and both variograms have a similar shape.</p>
 <p>In the next cell, we will check a standard deviation of the per lag variances.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -837,40 +838,40 @@ Length of the pre-processed training set is 672 records
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 3669.50
-Standard Deviation raw dataset: 517
-Standard Deviation processed dataset: 491
-Symmetric Mean Absolute Percentage Error of Variances: 5.16
+Lag 3618.85
+Standard Deviation raw dataset: 688
+Standard Deviation processed dataset: 646
+Symmetric Mean Absolute Percentage Error of Variances: 6.30
 
-Lag 7339.00
-Standard Deviation raw dataset: 1073
-Standard Deviation processed dataset: 917
-Symmetric Mean Absolute Percentage Error of Variances: 15.68
+Lag 7237.70
+Standard Deviation raw dataset: 1135
+Standard Deviation processed dataset: 1048
+Symmetric Mean Absolute Percentage Error of Variances: 7.97
 
-Lag 11008.50
-Standard Deviation raw dataset: 1256
-Standard Deviation processed dataset: 1078
-Symmetric Mean Absolute Percentage Error of Variances: 15.25
+Lag 10856.55
+Standard Deviation raw dataset: 1291
+Standard Deviation processed dataset: 1185
+Symmetric Mean Absolute Percentage Error of Variances: 8.56
 
-Lag 14678.00
-Standard Deviation raw dataset: 1336
-Standard Deviation processed dataset: 1117
-Symmetric Mean Absolute Percentage Error of Variances: 17.86
+Lag 14475.40
+Standard Deviation raw dataset: 1324
+Standard Deviation processed dataset: 1198
+Symmetric Mean Absolute Percentage Error of Variances: 9.99
 
-Lag 18347.50
-Standard Deviation raw dataset: 1218
-Standard Deviation processed dataset: 1083
-Symmetric Mean Absolute Percentage Error of Variances: 11.73
+Lag 18094.25
+Standard Deviation raw dataset: 1214
+Standard Deviation processed dataset: 1103
+Symmetric Mean Absolute Percentage Error of Variances: 9.58
 
-Lag 22017.00
-Standard Deviation raw dataset: 977
-Standard Deviation processed dataset: 927
-Symmetric Mean Absolute Percentage Error of Variances: 5.25
+Lag 21713.10
+Standard Deviation raw dataset: 935
+Standard Deviation processed dataset: 887
+Symmetric Mean Absolute Percentage Error of Variances: 5.27
 
-Lag 25686.50
-Standard Deviation raw dataset: 727
-Standard Deviation processed dataset: 695
-Symmetric Mean Absolute Percentage Error of Variances: 4.50
+Lag 25331.95
+Standard Deviation raw dataset: 747
+Standard Deviation processed dataset: 711
+Symmetric Mean Absolute Percentage Error of Variances: 4.94
 
 </pre></div></div>
 </div>
@@ -882,7 +883,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.50
 <h2>4) Remove outliers from the variograms<a class="headerlink" href="#4)-Remove-outliers-from-the-variograms" title="Permalink to this heading">¶</a></h2>
 <p>In this step, we will use <strong>pyinterpolate’s</strong> function <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to build two additional variogram point clouds from the raw and processed datasets. We delete the top part outliers of the <strong>semivariance values</strong> rather than the raw readings.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_without_outliers</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">z_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -891,7 +892,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.50
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
@@ -902,7 +903,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.50
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
@@ -941,7 +942,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.50
 <p><strong>Clarification:</strong> Comparison of multiple variogram clouds could be hard. We see that the largest semivariances are present in the raw data. Heavily processed data has the lowest number of outliers. The medians in each dataset are distributed over a similar pattern. How is it similar? We can check if we transform the variogram point cloud into the experimental semivariogram. Pyinterpolate has a method for it: <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. We use it and compare four plots of
 semivariances to gain more insight into the transformations.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_semivar</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
@@ -952,7 +953,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -987,7 +988,7 @@ semivariances to gain more insight into the transformations.</p>
 <div class="section" id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
 <h2>5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance<a class="headerlink" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit different semivariogram models into prepared datasets and variograms</span>
@@ -1011,7 +1012,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging models</span>
@@ -1035,14 +1036,14 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5407.90it/s]
-100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5445.02it/s]
-100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5456.83it/s]
-100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 5509.44it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 4805.91it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 4734.63it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 4645.33it/s]
+100%|█████████████████████████████████████| 6204/6204 [00:01&lt;00:00, 4529.00it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build test function</span>
@@ -1054,7 +1055,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1062,7 +1063,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1070,7 +1071,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1078,7 +1079,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1086,7 +1087,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r_test</span><span class="p">,</span> <span class="n">cr_test</span><span class="p">,</span> <span class="n">p_test</span><span class="p">,</span> <span class="n">cp_test</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
@@ -1096,7 +1097,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <p>We will use <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method from <strong>pandas</strong> to get the errors statistic:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -1104,7 +1105,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1135,59 +1136,59 @@ semivariances to gain more insight into the transformations.</p>
   <tbody>
     <tr>
       <th>count</th>
-      <td>5.865000e+03</td>
-      <td>5.697000e+03</td>
-      <td>5.793000e+03</td>
-      <td>5.673000e+03</td>
+      <td>6.204000e+03</td>
+      <td>6.204000e+03</td>
+      <td>6.204000e+03</td>
+      <td>6.204000e+03</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>8.890758e+02</td>
-      <td>1.655518e+03</td>
-      <td>2.460849e+03</td>
-      <td>8.198361e+02</td>
+      <td>5.665188e+03</td>
+      <td>2.202982e+05</td>
+      <td>4.574113e+04</td>
+      <td>8.858358e+03</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>1.202719e+04</td>
-      <td>4.026924e+04</td>
-      <td>7.442145e+04</td>
-      <td>2.130540e+04</td>
+      <td>2.264365e+05</td>
+      <td>1.204411e+07</td>
+      <td>2.546163e+06</td>
+      <td>2.601198e+05</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>1.427519e-07</td>
-      <td>1.957235e-06</td>
-      <td>8.005315e-07</td>
-      <td>1.754294e-07</td>
+      <td>5.574657e-10</td>
+      <td>1.309608e-06</td>
+      <td>2.113544e-09</td>
+      <td>3.356806e-07</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>1.277510e+00</td>
-      <td>1.163954e+00</td>
-      <td>1.188368e+00</td>
-      <td>1.150920e+00</td>
+      <td>1.150399e+00</td>
+      <td>1.164448e+00</td>
+      <td>1.186608e+00</td>
+      <td>1.239255e+00</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>9.716801e+00</td>
-      <td>9.337354e+00</td>
-      <td>1.014190e+01</td>
-      <td>9.593948e+00</td>
+      <td>1.011853e+01</td>
+      <td>9.942718e+00</td>
+      <td>9.800573e+00</td>
+      <td>1.057735e+01</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>6.790642e+01</td>
-      <td>6.543025e+01</td>
-      <td>7.095170e+01</td>
-      <td>6.664578e+01</td>
+      <td>8.065953e+01</td>
+      <td>7.199095e+01</td>
+      <td>7.615011e+01</td>
+      <td>8.583480e+01</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>4.671290e+05</td>
-      <td>1.937432e+06</td>
-      <td>4.851418e+06</td>
-      <td>1.421963e+06</td>
+      <td>1.734283e+07</td>
+      <td>9.306800e+08</td>
+      <td>1.994588e+08</td>
+      <td>1.908652e+07</td>
     </tr>
   </tbody>
 </table>
@@ -1210,8 +1211,8 @@ development.</div></blockquote>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-08" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

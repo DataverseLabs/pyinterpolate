@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union
+from typing import Dict, Union, List, Collection
 
 import geopandas as gpd
 import numpy as np
@@ -106,10 +106,10 @@ class Deconvolution:
     direction : float (in range [0, 360])
         Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float (in range [0, 1])
 
@@ -203,10 +203,12 @@ class Deconvolution:
         # Initial variogram parameters
         self.agg_step = None
         self.agg_rng = None
+        self.agg_nugget = None
         self.direction = None
         self.ranges = None
         self.tolerance = None
         self.weighting_method = None
+        self.model_types = None
 
         # Deviation and weights
         self.deviations = []
@@ -251,9 +253,11 @@ class Deconvolution:
             point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
             agg_step_size: float,
             agg_max_range: float,
+            agg_nugget: float = 0,
             agg_direction: float = 0,
             agg_tolerance: float = 1,
-            variogram_weighting_method: str = "closest") -> None:
+            variogram_weighting_method: str = "closest",
+            model_types: Union[str, List] = 'basic') -> None:
         """
         Function fits given areal data variogram into point support variogram - it is the first step of regularization
         process.
@@ -281,13 +285,16 @@ class Deconvolution:
         agg_max_range : float
             Maximal distance of analysis.
 
-        agg_direction : float (in range [0, 360]), optional, default=0
-            A direction of semivariogram, values from 0 to 360 degrees:
+        agg_nugget : float, default = 0
+            The nugget of a data.
 
-            * 0 or 180: is NS direction,
-            * 90 or 270 is EW direction,
-            * 45 or 225 is NE-SW direction,
-            * 135 or 315 is NW-SE direction.
+        agg_direction : float (in range [0, 360]), optional, default=0
+            Direction of semivariogram, values from 0 to 360 degrees:
+
+            - 0 or 180: is E-W,
+            - 90 or 270 is N-S,
+            - 45 or 225 is NW-SE,
+            - 135 or 315 is NE-SW.
 
         agg_tolerance : float (in range [0, 1]), optional, default=1
             If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -307,6 +314,20 @@ class Deconvolution:
             - **closest**: lags at a close range have bigger weights,
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
+
+        model_types : str or List, default='basic'
+            List of modeling functions or a name of a single function. Available models:
+
+            - 'all' - the same as list with all models,
+            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical',
+            - or a different set of the above.
         """
 
         if self.verbose:
@@ -317,10 +338,12 @@ class Deconvolution:
         self.ps = point_support_dataset
         self.agg_step = agg_step_size
         self.agg_rng = agg_max_range
+        self.agg_nugget = agg_nugget
         self.ranges = np.arange(agg_step_size, agg_max_range, agg_step_size)
         self.direction = agg_direction
         self.tolerance = agg_tolerance
         self.weighting_method = variogram_weighting_method
+        self.model_types = self._parse_model_types(model_types)
 
         # Compute experimental variogram of areal data
         areal_centroids = get_areal_centroids_from_agg(self.agg)
@@ -337,7 +360,8 @@ class Deconvolution:
         theo_model_agg = TheoreticalVariogram()
         theo_model_agg.autofit(
             self.initial_experimental_variogram,
-            model_types='all',
+            nugget=self.agg_nugget,
+            model_types=self.model_types,
             deviation_weighting=self.weighting_method
         )
         self.initial_theoretical_agg_model = theo_model_agg
@@ -352,6 +376,7 @@ class Deconvolution:
             aggregated_data=self.agg,
             agg_step_size=self.agg_step,
             agg_max_range=self.agg_rng,
+            agg_nugget=self.agg_nugget,
             point_support=self.ps,
             theoretical_block_model=self.initial_theoretical_agg_model,
             experimental_block_variogram=self.initial_experimental_variogram.experimental_semivariance_array,
@@ -450,8 +475,9 @@ class Deconvolution:
                 temp_theoretical_semivariogram_model = TheoreticalVariogram()
                 temp_theoretical_semivariogram_model.autofit(
                     self._rescaled_to_exp_variogram(rescaled_experimental_variogram),
-                    model_types='all',
+                    model_types=self.model_types,
                     rang=self.initial_theoretical_agg_model.rang,
+                    nugget=self.agg_nugget,
                     deviation_weighting=self.weighting_method
                 )
 
@@ -460,6 +486,7 @@ class Deconvolution:
                     aggregated_data=self.agg,
                     agg_step_size=self.agg_step,
                     agg_max_range=self.agg_rng,
+                    agg_nugget=self.agg_nugget,
                     point_support=self.ps,
                     theoretical_block_model=temp_theoretical_semivariogram_model,
                     experimental_block_variogram=rescaled_experimental_variogram,
@@ -503,9 +530,11 @@ class Deconvolution:
                       point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                       agg_step_size: float,
                       agg_max_range: float,
+                      agg_nugget: float = 0,
                       agg_direction: float = 0,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
+                      model_types: Union[str, List] = 'basic',
                       max_iters=25,
                       limit_deviation_ratio=0.1,
                       minimum_deviation_decrease=0.01,
@@ -536,13 +565,16 @@ class Deconvolution:
         agg_max_range : float
             Maximal distance of analysis.
 
-        agg_direction : float (in range [0, 360]), default=0
-            A direction of semivariogram, values from 0 to 360 degrees:
+        agg_nugget : float, default = 0
+            The nugget of a dataset.
 
-            * 0 or 180: is NS direction,
-            * 90 or 270 is EW direction,
-            * 45 or 225 is NE-SW direction,
-            * 135 or 315 is NW-SE direction.
+        agg_direction : float (in range [0, 360]), default=0
+            Direction of semivariogram, values from 0 to 360 degrees:
+
+            - 0 or 180: is E-W,
+            - 90 or 270 is N-S,
+            - 45 or 225 is NW-SE,
+            - 135 or 315 is NE-SW.
 
         agg_tolerance : float (in range [0, 1]), optional, default=1
             If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -563,6 +595,20 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
+        model_types : str or List, default='basic'
+            List of modeling functions or a name of a single function. Available models:
+
+            - 'all' - the same as list with all models,
+            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'circular',
+            - 'cubic',
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical',
+            - or a different set of the above.
+
         max_iters : int, default = 25
             Maximum number of iterations.
 
@@ -582,9 +628,11 @@ class Deconvolution:
                  point_support_dataset=point_support_dataset,
                  agg_step_size=agg_step_size,
                  agg_max_range=agg_max_range,
+                 agg_nugget=agg_nugget,
                  agg_direction=agg_direction,
                  agg_tolerance=agg_tolerance,
-                 variogram_weighting_method=variogram_weighting_method)
+                 variogram_weighting_method=variogram_weighting_method,
+                 model_types=model_types)
 
         self.transform(max_iters=max_iters,
                        limit_deviation_ratio=limit_deviation_ratio,
@@ -716,6 +764,51 @@ class Deconvolution:
         if dev_ratio <= self.min_deviation_ratio:
             return True
         return False
+
+    @staticmethod
+    def _parse_model_types(model_types):
+        """
+        The first level check and parser for model types.
+
+        Parameters
+        ----------
+        model_types : List or str
+
+        Returns
+        -------
+        mtypes : List
+        """
+
+        all_models = [
+                    'circular',
+                    'cubic',
+                    'exponential',
+                    'gaussian',
+                    'linear',
+                    'power',
+                    'spherical'
+        ]
+
+        basic_models = [
+            'exponential',
+            'linear',
+            'power',
+            'spherical'
+        ]
+
+        if isinstance(model_types, str):
+            if model_types == 'all':
+                return all_models
+            elif model_types == 'basic':
+                return basic_models
+            else:
+                return [model_types]
+
+        elif isinstance(model_types, Collection):
+            return model_types
+
+        else:
+            raise TypeError('Unknown Type of the input, model_types parameter takes str or List as an input.')
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
         """

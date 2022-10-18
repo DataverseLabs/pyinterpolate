@@ -50,7 +50,7 @@ class TestSemivariance(unittest.TestCase):
     def test_calculate_semivariance_SN_lag1(self):
         ss = 1
         mr = 2
-        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=0, tolerance=0.1)
+        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=0, tolerance=0.1, method='e')
         lag1_test_value = smv[0][1]
         expected_output = sem_data.output_armstrong_ns_lag1
         err_msg = f'Calculated semivariance for lag 1 should be equal to {expected_output} for ' \
@@ -60,7 +60,7 @@ class TestSemivariance(unittest.TestCase):
     def test_calculate_semivariance_WE_lag1(self):
         ss = 1
         mr = 2
-        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=90, tolerance=0.1)
+        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=90, tolerance=0.1, method='e')
         lag1_test_value = smv[0][1]
         expected_output = sem_data.output_armstrong_we_lag1
         err_msg = f'Calculated semivariance for lag 1 should be equal to {expected_output} for ' \
@@ -70,7 +70,7 @@ class TestSemivariance(unittest.TestCase):
     def test_calculate_semivariance_NW_SE_lag2(self):
         ss = 1
         mr = 4
-        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=135, tolerance=0.01)
+        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=135, tolerance=0.01, method='e')
         lag2_test_value = smv[1][1]
         expected_output = sem_data.output_armstrong_nw_se_lag2
         err_msg = f'Calculated semivariance for lag 2 should be equal to {expected_output} for ' \
@@ -80,7 +80,7 @@ class TestSemivariance(unittest.TestCase):
     def test_calculate_semivariance_NE_SW_lag2(self):
         ss = 1
         mr = 3
-        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=45, tolerance=0.01)
+        smv = calculate_semivariance(armstrong_arr, ss, mr, direction=45, tolerance=0.01, method='e')
         lag2_test_value = smv[1][1]
         expected_output = sem_data.output_armstrong_ne_sw_lag2
         err_msg = f'Calculated semivariance for lag 2 should be equal to {expected_output} for ' \
@@ -108,7 +108,7 @@ class TestSemivariance(unittest.TestCase):
         weight_arr = _input[1]
         ss = 2
         mr = 7
-        smv = calculate_semivariance(arr, ss, mr, weights=weight_arr[:, -1], direction=45, tolerance=0.01)
+        smv = calculate_semivariance(arr, ss, mr, weights=weight_arr[:, -1], direction=45, tolerance=0.01, method='e')
         expected_output = sem_data.directional_output_weighted
         arr_check = np.allclose(smv, expected_output, rtol=0.1)
         err_msg = f'Given arrays are not equal. Expected output for directional weighted semivariogram is ' \

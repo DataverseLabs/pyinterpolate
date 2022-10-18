@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -62,7 +63,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -288,10 +289,10 @@ Geometry column with polygons is not used and optional.</li>
 </dd>
 <dt><strong>direction</strong><span class="classifier">float (in range [0, 360])</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1])</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -386,7 +387,7 @@ for 0 tolerance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">agg_dataset</span></span></em>, <em><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">agg_dataset</span></span></em>, <em><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'basic'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function fits given areal data variogram into point support variogram - it is the first step of regularization
 process.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -413,12 +414,14 @@ Geometry column with polygons is not used.</li>
 </dd>
 <dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
 </dd>
-<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>agg_nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>The nugget of a data.</p>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -440,6 +443,20 @@ for 0 tolerance.</p>
 <li><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</li>
 </ul>
 </dd>
+<dt><strong>model_types</strong><span class="classifier">str or List, default=’basic’</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<ul class="simple">
+<li>‘all’ - the same as list with all models,</li>
+<li>‘basic’ - [‘exponential’, ‘linear’, ‘power’, ‘spherical’],</li>
+<li>‘circular’,</li>
+<li>‘cubic’,</li>
+<li>‘exponential’,</li>
+<li>‘gaussian’,</li>
+<li>‘linear’,</li>
+<li>‘power’,</li>
+<li>‘spherical’,</li>
+<li>or a different set of the above.</li>
+</ul>
+</dd>
 </dl>
 </td>
 </tr>
@@ -449,7 +466,7 @@ for 0 tolerance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">agg_dataset</span></span></em>, <em><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">agg_dataset</span></span></em>, <em><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em><span class="n"><span class="pre">agg_step_size</span></span></em>, <em><span class="n"><span class="pre">agg_max_range</span></span></em>, <em><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'basic'</span></span></em>, <em><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Method performs <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">transform()</span></code> operations at once.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -475,12 +492,14 @@ Geometry column with polygons is not used.</li>
 </dd>
 <dt><strong>agg_max_range</strong><span class="classifier">float</span></dt><dd><p>Maximal distance of analysis.</p>
 </dd>
-<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>agg_nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>The nugget of a dataset.</p>
+</dd>
+<dt><strong>agg_direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>agg_tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">agg_tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -500,6 +519,20 @@ for 0 tolerance.</p>
 <li><strong>closest</strong>: lags at a close range have bigger weights,</li>
 <li><strong>distant</strong>: lags that are further away have bigger weights,</li>
 <li><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</li>
+</ul>
+</dd>
+<dt><strong>model_types</strong><span class="classifier">str or List, default=’basic’</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<ul class="simple">
+<li>‘all’ - the same as list with all models,</li>
+<li>‘basic’ - [‘exponential’, ‘linear’, ‘power’, ‘spherical’],</li>
+<li>‘circular’,</li>
+<li>‘cubic’,</li>
+<li>‘exponential’,</li>
+<li>‘gaussian’,</li>
+<li>‘linear’,</li>
+<li>‘power’,</li>
+<li>‘spherical’,</li>
+<li>or a different set of the above.</li>
 </ul>
 </dd>
 <dt><strong>max_iters</strong><span class="classifier">int, default = 25</span></dt><dd><p>Maximum number of iterations.</p>
@@ -574,8 +607,8 @@ Parameter must be set within the limits <code class="docutils literal notranslat
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-08" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
