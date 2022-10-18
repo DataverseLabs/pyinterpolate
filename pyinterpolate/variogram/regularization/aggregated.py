@@ -4,6 +4,8 @@ Class to work with blocks & point support datasets and transformations.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
+
+# TODO: include nugget here
 """
 from copy import deepcopy
 from typing import Dict, Union
@@ -54,12 +56,12 @@ class AggregatedVariogram:
         * PointSupport
 
     agg_direction : float (in range [0, 360]), default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
+        Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -71,6 +73,9 @@ class AggregatedVariogram:
         * The minor axis size is ``agg_tolerance * agg_step_size``
         * The baseline point is at a center of the ellipse.
         * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.
+
+    agg_nugget : float, default = 0
+        The nugget of blocks data.
 
     variogram_weighting_method : str, default = "closest"
         Method used to weight error at a given lags. Available methods:
@@ -106,6 +111,9 @@ class AggregatedVariogram:
 
     agg_direction : float, default = 0
         See ``agg_direction`` parameter.
+
+    agg_nugget : float, default = 0
+        See ``agg_nugget`` parameter.
 
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
         See the ``point_support`` parameter.
@@ -167,6 +175,7 @@ class AggregatedVariogram:
                  point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                  agg_direction: float = 0,
                  agg_tolerance: float = 1,
+                 agg_nugget: float = 0,
                  variogram_weighting_method: str = 'closest',
                  verbose: bool = False,
                  log_process: bool = False):
@@ -174,6 +183,7 @@ class AggregatedVariogram:
         self.aggregated_data = aggregated_data
         self.agg_step_size = agg_step_size
         self.agg_max_range = agg_max_range
+        self.agg_nugget = agg_nugget
         self.agg_lags = np.arange(self.agg_step_size, self.agg_max_range, self.agg_step_size)
         self.agg_tolerance = agg_tolerance
         self.agg_direction = agg_direction
@@ -458,6 +468,7 @@ class AggregatedVariogram:
         theoretical_model = TheoreticalVariogram()
         theoretical_model.autofit(
             experimental_variogram=self.experimental_variogram,
+            nugget=self.agg_nugget,
             model_types='all',
             deviation_weighting=self.weighting_method
         )
@@ -491,6 +502,7 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
                agg_step_size: float,
                agg_max_range: float,
                point_support: Dict,
+               agg_nugget: float = 0,
                average_inblock_semivariances=None,
                semivariance_between_point_supports=None,
                experimental_block_variogram=None,
@@ -520,6 +532,21 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
     agg_max_range : float
         Maximal distance of analysis.
 
+    agg_nugget : float, default = 0
+        The nugget of blocks data.
+
+    average_inblock_semivariances : np.ndarray, default = None
+        The mean semivariance between the blocks. See Notes to learn more.
+
+    semivariance_between_point_supports : np.ndarray, default = None
+        Semivariance between all blocks calculated from the theoretical model.
+
+    experimental_block_variogram : np.ndarray, default = None
+        The experimental semivariance between area centroids.
+
+    theoretical_block_model : TheoreticalVariogram, default = None
+        A modeled variogram.
+
     point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
 
         * Dict: ``{block id: [[point x, point y, value]]}``
@@ -528,12 +555,12 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
         * PointSupport
 
     agg_direction : float (in range [0, 360]), default=0
-        A direction of semivariogram, values from 0 to 360 degrees:
+        Direction of semivariogram, values from 0 to 360 degrees:
 
-        * 0 or 180: is NS direction,
-        * 90 or 270 is EW direction,
-        * 45 or 225 is NE-SW direction,
-        * 135 or 315 is NW-SE direction.
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -581,6 +608,7 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
                                   point_support,
                                   agg_direction,
                                   agg_tolerance,
+                                  agg_nugget,
                                   variogram_weighting_method,
                                   verbose,
                                   log_process)

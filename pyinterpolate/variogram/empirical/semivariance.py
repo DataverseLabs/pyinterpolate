@@ -6,7 +6,8 @@ Authors
 1. Szymon Moliński | @SimonMolinsky
 """
 import numpy as np
-from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
+from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range, \
+    generate_triangles, select_points_within_triangle
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance, \
     validate_weights
 
@@ -108,11 +109,12 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
               the semivariogram is weighted by those.
 
     direction : float
-                Direction of semivariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -184,12 +186,188 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
     return output_semivariances
 
 
+def _from_ellipse_non_weighted(points: np.array, lags: np.array, step_size: float, direction, tolerance):
+    """
+    Function calculates semivariance from elliptical neighborhoods.
+
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value].
+
+    lags : numpy array
+           Array with lags.
+
+    step_size : float
+                Distance between lags.
+
+    direction : float
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
+
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
+
+    Returns
+    -------
+    output_semivariances : numpy array
+        ``[lag, semivariance, number of point pairs]``
+    """
+    semivariances_and_lags = list()
+
+    for h in lags:
+        semivars_per_lag = []
+
+        for point in points:
+            coordinates = point[:-1]
+
+            mask = select_points_within_ellipse(
+                coordinates,
+                points[:, :-1],
+                h,
+                step_size,
+                direction,
+                tolerance
+            )
+
+            points_in_range = points[mask, -1]
+
+            # Calculate semivariances
+            if len(points_in_range) > 0:
+                semivars = (points_in_range - point[-1]) ** 2
+                semivars_per_lag.extend(semivars)
+
+        if len(semivars_per_lag) == 0:
+            if h == lags[0]:
+                semivariances_and_lags.append([h, 0, 0])
+            else:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
+            # TODO: remove comment below after tests
+            # semivariances_and_lags.append([h, 0, 0])
+        else:
+            average_semivariance = np.mean(semivars_per_lag) / 2
+            semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
+
+    output_semivariances = np.array(semivariances_and_lags)
+    return output_semivariances
+
+
+def create_triangles_mask(old_mask, new_mask):
+    mask = []
+    for idx, val in enumerate(new_mask):
+        if old_mask[idx]:
+            mask.append(False)
+        else:
+            if val:
+                mask.append(True)
+            else:
+                mask.append(False)
+    return mask
+
+
+def _from_triangle_non_weighted(points: np.array, lags: np.array, direction, tolerance):
+    """
+    Function calculates semivariance from elliptical neighborhoods.
+
+    Parameters
+    ----------
+    points : numpy array
+             Coordinates and their values: [pt x, pt y, value] or [Point(), value].
+
+    lags : numpy array
+           Array with lags.
+
+    step_size : float
+                Distance between lags.
+
+    direction : float
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
+
+    tolerance : float, default=1
+                Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
+                to 0 then points must be placed at a single line with beginning in the origin of coordinate system
+                and angle given by y axis and direction parameter.
+                    * The major axis length == step_size,
+                    * The minor axis size == tolerance * step_size.
+                    * Tolerance == 1 creates the omnidirectional semivariogram.
+
+    Returns
+    -------
+    output_semivariances : numpy array
+        ``[lag, semivariance, number of point pairs]``
+    """
+    semivariances_and_lags = list()
+
+    old_mask = None
+
+    for h in lags:
+        semivars_per_lag = []
+        trs = generate_triangles(points[:, :-1], h, direction, tolerance)
+        if h == lags[0]:
+            for idx, pt in enumerate(points):
+                tr = trs[idx]
+                points_in_triangle_a = select_points_within_triangle(tr[0], points[:, :-1])
+                points_in_triangle_b = select_points_within_triangle(tr[1], points[:, :-1])
+                mask = np.logical_or(points_in_triangle_a, points_in_triangle_b)
+                # Update last mask
+                old_mask = mask.copy()
+                points_in_range = points[mask]
+                values_in_range = points_in_range[:, -1]
+                # Calculate semivariances
+                if len(values_in_range) > 0:
+                    semivars = (values_in_range - pt[-1]) ** 2
+                    semivars_per_lag.extend(semivars)
+            if len(semivars_per_lag) == 0:
+                semivariances_and_lags.append([h, 0, 0])
+            else:
+                average_semivariance = np.mean(semivars_per_lag) / 2
+                semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
+        else:
+            for idx, pt in enumerate(points):
+                tr = trs[idx]
+                points_in_triangle_a = select_points_within_triangle(tr[0], points[:, :-1])
+                points_in_triangle_b = select_points_within_triangle(tr[1], points[:, :-1])
+                new_mask = np.logical_or(points_in_triangle_a, points_in_triangle_b)
+                mask = create_triangles_mask(old_mask, new_mask)
+                old_mask = new_mask.copy()
+                points_in_range = points[mask]
+                values_in_range = points_in_range[:, -1]
+                if len(values_in_range) > 0:
+                    semivars = (values_in_range - pt[-1]) ** 2
+                    semivars_per_lag.extend(semivars)
+            if len(semivars_per_lag) == 0:
+                msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
+                raise RuntimeError(msg)
+            else:
+                average_semivariance = np.mean(semivars_per_lag) / 2
+                semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
+
+    output_semivariances = np.array(semivariances_and_lags)
+    return output_semivariances
+
+
 def directional_semivariogram(points: np.array,
                               lags: np.array,
                               step_size: float,
                               weights,
                               direction,
-                              tolerance) -> np.array:
+                              tolerance,
+                              method='triangle') -> np.array:
     """Function calculates directional semivariogram from a given set of points.
 
     Parameters
@@ -208,11 +386,11 @@ def directional_semivariogram(points: np.array,
               the semivariogram is weighted by those.
 
     direction : float
-                Direction of semivariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+        Direction of semivariogram, values from 0 to 360 degrees:
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -222,53 +400,30 @@ def directional_semivariogram(points: np.array,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
 
+    method : str, default = triangular
+        The method used for neighbors selection. Available methods:
+
+        * "triangle" or "t", default method where a point neighbors are selected from a triangular area,
+        * "ellipse" or "e", the most accurate method but also the slowest one.
+
     Returns
     -------
     : (numpy array)
       [lag, semivariance, number of points within a lag]
     """
 
+    output_semivariances = np.array([])
+
     if weights is None:
-        semivariances_and_lags = list()
-
-        for h in lags:
-            semivars_per_lag = []
-            for point in points:
-                coordinates = point[:-1]
-
-                mask = select_points_within_ellipse(
-                    coordinates,
-                    points[:, :-1],
-                    h,
-                    step_size,
-                    direction,
-                    tolerance
-                )
-
-                points_in_range = points[mask, -1]
-
-                # Calculate semivariances
-                if len(points_in_range) > 0:
-                    semivars = (points_in_range - point[-1]) ** 2
-                    semivars_per_lag.extend(semivars)
-
-            if len(semivars_per_lag) == 0:
-                if h == lags[0]:
-                    semivariances_and_lags.append([h, 0, 0])
-                else:
-                    msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
-                    raise RuntimeError(msg)
-                # TODO: remove comment below after tests
-                # semivariances_and_lags.append([h, 0, 0])
-            else:
-                average_semivariance = np.mean(semivars_per_lag) / 2
-                semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
-
-        output_semivariances = np.array(semivariances_and_lags)
+        if method == "e" or method == "ellipse":
+            output_semivariances = _from_ellipse_non_weighted(points, lags, step_size, direction, tolerance)
+        elif method == "t" or method == "triangle":
+            output_semivariances = _from_triangle_non_weighted(points, lags, direction, tolerance)
     else:
         output_semivariances = _calculate_weighted_directional_semivariogram(
             points, lags, step_size, weights, direction, tolerance
         )
+
     return output_semivariances
 
 
@@ -277,7 +432,8 @@ def calculate_semivariance(points: np.array,
                            max_range: float,
                            weights=None,
                            direction=0,
-                           tolerance=1) -> np.array:
+                           tolerance=1,
+                           method='t') -> np.array:
     """Function calculates semivariance from given points. In a default mode it calculates non-weighted and
        omnidirectional semivariance. User may provide weights to additionally weight points by a specific factor.
        User can calculate directional semivariogram with a specified tolerance.
@@ -297,12 +453,12 @@ def calculate_semivariance(points: np.array,
               Weights assigned to points, index of weight must be the same as index of point, if provided then
               the semivariogram is weighted by those.
 
-    direction : float, default=0
-                Direction of semivariogram, values from 0 to 360 degrees:
-                    - 0 or 180: is NS,
-                    - 90 or 270 is EW,
-                    - 45 or 225 is NE-SW,
-                    - 135 or 315 is NW-SE.
+    direction : float
+        Direction of semivariogram, values from 0 to 360 degrees:
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NW-SE,
+        - 135 or 315 is NE-SW.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -311,6 +467,12 @@ def calculate_semivariance(points: np.array,
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
+
+    method : str, default = triangular
+        The method used for neighbors selection. Available methods:
+
+        * "triangle" or "t", default method where a point neighbors are selected from a triangular area,
+        * "ellipse" or "e", the most accurate method but also the slowest one.
 
     Returns
     -------
@@ -427,6 +589,6 @@ def calculate_semivariance(points: np.array,
     if tolerance == 1:
         semivariance = omnidirectional_semivariogram(points, lags, step_size, weights)
     else:
-        semivariance = directional_semivariogram(points, lags, step_size, weights, direction, tolerance)
+        semivariance = directional_semivariogram(points, lags, step_size, weights, direction, tolerance, method=method)
     # END:CALCULATIONS
     return semivariance

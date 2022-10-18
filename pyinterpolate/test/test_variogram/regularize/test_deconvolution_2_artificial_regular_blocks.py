@@ -34,7 +34,8 @@ class TestDeconvolution(unittest.TestCase):
         dcv.fit(agg_dataset=AREAL_INPUT,
                 point_support_dataset=POINT_SUPPORT_INPUT,
                 agg_step_size=STEP_SIZE,
-                agg_max_range=MAX_RANGE)
+                agg_max_range=MAX_RANGE,
+                model_types='all')
 
         fitted = dcv.initial_regularized_variogram
         initial_deviation = dcv.initial_deviation
@@ -53,7 +54,8 @@ class TestDeconvolution(unittest.TestCase):
                 point_support_dataset=POINT_SUPPORT_INPUT,
                 agg_step_size=STEP_SIZE,
                 agg_max_range=MAX_RANGE,
-                variogram_weighting_method='closest')
+                variogram_weighting_method='closest',
+                model_types='all')
 
         self.assertTrue(dcv.initial_theoretical_agg_model is not None)
 

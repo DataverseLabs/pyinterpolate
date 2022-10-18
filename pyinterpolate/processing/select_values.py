@@ -5,9 +5,10 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Iterable, Dict, Union
+from typing import Iterable, Dict, Union, Tuple, List
 
 import geopandas as gpd
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -31,6 +32,7 @@ def _rotation_matrix(angle: float) -> np.array:
     : numpy array
         The rotation matrix.
     """
+    # angle = angle - 90
     theta = np.radians(angle)
     e_major_rot = [np.cos(theta), -np.sin(theta)]
     e_minor_rot = [np.sin(theta), np.cos(theta)]
@@ -87,7 +89,7 @@ def select_points_within_ellipse(ellipse_center: np.array,
     """Function checks which points from other points are within point range described as an ellipse with
     center in point, semi-major axis of length step_size and semi-minor axis of length
     step_size * tolerance and angle of semi-major axis calculated as angle of direction from
-    NS axis (0 radian angle) of a dataset.
+    WE axis (0 radian angle) of a dataset.
 
     Parameters
     ----------
@@ -103,7 +105,7 @@ def select_points_within_ellipse(ellipse_center: np.array,
                 Step size between lags.
 
     theta : float
-            Angle from y axis clockwise (N-S is a 0).
+            Angle from y axis clockwise (W-E is a 0).
 
     minor_axis_size : float
                       Fraction of the major axis size.
@@ -133,6 +135,124 @@ def select_points_within_ellipse(ellipse_center: np.array,
     current_ellipse = _select_distances(vector_distance, w_matrix, lag, step_size)
 
     return current_ellipse
+
+
+def _rotate_and_translate(points, angle, distance):
+    """
+    Function rotates and translates a set of points.
+
+    Parameters
+    ----------
+    points : numpy array
+        ``[x, y]`` coordinates.
+
+    angle : float
+        Angle of rotation in radians.
+
+    distance : float
+        The distance of translation.
+
+    Returns
+    -------
+    : numpy array
+        Rotated points.
+    """
+    points_x1 = points[:, 0] + distance * np.cos(angle)
+    points_y1 = points[:, 1] + distance * np.sin(angle)
+
+    npoints = np.column_stack((points_x1, points_y1))
+    return npoints
+
+
+def generate_triangles(points: np.ndarray, step_size: float, angle: float, tolerance: float) -> List:
+    """Function creates triangles to select points within.
+
+    Parameters
+    ----------
+    points : numpy array
+        The points to find their neighbors.
+
+    Returns
+    -------
+    triangles : List
+        The list of triangle tuples (three coordinates per polygon and its inverted version).
+        ``[triangle, inverted traingle]``
+
+    Notes
+    -----
+    Each triangle width is equal to ``step_size * tolerance``, and baseline point is placed in the middle of a
+    triangle's base. The height of a triangle is equal to step size. Angle points triangle to a specific direction on
+    a cartesian plane.
+    """
+
+    base_width = (step_size * tolerance)
+    t_height = step_size
+
+    angle = np.radians(angle)
+    rot_90 = np.pi / 2
+
+    apex = _rotate_and_translate(points, angle, t_height)
+    inv_apex = _rotate_and_translate(points, angle, -t_height)
+    base_a = _rotate_and_translate(
+        points, angle + rot_90, base_width
+    )
+    base_b = _rotate_and_translate(
+        points, angle - rot_90, base_width
+    )
+
+    triangles = []
+    for idx, vertex in enumerate(apex):
+        triangle = (
+            (base_a[idx][0], base_a[idx][1]),
+            (vertex[0], vertex[1]),
+            (base_b[idx][0], base_b[idx][1])
+        )
+        inv_triangle = (
+            (base_a[idx][0], base_a[idx][1]),
+            (inv_apex[idx][0], inv_apex[idx][1]),
+            (base_b[idx][0], base_b[idx][1])
+        )
+
+        triangles.append([triangle, inv_triangle])
+
+    return triangles
+
+
+def select_points_within_triangle(triangle: Tuple,
+                                  points: np.ndarray) -> np.ndarray:
+    """
+    Function selects points within a triangle.
+
+    Parameters
+    ----------
+    triangle : Tuple
+        ``((x1, y1), (x2, y2), (x3, y3))``
+
+    points : numpy array
+        The set of points to test.
+
+    Returns
+    -------
+    : numpy array
+        Boolean array of points within a triangle.
+    """
+    ax, ay = triangle[0]
+    bx, by = triangle[1]
+    cx, cy = triangle[2]
+
+    s1 = (points[:, 0] - bx) * (ay - by) - (ax - bx) * (points[:, 1] - by)
+    s2 = (points[:, 0] - cx) * (by - cy) - (bx - cx) * (points[:, 1] - cy)
+    s3 = (points[:, 0] - ax) * (cy - ay) - (cx - ax) * (points[:, 1] - ay)
+
+    s1t = s1 < 0
+    s2t = s2 < 0
+    s3t = s3 < 0
+
+    stest_2a = np.logical_and.reduce((s1t, s2t, s3t))
+    stest_2b = np.logical_and.reduce((~s1t, ~s2t, ~s3t))
+    stest = np.logical_or(stest_2a, stest_2b)
+
+    return stest
 
 
 def select_values_in_range(data, lag, step_size):
@@ -619,3 +739,44 @@ def _parse_pk_input(centroids_and_values, distances):
 
     data = np.array(data)
     return data
+
+
+if __name__ == '__main__':
+    points = np.array([
+        [0, 0],
+        [1, 1],
+        [2, 2],
+        [0, 1],
+        [0, 2],
+        [1, 0],
+        [1, 2],
+        [2, 0],
+        [2, 1]
+    ])
+
+    # TRIANGLE
+    # triangle = (
+    #     (-2, -2), (2, -2), (0, 4)
+    # )
+    #
+    # result = select_points_within_triangle(triangle, 0, points)
+    #
+    # pr = points[result]
+    # tarr = np.array(triangle)
+    # plt.figure()
+    # plt.scatter(tarr[:, 0], tarr[:, 1])
+    # plt.scatter(pr[:, 0], pr[:, 1], c='red')
+    # plt.show()
+    # print(result)
+
+    # generate triangles
+    # triangles = generate_triangles(points, 10, 350, tolerance=0.8)
+    #
+    # tarr = np.array(triangles[0])
+    # invtarr = np.array(triangles[1])
+    # plt.figure()
+    #
+    # plt.scatter(tarr[:, 0], tarr[:, 1])
+    # plt.scatter(points[0][0], points[0][1])
+    # plt.scatter(invtarr[:, 0], invtarr[:, 1])
+    # plt.show()
