@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -65,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -226,7 +226,7 @@
 <h1>Experimental<a class="headerlink" href="#experimental" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">build_experimental_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">input_array</span></span></em>, <em><span class="n"><span class="pre">step_size</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span></em>, <em><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#build_experimental_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">build_experimental_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">input_array</span></span></em>, <em><span class="n"><span class="pre">step_size</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span></em>, <em><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#build_experimental_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><dl class="docutils">
 <dt>Function prepares:</dt><dd><ul class="simple">
 <li>experimental semivariogram,</li>
@@ -248,12 +248,12 @@
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array or None, optional, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default = 0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default = 0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -265,6 +265,12 @@ for 0 tolerance:</p>
 <li>the minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code>,</li>
 <li>the baseline point is at a center of the ellipse,</li>
 <li>the <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</li>
+</ul>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default = triangular</span></dt><dd><p>The method used for neighbors selection. Available methods:</p>
+<ul class="simple">
+<li>“triangle” or “t”, default method where a point neighbors are selected from a triangular area,</li>
+<li>“ellipse” or “e”, the most accurate method but also the slowest one.</li>
 </ul>
 </dd>
 </dl>
@@ -341,13 +347,11 @@ from a given dataset.</p>
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array or None, optional, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
-<ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
-</ul>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:
+- 0 or 180: is E-W,
+- 90 or 270 is N-S,
+- 45 or 225 is NW-SE,
+- 135 or 315 is NE-SW.</p>
 </dd>
 <dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
 the coordinate system and the angle given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then
@@ -376,7 +380,7 @@ for 0 tolerance.</p>
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">ExperimentalVariogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">input_array</span></span></em>, <em><span class="n"><span class="pre">step_size</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span></em>, <em><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em><span class="n"><span class="pre">is_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">is_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">is_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#ExperimentalVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">ExperimentalVariogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">input_array</span></span></em>, <em><span class="n"><span class="pre">step_size</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span></em>, <em><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em>, <em><span class="n"><span class="pre">is_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">is_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">is_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#ExperimentalVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class calculates Experimental Semivariogram and Experimental Covariogram of a given dataset.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -395,12 +399,12 @@ for 0 tolerance.</p>
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -412,6 +416,12 @@ for 0 tolerance.</p>
 <li>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></li>
 <li>The baseline point is at a center of the ellipse.</li>
 <li>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</li>
+</ul>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default = triangular</span></dt><dd><p>The method used for neighbors selection. Available methods:</p>
+<ul class="simple">
+<li>“triangle” or “t”, default method where a point neighbors are selected from a triangular area,</li>
+<li>“ellipse” or “e”, the most accurate method but also the slowest one.</li>
 </ul>
 </dd>
 <dt><strong>is_semivariance</strong><span class="classifier">bool, optional, default=True</span></dt><dd><p>Should semivariance be calculated?</p>
@@ -506,6 +516,8 @@ for each distance bin) and if the semivariogram has the upper bound.</p>
 </dd>
 <dt><strong>tol</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
 </dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>See the <code class="docutils literal notranslate"><span class="pre">method</span></code> parameter.</p>
+</dd>
 </dl>
 </td>
 </tr>
@@ -545,7 +557,7 @@ not plotted and warning is printed.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
 <dt>AttributeSetToFalseWarning</dt><dd><p>Warning invoked when plotting parameter for semivariance, covariance or variance is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> but
-class atrributes to calculate those indices are set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+class attributes to calculate those indices are set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </dd>
 </dl>
 </td>
@@ -574,12 +586,12 @@ class atrributes to calculate those indices are set to <code class="docutils lit
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array or None, optional, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>A direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), optional, default=0</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
-<li>0 or 180: is NS direction,</li>
-<li>90 or 270 is EW direction,</li>
-<li>45 or 225 is NE-SW direction,</li>
-<li>135 or 315 is NW-SE direction.</li>
+<li>0 or 180: is E-W,</li>
+<li>90 or 270 is N-S,</li>
+<li>45 or 225 is NW-SE,</li>
+<li>135 or 315 is NE-SW.</li>
 </ul>
 </dd>
 <dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
@@ -810,7 +822,7 @@ nothing. Else new VariogramCloud object is returned.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-10" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 

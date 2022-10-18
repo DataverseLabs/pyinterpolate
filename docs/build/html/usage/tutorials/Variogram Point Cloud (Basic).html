@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -65,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -523,31 +523,35 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>2022-08-17</td>
+<tr class="row-even"><td>2022-10-17</td>
+<td>Corrected data selection, now tutorial will run faster</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-08-17</td>
 <td>Updated to the version 0.3.0</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-12-13</td>
+<tr class="row-even"><td>2021-12-13</td>
 <td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-10-13</td>
+<tr class="row-odd"><td>2021-10-13</td>
 <td>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</td>
 <td>&#64;ethmtrgt &amp; &#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-08-22</td>
+<tr class="row-even"><td>2021-08-22</td>
 <td>Refactored the Outlier Removal algorithm - quantile based algorithm</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-08-10</td>
+<tr class="row-odd"><td>2021-08-10</td>
 <td>Refactored the Outlier Removal algorithm</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-05-11</td>
+<tr class="row-even"><td>2021-05-11</td>
 <td>Refactored TheoreticalSemivariogram class</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-03-31</td>
+<tr class="row-odd"><td>2021-03-31</td>
 <td>Update related to the change of semivariogram weighting. Updated cancer rates data.</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
@@ -592,7 +596,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Look into a first few lines of data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">),</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">dem</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+<span class="c1"># Look into a first few lines of data</span>
 
 <span class="n">dem</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
 </pre></div>
@@ -604,16 +612,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
-       [2.37674140e+05, 5.45209671e+05, 4.89582825e+01],
-       [2.37449255e+05, 5.41045935e+05, 1.68178635e+01],
-       [2.37320090e+05, 5.38653518e+05, 1.62939053e+01],
-       [2.37187238e+05, 5.36192094e+05, 1.65406628e+01],
-       [2.37056908e+05, 5.33776683e+05, 1.94509335e+01],
-       [2.37050703e+05, 5.33661664e+05, 1.92426758e+01],
-       [2.36890637e+05, 5.30694166e+05, 4.56620102e+01],
-       [2.36841016e+05, 5.29774013e+05, 3.37260437e+01],
-       [2.36826130e+05, 5.29497967e+05, 3.55447350e+01]])
+array([[2.39370596e+05, 5.33883110e+05, 3.49692955e+01],
+       [2.52576708e+05, 5.29227707e+05, 5.82572060e+01],
+       [2.50613060e+05, 5.34932554e+05, 5.07088356e+01],
+       [2.45209903e+05, 5.41878771e+05, 2.97502346e+01],
+       [2.48955461e+05, 5.44382691e+05, 2.04777889e+01],
+       [2.48782240e+05, 5.33757975e+05, 5.16319275e+01],
+       [2.43020663e+05, 5.43032122e+05, 1.74619999e+01],
+       [2.51345684e+05, 5.31942754e+05, 4.78645058e+01],
+       [2.42724020e+05, 5.33866415e+05, 3.91722794e+01],
+       [2.48604886e+05, 5.49498640e+05, 7.08257904e+01]])
 </pre></div></div>
 </div>
 </div>
@@ -652,21 +660,21 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 934.6034381080927 has 296822 point pairs.
-Lag 1869.2068762161855 has 830918 point pairs.
-Lag 2803.8103143242784 has 1299328 point pairs.
-Lag 3738.413752432371 has 1707280 point pairs.
-Lag 4673.017190540464 has 2051616 point pairs.
-Lag 5607.620628648557 has 2343114 point pairs.
-Lag 6542.224066756649 has 2562464 point pairs.
-Lag 7476.827504864742 has 2734920 point pairs.
-Lag 8411.430942972835 has 2849234 point pairs.
-Lag 9346.034381080928 has 2920514 point pairs.
-Lag 10280.637819189022 has 2948446 point pairs.
-Lag 11215.241257297113 has 2914808 point pairs.
-Lag 12149.844695405207 has 2838740 point pairs.
-Lag 13084.448133513299 has 2714790 point pairs.
-Lag 14019.051571621392 has 2559140 point pairs.
+Lag 892.6520717169454 has 608 point pairs.
+Lag 1785.3041434338909 has 1878 point pairs.
+Lag 2677.956215150836 has 2948 point pairs.
+Lag 3570.6082868677818 has 4028 point pairs.
+Lag 4463.260358584727 has 4832 point pairs.
+Lag 5355.912430301672 has 5590 point pairs.
+Lag 6248.5645020186175 has 6206 point pairs.
+Lag 7141.2165737355635 has 6632 point pairs.
+Lag 8033.868645452509 has 7002 point pairs.
+Lag 8926.520717169455 has 7270 point pairs.
+Lag 9819.1727888864 has 7094 point pairs.
+Lag 10711.824860603347 has 7068 point pairs.
+Lag 11604.47693232029 has 6948 point pairs.
+Lag 12497.129004037237 has 6612 point pairs.
+Lag 13389.781075754183 has 6344 point pairs.
 </pre></div></div>
 </div>
 <p>As we see, there are a lot of points per lag! Data is probably messy, but to be sure, we must check its distribution. What are those <strong>points per lag</strong>? They are a set of semivariances between all point pairs within a specific lag. This information helps us to understand if there are any undersampled ranges. Then, we can change <code class="docutils literal notranslate"><span class="pre">step_size</span></code> accordingly (to avoid a situation where one lag has the order of magnitude less/more point pairs than the other).</p>
@@ -977,7 +985,7 @@ True
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-10" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.2',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -65,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.2 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -672,9 +672,9 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-  7%|██▉                                       | 15/217 [00:01&lt;00:19, 10.44it/s]/home/szymon/miniconda3/envs/p39/lib/python3.9/site-packages/pyinterpolate/kriging/models/block/weight.py:182: RuntimeWarning: invalid value encountered in double_scalars
+  7%|██▉                                       | 15/217 [00:01&lt;00:22,  9.14it/s]/Users/szymonos/miniconda3/envs/pytest/lib/python3.10/site-packages/pyinterpolate/kriging/models/block/weight.py:182: RuntimeWarning: invalid value encountered in double_scalars
   weighted_block_smv = weighted_semivars / np.sum(all_weights)
-100%|█████████████████████████████████████████| 217/217 [00:33&lt;00:00,  6.54it/s]
+100%|█████████████████████████████████████████| 217/217 [00:38&lt;00:00,  5.61it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -719,36 +719,36 @@ div.rendered_html tbody tr:hover {
       <th>0</th>
       <td>25019.0</td>
       <td>POINT (2117322.312 556124.507)</td>
-      <td>0.090620</td>
-      <td>10.362956</td>
+      <td>0.083987</td>
+      <td>8.803000</td>
     </tr>
     <tr>
       <th>1</th>
       <td>25019.0</td>
       <td>POINT (2134642.820 556124.507)</td>
-      <td>167.450133</td>
-      <td>7.179673</td>
+      <td>137.473418</td>
+      <td>7.476936</td>
     </tr>
     <tr>
       <th>2</th>
       <td>36121.0</td>
       <td>POINT (1424501.989 556124.507)</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>5.045252</td>
+      <td>4.732995</td>
     </tr>
     <tr>
       <th>3</th>
       <td>36121.0</td>
       <td>POINT (1424501.989 546124.507)</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>4.492783</td>
+      <td>10.508667</td>
     </tr>
     <tr>
       <th>4</th>
       <td>36121.0</td>
       <td>POINT (1433162.243 561124.507)</td>
-      <td>NaN</td>
-      <td>NaN</td>
+      <td>15.686610</td>
+      <td>8.330736</td>
     </tr>
   </tbody>
 </table>
@@ -759,18 +759,18 @@ div.rendered_html tbody tr:hover {
 <h2>4) Visualize data<a class="headerlink" href="#4)-Visualize-data" title="Permalink to this heading">¶</a></h2>
 <p>The last step is data visualization. We use a choropleth map from the GeoPandas package, but you can store smoothed map to a spatial file of points and process it in a different place or with specific software (in our idea, the best for it is <strong>QGIS</strong>).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">smooth_plot_data</span> <span class="o">=</span> <span class="n">smoothed</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">smooth_plot_data</span><span class="p">[</span><span class="n">smooth_plot_data</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="n">smooth_plot_data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;pred&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">smooth_plot_data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;pred&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -798,7 +798,7 @@ div.rendered_html tbody tr:hover {
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-10" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
