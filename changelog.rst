@@ -14,7 +14,7 @@ Changes by date
 * (debug) control of data *dtypes* after transformations and preparation of `PointSupport` and `Blocks`,
 * (debug) updated data selection methods for Poisson Kriging to avoid mixing column of numerical and non-numerical values in a single numpy array, (it makes algorithm faster),
 * (update) updated tutorials,
-*
+* (feature) check area and point support indexes with `smooth_area_to_point_pk()`
 
 
 2022-10-18
