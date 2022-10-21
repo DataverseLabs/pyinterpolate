@@ -156,7 +156,7 @@
         
   
     <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
@@ -183,11 +183,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -200,7 +200,7 @@
             
   
     <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
@@ -227,11 +227,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -723,7 +723,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">xyval</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -731,28 +731,21 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivars</span> <span class="o">=</span> <span class="n">experimental</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">semivars</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">semivars</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_24_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_24_0.png" />
 </div>
 </div>
 <p>We read a plot and decide to set:</p>
@@ -764,7 +757,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </ul>
 <p>Yes, we can create the theoretical variogram from scratch, without calling the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function or the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class. Those three parameters and the lags are all that we need for modeling.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set nugget, sill and range</span>
@@ -772,7 +765,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_nugget</span> <span class="o">=</span> <span class="mi">0</span>
@@ -797,7 +790,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <li>spherical.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crete different models: circular, cubic, exponential, gaussian, linear, power, spherical</span>
@@ -805,7 +798,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circular</span> <span class="o">=</span> <span class="n">circular_model</span><span class="p">(</span><span class="n">lags</span><span class="o">=</span><span class="n">_lags</span><span class="p">,</span>
@@ -846,8 +839,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <p>With all models calculated, let’s take a look at their output. Before we jump into the last step, try to guess which model works optimally with the experimental variogram? (It is a tricky question!)</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot circular</span>
@@ -862,15 +855,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_32_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_32_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot cubic</span>
@@ -885,15 +871,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_33_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_33_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot exponential</span>
@@ -908,15 +887,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_34_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_34_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot gaussian</span>
@@ -931,15 +903,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_35_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_35_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot linear</span>
@@ -954,15 +919,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_36_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_36_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot power</span>
@@ -977,15 +935,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_37_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_37_0.png" />
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot spherical</span>
@@ -1000,13 +951,6 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_38_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_38_0.png" />
-</div>
-</div>
 <p>What was your guess?</p>
 <p>…</p>
 <p>I hope we both have chosen <code class="docutils literal notranslate"><span class="pre">circulcar</span></code> or <code class="docutils literal notranslate"><span class="pre">linear</span></code> models! But we should be careful with the final opinion and even more careful if we let the algorithm decide which model is the best based on the <strong>root mean squared error metric</strong> (RMSE). For us, the best model is always the model that has the best fit for the closest distances. A model with low RMSE may be “great” with distances from 10 to 18… which oscillate around the sill of our data and are useless for weighting (weight is constant
@@ -1015,8 +959,8 @@ from some distance).</p>
 <div class="section" id="4)-Compare-variogram-models">
 <h2>4) Compare variogram models<a class="headerlink" href="#4)-Compare-variogram-models" title="Permalink to this heading">¶</a></h2>
 <p>The last part is a comparison of variogram models. We will still use our “own eyes” to decide which model is the best, but this time we will plot all of them in a single plot.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot ALL models</span>
@@ -1045,13 +989,6 @@ from some distance).</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_41_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_41_0.png" />
-</div>
-</div>
 <p>We observe that the lowest distance from a modeled value to the experimental curve at a small distance has…</p>
 <hr class="docutils" />
 </div>
@@ -1066,7 +1003,7 @@ from some distance).</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-21" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 

@@ -34,7 +34,7 @@ POINT_SUPPORT_GEODATAFRAME = POINT_SUPPORT_GEODATAFRAME_RAW.rename(columns={
     POP10: 'ds'
 })
 
-POINT_SUPPORT_NP_ARRAY = POINT_SUPPORT_GEODATAFRAME[['index', 'x', 'y', 'ds']].values
+POINT_SUPPORT_NP_ARRAY = POINT_SUPPORT_GEODATAFRAME[['index', 'x_col', 'y_col', 'ds']].values
 
 bc = AREAL_INPUT.data[[AREAL_INPUT.cx, AREAL_INPUT.cy, AREAL_INPUT.value_column_name]].values
 experimental_variogram_of_areal_data = build_experimental_variogram(bc,

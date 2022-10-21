@@ -42,7 +42,7 @@ class TestPolyset(unittest.TestCase):
         gdf = gpd.read_file(GEOJSON)
         blocks = Blocks()
         blocks.from_geodataframe(gdf, value_col='value', geometry_col='geometry')
-        expected_columns = {'index', 'value', 'geometry', 'centroid.x', 'centroid.y'}
+        expected_columns = {'index', 'value', 'geometry', 'centroid_x', 'centroid_y'}
         columns = set(blocks.data.columns)
         self.assertEqual(expected_columns, columns)
 
@@ -60,7 +60,7 @@ class TestPointSupportDataClass(unittest.TestCase):
                       point_support_layer_name=POPULATION_LAYER,
                       blocks_layer_name=POLYGON_LAYER)
         self.assertTrue(not ps.point_support.empty)
-        expected_keys = {POP10, GEOMETRY_COL, POLYGON_ID, 'x', 'y'}
+        expected_keys = {POP10, GEOMETRY_COL, POLYGON_ID, 'x_col', 'y_col'}
         out_keys = set(ps.point_support.keys())
         self.assertEqual(expected_keys, out_keys)
 
@@ -75,7 +75,7 @@ class TestPointSupportDataClass(unittest.TestCase):
                               blocks_geometry_col=GEOMETRY_COL,
                               blocks_index_col=POLYGON_ID)
         self.assertTrue(not ps.point_support.empty)
-        expected_keys = {POP10, GEOMETRY_COL, POLYGON_ID, 'x', 'y'}
+        expected_keys = {POP10, GEOMETRY_COL, POLYGON_ID, 'x_col', 'y_col'}
         out_keys = set(ps.point_support.keys())
         self.assertEqual(expected_keys, out_keys)
 

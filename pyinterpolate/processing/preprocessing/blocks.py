@@ -57,8 +57,8 @@ class Blocks:
         self.value_column_name = None
         self.index_column_name = None
         self.geometry_column_name = None
-        self.cx = 'centroid.x'
-        self.cy = 'centroid.y'
+        self.cx = 'centroid_x'
+        self.cy = 'centroid_y'
 
     @staticmethod
     def _check_index(ds, idx_col):
@@ -95,8 +95,8 @@ class Blocks:
 
         # Build centroids
         centroids = dataset[geo_col].centroid
-        cxs = centroids.x
-        cys = centroids.y
+        cxs = [float(c) for c in centroids.x]
+        cys = [float(c) for c in centroids.y]
         dataset[self.cx] = cxs
         dataset[self.cy] = cys
 
@@ -228,7 +228,7 @@ class PointSupport:
     Examples
     --------
     >>> import geopandas as gpd
-    >>> from pyinterpolate.processing.point.structure import PointSupport
+    >>> from pyinterpolate import PointSupport
     >>>
     >>>
     >>> POPULATION_DATA = "path to the point support file"
@@ -257,8 +257,8 @@ class PointSupport:
         self.value_column = None
         self.geometry_column = None
         self.block_index_column = None
-        self.x_col = 'x'
-        self.y_col = 'y'
+        self.x_col = 'x_col'
+        self.y_col = 'y_col'
 
     def from_files(self,
                    point_support_data_file: str,
@@ -377,7 +377,6 @@ class PointSupport:
         joined = joined[['index_right', point_support_geometry_col, point_support_val_col]]
         joined = self._set_dtypes(joined,
                                   blocks,
-                                  point_support,
                                   point_support_val_col,
                                   'index_right')
 
@@ -385,8 +384,8 @@ class PointSupport:
             joined.rename(columns={'index_right': blocks_index_col}, inplace=True)
 
         # Set x, y coordinates
-        joined[self.x_col] = joined[point_support_geometry_col].x
-        joined[self.y_col] = joined[point_support_geometry_col].y
+        joined[self.x_col] = [float(c) for c in joined[point_support_geometry_col].x]
+        joined[self.y_col] = [float(c) for c in joined[point_support_geometry_col].y]
 
         # Set attributes
         self.point_support = joined
@@ -436,10 +435,9 @@ class PointSupport:
         return points, blocks
 
     @staticmethod
-    def _set_dtypes(joined, blocks, point_support, point_support_val_col, blocks_id):
+    def _set_dtypes(joined, blocks, point_support_val_col, blocks_id):
         index_dtype = blocks.index.dtype
-        val_dtype = point_support[point_support_val_col].dtype
 
         joined[blocks_id] = joined[blocks_id].astype(index_dtype)
-        joined[point_support_val_col] = joined[point_support_val_col].astype(val_dtype)
+        joined[point_support_val_col] = joined[point_support_val_col].astype(float)
         return joined

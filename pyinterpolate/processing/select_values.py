@@ -32,7 +32,6 @@ def _rotation_matrix(angle: float) -> np.array:
     : numpy array
         The rotation matrix.
     """
-    # angle = angle - 90
     theta = np.radians(angle)
     e_major_rot = [np.cos(theta), -np.sin(theta)]
     e_minor_rot = [np.sin(theta), np.cos(theta)]
@@ -191,8 +190,8 @@ def generate_triangles(points: np.ndarray, step_size: float, angle: float, toler
     angle = np.radians(angle)
     rot_90 = np.pi / 2
 
-    apex = _rotate_and_translate(points, angle, t_height)
-    inv_apex = _rotate_and_translate(points, angle, -t_height)
+    apex = _rotate_and_translate(points, float(angle), t_height)
+    inv_apex = _rotate_and_translate(points, float(angle), -t_height)
     base_a = _rotate_and_translate(
         points, angle + rot_90, base_width
     )
@@ -542,26 +541,30 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
                                                                         u_index,
                                                                         u_point_support)
     kdata = []
+    kindex = []
     for kidx in k_idxs:
         for rec in distances_between_known_and_unknown:
             if kidx in rec:
                 val = rec[kidx][1]
-                kdata.append([kidx, val])
+                kdata.append(val)
+                kindex.append(kidx)
                 break
 
     kdata = np.array(kdata)
-    sorted_kdata = kdata[kdata[:, 1].argsort()]
+    kindex = np.array(kindex)
 
-    max_search_pos = np.argmax(sorted_kdata[:, -1] > max_range)
-    output_areas = sorted_kdata[:max_search_pos]
+    sort_indices = kdata.argsort()
+    sorted_kdata = kdata[sort_indices]
+    sorted_kindex = kindex[sort_indices]
 
-    if len(output_areas) < nn:
-        output_areas = sorted_kdata[:nn]
+    max_search_pos = np.argmax(sorted_kdata > max_range)
+    idxs = sorted_kindex[:max_search_pos]
 
-    if len(output_areas) <= 1:
-        output_areas = sorted_kdata[:2]
+    if len(idxs) < nn:
+        idxs = sorted_kindex[:nn]
 
-    idxs = [idx for idx in k_idxs if idx in output_areas[:, 0]]
+    if len(idxs) <= 1:
+        idxs = sorted_kindex[:2]
 
     for idx in idxs:
         point_s = k_point_support_dict[idx]
@@ -619,7 +622,7 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     Returns
     -------
     dataset : numpy array
-              [block id, cx, cy, value, distance to unknown, aggregated point support sum]
+        ``[[cx, cy, value, distance to unknown, aggregated point support sum]]``
     """
 
     if not isinstance(k_point_support_dict, Dict):
@@ -638,23 +641,28 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
 
     # Create Kriging Data
-    kriging_data = _parse_pk_input(k_centroids, dists)
+    kriging_indexes, kriging_data = _parse_pk_input(k_centroids, dists)
 
     # Sort by distance
-    sorted_kdata = kriging_data[kriging_data[:, 4].argsort()]  # 4th idx == distance
+    _s_idxs = kriging_data[:, 3].argsort()  # 3rd col == distance
+    sorted_kdata = kriging_data[_s_idxs]
+    sorted_indexes = kriging_indexes[_s_idxs]
 
-    max_search_pos = np.argmax(sorted_kdata[:, 4] > max_range)
+    max_search_pos = np.argmax(sorted_kdata[:, 3] > max_range)
+
     kriging_input = sorted_kdata[:max_search_pos]
 
     if len(kriging_input) > nn:
         kriging_input = sorted_kdata[:nn]
+        kriging_indexes = sorted_indexes[:nn]
 
     if len(kriging_input) <= 1:
         kriging_input = sorted_kdata[:2]
+        kriging_indexes = sorted_indexes[:2]
 
     # get total points' value in each id from prepared datasets and append it to the array
     for idx, rec in enumerate(kriging_input):
-        block_id = rec[0]
+        block_id = kriging_indexes[idx]
         points_within_block = k_point_support_dict[block_id]
         ps_total = np.sum(points_within_block[:, -1])
         kriging_input[idx][-1] = ps_total
@@ -706,8 +714,8 @@ def _parse_pk_input(centroids_and_values, distances):
 
     Returns
     -------
-    : numpy array
-        [[id, cx, cy, value, distance to unknown centroid, 0]]
+    : numpy array, numpy array
+        indexes, [[cx, cy, value, distance to unknown centroid, 0]]
     """
     indexes = []
     dists = []
@@ -728,7 +736,6 @@ def _parse_pk_input(centroids_and_values, distances):
 
     data = list(
         zip(
-            indexes,
             centroids_and_values[:, 0],
             centroids_and_values[:, 1],
             centroids_and_values[:, 2],
@@ -738,45 +745,5 @@ def _parse_pk_input(centroids_and_values, distances):
     )
 
     data = np.array(data)
-    return data
-
-
-if __name__ == '__main__':
-    points = np.array([
-        [0, 0],
-        [1, 1],
-        [2, 2],
-        [0, 1],
-        [0, 2],
-        [1, 0],
-        [1, 2],
-        [2, 0],
-        [2, 1]
-    ])
-
-    # TRIANGLE
-    # triangle = (
-    #     (-2, -2), (2, -2), (0, 4)
-    # )
-    #
-    # result = select_points_within_triangle(triangle, 0, points)
-    #
-    # pr = points[result]
-    # tarr = np.array(triangle)
-    # plt.figure()
-    # plt.scatter(tarr[:, 0], tarr[:, 1])
-    # plt.scatter(pr[:, 0], pr[:, 1], c='red')
-    # plt.show()
-    # print(result)
-
-    # generate triangles
-    # triangles = generate_triangles(points, 10, 350, tolerance=0.8)
-    #
-    # tarr = np.array(triangles[0])
-    # invtarr = np.array(triangles[1])
-    # plt.figure()
-    #
-    # plt.scatter(tarr[:, 0], tarr[:, 1])
-    # plt.scatter(points[0][0], points[0][1])
-    # plt.scatter(invtarr[:, 0], invtarr[:, 1])
-    # plt.show()
+    indexes = np.array(indexes)
+    return indexes, data

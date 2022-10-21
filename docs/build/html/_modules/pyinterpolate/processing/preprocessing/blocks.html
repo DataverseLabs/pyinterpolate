@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -132,14 +133,14 @@
         
   
     <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -152,14 +153,14 @@
             
   
     <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -226,8 +227,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="s1">&#39;centroid.x&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="s1">&#39;centroid.y&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cx</span> <span class="o">=</span> <span class="s1">&#39;centroid_x&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cy</span> <span class="o">=</span> <span class="s1">&#39;centroid_y&#39;</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_check_index</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
@@ -264,8 +265,8 @@
 
         <span class="c1"># Build centroids</span>
         <span class="n">centroids</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">geo_col</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span>
-        <span class="n">cxs</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">cys</span> <span class="o">=</span> <span class="n">centroids</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">cxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">centroids</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">cys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">centroids</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
         <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cx</span><span class="p">]</span> <span class="o">=</span> <span class="n">cxs</span>
         <span class="n">dataset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cy</span><span class="p">]</span> <span class="o">=</span> <span class="n">cys</span>
 
@@ -397,7 +398,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
-<span class="sd">    &gt;&gt;&gt; from pyinterpolate.processing.point.structure import PointSupport</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import PointSupport</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; POPULATION_DATA = &quot;path to the point support file&quot;</span>
@@ -426,8 +427,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">value_column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">block_index_column</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x_col</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y_col</span> <span class="o">=</span> <span class="s1">&#39;y&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_col</span> <span class="o">=</span> <span class="s1">&#39;x_col&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_col</span> <span class="o">=</span> <span class="s1">&#39;y_col&#39;</span>
 
 <div class="viewcode-block" id="PointSupport.from_files"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.PointSupport.from_files">[docs]</a>    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">point_support_data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -546,7 +547,6 @@
         <span class="n">joined</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[[</span><span class="s1">&#39;index_right&#39;</span><span class="p">,</span> <span class="n">point_support_geometry_col</span><span class="p">,</span> <span class="n">point_support_val_col</span><span class="p">]]</span>
         <span class="n">joined</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_dtypes</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span>
                                   <span class="n">blocks</span><span class="p">,</span>
-                                  <span class="n">point_support</span><span class="p">,</span>
                                   <span class="n">point_support_val_col</span><span class="p">,</span>
                                   <span class="s1">&#39;index_right&#39;</span><span class="p">)</span>
 
@@ -554,8 +554,8 @@
             <span class="n">joined</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;index_right&#39;</span><span class="p">:</span> <span class="n">blocks_index_col</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Set x, y coordinates</span>
-        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
-        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_col</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">]</span>
+        <span class="n">joined</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_geometry_col</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">]</span>
 
         <span class="c1"># Set attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_support</span> <span class="o">=</span> <span class="n">joined</span>
@@ -605,12 +605,11 @@
         <span class="k">return</span> <span class="n">points</span><span class="p">,</span> <span class="n">blocks</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_set_dtypes</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">point_support</span><span class="p">,</span> <span class="n">point_support_val_col</span><span class="p">,</span> <span class="n">blocks_id</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_set_dtypes</span><span class="p">(</span><span class="n">joined</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">point_support_val_col</span><span class="p">,</span> <span class="n">blocks_id</span><span class="p">):</span>
         <span class="n">index_dtype</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">dtype</span>
-        <span class="n">val_dtype</span> <span class="o">=</span> <span class="n">point_support</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span>
 
         <span class="n">joined</span><span class="p">[</span><span class="n">blocks_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">blocks_id</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">index_dtype</span><span class="p">)</span>
-        <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">val_dtype</span><span class="p">)</span>
+        <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">point_support_val_col</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">joined</span></div>
 </pre></div>
 
@@ -622,8 +621,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-21" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
