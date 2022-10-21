@@ -272,9 +272,29 @@ def calculate_covariance(points: np.array,
 
     Examples
     --------
-    # TODO
-
-
+    >>> import numpy as np
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> covariances = calculate_covariance(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> print(covariances[0][0])
+    [ 1.         -0.54340278 24.        ]
+    >>> print(covariances[1])
+    4.2485207100591715
     """
 
     # START:VALIDATION
