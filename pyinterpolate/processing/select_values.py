@@ -8,7 +8,6 @@ Authors
 from typing import Iterable, Dict, Union, Tuple, List
 
 import geopandas as gpd
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
