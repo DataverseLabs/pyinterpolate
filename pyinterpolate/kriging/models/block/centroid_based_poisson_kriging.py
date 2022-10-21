@@ -84,6 +84,8 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     else:
         dps = transform_ps_to_dict(point_support)
 
+    # Kriging data
+    # [cx, cy, value, distance to unknown, aggregated point support sum], indexes
     kriging_data = select_centroid_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
@@ -95,8 +97,8 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     )
 
     n = len(kriging_data)
-    distances = kriging_data[:, 4]
-    values = kriging_data[:, 3]
+    distances = kriging_data[:, 3]
+    values = kriging_data[:, 2]
 
     partial_semivars = semivariogram_model.predict(distances)
     semivars = np.ones(len(partial_semivars) + 1)
@@ -104,13 +106,13 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     semivars = semivars.transpose()
 
     # Distances between known blocks
-    coordinates = kriging_data[:, 1:3]
+    coordinates = kriging_data[:, :2]
     block_distances = calc_point_to_point_distance(coordinates).flatten()
     known_blocks_semivars = semivariogram_model.predict(block_distances)
     predicted = np.array(known_blocks_semivars.reshape(n, n))
 
     # Add diagonal weights to predicted semivars array
-    weights = weights_array(predicted.shape, values, kriging_data[:, 5])
+    weights = weights_array(predicted.shape, values, kriging_data[:, 4])
     weighted_and_predicted = predicted + weights
 
     # Prepare matrix for solving kriging system

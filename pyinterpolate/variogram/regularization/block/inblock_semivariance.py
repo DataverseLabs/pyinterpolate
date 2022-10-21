@@ -58,8 +58,8 @@ def calculate_inblock_semivariance(point_support: Union[Dict, PointSupport, gpd.
     point_support : geopandas GeoDataFrame | Point Support | numpy array
                     Point support data. It can be provided:
                         - directly as PointSupport object,
-                        - GeoDataFrame | DataFrame (then DataFrame must have columns: 'ds' - values, 'x' - point
-                          geometry x, 'y' - point geometry y, 'index' - block indexes,
+                        - GeoDataFrame | DataFrame (then DataFrame must have columns: 'ds' - values, 'x_col' - point
+                          geometry x, 'y_col' - point geometry y, 'index' - block indexes,
                         - numpy array [block index, coordinate x, coordinate y, value],
                         - Dict: {block id: [[point x, point y, value]]}.
 
@@ -107,7 +107,7 @@ def _calculate_inblock_semivariance_from_dataframe(point_support: Union[gpd.GeoD
                                                    variogram_model: TheoreticalVariogram):
     """
     Method calculates inblock semivariance of a given areas from the GeoDataFrame object. GeoDataFrame must have
-    columns: 'ds' - values, 'x' - point geometry x, 'y' - point geometry y, 'index' - block indexes.
+    columns: 'ds' - values, 'x_col' - point geometry x, 'y_col' - point geometry y, 'index' - block indexes.
 
 
     Parameters
@@ -124,7 +124,7 @@ def _calculate_inblock_semivariance_from_dataframe(point_support: Union[gpd.GeoD
                             {area id: the average inblock semivariance}
     """
 
-    expected_cols = {'x', 'y', 'ds', 'index'}
+    expected_cols = {'x_col', 'y_col', 'ds', 'index'}
     if not expected_cols.issubset(set(point_support.columns)):
         raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
                        f'It has {point_support.columns} instead.')
@@ -136,7 +136,7 @@ def _calculate_inblock_semivariance_from_dataframe(point_support: Union[gpd.GeoD
         data_points = point_support[point_support['index'] == unique_area]
 
         data_points = data_points[
-            ['x', 'y', 'ds']
+            ['x_col', 'y_col', 'ds']
         ].values
 
         inblock = inblock_semivariance(data_points, variogram_model)

@@ -100,27 +100,30 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         arr_bl = transform_blocks_to_numpy(blocks)
 
     rarr = []
+    possible_idx = set(arr_bl[:, 0]) & set(list(dict_ps.keys()))
     for area_id in tqdm(arr_bl[:, 0]):
-        k_areas = arr_bl[arr_bl[:, 0] != area_id].copy()
-        exclude_key = {area_id}
-        k_points = {k: dict_ps[k] for k in set(list(dict_ps.keys())) - exclude_key}
-        u_area = arr_bl[arr_bl[:, 0] == area_id].copy()
-        u_points = dict_ps[area_id].copy()
+        if area_id in possible_idx:
+            k_areas = arr_bl[arr_bl[:, 0] != area_id].copy()
+            exclude_key = {area_id}
+            k_points = {k: dict_ps[k] for k in set(list(dict_ps.keys())) - exclude_key}
+            u_area = arr_bl[arr_bl[:, 0] == area_id].copy()
+            u_points = dict_ps[area_id].copy()
 
-        results = area_to_point_pk(semivariogram_model=semivariogram_model,
-                                   blocks=k_areas,
-                                   point_support=k_points,
-                                   unknown_block=u_area[0][:-1],
-                                   unknown_block_point_support=u_points,
-                                   number_of_neighbors=number_of_neighbors,
-                                   max_range=max_range,
-                                   raise_when_negative_prediction=raise_when_negative_prediction,
-                                   raise_when_negative_error=raise_when_negative_error,
-                                   err_to_nan=err_to_nan)
 
-        for result in results:
-            pred_arr = [area_id, Point(result[0]), result[1], result[2]]
-            rarr.append(pred_arr)
+            results = area_to_point_pk(semivariogram_model=semivariogram_model,
+                                       blocks=k_areas,
+                                       point_support=k_points,
+                                       unknown_block=u_area[0][:-1],
+                                       unknown_block_point_support=u_points,
+                                       number_of_neighbors=number_of_neighbors,
+                                       max_range=max_range,
+                                       raise_when_negative_prediction=raise_when_negative_prediction,
+                                       raise_when_negative_error=raise_when_negative_error,
+                                       err_to_nan=err_to_nan)
+
+            for result in results:
+                pred_arr = [area_id, Point(result[0]), result[1], result[2]]
+                rarr.append(pred_arr)
 
     gdf = gpd.GeoDataFrame(data=rarr, columns=['area id', 'geometry', 'pred', 'err'])
     gdf.geometry = gdf['geometry']

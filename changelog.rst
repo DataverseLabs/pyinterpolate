@@ -6,6 +6,17 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-10-XX
+----------
+
+**version 0.3.4**
+
+* (debug) control of data *dtypes* after transformations and preparation of `PointSupport` and `Blocks`,
+* (debug) updated data selection methods for Poisson Kriging to avoid mixing column of numerical and non-numerical values in a single numpy array, (it makes algorithm faster),
+* (update) updated tutorials,
+*
+
+
 2022-10-18
 ----------
 
