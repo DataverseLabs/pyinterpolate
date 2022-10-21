@@ -43,7 +43,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
         Blocks with aggregated data.
           * ``Blocks``: ``Blocks()`` class object.
-          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.
+          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid_x, centroid_y, ds, index``.
             Geometry column with polygons is not used.
           * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.
 
@@ -51,11 +51,11 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         The point support of polygons.
           * ``Dict``: ``{block id: [[point x, point y, value]]}``,
           * ``numpy array``: ``[[block id, x, y, value]]``,
-          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,
+          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x_col, y_col, ds, index}``,
           * ``PointSupport``.
 
     unknown_block : numpy array
-        ``[index, centroid.x, centroid.y]``
+        ``[index, centroid x, centroid y]``
 
     unknown_block_point_support : numpy array
         Points within block ``[[x, y, point support value]]``
@@ -88,6 +88,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         dps = point_support
     else:
         dps = transform_ps_to_dict(point_support)
+
+    # Check ids
+
 
     kriging_data = select_poisson_kriging_data(
         u_block_centroid=unknown_block,
