@@ -252,8 +252,6 @@ def _from_ellipse_non_weighted(points: np.array, lags: np.array, step_size: floa
             else:
                 msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
                 raise RuntimeError(msg)
-            # TODO: remove comment below after tests
-            # semivariances_and_lags.append([h, 0, 0])
         else:
             average_semivariance = np.mean(semivars_per_lag) / 2
             semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
