@@ -59,10 +59,9 @@ class SetDifferenceWarning(Warning):
     """
 
     def __init__(self, set_1_to_2_diff, set_2_to_1_diff, set_1_name, set_2_name):
-        self.msg = f'Given sets of ids are not equal.\n' \
-                   f'* Differences between {set_1_name} and {set_2_name} are {set_1_to_2_diff}.\n' \
-                   f'* Differences between {set_2_name} and {set_1_name} are {set_2_to_1_diff}.'
-        self.message = 'Kriging system solution is based on the approximate solution, output may be incorrect!'
+        self.msg = f'Given sets of ids are not equal.' \
+                   f' * Differences between {set_1_name} and {set_2_name} are {list(set_1_to_2_diff)}.' \
+                   f' * Differences between {set_2_name} and {set_1_name} are {list(set_2_to_1_diff)}.'
 
     def __str__(self):
-        return repr(self.message)
+        return repr(self.msg)
