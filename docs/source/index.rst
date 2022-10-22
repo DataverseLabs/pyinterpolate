@@ -6,7 +6,7 @@
 Pyinterpolate
 =============
 
-**version 0.3.4** - *Kyiv*
+**version 0.3.4.post1** - *Kyiv*
 ---------------------------------------
 
 .. image:: imgs/logov03.jpg
