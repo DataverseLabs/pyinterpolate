@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-10-22
+----------
+
+**version 0.3.4.post1**
+
+* (setup) added `pyogrio` to dependencies due to the new `fiona` version (1.8.22) and `gdal` errors.
+
 2022-10-21
 ----------
 
