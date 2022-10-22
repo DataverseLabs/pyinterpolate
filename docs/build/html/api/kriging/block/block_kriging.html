@@ -232,7 +232,7 @@
 <dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="docutils">
 <dt>Blocks with aggregated data.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</li>
-<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid_x,</span> <span class="pre">centroid_y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
 Geometry column with polygons is not used.</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</li>
 </ul>
@@ -243,13 +243,13 @@ Geometry column with polygons is not used.</li>
 <dt>The point support of polygons.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</li>
-<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x_col,</span> <span class="pre">y_col,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</li>
 </ul>
 </dd>
 </dl>
 </dd>
-<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y]</span></code></p>
 </dd>
 <dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
 </dd>
@@ -295,7 +295,7 @@ Geometry column with polygons is not used.</li>
 <dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="docutils">
 <dt>Blocks with aggregated data.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</li>
-<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid_x,</span> <span class="pre">centroid_y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
 Geometry column with polygons is not used.</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</li>
 </ul>
@@ -306,13 +306,13 @@ Geometry column with polygons is not used.</li>
 <dt>The point support of polygons.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</li>
-<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x_col,</span> <span class="pre">y_col,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</li>
 </ul>
 </dd>
 </dl>
 </dd>
-<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y]</span></code></p>
 </dd>
 <dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
 </dd>
@@ -356,7 +356,7 @@ Geometry column with polygons is not used.</li>
 <dt><strong>blocks</strong><span class="classifier">Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span></dt><dd><dl class="docutils">
 <dt>Blocks with aggregated data.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Blocks</span></code>: <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object.</li>
-<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
+<li><code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> must have columns: <code class="docutils literal notranslate"><span class="pre">centroid_x,</span> <span class="pre">centroid_y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code>.
 Geometry column with polygons is not used.</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</li>
 </ul>
@@ -367,13 +367,13 @@ Geometry column with polygons is not used.</li>
 <dt>The point support of polygons.</dt><dd><ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</li>
-<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
+<li><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x_col,</span> <span class="pre">y_col,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</li>
 <li><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</li>
 </ul>
 </dd>
 </dl>
 </dd>
-<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid.x,</span> <span class="pre">centroid.y]</span></code></p>
+<dt><strong>unknown_block</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y]</span></code></p>
 </dd>
 <dt><strong>unknown_block_point_support</strong><span class="classifier">numpy array</span></dt><dd><p>Points within block <code class="docutils literal notranslate"><span class="pre">[[x,</span> <span class="pre">y,</span> <span class="pre">point</span> <span class="pre">support</span> <span class="pre">value]]</span></code></p>
 </dd>
@@ -418,7 +418,7 @@ the theoretical variogram’s range.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        <span title="Built on 2022-10-21" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
         Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 

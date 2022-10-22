@@ -19,6 +19,7 @@ from shapely.geometry import Point
 from tqdm import tqdm
 
 from pyinterpolate.kriging.models.block import area_to_point_pk
+from pyinterpolate.processing.checks import check_ids
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.transform.transform import transform_ps_to_dict, transform_blocks_to_numpy
 from pyinterpolate.variogram import TheoreticalVariogram
@@ -28,7 +29,7 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                             blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                             point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                             number_of_neighbors: int,
-                            max_range = None,
+                            max_range=None,
                             crs: Any = None,
                             raise_when_negative_prediction=True,
                             raise_when_negative_error=True,
@@ -100,27 +101,37 @@ def smooth_area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         arr_bl = transform_blocks_to_numpy(blocks)
 
     rarr = []
+    block_ids = arr_bl[:, 0]
+    ps_ids = list(dict_ps.keys())
+    possible_idx = set(block_ids) & set(ps_ids)
+
+    possible_len = len(possible_idx)
+
+    if possible_len != len(block_ids) or possible_len != len(ps_ids):
+        check_ids(block_ids, ps_ids, set_name_a='Blocks indexes', set_name_b='Point Support indexes')
+
     for area_id in tqdm(arr_bl[:, 0]):
-        k_areas = arr_bl[arr_bl[:, 0] != area_id].copy()
-        exclude_key = {area_id}
-        k_points = {k: dict_ps[k] for k in set(list(dict_ps.keys())) - exclude_key}
-        u_area = arr_bl[arr_bl[:, 0] == area_id].copy()
-        u_points = dict_ps[area_id].copy()
+        if area_id in possible_idx:
+            k_areas = arr_bl[arr_bl[:, 0] != area_id].copy()
+            exclude_key = {area_id}
+            k_points = {k: dict_ps[k] for k in set(list(dict_ps.keys())) - exclude_key}
+            u_area = arr_bl[arr_bl[:, 0] == area_id].copy()
+            u_points = dict_ps[area_id].copy()
 
-        results = area_to_point_pk(semivariogram_model=semivariogram_model,
-                                   blocks=k_areas,
-                                   point_support=k_points,
-                                   unknown_block=u_area[0][:-1],
-                                   unknown_block_point_support=u_points,
-                                   number_of_neighbors=number_of_neighbors,
-                                   max_range=max_range,
-                                   raise_when_negative_prediction=raise_when_negative_prediction,
-                                   raise_when_negative_error=raise_when_negative_error,
-                                   err_to_nan=err_to_nan)
+            results = area_to_point_pk(semivariogram_model=semivariogram_model,
+                                       blocks=k_areas,
+                                       point_support=k_points,
+                                       unknown_block=u_area[0][:-1],
+                                       unknown_block_point_support=u_points,
+                                       number_of_neighbors=number_of_neighbors,
+                                       max_range=max_range,
+                                       raise_when_negative_prediction=raise_when_negative_prediction,
+                                       raise_when_negative_error=raise_when_negative_error,
+                                       err_to_nan=err_to_nan)
 
-        for result in results:
-            pred_arr = [area_id, Point(result[0]), result[1], result[2]]
-            rarr.append(pred_arr)
+            for result in results:
+                pred_arr = [area_id, Point(result[0]), result[1], result[2]]
+                rarr.append(pred_arr)
 
     gdf = gpd.GeoDataFrame(data=rarr, columns=['area id', 'geometry', 'pred', 'err'])
     gdf.geometry = gdf['geometry']

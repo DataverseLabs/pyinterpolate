@@ -4,7 +4,7 @@
 
 # Pyinterpolate
 
-**version 0.3.3** - *Kyiv*
+**version 0.3.4** - *Kyiv*
 
 ---
 

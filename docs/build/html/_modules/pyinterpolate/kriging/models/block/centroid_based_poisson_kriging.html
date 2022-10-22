@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../../_static/clipboard.min.js"></script>
     <script src="../../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+<a href="../../../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -132,14 +133,14 @@
         
   
     <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -152,14 +153,14 @@
             
   
     <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../science/cite.html#how-to-cite">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../science/cite.html">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../../science/biblio.html#bibliography">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../developer/dev.html">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../science/biblio.html">Bibliography</a></li>
 </ul>
 
   
@@ -208,7 +209,7 @@
 <span class="sd">    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
 <span class="sd">        Blocks with aggregated data.</span>
 <span class="sd">          * ``Blocks``: ``Blocks()`` class object.</span>
-<span class="sd">          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">          * ``GeoDataFrame`` and ``DataFrame`` must have columns: ``centroid_x, centroid_y, ds, index``.</span>
 <span class="sd">            Geometry column with polygons is not used.</span>
 <span class="sd">          * ``numpy array``: ``[[block index, centroid x, centroid y, value]]``.</span>
 
@@ -216,11 +217,11 @@
 <span class="sd">        The point support of polygons.</span>
 <span class="sd">          * ``Dict``: ``{block id: [[point x, point y, value]]}``,</span>
 <span class="sd">          * ``numpy array``: ``[[block id, x, y, value]]``,</span>
-<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x, y, ds, index}``,</span>
+<span class="sd">          * ``DataFrame`` and ``GeoDataFrame``: ``columns={x_col, y_col, ds, index}``,</span>
 <span class="sd">          * ``PointSupport``.</span>
 
 <span class="sd">    unknown_block : numpy array</span>
-<span class="sd">        ``[index, centroid.x, centroid.y]``</span>
+<span class="sd">        ``[index, centroid x, centroid y]``</span>
 
 <span class="sd">    unknown_block_point_support : numpy array</span>
 <span class="sd">        Points within block ``[[x, y, point support value]]``</span>
@@ -253,6 +254,8 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">dps</span> <span class="o">=</span> <span class="n">transform_ps_to_dict</span><span class="p">(</span><span class="n">point_support</span><span class="p">)</span>
 
+    <span class="c1"># Kriging data</span>
+    <span class="c1"># [cx, cy, value, distance to unknown, aggregated point support sum], indexes</span>
     <span class="n">kriging_data</span> <span class="o">=</span> <span class="n">select_centroid_poisson_kriging_data</span><span class="p">(</span>
         <span class="n">u_block_centroid</span><span class="o">=</span><span class="n">unknown_block</span><span class="p">,</span>
         <span class="n">u_point_support</span><span class="o">=</span><span class="n">unknown_block_point_support</span><span class="p">,</span>
@@ -264,8 +267,8 @@
     <span class="p">)</span>
 
     <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">kriging_data</span><span class="p">)</span>
-    <span class="n">distances</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
     <span class="n">partial_semivars</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
     <span class="n">semivars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">partial_semivars</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -273,13 +276,13 @@
     <span class="n">semivars</span> <span class="o">=</span> <span class="n">semivars</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
     <span class="c1"># Distances between known blocks</span>
-    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">coordinates</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">block_distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">known_blocks_semivars</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">block_distances</span><span class="p">)</span>
     <span class="n">predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">known_blocks_semivars</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
 
     <span class="c1"># Add diagonal weights to predicted semivars array</span>
-    <span class="n">weights</span> <span class="o">=</span> <span class="n">weights_array</span><span class="p">(</span><span class="n">predicted</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">weights_array</span><span class="p">(</span><span class="n">predicted</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">])</span>
     <span class="n">weighted_and_predicted</span> <span class="o">=</span> <span class="n">predicted</span> <span class="o">+</span> <span class="n">weights</span>
 
     <span class="c1"># Prepare matrix for solving kriging system</span>
@@ -332,8 +335,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-21" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

@@ -36,3 +36,6 @@ from pyinterpolate.variogram import Deconvolution
 
 # Viz
 from pyinterpolate.viz import interpolate_raster
+
+
+__version__ = "0.3.4"

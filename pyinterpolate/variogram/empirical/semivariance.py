@@ -252,8 +252,6 @@ def _from_ellipse_non_weighted(points: np.array, lags: np.array, step_size: floa
             else:
                 msg = f'There are no neighbors for a lag {h}, the process has been stopped.'
                 raise RuntimeError(msg)
-            # TODO: remove comment below after tests
-            # semivariances_and_lags.append([h, 0, 0])
         else:
             average_semivariance = np.mean(semivars_per_lag) / 2
             semivariances_and_lags.append([h, average_semivariance, len(semivars_per_lag)])
@@ -567,6 +565,30 @@ def calculate_semivariance(points: np.array,
                 oxo
                  o
                  o
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> semivariances = calculate_semivariance(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
+    >>> print(semivariances[0])
+    [ 1.     4.625 24.   ]
     """
 
     # START:VALIDATION

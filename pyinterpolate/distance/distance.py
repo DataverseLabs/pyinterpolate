@@ -211,7 +211,7 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     bval = block_2[:, -1].reshape(b_shape, 1)
     w = aval * bval
 
-    dist = np.sqrt(dx ** 2 + dy ** 2, dtype=float)
+    dist = np.sqrt(dx ** 2 + dy ** 2, dtype=float, casting='unsafe')
 
     wdist = dist * w
     distances_sum = np.sum(wdist) / np.sum(w)

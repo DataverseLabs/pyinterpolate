@@ -179,7 +179,12 @@ class WeightedBlock2PointSemivariance:
             all_weights = unknown_pt_value * known_points_values_and_distances[:, 0]
 
             weighted_semivars = np.sum(partial_semivars * all_weights)
-            weighted_block_smv = weighted_semivars / np.sum(all_weights)
+
+            all_weights_sum = np.sum(all_weights)
+            if all_weights_sum == 0:
+                weighted_block_smv = 0
+            else:
+                weighted_block_smv = weighted_semivars / np.sum(all_weights)
         else:
             weighted_block_smv = 0
 

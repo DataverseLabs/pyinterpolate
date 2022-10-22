@@ -51,3 +51,17 @@ class WrongGeometryTypeError(Exception):
 
     def __str__(self):
         return self.msg
+
+
+class SetDifferenceWarning(Warning):
+    """
+    Warning used when two sets of values differs (can check if Blocks ids and PointSupport ids are the same).
+    """
+
+    def __init__(self, set_1_to_2_diff, set_2_to_1_diff, set_1_name, set_2_name):
+        self.msg = f'Given sets of ids are not equal.' \
+                   f' * Differences between {set_1_name} and {set_2_name} are {list(set_1_to_2_diff)}.' \
+                   f' * Differences between {set_2_name} and {set_1_name} are {list(set_2_to_1_diff)}.'
+
+    def __str__(self):
+        return repr(self.msg)

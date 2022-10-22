@@ -192,12 +192,12 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     """
     block_keys = point_support.point_support[point_support.block_index_column].unique()
 
-    cls = [point_support.block_index_column, point_support.x_col, point_support.y_col, point_support.value_column]
+    cls = [point_support.x_col, point_support.y_col, point_support.value_column]
     d = {}
     for _id in block_keys:
         d[_id] = point_support.point_support[
                      point_support.point_support[point_support.block_index_column] == _id
-                     ][cls].values[:, 1:]
+                     ][cls].values
     return d
 
 
