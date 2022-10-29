@@ -440,6 +440,49 @@ def prepare_pk_known_areas(point_support_dict: Dict,
     return datasets
 
 
+def select_kriging_data_from_directional(unknown_position: Iterable,
+                                         data_array: np.ndarray,
+                                         neighbors_range: float,
+                                         angle: float,
+                                         tolerance: float,
+                                         number_of_neighbors: int = 4,
+                                         use_all_neighbors_in_range: bool = False) -> np.ndarray:
+    """
+    Function selects closest neighbors based on the specific angle and tolerance.
+
+    Parameters
+    ----------
+    unknown_position : Iterable
+        List, tuple or array with x, y coordinates.
+
+    data_array : numpy array
+        Known points.
+
+    neighbors_range : float
+        Range within neighbors are affecting the value, it should be lower or the same as the variogram range.
+
+    number_of_neighbors : int, default = 4
+        Number of the n-closest neighbors used for interpolation.
+
+    use_all_neighbors_in_range : bool, default = False
+        ``True``: if number of neighbors within the ``neighbors_range`` is greater than the ``number_of_neighbors`` then
+        take all of them for modeling.
+
+    Returns
+    -------
+    : numpy array
+        Dataset of the length number_of_neighbors <= length. Each record is created from the position, value and
+        distance to the unknown point ``[[x, y, value, distance to unknown position]]``.
+    """
+    # Distances to unknown point
+    r = np.array([unknown_position])
+
+    known_pos = data_array[:, :-1]
+    dists = calc_point_to_point_distance(r, known_pos)
+    angles = calc_point_to_point_angle(r, known_pos)
+
+
+
 def select_kriging_data(unknown_position: Iterable,
                         data_array: np.ndarray,
                         neighbors_range: float,

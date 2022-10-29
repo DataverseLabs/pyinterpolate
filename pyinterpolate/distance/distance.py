@@ -6,7 +6,7 @@ Authors
 1. Szymon Moliński | @SimonMolinsky
 """
 
-from typing import Dict, Union
+from typing import Dict, Union, Iterable
 
 import geopandas as gpd
 import numpy as np
@@ -216,6 +216,54 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     wdist = dist * w
     distances_sum = np.sum(wdist) / np.sum(w)
     return distances_sum
+
+
+def _calc_angle_between_points(v1, v2):
+    ang1 = np.arctan2(*v1[::-1])
+    ang2 = np.arctan2(v2[:, 1], v2[:, 0])
+    return np.rad2deg((ang1 - ang2) % (2 * np.pi))
+
+
+def _calc_angle_from_origin(vec):
+    ang = np.arctan2(vec[:, 1], vec[:, 0])
+    return np.rad2deg(ang % (2 * np.pi))
+
+
+def calc_point_to_points_angle(points_b: Iterable, point_a: Iterable = None):
+    """
+    Function calculates angles between a single point and other points. The angle is calculated from a lines
+    connecting origing (0, 0) with those points clockwise.
+
+    Parameters
+    ----------
+    points_b : numpy array
+        Other point coordinates.
+
+    point_a : Iterable
+        The point coordinates, default is equal to (0, 0).
+
+    Returns
+    -------
+    angles : numpy array
+        Angles from the ``point_a`` to other points in degrees.
+    """
+
+    if not isinstance(points_b, np.ndarray):
+        points_b = np.array(points_b)
+    if len(points_b.shape) == 1:
+        points_b = points_b[np.newaxis, ...]
+
+    if point_a is None:
+        angles = _calc_angle_from_origin(points_b)
+    else:
+        angles = _calc_angle_between_points(point_a, points_b)
+
+    return angles
+
+    #
+    # angles = np.arctan2(point_a, points_b)
+    # angles = np.rad2deg(angles)
+    # return angles
 
 
 def calc_point_to_point_distance(points_a, points_b=None):
