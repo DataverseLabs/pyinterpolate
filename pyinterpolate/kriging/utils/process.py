@@ -57,18 +57,21 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     if neighbors_range is None:
         neighbors_range = theoretical_model.rang
 
-    prepared_data = select_kriging_data(unknown_position=unknown_location,
-                                        data_array=known_locations,
-                                        neighbors_range=neighbors_range,
-                                        number_of_neighbors=no_neighbors,
-                                        use_all_neighbors_in_range=use_all_neighbors_in_range)
+    if theoretical_model.is_directional:
+        prepared_data = select_kriging_data_from_direction()
+    else:
+        prepared_data = select_kriging_data(unknown_position=unknown_location,
+                                            data_array=known_locations,
+                                            neighbors_range=neighbors_range,
+                                            number_of_neighbors=no_neighbors,
+                                            use_all_neighbors_in_range=use_all_neighbors_in_range)
+        unknown_distances = prepared_data[:, -1]
 
     n = len(prepared_data)
-    unknown_distances = prepared_data[:, -1]
     k = theoretical_model.predict(unknown_distances)
     k = k.T
 
-    dists = calc_point_to_point_distance(prepared_data[:, :-2])
+    dists = calc_point_to_point_distance(prepared_data[:, :2])
 
     predicted_weights = theoretical_model.predict(dists.ravel())
     predicted = np.array(predicted_weights.reshape(n, n))

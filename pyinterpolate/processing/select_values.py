@@ -13,7 +13,8 @@ import pandas as pd
 
 from scipy.linalg import fractional_matrix_power
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance
+from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance, \
+    calc_angles, calculate_angular_distance
 from pyinterpolate.processing.preprocessing.blocks import Blocks
 from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg, transform_ps_to_dict
 
@@ -169,6 +170,15 @@ def generate_triangles(points: np.ndarray, step_size: float, angle: float, toler
     ----------
     points : numpy array
         The points to find their neighbors.
+
+    step_size : float
+        Lag length.
+
+    angle : float
+        The direction of a variogram.
+
+    tolerance : float
+        The parameter to control ratio of triangle base to its height.
 
     Returns
     -------
@@ -440,13 +450,78 @@ def prepare_pk_known_areas(point_support_dict: Dict,
     return datasets
 
 
-def select_kriging_data_from_directional(unknown_position: Iterable,
-                                         data_array: np.ndarray,
-                                         neighbors_range: float,
-                                         angle: float,
-                                         tolerance: float,
-                                         number_of_neighbors: int = 4,
-                                         use_all_neighbors_in_range: bool = False) -> np.ndarray:
+def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
+                                      distances: np.ndarray,
+                                      angle_differences: np.ndarray,
+                                      max_range: float,
+                                      min_number_of_neighbors: int,
+                                      use_all_neighbors_in_range: bool) -> np.ndarray:
+    """
+    Function selects possible neighbors.
+
+    Parameters
+    ----------
+    possible_neighbors : numpy array
+        The array with possible neighbors.
+
+    distances : numpy array
+        The array with distances to each neighbor.
+
+    angle_differences : numpy array
+        The array with the minimal angle between expected distance and other points.
+
+    max_range : float
+        Range within neighbors are affecting the value, it should be lower or the same as the variogram range.
+
+    min_number_of_neighbors : int
+        Number of the n-closest neighbors used for interpolation.
+
+    use_all_neighbors_in_range : bool
+        ``True``: if number of neighbors within the ``neighbors_range`` is greater than the ``number_of_neighbors``
+        then take all of them for modeling.
+
+    Returns
+    -------
+    possible_neighbors : numpy array
+        Sorted neighbors based on a distance and angle from the origin.
+    """
+    angular_tolerance = 1
+    max_tick = 30
+
+    neighbors_dists_and_angles = np.c_[possible_neighbors, distances.T, angle_differences.T]
+
+    # First select only neighbors in a max range
+    sorted_neighbors_and_dists = neighbors_dists_and_angles[neighbors_dists_and_angles[:, -2].argsort()]
+    prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -2] <= max_range, :]
+
+    # Limit to a specific angle
+    prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
+
+    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick > angular_tolerance):
+        angular_tolerance = angular_tolerance + 1
+        prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
+
+    len_prep = len(prepared_data_with_angles)
+    is_more_than_0 = len_prep > 0
+
+    if not is_more_than_0:
+        sorted_angles = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1].argsort()]
+        return sorted_angles[:min_number_of_neighbors]
+    else:
+        if use_all_neighbors_in_range:
+            return prepared_data_with_angles
+        elif len_prep > min_number_of_neighbors:
+            return prepared_data_with_angles[:min_number_of_neighbors]
+        else:
+            return prepared_data_with_angles
+
+
+def select_kriging_data_from_direction(unknown_position: Iterable,
+                                       data_array: np.ndarray,
+                                       neighbors_range: float,
+                                       direction: float,
+                                       number_of_neighbors: int = 4,
+                                       use_all_neighbors_in_range: bool = False) -> np.ndarray:
     """
     Function selects closest neighbors based on the specific angle and tolerance.
 
@@ -460,6 +535,9 @@ def select_kriging_data_from_directional(unknown_position: Iterable,
 
     neighbors_range : float
         Range within neighbors are affecting the value, it should be lower or the same as the variogram range.
+
+    direction : float
+        The angle of a directional variogram.
 
     number_of_neighbors : int, default = 4
         Number of the n-closest neighbors used for interpolation.
@@ -479,8 +557,17 @@ def select_kriging_data_from_directional(unknown_position: Iterable,
 
     known_pos = data_array[:, :-1]
     dists = calc_point_to_point_distance(r, known_pos)
-    angles = calc_point_to_point_angle(r, known_pos)
+    angles = calc_angles(known_pos)
+    angle_diffs = calculate_angular_distance(angles, direction)
 
+    selected_data = select_possible_neighbors_angular(data_array,
+                                                      dists,
+                                                      angle_diffs,
+                                                      neighbors_range,
+                                                      number_of_neighbors,
+                                                      use_all_neighbors_in_range)
+
+    return selected_data
 
 
 def select_kriging_data(unknown_position: Iterable,

@@ -229,10 +229,10 @@ def _calc_angle_from_origin(vec):
     return np.rad2deg(ang % (2 * np.pi))
 
 
-def calc_point_to_points_angle(points_b: Iterable, point_a: Iterable = None):
+def calc_angles(points_b: Iterable, point_a: Iterable = None):
     """
-    Function calculates angles between a single point and other points. The angle is calculated from a lines
-    connecting origing (0, 0) with those points clockwise.
+    Function calculates angles between points and origin or between vectors from origin to points and a vector from
+    a specific point to origin.
 
     Parameters
     ----------
@@ -240,12 +240,13 @@ def calc_point_to_points_angle(points_b: Iterable, point_a: Iterable = None):
         Other point coordinates.
 
     point_a : Iterable
-        The point coordinates, default is equal to (0, 0).
+        The point coordinates, default is equal to (0, 0) - origin.
 
     Returns
     -------
     angles : numpy array
-        Angles from the ``point_a`` to other points in degrees.
+        Angles from the ``points_b`` to origin, or angles beteen vectors ``points_b`` to origin and ``point_a``
+        to origin.
     """
 
     if not isinstance(points_b, np.ndarray):
@@ -259,11 +260,6 @@ def calc_point_to_points_angle(points_b: Iterable, point_a: Iterable = None):
         angles = _calc_angle_between_points(point_a, points_b)
 
     return angles
-
-    #
-    # angles = np.arctan2(point_a, points_b)
-    # angles = np.rad2deg(angles)
-    # return angles
 
 
 def calc_point_to_point_distance(points_a, points_b=None):
@@ -290,3 +286,35 @@ def calc_point_to_point_distance(points_a, points_b=None):
     else:
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
+
+
+def calculate_angular_distance(angles: np.ndarray, expected_direction: float) -> np.ndarray:
+    """
+    Function calculates minimal angular distance between one angle and other angles in degrees.
+
+    Parameters
+    ----------
+    angles : numpy array
+        The array with the angle to the origin of each point (clockwise).
+
+    expected_direction : float
+        The variogram direction in degrees.
+
+    Returns
+    -------
+    angular_distances : numpy array
+        Minimal angle from ``expected_direction`` to other angles.
+    """
+
+    # We should select angles equal to the expected direction
+    # and 180 degrees from it
+
+    expected_direction_rad = np.deg2rad(expected_direction)
+    r_angles = np.deg2rad(angles)
+    norm_a = r_angles - expected_direction_rad
+    deg_norm_a = np.rad2deg(norm_a % (2 * np.pi))
+    norm_b = expected_direction_rad - r_angles
+    deg_norm_b = np.rad2deg(norm_b % (2 * np.pi))
+    normalized_angular_dists = np.minimum(deg_norm_a, deg_norm_b)
+
+    return normalized_angular_dists
