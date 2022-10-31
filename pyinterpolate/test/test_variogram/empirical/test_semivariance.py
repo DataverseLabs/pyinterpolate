@@ -47,7 +47,7 @@ class TestSemivariance(unittest.TestCase):
 
     # DIRECTIONAL CASES
 
-    def test_calculate_semivariance_SN_lag1(self):
+    def test_calculate_semivariance_WE_lag1(self):
         ss = 1
         mr = 2
         smv = calculate_semivariance(armstrong_arr, ss, mr, direction=0, tolerance=0.1, method='e')
@@ -57,7 +57,7 @@ class TestSemivariance(unittest.TestCase):
                   f'the N-S direction.'
         self.assertAlmostEqual(lag1_test_value, expected_output, places=2, msg=err_msg)
 
-    def test_calculate_semivariance_WE_lag1(self):
+    def test_calculate_semivariance_NS_lag1(self):
         ss = 1
         mr = 2
         smv = calculate_semivariance(armstrong_arr, ss, mr, direction=90, tolerance=0.1, method='e')

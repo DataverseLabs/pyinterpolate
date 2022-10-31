@@ -39,7 +39,7 @@ class TestDirectionalSelection(unittest.TestCase):
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=0,
                                                  step_size=1,
-                                                 theta=-90,
+                                                 theta=90,
                                                  minor_axis_size=0.01)
         output = INPUT_ARRAY[selection]
         for row in output:
@@ -72,7 +72,7 @@ class TestDirectionalSelection(unittest.TestCase):
                                                      other_points=INPUT_ARRAY[:, :-1],
                                                      lag=1,
                                                      step_size=1,
-                                                     theta=45,
+                                                     theta=135,
                                                      minor_axis_size=0.01)
             output = INPUT_ARRAY[selection]
             selections.append(output)
@@ -90,7 +90,7 @@ class TestDirectionalSelection(unittest.TestCase):
                                                  other_points=INPUT_ARRAY[:, :-1],
                                                  lag=3,
                                                  step_size=1,
-                                                 theta=-45,
+                                                 theta=45,
                                                  minor_axis_size=0.01)
         output = INPUT_ARRAY[selection]
         for pt in output:

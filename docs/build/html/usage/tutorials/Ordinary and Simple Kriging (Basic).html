@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -798,7 +799,7 @@ array([2.37852392e+05, 5.47022672e+05, 7.61861649e+01])
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 622.21it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 427.12it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -827,7 +828,7 @@ array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 737.01it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 487.60it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -897,7 +898,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2234.44it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 2163.47it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -915,7 +916,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2266.78it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 2165.07it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -933,7 +934,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2192.01it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 2129.15it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -951,7 +952,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2027.99it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 1985.67it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -969,7 +970,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 1658.11it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 1640.56it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -987,7 +988,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:04&lt;00:00, 1143.55it/s]
+100%|██████████| 4825/4825 [00:04&lt;00:00, 1148.91it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1005,23 +1006,15 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:06&lt;00:00, 711.65it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-RMSE: 2.6309421059722435
-
+100%|██████████| 4825/4825 [00:06&lt;00:00, 711.72it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
+RMSE: 2.6309421059722435
 
 </pre></div></div>
 </div>
@@ -1057,7 +1050,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2604.73it/s]
+100%|██████████| 4825/4825 [00:01&lt;00:00, 2535.41it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1075,7 +1068,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2606.66it/s]
+100%|██████████| 4825/4825 [00:01&lt;00:00, 2494.54it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1093,7 +1086,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2554.91it/s]
+100%|██████████| 4825/4825 [00:01&lt;00:00, 2486.84it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1111,7 +1104,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2490.65it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 2376.13it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1129,7 +1122,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 1895.18it/s]
+100%|██████████| 4825/4825 [00:02&lt;00:00, 1845.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1147,7 +1140,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:03&lt;00:00, 1283.47it/s]
+100%|██████████| 4825/4825 [00:03&lt;00:00, 1274.52it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1165,7 +1158,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:06&lt;00:00, 732.70it/s]
+100%|██████████| 4825/4825 [00:06&lt;00:00, 726.09it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1209,8 +1202,8 @@ RMSE: 2.6307300408948957
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-31" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

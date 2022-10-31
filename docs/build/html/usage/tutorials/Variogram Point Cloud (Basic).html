@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -615,16 +616,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.44467754e+05, 5.43048081e+05, 1.74570007e+01],
-       [2.48022553e+05, 5.41363086e+05, 1.77402687e+01],
-       [2.38251389e+05, 5.36526982e+05, 1.59003820e+01],
-       [2.47706143e+05, 5.45070244e+05, 2.02134876e+01],
-       [2.38937793e+05, 5.44311023e+05, 2.08798466e+01],
-       [2.39311828e+05, 5.48282157e+05, 8.50572281e+01],
-       [2.47024930e+05, 5.37631868e+05, 2.14817142e+01],
-       [2.41762730e+05, 5.48081855e+05, 8.29506836e+01],
-       [2.40972451e+05, 5.42794832e+05, 1.80401993e+01],
-       [2.44548561e+05, 5.46619449e+05, 1.73589993e+01]])
+array([[2.53770053e+05, 5.52209018e+05, 7.53570328e+01],
+       [2.45740762e+05, 5.47410367e+05, 3.13298454e+01],
+       [2.50076035e+05, 5.46908336e+05, 2.43907852e+01],
+       [2.38115549e+05, 5.45947191e+05, 8.59198914e+01],
+       [2.54457974e+05, 5.37781730e+05, 3.21219940e+01],
+       [2.50403316e+05, 5.36073516e+05, 3.22589760e+01],
+       [2.40676186e+05, 5.42764493e+05, 1.74453812e+01],
+       [2.50346460e+05, 5.40712676e+05, 2.18128986e+01],
+       [2.45648110e+05, 5.37449876e+05, 1.89279823e+01],
+       [2.38000746e+05, 5.44315336e+05, 2.43942070e+01]])
 </pre></div></div>
 </div>
 </div>
@@ -663,21 +664,21 @@ array([[2.44467754e+05, 5.43048081e+05, 1.74570007e+01],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 863.3110600163982 has 624 point pairs.
-Lag 1726.6221200327964 has 1734 point pairs.
-Lag 2589.9331800491946 has 2648 point pairs.
-Lag 3453.2442400655927 has 3620 point pairs.
-Lag 4316.555300081991 has 4326 point pairs.
-Lag 5179.866360098389 has 5192 point pairs.
-Lag 6043.177420114787 has 5492 point pairs.
-Lag 6906.4884801311855 has 6100 point pairs.
-Lag 7769.799540147584 has 6448 point pairs.
-Lag 8633.110600163982 has 6772 point pairs.
-Lag 9496.42166018038 has 7104 point pairs.
-Lag 10359.732720196778 has 6770 point pairs.
-Lag 11223.043780213176 has 6644 point pairs.
-Lag 12086.354840229575 has 6704 point pairs.
-Lag 12949.665900245973 has 6398 point pairs.
+Lag 901.2821082093058 has 724 point pairs.
+Lag 1802.5642164186115 has 2120 point pairs.
+Lag 2703.846324627917 has 3082 point pairs.
+Lag 3605.128432837223 has 4218 point pairs.
+Lag 4506.410541046529 has 5248 point pairs.
+Lag 5407.692649255835 has 5960 point pairs.
+Lag 6308.97475746514 has 6388 point pairs.
+Lag 7210.256865674446 has 6802 point pairs.
+Lag 8111.538973883752 has 7236 point pairs.
+Lag 9012.821082093058 has 7658 point pairs.
+Lag 9914.103190302363 has 7704 point pairs.
+Lag 10815.385298511668 has 7460 point pairs.
+Lag 11716.667406720973 has 7198 point pairs.
+Lag 12617.94951493028 has 7084 point pairs.
+Lag 13519.231623139585 has 6364 point pairs.
 </pre></div></div>
 </div>
 <p>As we see, there are a lot of points per lag! Data is probably messy, but to be sure, we must check its distribution. What are those <strong>points per lag</strong>? They are a set of semivariances between all point pairs within a specific lag. This information helps us to understand if there are any undersampled ranges. Then, we can change <code class="docutils literal notranslate"><span class="pre">step_size</span></code> accordingly (to avoid a situation where one lag has the order of magnitude less/more point pairs than the other).</p>
@@ -988,8 +989,8 @@ True
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-10-31" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

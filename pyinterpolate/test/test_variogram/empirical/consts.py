@@ -112,8 +112,8 @@ class EmpiricalCovarianceData:
 
     output_armstrong_we_lag1 = 4.643
     output_armstrong_ns_lag1 = 9.589
-    output_armstrong_ne_sw_lag2 = 4.551
-    output_armstrong_nw_se_lag2 = 6.331
+    output_armstrong_nw_se_lag2 = 4.551
+    output_armstrong_ne_sw_lag2 = 6.331
     output_armstrong_omni_lag1 = 6.649
 
 
@@ -134,8 +134,8 @@ class EmpiricalSemivarianceData:
 
     output_armstrong_we_lag1 = 6.41
     output_armstrong_ns_lag1 = 4.98
-    output_armstrong_ne_sw_lag2 = 7.459
-    output_armstrong_nw_se_lag2 = 7.806
+    output_armstrong_ne_sw_lag2 = 7.806
+    output_armstrong_nw_se_lag2 = 7.459
     output_armstrong_lag1 = 5.69
 
     output_weighted = np.array([
@@ -144,9 +144,9 @@ class EmpiricalSemivarianceData:
     ])
 
     directional_output_weighted = np.array([
-        [2, 34480.6, 18],
-        [4, 16409.3, 8],
-        [6, 4166.9, 2]
+        [2, 28901.5, 18],
+        [4, 92991.6, 8],
+        [6, 255364.2, 2]
     ])
 
 
