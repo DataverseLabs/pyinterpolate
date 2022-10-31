@@ -74,6 +74,9 @@ class TheoreticalVariogram:
         The semivariogram range is a distance at which spatial correlation exists. It shouldn't be set at a distance
         larger than a half of a study extent.
 
+    direction : float, in range [0, 360], default=None
+        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.
+
     rmse : float, default=0
         Root mean squared error of the difference between the empirical observations and the modeled curve.
 
@@ -174,6 +177,8 @@ class TheoreticalVariogram:
         self.rang = 0.
         self.sill = 0.
 
+        self.direction = None
+
         if self.are_params:
             self._set_model_parameters(model_params)
 
@@ -192,6 +197,7 @@ class TheoreticalVariogram:
             sill: float,
             rang: float,
             nugget=0.,
+            direction=None,
             update_attrs=True,
             warn_about_set_params=True) -> Tuple[np.array, dict]:
         """
@@ -223,6 +229,10 @@ class TheoreticalVariogram:
         nugget : float, default=0.
             Nugget parameter (bias at a zero distance).
 
+        direction : float, in range [0, 360], default=None
+            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is
+            required if passed experimental variogram is stored in a numpy array.
+
         update_attrs : bool, default=True
             Should class attributes be updated?
 
@@ -236,7 +246,11 @@ class TheoreticalVariogram:
 
         Warns
         -----
-        * Model parameters were given during initialization but program is forced to fit the new set of parameters.
+        Warning
+            Model parameters were given during initialization but program is forced to fit the new set of parameters.
+
+        Warning
+            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.
 
         Returns
         -------
@@ -252,9 +266,16 @@ class TheoreticalVariogram:
             self.experimental_variogram = experimental_variogram
             self.lags = experimental_variogram.lags
             self.experimental_array = experimental_variogram.experimental_semivariance_array
+            self.direction = direction
         elif isinstance(experimental_variogram, np.ndarray):
             self.experimental_array = experimental_variogram
             self.lags = experimental_variogram[:, 0]
+            if direction is None:
+                msg = 'If you provide experimental variogram as a numpy array you must remember that the direction' \
+                      ' parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that' \
+                      ' variogram is isotropic.'
+                warnings.warn(msg)
+            self.direction = direction
 
         # Check model type
 
@@ -297,6 +318,7 @@ class TheoreticalVariogram:
                 min_sill=0.,
                 max_sill=1,
                 number_of_sills=64,
+                direction=None,
                 error_estimator='rmse',
                 deviation_weighting='equal',
                 auto_update_attributes=True,
@@ -352,6 +374,10 @@ class TheoreticalVariogram:
         number_of_sills : int, default = 64
             How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
 
+        direction : float, in range [0, 360], default=None
+            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is
+            required if passed experimental variogram is stored in a numpy array.
+
         error_estimator : str, default = 'rmse'
             A model error estimation method. Available options are:
 
@@ -406,6 +432,9 @@ class TheoreticalVariogram:
         Warning
             Model parameters were given during initilization but program is forced to fit the new set of parameters.
 
+        Warning
+            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.
+
         Raises
         ------
         ValueError
@@ -432,9 +461,16 @@ class TheoreticalVariogram:
             self.experimental_variogram = experimental_variogram
             self.lags = experimental_variogram.lags
             self.experimental_array = experimental_variogram.experimental_semivariance_array
+            self.direction = experimental_variogram.direct
         elif isinstance(experimental_variogram, np.ndarray):
             self.experimental_array = experimental_variogram
             self.lags = experimental_variogram[:, 0]
+            if direction is None:
+                msg = 'If you provide experimental variogram as a numpy array you must remember that the direction' \
+                      ' parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that' \
+                      ' variogram is isotropic.'
+                warnings.warn(msg)
+            self.direction = direction
 
         # Check model type and set models
         mtypes = self._check_models_type_autofit(model_types)
@@ -664,7 +700,7 @@ class TheoreticalVariogram:
         Returns
         -------
         model_parameters : Dict
-            Dictionary with model 'name', 'nugget', 'sill' and 'range'.
+            Dictionary with model's ``'name'``, ``'nugget'``, ``'sill'``, ``'range'`` and ``'direction'``.
 
         Raises
         ------
@@ -677,10 +713,13 @@ class TheoreticalVariogram:
                 msg = 'Model is not set yet, cannot export model parameters to dict'
                 raise AttributeError(msg)
 
-        modeled_parameters = {'name': self.name,
-                              'sill': self.sill,
-                              'range': self.rang,
-                              'nugget': self.nugget}
+        modeled_parameters = {
+            'name': self.name,
+            'sill': self.sill,
+            'range': self.rang,
+            'nugget': self.nugget,
+            'direction': self.direction
+        }
 
         return modeled_parameters
 
@@ -690,7 +729,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         parameters : Dict
-            Dictionary with model's: ``'name', 'nugget', 'sill', 'range'``.
+            Dictionary with model's: ``'name', 'nugget', 'sill', 'range', 'direction'``.
         """
 
         self._set_model_parameters(parameters)
@@ -709,7 +748,8 @@ class TheoreticalVariogram:
             'name': self.name,
             'nugget': self.nugget,
             'range': self.rang,
-            'sill': self.sill
+            'sill': self.sill,
+            'direction': self.direction
         }
 
         with open(fname, 'w') as fout:
@@ -893,11 +933,23 @@ class TheoreticalVariogram:
         modeled[:, 1] = fitted_values
         return modeled
 
+    @staticmethod
+    def _set_direction(mparams):
+        try:
+            direction = float(mparams['direction'])
+        except TypeError:
+            return None
+        except KeyError:
+            return None
+
+        return direction
+
     def _set_model_parameters(self, model_params: dict):
         self.nugget = float(model_params['nugget'])
         self.rang = float(model_params['range'])
         self.sill = float(model_params['sill'])
         self.name = model_params['name']
+        self.direction = self._set_direction(model_params)
 
 
 def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,

@@ -72,7 +72,7 @@ class DirectionalVariogram:
         See the ``weights`` parameter.
 
     directions : Dict
-        Dictionary where keys are directions: NS, WE, NE-SW, NW-SE, and values are angles: -90, 0, -45, 45.
+        Dictionary where keys are directions: NS, WE, NE-SW, NW-SE, and values are angles: 90, 0, 45, 135
 
     method : str, default = triangular
         See the ``method`` parameter.
@@ -106,10 +106,10 @@ class DirectionalVariogram:
         self.method = method
 
         self.directions = {
-            'NS': -90,
+            'NS': 90,
             'WE': 0,
-            'NE-SW': -45,
-            'NW-SE': 45
+            'NE-SW': 45,
+            'NW-SE': 135
         }
 
         self.directional_variograms = {}
@@ -185,8 +185,8 @@ class ExperimentalVariogram:
         
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1]), default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -558,8 +558,8 @@ def build_experimental_variogram(input_array: np.array,
         
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of

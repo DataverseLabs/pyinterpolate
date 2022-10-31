@@ -28,6 +28,7 @@ def simple_kriging(
         neighbors_range=None,
         no_neighbors=1,
         use_all_neighbors_in_range=False,
+        direction=None,
         allow_approximate_solutions=False,
         err_to_nan=False
 ) -> List:

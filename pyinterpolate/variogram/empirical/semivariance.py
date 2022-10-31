@@ -113,8 +113,8 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -206,8 +206,8 @@ def _from_ellipse_non_weighted(points: np.array, lags: np.array, step_size: floa
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -285,16 +285,13 @@ def _from_triangle_non_weighted(points: np.array, lags: np.array, direction, tol
     lags : numpy array
            Array with lags.
 
-    step_size : float
-                Distance between lags.
-
     direction : float
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -385,10 +382,11 @@ def directional_semivariogram(points: np.array,
 
     direction : float
         Direction of semivariogram, values from 0 to 360 degrees:
+
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -453,10 +451,11 @@ def calculate_semivariance(points: np.array,
 
     direction : float
         Direction of semivariogram, values from 0 to 360 degrees:
+
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close

@@ -108,8 +108,8 @@ class Deconvolution:
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1])
 
@@ -293,8 +293,8 @@ class Deconvolution:
 
             - 0 or 180: is E-W,
             - 90 or 270 is N-S,
-            - 45 or 225 is NW-SE,
-            - 135 or 315 is NE-SW.
+            - 45 or 225 is NE-SW,
+            - 135 or 315 is NW-SE.
 
         agg_tolerance : float (in range [0, 1]), optional, default=1
             If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -573,8 +573,8 @@ class Deconvolution:
 
             - 0 or 180: is E-W,
             - 90 or 270 is N-S,
-            - 45 or 225 is NW-SE,
-            - 135 or 315 is NE-SW.
+            - 45 or 225 is NE-SW,
+            - 135 or 315 is NW-SE.
 
         agg_tolerance : float (in range [0, 1]), optional, default=1
             If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of

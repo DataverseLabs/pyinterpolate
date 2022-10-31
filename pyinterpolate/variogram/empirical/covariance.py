@@ -111,8 +111,8 @@ def directional_covariogram(points: np.array,
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -198,8 +198,8 @@ def calculate_covariance(points: np.array,
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close

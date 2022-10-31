@@ -33,8 +33,8 @@ def _rotation_matrix(angle: float) -> np.array:
         The rotation matrix.
     """
     theta = np.radians(angle)
-    e_major_rot = [np.cos(theta), -np.sin(theta)]
-    e_minor_rot = [np.sin(theta), np.cos(theta)]
+    e_major_rot = [np.cos(theta), np.sin(theta)]
+    e_minor_rot = [-np.sin(theta), np.cos(theta)]
     e_matrix = np.array([e_major_rot, e_minor_rot])
     return e_matrix
 
@@ -104,7 +104,7 @@ def select_points_within_ellipse(ellipse_center: np.array,
                 Step size between lags.
 
     theta : float
-            Angle from y axis clockwise (W-E is a 0).
+            Angle from y axis counterclockwise (W-E is a 0).
 
     minor_axis_size : float
                       Fraction of the major axis size.
@@ -567,7 +567,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
                                                       number_of_neighbors,
                                                       use_all_neighbors_in_range)
 
-    return selected_data
+    return selected_data[:, :-1]
 
 
 def select_kriging_data(unknown_position: Iterable,

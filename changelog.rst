@@ -6,6 +6,18 @@ Pyinterpolate is the Python library for **geostatistics**. The package provides 
 Changes by date
 ===============
 
+2022-11-
+--------
+
+**version 0.3.5**
+
+* (debug) Updated directional variogram algorithm: now angle moves counterclockwise (instead of clockwise).
+* (feature) Directional Ordinary Kriging,
+* (feature) Directional Simple Kriging,
+* (feature) Angle calculations (angle to origin, angle between vectors),
+* (docs) Updated `distance` module docs.
+
+
 2022-10-22
 ----------
 

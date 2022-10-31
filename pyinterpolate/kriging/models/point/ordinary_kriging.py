@@ -51,7 +51,7 @@ def ordinary_kriging(
         ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
         ``number_of_neighbors`` parameter then take all of them anyway.
 
-    allow_approx_solutions : bool, default=False
+    allow_approximate_solutions : bool, default=False
         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing.
 
