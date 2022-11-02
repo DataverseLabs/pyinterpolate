@@ -956,7 +956,8 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
                                 model_type: str,
                                 sill: float,
                                 rang: float,
-                                nugget: float = 0.) -> TheoreticalVariogram:
+                                nugget: float = 0.,
+                                direction: float = None) -> TheoreticalVariogram:
     """Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.
 
     Parameters
@@ -985,6 +986,9 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
     nugget : float, default=0.
         The nugget parameter (bias at a zero distance).
 
+    direction : float, in range [0, 360], default=None
+        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.
+
     Returns
     -------
     theo : TheoreticalVariogram
@@ -992,6 +996,11 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
     """
     theo = TheoreticalVariogram()
     theo.fit(
-        experimental_variogram=experimental_variogram, model_type=model_type, sill=sill, rang=rang, nugget=nugget
+        experimental_variogram=experimental_variogram,
+        model_type=model_type,
+        sill=sill,
+        rang=rang,
+        nugget=nugget,
+        direction=direction
     )
     return theo

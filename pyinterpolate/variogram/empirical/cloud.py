@@ -144,7 +144,7 @@ def directional_point_cloud(input_array: np.array,
 def build_variogram_point_cloud(input_array: np.array,
                                 step_size: float,
                                 max_range: float,
-                                direction=0.0,
+                                direction=None,
                                 tolerance=1.0) -> dict:
     """
     Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point
@@ -164,7 +164,7 @@ def build_variogram_point_cloud(input_array: np.array,
     weights : numpy array or None, optional, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), default=0
+    direction : float (in range [0, 360]), default=None
         Direction of semivariogram, values from 0 to 360 degrees:
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
@@ -204,7 +204,7 @@ def build_variogram_point_cloud(input_array: np.array,
     validate_tolerance(tolerance)
     # END:VALIDATION
 
-    if tolerance == 1:
+    if direction is None:
         return omnidirectional_point_cloud(input_array, step_size, max_range)
     else:
         return directional_point_cloud(input_array, step_size, max_range, direction, tolerance)
@@ -228,7 +228,7 @@ class VariogramCloud:
     weights : numpy array or None, optional, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), optional, default=0
+    direction : float (in range [0, 360]), optional, default=None
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,

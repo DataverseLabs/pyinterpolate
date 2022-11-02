@@ -254,7 +254,7 @@ class Deconvolution:
             agg_step_size: float,
             agg_max_range: float,
             agg_nugget: float = 0,
-            agg_direction: float = 0,
+            agg_direction: float = None,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
             model_types: Union[str, List] = 'basic') -> None:
@@ -531,7 +531,7 @@ class Deconvolution:
                       agg_step_size: float,
                       agg_max_range: float,
                       agg_nugget: float = 0,
-                      agg_direction: float = 0,
+                      agg_direction: float = None,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
                       model_types: Union[str, List] = 'basic',

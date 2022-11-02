@@ -427,7 +427,7 @@ def calculate_semivariance(points: np.array,
                            step_size: float,
                            max_range: float,
                            weights=None,
-                           direction=0,
+                           direction=None,
                            tolerance=1,
                            method='t') -> np.array:
     """Function calculates semivariance from given points. In a default mode it calculates non-weighted and
@@ -449,7 +449,7 @@ def calculate_semivariance(points: np.array,
               Weights assigned to points, index of weight must be the same as index of point, if provided then
               the semivariogram is weighted by those.
 
-    direction : float
+    direction : float, default = None
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,
@@ -607,7 +607,7 @@ def calculate_semivariance(points: np.array,
     # START:CALCULATIONS
     lags = np.arange(step_size, max_range, step_size)
 
-    if tolerance == 1:
+    if direction is None:
         semivariance = omnidirectional_semivariogram(points, lags, step_size, weights)
     else:
         semivariance = directional_semivariogram(points, lags, step_size, weights, direction, tolerance, method=method)

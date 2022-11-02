@@ -180,7 +180,7 @@ class ExperimentalVariogram:
     weights : numpy array, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), default=0
+    direction : float (in range [0, 360]), default=None
         Direction of semivariogram, values from 0 to 360 degrees:
         
         - 0 or 180: is E-W,
@@ -321,7 +321,7 @@ class ExperimentalVariogram:
                  step_size: float,
                  max_range: float,
                  weights=None,
-                 direction: float = 0.0,
+                 direction: float = None,
                  tolerance: float = 1.0,
                  method='t',
                  is_semivariance=True,
@@ -530,7 +530,7 @@ def build_experimental_variogram(input_array: np.array,
                                  step_size: float,
                                  max_range: float,
                                  weights: np.array = None,
-                                 direction: float = 0,
+                                 direction: float = None,
                                  tolerance: float = 1,
                                  method='t') -> ExperimentalVariogram:
     """
@@ -553,7 +553,7 @@ def build_experimental_variogram(input_array: np.array,
     weights : numpy array or None, optional, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), default = 0
+    direction : float (in range [0, 360]), default = None
         Direction of semivariogram, values from 0 to 360 degrees:
         
         - 0 or 180: is E-W,
