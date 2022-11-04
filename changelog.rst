@@ -15,6 +15,9 @@ Changes by date
 * (feature) Directional Ordinary Kriging,
 * (feature) Directional Simple Kriging,
 * (feature) Angle calculations (angle to origin, angle between vectors),
+* (enhancement) `direction` parameter is `None` default, to avoid hard-to-track bugs,
+* (debug) debugged `interpolate_raster()` function,
+* (enhancement) kriging data selection - a small refactoring,
 * (docs) Updated `distance` module docs.
 
 

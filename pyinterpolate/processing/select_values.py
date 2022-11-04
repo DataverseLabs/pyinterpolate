@@ -486,7 +486,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
         Sorted neighbors based on a distance and angle from the origin.
     """
     angular_tolerance = 1
-    max_tick = 30
+    max_tick = 15
 
     neighbors_dists_and_angles = np.c_[possible_neighbors, distances.T, angle_differences.T]
 
@@ -501,19 +501,14 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
         angular_tolerance = angular_tolerance + 1
         prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
 
-    len_prep = len(prepared_data_with_angles)
-    is_more_than_0 = len_prep > 0
-
-    if not is_more_than_0:
-        sorted_angles = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1].argsort()]
-        return sorted_angles[:min_number_of_neighbors]
-    else:
+    if len(prepared_data_with_angles) >= min_number_of_neighbors:
         if use_all_neighbors_in_range:
             return prepared_data_with_angles
-        elif len_prep > min_number_of_neighbors:
-            return prepared_data_with_angles[:min_number_of_neighbors]
         else:
-            return prepared_data_with_angles
+            return prepared_data_with_angles[:min_number_of_neighbors]
+    else:
+        sorted_with_sorted_angles = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1].argsort()]
+        return sorted_with_sorted_angles[:min_number_of_neighbors]
 
 
 def select_kriging_data_from_direction(unknown_position: Iterable,
@@ -616,18 +611,13 @@ def select_kriging_data(unknown_position: Iterable,
     sorted_neighbors_and_dists = neighbors_and_dists[neighbors_and_dists[:, -1].argsort()]
     prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -1] <= neighbors_range, :]
 
-    len_prep = len(prepared_data)
-    is_more_than_0 = len_prep > 0
-
-    if use_all_neighbors_in_range and is_more_than_0:
-        return prepared_data
-
-    if len_prep > number_of_neighbors:
-        return sorted_neighbors_and_dists[:number_of_neighbors]
-    elif not is_more_than_0:
-        return sorted_neighbors_and_dists[:number_of_neighbors]
+    if len(prepared_data) >= number_of_neighbors:
+        if use_all_neighbors_in_range:
+            return prepared_data
+        else:
+            return prepared_data[:number_of_neighbors]
     else:
-        return prepared_data
+        return sorted_neighbors_and_dists[:number_of_neighbors]
 
 
 def select_poisson_kriging_data(u_block_centroid: np.ndarray,

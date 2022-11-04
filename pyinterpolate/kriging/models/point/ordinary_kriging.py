@@ -92,4 +92,7 @@ def ordinary_kriging(
 
     sigma = np.matmul(output_weights.T, k)
 
+    if sigma < 0:
+        return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
+
     return [zhat, sigma, unknown_location[0], unknown_location[1]]

@@ -312,9 +312,9 @@ def calculate_angular_distance(angles: np.ndarray, expected_direction: float) ->
     expected_direction_rad = np.deg2rad(expected_direction)
     r_angles = np.deg2rad(angles)
     norm_a = r_angles - expected_direction_rad
-    deg_norm_a = np.rad2deg(norm_a % (2 * np.pi))
+    deg_norm_a = np.abs(np.rad2deg(norm_a % (2 * np.pi)))
     norm_b = expected_direction_rad - r_angles
-    deg_norm_b = np.rad2deg(norm_b % (2 * np.pi))
+    deg_norm_b = np.abs(np.rad2deg(norm_b % (2 * np.pi)))
     normalized_angular_dists = np.minimum(deg_norm_a, deg_norm_b)
 
     return normalized_angular_dists
