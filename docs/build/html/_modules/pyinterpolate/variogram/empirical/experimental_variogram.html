@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -61,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -350,7 +350,7 @@
 <span class="sd">    weights : numpy array, default=None</span>
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
-<span class="sd">    direction : float (in range [0, 360]), default=0</span>
+<span class="sd">    direction : float (in range [0, 360]), default=None</span>
 <span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
 <span class="sd">        </span>
 <span class="sd">        - 0 or 180: is E-W,</span>
@@ -491,7 +491,7 @@
                  <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                  <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                  <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span>
                  <span class="n">is_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -700,7 +700,7 @@
                                  <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                  <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                  <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                                 <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                                 <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                  <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -723,7 +723,7 @@
 <span class="sd">    weights : numpy array or None, optional, default=None</span>
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
-<span class="sd">    direction : float (in range [0, 360]), default = 0</span>
+<span class="sd">    direction : float (in range [0, 360]), default = None</span>
 <span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
 <span class="sd">        </span>
 <span class="sd">        - 0 or 180: is E-W,</span>
@@ -817,8 +817,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-31" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

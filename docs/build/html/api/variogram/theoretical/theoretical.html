@@ -224,7 +224,7 @@
 <h1>Theoretical<a class="headerlink" href="#theoretical" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">build_theoretical_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">build_theoretical_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function is a wrapper into <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class and its <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -250,6 +250,8 @@ to observations variance.</p>
 larger than a half of a study extent.</p>
 </dd>
 <dt><strong>nugget</strong><span class="classifier">float, default=0.</span></dt><dd><p>The nugget parameter (bias at a zero distance).</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic.</p>
 </dd>
 </dl>
 </td>
@@ -758,8 +760,8 @@ required if passed experimental variogram is stored in a numpy array.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-31" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

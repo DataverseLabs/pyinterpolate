@@ -69,10 +69,8 @@ def kriging(observations: np.ndarray,
 
     allow_approx_solutions : bool, default=False
         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing.
-
-    err_to_nan : bool, default=False
-        Return ``NaN`` if algorithm detects singular matrix.
+        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        that can lead to singular or near-singular matrix creation.
 
     number_of_workers : int, default=1
         How many processing units can be used for predictions. Increase it only for a very large number of
@@ -119,8 +117,7 @@ def kriging(observations: np.ndarray,
                     neighbors_range=neighbors_range,
                     no_neighbors=no_neighbors,
                     use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions,
-                    err_to_nan=err_to_nan
+                    allow_approximate_solutions=allow_approx_solutions
                 )
             elif how == 'sk':
                 prediction = model(
@@ -131,8 +128,7 @@ def kriging(observations: np.ndarray,
                     neighbors_range=neighbors_range,
                     no_neighbors=no_neighbors,
                     use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions,
-                    err_to_nan=err_to_nan
+                    allow_approximate_solutions=allow_approx_solutions
                 )
             results.append(prediction)
         predictions = np.array(results)
@@ -148,8 +144,7 @@ def kriging(observations: np.ndarray,
                     neighbors_range=neighbors_range,
                     no_neighbors=no_neighbors,
                     use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions,
-                    err_to_nan=err_to_nan
+                    allow_approximate_solutions=allow_approx_solutions
                 )
             elif how == 'sk':
                 prediction = dask.delayed(model)(
@@ -160,8 +155,7 @@ def kriging(observations: np.ndarray,
                     neighbors_range=neighbors_range,
                     no_neighbors=no_neighbors,
                     use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions,
-                    err_to_nan=err_to_nan
+                    allow_approximate_solutions=allow_approx_solutions
                 )
             results.append(prediction)
         predictions = dask.delayed()(results)
