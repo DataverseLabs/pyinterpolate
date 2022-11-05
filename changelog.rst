@@ -1,13 +1,13 @@
 Pyinterpolate
 =============
 
-Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
+Pyinterpolate is the Python library for **geostatistics** and **spatial statistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 Changes by date
 ===============
 
-2022-11-
---------
+2022-11-05
+----------
 
 **version 0.3.5**
 
