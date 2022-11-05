@@ -68,7 +68,7 @@ class TestVariogramPointCloud(unittest.TestCase):
 
         expected_output = sem_data.output_armstrong_we_lag1
         err_msg = f'Calculated semivariance for lag 1 should be equal to {expected_output} for ' \
-                  f'the W-E direction.'
+                  f'the N-S direction.'
         self.assertAlmostEqual(smv, expected_output, places=2, msg=err_msg)
 
     def test_calculate_semivariance_NE_SW_lag2(self):

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -572,7 +573,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -585,7 +586,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
@@ -614,7 +615,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets take a look into a map of areal counts</span>
@@ -624,7 +625,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -636,7 +637,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_4_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_4_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_4_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_4_1.png" />
 </div>
 </div>
 <p><strong>Clarification</strong>: It is a good idea to look into the spatial patterns in a dataset and to visually check if our data do not have any NaN values. We use the geopandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.plot()</span></code> function with a color map that diverges regions based on the cancer incidence rates. The output choropleth map is not ideal, and (probably) it has a few unreliable results, for example:</p>
@@ -651,7 +652,7 @@ div.rendered_html tbody tr:hover {
 <h2>2) Load a semivariogram model<a class="headerlink" href="#2)-Load-a-semivariogram-model" title="Permalink to this heading">¶</a></h2>
 <p>In this step, we load regularized semivariogram from the tutorial <strong>Semivariogram Regularization (Intermediate)</strong>. You can always perform semivariogram regularization along with the Poisson Kriging, but it is a very long process, and it is more convenient to separate those two steps.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
@@ -664,7 +665,7 @@ div.rendered_html tbody tr:hover {
 <h2>3) Prepare training and test data.<a class="headerlink" href="#3)-Prepare-training-and-test-data." title="Permalink to this heading">¶</a></h2>
 <p>We simply remove 40% of random ID’s from the areal dataset (the same for points) and create four arrays: two training arrays with areal and point geometry and values and two test arrays with the same categories of data.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove 40% of rows (values) to test our model</span>
@@ -744,7 +745,7 @@ div.rendered_html tbody tr:hover {
 in the last part of the tutorial.</p>
 <p>Your work with Poisson Kriging (or Kriging) will usually be the same: - prepare training and test data, - use training data to train the semivariogram model, - test different hyperparameters with a test set to find the optimal number of neighbors which are affecting your area of analysis, - forecast into unknown areas OR perform data smoothing.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">number_of_obs</span> <span class="o">=</span> <span class="mi">4</span>
@@ -776,7 +777,7 @@ in the last part of the tutorial.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">kriged_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predslist</span><span class="p">)</span>
@@ -791,7 +792,7 @@ in the last part of the tutorial.</p>
 <h2>5) Analyze Forecast Bias and Root Mean Squared Error of prediction<a class="headerlink" href="#5)-Analyze-Forecast-Bias-and-Root-Mean-Squared-Error-of-prediction" title="Permalink to this heading">¶</a></h2>
 <p>The last step is the analysis of errors. We plot two histograms: forecast bias and root mean squared error then we calculate the base statistics of a dataset.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show histograms of errors</span>
@@ -801,7 +802,7 @@ in the last part of the tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -813,11 +814,11 @@ in the last part of the tutorial.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_15_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_15_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_15_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_15_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="p">[</span><span class="s1">&#39;rmse&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -825,7 +826,7 @@ in the last part of the tutorial.</p>
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -837,11 +838,11 @@ in the last part of the tutorial.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_16_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_(Advanced)_16_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_16_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Area_%28Advanced%29_16_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -849,7 +850,7 @@ in the last part of the tutorial.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -880,59 +881,59 @@ in the last part of the tutorial.</p>
   <tbody>
     <tr>
       <th>count</th>
-      <td>40.000000</td>
-      <td>40.000000</td>
-      <td>40.000000</td>
-      <td>40.000000</td>
+      <td>41.000000</td>
+      <td>41.000000</td>
+      <td>41.000000</td>
+      <td>41.000000</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>188.851560</td>
-      <td>12.874029</td>
-      <td>86.101090</td>
-      <td>-55.261560</td>
+      <td>128.385675</td>
+      <td>6.947989</td>
+      <td>25.612078</td>
+      <td>3.985057</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>222.148586</td>
-      <td>14.195824</td>
-      <td>210.666040</td>
-      <td>221.023803</td>
+      <td>32.303385</td>
+      <td>4.202071</td>
+      <td>19.495842</td>
+      <td>32.189877</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>24.439343</td>
-      <td>2.953871</td>
-      <td>0.210986</td>
-      <td>-1215.955295</td>
+      <td>38.660837</td>
+      <td>1.228189</td>
+      <td>0.868979</td>
+      <td>-47.462754</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>107.067796</td>
-      <td>5.939257</td>
-      <td>16.045911</td>
-      <td>-38.356150</td>
+      <td>113.362522</td>
+      <td>3.504735</td>
+      <td>11.094049</td>
+      <td>-18.979176</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>144.979562</td>
-      <td>8.438366</td>
-      <td>37.126108</td>
-      <td>-4.730332</td>
+      <td>130.341906</td>
+      <td>6.617274</td>
+      <td>20.637478</td>
+      <td>0.868979</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>176.309400</td>
-      <td>15.364577</td>
-      <td>51.849574</td>
-      <td>21.502745</td>
+      <td>148.494049</td>
+      <td>9.235619</td>
+      <td>33.513149</td>
+      <td>20.637478</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>1354.955295</td>
-      <td>88.469054</td>
-      <td>1215.955295</td>
-      <td>99.860657</td>
+      <td>175.962754</td>
+      <td>20.815410</td>
+      <td>83.739163</td>
+      <td>83.739163</td>
     </tr>
   </tbody>
 </table>
@@ -960,8 +961,8 @@ in the last part of the tutorial.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

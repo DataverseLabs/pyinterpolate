@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -511,9 +512,9 @@ div.rendered_html tbody tr:hover {
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
 <table>
 <colgroup>
-<col width="3%" />
-<col width="93%" />
-<col width="4%" />
+<col width="6%" />
+<col width="86%" />
+<col width="8%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Date</th>
@@ -522,31 +523,35 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>2022-08-20</td>
+<tr class="row-even"><td>2022-11-05</td>
+<td>Tutorial updated for the 0.3.5 version of the package</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-08-20</td>
 <td>The tutorial is updated to the version 0.3.0 of the package</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-12-14</td>
+<tr class="row-even"><td>2021-12-14</td>
 <td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class &amp; error variance estimated in a correct way</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-12-13</td>
+<tr class="row-odd"><td>2021-12-13</td>
 <td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-12-11</td>
+<tr class="row-even"><td>2021-12-11</td>
 <td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-05-11</td>
+<tr class="row-odd"><td>2021-05-11</td>
 <td>Refactored TheoreticalSemivariogram class</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-04-03</td>
+<tr class="row-even"><td>2021-04-03</td>
 <td>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-03-31</td>
+<tr class="row-odd"><td>2021-03-31</td>
 <td>Update related to the change of semivariogram weighting. Updated point data source.</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
@@ -598,10 +603,10 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </div>
 <p>In the beginning, we remove 70 % of our points from the dataset, and we will leave them as a test set to estimate how good our models are.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">frac</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function divides base dataset into a training and a test set.</span>
 
@@ -609,7 +614,7 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 <span class="sd">    ----------</span>
 <span class="sd">    dataset : np.ndarray</span>
 
-<span class="sd">    frac : float, default = 0.2</span>
+<span class="sd">    training_set_ratio : float, default = 0.3</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -618,10 +623,10 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>  <span class="c1"># To ensure that we will get the same results every time</span>
 
-    <span class="n">removed_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">frac</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)))</span>
-    <span class="n">testset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">removed_idx</span><span class="p">]</span>
-    <span class="n">trainingset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">removed_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">trainingset</span><span class="p">,</span> <span class="n">testset</span>
+    <span class="n">indexes_of_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">training_set_ratio</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">training_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">indexes_of_training_set</span><span class="p">]</span>
+    <span class="n">validation_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">indexes_of_training_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">training_set</span><span class="p">,</span> <span class="n">validation_set</span>
 
 
 <span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">create_train_test</span><span class="p">(</span><span class="n">dem</span><span class="p">)</span>
@@ -641,7 +646,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <h2>2) Set Semivariogram model<a class="headerlink" href="#2)-Set-Semivariogram-model" title="Permalink to this heading">¶</a></h2>
 <p>In this step, we are going to create experimental and theoretical semivariograms.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create experimental semivariogram</span>
@@ -656,7 +661,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot experimental semivariogram</span>
@@ -669,11 +674,11 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_10_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_10_0.png" />
+<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_10_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_10_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit data into a theoretical model</span>
@@ -683,7 +688,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -694,11 +699,11 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_12_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_12_0.png" />
+<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_12_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_12_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">semivar</span><span class="p">)</span>
@@ -712,34 +717,34 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="highlight"><pre>
 * Selected model: Linear model
 * Nugget: 0.0
-* Sill: 502.1478552791644
+* Sill: 493.778772754868
 * Range: 10000
-* Mean Bias: 27.316066997374072
-* Mean RMSE: 44.33535794872789
+* Mean Bias: 21.92700357030904
+* Mean RMSE: 37.17324824914244
 * Error-lag weighting method: None
 
 +--------+--------------------+--------------------+---------------------+
 |  lag   |    theoretical     |    experimental    |     bias (y-y&#39;)     |
 +--------+--------------------+--------------------+---------------------+
-| 500.0  | 25.10739276395822  | 15.685422829102698 |  -9.421969934855522 |
-| 1000.0 | 50.21478552791644  | 35.23923933757287  | -14.975546190343572 |
-| 1500.0 | 75.32217829187465  | 56.351669380560246 | -18.970508911314404 |
-| 2000.0 | 100.42957105583288 | 82.39521047099969  | -18.034360584833195 |
-| 2500.0 | 125.5369638197911  | 111.26318241073449 |  -14.27378140905661 |
-| 3000.0 | 150.6443565837493  | 142.15040290428337 |  -8.493953679465932 |
-| 3500.0 | 175.75174934770752 | 171.76539947943704 |  -3.98634986827048  |
-| 4000.0 | 200.85914211166576 | 206.84908400021737 |  5.989941888551613  |
-| 4500.0 | 225.96653487562398 | 243.99652017816922 |  18.029985302545242 |
-| 5000.0 | 251.0739276395822  | 283.6724763618299  |  32.59854872224773  |
-| 5500.0 | 276.18132040354044 | 316.1601121172623  |  39.978791713721876 |
-| 6000.0 | 301.2887131674986  | 351.92582352100305 |  50.637110353504454 |
-| 6500.0 | 326.3961059314569  | 385.7185939984619  |  59.322488067005054 |
-| 7000.0 | 351.50349869541503 | 420.7567175096165  |  69.25321881420149  |
-| 7500.0 | 376.6108914593733  | 448.9907670140393  |   72.379875554666   |
-| 8000.0 | 401.7182842233315  | 474.7460708097995  |  73.02778658646798  |
-| 8500.0 | 426.82567698728974 | 494.3271007965118  |  67.50142380922205  |
-| 9000.0 | 451.93306975124796 | 513.7075757354861  |  61.77450598423815  |
-| 9500.0 | 477.0404625152062  | 533.7085292470816  |  56.668066731875456 |
+| 500.0  |  24.6889386377434  | 15.614084077885668 |  -9.074854559857734 |
+| 1000.0 |  49.3778772754868  | 34.151521896711735 | -15.226355378775068 |
+| 1500.0 |  74.0668159132302  | 56.61060460335831  |  -17.45621130987189 |
+| 2000.0 |  98.7557545509736  | 81.75250857008155  |  -17.00324598089206 |
+| 2500.0 |  123.444693188717  | 107.39147411240353 | -16.053219076313468 |
+| 3000.0 | 148.1336318264604  | 138.01527174633642 | -10.118360080123978 |
+| 3500.0 | 172.82257046420378 | 170.17760461535644 | -2.6449658488473347 |
+| 4000.0 | 197.5115091019472  | 201.7643955690108  |  4.2528864670635755 |
+| 4500.0 | 222.2004477396906  | 235.6737606045218  |   13.4733128648312  |
+| 5000.0 |  246.889386377434  | 274.49115425599933 |  27.60176787856534  |
+| 5500.0 | 271.5783250151774  | 304.81328096735956 |  33.23495595218213  |
+| 6000.0 | 296.2672636529208  | 341.13970843945583 |  44.87244478653503  |
+| 6500.0 | 320.9562022906642  | 367.8150566677254  |  46.85885437706122  |
+| 7000.0 | 345.64514092840756 | 403.5663320998641  |  57.92119117145654  |
+| 7500.0 |  370.334079566151  | 430.51175648403176 |  60.177676917880774 |
+| 8000.0 | 395.0230182038944  | 456.5353159209564  |  61.51229771706198  |
+| 8500.0 | 419.7119568416378  | 472.6792052919712  |  52.967248450333386 |
+| 9000.0 | 444.4008954793812  | 496.87388696572737 |  52.47299148634619  |
+| 9500.0 | 469.08983411712455 | 517.9344861183605  |  48.84465200123594  |
 +--------+--------------------+--------------------+---------------------+
 </pre></div></div>
 </div>
@@ -763,7 +768,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </ul>
 <p>We use only the first four parameters and <code class="docutils literal notranslate"><span class="pre">sk_mean</span></code> when we perform Simple Kriging. Let’s start! The first step is an interpolation of the value known by our model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select one known value</span>
@@ -774,16 +779,16 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([2.37852392e+05, 5.47022672e+05, 7.61861649e+01])
+array([2.49304390e+05, 5.40766289e+05, 2.03649998e+01])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
@@ -798,26 +803,25 @@ array([2.37852392e+05, 5.47022672e+05, 7.61861649e+01])
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 622.21it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 524.75it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
-         5.47022672e+05]])
+array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 </pre></div></div>
 </div>
 <p>The first value is our prediction: it is precisely the same as the input in the training set! So far, the algorithm has worked well. The second value is prediction variance error, and it is equal to zero - we are sure it is the exact value.</p>
 <p>Simple Kriging is slightly different than Ordinary Kriging, and we must set the process mean to retrieve valid results. It is rarely the case. That’s why Ordinary Kriging is the first choice for many applications. We know the global mean because we have the whole dataset, but in the real-world scenario, we cannot divide the set into training and test sets and then get the mean from the entire dataset - it is an information leak from the test set into a model!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
 <span class="n">sk_interpolation</span>
 </pre></div>
 </div>
@@ -827,17 +831,16 @@ array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 737.01it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 235.93it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
-         5.47022672e+05]])
+array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 </pre></div></div>
 </div>
 <p>The Simple Kriging algorithm returns the same output as the Ordinary Kriging: <code class="docutils literal notranslate"><span class="pre">[prediction,</span> <span class="pre">error</span> <span class="pre">variance,</span> <span class="pre">pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y]</span></code>. And as with Ordinary Kriging, Simple Kriging has returned the same value as the actual value fed to the algorithm.</p>
@@ -847,17 +850,17 @@ array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
 <p>Using kriging for interpolation of known points values is pointless, and it is an excellent tool for a testing algorithm but nothing more. Here we will interpolate with Kriging, and we will interpolate values at unknown locations. Additionally, we will control the <code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code> parameter to check how it influences predictions.</p>
 <p>In the first step, we will create a simple function to test our kriging results and calculate RMSE.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="p">,</span> <span class="n">ktype</span><span class="p">,</span> <span class="n">test_values</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">variogram_model</span><span class="p">,</span> <span class="n">ktype</span><span class="p">,</span> <span class="n">test_values</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
                           <span class="n">theoretical_model</span><span class="o">=</span><span class="n">variogram_model</span><span class="p">,</span>
                           <span class="n">points</span><span class="o">=</span><span class="n">test_values</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                           <span class="n">how</span><span class="o">=</span><span class="n">ktype</span><span class="p">,</span>
                           <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
                           <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                          <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">)</span>
+                          <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean_value</span><span class="p">)</span>
     <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">predictions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">test_values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">rmse</span>
@@ -865,7 +868,7 @@ array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of neighbors</span>
@@ -876,7 +879,7 @@ array([[ 7.61861649e+01, -7.88860905e-31,  2.37852392e+05,
 
 <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
-    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_set</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">)</span>
+    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
@@ -897,7 +900,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2234.44it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 3412.41it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -905,7 +908,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.818867284388139
+RMSE: 3.404341396262182
 
 Number of neighbors: 8
 </pre></div></div>
@@ -915,7 +918,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2266.78it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 3191.84it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -923,7 +926,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6860057738762406
+RMSE: 3.2909488461696372
 
 Number of neighbors: 16
 </pre></div></div>
@@ -933,7 +936,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2192.01it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 3390.65it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -941,7 +944,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.643039827611819
+RMSE: 3.2674275543792795
 
 Number of neighbors: 32
 </pre></div></div>
@@ -951,7 +954,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 2027.99it/s]
+100%|██████████| 4826/4826 [00:04&lt;00:00, 1122.85it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -959,7 +962,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6331569086257294
+RMSE: 3.2608735889738663
 
 Number of neighbors: 64
 </pre></div></div>
@@ -969,7 +972,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 1658.11it/s]
+100%|██████████| 4826/4826 [00:04&lt;00:00, 1147.38it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -977,7 +980,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6323383774599884
+RMSE: 3.2565732386644757
 
 Number of neighbors: 128
 </pre></div></div>
@@ -987,7 +990,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:04&lt;00:00, 1143.55it/s]
+100%|██████████| 4826/4826 [00:07&lt;00:00, 647.30it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -995,7 +998,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6311211699475523
+RMSE: 3.2547868359770336
 
 Number of neighbors: 256
 </pre></div></div>
@@ -1005,7 +1008,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:06&lt;00:00, 711.65it/s]
+100%|██████████| 4826/4826 [00:11&lt;00:00, 415.25it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1013,7 +1016,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6309421059722435
+RMSE: 3.2550170696805005
 
 </pre></div></div>
 </div>
@@ -1026,7 +1029,7 @@ RMSE: 2.6309421059722435
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Simple Kriging: tests&#39;</span><span class="p">)</span>
@@ -1036,7 +1039,7 @@ RMSE: 2.6309421059722435
 
 <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
-    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_set</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">)</span>
+    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1057,7 +1060,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2604.73it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 4217.93it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1065,7 +1068,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 5.32695312780116
+RMSE: 8.697161939348147
 
 Number of neighbors: 8
 </pre></div></div>
@@ -1075,7 +1078,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2606.66it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 4246.46it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1083,7 +1086,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 3.1291216204454035
+RMSE: 3.650066190084651
 
 Number of neighbors: 16
 </pre></div></div>
@@ -1093,7 +1096,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2554.91it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 4154.94it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1101,7 +1104,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.728023100559632
+RMSE: 3.348632949010878
 
 Number of neighbors: 32
 </pre></div></div>
@@ -1111,7 +1114,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:01&lt;00:00, 2490.65it/s]
+100%|██████████| 4826/4826 [00:03&lt;00:00, 1539.77it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1119,7 +1122,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6447451848933268
+RMSE: 3.2785837126433313
 
 Number of neighbors: 64
 </pre></div></div>
@@ -1129,7 +1132,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:02&lt;00:00, 1895.18it/s]
+100%|██████████| 4826/4826 [00:03&lt;00:00, 1396.62it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1137,7 +1140,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6333680288613786
+RMSE: 3.261651162610457
 
 Number of neighbors: 128
 </pre></div></div>
@@ -1147,7 +1150,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:03&lt;00:00, 1283.47it/s]
+100%|██████████| 4826/4826 [00:04&lt;00:00, 976.35it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1155,7 +1158,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6308138101222793
+RMSE: 3.255919635781099
 
 Number of neighbors: 256
 </pre></div></div>
@@ -1165,7 +1168,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4825/4825 [00:06&lt;00:00, 732.70it/s]
+100%|██████████| 4826/4826 [00:11&lt;00:00, 417.94it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1173,7 +1176,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 2.6307300408948957
+RMSE: 3.254332343473019
 
 </pre></div></div>
 </div>
@@ -1209,8 +1212,8 @@ RMSE: 2.6307300408948957
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -511,9 +512,9 @@ div.rendered_html tbody tr:hover {
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
 <table>
 <colgroup>
-<col width="12%" />
-<col width="73%" />
-<col width="16%" />
+<col width="6%" />
+<col width="90%" />
+<col width="4%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Date</th>
@@ -522,35 +523,40 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>2022-10-21</td>
+<tr class="row-even"><td>2022-11-05</td>
+<td>Tutorial updated for the 0.3.5 version of the package</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-10-21</td>
 <td>Tutorial updated for the 0.3.4 version of the package</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2022-08-23</td>
+<tr class="row-even"><td>2022-08-23</td>
 <td>Tutorial updated for the 0.3.0 version of the package</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-12-14</td>
+<tr class="row-odd"><td>2021-12-14</td>
 <td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-12-13</td>
+<tr class="row-even"><td>2021-12-13</td>
 <td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-12-06</td>
+<tr class="row-odd"><td>2021-12-06</td>
 <td>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-10-13</td>
+<tr class="row-even"><td>2021-10-13</td>
 <td>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> functions to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</td>
-<td>&#64;ethmtrgt &amp; &#64;SimonMolinsky</td>
+<td>&#64;ethmtrgt &amp;
+&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-even"><td>2021-05-11</td>
+<tr class="row-odd"><td>2021-05-11</td>
 <td>Refactored TheoreticalSemivariogram class</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
-<tr class="row-odd"><td>2021-03-31</td>
+<tr class="row-even"><td>2021-03-31</td>
 <td>Update related to the change of semivariogram weighting. Updated cancer rates data.</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
@@ -589,7 +595,7 @@ div.rendered_html tbody tr:hover {
 <div class="section" id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -607,7 +613,7 @@ div.rendered_html tbody tr:hover {
 <p>The block data represents the breast cancer rates in the Northeastern part of the United States. Rate is the number of new cases divided by the population in a county, and this fraction is multiplied by a constant factor of 100,000.</p>
 <p>We read data from <code class="docutils literal notranslate"><span class="pre">geopackage</span></code> and use only <code class="docutils literal notranslate"><span class="pre">rate</span></code>, <code class="docutils literal notranslate"><span class="pre">centroid.x</span></code>, and <code class="docutils literal notranslate"><span class="pre">centroid.y</span></code> columns.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
@@ -627,8 +633,16 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/blogt/share/proj failed
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -703,7 +717,7 @@ div.rendered_html tbody tr:hover {
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;rate&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
@@ -712,7 +726,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -725,7 +739,7 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <h2>2) Detect and remove outliers<a class="headerlink" href="#2)-Detect-and-remove-outliers" title="Permalink to this heading">¶</a></h2>
 <p>We check and clean data before the semivariogram fitting and the Ordinary Kriging interpolation. Variogram Point Cloud is the best way to analyze data and detect outliers. We inspect and compare different lags and step sizes and their respective point clouds. Then we will create multiple variograms and Kriging models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
@@ -744,7 +758,7 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
@@ -768,7 +782,7 @@ Lags per area: 4
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_1.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_1.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_1.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -787,7 +801,7 @@ Lags per area: 8
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_3.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_3.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_3.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_3.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -806,7 +820,7 @@ Lags per area: 16
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_5.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_8_5.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_5.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_8_5.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -833,7 +847,7 @@ Lags per area: 16
 <li>use a small number of neighbors and a range close to 200,000 to avoid unnecessary computations.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now remove outliers from each lag</span>
@@ -843,7 +857,7 @@ Lags per area: 16
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And show data without outliers</span>
@@ -869,7 +883,7 @@ Lags per area: 4
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_1.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_1.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_1.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_1.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -888,7 +902,7 @@ Lags per area: 8
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_3.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_3.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_3.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_3.png" />
 </div>
 </div>
 <div class="nboutput docutils container">
@@ -907,7 +921,7 @@ Lags per area: 16
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_5.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_11_5.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_5.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_11_5.png" />
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -926,7 +940,7 @@ Lags per area: 16
 <h2>3. Create a theoretical semivariogram model<a class="headerlink" href="#3.-Create-a-theoretical-semivariogram-model" title="Permalink to this heading">¶</a></h2>
 <p>Semivariogram may be fitted manually or automatically. In this case, we fit it automatically - we test multiple models, and it’s easier to use the <code class="docutils literal notranslate"><span class="pre">autofit()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> object. We didn’t force any model to see how different results we would get.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theoretical_semivariograms</span> <span class="o">=</span> <span class="p">[]</span>
@@ -955,13 +969,29 @@ Lags per area: 16
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Semivariance calculated for [ 75000. 150000. 225000. 300000.] lags.
 
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/szymon/Documents/Programming/Repositories/pyinterpolate-environment/pyinterpolate/pyinterpolate/variogram/theoretical/semivariogram.py:472: UserWarning: If you provide experimental variogram as a numpy array you must remember that the direction parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that variogram is isotropic.
+  warnings.warn(msg)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 
 Model parameters:
 Model type: circular
@@ -1003,7 +1033,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <h2>4. Read point data canvas<a class="headerlink" href="#4.-Read-point-data-canvas" title="Permalink to this heading">¶</a></h2>
 <p>Our variogram model is ready to load the point file as the <strong>GeoDataFrame</strong> object, which stores the geometry column and data features as tables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/shapefile/regular_grid_points.shp&#39;</span>  <span class="c1"># file with grid for analysis</span>
@@ -1016,7 +1046,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1090,7 +1120,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <p>We can model all values in a batch. If we set the <code class="docutils literal notranslate"><span class="pre">number_of_workers</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">-1</span></code> or a positive integer, then the algorithm will use parallel processing functions to speed up calculations.</p>
 <p>Based on the learning from a semivariogram modeling step, we will set a number of neighboring areas to 8 and range to 200000. We will append interpolated values and errors to an existing data frame and plot them to compare results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds_cols</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1120,13 +1150,13 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5419/5419 [00:02&lt;00:00, 1835.81it/s]
-100%|██████████| 5419/5419 [00:01&lt;00:00, 2945.32it/s]
-100%|██████████| 5419/5419 [00:02&lt;00:00, 2611.88it/s]
+100%|██████████| 5419/5419 [00:04&lt;00:00, 1190.56it/s]
+100%|██████████| 5419/5419 [00:03&lt;00:00, 1402.50it/s]
+100%|██████████| 5419/5419 [00:03&lt;00:00, 1392.23it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -1134,7 +1164,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1247,7 +1277,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <p>This is the somewhat complicated function in which we interpolate missing values as new columns of <strong>GeoDataFrame</strong>. <em>Uncertainty</em> is assigned to interpolated results for further analysis.</p>
 <p>Now we can save our <strong>GeoDataFrame</strong> as a shapefile.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save interpolation results</span>
@@ -1261,7 +1291,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="section" id="6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates">
 <h2>6. Show a map of interpolated values with a choropleth map of the breast cancer rates<a class="headerlink" href="#6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates" title="Permalink to this heading">¶</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now compare results to choropleth maps</span>
@@ -1297,7 +1327,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_25_0.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_(Intermediate)_25_0.png" />
+<img alt="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_25_0.png" src="../../_images/usage_tutorials_Blocks_to_points_Ordinary_Kriging_interpolation_%28Intermediate%29_25_0.png" />
 </div>
 </div>
 <p>Visual inspection shows that:</p>
@@ -1306,7 +1336,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 we have chosen the wrong model - we are not able to retrieve meaningful information from it.</div></blockquote>
 <p>Are absolute errors between maps large or not? Let’s check it in the last step:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pcol1</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
@@ -1328,16 +1358,16 @@ we have chosen the wrong model - we are not able to retrieve meaningful informat
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Column: p cir 4
-Mean Absolute Difference with p exp 8 is 0.2259
-Mean Absolute Difference with p cub 16 is 0.6819
+Mean Absolute Difference with p exp 8 is 0.2124
+Mean Absolute Difference with p cub 16 is 0.6504
 
 Column: p exp 8
-Mean Absolute Difference with p cir 4 is 0.2259
-Mean Absolute Difference with p cub 16 is 0.4561
+Mean Absolute Difference with p cir 4 is 0.2124
+Mean Absolute Difference with p cub 16 is 0.4380
 
 Column: p cub 16
-Mean Absolute Difference with p cir 4 is 0.6819
-Mean Absolute Difference with p exp 8 is 0.4561
+Mean Absolute Difference with p cir 4 is 0.6504
+Mean Absolute Difference with p exp 8 is 0.4380
 
 </pre></div></div>
 </div>
@@ -1355,8 +1385,8 @@ Mean Absolute Difference with p exp 8 is 0.4561
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

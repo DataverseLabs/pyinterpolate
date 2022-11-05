@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -62,7 +63,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -253,9 +254,8 @@ Kriging has a limited number of applications. You must have multiple samples and
 know this parameter.</p>
 </dd>
 <dt><strong>allow_approx_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
-if you don’t know what are you doing.</p>
-</dd>
-<dt><strong>err_to_nan</strong><span class="classifier">bool, default=False</span></dt><dd><p>Return <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if algorithm detects singular matrix.</p>
+if you don’t know what are you doing. This parameter can be useful when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation.</p>
 </dd>
 <dt><strong>number_of_workers</strong><span class="classifier">int, default=1</span></dt><dd><p>How many processing units can be used for predictions. Increase it only for a very large number of
 interpolated points (~10k+).</p>
@@ -276,7 +276,7 @@ interpolated points (~10k+).</p>
 <hr class="docutils" />
 <dl class="py function">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">ordinary_kriging</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">theoretical_model</span></span></em>, <em><span class="n"><span class="pre">known_locations</span></span></em>, <em><span class="n"><span class="pre">unknown_location</span></span></em>, <em><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">allow_approximate_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">err_to_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/point/ordinary_kriging.html#ordinary_kriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">ordinary_kriging</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">theoretical_model</span></span></em>, <em><span class="n"><span class="pre">known_locations</span></span></em>, <em><span class="n"><span class="pre">unknown_location</span></span></em>, <em><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">allow_approximate_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/point/ordinary_kriging.html#ordinary_kriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function predicts value at unknown location with Ordinary Kriging technique.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -297,16 +297,21 @@ the <code class="docutils literal notranslate"><span class="pre">theoretical_mod
 <dt><strong>use_all_neighbors_in_range</strong><span class="classifier">bool, default = False</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: if the real number of neighbors within the <code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the
 <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> parameter then take all of them anyway.</p>
 </dd>
-<dt><strong>allow_approx_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
-if you don’t know what are you doing.</p>
-</dd>
-<dt><strong>err_to_nan</strong><span class="classifier">bool, default=False</span></dt><dd><p>Return <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if algorithm detects singular matrix.</p>
+<dt><strong>allow_approximate_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
+if you don’t know what are you doing. This parameter can be useful when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation.</p>
 </dd>
 </dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
 <dt>: numpy array</dt><dd><p><code class="docutils literal notranslate"><span class="pre">[predicted</span> <span class="pre">value,</span> <span class="pre">variance</span> <span class="pre">error,</span> <span class="pre">longitude</span> <span class="pre">(x),</span> <span class="pre">latitude</span> <span class="pre">(y)]</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt>RunetimeError</dt><dd><p>Singularity matrix in a Kriging system.</p>
 </dd>
 </dl>
 </td>
@@ -344,15 +349,20 @@ the <code class="docutils literal notranslate"><span class="pre">theoretical_mod
 <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> parameter then take all of them anyway.</p>
 </dd>
 <dt><strong>allow_approx_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
-if you don’t know what are you doing.</p>
-</dd>
-<dt><strong>err_to_nan</strong><span class="classifier">bool, default=False</span></dt><dd><p>Return <code class="docutils literal notranslate"><span class="pre">NaN</span></code> if algorithm detects singular matrix.</p>
+if you don’t know what are you doing. This parameter can be useful when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation.</p>
 </dd>
 </dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first last docutils">
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
 <dt>: numpy array</dt><dd><p><code class="docutils literal notranslate"><span class="pre">[predicted</span> <span class="pre">value,</span> <span class="pre">variance</span> <span class="pre">error,</span> <span class="pre">longitude</span> <span class="pre">(x),</span> <span class="pre">latitude</span> <span class="pre">(y)]</span></code></p>
+</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+<dt>RunetimeError</dt><dd><p>Singularity matrix in a Kriging system.</p>
 </dd>
 </dl>
 </td>
@@ -372,8 +382,8 @@ if you don’t know what are you doing.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

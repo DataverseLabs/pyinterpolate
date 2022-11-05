@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -623,7 +624,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_3_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_3_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_3_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_3_1.png" />
 </div>
 </div>
 <p><strong>Clarification</strong>: It is a good idea to look into the spatial patterns in a dataset and to visually check if our data do not have any NaN values. We use the geopandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.plot()</span></code> function with a color map that diverges regions based on the cancer incidence rates. The output choropleth map is not ideal, and (probably) it has a few unreliable results, for example:</p>
@@ -675,9 +676,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-  7%|▋         | 15/217 [00:01&lt;00:21,  9.32it/s]/Users/szymonos/Documents/GitHub/pyinterpolate/pyinterpolate/kriging/models/block/weight.py:182: RuntimeWarning: invalid value encountered in double_scalars
-  weighted_block_smv = weighted_semivars / np.sum(all_weights)
-100%|██████████| 217/217 [00:40&lt;00:00,  5.42it/s]
+100%|██████████| 217/217 [00:41&lt;00:00,  5.28it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -722,36 +721,36 @@ div.rendered_html tbody tr:hover {
       <th>0</th>
       <td>25019.0</td>
       <td>POINT (2117322.312 556124.507)</td>
-      <td>0.083987</td>
-      <td>8.803000</td>
+      <td>0.079420</td>
+      <td>8.348680</td>
     </tr>
     <tr>
       <th>1</th>
       <td>25019.0</td>
       <td>POINT (2134642.820 556124.507)</td>
-      <td>137.473418</td>
-      <td>7.476936</td>
+      <td>122.382795</td>
+      <td>7.908064</td>
     </tr>
     <tr>
       <th>2</th>
       <td>36121.0</td>
       <td>POINT (1424501.989 556124.507)</td>
-      <td>5.045252</td>
-      <td>4.732995</td>
+      <td>4.384635</td>
+      <td>5.895874</td>
     </tr>
     <tr>
       <th>3</th>
       <td>36121.0</td>
       <td>POINT (1424501.989 546124.507)</td>
-      <td>4.492783</td>
-      <td>10.508667</td>
+      <td>3.469558</td>
+      <td>11.470921</td>
     </tr>
     <tr>
       <th>4</th>
       <td>36121.0</td>
       <td>POINT (1433162.243 561124.507)</td>
-      <td>15.686610</td>
-      <td>8.330736</td>
+      <td>12.835764</td>
+      <td>9.041494</td>
     </tr>
   </tbody>
 </table>
@@ -785,7 +784,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_12_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_12_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_12_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_12_1.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -801,8 +800,8 @@ div.rendered_html tbody tr:hover {
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

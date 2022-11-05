@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -175,7 +176,7 @@
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -387,6 +388,50 @@
     <span class="k">return</span> <span class="n">distances_sum</span>
 
 
+<span class="k">def</span> <span class="nf">_calc_angle_between_points</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
+    <span class="n">ang1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">*</span><span class="n">v1</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ang2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">v2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">v2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">((</span><span class="n">ang1</span> <span class="o">-</span> <span class="n">ang2</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_angle_from_origin</span><span class="p">(</span><span class="n">vec</span><span class="p">):</span>
+    <span class="n">ang</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">vec</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">ang</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">calc_angles</span><span class="p">(</span><span class="n">points_b</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">point_a</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates angles between points and origin or between vectors from origin to points and a vector from</span>
+<span class="sd">    a specific point to origin.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points_b : numpy array</span>
+<span class="sd">        Other point coordinates.</span>
+
+<span class="sd">    point_a : Iterable</span>
+<span class="sd">        The point coordinates, default is equal to (0, 0) - origin.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    angles : numpy array</span>
+<span class="sd">        Angles from the ``points_b`` to origin, or angles beteen vectors ``points_b`` to origin and ``point_a``</span>
+<span class="sd">        to origin.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">points_b</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">points_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points_b</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">points_b</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">points_b</span> <span class="o">=</span> <span class="n">points_b</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">point_a</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">_calc_angle_from_origin</span><span class="p">(</span><span class="n">points_b</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">_calc_angle_between_points</span><span class="p">(</span><span class="n">point_a</span><span class="p">,</span> <span class="n">points_b</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">angles</span>
+
+
 <div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Function calculates distances between two group of points of a single group to itself.</span>
 
@@ -411,6 +456,38 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">distances</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">distances</span></div>
+
+
+<span class="k">def</span> <span class="nf">calculate_angular_distance</span><span class="p">(</span><span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">expected_direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates minimal angle between one vector and other vectors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    angles : numpy array</span>
+<span class="sd">        The array with the angle to the origin of each point.</span>
+
+<span class="sd">    expected_direction : float</span>
+<span class="sd">        The variogram direction in degrees.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    angular_distances : numpy array</span>
+<span class="sd">        Minimal angle from ``expected_direction`` to other angles.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We should select angles equal to the expected direction</span>
+    <span class="c1"># and 180 degrees from it</span>
+
+    <span class="n">expected_direction_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">expected_direction</span><span class="p">)</span>
+    <span class="n">r_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="n">norm_a</span> <span class="o">=</span> <span class="n">r_angles</span> <span class="o">-</span> <span class="n">expected_direction_rad</span>
+    <span class="n">deg_norm_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">norm_a</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+    <span class="n">norm_b</span> <span class="o">=</span> <span class="n">expected_direction_rad</span> <span class="o">-</span> <span class="n">r_angles</span>
+    <span class="n">deg_norm_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">norm_b</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)))</span>
+    <span class="n">normalized_angular_dists</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">deg_norm_a</span><span class="p">,</span> <span class="n">deg_norm_b</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">normalized_angular_dists</span>
 </pre></div>
 
           </div>
@@ -421,8 +498,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

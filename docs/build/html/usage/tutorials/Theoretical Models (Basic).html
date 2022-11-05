@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -64,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -511,9 +512,9 @@ div.rendered_html tbody tr:hover {
 <h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
 <table>
 <colgroup>
-<col width="19%" />
-<col width="55%" />
-<col width="26%" />
+<col width="18%" />
+<col width="59%" />
+<col width="23%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Date</th>
@@ -522,7 +523,11 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td>2022-08-16</td>
+<tr class="row-even"><td>2022-11-05</td>
+<td>Tutorial updated for the 0.3.5 version of the package</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-08-16</td>
 <td>The first release of tutorial</td>
 <td>&#64;SimonMolinsky</td>
 </tr>
@@ -608,7 +613,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_7_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_7_0.png" />
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_7_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_7_0.png" />
 </div>
 </div>
 <p>Let’s reshape this signal into a <strong>2-D</strong> matrix:</p>
@@ -636,7 +641,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_10_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_10_0.png" />
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_10_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_10_0.png" />
 </div>
 </div>
 <p>The spatial correlation of this structure is very weak, we can change it with a simple blur filter. It’s size will be our <strong>range</strong> parameter!</p>
@@ -667,7 +672,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Theoretical_Models_(Basic)_14_0.png" src="../../_images/usage_tutorials_Theoretical_Models_(Basic)_14_0.png" />
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_14_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_14_0.png" />
 </div>
 </div>
 </div>
@@ -722,7 +727,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">xyval</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -730,21 +735,28 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivars</span> <span class="o">=</span> <span class="n">experimental</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">semivars</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">semivars</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_24_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_24_0.png" />
 </div>
 </div>
 <p>We read a plot and decide to set:</p>
@@ -756,7 +768,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </ul>
 <p>Yes, we can create the theoretical variogram from scratch, without calling the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function or the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class. Those three parameters and the lags are all that we need for modeling.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set nugget, sill and range</span>
@@ -764,7 +776,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_nugget</span> <span class="o">=</span> <span class="mi">0</span>
@@ -789,7 +801,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <li>spherical.</li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crete different models: circular, cubic, exponential, gaussian, linear, power, spherical</span>
@@ -797,7 +809,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circular</span> <span class="o">=</span> <span class="n">circular_model</span><span class="p">(</span><span class="n">lags</span><span class="o">=</span><span class="n">_lags</span><span class="p">,</span>
@@ -838,8 +850,8 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <p>With all models calculated, let’s take a look at their output. Before we jump into the last step, try to guess which model works optimally with the experimental variogram? (It is a tricky question!)</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot circular</span>
@@ -854,8 +866,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_32_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_32_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot cubic</span>
@@ -870,8 +889,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_33_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_33_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot exponential</span>
@@ -886,8 +912,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_34_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_34_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot gaussian</span>
@@ -902,8 +935,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_35_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_35_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot linear</span>
@@ -918,8 +958,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_36_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_36_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot power</span>
@@ -934,8 +981,15 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_37_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_37_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot spherical</span>
@@ -950,6 +1004,13 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_38_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_38_0.png" />
+</div>
+</div>
 <p>What was your guess?</p>
 <p>…</p>
 <p>I hope we both have chosen <code class="docutils literal notranslate"><span class="pre">circulcar</span></code> or <code class="docutils literal notranslate"><span class="pre">linear</span></code> models! But we should be careful with the final opinion and even more careful if we let the algorithm decide which model is the best based on the <strong>root mean squared error metric</strong> (RMSE). For us, the best model is always the model that has the best fit for the closest distances. A model with low RMSE may be “great” with distances from 10 to 18… which oscillate around the sill of our data and are useless for weighting (weight is constant
@@ -958,8 +1019,8 @@ from some distance).</p>
 <div class="section" id="4)-Compare-variogram-models">
 <h2>4) Compare variogram models<a class="headerlink" href="#4)-Compare-variogram-models" title="Permalink to this heading">¶</a></h2>
 <p>The last part is a comparison of variogram models. We will still use our “own eyes” to decide which model is the best, but this time we will plot all of them in a single plot.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot ALL models</span>
@@ -988,6 +1049,13 @@ from some distance).</p>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_41_0.png" src="../../_images/usage_tutorials_Theoretical_Models_%28Basic%29_41_0.png" />
+</div>
+</div>
 <p>We observe that the lowest distance from a modeled value to the experimental curve at a small distance has…</p>
 <hr class="docutils" />
 </div>
@@ -1002,8 +1070,8 @@ from some distance).</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

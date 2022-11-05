@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -257,8 +258,8 @@
 
 <span class="sd">        - 0 or 180: is E-W,</span>
 <span class="sd">        - 90 or 270 is N-S,</span>
-<span class="sd">        - 45 or 225 is NW-SE,</span>
-<span class="sd">        - 135 or 315 is NE-SW.</span>
+<span class="sd">        - 45 or 225 is NE-SW,</span>
+<span class="sd">        - 135 or 315 is NW-SE.</span>
 
 <span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
@@ -315,35 +316,22 @@
         <span class="n">ts</span> <span class="o">=</span> <span class="n">semivariogram_model</span>
 
     <span class="c1"># Interpolate data point by point</span>
-
-    <span class="n">output_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
-    <span class="n">output_errs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
-
     <span class="n">interpolation_points</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">indexes</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">ridx</span><span class="p">,</span> <span class="n">_y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">y_coords</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">cidx</span><span class="p">,</span> <span class="n">_x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x_coords</span><span class="p">):</span>
-
             <span class="n">coords</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">_x</span><span class="p">,</span> <span class="n">_y</span><span class="p">])</span>
             <span class="n">interpolation_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
-            <span class="n">indexes</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">ridx</span><span class="p">,</span> <span class="n">cidx</span><span class="p">])</span>
 
     <span class="n">k</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
                 <span class="n">theoretical_model</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span>
                 <span class="n">points</span><span class="o">=</span><span class="n">interpolation_points</span><span class="p">,</span>
                 <span class="n">how</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span>
-                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">)</span>
+                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+                <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-        <span class="n">val</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">iidx</span> <span class="o">=</span> <span class="n">indexes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
-        <span class="n">output_vals</span><span class="p">[</span><span class="n">iidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
-        <span class="n">output_errs</span><span class="p">[</span><span class="n">iidx</span><span class="p">]</span> <span class="o">=</span> <span class="n">err</span>
-
-    <span class="n">kriged_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output_vals</span><span class="p">)</span>
-    <span class="n">kriged_errors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">output_errs</span><span class="p">)</span>
+    <span class="n">kriged_matrix</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
+    <span class="n">kriged_errors</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
 
     <span class="n">raster_dict</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;result&#39;</span><span class="p">:</span> <span class="n">kriged_matrix</span><span class="p">,</span>
@@ -368,8 +356,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

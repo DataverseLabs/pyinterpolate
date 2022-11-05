@@ -83,9 +83,10 @@ def validate_direction(direction):
     """
     Check if direction is within limits 0-360
     """
-    if np.abs(direction) > 360:
-        msg = f'Provided direction must be between -360 to 360 degrees.'
-        raise ValueError(msg)
+    if direction is not None:
+        if np.abs(direction) > 360:
+            msg = f'Provided direction must be between -360 to 360 degrees.'
+            raise ValueError(msg)
 
 
 def validate_points(points):

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -243,6 +244,9 @@
 <span class="sd">        The semivariogram range is a distance at which spatial correlation exists. It shouldn&#39;t be set at a distance</span>
 <span class="sd">        larger than a half of a study extent.</span>
 
+<span class="sd">    direction : float, in range [0, 360], default=None</span>
+<span class="sd">        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.</span>
+
 <span class="sd">    rmse : float, default=0</span>
 <span class="sd">        Root mean squared error of the difference between the empirical observations and the modeled curve.</span>
 
@@ -343,6 +347,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="mf">0.</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
 
@@ -361,6 +367,7 @@
             <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">update_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">warn_about_set_params</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -392,6 +399,10 @@
 <span class="sd">        nugget : float, default=0.</span>
 <span class="sd">            Nugget parameter (bias at a zero distance).</span>
 
+<span class="sd">        direction : float, in range [0, 360], default=None</span>
+<span class="sd">            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is</span>
+<span class="sd">            required if passed experimental variogram is stored in a numpy array.</span>
+
 <span class="sd">        update_attrs : bool, default=True</span>
 <span class="sd">            Should class attributes be updated?</span>
 
@@ -405,7 +416,11 @@
 
 <span class="sd">        Warns</span>
 <span class="sd">        -----</span>
-<span class="sd">        * Model parameters were given during initialization but program is forced to fit the new set of parameters.</span>
+<span class="sd">        Warning</span>
+<span class="sd">            Model parameters were given during initialization but program is forced to fit the new set of parameters.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -421,9 +436,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;If you provide experimental variogram as a numpy array you must remember that the direction&#39;</span> \
+                      <span class="s1">&#39; parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that&#39;</span> \
+                      <span class="s1">&#39; variogram is isotropic.&#39;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
 
         <span class="c1"># Check model type</span>
 
@@ -466,6 +488,7 @@
                 <span class="n">min_sill</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                 <span class="n">max_sill</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                 <span class="n">number_of_sills</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">error_estimator</span><span class="o">=</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span>
                 <span class="n">deviation_weighting</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span>
                 <span class="n">auto_update_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -521,6 +544,10 @@
 <span class="sd">        number_of_sills : int, default = 64</span>
 <span class="sd">            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.</span>
 
+<span class="sd">        direction : float, in range [0, 360], default=None</span>
+<span class="sd">            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is</span>
+<span class="sd">            required if passed experimental variogram is stored in a numpy array.</span>
+
 <span class="sd">        error_estimator : str, default = &#39;rmse&#39;</span>
 <span class="sd">            A model error estimation method. Available options are:</span>
 
@@ -575,6 +602,9 @@
 <span class="sd">        Warning</span>
 <span class="sd">            Model parameters were given during initilization but program is forced to fit the new set of parameters.</span>
 
+<span class="sd">        Warning</span>
+<span class="sd">            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        ValueError</span>
@@ -601,9 +631,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">direct</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;If you provide experimental variogram as a numpy array you must remember that the direction&#39;</span> \
+                      <span class="s1">&#39; parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that&#39;</span> \
+                      <span class="s1">&#39; variogram is isotropic.&#39;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
 
         <span class="c1"># Check model type and set models</span>
         <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
@@ -833,7 +870,7 @@
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        model_parameters : Dict</span>
-<span class="sd">            Dictionary with model &#39;name&#39;, &#39;nugget&#39;, &#39;sill&#39; and &#39;range&#39;.</span>
+<span class="sd">            Dictionary with model&#39;s ``&#39;name&#39;``, ``&#39;nugget&#39;``, ``&#39;sill&#39;``, ``&#39;range&#39;`` and ``&#39;direction&#39;``.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
@@ -846,10 +883,13 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Model is not set yet, cannot export model parameters to dict&#39;</span>
                 <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-        <span class="n">modeled_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-                              <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span>
-                              <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
-                              <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">}</span>
+        <span class="n">modeled_parameters</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
+            <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+        <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
@@ -859,7 +899,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        parameters : Dict</span>
-<span class="sd">            Dictionary with model&#39;s: ``&#39;name&#39;, &#39;nugget&#39;, &#39;sill&#39;, &#39;range&#39;``.</span>
+<span class="sd">            Dictionary with model&#39;s: ``&#39;name&#39;, &#39;nugget&#39;, &#39;sill&#39;, &#39;range&#39;, &#39;direction&#39;``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
@@ -878,7 +918,8 @@
             <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span>
             <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
-            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span>
+            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
         <span class="p">}</span>
 
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
@@ -1062,18 +1103,31 @@
         <span class="n">modeled</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitted_values</span>
         <span class="k">return</span> <span class="n">modeled</span>
 
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="n">mparams</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mparams</span><span class="p">[</span><span class="s1">&#39;direction&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">direction</span>
+
     <span class="k">def</span> <span class="nf">_set_model_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
                                 <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                                <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
+                                <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+                                <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.</span>
 
 <span class="sd">    Parameters</span>
@@ -1102,6 +1156,9 @@
 <span class="sd">    nugget : float, default=0.</span>
 <span class="sd">        The nugget parameter (bias at a zero distance).</span>
 
+<span class="sd">    direction : float, in range [0, 360], default=None</span>
+<span class="sd">        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    theo : TheoreticalVariogram</span>
@@ -1109,7 +1166,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
     <span class="n">theo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
-        <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span> <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span> <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span>
+        <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+        <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
+        <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+        <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span>
+        <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="n">direction</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">theo</span></div>
 </pre></div>
@@ -1122,8 +1184,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-22" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
