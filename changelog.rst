@@ -19,7 +19,7 @@ Changes by date
 * (debug) debugged `interpolate_raster()` function,
 * (enhancement) kriging data selection - a small refactoring,
 * (docs) Updated `distance` module docs,
-* (enhancement) point kriging functions refactoring and update, better management of a singular matrices and duplicated points,
+* (enhancement) point kriging functions refactoring and update, better management of a singular matrices and duplicated points.
 
 
 2022-10-22
