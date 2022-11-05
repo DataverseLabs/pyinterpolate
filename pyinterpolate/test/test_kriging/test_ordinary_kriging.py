@@ -34,9 +34,11 @@ class TestOrdinaryKriging(unittest.TestCase):
                                      no_neighbors=4)
             except np.linalg.LinAlgError:
                 self.assertTrue(True)
+            except RuntimeError:
+                self.assertTrue(True)
             else:
-                msg = 'Every test should raise LinAlgError because there are only zeros and algorithm creates the ' \
-                      'singular matrix.'
+                msg = 'Every test should raise LinAlgError | RunetimeError because there are only zeros and ' \
+                      'algorithm creates the singular matrix.'
                 raise ValueError(msg)
 
     def test_value_known_location(self):

@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -65,7 +65,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -156,7 +156,7 @@
         
   
     <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
@@ -193,11 +193,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
 </ul>
 
   
@@ -210,7 +210,7 @@
             
   
     <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
@@ -247,11 +247,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
 </ul>
 
   
@@ -543,6 +543,14 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody valign="top">
+<tr class="row-even"><td>2022-11-05</td>
+<td>Tutorial updated for the 0.3.5 version of the package</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
+<tr class="row-odd"><td>2022-10-31</td>
+<td>Bug update: wrong direction of angle from origin, it was clockwise but now it is counterclockwise</td>
+<td>&#64;SimonMolinsky</td>
+</tr>
 <tr class="row-even"><td>2022-10-21</td>
 <td>Bug update: wrong name of the N-S variogram</td>
 <td>&#64;SimonMolinsky</td>
@@ -585,8 +593,6 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">download_air_quality_poland</span>
 <span class="c1"># Experimental variogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
-<span class="c1"># Theoretical Variogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span>
 </pre></div>
 </div>
 </div>
@@ -867,7 +873,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_9_1.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_9_1.png" />
 </div>
 </div>
 </div>
@@ -885,8 +891,8 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 <li><code class="docutils literal notranslate"><span class="pre">direction</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 360]. We set the direction of semivariogram:<ul>
 <li>0 or 180: is WE direction,</li>
 <li>90 or 270 is NS direction,</li>
-<li>45 or 225 is NW-SE direction,</li>
-<li>135 or 315 is NE-SW direction.</li>
+<li>45 or 225 is NE-SW direction,</li>
+<li>135 or 315 is NW-SE direction.</li>
 </ul>
 </li>
 <li><code class="docutils literal notranslate"><span class="pre">tolerance</span></code>: it is a <code class="docutils literal notranslate"><span class="pre">float</span></code> in range [0, 1]. If we leave <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> with default <strong>1</strong>, we will always get isotropic semivariogram. Other edge case is if we set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to <strong>0</strong>, then points must be placed on a single line with the beginning in the origin of the coordinate system and the angle given by y axis and direction parameter. If tolerance is &gt; 0 and &lt; 1 then the bin is selected as an elliptical area with major axis pointed in the same direction as the line for 0
@@ -959,7 +965,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_16_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_16_0.png" />
 </div>
 </div>
 </div>
@@ -986,7 +992,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_18_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_18_0.png" />
 </div>
 </div>
 </div>
@@ -1000,7 +1006,7 @@ tolerance.<ul>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
@@ -1013,7 +1019,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_20_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_20_0.png" />
 </div>
 </div>
 </div>
@@ -1027,7 +1033,7 @@ tolerance.<ul>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
@@ -1040,7 +1046,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_22_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_22_0.png" />
 </div>
 </div>
 </div>
@@ -1064,7 +1070,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_24_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_24_0.png" />
 </div>
 </div>
 </div>
@@ -1112,7 +1118,7 @@ tolerance.<ul>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_26_0.png" />
 </div>
 </div>
 <p>What do you think about this comparison? Do you agree, that the <strong>NW-SE</strong> variogram is the best fit for a data?</p>
@@ -1140,7 +1146,7 @@ tolerance.<ul>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
 <span class="p">)</span>
@@ -1161,7 +1167,7 @@ tolerance.<ul>
     <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span>
 <span class="p">)</span>
@@ -1185,10 +1191,10 @@ tolerance.<ul>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The triangular method is 1.6640341852849097 times faster than the elliptical selection.
+The triangular method is 1.6258333880714662 times faster than the elliptical selection.
 </pre></div></div>
 </div>
-<p>For this scenario the triangular method is 1.3x faster than the elliptical selection, but with the larger number of points and point pairs this difference will can be greater, and triangular selection is 5x faster for a big datasets.</p>
+<p>For this scenario the triangular method is 1.5x faster than the elliptical selection, but with the larger number of points and point pairs this difference will can be greater, and triangular selection is 5x faster for a big datasets.</p>
 <p>Are variograms different? Let’s compare!</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
@@ -1213,7 +1219,7 @@ The triangular method is 1.6640341852849097 times faster than the elliptical sel
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_34_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_34_0.png" />
 </div>
 </div>
 <p>The general shape is the same but variance of a semivariogram from a triangular selection is lower; it is harder to distinguish the covariance between neighboring points, and it could be dangerously close to the nugget effect. You should consider this (especially) in automatic calculations to avoid a strange results or models that are not better than a simple IDW technique.</p>
@@ -1231,8 +1237,8 @@ The triangular method is 1.6640341852849097 times faster than the elliptical sel
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-21" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

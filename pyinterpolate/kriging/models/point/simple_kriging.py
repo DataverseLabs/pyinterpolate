@@ -63,16 +63,18 @@ def simple_kriging(
 
     allow_approx_solutions : bool, default=False
         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing.
-
-    err_to_nan : bool, default=False
-        Return ``NaN`` if algorithm detects singular matrix.
+        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        that can lead to singular or near-singular matrix creation.
 
     Returns
     -------
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
 
+    Raises
+    ------
+    RunetimeError
+        Singularity matrix in a Kriging system.
     """
 
     k, predicted, dataset = get_predictions(theoretical_model,
@@ -82,18 +84,20 @@ def simple_kriging(
                                             no_neighbors,
                                             use_all_neighbors_in_range)
 
-    if err_to_nan:
-        try:
-            output_weights = solve_weights(predicted, k, allow_approximate_solutions)
-        except np.linalg.LinAlgError as _:
-            return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
-    else:
+    try:
         output_weights = solve_weights(predicted, k, allow_approximate_solutions)
+    except np.linalg.LinAlgError as _:
+        msg = 'Singular matrix in Kriging system detected, check if you have duplicated coordinates ' \
+              'in the ``known_locations`` variable.'
+        raise RuntimeError(msg)
 
     r = dataset[:, -2] - process_mean
     zhat = r.dot(output_weights)
     zhat = zhat + process_mean
 
     sigma = np.matmul(output_weights.T, k)
+
+    if sigma < 0:
+        return [zhat, np.nan, unknown_location[0], unknown_location[1]]
 
     return [zhat, sigma, unknown_location[0], unknown_location[1]]

@@ -111,8 +111,8 @@ def directional_covariogram(points: np.array,
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -176,7 +176,7 @@ def directional_covariogram(points: np.array,
 def calculate_covariance(points: np.array,
                          step_size: float,
                          max_range: float,
-                         direction=0,
+                         direction=None,
                          tolerance=1,
                          get_c0=True) -> tuple:
     """Function calculates covariance from given points. In a default mode it calculates an omnidirectional
@@ -193,13 +193,13 @@ def calculate_covariance(points: np.array,
     max_range : float
                 Maximum range of analysis. Lags are calculated from it as a points in range (0, max_range, step_size).
 
-    direction : float
+    direction : float, default=None
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
@@ -311,7 +311,7 @@ def calculate_covariance(points: np.array,
     # START:CALCULATIONS
     lags = np.arange(step_size, max_range, step_size)
 
-    if tolerance == 1:
+    if direction is None:
         covariance = omnidirectional_covariogram(points, lags, step_size)
     else:
         covariance = directional_covariogram(points, lags, step_size, direction, tolerance)

@@ -1,10 +1,33 @@
 Pyinterpolate
 =============
 
-Pyinterpolate is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
+Pyinterpolate is the Python library for **geostatistics** and **spatial statistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 
 Changes by date
 ===============
+
+2022-11-05
+----------
+
+**version 0.3.5**
+
+* (debug) Updated directional variogram algorithm: now angle moves counterclockwise (instead of clockwise).
+* (feature) Directional Ordinary Kriging,
+* (feature) Directional Simple Kriging,
+* (feature) Angle calculations (angle to origin, angle between vectors),
+* (enhancement) `direction` parameter is `None` default, to avoid hard-to-track bugs,
+* (debug) debugged `interpolate_raster()` function,
+* (enhancement) kriging data selection - a small refactoring,
+* (docs) Updated `distance` module docs,
+* (enhancement) point kriging functions refactoring and update, better management of a singular matrices and duplicated points.
+
+
+2022-10-22
+----------
+
+**version 0.3.4.post1**
+
+* (setup) added `pyogrio` to dependencies due to the new `fiona` version (1.8.22) and `gdal` errors.
 
 2022-10-21
 ----------

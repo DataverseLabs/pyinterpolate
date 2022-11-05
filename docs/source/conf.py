@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 project = 'Pyinterpolate'
 copyright = '2022, Szymon Moliński'
 author = 'Szymon Moliński'
-release = '0.3.3'
+release = '0.3.5'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

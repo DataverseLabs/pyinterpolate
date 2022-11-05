@@ -23,8 +23,7 @@ def ordinary_kriging(
         neighbors_range=None,
         no_neighbors=4,
         use_all_neighbors_in_range=False,
-        allow_approximate_solutions=False,
-        err_to_nan=False
+        allow_approximate_solutions=False
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -51,17 +50,20 @@ def ordinary_kriging(
         ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
         ``number_of_neighbors`` parameter then take all of them anyway.
 
-    allow_approx_solutions : bool, default=False
+    allow_approximate_solutions : bool, default=False
         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing.
-
-    err_to_nan : bool, default=False
-        Return ``NaN`` if algorithm detects singular matrix.
+        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        that can lead to singular or near-singular matrix creation.
 
     Returns
     -------
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
+
+    Raises
+    ------
+    RunetimeError
+        Singularity matrix in a Kriging system.
     """
 
     k, predicted, dataset = get_predictions(theoretical_model,
@@ -80,16 +82,18 @@ def ordinary_kriging(
     p_ones_row[0][-1] = 0.
     weights = np.r_[predicted_with_ones_col, p_ones_row]
 
-    if err_to_nan:
-        try:
-            output_weights = solve_weights(weights, k, allow_approximate_solutions)
-        except np.linalg.LinAlgError as _:
-            return [np.nan, np.nan, unknown_location[0], unknown_location[1]]
-    else:
+    try:
         output_weights = solve_weights(weights, k, allow_approximate_solutions)
+    except np.linalg.LinAlgError as _:
+        msg = 'Singular matrix in Kriging system detected, check if you have duplicated coordinates ' \
+              'in the ``known_locations`` variable.'
+        raise RuntimeError(msg)
 
     zhat = dataset[:, -2].dot(output_weights[:-1])
 
     sigma = np.matmul(output_weights.T, k)
+
+    if sigma < 0:
+        return [zhat, np.nan, unknown_location[0], unknown_location[1]]
 
     return [zhat, sigma, unknown_location[0], unknown_location[1]]

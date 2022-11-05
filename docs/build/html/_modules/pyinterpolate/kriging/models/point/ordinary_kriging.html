@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.1',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -40,6 +40,7 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../../_static/clipboard.min.js"></script>
     <script src="../../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +61,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../../../index.html" class="text-logo">Pyinterpolate 0.3.1 documentation</a>
+<a href="../../../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -192,8 +193,7 @@
         <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts value at unknown location with Ordinary Kriging technique.</span>
@@ -220,17 +220,20 @@
 <span class="sd">        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the</span>
 <span class="sd">        ``number_of_neighbors`` parameter then take all of them anyway.</span>
 
-<span class="sd">    allow_approx_solutions : bool, default=False</span>
+<span class="sd">    allow_approximate_solutions : bool, default=False</span>
 <span class="sd">        Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to ``True``</span>
-<span class="sd">        if you don&#39;t know what are you doing.</span>
-
-<span class="sd">    err_to_nan : bool, default=False</span>
-<span class="sd">        Return ``NaN`` if algorithm detects singular matrix.</span>
+<span class="sd">        if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in your dataset,</span>
+<span class="sd">        that can lead to singular or near-singular matrix creation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    : numpy array</span>
 <span class="sd">        ``[predicted value, variance error, longitude (x), latitude (y)]``</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RunetimeError</span>
+<span class="sd">        Singularity matrix in a Kriging system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">k</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">theoretical_model</span><span class="p">,</span>
@@ -249,17 +252,19 @@
     <span class="n">p_ones_row</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">predicted_with_ones_col</span><span class="p">,</span> <span class="n">p_ones_row</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">output_weights</span> <span class="o">=</span> <span class="n">solve_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">allow_approximate_solutions</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-            <span class="k">return</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
         <span class="n">output_weights</span> <span class="o">=</span> <span class="n">solve_weights</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">allow_approximate_solutions</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Singular matrix in Kriging system detected, check if you have duplicated coordinates &#39;</span> \
+              <span class="s1">&#39;in the ``known_locations`` variable.&#39;</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="n">zhat</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">output_weights</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sigma</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span></div>
 </pre></div>
@@ -272,8 +277,8 @@
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-01" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

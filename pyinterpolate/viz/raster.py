@@ -88,8 +88,8 @@ def interpolate_raster(data,
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -146,35 +146,22 @@ def interpolate_raster(data,
         ts = semivariogram_model
 
     # Interpolate data point by point
-
-    output_vals = np.zeros(shape=(len(y_coords), len(x_coords)))
-    output_errs = np.zeros(shape=(len(y_coords), len(x_coords)))
-
     interpolation_points = []
-    indexes = []
 
     for ridx, _y in enumerate(y_coords):
         for cidx, _x in enumerate(x_coords):
-
             coords = np.array([_x, _y])
             interpolation_points.append(coords)
-            indexes.append([ridx, cidx])
 
     k = kriging(observations=data,
                 theoretical_model=ts,
                 points=interpolation_points,
                 how='ok',
-                no_neighbors=number_of_neighbors)
+                no_neighbors=number_of_neighbors,
+                err_to_nan=True)
 
-    for idx, row in enumerate(k):
-        val = row[0]
-        err = row[1]
-        iidx = indexes[idx]
-        output_vals[iidx] = val
-        output_errs[iidx] = err
-
-    kriged_matrix = np.array(output_vals)
-    kriged_errors = np.array(output_errs)
+    kriged_matrix = k[:, 0].reshape((len(y_coords), len(x_coords)))
+    kriged_errors = k[:, 1].reshape((len(y_coords), len(x_coords)))
 
     raster_dict = {
         'result': kriged_matrix,

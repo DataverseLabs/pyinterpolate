@@ -28,7 +28,7 @@
     <script>
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3.3',
+        VERSION:     '0.3.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         LINK_SUFFIX: '.html',
@@ -63,7 +63,7 @@
       <div id="hdr-left">
         <i class="fa fa-bars menu-toggle"></i>
         
-<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.3 documentation</a>
+<a href="../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
 
       </div>
       <div id="hdr-centre" class="text-center stretch">
@@ -224,7 +224,7 @@
 <h1>Theoretical<a class="headerlink" href="#theoretical" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">build_theoretical_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">build_theoretical_variogram</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function is a wrapper into <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class and its <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -250,6 +250,8 @@ to observations variance.</p>
 larger than a half of a study extent.</p>
 </dd>
 <dt><strong>nugget</strong><span class="classifier">float, default=0.</span></dt><dd><p>The nugget parameter (bias at a zero distance).</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic.</p>
 </dd>
 </dl>
 </td>
@@ -346,6 +348,8 @@ to observations variance.</p>
 <dt><strong>rang</strong><span class="classifier">float, default=0</span></dt><dd><p>The semivariogram range is a distance at which spatial correlation exists. It shouldn’t be set at a distance
 larger than a half of a study extent.</p>
 </dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic.</p>
+</dd>
 <dt><strong>rmse</strong><span class="classifier">float, default=0</span></dt><dd><p>Root mean squared error of the difference between the empirical observations and the modeled curve.</p>
 </dd>
 <dt><strong>mae</strong><span class="classifier">bool, default=True</span></dt><dd><p>Mean Absolute Error of a model.</p>
@@ -397,7 +401,7 @@ model underestimates values. A large negative value means that model overestimat
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">autofit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em><span class="n"><span class="pre">auto_update_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">return_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.autofit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">autofit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em><span class="n"><span class="pre">auto_update_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em><span class="n"><span class="pre">return_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.autofit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -437,6 +441,9 @@ than <strong>0.5</strong> raises warning.</p>
 It is possible to set it above 1, but then warning is printed.</p>
 </dd>
 <dt><strong>number_of_sills</strong><span class="classifier">int, default = 64</span></dt><dd><p>How many equally spaced sill values are tested between <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic. This parameter is
+required if passed experimental variogram is stored in a numpy array.</p>
 </dd>
 <dt><strong>error_estimator</strong><span class="classifier">str, default = ‘rmse’</span></dt><dd><p>A model error estimation method. Available options are:</p>
 <ul class="simple">
@@ -498,6 +505,8 @@ It is possible to set it above 1, but then warning is printed.</p>
 </dd>
 <dt>Warning</dt><dd><p>Model parameters were given during initilization but program is forced to fit the new set of parameters.</p>
 </dd>
+<dt>Warning</dt><dd><p>Passed <code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> is a numpy array and <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
 </dl>
 </td>
 </tr>
@@ -555,7 +564,7 @@ Available methods:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">update_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em><span class="n"><span class="pre">model_type</span></span></em>, <em><span class="n"><span class="pre">sill</span></span></em>, <em><span class="n"><span class="pre">rang</span></span></em>, <em><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">update_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -582,6 +591,9 @@ larger than a half of a study extent.</p>
 </dd>
 <dt><strong>nugget</strong><span class="classifier">float, default=0.</span></dt><dd><p>Nugget parameter (bias at a zero distance).</p>
 </dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic. This parameter is
+required if passed experimental variogram is stored in a numpy array.</p>
+</dd>
 <dt><strong>update_attrs</strong><span class="classifier">bool, default=True</span></dt><dd><p>Should class attributes be updated?</p>
 </dd>
 <dt><strong>warn_about_set_params: bool, default=True</strong></dt><dd><p>Should class invoke warning if model parameters has been set during initialization?</p>
@@ -601,12 +613,12 @@ larger than a half of a study extent.</p>
 </dl>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><ul class="first last simple">
-<li><dl class="first docutils">
-<dt>Model parameters were given during initialization but program is forced to fit the new set of parameters.</dt><dd></dd>
+<tr class="field-even field"><th class="field-name">Warns:</th><td class="field-body"><dl class="first last docutils">
+<dt>Warning</dt><dd><p>Model parameters were given during initialization but program is forced to fit the new set of parameters.</p>
+</dd>
+<dt>Warning</dt><dd><p>Passed <code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> is a numpy array and <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
 </dl>
-</li>
-</ul>
 </td>
 </tr>
 </tbody>
@@ -622,7 +634,7 @@ larger than a half of a study extent.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
-<dt><strong>parameters</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with model’s: <code class="docutils literal notranslate"><span class="pre">'name',</span> <span class="pre">'nugget',</span> <span class="pre">'sill',</span> <span class="pre">'range'</span></code>.</p>
+<dt><strong>parameters</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with model’s: <code class="docutils literal notranslate"><span class="pre">'name',</span> <span class="pre">'nugget',</span> <span class="pre">'sill',</span> <span class="pre">'range',</span> <span class="pre">'direction'</span></code>.</p>
 </dd>
 </dl>
 </td>
@@ -703,7 +715,7 @@ larger than a half of a study extent.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="first docutils">
-<dt><strong>model_parameters</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with model ‘name’, ‘nugget’, ‘sill’ and ‘range’.</p>
+<dt><strong>model_parameters</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with model’s <code class="docutils literal notranslate"><span class="pre">'name'</span></code>, <code class="docutils literal notranslate"><span class="pre">'nugget'</span></code>, <code class="docutils literal notranslate"><span class="pre">'sill'</span></code>, <code class="docutils literal notranslate"><span class="pre">'range'</span></code> and <code class="docutils literal notranslate"><span class="pre">'direction'</span></code>.</p>
 </dd>
 </dl>
 </td>
@@ -748,8 +760,8 @@ larger than a half of a study extent.</p>
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-10-18" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
+        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"

@@ -5,7 +5,6 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 
-# TODO: include nugget here
 """
 from copy import deepcopy
 from typing import Dict, Union
@@ -60,8 +59,8 @@ class AggregatedVariogram:
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
@@ -218,7 +217,8 @@ class AggregatedVariogram:
         where:
 
         - :math:`\gamma(v_{a}, v_{a})` is a semivariance within a block :math:`a`,
-        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the block :math:`a`.
+        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the
+          block :math:`a`.
 
         Returns
         -------
@@ -559,8 +559,8 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
 
         - 0 or 180: is E-W,
         - 90 or 270 is N-S,
-        - 45 or 225 is NW-SE,
-        - 135 or 315 is NE-SW.
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of

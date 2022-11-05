@@ -6,7 +6,7 @@ Authors
 1. Szymon Moliński | @SimonMolinsky
 """
 
-from typing import Dict, Union
+from typing import Dict, Union, Iterable
 
 import geopandas as gpd
 import numpy as np
@@ -218,6 +218,50 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     return distances_sum
 
 
+def _calc_angle_between_points(v1, v2):
+    ang1 = np.arctan2(*v1[::-1])
+    ang2 = np.arctan2(v2[:, 1], v2[:, 0])
+    return np.rad2deg((ang1 - ang2) % (2 * np.pi))
+
+
+def _calc_angle_from_origin(vec):
+    ang = np.arctan2(vec[:, 1], vec[:, 0])
+    return np.rad2deg(ang % (2 * np.pi))
+
+
+def calc_angles(points_b: Iterable, point_a: Iterable = None):
+    """
+    Function calculates angles between points and origin or between vectors from origin to points and a vector from
+    a specific point to origin.
+
+    Parameters
+    ----------
+    points_b : numpy array
+        Other point coordinates.
+
+    point_a : Iterable
+        The point coordinates, default is equal to (0, 0) - origin.
+
+    Returns
+    -------
+    angles : numpy array
+        Angles from the ``points_b`` to origin, or angles beteen vectors ``points_b`` to origin and ``point_a``
+        to origin.
+    """
+
+    if not isinstance(points_b, np.ndarray):
+        points_b = np.array(points_b)
+    if len(points_b.shape) == 1:
+        points_b = points_b[np.newaxis, ...]
+
+    if point_a is None:
+        angles = _calc_angle_from_origin(points_b)
+    else:
+        angles = _calc_angle_between_points(point_a, points_b)
+
+    return angles
+
+
 def calc_point_to_point_distance(points_a, points_b=None):
     """Function calculates distances between two group of points of a single group to itself.
 
@@ -242,3 +286,35 @@ def calc_point_to_point_distance(points_a, points_b=None):
     else:
         distances = cdist(points_a, points_b, 'euclidean')
     return distances
+
+
+def calculate_angular_distance(angles: np.ndarray, expected_direction: float) -> np.ndarray:
+    """
+    Function calculates minimal angle between one vector and other vectors.
+
+    Parameters
+    ----------
+    angles : numpy array
+        The array with the angle to the origin of each point.
+
+    expected_direction : float
+        The variogram direction in degrees.
+
+    Returns
+    -------
+    angular_distances : numpy array
+        Minimal angle from ``expected_direction`` to other angles.
+    """
+
+    # We should select angles equal to the expected direction
+    # and 180 degrees from it
+
+    expected_direction_rad = np.deg2rad(expected_direction)
+    r_angles = np.deg2rad(angles)
+    norm_a = r_angles - expected_direction_rad
+    deg_norm_a = np.abs(np.rad2deg(norm_a % (2 * np.pi)))
+    norm_b = expected_direction_rad - r_angles
+    deg_norm_b = np.abs(np.rad2deg(norm_b % (2 * np.pi)))
+    normalized_angular_dists = np.minimum(deg_norm_a, deg_norm_b)
+
+    return normalized_angular_dists
