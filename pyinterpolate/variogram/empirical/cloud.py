@@ -94,7 +94,7 @@ def directional_point_cloud(input_array: np.array,
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -173,7 +173,7 @@ def build_variogram_point_cloud(input_array: np.array,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
         the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
@@ -238,7 +238,7 @@ class VariogramCloud:
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
         the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 

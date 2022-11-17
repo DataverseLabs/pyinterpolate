@@ -290,12 +290,12 @@ def calc_point_to_point_distance(points_a, points_b=None):
 
 def calculate_angular_distance(angles: np.ndarray, expected_direction: float) -> np.ndarray:
     """
-    Function calculates minimal angle between one vector and other vectors.
+    Function calculates minimal direction between one vector and other vectors.
 
     Parameters
     ----------
     angles : numpy array
-        The array with the angle to the origin of each point.
+        The array with the direction to the origin of each point.
 
     expected_direction : float
         The variogram direction in degrees.
@@ -303,7 +303,7 @@ def calculate_angular_distance(angles: np.ndarray, expected_direction: float) ->
     Returns
     -------
     angular_distances : numpy array
-        Minimal angle from ``expected_direction`` to other angles.
+        Minimal direction from ``expected_direction`` to other angles.
     """
 
     # We should select angles equal to the expected direction

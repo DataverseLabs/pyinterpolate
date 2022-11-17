@@ -87,8 +87,8 @@ def select_points_within_ellipse(ellipse_center: np.array,
                                  minor_axis_size: float) -> np.array:
     """Function checks which points from other points are within point range described as an ellipse with
     center in point, semi-major axis of length step_size and semi-minor axis of length
-    step_size * tolerance and angle of semi-major axis calculated as angle of direction from
-    WE axis (0 radian angle) of a dataset.
+    step_size * tolerance and direction of semi-major axis calculated as direction of direction from
+    WE axis (0 radian direction) of a dataset.
 
     Parameters
     ----------
@@ -468,7 +468,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
         The array with distances to each neighbor.
 
     angle_differences : numpy array
-        The array with the minimal angle between expected distance and other points.
+        The array with the minimal direction between expected distance and other points.
 
     max_range : float
         Range within neighbors are affecting the value, it should be lower or the same as the variogram range.
@@ -483,7 +483,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
     Returns
     -------
     possible_neighbors : numpy array
-        Sorted neighbors based on a distance and angle from the origin.
+        Sorted neighbors based on a distance and direction from the origin.
     """
     angular_tolerance = 1
     max_tick = 15
@@ -494,7 +494,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
     sorted_neighbors_and_dists = neighbors_dists_and_angles[neighbors_dists_and_angles[:, -2].argsort()]
     prepared_data = sorted_neighbors_and_dists[sorted_neighbors_and_dists[:, -2] <= max_range, :]
 
-    # Limit to a specific angle
+    # Limit to a specific direction
     prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
 
     while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick > angular_tolerance):
@@ -518,7 +518,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
                                        number_of_neighbors: int = 4,
                                        use_all_neighbors_in_range: bool = False) -> np.ndarray:
     """
-    Function selects closest neighbors based on the specific angle and tolerance.
+    Function selects closest neighbors based on the specific direction and tolerance.
 
     Parameters
     ----------
@@ -532,7 +532,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
         Range within neighbors are affecting the value, it should be lower or the same as the variogram range.
 
     direction : float
-        The angle of a directional variogram.
+        The direction of a directional variogram.
 
     number_of_neighbors : int, default = 4
         Number of the n-closest neighbors used for interpolation.
@@ -701,13 +701,135 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
     return datasets
 
 
+def select_neighbors_pk_centroid_with_angle(indexes,
+                                            kriging_data,
+                                            max_range,
+                                            min_number_of_neighbors,
+                                            use_all_neighbors_in_range):
+    """
+    Function selects neighbors to a point.
+
+    Parameters
+    ----------
+    indexes : numpy array
+        The array with data indexes.
+
+    kriging_data : numpy array
+        The array with data: [[cx, cy, value, distance to unknown centroid, angle to the origin, 0]]
+
+    max_range : float
+
+    min_number_of_neighbors : int
+
+    use_all_neighbors_in_range : bool
+
+    Returns
+    -------
+    sorted_data : Tuple
+        The sorted indexes and sorted data with n-closest neighbors.
+    """
+    angular_tolerance = 1
+    max_tick = 15
+    distance_column_index = 3
+    angle_column_index = 4
+
+    # First select only neighbors in a max range
+    sorting_indexes = kriging_data[:, distance_column_index].argsort()
+    sorted_neighbors_and_dists = kriging_data[sorting_indexes]
+    sorted_indexes = indexes[sorting_indexes]
+
+    # Check ranges
+    range_test = sorted_neighbors_and_dists[:, distance_column_index] <= max_range
+    prepared_data = sorted_neighbors_and_dists[range_test, :]
+    prepared_indexes = sorted_indexes[range_test]
+
+    # Limit to a specific direction
+    angle_test = prepared_data[:, angle_column_index] <= angular_tolerance
+    prepared_data_with_angles = prepared_data[angle_test]
+    prepared_indexes_with_angles = prepared_indexes[angle_test]
+
+    # Select neighbors
+    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick > angular_tolerance):
+        angular_tolerance = angular_tolerance + 1
+        new_angle_test = prepared_data[:, angle_column_index] <= angular_tolerance
+        prepared_data_with_angles = prepared_data[new_angle_test, :]
+        prepared_indexes_with_angles = prepared_indexes[new_angle_test]
+
+    # Limit results
+    if len(prepared_data_with_angles) >= min_number_of_neighbors:
+        if use_all_neighbors_in_range:
+            return prepared_indexes_with_angles, prepared_data_with_angles
+        else:
+
+            sorting_angle_idx = prepared_data_with_angles[:, angle_column_index].argsort()
+            sorted_with_sorted_angles = prepared_data_with_angles[
+                sorting_angle_idx
+            ]
+            sorted_indexes_angles = prepared_indexes_with_angles[sorting_angle_idx]
+
+            return sorted_indexes_angles[:min_number_of_neighbors], sorted_with_sorted_angles[:min_number_of_neighbors]
+    else:
+        sorting_angle_idx = sorted_neighbors_and_dists[:, angle_column_index].argsort()
+        sorted_with_sorted_angles = sorted_neighbors_and_dists[
+            sorting_angle_idx
+        ]
+        sorted_indexes_angles = sorted_indexes[sorting_angle_idx]
+        return sorted_indexes_angles[:min_number_of_neighbors], sorted_with_sorted_angles[:min_number_of_neighbors]
+
+
+def select_neighbors_pk_centroid(indexes, kriging_data, max_range, min_number_of_neighbors, use_all_neighbors_in_range):
+    """
+    Function selects neighbors to a point.
+
+    Parameters
+    ----------
+    indexes : numpy array
+        The indexes of areas.
+
+    kriging_data : numpy array
+        The array with data: [[cx, cy, value, distance to unknown centroid, angle to the origin, 0]]
+
+    max_range : float
+
+    min_number_of_neighbors : int
+
+    use_all_neighbors_in_range : bool
+
+    Returns
+    -------
+    sorted_data : Tuple
+        The sorted indexes and sorted data with n-closest neighbors.
+    """
+    distance_column_index = 3
+
+    # First select only neighbors in a max range
+    sorting_indexes = kriging_data[:, distance_column_index].argsort()
+    sorted_neighbors_and_dists = kriging_data[sorting_indexes]
+    sorted_indexes = indexes[sorting_indexes]
+
+    # Check ranges
+    range_test = sorted_neighbors_and_dists[:, distance_column_index] <= max_range
+    prepared_data = sorted_neighbors_and_dists[range_test, :]
+    prepared_indexes = sorted_indexes[range_test]
+
+    if len(prepared_data) >= min_number_of_neighbors:
+        if use_all_neighbors_in_range:
+            return prepared_indexes, prepared_data
+        else:
+            return prepared_indexes[:min_number_of_neighbors], prepared_data[:min_number_of_neighbors]
+    else:
+        return sorted_indexes[:min_number_of_neighbors], sorted_neighbors_and_dists[:min_number_of_neighbors]
+
+
 def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
                                          u_point_support: np.ndarray,
                                          k_blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                                          k_point_support_dict: Dict,
                                          nn: int,
                                          max_range: float,
-                                         weighted: bool) -> np.ndarray:
+                                         weighted: bool,
+                                         direction: float = None,
+                                         use_all_neighbors_in_range=False) -> np.ndarray:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
@@ -738,10 +860,16 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
     weighted : bool
                Are distances between blocks weighted by point support?
 
+    direction : float, default = None
+        The direction of a directional variogram.
+
+    use_all_neighbors_in_range : bool, default = None
+        Should algorithm select all neighbors within a specified range and direction (if provided)?
+
     Returns
     -------
     dataset : numpy array
-        ``[[cx, cy, value, distance to unknown, aggregated point support sum]]``
+        ``[[cx, cy, value, distance to unknown, angles, aggregated point support sum]]``
     """
 
     if not isinstance(k_point_support_dict, Dict):
@@ -759,25 +887,30 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         # Calc from centroids
         dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
 
-    # Create Kriging Data
-    kriging_indexes, kriging_data = _parse_pk_input(k_centroids, dists)
+    if direction is not None:
+        angles = calc_angles(k_centroids[:, :-1])
+        angle_distances = calculate_angular_distance(angles, direction)
 
-    # Sort by distance
-    _s_idxs = kriging_data[:, 3].argsort()  # 3rd col == distance
-    sorted_kdata = kriging_data[_s_idxs]
-    sorted_indexes = kriging_indexes[_s_idxs]
+        # Create Kriging Data
+        # indexes, [[cx, cy, value,
+        #            distance to unknown centroid,
+        #            difference between angle and a directional angle,
+        #            0]]
+        indexes, kriging_data = _parse_pk_input(k_centroids, dists, angle_distances)
+        kriging_indexes, kriging_input = select_neighbors_pk_centroid_with_angle(indexes,
+                                                                                 kriging_data,
+                                                                                 max_range,
+                                                                                 nn,
+                                                                                 use_all_neighbors_in_range)
 
-    max_search_pos = np.argmax(sorted_kdata[:, 3] > max_range)
-
-    kriging_input = sorted_kdata[:max_search_pos]
-
-    if len(kriging_input) > nn:
-        kriging_input = sorted_kdata[:nn]
-        kriging_indexes = sorted_indexes[:nn]
-
-    if len(kriging_input) <= 1:
-        kriging_input = sorted_kdata[:2]
-        kriging_indexes = sorted_indexes[:2]
+    else:
+        # [indexes], [[cx, cy, value, distance to unknown centroid, np.nan, 0]]
+        indexes, kriging_data = _parse_pk_input(k_centroids, dists)
+        kriging_indexes, kriging_input = select_neighbors_pk_centroid(indexes,
+                                                                      kriging_data,
+                                                                      max_range,
+                                                                      nn,
+                                                                      use_all_neighbors_in_range)
 
     # get total points' value in each id from prepared datasets and append it to the array
     for idx, rec in enumerate(kriging_input):
@@ -821,7 +954,7 @@ def _transform_and_test_u_block_centroid(u_block_centroid):
     return u_index, u_coordinates
 
 
-def _parse_pk_input(centroids_and_values, distances):
+def _parse_pk_input(centroids_and_values, distances, angles=None):
     """
     Function parses given arrays into PK input.
 
@@ -831,10 +964,13 @@ def _parse_pk_input(centroids_and_values, distances):
 
     distances : Collection
 
+    angles : Collection, default=None
+        Angles between points and the origin.
+
     Returns
     -------
     : numpy array, numpy array
-        indexes, [[cx, cy, value, distance to unknown centroid, 0]]
+        indexes, [[cx, cy, value, distance to unknown centroid, angle to the origin, 0]]
     """
     indexes = []
     dists = []
@@ -853,16 +989,21 @@ def _parse_pk_input(centroids_and_values, distances):
 
     nones = [0 for _ in indexes]
 
+    if angles is None:
+        angles = [np.nan for _ in indexes]
+
     data = list(
         zip(
             centroids_and_values[:, 0],
             centroids_and_values[:, 1],
             centroids_and_values[:, 2],
             dists,
+            angles,
             nones
         )
     )
 
-    data = np.array(data)
+    data = np.asarray(data)
     indexes = np.array(indexes)
+
     return indexes, data

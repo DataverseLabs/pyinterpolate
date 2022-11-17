@@ -119,7 +119,7 @@ def _calculate_weighted_directional_semivariogram(points: np.array,
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -212,7 +212,7 @@ def _from_ellipse_non_weighted(points: np.array, lags: np.array, step_size: floa
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -296,7 +296,7 @@ def _from_triangle_non_weighted(points: np.array, lags: np.array, direction, tol
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -391,7 +391,7 @@ def directional_semivariogram(points: np.array,
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -460,7 +460,7 @@ def calculate_semivariance(points: np.array,
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -540,7 +540,7 @@ def calculate_semivariance(points: np.array,
         temperature. It changes from equator to poles, so in the N-S and S-N axes. The good idea is to test if
         our observations are correlated in a few different directions. The main difference between an omnidirectional
         semivariogram and a directional semivariogram is that we take into account a different subset of neighbors.
-        The selection depends on the angle (direction) of analysis. You may imagine it like that:
+        The selection depends on the direction (direction) of analysis. You may imagine it like that:
 
         - Omnidirectional semivariogram: we test neighbors in a circle,
         - Directional semivariogram: we test neighbors within an ellipse and one direction is major.
