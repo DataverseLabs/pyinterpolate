@@ -6,6 +6,14 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2022-12-XX
+----------
+
+**version 0.3.6**
+
+* (enhancement) Directional Centroid-based Poisson Kriging.
+
+
 2022-11-05
 ----------
 
