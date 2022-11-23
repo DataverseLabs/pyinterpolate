@@ -229,7 +229,7 @@ def _calc_angle_from_origin(vec):
     return np.rad2deg(ang % (2 * np.pi))
 
 
-def calc_angles(points_b: Iterable, point_a: Iterable = None):
+def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Tuple = None):
     """
     Function calculates angles between points and origin or between vectors from origin to points and a vector from
     a specific point to origin.
@@ -240,14 +240,20 @@ def calc_angles(points_b: Iterable, point_a: Iterable = None):
         Other point coordinates.
 
     point_a : Iterable
-        The point coordinates, default is equal to (0, 0) - origin.
+        The point coordinates, default is equal to (0, 0).
+
+    origin : Tuple
+        The origin coordinates, default is (0, 0).
 
     Returns
     -------
     angles : numpy array
-        Angles from the ``points_b`` to origin, or angles beteen vectors ``points_b`` to origin and ``point_a``
+        Angles from the ``points_b`` to origin, or angles between vectors ``points_b`` to origin and ``point_a``
         to origin.
     """
+
+    if origin is None:
+        origin = (0, 0)
 
     if not isinstance(points_b, np.ndarray):
         points_b = np.array(points_b)

@@ -5,12 +5,13 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Union
+from typing import Union, Dict, Type
 
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
+from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
@@ -89,7 +90,7 @@ class DirectionalVariogram:
     Methods
     -------
     get()
-        Returns copy of calculated directional variograms.
+        Returns copy of calculated directional variograms or a single variogram in a specific direction.
 
     show()
         Plot all variograms on a single plot.
@@ -104,6 +105,7 @@ class DirectionalVariogram:
         self.tolerance = tolerance
         self.weights = weights
         self.method = method
+        self.possible_variograms = ['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE']
 
         self.directions = {
             'NS': 90,
@@ -131,8 +133,30 @@ class DirectionalVariogram:
                                                      method=self.method)
             self.directional_variograms[idx] = variogram
 
-    def get(self):
-        return self.directional_variograms.copy()
+    def get(self, direction=None) -> Union[Dict, Type[ExperimentalVariogram]]:
+        """
+        Method returns all variograms or a single variogram at a specific direction.
+
+        Parameters
+        ----------
+        direction : str, default = None
+            The direction of variogram from a list of ``possible_variograms`` attribute: "ISO", "NS", "WE", "NE-SW",
+            "NW-SE".
+
+        Returns
+        -------
+        : Union[Dict, Type[ExperimentalVariogram]]
+            The dictionary with variograms for all possible directions, or a single variogram for a specific direction.
+        """
+        if direction is None:
+            return self.directional_variograms.copy()
+        else:
+            if direction in self.possible_variograms:
+                return self.directional_variograms[direction]
+
+            msg = f'Given direction is not possible to retrieve, pass one direction from a possible_variograms: ' \
+                  f'{self.possible_variograms} or leave None to get a dictionary with all possible variograms.'
+            raise KeyError(msg)
 
     def show(self):
         if self.directional_variograms:
