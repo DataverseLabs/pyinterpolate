@@ -218,18 +218,20 @@ def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray)
     return distances_sum
 
 
-def _calc_angle_between_points(v1, v2):
-    ang1 = np.arctan2(*v1[::-1])
-    ang2 = np.arctan2(v2[:, 1], v2[:, 0])
+def _calc_angle_between_points(v1, v2, origin):
+    ang1 = np.arctan2(v1[1] - origin[1], v1[0] - origin[0])
+    ang2 = np.arctan2(v2[:, 1] - origin[1], v2[:, 0] - origin[0])
     return np.rad2deg((ang1 - ang2) % (2 * np.pi))
 
 
-def _calc_angle_from_origin(vec):
-    ang = np.arctan2(vec[:, 1], vec[:, 0])
+def _calc_angle_from_origin(vec, origin):
+    ys = vec[:, 1] - origin[1]
+    xs = vec[:, 0] - origin[0]
+    ang = np.arctan2(ys, xs)
     return np.rad2deg(ang % (2 * np.pi))
 
 
-def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Tuple = None):
+def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Iterable = None):
     """
     Function calculates angles between points and origin or between vectors from origin to points and a vector from
     a specific point to origin.
@@ -242,7 +244,7 @@ def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Tuple = No
     point_a : Iterable
         The point coordinates, default is equal to (0, 0).
 
-    origin : Tuple
+    origin : Iterable
         The origin coordinates, default is (0, 0).
 
     Returns
@@ -253,17 +255,21 @@ def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Tuple = No
     """
 
     if origin is None:
-        origin = (0, 0)
+        origin = np.array((0, 0))
+    else:
+        if not isinstance(origin, np.ndarray):
+            origin = np.array(origin)
 
     if not isinstance(points_b, np.ndarray):
         points_b = np.array(points_b)
+
     if len(points_b.shape) == 1:
         points_b = points_b[np.newaxis, ...]
 
     if point_a is None:
-        angles = _calc_angle_from_origin(points_b)
+        angles = _calc_angle_from_origin(points_b, origin)
     else:
-        angles = _calc_angle_between_points(point_a, points_b)
+        angles = _calc_angle_between_points(point_a, points_b, origin)
 
     return angles
 

@@ -5,17 +5,19 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Union, Dict, Type
+from typing import Union, Dict, Type, TYPE_CHECKING
 
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy import nan
 from prettytable import PrettyTable
-from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
+
+if TYPE_CHECKING:
+    from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 
 
 class DirectionalVariogram:
@@ -133,7 +135,7 @@ class DirectionalVariogram:
                                                      method=self.method)
             self.directional_variograms[idx] = variogram
 
-    def get(self, direction=None) -> Union[Dict, Type[ExperimentalVariogram]]:
+    def get(self, direction=None) -> Union[Dict, Type["ExperimentalVariogram"]]:
         """
         Method returns all variograms or a single variogram at a specific direction.
 

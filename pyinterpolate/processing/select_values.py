@@ -552,7 +552,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
 
     known_pos = data_array[:, :-1]
     dists = calc_point_to_point_distance(r, known_pos)
-    angles = calc_angles(known_pos)
+    angles = calc_angles(known_pos, origin=r)
     angle_diffs = calculate_angular_distance(angles, direction)
 
     selected_data = select_possible_neighbors_angular(data_array,
@@ -888,7 +888,7 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
 
     if direction is not None:
-        angles = calc_angles(k_centroids[:, :-1])
+        angles = calc_angles(k_centroids[:, :-1], origin=u_coordinates)
         angle_distances = calculate_angular_distance(angles, direction)
 
         # Create Kriging Data
