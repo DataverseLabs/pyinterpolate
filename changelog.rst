@@ -11,7 +11,9 @@ Changes by date
 
 **version 0.3.6**
 
-* (enhancement) Directional Centroid-based Poisson Kriging.
+* (enhancement) Directional Centroid-based Poisson Kriging,
+* (debug) Added origin (unknown point) to calculate directional Kriging and directional Centroid-based Poisson Kriging,
+* (docs) Directional Ordinary Kriging tutorial,
 
 
 2022-11-05

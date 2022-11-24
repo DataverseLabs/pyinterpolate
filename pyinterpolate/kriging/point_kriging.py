@@ -31,7 +31,6 @@ def kriging(observations: np.ndarray,
             use_all_neighbors_in_range=False,
             sk_mean: Union[float, None] = None,
             allow_approx_solutions=False,
-            err_to_nan=False,
             number_of_workers: int = 1) -> np.ndarray:
     """Function manages Ordinary Kriging and Simple Kriging predictions.
 
