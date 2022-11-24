@@ -497,7 +497,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
     # Limit to a specific direction
     prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
 
-    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick > angular_tolerance):
+    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick < angular_tolerance):
         angular_tolerance = angular_tolerance + 1
         prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
 
@@ -552,7 +552,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
 
     known_pos = data_array[:, :-1]
     dists = calc_point_to_point_distance(r, known_pos)
-    angles = calc_angles(known_pos, origin=r)
+    angles = calc_angles(known_pos, origin=unknown_position)
     angle_diffs = calculate_angular_distance(angles, direction)
 
     selected_data = select_possible_neighbors_angular(data_array,
