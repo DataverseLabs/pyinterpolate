@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Union, Dict, Type, TYPE_CHECKING
+from typing import Union, Dict, Type
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -15,9 +15,6 @@ from prettytable import PrettyTable
 from pyinterpolate.variogram.empirical.covariance import calculate_covariance
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
 from pyinterpolate.variogram.utils.exceptions import validate_plot_attributes_for_experimental_variogram_class
-
-if TYPE_CHECKING:
-    from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 
 
 class DirectionalVariogram:
@@ -42,8 +39,8 @@ class DirectionalVariogram:
 
     tolerance : float (in range [0, 1]), default=0.2
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
         * The major axis size == ``step_size``.
@@ -98,7 +95,7 @@ class DirectionalVariogram:
         Plot all variograms on a single plot.
     """
 
-    def __init__(self, input_array: np.array, step_size: float, max_range: float, weights=None, tolerance=0.2,
+    def __init__(self, input_array: np.array, step_size: float, max_range: float, weights=None, tolerance: float = 0.2,
                  method='t'):
 
         self.ds = input_array
@@ -216,8 +213,8 @@ class ExperimentalVariogram:
 
     tolerance : float (in range [0, 1]), default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
         * The major axis size == ``step_size``.
@@ -589,8 +586,8 @@ def build_experimental_variogram(input_array: np.array,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance:
 
         * the major axis size == ``step_size``,

@@ -486,7 +486,7 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
         Sorted neighbors based on a distance and direction from the origin.
     """
     angular_tolerance = 1
-    max_tick = 15
+    max_tick = 5  # TODO: more control over this parameter?
 
     neighbors_dists_and_angles = np.c_[possible_neighbors, distances.T, angle_differences.T]
 
@@ -497,9 +497,11 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
     # Limit to a specific direction
     prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
 
-    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick < angular_tolerance):
+    while len(prepared_data_with_angles) < min_number_of_neighbors:
         angular_tolerance = angular_tolerance + 1
         prepared_data_with_angles = prepared_data[prepared_data[:, -1] <= angular_tolerance]
+        if angular_tolerance > max_tick:
+            break
 
     if len(prepared_data_with_angles) >= min_number_of_neighbors:
         if use_all_neighbors_in_range:
@@ -729,7 +731,7 @@ def select_neighbors_pk_centroid_with_angle(indexes,
         The sorted indexes and sorted data with n-closest neighbors.
     """
     angular_tolerance = 1
-    max_tick = 15
+    max_tick = 15  # TODO: more control over this parameter?
     distance_column_index = 3
     angle_column_index = 4
 
@@ -749,11 +751,13 @@ def select_neighbors_pk_centroid_with_angle(indexes,
     prepared_indexes_with_angles = prepared_indexes[angle_test]
 
     # Select neighbors
-    while (len(prepared_data_with_angles) < min_number_of_neighbors) or (max_tick > angular_tolerance):
+    while len(prepared_data_with_angles) < min_number_of_neighbors:
         angular_tolerance = angular_tolerance + 1
         new_angle_test = prepared_data[:, angle_column_index] <= angular_tolerance
         prepared_data_with_angles = prepared_data[new_angle_test, :]
         prepared_indexes_with_angles = prepared_indexes[new_angle_test]
+        if max_tick < angular_tolerance:
+            break
 
     # Limit results
     if len(prepared_data_with_angles) >= min_number_of_neighbors:
