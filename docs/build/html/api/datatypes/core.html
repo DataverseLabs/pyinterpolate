@@ -324,6 +324,20 @@ from the index array of <code class="docutils literal notranslate"><span class="
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">PointSupport</span></code><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class prepares the point support data in relation to block dataset.</p>
+<p class="rubric">Notes</p>
+<p>The PointSupport class structure is designed to store the information about the points within polygons.
+During the regularization process, the inblock variograms are estimated from the polygon’s point support, and
+semivariances are calculated between point supports of neighbouring blocks.</p>
+<p>The class takes population grid (support) and blocks data (polygons). Then, spatial join is performed and points
+are assigned to areas within they are placed. The core attribute is <code class="docutils literal notranslate"><span class="pre">point_support</span></code> - GeoDataFrame with columns:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">x_col</span></code> - a floating representation of longitude,</li>
+<li><code class="docutils literal notranslate"><span class="pre">y_col</span></code> - a floating representation of latitude,</li>
+<li><code class="docutils literal notranslate"><span class="pre">value_column</span></code> - the attribute which describes the name of a column with the point-support’s value,</li>
+<li><code class="docutils literal notranslate"><span class="pre">geometry_column</span></code> - the attribute which describes the name of a geometry column with <code class="docutils literal notranslate"><span class="pre">Point()</span></code> representation
+of the point support coordinates,</li>
+<li><code class="docutils literal notranslate"><span class="pre">block_index_column</span></code> - the name of a column which directs to the block index values.</li>
+</ul>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">PointSupport</span>
@@ -451,8 +465,8 @@ from the index array of <code class="docutils literal notranslate"><span class="
   <div id="footer-row" class="row">
 
     <div class="col-md-12">
-        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
+        <span title="Built on 2022-12-14" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
+        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
         <a href="https://pypi.org/project/sphinx-sizzle-theme/"
 
            title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
