@@ -1,42 +1,40 @@
+
 <!DOCTYPE html>
-<html lang="en-gb">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-<title>Pyinterpolate - Semivariogram Estimation</title>
+    <title>Semivariogram Estimation &#8212; Pyinterpolate 0.3.5 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
-<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
-    <script>
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.3.5',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        LINK_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-      $(document).data('sizzle', {on_load: []});
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -46,208 +44,363 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="../../app-data.js"></script>
-<link rel="index" title="Index" href="../../genindex.html" />
-<link rel="search" title="Search" href="../../search.html" />
-<link rel="next" title="Semivariogram models" href="Theoretical%20Models%20%28Basic%29.html" />
-<link rel="prev" title="Tutorials" href="../tutorials.html" />
-
-</head>
-<body class="full-height test">
-<noscript>
-  <div>
-    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
-  </div>
-</noscript>
-<div id="whole-page" class="container-fluid content full-height">
-  <div id="header-row" class="row">
-    <div id="header-container" class="col-md-12">
-      <div id="hdr-left">
-        <i class="fa fa-bars menu-toggle"></i>
-        
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
-
-      </div>
-      <div id="hdr-centre" class="text-center stretch">
-        <h3 title="Semivariogram Estimation">Semivariogram Estimation</h3>
-        <h6>Semivariogram Estimation</h6>
-      </div>
-      <div id="hdr-search">
-        
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-      </div>
-
-      <div id="hdr-index">
-        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
-      </div>
-
-      <div id="hdr-source">
-        <a href="../../_sources/usage/tutorials/Semivariogram Estimation (Basic).ipynb.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
-      </div>
-
-      <div id="hdr-right">
-        
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/Semivariogram Estimation (Basic)';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Semivariogram models" href="Theoretical%20Models%20%28Basic%29.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
   
-  <div class="prev-next">
-    
-      <div class="pull-left">
-        <a class="btn btn-default prev" href="../tutorials.html" title="Previous chapter (Tutorials)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">Tutorials</span></a>
-      </div>
-    
-      <div class="pull-right">
-        <a class="btn btn-default next" href="Theoretical%20Models%20%28Basic%29.html" title="Next chapter (Semivariogram models)"><span class="btn-text">Semivariogram models</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
-      </div>
-    </div>
   
-      </div>
-      <div id="alt-hdr-right">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
 
-        <a href="../tutorials.html"><i class="fa fa-chevron-left mr-8"></i></a>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
 
-        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
 
-
-        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
-
-
-        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
-
-
-        <a href="Theoretical%20Models%20%28Basic%29.html"><i class="fa fa-chevron-right"></i></a>
-
-      </div>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
     </div>
   </div>
 
-  <div id="content-row" class="row">
-    <div id="page-content" class="col-md-12 flex-col">
-      <div id="content-container">
-        <div id="nav">
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
           
-  <div class="navsidebar">
-    <div id="sidebar-search">
-      
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-    </div>
-      <div class="sidebar-block">
-        <div class="sidebar-tocheading">
-          <div class="pull-left">
-            <h2>Table Of Contents</h2>
-          </div>
-          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
         </div>
-        <div class="sidebar-toc">
       
-          <div id="toc-filter" title="Type in here to show only matching topics">
-            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
-          </div>
       
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
   
-    <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#Semivariogram-Estimation">Semivariogram Estimation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data">1) Read point data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-variogram">2) Create the experimental variogram</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#3.-Set-manually-different-semivariogram-models">3. Set manually different semivariogram models</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#Models:">Models:</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#4)-Set-automatically-semivariogram-model">4) Set automatically semivariogram model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#5)-Export-model">5) Export model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#6)-Import-model">6) Import model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Directional%20Semivariograms%20%28Basic%29.html">Directional semivariograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
-</ul>
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
 
-  
-        </div>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
       </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
   </div>
-        </div>
-        <div id="content" tabindex="0" class="stretch">
-          <div id="mnav">
-            
-  
-    <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Tutorials</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#beginner">Beginner</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#Semivariogram-Estimation">Semivariogram Estimation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#Table-of-Contents:">Table of Contents:</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Level:-Basic">Level: Basic</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Changelog">Changelog</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Import-packages">Import packages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#1)-Read-point-data">1) Read point data</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#2)-Create-the-experimental-variogram">2) Create the experimental variogram</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#3.-Set-manually-different-semivariogram-models">3. Set manually different semivariogram models</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="#Models:">Models:</a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="#4)-Set-automatically-semivariogram-model">4) Set automatically semivariogram model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#5)-Export-model">5) Export model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#6)-Import-model">6) Import model</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Directional%20Semivariograms%20%28Basic%29.html">Directional semivariograms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#intermediate">Intermediate</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#advanced">Advanced</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html#how-to-cite">How to cite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html#bibliography">Bibliography</a></li>
-</ul>
 
   
-          </div>
-          <div class="body">
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Semivariogram Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Directional%20Semivariograms%20%28Basic%29.html">Directional semivariograms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Ordinary%20and%20Simple%20Kriging%20%28Basic%29.html">Ordinary and Simple Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="How%20good%20is%20our%20Kriging%20model%20-%20test%20it%20against%20IDW%20algorithm%20%28Basic%29.html">How good is my Kriging model? - tests with IDW algorithm</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Semivariogram%20Regularization%20%28Intermediate%29.html">Semivariogram regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Blocks%20to%20points%20Ordinary%20Kriging%20interpolation%20%28Intermediate%29.html">Blocks to points Ordinary Kriging interpolation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Directional%20Ordinary%20Kriging%20%28Intermediate%29.html">Directional Ordinary Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Outliers%20and%20Their%20Influence%20on%20the%20Final%20Model%20%28Intermediate%29.html">Outliers and Their Influence on the Final Model</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Poisson%20Kriging%20-%20Centroid%20Based%20%28Advanced%29.html">Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Point%20%28Advanced%29.html">Poisson Kriging - Area to Point Kriging</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
             
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
   
 <style>
 /* CSS for nbsphinx extension */
@@ -504,84 +657,79 @@ div.rendered_html tbody tr:hover {
   background: rgba(66, 165, 245, 0.2);
 }
 </style>
-<div class="section" id="Semivariogram-Estimation">
-<h1>Semivariogram Estimation<a class="headerlink" href="#Semivariogram-Estimation" title="Permalink to this heading">¶</a></h1>
-<div class="section" id="Table-of-Contents:">
-<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">¶</a></h2>
+<section id="Semivariogram-Estimation">
+<h1>Semivariogram Estimation<a class="headerlink" href="#Semivariogram-Estimation" title="Permalink to this heading">#</a></h1>
+<section id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li>Read point data,</li>
-<li>Create the experimental variogram,</li>
-<li>Set manually different semivariogram models,</li>
-<li>Set automatically a semivariogram model,</li>
-<li>Export model,</li>
-<li>Import model.</li>
+<li><p>Read point data,</p></li>
+<li><p>Create the experimental variogram,</p></li>
+<li><p>Set manually different semivariogram models,</p></li>
+<li><p>Set automatically a semivariogram model,</p></li>
+<li><p>Export model,</p></li>
+<li><p>Import model.</p></li>
 </ol>
-</div>
-<div class="section" id="Level:-Basic">
-<h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this heading">¶</a></h2>
-</div>
-<div class="section" id="Changelog">
-<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">¶</a></h2>
-<table>
-<colgroup>
-<col width="18%" />
-<col width="59%" />
-<col width="23%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Date</th>
-<th class="head">Change description</th>
-<th class="head">Author</th>
+</section>
+<section id="Level:-Basic">
+<h2>Level: Basic<a class="headerlink" href="#Level:-Basic" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
 </tr>
 </thead>
-<tbody valign="top">
-<tr class="row-even"><td>2022-11-05</td>
-<td>Tutorial updated for the 0.3.5 version of the package</td>
-<td>&#64;SimonMolinsky</td>
+<tbody>
+<tr class="row-even"><td><p>2022-11-05</p></td>
+<td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td>2022-08-09</td>
-<td>Tutorial updated to work with version 0.3.0</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-odd"><td><p>2022-08-09</p></td>
+<td><p>Tutorial updated to work with version 0.3.0</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td>2021-12-14</td>
-<td>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-even"><td><p>2021-12-14</p></td>
+<td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td>2021-12-13</td>
-<td>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-odd"><td><p>2021-12-13</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td>2021-10-13</td>
-<td>Refactored TheoreticalSemivariogram (name change of class attribute)</td>
-<td>&#64;ethmtrgt</td>
+<tr class="row-even"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute)</p></td>
+<td><p>&#64;ethmtrgt</p></td>
 </tr>
-<tr class="row-odd"><td>2021-05-28</td>
-<td>Updated paths for input/output data</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-odd"><td><p>2021-05-28</p></td>
+<td><p>Updated paths for input/output data</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td>2021-05-11</td>
-<td>Refactored TheoreticalSemivariogram class</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td>2021-03-31</td>
-<td>Update related to the change of semivariogram weighting</td>
-<td>&#64;SimonMolinsky</td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
 <p>In this tutorial, we will learn how to read and prepare data for semivariogram modeling, manually set semivariogram type, and do it automatically. We will compare different semivariogram models by visualizing the outcomes of the models.</p>
 <p>Semivariogram modeling is an initial step before we can perform spatial interpolation of unknown values with Kriging. When you complete this tutorial, you may learn how to:</p>
 <ul class="simple">
-<li>perform point Kriging (ordinary and simple),</li>
-<li>regularize semivariogram of areal data.</li>
+<li><p>perform point Kriging (ordinary and simple),</p></li>
+<li><p>regularize semivariogram of areal data.</p></li>
 </ul>
 <p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem.txt</span></code>.</p>
-</div>
-<div class="section" id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -599,9 +747,9 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="1)-Read-point-data">
-<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="1)-Read-point-data">
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -639,19 +787,19 @@ array([[2.54549783e+05, 5.38007742e+05, 2.96319027e+01],
        [2.54521994e+05, 5.36925123e+05, 5.15251350e+01]])
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="2)-Create-the-experimental-variogram">
-<h2>2) Create the experimental variogram<a class="headerlink" href="#2)-Create-the-experimental-variogram" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="2)-Create-the-experimental-variogram">
+<h2>2) Create the experimental variogram<a class="headerlink" href="#2)-Create-the-experimental-variogram" title="Permalink to this heading">#</a></h2>
 <p>The first step of analysis is to check if there is any kind of spatial correlation in our dataset. To do so, we use variograms - plots of the dissimilarity between point pairs (y axis) that changes with a distance (x axis). There are two “types” of variograms.</p>
 <ul class="simple">
-<li><strong>Experimental variogram</strong>: directly showing relationships of point pairs, which could be very messy. We use it to initially check if there are a spatial correlation and model spatial processes.</li>
-<li><strong>Theoretical variogram</strong>: is a special function applied to the experimental variogram. We try to model dissimilarity with a mathematical curve that could be later used for missing values interpolation. We have a set of models to try and only three <em>hyperparameters</em> to test.</li>
+<li><p><strong>Experimental variogram</strong>: directly showing relationships of point pairs, which could be very messy. We use it to initially check if there are a spatial correlation and model spatial processes.</p></li>
+<li><p><strong>Theoretical variogram</strong>: is a special function applied to the experimental variogram. We try to model dissimilarity with a mathematical curve that could be later used for missing values interpolation. We have a set of models to try and only three <em>hyperparameters</em> to test.</p></li>
 </ul>
 <p>We start our analysis by setting up the experimental model. We use for it <code class="docutils literal notranslate"><span class="pre">build_experimental_variogram()</span></code> function that creates for us <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> object. We pass to this function three parameters:</p>
 <ol class="arabic simple">
-<li><code class="docutils literal notranslate"><span class="pre">input_array</span></code>: <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> with coordinates and observed values, for example <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">0,</span> <span class="pre">10],</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">20]]</span></code>,</li>
-<li><code class="docutils literal notranslate"><span class="pre">step_size</span></code>: we must divide our area of analysis into discrete <strong>lags</strong>. <strong>Lags</strong> are intervals (usually circular) within which we check if the point has a neighbor. For example, if we look into the lag <code class="docutils literal notranslate"><span class="pre">500</span></code>, then we are going to compare one point with other points in a distance <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1000]</span></code> from this point,</li>
-<li><code class="docutils literal notranslate"><span class="pre">max_range</span></code>: it is a tricky one, and it is hard to guess it at the first try. This parameter represents the possible <strong>maximum range of spatial dependency</strong>. This parameter shouldn’t exceed half of the extent.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">input_array</span></code>: <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> with coordinates and observed values, for example <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">0,</span> <span class="pre">10],</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">20]]</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_size</span></code>: we must divide our area of analysis into discrete <strong>lags</strong>. <strong>Lags</strong> are intervals (usually circular) within which we check if the point has a neighbor. For example, if we look into the lag <code class="docutils literal notranslate"><span class="pre">500</span></code>, then we are going to compare one point with other points in a distance <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">1000]</span></code> from this point,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_range</span></code>: it is a tricky one, and it is hard to guess it at the first try. This parameter represents the possible <strong>maximum range of spatial dependency</strong>. This parameter shouldn’t exceed half of the extent.</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -687,14 +835,14 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> object represents all information that we could estimate from our measurements:</p>
 <ul class="simple">
-<li><strong>semivariance</strong>: dissimilarity over a distance,</li>
-<li><strong>covariance</strong>: similarity over a distance,</li>
-<li><strong>variance</strong>: non-spatial variance of all points.</li>
+<li><p><strong>semivariance</strong>: dissimilarity over a distance,</p></li>
+<li><p><strong>covariance</strong>: similarity over a distance,</p></li>
+<li><p><strong>variance</strong>: non-spatial variance of all points.</p></li>
 </ul>
 <p>This class has two useful methods:</p>
 <ol class="arabic simple">
-<li>We can print object statistics with the <code class="docutils literal notranslate"><span class="pre">print()</span></code> function,</li>
-<li>or we can plot <em>semivariance</em>, <em>covariance</em> and <em>variance</em> and check how they behave with a distance with <code class="docutils literal notranslate"><span class="pre">object.plot()</span></code> method.</li>
+<li><p>We can print object statistics with the <code class="docutils literal notranslate"><span class="pre">print()</span></code> function,</p></li>
+<li><p>or we can plot <em>semivariance</em>, <em>covariance</em> and <em>variance</em> and check how they behave with a distance with <code class="docutils literal notranslate"><span class="pre">object.plot()</span></code> method.</p></li>
 </ol>
 <p>Let’s check both!</p>
 <div class="nbinput docutils container">
@@ -736,10 +884,10 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 </pre></div></div>
 </div>
 <ul class="simple">
-<li><strong>Lag</strong> is a column with the lag center,</li>
-<li><strong>semivariance</strong> is a column with a dissimilarity metric,</li>
-<li><strong>covariance</strong> is a column with a similarity metric,</li>
-<li><strong>var_cov_diff</strong> is a difference between the variance and the covariance and ideally it should be equal to the semivariance. But it is possible only if a spatial process is second-order stationary, and in real-world applications, it is a rare situation. On the other hand, you should see that this value is very close to the semivariance for our dataset.</li>
+<li><p><strong>Lag</strong> is a column with the lag center,</p></li>
+<li><p><strong>semivariance</strong> is a column with a dissimilarity metric,</p></li>
+<li><p><strong>covariance</strong> is a column with a similarity metric,</p></li>
+<li><p><strong>var_cov_diff</strong> is a difference between the variance and the covariance and ideally it should be equal to the semivariance. But it is possible only if a spatial process is second-order stationary, and in real-world applications, it is a rare situation. On the other hand, you should see that this value is very close to the semivariance for our dataset.</p></li>
 </ul>
 <p>We can plot semivariance and covariance to understand their relation.</p>
 <div class="nbinput docutils container">
@@ -754,51 +902,51 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_12_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_12_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_12_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_12_0.png" />
 </div>
 </div>
 <p>Our plot shows three objects:</p>
 <ol class="arabic simple">
-<li><strong>Circles</strong> represent <em>semivariance</em>,</li>
-<li><strong>Pluses</strong> represent <em>covariance</em>,</li>
-<li><strong>The dashed line</strong> is a <em>variance</em>.</li>
+<li><p><strong>Circles</strong> represent <em>semivariance</em>,</p></li>
+<li><p><strong>Pluses</strong> represent <em>covariance</em>,</p></li>
+<li><p><strong>The dashed line</strong> is a <em>variance</em>.</p></li>
 </ol>
 <p>We see here that semivariance and covariance are mirrored. What does it mean? It is normal behavior, and we should expect it - semivariance and covariance have symmetrical trends (they differ in a sign). We can read it as:</p>
 <ul class="simple">
-<li>with <strong>semivariance</strong>, the dissimilarity between point pairs over a distance increases,</li>
-<li><strong>covariance</strong> shows that the similarity between point pairs over a distance decreases.</li>
+<li><p>with <strong>semivariance</strong>, the dissimilarity between point pairs over a distance increases,</p></li>
+<li><p><strong>covariance</strong> shows that the similarity between point pairs over a distance decreases.</p></li>
 </ul>
 <p>In the best-case scenario (data is stationary, e.g., mean and variance don’t change with a distance), the difference between variance and covariance should be equal to semivariance. That’s why our <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> object prints the difference between those two. We can quickly check if the process we measure is stationary.</p>
 <p>With the experimental variogram, we can create a theoretical model of semivariance.</p>
-</div>
-<div class="section" id="3.-Set-manually-different-semivariogram-models">
-<h2>3. Set manually different semivariogram models<a class="headerlink" href="#3.-Set-manually-different-semivariogram-models" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="3.-Set-manually-different-semivariogram-models">
+<h2>3. Set manually different semivariogram models<a class="headerlink" href="#3.-Set-manually-different-semivariogram-models" title="Permalink to this heading">#</a></h2>
 <p>With an experimental variogram, we can start modeling theoretical function that optimally describes observed data. Our role is to choose the modeling function and to set three hyperparameters: nugget, sill, and range. You can read more about semivariogram models here: <a class="reference external" href="https://ml-gis-service.com/index.php/2022/04/01/geostatistics-theoretical-variogram-models/">Geostatistics: Theoretical Variogram Models</a>.</p>
 <p>Semivariogram has three basic properties:</p>
 <ul class="simple">
-<li><strong>nugget</strong>: the initial value at a zero distance, in most cases, it is zero, but sometimes it represents a bias in observations.</li>
-<li><strong>sill</strong>: the point where semivariogram flattens and reaches approximately 95% of dissimilarity. Sometimes we cannot find a sill; for example, if differences grow exponentially, but in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> it is usually set close to the variance of data,</li>
-<li><strong>range</strong>: is a distance where a variogram reaches its sill. Larger distances are negligible for interpolation.</li>
+<li><p><strong>nugget</strong>: the initial value at a zero distance, in most cases, it is zero, but sometimes it represents a bias in observations.</p></li>
+<li><p><strong>sill</strong>: the point where semivariogram flattens and reaches approximately 95% of dissimilarity. Sometimes we cannot find a sill; for example, if differences grow exponentially, but in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> it is usually set close to the variance of data,</p></li>
+<li><p><strong>range</strong>: is a distance where a variogram reaches its sill. Larger distances are negligible for interpolation.</p></li>
 </ul>
 <p>We are not forced to know all of them at the beginning. <strong>Range</strong> and <strong>sill</strong> may be easily computed by the algorithm. The nugget is slightly different. As a programmer, I can tell you that it is easy to build an algorithm for nugget grid search, and it will work the same as for range &amp; sill. But nugget may represent systematic bias, and we should be sure that it is different than zero if we use it. The algorithm doesn’t know about our sampling method!</p>
 <p>A theoretical model can be created in two ways: 1. Manually, with the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function, 2. Semi-automatically, but here’s the catch: we must create a <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> object first, and in the second step, we may use the <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> method of this class. Why is that? The reason is simple - if we want to fit semivariogram automatically, then the algorithm (or creator) assumes that we know what we are doing.</p>
 <p>We start from the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function and look into different models fitted to our data.</p>
-<div class="section" id="Models:">
-<h3>Models:<a class="headerlink" href="#Models:" title="Permalink to this heading">¶</a></h3>
+<section id="Models:">
+<h3>Models:<a class="headerlink" href="#Models:" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
-<li>circular,</li>
-<li>cubic,</li>
-<li>exponential,</li>
-<li>gaussian,</li>
-<li>linear,</li>
-<li>power,</li>
-<li>spherical.</li>
+<li><p>circular,</p></li>
+<li><p>cubic,</p></li>
+<li><p>exponential,</p></li>
+<li><p>gaussian,</p></li>
+<li><p>linear,</p></li>
+<li><p>power,</p></li>
+<li><p>spherical.</p></li>
 </ul>
 <p>We will set:</p>
 <ul class="simple">
-<li><strong>sill</strong> to the experimental variogram variance,</li>
-<li><strong>nugget</strong> to zero,</li>
-<li><strong>range</strong> to 8000 (we see in the experimental variogram plot that around this range semivariance <em>flattens</em>, and it is close to the variance).</li>
+<li><p><strong>sill</strong> to the experimental variogram variance,</p></li>
+<li><p><strong>nugget</strong> to zero,</p></li>
+<li><p><strong>range</strong> to 8000 (we see in the experimental variogram plot that around this range semivariance <em>flattens</em>, and it is close to the variance).</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
@@ -882,7 +1030,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_19_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_19_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_19_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_19_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -957,7 +1105,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_22_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_22_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_22_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_22_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1025,7 +1173,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_24_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_24_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_24_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_24_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1093,7 +1241,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_26_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_26_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_26_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_26_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1161,7 +1309,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_28_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_28_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_28_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_28_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1229,7 +1377,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_30_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_30_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_30_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_30_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1298,7 +1446,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_32_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_32_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_32_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_32_0.png" />
 </div>
 </div>
 <p>Quick look into plots, and we can bet that the best model is <strong>linear</strong>. We can read each table printed with a <code class="docutils literal notranslate"><span class="pre">print()</span></code> method, but instead, we will read <em>Root Mean Squared Error</em> of each model and select the model with the lowest value of RMSE:</p>
@@ -1356,44 +1504,46 @@ Model: spherical, RMSE: 87.44243944688779
 The best model is linear with RMSE 28.218692107535404
 </pre></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="4)-Set-automatically-semivariogram-model">
-<h2>4) Set automatically semivariogram model<a class="headerlink" href="#4)-Set-automatically-semivariogram-model" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+<section id="4)-Set-automatically-semivariogram-model">
+<h2>4) Set automatically semivariogram model<a class="headerlink" href="#4)-Set-automatically-semivariogram-model" title="Permalink to this heading">#</a></h2>
 <p>We can set the semivariogram model automatically, but we can’t do it with the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function. Instead we use <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class - object of this type is generated by <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function.</p>
 <p>This process has two steps:</p>
 <ol class="arabic simple">
-<li>Initilize the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class object.</li>
-<li>Let the algorithm fit the best model, then find the optimal range and sill with the <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> method.</li>
+<li><p>Initilize the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class object.</p></li>
+<li><p>Let the algorithm fit the best model, then find the optimal range and sill with the <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> method.</p></li>
 </ol>
 <p>The <code class="docutils literal notranslate"><span class="pre">autofit()</span></code> method takes multiple parameters, the most important for us are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> - the experimental variogram (<code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> type),</li>
-<li><code class="docutils literal notranslate"><span class="pre">model_types</span></code> - list of models of string with a model name. Available models:<ul>
-<li>all - the same as list with all models,</li>
-<li>circular,</li>
-<li>cubic,</li>
-<li>exponential,</li>
-<li>gaussian,</li>
-<li>linear,</li>
-<li>power,</li>
-<li>spherical.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> - the experimental variogram (<code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> type),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model_types</span></code> - list of models of string with a model name. Available models:</p>
+<ul>
+<li><p>all - the same as list with all models,</p></li>
+<li><p>circular,</p></li>
+<li><p>cubic,</p></li>
+<li><p>exponential,</p></li>
+<li><p>gaussian,</p></li>
+<li><p>linear,</p></li>
+<li><p>power,</p></li>
+<li><p>spherical.</p></li>
 </ul>
 </li>
-<li><code class="docutils literal notranslate"><span class="pre">nugget</span></code> - <strong>default = 0</strong> - nugget (bias) of a variogram. Default value is 0.</li>
-<li><code class="docutils literal notranslate"><span class="pre">rang</span></code> - if given, then range is fixed to this value.</li>
-<li><code class="docutils literal notranslate"><span class="pre">min_range</span></code> - <strong>default = 0.1</strong> - the minimal fraction of a variogram to find an optimal range.</li>
-<li><code class="docutils literal notranslate"><span class="pre">max_range</span></code> - <strong>default = 0.5</strong> - the maximum fraction of a variogram range to find an optimal range. Parameter set to value greater 0.5 raises warning.</li>
-<li><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> - <strong>default = 64</strong> - how many equally spaced ranges are tested between <code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">sill</span></code> - if given, then it is fixed to this value.</li>
-<li><code class="docutils literal notranslate"><span class="pre">min_sill</span></code> - <strong>default = 0</strong> - the minimal fraction of variogram variance at lag 0 to find a sill.</li>
-<li><code class="docutils literal notranslate"><span class="pre">max_sill</span></code> - <strong>default = 1</strong> - the maximum fraction of variogram variance at lag 0 to find a sill. It should be lower or equal to 1, but it is possible to set it above. Warning is printed if <code class="docutils literal notranslate"><span class="pre">max_sill</span></code> is greater than 1.</li>
-<li><code class="docutils literal notranslate"><span class="pre">number_of_sills</span></code> - <strong>default = 64</strong> - how many equally spaced sill values are tested between <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</li>
-<li><code class="docutils literal notranslate"><span class="pre">error_estimator</span></code> - <strong>default = ‘rmse’</strong> - Error estimation to choose the best model. Available options are:<ul>
-<li>rmse: Root Mean Squared Error,</li>
-<li>mae: Mean Absolute Error,</li>
-<li>bias: Forecast Bias,</li>
-<li>smape: Symmetric Mean Absolute Percentage Error.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nugget</span></code> - <strong>default = 0</strong> - nugget (bias) of a variogram. Default value is 0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rang</span></code> - if given, then range is fixed to this value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_range</span></code> - <strong>default = 0.1</strong> - the minimal fraction of a variogram to find an optimal range.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_range</span></code> - <strong>default = 0.5</strong> - the maximum fraction of a variogram range to find an optimal range. Parameter set to value greater 0.5 raises warning.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> - <strong>default = 64</strong> - how many equally spaced ranges are tested between <code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sill</span></code> - if given, then it is fixed to this value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_sill</span></code> - <strong>default = 0</strong> - the minimal fraction of variogram variance at lag 0 to find a sill.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_sill</span></code> - <strong>default = 1</strong> - the maximum fraction of variogram variance at lag 0 to find a sill. It should be lower or equal to 1, but it is possible to set it above. Warning is printed if <code class="docutils literal notranslate"><span class="pre">max_sill</span></code> is greater than 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_sills</span></code> - <strong>default = 64</strong> - how many equally spaced sill values are tested between <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error_estimator</span></code> - <strong>default = ‘rmse’</strong> - Error estimation to choose the best model. Available options are:</p>
+<ul>
+<li><p>rmse: Root Mean Squared Error,</p></li>
+<li><p>mae: Mean Absolute Error,</p></li>
+<li><p>bias: Forecast Bias,</p></li>
+<li><p>smape: Symmetric Mean Absolute Percentage Error.</p></li>
 </ul>
 </li>
 </ul>
@@ -1519,7 +1669,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_44_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_44_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_44_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_44_0.png" />
 </div>
 </div>
 <p>Compare this model to the linear model fitted before:</p>
@@ -1547,12 +1697,12 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_46_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_(Basic)_46_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_46_0.png" src="../../_images/usage_tutorials_Semivariogram_Estimation_%28Basic%29_46_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="5)-Export-model">
-<h2>5) Export model<a class="headerlink" href="#5)-Export-model" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="5)-Export-model">
+<h2>5) Export model<a class="headerlink" href="#5)-Export-model" title="Permalink to this heading">#</a></h2>
 <p>Models could be exported and used for other purposes. It is vital for the <strong>semivariogram regularization</strong>. Those calculations are computationally intensive, and in production, it is not a good idea to build a full pipeline; we divide it into two steps.</p>
 <p>Model can be exported to <code class="docutils literal notranslate"><span class="pre">dict</span></code> with <code class="docutils literal notranslate"><span class="pre">.to_dict()</span></code> method or to <code class="docutils literal notranslate"><span class="pre">json</span></code> with <code class="docutils literal notranslate"><span class="pre">.to_json()</span></code> method:</p>
 <div class="nbinput nblast docutils container">
@@ -1568,9 +1718,9 @@ The best model is linear with RMSE 28.218692107535404
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="6)-Import-model">
-<h2>6) Import model<a class="headerlink" href="#6)-Import-model" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="6)-Import-model">
+<h2>6) Import model<a class="headerlink" href="#6)-Import-model" title="Permalink to this heading">#</a></h2>
 <p>We can import a semivariogram model into a new <strong>TheoreticalSemivariogram</strong> class instance without passing into it experimental semivariogram or actual data points. It is useful for some applications focused on kriging, where we are sure that our semivariogram model fits data well.</p>
 <p>We can import a model with two methods <code class="docutils literal notranslate"><span class="pre">.from_dict()</span></code> if we have our model parameters in Python dictionary or <code class="docutils literal notranslate"><span class="pre">.from_json()</span></code> if model parameters are stored in a flat file:</p>
 <div class="nbinput docutils container">
@@ -1666,362 +1816,184 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 </pre></div></div>
 </div>
 <hr class="docutils" />
-</div>
-</div>
+</section>
+</section>
 
 
-          </div>
-        </div>
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../tutorials.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Tutorials</p>
       </div>
-    </div>
+  </a>
+  <a class='right-next' id="next-link" href="Theoretical%20Models%20%28Basic%29.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Semivariogram models</p>
   </div>
-  <div id="footer-row" class="row">
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Table-of-Contents:">
+   Table of Contents:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Level:-Basic">
+   Level: Basic
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Changelog">
+   Changelog
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#Import-packages">
+   Import packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#1)-Read-point-data">
+   1) Read point data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#2)-Create-the-experimental-variogram">
+   2) Create the experimental variogram
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#3.-Set-manually-different-semivariogram-models">
+   3. Set manually different semivariogram models
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#Models:">
+     Models:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#4)-Set-automatically-semivariogram-model">
+   4) Set automatically semivariogram model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#5)-Export-model">
+   5) Export model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#6)-Import-model">
+   6) Import model
+  </a>
+ </li>
+</ul>
 
-    <div class="col-md-12">
-        <span title="Built on 2022-12-14" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
-        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
-
-           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
-
-        >Sizzle</a> theme.</span>
-    </div>
-
-  </div>
+</nav>
 </div>
 
-<div id="tooltips" class="hidden">
+<div class="toc-item">
+  
+<div id="searchbox"></div>
 </div>
 
-<script>
-$(document).ready(function() {
-  'use strict';
-  var $search = $('.search-query');
-
-  var $filter = $('#toc-filter-query');
-  var $toclist = $('.sidebar-toc > ul').find('li');
-
-  if ($toclist.length === 0) {
-    $toclist = $('.localtoc > ul').find('li');
-  }
-
-
-  var $nav = $('#nav');
-
-  //$('#whole-page').removeClass('hidden');
-  var nav_width = $nav.width();
-
-
-  var search_url = '../../search.html';
-
-  function perform_search(e) {
-    var $elem;
-
-    if (e.type === 'keypress') {
-      $elem = $(e.target);
-    }
-    else if (e.type === 'click') {
-      $elem = $(e.target).parents('.input-group').find('input');
-    }
-    var q = $elem.val().trim();
-
-    if (q) {
-      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
-
-      location.href = url;
-    }
-  }
-
-
-  function apply_filter() {
-    var s = $filter.val().trim().toLowerCase();
-
-    $toclist.find('a').removeClass('hidden');
-    $toclist.each(function() {
-      var $this = $(this);
-      var $link = $this.find('> a');
-      var t = $link.text().toLowerCase();
-      var show = t.indexOf(s) >= 0;
-
-      if (!show) {
-        $link.addClass('hidden');
-      }
-    });
-  }
-
-  $filter.on('keyup', function(e) {
-    apply_filter();
-  });
-
-
-
-  $search.on('keypress', function(e) {
-    if (e.which == 13) {
-      perform_search(e);
-    }
-  });
-  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
-  $(document).on('click', '.summary .fa-caret-right', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $next = $elem.next();
-    $elem.addClass('hidden');
-    $next.removeClass('hidden');
-  });
-  $(document).on('click', '.detail .fa-caret-down', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $prev = $elem.prev();
-    $elem.addClass('hidden');
-    $prev.removeClass('hidden');
-  });
-
-  $('#content').on('click', function() {
-    $('#mnav').hide();
-  });
-
-  var counter = 0;
-  var timer = null;
-
-  function show_nav() {
-    $('#content').off('mousemove', track_mouse);
-    if (timer !== null) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    $nav.show();
-  }
-
-  function track_mouse(e) {
-    var x = e.clientX;
-
-    if (x < 15) {
-      ++counter;
-      if (timer === null) {
-        timer = setTimeout(show_nav, 2000);
-      }
-    }
-    else {
-      counter = 0;
-    }
-    if (counter >= 20) {
-      show_nav();
-    }
-  };
-
-  function hide_nav() {
-    $nav.hide();
-    counter = 0;
-    $('#content').on('mousemove', track_mouse);
-  }
-
-  $('.hidetoc').on('click', hide_nav);
-
-  $(document).on('keyup', function(e) {
-    if (e.ctrlKey) {
-      if (e.which == 37) {      // Ctrl+left arrow
-        hide_nav();
-      }
-      else if (e.which == 39) { // Ctrl+right arrow
-        show_nav();
-      }
-    }
-  });
-
-  $('.menu-toggle').on('click', function(e) {
-    $('#mnav').toggle();
-  });
-
-  function scroll_nav(frag) {
-    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
-
-    var $link = $(sel);
-
-    if ($link.length > 0) {
-      $link[0].scrollIntoView({block: 'center'});
-    }
-  }
-
-  // If the navigator is long, then the item we clicked on to get here might
-  // not be in view. Try to scroll it into the view - a slight delay is needed
-  // to get it to sync properly with other stuff going on (as the page has just
-  // loaded). Hence the setTimeout with a timeout of 0.
-
-  function do_scroll() {
-    scroll_nav(window.location.hash);
-  }
-
-  setTimeout(do_scroll, 0);
-
-  function adjust_size() {
-    // we need to set the height explicitly so that scrolling regions in the
-    // content area work properly.
-    var h = $('#page-content').height();
-
-    $('#nav, #content').height(h);
-    if ($('#nav').is(':visible')) {
-      $('#mnav').hide();
-    }
-  }
-
-  adjust_size();
-
-  $(window).on('resize', adjust_size);
-
-  function focus_content() {
-    $('#content').focus();  // so that keyboard can be used to scroll, etc.
-  }
-
-  setTimeout(focus_content, 150);
-
-  var sizzle = $(document).data('sizzle');
-
-  function make_tooltip(id, h, b) {
-    var $e = $('<div>').attr('id', id);
-    var $b = $('<div>').addClass('tc-body').html(b);
-
-    if (h) {
-      var $h = $('<div>').addClass('tc-heading').html(h);
-      $e.append($h);
-    }
-    $e.append($b);
-    return $e;
-  }
-
-  var default_tt_options = {
-    theme: ['tooltipster-light', 'tooltipster-light-customized'],
-    interactive: true,
-    maxWidth: 600,
-    contentCloning: true
-  };
-
-  function activate_tooltips() {
-    var $tt = $('.tt');
-
-    //console.log('tt links:', $tt.length);
-    $tt.tooltipster(default_tt_options);
-  }
-
-
-
-  function add_glossary_tooltips() {
-    var links = $('a');  // can qualify with .reference.internal
-    var glinks = {};
-    var pat = /(.*)\.html#(term-.*)$/;
-    var found = false;  // links in this document
-
-    $.each(links, function(i, link) {
-        var $link = $(link);
-        var href = $link.attr('href');
-        var m = href.match(pat);
-
-        if (m) {
-          var s = m[1].replace(/^(\.\.\/)+/, '');
-
-          if (s === sizzle.app_data.glossary.document) {
-            var k = m[2];
-
-            if (k in glinks) {
-              glinks[k].push($link);
-            }
-            else {
-              glinks[k] = [$link];
-            }
-            found = true;
-          }
-        }
-    });
-    if (found) {
-      var $t = $('#tooltips');
-      var data = sizzle.app_data.glossary.terms;
-
-      $.each(glinks, function(k, v) {
-        var d = data[k];
-
-        if (d) {  // as a sanity check
-          var s = 'tc-'+ k;
-          var $e = make_tooltip(s, d.term, d.defn);
-          $t.append($e);
-
-          $.each(v, function(i, link) {
-            link.addClass('tt').attr('data-tooltip-content', '#' + s);
-          });
-        }
-      });
-    }
-  }
-
-  if (sizzle.app_data && sizzle.app_data.glossary &&
-      sizzle.app_data.glossary.document) {
-    add_glossary_tooltips();
-  }
-
-
-
-
-  function add_custom_tooltips() {
-    if (!sizzle.app_data) {
-      return;
-    }
-
-    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
-
-    if ($.isEmptyObject(info_tips)) {
-      return;
-    }
-
-    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
-
-    $('.tc-info').each(function() {
-      var $elem = $(this).prev();
-      var classes = $elem.attr('class');
-      var m = /\btci-([\S]+)/.exec(classes);
-
-      if (m !== null) {
-        var key = m[1];
-
-        if (key in info_tips) {
-          var v = info_tips[key];
-          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
-        }
-      }
-    });
-  }
-
-  add_custom_tooltips();
-
-  setTimeout(activate_tooltips, 1000);
-
-
-  // Clipboard copy for code blocks with captions
-
-  $('.code-block-caption').each(function() {
-    var $cap = $(this);
-    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
-    var $code = $cap.parent().find('.highlight');
-
-    $cap.append($btn);
-    $btn.find('.fa-clipboard').data('clip-text', $code.text());
-  });
-
-  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
-    'text': function(trigger) {
-      return $(trigger).data('clip-text');
-    }
-  });
-
-  clipboard.on('success', function(e) {
-    var $copied = $(e.trigger).prev();
-
-    $copied.removeClass('hidden');
-
-    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
-  });
-
-  if (sizzle.on_load) {
-    sizzle.on_load.forEach(function(f) {
-      f();
-    });
-  }
-});
-</script>
-</body>
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/usage/tutorials/Semivariogram Estimation (Basic).ipynb.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, Szymon Moliński.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
 </html>

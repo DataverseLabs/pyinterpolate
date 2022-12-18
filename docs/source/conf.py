@@ -43,10 +43,7 @@ autodoc_typehints = 'none'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sizzle'
-html_theme_options = {
-    'globaltoc_collapse': True
-}
+html_theme = 'pydata_sphinx_theme'
 
 nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'svg', 'pdf'}",
