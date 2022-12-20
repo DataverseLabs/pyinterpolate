@@ -549,12 +549,6 @@ class ExperimentalVariogram:
         return rows
 
 
-class IndicatorVariogram(ExperimentalVariogram):
-    """
-    Cl
-    """
-
-
 def build_experimental_variogram(input_array: np.array,
                                  step_size: float,
                                  max_range: float,
