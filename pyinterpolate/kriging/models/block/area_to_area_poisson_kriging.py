@@ -146,17 +146,18 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     zhat = values.dot(w[:-1])
 
-    if raise_when_negative_prediction:
-        if zhat < 0:
-            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
-                             f'grid, samples, number of neighbors or semivariogram model type.')
-
     # Calculate prediction error
 
     if isinstance(unknown_block[0], np.ndarray):
         u_idx = unknown_block[0][0]
     else:
         u_idx = unknown_block[0]
+
+    if zhat < 0:
+        logging.debug(f'Prediction below 0 for area {u_idx}')
+        if raise_when_negative_prediction:
+            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
+                             f'grid, samples, number of neighbors or semivariogram model type.')
 
     distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
 
