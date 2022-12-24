@@ -5,11 +5,8 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 
-TODO
-----
-* log errors
-* control negative predictions and errors
 """
+import logging
 from typing import Dict, Union
 
 import geopandas as gpd
@@ -87,11 +84,10 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     if isinstance(point_support, Dict):
         dps = point_support
     else:
+        logging.info('Point support is transformed to dictionary')
         dps = transform_ps_to_dict(point_support)
 
     # Check ids
-
-
     kriging_data = select_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
@@ -143,6 +139,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     try:
         w = np.linalg.solve(weights, k_ones)
     except TypeError:
+        logging.debug('Wrong dtypes used for np.linalg.solve, casting to float.')
         weights = weights.astype(np.float)
         k_ones = k_ones.astype(np.float)
         w = np.linalg.solve(weights, k_ones)
@@ -172,6 +169,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     sigmasq = semivariance_within_unknown - sig_base
 
     if sigmasq < 0:
+        logging.debug(f'Variance Error below 0 for area {u_idx}')
         if raise_when_negative_error:
             raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
                              f'Check your sampling grid, samples, number of neighbors or semivariogram model type.')
