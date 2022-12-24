@@ -24,6 +24,7 @@ Intermediate
 
    tutorials/Semivariogram Regularization (Intermediate)
    tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate)
+   tutorials/Directional Ordinary Kriging (Intermediate)
    tutorials/Outliers and Their Influence on the Final Model (Intermediate)
 
 Advanced

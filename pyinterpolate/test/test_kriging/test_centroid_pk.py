@@ -116,10 +116,10 @@ class TestCentroidPK(unittest.TestCase):
                 ])
         }
 
-        ublock = np.array([6.0, 3, 1])
+        ublock = np.array([6.0, 2.8, 1])
         u_ps = np.array([
-            [2.8, 0.9, 200],
-            [3.2, 1.1, 400]
+            [2.3, 0.9, 800],
+            [3.6, 1.1, 400]
         ])
 
         pk_model = centroid_poisson_kriging(semivariogram_model=THEORETICAL_VARIOGRAM,
@@ -127,6 +127,9 @@ class TestCentroidPK(unittest.TestCase):
                                             point_support=ps,
                                             unknown_block=ublock,
                                             unknown_block_point_support=u_ps,
-                                            number_of_neighbors=4,
+                                            number_of_neighbors=8,
                                             raise_when_negative_error=False)
-        self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 649, 0]))
+
+        arr_eq = np.allclose(np.array([6, 340, np.nan]), pk_model, rtol=1, atol=1, equal_nan=True)
+
+        self.assertTrue(arr_eq)

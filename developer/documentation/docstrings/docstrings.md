@@ -136,7 +136,7 @@ def build_experimental_variogram(input_array,
 
     tolerance : float (in range [0, 1]), optional, default=1
                 If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
+                the coordinate system and the direction given by y axis and direction parameter. If tolerance is > 0 then
                 the bin is selected as an elliptical area with major axis pointed in the same direction as the line
                 for 0 tolerance.
                 * The minor axis size is (tolerance * step_size)
@@ -321,7 +321,7 @@ class EmpiricalVariogram:
 
     tolerance : float (in range [0, 1]), optional, default=1
                 If tolerance is 0 then points must be placed at a single line with the beginning in the origin of
-                the coordinate system and the angle given by y axis and direction parameter. If tolerance is > 0 then
+                the coordinate system and the direction given by y axis and direction parameter. If tolerance is > 0 then
                 the bin is selected as an elliptical area with major axis pointed in the same direction as the line
                 for 0 tolerance.
                 * The minor axis size is (tolerance * step_size)

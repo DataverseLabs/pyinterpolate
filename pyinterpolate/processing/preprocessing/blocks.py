@@ -225,6 +225,22 @@ class PointSupport:
     from_geodataframes()
         Loads point support and polygon data from dataframe.
 
+    Notes
+    -----
+    The PointSupport class structure is designed to store the information about the points within polygons.
+    During the regularization process, the inblock variograms are estimated from the polygon's point support, and
+    semivariances are calculated between point supports of neighbouring blocks.
+
+    The class takes population grid (support) and blocks data (polygons). Then, spatial join is performed and points
+    are assigned to areas within they are placed. The core attribute is ``point_support`` - GeoDataFrame with columns:
+
+    * ``x_col`` - a floating representation of longitude,
+    * ``y_col`` - a floating representation of latitude,
+    * ``value_column`` - the attribute which describes the name of a column with the point-support's value,
+    * ``geometry_column`` - the attribute which describes the name of a geometry column with ``Point()`` representation
+      of the point support coordinates,
+    * ``block_index_column`` - the name of a column which directs to the block index values.
+
     Examples
     --------
     >>> import geopandas as gpd
@@ -246,10 +262,6 @@ class PointSupport:
     ...                                        point_support_val_col=POP10,
     ...                                        blocks_geometry_col=GEOMETRY_COL,
     ...                                        blocks_index_col=POLYGON_ID)
-
-    TODO
-    ----
-    - info about regualarization process into Notes
     """
 
     def __init__(self):
