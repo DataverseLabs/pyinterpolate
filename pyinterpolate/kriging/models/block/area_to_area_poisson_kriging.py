@@ -174,7 +174,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     sig_base = np.matmul(w.T, k_ones)
 
+    # TODO test - come back here when covariance terms are used
     sigmasq = semivariance_within_unknown - sig_base
+    # sigmasq = semivariance_within_unknown + sig_base
 
     if sigmasq < 0:
         if log_process:

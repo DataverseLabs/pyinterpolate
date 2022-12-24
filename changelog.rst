@@ -14,6 +14,8 @@ Changes by date
 * (enhancement) Directional Centroid-based Poisson Kriging,
 * (debug) Added origin (unknown point) to calculate directional Kriging and directional Centroid-based Poisson Kriging,
 * (docs) Directional Ordinary Kriging tutorial,
+* (engancement) logging of area to area PK function,
+* (enhancement) `test` package moved outside the main package,
 
 
 2022-11-05
