@@ -201,6 +201,27 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     return d
 
 
+def sem_to_cov(semivariances, sill) -> np.ndarray:
+    """
+    Function transforms semivariances into a covariances.
+
+    Parameters
+    ----------
+    semivariances : Iterable
+
+    sill : float
+
+    Returns
+    -------
+    covariances : numpy array
+    """
+
+    if isinstance(semivariances, np.ndarray):
+        return sill - semivariances
+
+    return sill - np.asarray(semivariances)
+
+
 def transform_ps_to_dict(ps: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]) -> Dict:
     """
 

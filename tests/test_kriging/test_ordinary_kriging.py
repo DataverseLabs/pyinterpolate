@@ -1,7 +1,22 @@
 import unittest
 import numpy as np
+
+from pyinterpolate import read_txt, ExperimentalVariogram, TheoreticalVariogram
 from .consts import prepare_test_data, prepare_zeros_data
-from pyinterpolate.kriging.models.point.ordinary_kriging import ordinary_kriging
+from pyinterpolate.kriging.models.point.ordinary_kriging import ordinary_kriging, ordinary_kriging_from_cov
+
+
+dem = read_txt('samples/point_data/txt/pl_dem_epsg2180.txt')
+
+
+def create_model_validation_sets(dataset: np.array, frac=0.1):
+    indexes_of_training_set = np.random.choice(range(len(dataset) - 1), int(frac * len(dataset)), replace=False)
+    training_set = dataset[indexes_of_training_set]
+    validation_set = np.delete(dataset, indexes_of_training_set, 0)
+    return training_set, validation_set
+
+
+KNOWN_POINTS, UNKNOWN_POINTS = create_model_validation_sets(dem)
 
 
 class TestOrdinaryKriging(unittest.TestCase):
@@ -51,3 +66,23 @@ class TestOrdinaryKriging(unittest.TestCase):
                                   no_neighbors=4)
 
         self.assertAlmostEqual(kriged[0], expected_value, places=6)
+
+    def test_from_covariance(self):
+        exp_var = ExperimentalVariogram(input_array=KNOWN_POINTS, step_size=500, max_range=20000)
+        theo_var = TheoreticalVariogram()
+        theo_var.autofit(exp_var, model_types='spherical')
+
+        for _unknown_pt in UNKNOWN_POINTS:
+            predicted_sem = ordinary_kriging(
+                theoretical_model=theo_var,
+                known_locations=KNOWN_POINTS,
+                unknown_location=_unknown_pt[:-1]
+            )
+            predicted_cov = ordinary_kriging_from_cov(
+                theoretical_model=theo_var,
+                known_locations=KNOWN_POINTS,
+                unknown_location=_unknown_pt[:-1],
+                sill=exp_var.variance
+            )
+
+            self.assertTrue(np.allclose(predicted_cov, predicted_sem, rtol=10, equal_nan=True))
