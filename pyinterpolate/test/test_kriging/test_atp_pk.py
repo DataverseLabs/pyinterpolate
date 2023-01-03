@@ -133,10 +133,10 @@ class TestATAPK(unittest.TestCase):
                                     number_of_neighbors=4,
                                     raise_when_negative_error=False)
 
-        expected_output = np.array([
+        expected_output = [
             [(2.8, 0.9), 133.33, 0.],
             [(3.2, 1.1), 266.67, 0.]
-        ])
+        ]
 
         self.assertEqual(pk_model[0][0], expected_output[0][0])
         self.assertAlmostEqual(pk_model[0][1], expected_output[0][1], places=2)
