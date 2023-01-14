@@ -104,7 +104,7 @@ def ordinary_kriging_from_cov(
         theoretical_model: TheoreticalVariogram,
         known_locations: np.ndarray,
         unknown_location: Union[List, Tuple, np.ndarray],
-        sill,
+        sill=None,
         neighbors_range=None,
         no_neighbors=4,
         use_all_neighbors_in_range=False,
@@ -160,6 +160,9 @@ def ordinary_kriging_from_cov(
                                             neighbors_range,
                                             no_neighbors,
                                             use_all_neighbors_in_range)
+
+    if sill is None:
+        sill = theoretical_model.sill
 
     k = sem_to_cov(k, sill)
     predicted = sem_to_cov(predicted, sill)
