@@ -1,11 +1,3 @@
-"""
-Area-to-area Poisson Kriging function.
-
-Authors
--------
-1. Szymon Moliński | @SimonMolinsky
-
-"""
 import logging
 from typing import Dict, Union
 
@@ -17,11 +9,12 @@ from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlo
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
     get_aggregated_point_support_values, get_distances_within_unknown
-from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict, sem_to_cov
+from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict
 from pyinterpolate.variogram import TheoreticalVariogram
+from pyinterpolate.processing.transform.transform import sem_to_cov
 
 
-def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
+def area_to_area_pk_cov(semivariogram_model: TheoreticalVariogram,
                         blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                         point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                         unknown_block: np.ndarray,
@@ -179,7 +172,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
         u_idx: distances_within_unknown_block
     })[u_idx]
-
     covariance_within_unknown = sem_to_cov([semivariance_within_unknown], sill)[0]
 
     sigmasq = covariance_within_unknown - sigmasq

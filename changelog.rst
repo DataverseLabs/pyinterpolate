@@ -17,6 +17,8 @@ Changes by date
 * (engancement) logging of area to area PK function,
 * (enhancement) `tests` package moved outside the main package,
 * (feature) ordinary kriging from covariance terms,
+* (feature) area-to-area PK from covariance terms,
+* (debug) area-to-area PK debugged.
 
 
 2022-11-05

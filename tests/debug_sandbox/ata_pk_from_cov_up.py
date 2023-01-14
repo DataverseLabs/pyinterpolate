@@ -1,27 +1,70 @@
-"""
-Area-to-area Poisson Kriging function.
-
-Authors
--------
-1. Szymon Moliński | @SimonMolinsky
-
-"""
-import logging
+from datetime import datetime
 from typing import Dict, Union
 
-import geopandas as gpd
 import numpy as np
-import pandas as pd
+import logging
 
-from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlock2BlockSemivariance
+import pandas as pd
+import geopandas as gpd
+
+from pyinterpolate.kriging.models.block.area_to_area_poisson_kriging import area_to_area_pk
+from pyinterpolate.kriging.models.block.weight import WeightedBlock2BlockSemivariance, weights_array
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
-from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
+from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas, \
     get_aggregated_point_support_values, get_distances_within_unknown
-from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict, sem_to_cov
+from pyinterpolate.processing.transform.transform import transform_ps_to_dict, sem_to_cov, get_areal_values_from_agg
 from pyinterpolate.variogram import TheoreticalVariogram
 
+# Set logging
+datenow = datetime.now().strftime('%Y%m%d_%H%M')
+LOGGING_FILE = f'logs/analyze_area_to_area_pk_log_{datenow}.log'
+LOGGING_LEVEL = 'DEBUG'
+LOGGING_FORMAT = "[%(asctime)s, %(levelname)s] %(message)s"
+logging.basicConfig(filename=LOGGING_FILE,
+                    level=LOGGING_LEVEL,
+                    format=LOGGING_FORMAT)
 
-def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
+DATASET = '../samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+POLYGON_LAYER = 'areas'
+POPULATION_LAYER = 'points'
+POP10 = 'POP10'
+GEOMETRY_COL = 'geometry'
+POLYGON_ID = 'FIPS'
+POLYGON_VALUE = 'rate'
+NN = 8
+
+
+def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
+    ar_x = areal_input.cx
+    ar_y = areal_input.cy
+    ar_val = areal_input.value_column_name
+    ps_val = point_support.value_column
+    ps_x = point_support.x_col
+    ps_y = point_support.y_col
+    idx_col = areal_input.index_column_name
+
+    areal_input = areal_input.data.copy()
+    point_support = point_support.point_support.copy()
+
+    sample_key = np.random.choice(list(point_support[block_id].unique()))
+
+    unkn_ps = point_support[point_support[block_id] == sample_key][[ps_x, ps_y, ps_val]].values
+    known_poses = point_support[point_support[block_id] != sample_key]
+    known_poses.rename(columns={
+        ps_x: 'x', ps_y: 'y', ps_val: 'ds', idx_col: 'index'
+    }, inplace=True)
+
+    unkn_area = areal_input[areal_input[block_id] == sample_key][[idx_col, ar_x, ar_y, ar_val]].values
+    known_areas = areal_input[areal_input[block_id] != sample_key]
+    known_areas.rename(columns={
+        ar_x: 'centroid.x', ar_y: 'centroid.y', ar_val: 'ds', idx_col: 'index'
+    }, inplace=True)
+
+    return known_areas, known_poses, unkn_area, unkn_ps
+
+
+def area_to_area_pk_cov(semivariogram_model: TheoreticalVariogram,
                         blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                         point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                         unknown_block: np.ndarray,
@@ -179,7 +222,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
         u_idx: distances_within_unknown_block
     })[u_idx]
-
     covariance_within_unknown = sem_to_cov([semivariance_within_unknown], sill)[0]
 
     sigmasq = covariance_within_unknown - sigmasq
@@ -196,3 +238,71 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     results = [u_idx, zhat, sigma]
     return results
+
+
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
+POINT_SUPPORT_INPUT = PointSupport()
+POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
+                               blocks_file=DATASET,
+                               point_support_geometry_col=GEOMETRY_COL,
+                               point_support_val_col=POP10,
+                               blocks_geometry_col=GEOMETRY_COL,
+                               blocks_index_col=POLYGON_ID,
+                               use_point_support_crs=True,
+                               point_support_layer_name=POPULATION_LAYER,
+                               blocks_layer_name=POLYGON_LAYER)
+
+THEORETICAL_VARIOGRAM = TheoreticalVariogram()
+THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
+
+if __name__ == '__main__':
+
+    areas = []
+
+    errs_cov = []
+    errs_sem = []
+    for _ in range(200):
+
+        AREAL_INP, PS_INP, UNKN_AREA, UNKN_PS = select_unknown_blocks_and_ps(AREAL_INPUT,
+                                                                             POINT_SUPPORT_INPUT,
+                                                                             POLYGON_ID)
+
+        if UNKN_AREA[0][0] in areas:
+            continue
+        else:
+            areas.append(UNKN_AREA[0][0])
+
+            uar = UNKN_AREA[0][:-1]
+            uvar = UNKN_AREA[0][-1]
+
+            pk_output_base = area_to_area_pk(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                             blocks=AREAL_INP,
+                                             point_support=PS_INP,
+                                             unknown_block=uar,
+                                             unknown_block_point_support=UNKN_PS,
+                                             number_of_neighbors=NN,
+                                             raise_when_negative_error=False,
+                                             raise_when_negative_prediction=False,
+                                             log_process=True)
+
+            pk_output_cov = area_to_area_pk_cov(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                                blocks=AREAL_INP,
+                                                point_support=PS_INP,
+                                                unknown_block=uar,
+                                                unknown_block_point_support=UNKN_PS,
+                                                number_of_neighbors=NN,
+                                                raise_when_negative_error=False,
+                                                raise_when_negative_prediction=False,
+                                                log_process=True)
+
+
+            errs_cov.append(pk_output_cov[1] - uvar)
+            errs_sem.append(pk_output_base[1] - uvar)
+
+    print('Semivariance errors:')
+    print('Mean:', np.mean(errs_sem))
+    print('STD:', np.std(errs_sem))
+    print('Covariance errors:')
+    print('Mean:', np.mean(errs_cov))
+    print('STD:', np.std(errs_cov))
