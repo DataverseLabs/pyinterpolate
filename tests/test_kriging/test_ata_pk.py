@@ -7,8 +7,8 @@ from pyinterpolate.kriging.models.block.area_to_area_poisson_kriging import area
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.variogram import TheoreticalVariogram
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
