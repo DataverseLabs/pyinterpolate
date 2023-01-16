@@ -5,11 +5,8 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 
-TODO
-----
-* log errors
-* control negative predictions and errors
 """
+import logging
 from typing import Dict, Union
 
 import geopandas as gpd
@@ -20,18 +17,19 @@ from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlo
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
     get_aggregated_point_support_values, get_distances_within_unknown
-from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict
+from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict, sem_to_cov
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
 def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
-                    blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
-                    point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
-                    unknown_block: np.ndarray,
-                    unknown_block_point_support: np.ndarray,
-                    number_of_neighbors: int,
-                    raise_when_negative_prediction=True,
-                    raise_when_negative_error=True):
+                        blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                        point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
+                        unknown_block: np.ndarray,
+                        unknown_block_point_support: np.ndarray,
+                        number_of_neighbors: int,
+                        raise_when_negative_prediction=True,
+                        raise_when_negative_error=True,
+                        log_process=True):
     """
     Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
 
@@ -69,6 +67,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     raise_when_negative_error : bool, default=True
         Raise error when prediction error is negative.
 
+    log_process : bool, default=True
+        Log process info and debug info.
+
     Returns
     -------
     results : List
@@ -87,11 +88,14 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     if isinstance(point_support, Dict):
         dps = point_support
     else:
+        if log_process:
+            logging.info('Point support is transformed to dictionary')
         dps = transform_ps_to_dict(point_support)
 
+    # Get c0
+    sill = semivariogram_model.sill
+
     # Check ids
-
-
     kriging_data = select_poisson_kriging_data(
         u_block_centroid=unknown_block,
         u_point_support=unknown_block_point_support,
@@ -104,8 +108,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     avg_semivariances = b2b_semivariance.calculate_average_semivariance(kriging_data)
 
     k = np.array(list(avg_semivariances.values()))
+    k = sem_to_cov(k, sill)
     k = k.T
-    k_ones = np.ones(len(k)+1)
+    k_ones = np.ones(len(k) + 1)
     k_ones[:-1] = k
 
     # Prepare blocks for calculation
@@ -126,6 +131,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         predicted.append(row)
 
     predicted = np.array(predicted)
+    predicted = sem_to_cov(predicted, sill)
 
     # Add diagonal weights
     values = get_areal_values_from_agg(blocks, prepared_ids)
@@ -143,16 +149,13 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     try:
         w = np.linalg.solve(weights, k_ones)
     except TypeError:
+        if log_process:
+            logging.debug('Wrong dtypes used for np.linalg.solve, casting to float.')
         weights = weights.astype(np.float)
         k_ones = k_ones.astype(np.float)
         w = np.linalg.solve(weights, k_ones)
 
     zhat = values.dot(w[:-1])
-
-    if raise_when_negative_prediction:
-        if zhat < 0:
-            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
-                             f'grid, samples, number of neighbors or semivariogram model type.')
 
     # Calculate prediction error
 
@@ -161,17 +164,29 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     else:
         u_idx = unknown_block[0]
 
-    distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
+    if zhat < 0:
+        if log_process:
+            logging.debug(f'Prediction below 0 for area {u_idx}')
+        if raise_when_negative_prediction:
+            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
+                             f'grid, samples, number of neighbors or semivariogram model type.')
 
+    # TODO test - come back here when covariance terms are used
+    # TODO - probably it should be without subtraction - those are semivariance terms, not covariances.
+    sigmasq = np.matmul(w.T, k_ones)
+
+    distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
         u_idx: distances_within_unknown_block
     })[u_idx]
 
-    sig_base = np.matmul(w.T, k_ones)
+    covariance_within_unknown = sem_to_cov([semivariance_within_unknown], sill)[0]
 
-    sigmasq = semivariance_within_unknown - sig_base
+    sigmasq = covariance_within_unknown - sigmasq
 
     if sigmasq < 0:
+        if log_process:
+            logging.debug(f'Variance Error below 0 for area {u_idx}')
         if raise_when_negative_error:
             raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
                              f'Check your sampling grid, samples, number of neighbors or semivariogram model type.')

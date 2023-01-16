@@ -6,8 +6,8 @@
 Pyinterpolate
 =============
 
-**version 0.3.5.post1** - *Kyiv*
----------------------------------------
+**version 0.3.6** - *Kyiv*
+---------------------------
 
 .. image:: imgs/logov03.jpg
   :width: 800

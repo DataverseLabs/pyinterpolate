@@ -64,7 +64,7 @@ class AggregatedVariogram:
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
+        the coordinate system and the direction given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
@@ -564,7 +564,7 @@ def regularize(aggregated_data: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np
 
     agg_tolerance : float (in range [0, 1]), default=1
         If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
+        the coordinate system and the direction given by y axis and direction parameter. If ``agg_tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
