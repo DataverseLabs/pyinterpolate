@@ -6,7 +6,7 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2023-01-15
+2023-01-16
 ----------
 
 **version 0.3.6**
@@ -18,7 +18,11 @@ Changes by date
 * (enhancement) `tests` package moved outside the main package,
 * (feature) ordinary kriging from covariance terms,
 * (feature) area-to-area PK from covariance terms,
-* (debug) area-to-area PK debugged.
+* (debug) area-to-area PK debugged,
+* (feature) area-to-point PK from covariance terms,
+* (debug) area-to-point PK debugged,
+* (feature) centroid-based PK from covariance terms,
+* (debug) centroid-based PK debugged.
 
 
 2022-11-05

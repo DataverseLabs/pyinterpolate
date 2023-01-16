@@ -16,7 +16,7 @@ from pyinterpolate.kriging.models.block.weight import weights_array
 from pyinterpolate.kriging.utils.process import solve_weights
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
-from pyinterpolate.processing.transform.transform import transform_ps_to_dict
+from pyinterpolate.processing.transform.transform import transform_ps_to_dict, sem_to_cov
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
@@ -103,6 +103,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         weighted=is_weighted_by_point_support,
         direction=semivariogram_model.direction
     )
+    sill = semivariogram_model.sill
 
     distances_column_index = 3
     values_column_index = 2
@@ -113,15 +114,17 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     values = kriging_data[:, values_column_index]
 
     partial_semivars = semivariogram_model.predict(distances)
-    semivars = np.ones(len(partial_semivars) + 1)
-    semivars[:-1] = partial_semivars
-    semivars = semivars.transpose()
+    pcovars = sem_to_cov(partial_semivars, sill)
+    covars = np.ones(len(pcovars) + 1)
+    covars[:-1] = pcovars
+    covars = covars.transpose()
 
     # Distances between known blocks
     coordinates = kriging_data[:, :values_column_index]
     block_distances = calc_point_to_point_distance(coordinates).flatten()
     known_blocks_semivars = semivariogram_model.predict(block_distances)
     predicted = np.array(known_blocks_semivars.reshape(n, n))
+    predicted = sem_to_cov(predicted, sill)
 
     # Add diagonal weights to predicted semivars array
     weights = weights_array(predicted.shape, values, kriging_data[:, weights_column_index])
@@ -136,7 +139,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     # Solve Kriging system
     try:
-        output_weights = solve_weights(kriging_weights, semivars, allow_approximate_solutions)
+        output_weights = solve_weights(kriging_weights, covars, allow_approximate_solutions)
     except np.linalg.LinAlgError as _:
         msg = 'Singular matrix in Kriging system detected, check if you have duplicated coordinates ' \
               'in the ``known_locations`` variable.'
@@ -149,7 +152,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
             raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or semivariogram model type.')
 
-    sigmasq = np.matmul(output_weights.T, semivars)
+    sigmasq = np.matmul(output_weights.T, covars)
 
     if sigmasq < 0:
         if raise_when_negative_error:

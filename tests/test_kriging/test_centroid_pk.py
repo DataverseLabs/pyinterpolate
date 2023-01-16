@@ -130,6 +130,6 @@ class TestCentroidPK(unittest.TestCase):
                                             number_of_neighbors=8,
                                             raise_when_negative_error=False)
 
-        arr_eq = np.allclose(np.array([6, 340, np.nan]), pk_model, rtol=1, atol=1, equal_nan=True)
+        arr_eq = np.allclose(np.array([6, 340, 10]), pk_model, rtol=1, atol=1, equal_nan=True)
 
         self.assertTrue(arr_eq)
