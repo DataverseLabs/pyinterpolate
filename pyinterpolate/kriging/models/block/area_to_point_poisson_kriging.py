@@ -4,13 +4,9 @@ Area-to-point Poisson Kriging function.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
-
-TODO
-----
-* log errors
-* control negative predictions and errors
 """
 from typing import Union, Dict
+import logging
 
 import geopandas as gpd
 import numpy as np
@@ -90,6 +86,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     ValueError
         Prediction or prediction error are negative.
     """
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Operation starts")
     # Get total point-support value of the unknown area
     tot_unknown_value = np.sum(unknown_block_point_support[:, -1])
 
@@ -119,12 +116,15 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     )
 
     prepared_ids = list(kriging_data.keys())
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Kriging data has been prepared")
 
     # Get block to block weighted semivariances
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Block to block semivariances are calculated")
 
     # Get block to point weighted semivariances
     b2p_semivariance = WeightedBlock2PointSemivariance(semivariance_model=semivariogram_model)
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Block to point semivariances are calculated")
     # array(
     #     [unknown point 1 (n) semivariance against point support from block 1,
     #      unknown point 2 (n+1) semivariance against point support from block 1,
@@ -146,7 +146,8 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     semivariances_between_known_areas = b2b_semivariance.calculate_average_semivariance(
         distances_between_known_areas)
-
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Average semivariance between areas is estimated")
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Kriging system weights preparation")
     # Create array
     predicted = []
     for idx_a in prepared_ids:
@@ -178,6 +179,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
     # Transpose points matrix
     transposed = avg_b2p_covariances.T
+    logging.info("POISSON KRIGING: AREA-TO-POINT | Kriging system weights has been prepared")
 
     predicted_points = []
 
@@ -196,7 +198,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         if zhat < 0:
             if raise_when_negative_prediction:
+                logging.info(f"POISSON KRIGING: AREA-TO-POINT | Negative prediction for point {point}")
                 if err_to_nan:
+                    logging.info(f"POISSON KRIGING: AREA-TO-POINT | Negative prediction - NaN zhat and error")
                     predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), np.nan, np.nan])
                     continue
                 else:
@@ -210,7 +214,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         sigmasq = np.matmul(w.T, point)
         if sigmasq < 0:
             if raise_when_negative_error:
+                logging.info(f"POISSON KRIGING: AREA-TO-POINT | Negative variance error for point {point}")
                 if err_to_nan:
+                    logging.info(f"POISSON KRIGING: AREA-TO-POINT | Negative error - NaN error")
                     predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), zhat, np.nan])
                     continue
                 else:
@@ -223,5 +229,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
             sigma = np.sqrt(sigmasq)
 
         predicted_points.append([(analyzed_pts[0], analyzed_pts[1]), zhat, sigma])
+
+    logging.info(f"POISSON KRIGING: AREA-TO-POINT | Process ends")
 
     return predicted_points

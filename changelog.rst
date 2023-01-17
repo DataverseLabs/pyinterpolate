@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-02-XX
+----------
+
+**version 0.3.7**
+
+* (enhancement) added logging to Poisson Kriging ATP process,
+
 2023-01-16
 ----------
 
