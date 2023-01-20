@@ -12,6 +12,7 @@ Changes by date
 **version 0.3.7**
 
 * (enhancement) added logging to Poisson Kriging ATP process,
+* (test) added functional test for `smooth_blocks` function,
 
 2023-01-16
 ----------
