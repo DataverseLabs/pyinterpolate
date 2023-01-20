@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -969,7 +969,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Ordinary_Kriging_%28Intermediate%29_33_0.png" src="../../_images/usage_tutorials_Directional_Ordinary_Kriging_%28Intermediate%29_33_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Ordinary_Kriging_(Intermediate)_33_0.png" src="../../_images/usage_tutorials_Directional_Ordinary_Kriging_(Intermediate)_33_0.png" />
 </div>
 </div>
 <p>Directional Kriging clearly shows the leading direction, and it’s even more pronounced in the variance error maps. At the end, let’s compare the mean of directional interpolations to the isotropic interpolation result:</p>
@@ -1010,7 +1010,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Ordinary_Kriging_%28Intermediate%29_37_0.png" src="../../_images/usage_tutorials_Directional_Ordinary_Kriging_%28Intermediate%29_37_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Ordinary_Kriging_(Intermediate)_37_0.png" src="../../_images/usage_tutorials_Directional_Ordinary_Kriging_(Intermediate)_37_0.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -1173,7 +1173,7 @@ div.rendered_html tbody tr:hover {
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

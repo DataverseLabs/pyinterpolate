@@ -38,7 +38,6 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -471,7 +470,7 @@ that can lead to singular or near-singular matrix creation.</p>
 <hr class="docutils" />
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">area_to_area_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_area_poisson_kriging.html#area_to_area_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">area_to_area_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_area_poisson_kriging.html#area_to_area_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -507,6 +506,8 @@ Geometry column with polygons is not used.</p></li>
 <dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
 </dd>
 <dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
+</dd>
+<dt><strong>log_process</strong><span class="classifier">bool, default=True</span></dt><dd><p>Log process info and debug info.</p>
 </dd>
 </dl>
 </dd>
@@ -684,7 +685,7 @@ the theoretical variogram’s range.</p>
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

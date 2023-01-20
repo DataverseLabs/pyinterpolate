@@ -79,3 +79,14 @@ class TestPointSupportDataClass(unittest.TestCase):
         out_keys = set(ps.point_support.keys())
         self.assertEqual(expected_keys, out_keys)
 
+    def test_get_from_geodataframes_fn_with_logging(self):
+        gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
+        gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
+        ps = PointSupport(log_not_used_points=True)
+        ps.from_geodataframes(gdf_points,
+                              gdf_polygons,
+                              point_support_geometry_col=GEOMETRY_COL,
+                              point_support_val_col=POP10,
+                              blocks_geometry_col=GEOMETRY_COL,
+                              blocks_index_col=POLYGON_ID)
+        self.assertTrue(not ps.point_support.empty)

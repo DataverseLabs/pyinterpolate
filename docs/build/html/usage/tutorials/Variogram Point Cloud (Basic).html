@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -864,7 +864,7 @@ Lag 14027.210871193689 has 5848 point pairs.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_11_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_11_0.png" />
+<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_11_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_11_0.png" />
 </div>
 </div>
 <p>The output per lag is dense, and we cannot distinguish a single value. But, we can follow a general trend and see maxima on the plot. We can make it better if we use a box plot instead:</p>
@@ -880,7 +880,7 @@ Lag 14027.210871193689 has 5848 point pairs.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_13_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_13_0.png" />
+<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_13_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_13_0.png" />
 </div>
 </div>
 <p>The orange line in the middle of each box represents the median (50%) value per lag. The trend is more visible if we look into it. What else can be seen here?</p>
@@ -903,7 +903,7 @@ Lag 14027.210871193689 has 5848 point pairs.
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_15_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_15_0.png" />
+<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_15_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_15_0.png" />
 </div>
 </div>
 <p>The violin plot supports our earlier assumptions, but we can learn more from it. For distant lags, a distribution starts to be multimodal. We see one mode around very low values of semivariance and another mode close to the 1st quartile. Multimodality may affect our outcomes, and maybe it tells us that there is more than one level of spatial dependency?</p>
@@ -1054,7 +1054,7 @@ ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/b
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_21_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_21_0.png" />
+<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_21_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_21_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1112,7 +1112,7 @@ distribution, and its skewness.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_25_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_25_0.png" />
+<img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_25_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_(Basic)_25_0.png" />
 </div>
 </div>
 <p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is 6-7 times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
@@ -1303,7 +1303,7 @@ True
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

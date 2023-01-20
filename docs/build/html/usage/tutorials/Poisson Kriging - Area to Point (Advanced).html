@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -791,7 +791,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_3_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_3_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_3_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_3_1.png" />
 </div>
 </div>
 <p><strong>Clarification</strong>: It is a good idea to look into the spatial patterns in a dataset and to visually check if our data do not have any NaN values. We use the geopandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame.plot()</span></code> function with a color map that diverges regions based on the cancer incidence rates. The output choropleth map is not ideal, and (probably) it has a few unreliable results, for example:</p>
@@ -951,7 +951,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_12_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_%28Advanced%29_12_1.png" />
+<img alt="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_12_1.png" src="../../_images/usage_tutorials_Poisson_Kriging_-_Area_to_Point_(Advanced)_12_1.png" />
 </div>
 </div>
 <hr class="docutils" />
@@ -1105,7 +1105,7 @@ div.rendered_html tbody tr:hover {
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>
