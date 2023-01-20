@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -929,7 +929,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_%28Basic%29_16_0.png" src="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_%28Basic%29_16_0.png" />
+<img alt="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_(Basic)_16_0.png" src="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_(Basic)_16_0.png" />
 </div>
 </div>
 </section>
@@ -1133,7 +1133,7 @@ File <span class="ansi-green-fg">~/Documents/Programming/Repositories/pyinterpol
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_%28Basic%29_26_0.png" src="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_%28Basic%29_26_0.png" />
+<img alt="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_(Basic)_26_0.png" src="../../_images/usage_tutorials_How_good_is_our_Kriging_model_-_test_it_against_IDW_algorithm_(Basic)_26_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1366,7 +1366,7 @@ Root Mean Squared Error of prediction with Kriging is 4.8595
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

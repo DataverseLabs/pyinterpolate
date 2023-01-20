@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -765,7 +765,7 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function divides base dataset into a training and a test set.</span>
 
 <span class="sd">    Parameters</span>
@@ -832,7 +832,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_10_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_10_0.png" />
+<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_10_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_10_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -857,7 +857,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_12_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_%28Basic%29_12_0.png" />
+<img alt="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_12_0.png" src="../../_images/usage_tutorials_Ordinary_and_Simple_Kriging_(Basic)_12_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1513,7 +1513,7 @@ RMSE: 3.254332343473019
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

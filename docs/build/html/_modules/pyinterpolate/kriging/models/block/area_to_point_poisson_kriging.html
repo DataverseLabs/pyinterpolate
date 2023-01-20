@@ -37,7 +37,6 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../../_static/clipboard.min.js"></script>
     <script src="../../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -372,13 +371,9 @@
 <span class="sd">Authors</span>
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
-
-<span class="sd">TODO</span>
-<span class="sd">----</span>
-<span class="sd">* log errors</span>
-<span class="sd">* control negative predictions and errors</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -389,7 +384,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_poisson_kriging_data</span><span class="p">,</span> <span class="n">prepare_pk_known_areas</span><span class="p">,</span> \
     <span class="n">get_aggregated_point_support_values</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">transform_ps_to_dict</span><span class="p">,</span> <span class="n">get_areal_values_from_agg</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">transform_ps_to_dict</span><span class="p">,</span> <span class="n">get_areal_values_from_agg</span><span class="p">,</span> <span class="n">sem_to_cov</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
 
 
@@ -403,7 +398,7 @@
                      <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts areal value in the unknown location based on the area-to-area Poisson Kriging</span>
 
 <span class="sd">    Parameters</span>
@@ -458,6 +453,7 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        Prediction or prediction error are negative.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Operation starts&quot;</span><span class="p">)</span>
     <span class="c1"># Get total point-support value of the unknown area</span>
     <span class="n">tot_unknown_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">unknown_block_point_support</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
@@ -475,6 +471,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">rng</span> <span class="o">=</span> <span class="n">max_range</span>
 
+    <span class="c1"># Get sill to calc cov</span>
+    <span class="n">sill</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">sill</span>
+
     <span class="n">kriging_data</span> <span class="o">=</span> <span class="n">select_poisson_kriging_data</span><span class="p">(</span>
         <span class="n">u_block_centroid</span><span class="o">=</span><span class="n">unknown_block</span><span class="p">,</span>
         <span class="n">u_point_support</span><span class="o">=</span><span class="n">unknown_block_point_support</span><span class="p">,</span>
@@ -484,12 +483,15 @@
     <span class="p">)</span>
 
     <span class="n">prepared_ids</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">kriging_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Kriging data has been prepared&quot;</span><span class="p">)</span>
 
     <span class="c1"># Get block to block weighted semivariances</span>
     <span class="n">b2b_semivariance</span> <span class="o">=</span> <span class="n">WeightedBlock2BlockSemivariance</span><span class="p">(</span><span class="n">semivariance_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Block to block semivariances are calculated&quot;</span><span class="p">)</span>
 
     <span class="c1"># Get block to point weighted semivariances</span>
     <span class="n">b2p_semivariance</span> <span class="o">=</span> <span class="n">WeightedBlock2PointSemivariance</span><span class="p">(</span><span class="n">semivariance_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Block to point semivariances are calculated&quot;</span><span class="p">)</span>
     <span class="c1"># array(</span>
     <span class="c1">#     [unknown point 1 (n) semivariance against point support from block 1,</span>
     <span class="c1">#      unknown point 2 (n+1) semivariance against point support from block 1,</span>
@@ -498,14 +500,21 @@
     <span class="c1">#      unknown point 2 (n+1) semivariance against point support from block 2,</span>
     <span class="c1">#      ...],</span>
     <span class="c1"># )</span>
-    <span class="n">avg_b2p_semivariances</span> <span class="o">=</span> <span class="n">add_ones</span><span class="p">(</span><span class="n">b2p_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">(</span><span class="n">kriging_data</span><span class="p">))</span>
+    <span class="c1"># Transform to covariances</span>
+    <span class="n">avg_b2p_covariances</span> <span class="o">=</span> <span class="n">add_ones</span><span class="p">(</span>
+        <span class="n">sem_to_cov</span><span class="p">(</span>
+            <span class="n">b2p_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">(</span><span class="n">kriging_data</span><span class="p">),</span>
+            <span class="n">sill</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
     <span class="c1"># {(known block id a, known block id b): [pt a val, pt b val, distance between points]}</span>
     <span class="n">distances_between_known_areas</span> <span class="o">=</span> <span class="n">prepare_pk_known_areas</span><span class="p">(</span><span class="n">dps</span><span class="p">,</span> <span class="n">prepared_ids</span><span class="p">)</span>
 
     <span class="n">semivariances_between_known_areas</span> <span class="o">=</span> <span class="n">b2b_semivariance</span><span class="o">.</span><span class="n">calculate_average_semivariance</span><span class="p">(</span>
         <span class="n">distances_between_known_areas</span><span class="p">)</span>
-
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Average semivariance between areas is estimated&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Kriging system weights preparation&quot;</span><span class="p">)</span>
     <span class="c1"># Create array</span>
     <span class="n">predicted</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">idx_a</span> <span class="ow">in</span> <span class="n">prepared_ids</span><span class="p">:</span>
@@ -515,6 +524,9 @@
         <span class="n">predicted</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
 
     <span class="n">predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predicted</span><span class="p">)</span>
+
+    <span class="c1"># Transform to covariances</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">sem_to_cov</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">sill</span><span class="p">)</span>
 
     <span class="c1"># Add diagonal weights</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">get_areal_values_from_agg</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">prepared_ids</span><span class="p">)</span>
@@ -533,7 +545,8 @@
     <span class="c1"># Each point of unknown area represents different kriging system</span>
 
     <span class="c1"># Transpose points matrix</span>
-    <span class="n">transposed</span> <span class="o">=</span> <span class="n">avg_b2p_semivariances</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">transposed</span> <span class="o">=</span> <span class="n">avg_b2p_covariances</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Kriging system weights has been prepared&quot;</span><span class="p">)</span>
 
     <span class="n">predicted_points</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -552,7 +565,9 @@
 
         <span class="k">if</span> <span class="n">zhat</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">raise_when_negative_prediction</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Negative prediction for point </span><span class="si">{</span><span class="n">point</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Negative prediction - NaN zhat and error&quot;</span><span class="p">)</span>
                     <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -566,7 +581,9 @@
         <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">point</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">sigmasq</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">raise_when_negative_error</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Negative variance error for point </span><span class="si">{</span><span class="n">point</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Negative error - NaN error&quot;</span><span class="p">)</span>
                     <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">zhat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
                     <span class="k">continue</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -579,6 +596,8 @@
             <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigmasq</span><span class="p">)</span>
 
         <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">([(</span><span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">analyzed_pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">zhat</span><span class="p">,</span> <span class="n">sigma</span><span class="p">])</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;POISSON KRIGING: AREA-TO-POINT | Process ends&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">predicted_points</span></div>
 </pre></div>
@@ -657,7 +676,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

@@ -37,7 +37,6 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -386,7 +385,7 @@
 
 
 <span class="k">class</span> <span class="nc">DirectionalVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class prepares four directional variograms and one isotropic variogram.</span>
 
 <span class="sd">    Parameters</span>
@@ -501,7 +500,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">directional_variograms</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">variogram</span>
 
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;ExperimentalVariogram&quot;</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method returns all variograms or a single variogram at a specific direction.</span>
 
 <span class="sd">        Parameters</span>
@@ -552,7 +551,7 @@
 
 
 <div class="viewcode-block" id="ExperimentalVariogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram">[docs]</a><span class="k">class</span> <span class="nc">ExperimentalVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates Experimental Semivariogram and Experimental Covariogram of a given dataset.</span>
 
 <span class="sd">    Parameters</span>
@@ -765,7 +764,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">variance_covariances_diff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variance</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_covariances</span>
 
 <div class="viewcode-block" id="ExperimentalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -819,7 +818,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_calculate_covariance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">get_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates covariance and variance.</span>
 
 <span class="sd">        See : calculate_covariance function.</span>
@@ -834,7 +833,7 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_calculate_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates semivariance.</span>
 
 <span class="sd">        See: calculate_semivariance function.</span>
@@ -924,7 +923,7 @@
                                  <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                  <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function prepares:</span>
 <span class="sd">      - experimental semivariogram,</span>
 <span class="sd">      - experimental covariogram,</span>
@@ -1104,7 +1103,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

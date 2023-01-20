@@ -38,7 +38,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -511,10 +510,11 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars on prompts */
+/* disable scrollbars and line breaks on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
+    white-space: pre;
 }
 
 /* input/output area */
@@ -836,7 +836,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">df2gdf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function transforms DataFrame into GeoDataFrame.</span>
 
 <span class="sd">    Parameters</span>
@@ -1012,7 +1012,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_9_1.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_9_1.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_9_1.png" />
 </div>
 </div>
 </section>
@@ -1108,7 +1108,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_16_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_16_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_16_0.png" />
 </div>
 </div>
 </section>
@@ -1135,7 +1135,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_18_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_18_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_18_0.png" />
 </div>
 </div>
 </section>
@@ -1162,7 +1162,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_20_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_20_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_20_0.png" />
 </div>
 </div>
 </section>
@@ -1189,7 +1189,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_22_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_22_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_22_0.png" />
 </div>
 </div>
 </section>
@@ -1213,7 +1213,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_24_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_24_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_24_0.png" />
 </div>
 </div>
 </section>
@@ -1261,7 +1261,7 @@ tolerance.</p>
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_26_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_26_0.png" />
 </div>
 </div>
 <p>What do you think about this comparison? Do you agree, that the <strong>NW-SE</strong> variogram is the best fit for a data?</p>
@@ -1323,7 +1323,7 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span> <span class="o">/</span> <span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </pre></div>
@@ -1362,7 +1362,7 @@ The triangular method is 1.6258333880714662 times faster than the elliptical sel
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_34_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_%28Basic%29_34_0.png" />
+<img alt="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" src="../../_images/usage_tutorials_Directional_Semivariograms_(Basic)_34_0.png" />
 </div>
 </div>
 <p>The general shape is the same but variance of a semivariogram from a triangular selection is lower; it is harder to distinguish the covariance between neighboring points, and it could be dangerously close to the nugget effect. You should consider this (especially) in automatic calculations to avoid a strange results or models that are not better than a simple IDW technique.</p>
@@ -1557,7 +1557,7 @@ The triangular method is 1.6258333880714662 times faster than the elliptical sel
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

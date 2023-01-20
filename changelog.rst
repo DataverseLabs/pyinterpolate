@@ -14,7 +14,8 @@ Changes by date
 * (enhancement) added logging to Poisson Kriging ATP process,
 * (test) added functional test for `smooth_blocks` function,
 * (debug) too broad exception in `download_air_quality_poland` is narrowed to `KeyError`,
-* 
+* (enhancement) log points that cannot be assigned to any area in `PointSupport` class,
+*
 
 2023-01-16
 ----------
