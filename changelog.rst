@@ -16,6 +16,7 @@ Changes by date
 * (debug) too broad exception in `download_air_quality_poland` is narrowed to `KeyError`,
 * (enhancement) log points that cannot be assigned to any area in `PointSupport` class,
 * (enhancement) `transform_ps_to_dict()` function takes custom parameters for lon, lat, value and index,
+* (test) `check_limits()` function tests,
 
 2023-01-16
 ----------
