@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Semivariogram regularization &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>Semivariogram regularization &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -38,6 +38,7 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -103,7 +104,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -820,7 +821,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_7_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_7_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_7_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_7_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -847,7 +848,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_8_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_8_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_8_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_8_0.png" />
 </div>
 </div>
 <p>We see that block and point support variograms follow a spatial-dependency pattern. In this case, we can move to the next step - deconvolution. The next step is to create the <code class="docutils literal notranslate"><span class="pre">Deconvolution</span></code> object. We have multiple parameters to choose from, and it is hard to find the best fit at the beginning, so try to avoid multiple loops because it is time-consuming.</p>
@@ -905,7 +906,7 @@ Regularization fit process ends
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_12_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_12_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_12_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_12_0.png" />
 </div>
 </div>
 <p>After the first step, we see that variogram can be regularized. There is a big difference between the theoretical curve and the experimental values. Let’s run the transformation process.</p>
@@ -951,7 +952,7 @@ Transform procedure starts
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_16_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_16_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_16_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_16_0.png" />
 </div>
 </div>
 <p><strong>Clarification</strong>: Deviation between regularized semivariogram and a theoretical model is smaller in each step, but the significant improvement can be seen after the first step, and then it slows down. That’s why semivariogram regularization usually does not require many steps. However, if there are many lags, optimization may require more steps to achieve a meaningful result.</p>
@@ -970,7 +971,7 @@ Transform procedure starts
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_18_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_18_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_18_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_18_0.png" />
 </div>
 </div>
 <p><strong>NOTE</strong>: Weights are smaller with each iteration. It is the expected behavior of the algorithm. The general trend goes downward, and small oscillations may occur due to the optimization process.</p>
@@ -987,7 +988,7 @@ Transform procedure starts
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_20_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_(Intermediate)_20_0.png" />
+<img alt="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_20_0.png" src="../../_images/usage_tutorials_Semivariogram_Regularization_%28Intermediate%29_20_0.png" />
 </div>
 </div>
 <p>The regularized model works well for our dataset and follows general trends. For closest lags, it assigns smaller weights, and for larger lags, weights are bigger. It is related to the semivariogram weighting method - we penalize more models that are poorly performing for the shortest distances from the origin.</p>
@@ -1167,7 +1168,7 @@ Transform procedure starts
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>
