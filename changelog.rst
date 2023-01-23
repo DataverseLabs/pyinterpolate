@@ -17,6 +17,8 @@ Changes by date
 * (enhancement) log points that cannot be assigned to any area in `PointSupport` class,
 * (enhancement) `transform_ps_to_dict()` function takes custom parameters for lon, lat, value and index,
 * (test) `check_limits()` function tests,
+* (test) plotting function of the `VariogramCloud()` class is tested and slightly changed to return `True` if everything has worked fine,
+*
 
 2023-01-16
 ----------

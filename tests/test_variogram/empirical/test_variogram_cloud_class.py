@@ -1,6 +1,7 @@
 # Core modules
 import unittest
 # Math modules
+import matplotlib.pyplot as plt
 import numpy as np
 # Package modules
 from pyinterpolate.variogram.empirical.semivariance import calculate_semivariance
@@ -134,4 +135,12 @@ class TestEmpiricalSemivariance(unittest.TestCase):
 
         self.assertRaises(ValueError, VariogramCloud, **kwargs)
 
-    # TODO: test plots (future)
+    def test_plots_figure(self):
+        variogram_cloud = VariogramCloud(
+            input_array=armstrong_arr,
+            step_size=gen_data.param_step_size,
+            max_range=gen_data.param_max_range
+        )
+        was_plotted = variogram_cloud.plot(kind='scatter')
+        msg = "Figure wasn't plotted"
+        self.assertTrue(was_plotted, msg)

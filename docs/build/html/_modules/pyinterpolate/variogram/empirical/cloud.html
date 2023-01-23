@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -37,6 +37,7 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -98,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -827,6 +828,11 @@
 <span class="sd">        ----------</span>
 <span class="sd">        kind : string, default=&#39;scatter&#39;</span>
 <span class="sd">               available plot types: &#39;scatter&#39;, &#39;box&#39;, &#39;violin&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : bool</span>
+<span class="sd">            ``True`` if Figure was plotted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -841,7 +847,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_violin_plot</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Plot kind </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s1"> is not available. Use &quot;scatter&quot;, &quot;box&quot; or &quot;violin&quot; instead.&#39;</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
 
 <div class="viewcode-block" id="VariogramCloud.remove_outliers"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.remove_outliers">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outliers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
                         <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span>
@@ -1088,7 +1096,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

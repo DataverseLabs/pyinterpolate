@@ -460,6 +460,11 @@ class VariogramCloud:
         ----------
         kind : string, default='scatter'
                available plot types: 'scatter', 'box', 'violin'
+
+        Returns
+        -------
+        : bool
+            ``True`` if Figure was plotted.
         """
 
         if self.experimental_point_cloud is None:
@@ -475,6 +480,8 @@ class VariogramCloud:
         else:
             msg = f'Plot kind {kind} is not available. Use "scatter", "box" or "violin" instead.'
             raise KeyError(msg)
+        return True
+
 
     def remove_outliers(self, method='zscore',
                         z_lower_limit=-3,
