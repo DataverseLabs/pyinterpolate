@@ -21,6 +21,7 @@ Changes by date
 * (tutorials) new tutorial about `ExperimentalVariogram` and `VariogramCloud` classes,
 * (test) new tests for `calculate_average_semivariance()` function from `block` module,
 * (enhancement) function `inblock_semivariance` has been optimized,
+* (docs) updated `__init__.py` of `variogram.theoretical` module,
 
 2023-01-16
 ----------
