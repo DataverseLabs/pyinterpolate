@@ -65,3 +65,30 @@ class TestCalculateAverageSemivariance(unittest.TestCase):
                                                           MAX_RANGE)
 
         self.assertIsInstance(avg_semivariance, np.ndarray)
+
+    def test_average_semivariance_no_neighbors(self):
+
+        distances_between_blocks = {
+            'a': [0, 2, 99],
+            'b': [2, 0, 300],
+            'c': [99, 300, 0]
+        }
+
+        inblock_semivariances = {'a': 10, 'b': 20, 'c': 900}
+
+        step_size = 1
+        max_range = 3
+
+        # Avg semi
+        avg_semivariance = calculate_average_semivariance(distances_between_blocks,
+                                                          inblock_semivariances,
+                                                          step_size,
+                                                          max_range)
+
+        arrays_equal = np.array_equal(avg_semivariance,
+                                      np.array([
+                                          [1, 0, 0],
+                                          [2, 7.5, 1]
+                                      ]))
+
+        self.assertTrue(arrays_equal)

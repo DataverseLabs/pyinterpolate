@@ -18,7 +18,9 @@ Changes by date
 * (enhancement) `transform_ps_to_dict()` function takes custom parameters for lon, lat, value and index,
 * (test) `check_limits()` function tests,
 * (test) plotting function of the `VariogramCloud()` class is tested and slightly changed to return `True` if everything has worked fine,
-*
+* (tutorials) new tutorial about `ExperimentalVariogram` and `VariogramCloud` classes,
+* (test) new tests for `calculate_average_semivariance()` function from `block` module,
+* 
 
 2023-01-16
 ----------
