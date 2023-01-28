@@ -33,10 +33,6 @@ Bibliography
 [2] Oliver, M. and Webster, R. Basic Steps in Geostatistics: The Variogram and Kriging. Springer 2015.
     doi:10.1007/978-3-319-15865-5
 
-TODO
-----
-- Tutorial for experimental semivariance (Basics)
-
 """
 
 
