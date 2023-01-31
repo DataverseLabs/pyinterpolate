@@ -22,6 +22,8 @@ Changes by date
 * (test) new tests for `calculate_average_semivariance()` function from `block` module,
 * (enhancement) function `inblock_semivariance` has been optimized,
 * (docs) updated `__init__.py` of `variogram.theoretical` module,
+* (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
+*
 
 2023-01-16
 ----------

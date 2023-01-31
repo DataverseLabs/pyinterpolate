@@ -19,6 +19,7 @@ from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.processing.transform.statistics import remove_outliers
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
+from pyinterpolate.variogram.utils.plots import build_swarmplot_input
 
 
 def omnidirectional_point_cloud(input_array: np.array,
@@ -565,12 +566,14 @@ class VariogramCloud:
         self.__dist_plots(title_box, 'box')
 
     def _scatter_plot(self):
+
         ds = self.__prep_scatterplot_data()
         plt.figure(figsize=(14, 8))
         xs = ds[:, 0]
         ys = ds[:, 1]
         plt.scatter(x=xs,
-                    y=ys)
+                    y=ys,
+                    s=0.2)
         plt.title('Variogram Point Cloud per lag.')
         plt.show()
 
@@ -640,14 +643,11 @@ class VariogramCloud:
         return data, x_tick_labels
 
     def __prep_scatterplot_data(self) -> np.array:
-        ds = []
-        for idx, values in self.experimental_point_cloud.items():
-            vals_l = len(values)
-            idxs = np.ones(vals_l) * idx
-            elems = list(zip(idxs, values))
-            ds.extend(elems)
 
-        return np.array(ds)
+        ds = build_swarmplot_input(data=self.experimental_point_cloud,
+                                   step_size=self.step)
+
+        return ds
 
     @staticmethod
     def __str_empty():
