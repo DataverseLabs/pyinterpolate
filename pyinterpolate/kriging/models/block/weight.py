@@ -70,7 +70,11 @@ class WeightedBlock2BlockSemivariance:
         : Tuple[float, float]
             [Weighted sum of semivariances, Weights sum]
         """
+        if datarows.ndim == 1:
+            datarows = datarows[np.newaxis, :]
+
         predictions = self.semivariance_model.predict(datarows[:, -1])
+
         weights = datarows[:, 0] * datarows[:, 1]
         summed_weights = np.sum(weights)
         summed_semivariances = np.sum(
@@ -96,10 +100,15 @@ class WeightedBlock2BlockSemivariance:
         k = {}
         for idx, prediction_input in data_points.items():
 
+            _input = prediction_input
+
             if isinstance(prediction_input[0][0], Tuple):
                 _input = prediction_input[1]
-            else:
-                _input = prediction_input
+
+            if len(prediction_input) == 2:
+                if isinstance(prediction_input[0], np.ndarray) and isinstance(prediction_input[1], np.ndarray):
+                    _input = prediction_input[1]
+
 
             w_sem = self._avg_smv(_input)
             w_sem_sum = w_sem[0]

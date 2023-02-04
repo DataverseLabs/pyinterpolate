@@ -103,6 +103,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         weighted=is_weighted_by_point_support,
         direction=semivariogram_model.direction
     )
+
     sill = semivariogram_model.sill
 
     distances_column_index = 3
