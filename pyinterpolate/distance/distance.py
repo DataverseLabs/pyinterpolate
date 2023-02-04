@@ -231,6 +231,37 @@ def _calc_angle_from_origin(vec, origin):
     return np.rad2deg(ang % (2 * np.pi))
 
 
+def calc_angles_between_points(vec1, vec2, origin=None):
+    """
+    Function calculates distances between two groups of points as their cross product.
+
+    Parameters
+    ----------
+    vec1 : numpy array
+        The first set of coordinates.
+
+    vec2 : numpy array
+        The second set of coordinates.
+
+    origin : Iterable, optional
+        The coordinates (x, y) of origin.
+
+    Returns
+    -------
+    angles : numpy array
+        An array with angles between all points from ``vec1`` to all points from ``vec2``, where rows are angles between
+         points from ``vec1`` to points from ``vec2`` (columns).
+    """
+    angles = []
+
+    for point in vec1:
+        row = calc_angles(vec2, origin=point)
+        angles.append(row.flatten())
+
+    angles = np.array(angles).flatten()
+    return angles
+
+
 def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Iterable = None):
     """
     Function calculates angles between points and origin or between vectors from origin to points and a vector from

@@ -14,7 +14,7 @@ import pandas as pd
 from scipy.linalg import fractional_matrix_power
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance, \
-    calc_angles, calculate_angular_distance
+    calc_angles, calculate_angular_distance, calc_angles_between_points
 from pyinterpolate.processing.preprocessing.blocks import Blocks
 from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg, transform_ps_to_dict
 
@@ -622,11 +622,66 @@ def select_kriging_data(unknown_position: Iterable,
         return sorted_neighbors_and_dists[:number_of_neighbors]
 
 
+def _select_datasets_based_on_angular_distances(dataset: Dict,
+                                                angular_distances: Dict,
+                                                angle_tol: float,
+                                                min_no_neighbors=1):
+    """
+    Function checks if angular data is within given angle
+    Parameters
+    ----------
+    dataset : Dict
+        ``{known block id: [(unknown x, unknown y), [unknown val, known val, distance between points]]}``
+
+    angular_distances : Dict
+        ``{known block id: angle for each point to unknown area points}``
+
+    angle_tol : float
+        Tolerance of angle.
+
+    min_no_neighbors : int, default = 1
+        Minimum number of neighbors that algorithm selects for further processing.
+
+    Returns
+    -------
+    : Dict
+        Cleaned dataset.
+    """
+
+    new_dataset = {}
+
+    while len(new_dataset) < min_no_neighbors:
+        for nn_key in list(dataset.keys()):
+
+            if nn_key in new_dataset:
+                continue
+            else:
+                angle_diffs = angular_distances[nn_key]
+                u_coordinates_arr, out_arr = dataset[nn_key]
+
+                new_coordinates_arr = []
+                new_out_arr = []
+
+                for angle_idx, _angle in enumerate(angle_diffs):
+                    if abs(_angle) <= angle_tol:
+                        new_coordinates_arr.append(u_coordinates_arr[angle_idx])
+                        new_out_arr.append(out_arr[angle_idx])
+
+                if len(new_coordinates_arr) > 0:
+                    new_dataset[nn_key] = (np.array(new_coordinates_arr), np.array(out_arr))
+
+        angle_tol = angle_tol + 2
+
+    return new_dataset
+
+
 def select_poisson_kriging_data(u_block_centroid: np.ndarray,
                                 u_point_support: np.ndarray,
                                 k_point_support_dict: Dict,
                                 nn: int,
-                                max_range: float) -> Dict:
+                                max_range: float,
+                                direction=None,
+                                angular_tolerance=5) -> Dict:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
@@ -646,6 +701,12 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     max_range : float
                 The maximum range of influence (it should be set to semivariogram range).
+
+    direction : float, default = None
+        The direction of a directional variogram.
+
+    angular_tolerance : float
+        How many degrees of deviation from the angle is respected.
 
     Returns
     -------
@@ -680,6 +741,7 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     max_search_pos = np.argmax(sorted_kdata > max_range)
     idxs = sorted_kindex[:max_search_pos]
+    angle_diffs_dict = {}
 
     if len(idxs) < nn:
         idxs = sorted_kindex[:nn]
@@ -689,18 +751,39 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
 
     for idx in idxs:
         point_s = k_point_support_dict[idx]
+
+        # Distances between points
         distances = calc_point_to_point_distance(u_point_support[:, :-1],
                                                  point_s[:, :-1])
         fdistances = distances.flatten()
         ldist = len(fdistances)
+
         u_coordinates_arr = [(uc[0], uc[1]) for uc in u_point_support[:, :-1]]
         u_values_arr = np.resize(u_point_support[:, -1], ldist)
         k_values_arr = np.resize(point_s[:, -1], ldist)
         u_coordinates_arr = u_coordinates_arr * int(ldist / len(u_coordinates_arr))
         out_arr = list(zip(u_values_arr, k_values_arr, fdistances))
-        datasets[idx] = [u_coordinates_arr, np.array(out_arr)]
 
-    return datasets
+        # Get angles if angular
+        if direction is not None:
+            angles = calc_angles_between_points(u_point_support[:, :-1], point_s)
+            angle_diffs = calculate_angular_distance(angles, direction)
+            angle_diffs_dict[idx] = angle_diffs
+
+        datasets[idx] = (u_coordinates_arr, np.array(out_arr))
+
+    # Clean output
+    if direction is None:
+        return datasets
+    else:
+        datasets = _select_datasets_based_on_angular_distances(
+            dataset=datasets,
+            angular_distances=angle_diffs_dict,
+            angle_tol=angular_tolerance,
+            min_no_neighbors=2
+        )
+
+        return datasets
 
 
 def select_neighbors_pk_centroid_with_angle(indexes,

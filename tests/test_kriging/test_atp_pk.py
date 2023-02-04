@@ -17,6 +17,9 @@ GEOMETRY_COL = 'geometry'
 POLYGON_ID = 'FIPS'
 POLYGON_VALUE = 'rate'
 NN = 4
+DIRECTIONAL_VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_directional_variogram.json'
+DIRECTIONAL_VARIOGRAM = TheoreticalVariogram()
+DIRECTIONAL_VARIOGRAM.from_json(DIRECTIONAL_VARIOGRAM_MODEL_FILE)
 
 
 def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
@@ -141,3 +144,15 @@ class TestATAPK(unittest.TestCase):
         self.assertEqual(pk_model[0][0], expected_output[0][0])
         self.assertAlmostEqual(pk_model[0][1], expected_output[0][1], places=2)
         self.assertAlmostEqual(pk_model[1][1], expected_output[1][1], places=2)
+
+    def test_flow_3(self):
+        pk_output = area_to_point_pk(semivariogram_model=DIRECTIONAL_VARIOGRAM,
+                                     blocks=AREAL_INP,
+                                     point_support=PS_INP,
+                                     unknown_block=UNKN_AREA,
+                                     unknown_block_point_support=UNKN_PS,
+                                     number_of_neighbors=NN,
+                                     raise_when_negative_error=False,
+                                     raise_when_negative_prediction=False)
+
+        self.assertTrue(pk_output)
