@@ -23,6 +23,8 @@ Changes by date
 * (enhancement) function `inblock_semivariance` has been optimized,
 * (docs) updated `__init__.py` of `variogram.theoretical` module,
 * (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
+* (enahncement) added directional kriging for ATA and ATP Poisson Kriging,
+* (debug) warning for directional kriging functions,
 *
 
 2023-01-16
