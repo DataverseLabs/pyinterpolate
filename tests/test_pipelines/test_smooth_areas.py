@@ -28,6 +28,9 @@ POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
 
 THEORETICAL_VARIOGRAM = TheoreticalVariogram()
 THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
+DIRECTIONAL_VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_directional_variogram.json'
+DIRECTIONAL_VARIOGRAM = TheoreticalVariogram()
+DIRECTIONAL_VARIOGRAM.from_json(DIRECTIONAL_VARIOGRAM_MODEL_FILE)
 
 
 class TestSmoothBlocks(unittest.TestCase):
@@ -35,6 +38,14 @@ class TestSmoothBlocks(unittest.TestCase):
     def test_real_data(self):
 
         output_results = smooth_blocks(semivariogram_model=THEORETICAL_VARIOGRAM,
+                                       blocks=AREAL_INPUT,
+                                       point_support=POINT_SUPPORT_INPUT,
+                                       number_of_neighbors=NN)
+
+        self.assertIsInstance(output_results, gpd.GeoDataFrame)
+
+    def test_directional(self):
+        output_results = smooth_blocks(semivariogram_model=DIRECTIONAL_VARIOGRAM,
                                        blocks=AREAL_INPUT,
                                        point_support=POINT_SUPPORT_INPUT,
                                        number_of_neighbors=NN)

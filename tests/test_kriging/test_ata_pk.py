@@ -9,6 +9,11 @@ from pyinterpolate.variogram import TheoreticalVariogram
 
 DATASET = 'samples/regularization/cancer_data.gpkg'
 VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
+THEORETICAL_VARIOGRAM = TheoreticalVariogram()
+THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
+DIRECTIONAL_VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_directional_variogram.json'
+DIRECTIONAL_VARIOGRAM = TheoreticalVariogram()
+DIRECTIONAL_VARIOGRAM.from_json(DIRECTIONAL_VARIOGRAM_MODEL_FILE)
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -61,9 +66,6 @@ POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
                                blocks_layer_name=POLYGON_LAYER)
 
 AREAL_INP, PS_INP, UNKN_AREA, UNKN_PS = select_unknown_blocks_and_ps(AREAL_INPUT, POINT_SUPPORT_INPUT, POLYGON_ID)
-
-THEORETICAL_VARIOGRAM = TheoreticalVariogram()
-THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
 
 
 class TestATAPK(unittest.TestCase):
@@ -130,3 +132,15 @@ class TestATAPK(unittest.TestCase):
                                    number_of_neighbors=8,
                                    raise_when_negative_error=False)
         self.assertTrue(np.array_equal([int(x) for x in pk_model], [6, 340, 8]))
+
+    def test_flow_3(self):
+        pk_output = area_to_area_pk(semivariogram_model=DIRECTIONAL_VARIOGRAM,
+                                    blocks=AREAL_INP,
+                                    point_support=PS_INP,
+                                    unknown_block=UNKN_AREA,
+                                    unknown_block_point_support=UNKN_PS,
+                                    number_of_neighbors=NN,
+                                    raise_when_negative_error=False,
+                                    raise_when_negative_prediction=False)
+
+        self.assertTrue(pk_output)
