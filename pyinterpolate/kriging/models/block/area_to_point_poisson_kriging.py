@@ -5,6 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
+import warnings
 from typing import Union, Dict
 import logging
 
@@ -14,6 +15,7 @@ import pandas as pd
 
 from pyinterpolate.kriging.models.block.weight import WeightedBlock2BlockSemivariance,\
     WeightedBlock2PointSemivariance, add_ones, weights_array
+from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas, \
     get_aggregated_point_support_values
@@ -85,7 +87,18 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     ------
     ValueError
         Prediction or prediction error are negative.
+
+    Warns
+    -----
+    ExperimentalFeatureWarning
+        Directional Kriging is in early-phase and may contain bugs.
+
     """
+    # Warnings area
+    if semivariogram_model.direction is not None:
+        exp_warning_msg = 'Directional Poisson Kriging is an experimental feature. Use it at your own responsibility!'
+        warnings.warn(ExperimentalFeatureWarning(exp_warning_msg).__str__())
+
     logging.info("POISSON KRIGING: AREA-TO-POINT | Operation starts")
     # Get total point-support value of the unknown area
     tot_unknown_value = np.sum(unknown_block_point_support[:, -1])
