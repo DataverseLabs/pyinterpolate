@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.distance.distance &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.distance.distance &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -37,6 +37,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -98,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -165,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -298,6 +306,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -598,6 +613,37 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">ang</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
 
 
+<span class="k">def</span> <span class="nf">calc_angles_between_points</span><span class="p">(</span><span class="n">vec1</span><span class="p">,</span> <span class="n">vec2</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates distances between two groups of points as their cross product.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    vec1 : numpy array</span>
+<span class="sd">        The first set of coordinates.</span>
+
+<span class="sd">    vec2 : numpy array</span>
+<span class="sd">        The second set of coordinates.</span>
+
+<span class="sd">    origin : Iterable, optional</span>
+<span class="sd">        The coordinates (x, y) of origin.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    angles : numpy array</span>
+<span class="sd">        An array with angles between all points from ``vec1`` to all points from ``vec2``, where rows are angles between</span>
+<span class="sd">         points from ``vec1`` to points from ``vec2`` (columns).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">angles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">vec1</span><span class="p">:</span>
+        <span class="n">row</span> <span class="o">=</span> <span class="n">calc_angles</span><span class="p">(</span><span class="n">vec2</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="n">point</span><span class="p">)</span>
+        <span class="n">angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+
+    <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">angles</span>
+
+
 <span class="k">def</span> <span class="nf">calc_angles</span><span class="p">(</span><span class="n">points_b</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">point_a</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="n">Iterable</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates angles between points and origin or between vectors from origin to points and a vector from</span>
@@ -773,7 +819,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>
