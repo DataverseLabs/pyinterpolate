@@ -171,6 +171,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -304,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -387,6 +401,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_points_within_ellipse</span><span class="p">,</span> <span class="n">select_values_in_range</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.statistics</span> <span class="kn">import</span> <span class="n">remove_outliers</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_direction</span><span class="p">,</span> <span class="n">validate_points</span><span class="p">,</span> <span class="n">validate_tolerance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.plots</span> <span class="kn">import</span> <span class="n">build_swarmplot_input</span>
 
 
 <span class="k">def</span> <span class="nf">omnidirectional_point_cloud</span><span class="p">(</span><span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
@@ -933,12 +948,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__dist_plots</span><span class="p">(</span><span class="n">title_box</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_scatter_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prep_scatterplot_data</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
         <span class="n">xs</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">ys</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span>
-                    <span class="n">y</span><span class="o">=</span><span class="n">ys</span><span class="p">)</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+                    <span class="n">s</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Variogram Point Cloud per lag.&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -1008,14 +1025,11 @@
         <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x_tick_labels</span>
 
     <span class="k">def</span> <span class="nf">__prep_scatterplot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-        <span class="n">ds</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">vals_l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-            <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">vals_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">idx</span>
-            <span class="n">elems</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">build_swarmplot_input</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="p">,</span>
+                                   <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ds</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__str_empty</span><span class="p">():</span>
