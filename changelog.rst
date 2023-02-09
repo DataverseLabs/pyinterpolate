@@ -25,7 +25,8 @@ Changes by date
 * (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
 * (enhancement) added directional kriging for ATA and ATP Poisson Kriging,
 * (debug) warning for directional kriging functions,
-* (enhancement) initialization of `KrigingObject` dataclass.
+* (enhancement) initialization of `KrigingObject` dataclass,
+* (ci/cd) added new workflow tests for MacOS and Ubuntu.
 
 2023-01-16
 ----------
