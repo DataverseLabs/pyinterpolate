@@ -26,7 +26,9 @@ Changes by date
 * (enhancement) added directional kriging for ATA and ATP Poisson Kriging,
 * (debug) warning for directional kriging functions,
 * (enhancement) initialization of `KrigingObject` dataclass,
-* (ci/cd) added new workflow tests for MacOS and Ubuntu.
+* (ci/cd) added new workflow tests for MacOS and Ubuntu,
+* (enhancement) added logging to Simple Kriging process.
+
 
 2023-01-16
 ----------
