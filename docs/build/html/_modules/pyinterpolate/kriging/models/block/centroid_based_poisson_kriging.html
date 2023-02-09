@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.models.block.centroid_based_poisson_kriging &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.kriging.models.block.centroid_based_poisson_kriging &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -99,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -166,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -304,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -373,6 +387,7 @@
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -381,10 +396,11 @@
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.models.block.weight</span> <span class="kn">import</span> <span class="n">weights_array</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.kwarnings</span> <span class="kn">import</span> <span class="n">ExperimentalFeatureWarning</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.process</span> <span class="kn">import</span> <span class="n">solve_weights</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_centroid_poisson_kriging_data</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">transform_ps_to_dict</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">transform_ps_to_dict</span><span class="p">,</span> <span class="n">sem_to_cov</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
 
 
@@ -398,7 +414,7 @@
                              <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function performs centroid-based Poisson Kriging of blocks (areal) data.</span>
 
 <span class="sd">    Parameters</span>
@@ -452,7 +468,18 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        Prediction or prediction error are negative.</span>
+
+<span class="sd">    Warns</span>
+<span class="sd">    -----</span>
+<span class="sd">    ExperimentalFeatureWarning</span>
+<span class="sd">        Directional Kriging is in early-phase and may contain bugs.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Warnings area</span>
+    <span class="k">if</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">exp_warning_msg</span> <span class="o">=</span> <span class="s1">&#39;Directional Poisson Kriging is an experimental feature. Use it at your own responsibility!&#39;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">ExperimentalFeatureWarning</span><span class="p">(</span><span class="n">exp_warning_msg</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span>
+
     <span class="c1"># Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">Dict</span><span class="p">):</span>
         <span class="n">dps</span> <span class="o">=</span> <span class="n">point_support</span>
@@ -472,6 +499,8 @@
         <span class="n">direction</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="o">.</span><span class="n">direction</span>
     <span class="p">)</span>
 
+    <span class="n">sill</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">sill</span>
+
     <span class="n">distances_column_index</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">values_column_index</span> <span class="o">=</span> <span class="mi">2</span>
     <span class="n">weights_column_index</span> <span class="o">=</span> <span class="mi">5</span>
@@ -481,15 +510,17 @@
     <span class="n">values</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="n">values_column_index</span><span class="p">]</span>
 
     <span class="n">partial_semivars</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
-    <span class="n">semivars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">partial_semivars</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">semivars</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">partial_semivars</span>
-    <span class="n">semivars</span> <span class="o">=</span> <span class="n">semivars</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="n">pcovars</span> <span class="o">=</span> <span class="n">sem_to_cov</span><span class="p">(</span><span class="n">partial_semivars</span><span class="p">,</span> <span class="n">sill</span><span class="p">)</span>
+    <span class="n">covars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pcovars</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">covars</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pcovars</span>
+    <span class="n">covars</span> <span class="o">=</span> <span class="n">covars</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
 
     <span class="c1"># Distances between known blocks</span>
     <span class="n">coordinates</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="p">:</span><span class="n">values_column_index</span><span class="p">]</span>
     <span class="n">block_distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">known_blocks_semivars</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">block_distances</span><span class="p">)</span>
     <span class="n">predicted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">known_blocks_semivars</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+    <span class="n">predicted</span> <span class="o">=</span> <span class="n">sem_to_cov</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">sill</span><span class="p">)</span>
 
     <span class="c1"># Add diagonal weights to predicted semivars array</span>
     <span class="n">weights</span> <span class="o">=</span> <span class="n">weights_array</span><span class="p">(</span><span class="n">predicted</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">kriging_data</span><span class="p">[:,</span> <span class="n">weights_column_index</span><span class="p">])</span>
@@ -504,7 +535,7 @@
 
     <span class="c1"># Solve Kriging system</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">output_weights</span> <span class="o">=</span> <span class="n">solve_weights</span><span class="p">(</span><span class="n">kriging_weights</span><span class="p">,</span> <span class="n">semivars</span><span class="p">,</span> <span class="n">allow_approximate_solutions</span><span class="p">)</span>
+        <span class="n">output_weights</span> <span class="o">=</span> <span class="n">solve_weights</span><span class="p">(</span><span class="n">kriging_weights</span><span class="p">,</span> <span class="n">covars</span><span class="p">,</span> <span class="n">allow_approximate_solutions</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Singular matrix in Kriging system detected, check if you have duplicated coordinates &#39;</span> \
               <span class="s1">&#39;in the ``known_locations`` variable.&#39;</span>
@@ -517,7 +548,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted value is </span><span class="si">{</span><span class="n">zhat</span><span class="si">}</span><span class="s1"> and it should not be lower than 0. Check your sampling &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;grid, samples, number of neighbors or semivariogram model type.&#39;</span><span class="p">)</span>
 
-    <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">semivars</span><span class="p">)</span>
+    <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">covars</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">sigmasq</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">raise_when_negative_error</span><span class="p">:</span>

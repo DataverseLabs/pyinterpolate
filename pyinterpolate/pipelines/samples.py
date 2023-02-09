@@ -72,7 +72,7 @@ def download_air_quality_poland(dataset: str, export=False, export_path='air_qua
         api_output = requests.get(data_url + str(i)).json()['values']
         try:
             values_df.append([i, pd.DataFrame.from_dict(api_output).dropna()['value'].values[0]])
-        except Exception as _:
+        except KeyError:
             values_df.append([i, np.nan])
     values_df = pd.DataFrame(data=values_df, columns=['id', dataset])
 

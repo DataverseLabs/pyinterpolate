@@ -5,6 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
+import warnings
 from typing import Dict, List, Union
 
 import geopandas as gpd
@@ -13,6 +14,7 @@ import pandas as pd
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.kriging.models.block.weight import weights_array
+from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.kriging.utils.process import solve_weights
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_centroid_poisson_kriging_data
@@ -84,7 +86,18 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     ------
     ValueError
         Prediction or prediction error are negative.
+
+    Warns
+    -----
+    ExperimentalFeatureWarning
+        Directional Kriging is in early-phase and may contain bugs.
+
     """
+    # Warnings area
+    if semivariogram_model.direction is not None:
+        exp_warning_msg = 'Directional Poisson Kriging is an experimental feature. Use it at your own responsibility!'
+        warnings.warn(ExperimentalFeatureWarning(exp_warning_msg).__str__())
+
     # Get data: [block id, cx, cy, value, distance to unknown, aggregated point support sum]
     if isinstance(point_support, Dict):
         dps = point_support
@@ -103,6 +116,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         weighted=is_weighted_by_point_support,
         direction=semivariogram_model.direction
     )
+
     sill = semivariogram_model.sill
 
     distances_column_index = 3

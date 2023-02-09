@@ -24,10 +24,30 @@ Researcher must model variogram from experimental observations to perform spatia
     brings information about the modeled data. This module contains class and methods to fit experimental variances
     into theoretical functions. It can be done manully or automatically.
 
-Module contains:
-TODO: list of fn and classes
+Module contains
+---------------
 
-Flow of analysis:
+#############
+# functions #
+#############
+
+- build_theoretical_variogram() : Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.
+- circular_model() : Function calculates circular model of semivariogram.
+- cubic_model() : Function calculates cubic model of semivariogram.
+- exponential_model() : Function calculates exponential model of semivariogram.
+- gaussian_model() : Function calculates gaussian model of semivariogram.
+- linear_model() : Function calculates linear model of semivariogram.
+- power_model() : Function calculates power model of semivariogram.
+- spherical_model() : Function calculates spherical model of semivariogram.
+
+#############
+#  classes  #
+#############
+
+- TheoreticalVariogram : Theoretical model of a spatial dissimilarity.
+
+Flow of analysis
+----------------
 Experimental Variogram -> Theoretical Variogram -> Kriging
 ......................    ---------------------    .......
 
@@ -48,7 +68,7 @@ Module returns the Theoretical Variogram as a set of four values: model type (st
     nugget (float). It is used later for Kriging.
 
 Variogram Models:
-- circular variogram [4],
+- circular [4], cubic, exponential, gaussian, linear, power, spherical [3].
 
 
 Changelog
@@ -57,6 +77,7 @@ Changelog
 | Date       | Change description           | Author         |
 |------------|------------------------------|----------------|
 | 2022-02-16 | First release of v0.3 module | @SimonMolinsky |
+| 2023-01-28 | Added description of functions and classes | @SimonMolinsky |
 
 Authors
 -------
@@ -69,7 +90,8 @@ Contributors
 
 References
 ----------
-TODO
+* variogram.empirical : Experimental Variogram and Covariogram calculations.
+* variogram.regularization : Block variograms and semivariogram regularization.
 
 Bibliography
 ------------

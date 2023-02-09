@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -99,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -372,11 +372,8 @@
 <span class="sd">Authors</span>
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
-
-<span class="sd">TODO</span>
-<span class="sd">----</span>
-<span class="sd">* PointSupport | Fn skips points that are not assigned to any area, maybe log it somewhere...</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -386,7 +383,7 @@
 
 
 <div class="viewcode-block" id="Blocks"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.Blocks">[docs]</a><span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class stores and prepares aggregated data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class stores and prepares aggregated data.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -436,7 +433,7 @@
             <span class="k">raise</span> <span class="n">IndexColNotUniqueError</span><span class="p">(</span><span class="n">dsl</span><span class="p">,</span> <span class="n">nuniq</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_col</span><span class="p">,</span> <span class="n">geo_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Parser.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parser.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -481,7 +478,7 @@
                   <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
                   <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads areal dataset from a file supported by GeoPandas.</span>
 
 <span class="sd">        Parameters</span>
@@ -536,7 +533,7 @@
                           <span class="n">value_col</span><span class="p">,</span>
                           <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
                           <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads areal dataset from a GeoDataFrame supported by GeoPandas.</span>
 
 <span class="sd">        Parameters</span>
@@ -578,12 +575,35 @@
 
 
 <div class="viewcode-block" id="PointSupport"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.PointSupport">[docs]</a><span class="k">class</span> <span class="nc">PointSupport</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class prepares the point support data in relation to block dataset.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class prepares the point support data in relation to block dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    log_not_used_points : bool, default=False</span>
+<span class="sd">        Should dropped points be logged?</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
 <span class="sd">    point_support : gpd.GeoDataFrame</span>
 <span class="sd">        Dataset with point support values and indexes of blocks (where points fall into).</span>
+
+<span class="sd">    value_column : str</span>
+<span class="sd">        The value column name</span>
+
+<span class="sd">    geometry_column : str</span>
+<span class="sd">        The geometry column name.</span>
+
+<span class="sd">    block_index_column : str</span>
+<span class="sd">        The area index.</span>
+
+<span class="sd">    x_col : str, default = &quot;x_col&quot;</span>
+<span class="sd">        Longitude column name.</span>
+
+<span class="sd">    y_col : str, default = &quot;y_col&quot;</span>
+<span class="sd">        Latitude column name.</span>
+
+<span class="sd">    log_dropped : bool</span>
+<span class="sd">        See log_not_used_points parameter.</span>
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
@@ -632,13 +652,14 @@
 <span class="sd">    ...                                        blocks_index_col=POLYGON_ID)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log_not_used_points</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_support</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">block_index_column</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_col</span> <span class="o">=</span> <span class="s1">&#39;x_col&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_col</span> <span class="o">=</span> <span class="s1">&#39;y_col&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_dropped</span> <span class="o">=</span> <span class="n">log_not_used_points</span>
 
 <div class="viewcode-block" id="PointSupport.from_files"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.PointSupport.from_files">[docs]</a>    <span class="k">def</span> <span class="nf">from_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">point_support_data_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -650,7 +671,7 @@
                    <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="n">point_support_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">blocks_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Methods prepares the point support data from files.</span>
 
 <span class="sd">        Parameters</span>
@@ -709,13 +730,12 @@
                            <span class="n">blocks_geometry_col</span><span class="p">,</span>
                            <span class="n">blocks_index_col</span><span class="p">,</span>
                            <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Methods prepares the point support data from files.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        point_support_dataframe : GeoDataFrame or GeoSeries</span>
-
 
 <span class="sd">        blocks_dataframe : GeoDataFrame</span>
 <span class="sd">            Block data with block indexes and geometries.</span>
@@ -751,6 +771,16 @@
 
         <span class="c1"># Merge data</span>
         <span class="n">joined</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check which points weren&#39;t joined</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_dropped</span><span class="p">:</span>
+            <span class="n">is_na</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">not_joined_points</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="n">is_na</span><span class="p">][</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">not_joined_points</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;POINT SUPPORT : Dropped points:&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">not_joined_points</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;(</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pt</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">pt</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="c1"># Clean data</span>
         <span class="n">joined</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

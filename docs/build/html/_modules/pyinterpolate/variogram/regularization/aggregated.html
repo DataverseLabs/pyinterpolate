@@ -37,7 +37,6 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -396,7 +395,7 @@
 
 
 <div class="viewcode-block" id="AggregatedVariogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a><span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates semivariance of aggregated counts.</span>
 
 <span class="sd">    Parameters</span>
@@ -574,7 +573,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="AggregatedVariogram.calculate_avg_inblock_semivariance"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_inblock_semivariance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`. The average inblock</span>
 <span class="sd">        semivariance is calculated as:</span>
 
@@ -611,7 +610,7 @@
         <span class="k">return</span> <span class="n">avg_inblock_semivariance</span></div>
 
 <div class="viewcode-block" id="AggregatedVariogram.calculate_avg_semivariance_between_blocks"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_semivariance_between_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function calculates semivariance between areas based on their division into smaller blocks. It is</span>
 <span class="sd">        :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.</span>
 
@@ -667,7 +666,7 @@
                    <span class="n">semivariance_between_point_supports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">experimental_block_variogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">theoretical_block_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method regularizes point support model. Procedure is described in [1].</span>
 
 <span class="sd">        Parameters</span>
@@ -747,7 +746,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span></div>
 
 <div class="viewcode-block" id="AggregatedVariogram.regularize_variogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize_variogram">[docs]</a>    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function regularizes semivariograms.</span>
 
 <span class="sd">        Returns</span>
@@ -785,7 +784,7 @@
         <span class="k">return</span> <span class="n">reg_variogram</span></div>
 
 <div class="viewcode-block" id="AggregatedVariogram.show_semivariograms"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots:</span>
 
 <span class="sd">        - experimental variogram,</span>
@@ -824,7 +823,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_fit_theoretical_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method automatically fits experimental curve into WEIGHTED theoretical model if it wasn&#39;t provided as a</span>
 <span class="sd">        parameter in regularize() method.</span>
 
@@ -844,7 +843,7 @@
         <span class="k">return</span> <span class="n">theoretical_model</span>
 
     <span class="k">def</span> <span class="nf">_get_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method gets experimental variogram from aggregated data if None is given in the regularize method.</span>
 
 <span class="sd">        Returns</span>
@@ -880,7 +879,7 @@
                <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;closest&#39;</span><span class="p">,</span>
                <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                <span class="n">log_process</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function is an alias for ``AggregatedVariogram`` class and performs semivariogram regularization. Function returns</span>
 <span class="sd">    regularized variogram.</span>
 
@@ -1062,7 +1061,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
 </p>
 
   </div>

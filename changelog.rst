@@ -6,14 +6,29 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2023-02-XX
+2023-02-09
 ----------
 
 **version 0.3.7**
 
 * (enhancement) added logging to Poisson Kriging ATP process,
-* (enhancement) added logging to Simple Kriging process,
-*
+* (test) added functional test for `smooth_blocks` function,
+* (debug) too broad exception in `download_air_quality_poland` is narrowed to `KeyError`,
+* (enhancement) log points that cannot be assigned to any area in `PointSupport` class,
+* (enhancement) `transform_ps_to_dict()` function takes custom parameters for lon, lat, value and index,
+* (test) `check_limits()` function tests,
+* (test) plotting function of the `VariogramCloud()` class is tested and slightly changed to return `True` if everything has worked fine,
+* (tutorials) new tutorial about `ExperimentalVariogram` and `VariogramCloud` classes,
+* (test) new tests for `calculate_average_semivariance()` function from `block` module,
+* (enhancement) function `inblock_semivariance` has been optimized,
+* (docs) updated `__init__.py` of `variogram.theoretical` module,
+* (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
+* (enhancement) added directional kriging for ATA and ATP Poisson Kriging,
+* (debug) warning for directional kriging functions,
+* (enhancement) initialization of `KrigingObject` dataclass,
+* (ci/cd) added new workflow tests for MacOS and Ubuntu,
+* (enhancement) added logging to Simple Kriging process.
+
 
 2023-01-16
 ----------

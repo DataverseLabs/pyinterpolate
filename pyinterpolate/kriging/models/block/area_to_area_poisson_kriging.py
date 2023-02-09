@@ -7,6 +7,7 @@ Authors
 
 """
 import logging
+import warnings
 from typing import Dict, Union
 
 import geopandas as gpd
@@ -14,24 +15,25 @@ import numpy as np
 import pandas as pd
 
 from pyinterpolate.kriging.models.block.weight import weights_array, WeightedBlock2BlockSemivariance
+from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
-from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas,\
+from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas, \
     get_aggregated_point_support_values, get_distances_within_unknown
 from pyinterpolate.processing.transform.transform import get_areal_values_from_agg, transform_ps_to_dict, sem_to_cov
 from pyinterpolate.variogram import TheoreticalVariogram
 
 
 def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
-                        blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
-                        point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
-                        unknown_block: np.ndarray,
-                        unknown_block_point_support: np.ndarray,
-                        number_of_neighbors: int,
-                        raise_when_negative_prediction=True,
-                        raise_when_negative_error=True,
-                        log_process=True):
+                    blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
+                    point_support: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
+                    unknown_block: np.ndarray,
+                    unknown_block_point_support: np.ndarray,
+                    number_of_neighbors: int,
+                    raise_when_negative_prediction=True,
+                    raise_when_negative_error=True,
+                    log_process=True):
     """
-    Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging
+    Function predicts areal value in an unknown location based on the area-to-area Poisson Kriging
 
     Parameters
     ----------
@@ -80,10 +82,19 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     ValueError
         Prediction or prediction error are negative.
 
+    Warns
+    -----
+    ExperimentalFeatureWarning
+        Directional Kriging is in early-phase and may contain bugs.
+
     """
+    # Warnings area
+    if semivariogram_model.direction is not None:
+        exp_warning_msg = 'Directional Poisson Kriging is an experimental feature. Use it at your own responsibility!'
+        warnings.warn(ExperimentalFeatureWarning(exp_warning_msg).__str__())
+
     # Prepare Kriging Data
     # {known block id: [(unknown x, unknown y), [unknown val, known val, distance between points]]}
-
     # Transform point support to dict
     if isinstance(point_support, Dict):
         dps = point_support
@@ -101,7 +112,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         u_point_support=unknown_block_point_support,
         k_point_support_dict=dps,
         nn=number_of_neighbors,
-        max_range=semivariogram_model.rang
+        max_range=semivariogram_model.rang,
+        direction=semivariogram_model.direction,
+        angular_tolerance=5
     )
 
     b2b_semivariance = WeightedBlock2BlockSemivariance(semivariance_model=semivariogram_model)
@@ -171,9 +184,8 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
             raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or semivariogram model type.')
 
-    # TODO test - come back here when covariance terms are used
-    # TODO - probably it should be without subtraction - those are semivariance terms, not covariances.
     sigmasq = np.matmul(w.T, k_ones)
+
 
     distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({

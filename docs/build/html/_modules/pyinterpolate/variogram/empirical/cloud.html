@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.6 documentation</title>
   
   
   
@@ -99,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
   
 </a>
     
@@ -166,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -304,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -387,12 +401,13 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_points_within_ellipse</span><span class="p">,</span> <span class="n">select_values_in_range</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.statistics</span> <span class="kn">import</span> <span class="n">remove_outliers</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_direction</span><span class="p">,</span> <span class="n">validate_points</span><span class="p">,</span> <span class="n">validate_tolerance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.plots</span> <span class="kn">import</span> <span class="n">build_swarmplot_input</span>
 
 
 <span class="k">def</span> <span class="nf">omnidirectional_point_cloud</span><span class="p">(</span><span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                                 <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged omnidirectional point cloud.</span>
 
 <span class="sd">    Parameters</span>
@@ -437,7 +452,7 @@
                             <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                             <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                             <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point</span>
 <span class="sd">        against other point within range specified by step_size parameter.</span>
 
@@ -514,7 +529,7 @@
                                 <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point</span>
 <span class="sd">        against other point within range specified by step_size parameter.</span>
 
@@ -579,7 +594,7 @@
 
 
 <div class="viewcode-block" id="VariogramCloud"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud">[docs]</a><span class="k">class</span> <span class="nc">VariogramCloud</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates Variogram Point Cloud and presents it in a scatterplot, boxplot and violinplot.</span>
 
 <span class="sd">    Parameters</span>
@@ -725,7 +740,7 @@
                        <span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="VariogramCloud.calculate_experimental_variogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.calculate_experimental_variogram">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method transforms the experimental point cloud into the experimental variogram.</span>
 
 <span class="sd">        Raises</span>
@@ -759,7 +774,7 @@
         <span class="k">return</span> <span class="n">experimental_semivariogram</span></div>
 
 <div class="viewcode-block" id="VariogramCloud.describe"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates basic statistcs of a data: count (point pairs number), average semivariance,</span>
 <span class="sd">        standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.</span>
 
@@ -821,13 +836,18 @@
         <span class="k">return</span> <span class="n">statistics</span></div>
 
 <div class="viewcode-block" id="VariogramCloud.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots variogram point cloud.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        kind : string, default=&#39;scatter&#39;</span>
 <span class="sd">               available plot types: &#39;scatter&#39;, &#39;box&#39;, &#39;violin&#39;</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : bool</span>
+<span class="sd">            ``True`` if Figure was plotted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -842,7 +862,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_violin_plot</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Plot kind </span><span class="si">{</span><span class="n">kind</span><span class="si">}</span><span class="s1"> is not available. Use &quot;scatter&quot;, &quot;box&quot; or &quot;violin&quot; instead.&#39;</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
 
 <div class="viewcode-block" id="VariogramCloud.remove_outliers"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.remove_outliers">[docs]</a>    <span class="k">def</span> <span class="nf">remove_outliers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
                         <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span>
@@ -850,7 +872,7 @@
                         <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                         <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                         <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -926,12 +948,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">__dist_plots</span><span class="p">(</span><span class="n">title_box</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_scatter_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prep_scatterplot_data</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
         <span class="n">xs</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">ys</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span>
-                    <span class="n">y</span><span class="o">=</span><span class="n">ys</span><span class="p">)</span>
+                    <span class="n">y</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span>
+                    <span class="n">s</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Variogram Point Cloud per lag.&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
@@ -1001,14 +1025,11 @@
         <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">x_tick_labels</span>
 
     <span class="k">def</span> <span class="nf">__prep_scatterplot_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-        <span class="n">ds</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">vals_l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-            <span class="n">idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">vals_l</span><span class="p">)</span> <span class="o">*</span> <span class="n">idx</span>
-            <span class="n">elems</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">idxs</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">elems</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">build_swarmplot_input</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="p">,</span>
+                                   <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ds</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">__str_empty</span><span class="p">():</span>

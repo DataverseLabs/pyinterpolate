@@ -28,3 +28,15 @@ class LeastSquaresApproximationWarning(Warning):
 
     def __str__(self):
         return repr(self.message)
+
+
+class ExperimentalFeatureWarning(Warning):
+    """
+    Class describes experimental feature warnings.
+    """
+
+    def __init__(self, msg: str):
+        self.msg = msg
+
+    def __str__(self):
+        return repr(self.msg)

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Block - Poisson Kriging &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>Block - Poisson Kriging &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -102,7 +102,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
   
 </a>
     
@@ -169,6 +169,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -302,6 +309,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -465,14 +479,20 @@ that can lead to singular or near-singular matrix creation.</p>
 </dd>
 </dl>
 </dd>
+<dt class="field-even">Warns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ExperimentalFeatureWarning</dt><dd><p>Directional Kriging is in early-phase and may contain bugs.</p>
+</dd>
+</dl>
+</dd>
 </dl>
 </dd></dl>
 
 <hr class="docutils" />
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">area_to_area_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_area_poisson_kriging.html#area_to_area_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function predicts areal value in a unknown location based on the area-to-area Poisson Kriging</p>
+<span class="sig-name descname"><span class="pre">area_to_area_pk</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_block_point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_process</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/models/block/area_to_area_poisson_kriging.html#area_to_area_pk"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function predicts areal value in an unknown location based on the area-to-area Poisson Kriging</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -508,6 +528,8 @@ Geometry column with polygons is not used.</p></li>
 </dd>
 <dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
 </dd>
+<dt><strong>log_process</strong><span class="classifier">bool, default=True</span></dt><dd><p>Log process info and debug info.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -519,6 +541,12 @@ Geometry column with polygons is not used.</p></li>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>ValueError</dt><dd><p>Prediction or prediction error are negative.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Warns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ExperimentalFeatureWarning</dt><dd><p>Directional Kriging is in early-phase and may contain bugs.</p>
 </dd>
 </dl>
 </dd>
@@ -581,6 +609,12 @@ the theoretical variogram’s range.</p>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>ValueError</dt><dd><p>Prediction or prediction error are negative.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Warns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ExperimentalFeatureWarning</dt><dd><p>Directional Kriging is in early-phase and may contain bugs.</p>
 </dd>
 </dl>
 </dd>

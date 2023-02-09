@@ -8,7 +8,7 @@ from pyinterpolate.variogram.empirical.experimental_variogram import Experimenta
 from pyinterpolate import TheoreticalVariogram
 
 # Read data
-dem = read_txt('../samples/point_data/txt/pl_dem_epsg2180.txt')
+dem = read_txt('../../samples/point_data/txt/pl_dem_epsg2180.txt')
 
 
 def create_model_validation_sets(dataset: np.array, frac=0.1):

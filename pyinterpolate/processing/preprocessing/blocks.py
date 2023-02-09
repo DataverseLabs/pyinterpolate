@@ -4,11 +4,8 @@ Core data structures for block interpolation.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
-
-TODO
-----
-* PointSupport | Fn skips points that are not assigned to any area, maybe log it somewhere...
 """
+import logging
 from typing import Union
 
 import geopandas as gpd
@@ -212,10 +209,33 @@ class Blocks:
 class PointSupport:
     """Class prepares the point support data in relation to block dataset.
 
+    Parameters
+    ----------
+    log_not_used_points : bool, default=False
+        Should dropped points be logged?
+
     Attributes
     ----------
     point_support : gpd.GeoDataFrame
         Dataset with point support values and indexes of blocks (where points fall into).
+
+    value_column : str
+        The value column name
+
+    geometry_column : str
+        The geometry column name.
+
+    block_index_column : str
+        The area index.
+
+    x_col : str, default = "x_col"
+        Longitude column name.
+
+    y_col : str, default = "y_col"
+        Latitude column name.
+
+    log_dropped : bool
+        See log_not_used_points parameter.
 
     Methods
     -------
@@ -264,13 +284,14 @@ class PointSupport:
     ...                                        blocks_index_col=POLYGON_ID)
     """
 
-    def __init__(self):
+    def __init__(self, log_not_used_points=False):
         self.point_support = None
         self.value_column = None
         self.geometry_column = None
         self.block_index_column = None
         self.x_col = 'x_col'
         self.y_col = 'y_col'
+        self.log_dropped = log_not_used_points
 
     def from_files(self,
                    point_support_data_file: str,
@@ -348,7 +369,6 @@ class PointSupport:
         ----------
         point_support_dataframe : GeoDataFrame or GeoSeries
 
-
         blocks_dataframe : GeoDataFrame
             Block data with block indexes and geometries.
 
@@ -383,6 +403,16 @@ class PointSupport:
 
         # Merge data
         joined = gpd.sjoin(point_support, blocks, how='left')
+
+        # Check which points weren't joined
+        if self.log_dropped:
+            is_na = joined.isna().any(axis=1)
+            not_joined_points = joined[is_na]['geometry']
+            if len(not_joined_points) > 0:
+                logging.info('POINT SUPPORT : Dropped points:')
+                for pt in not_joined_points:
+                    msg = '({}, {})'.format(pt.x, pt.y)
+                    logging.info(msg)
 
         # Clean data
         joined.dropna(inplace=True)
