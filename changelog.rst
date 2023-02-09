@@ -6,7 +6,7 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2023-02-XX
+2023-02-09
 ----------
 
 **version 0.3.7**
@@ -23,7 +23,7 @@ Changes by date
 * (enhancement) function `inblock_semivariance` has been optimized,
 * (docs) updated `__init__.py` of `variogram.theoretical` module,
 * (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
-* (enahncement) added directional kriging for ATA and ATP Poisson Kriging,
+* (enhancement) added directional kriging for ATA and ATP Poisson Kriging,
 * (debug) warning for directional kriging functions,
 * (enhancement) initialization of `KrigingObject` dataclass.
 
