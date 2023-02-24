@@ -36,14 +36,14 @@ clusterer.fit(centroids)
 lbls = clusterer.labels_
 no_of_labels = len(np.unique(lbls))
 
-color = cm.get_cmap('Pastel1')
+color = cm.get_cmap('Wistia')
 clist = [color(i) for i in range(color.N)]
-cmap = LinearSegmentedColormap.from_list('Custom cmap', clist, color.N)
+cmap = LinearSegmentedColormap.from_list('Clusters cmap', clist, color.N)
 bounds = np.linspace(0, no_of_labels, no_of_labels+1)
 norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 
 fig, ax = plt.subplots(1,1)
-scat = ax.scatter(xss, yss, c=lbls, cmap=cmap, norm=norm)
+scat = ax.scatter(xss, yss, c=lbls, cmap=cmap, norm=norm, edgecolor='black')
 cb = plt.colorbar(scat, spacing='proportional', ticks=bounds)
 cb.set_label('Labels')
 plt.show()
