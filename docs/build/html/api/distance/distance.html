@@ -368,6 +368,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../datatypes/core.html">Core data structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Distance calculations</a></li>
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../variogram/experimental/experimental.html">Experimental</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../variogram/theoretical/theoretical.html">Theoretical</a></li>
@@ -480,6 +481,167 @@ other set of points <code class="docutils literal notranslate"><span class="pre"
 </dd></dl>
 
 </section>
+<section id="cluster-detection-and-cleaning">
+<h1>Cluster detection and cleaning<a class="headerlink" href="#cluster-detection-and-cleaning" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">aggregate_cluster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#aggregate_cluster"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function aggregates points in a cluster into a single point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy ndarray</span></dt><dd><p>Points(x, y, value)</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">numpy ndarray</span></dt><dd><p>Cluster labels (integers). The length of this array must be equal to the length of <code class="docutils literal notranslate"><span class="pre">ds</span></code> points.</p>
+</dd>
+<dt><strong>cluster</strong><span class="classifier">int</span></dt><dd><p>Number of cluster to aggregate.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default=’mean’</span></dt><dd><p>The method of aggregation, available methods are:
+* <code class="docutils literal notranslate"><span class="pre">mean</span></code>,
+* <code class="docutils literal notranslate"><span class="pre">median</span></code>,
+* <code class="docutils literal notranslate"><span class="pre">sum</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>declustered</strong><span class="classifier">numpy ndarray</span></dt><dd><p>Declustered list of points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ClusterDetector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#ClusterDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class detects spatial clusters in data and allows to remove those from a dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>verbose</strong><span class="classifier">bool, default = True</span></dt><dd><p>Should print process information?</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>RuntimeError</dt><dd><p>Model is not fitted and user tries to use <code class="docutils literal notranslate"><span class="pre">aggregate_clusters()</span></code>, <code class="docutils literal notranslate"><span class="pre">get_labels()</span></code> or <code class="docutils literal notranslate"><span class="pre">show_clusters()</span></code>
+methods.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Pyinterpolate uses HDBSCAN package: <a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/index.html">https://hdbscan.readthedocs.io/en/latest/index.html</a></p>
+<p>[1] L. McInnes, J. Healy, S. Astels, hdbscan: Hierarchical density based clustering.
+In: Journal of Open Source Software, The Open Journal, volume 2, number 11. 2017</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy ndarray</span></dt><dd><p>Input points (x, y, value)</p>
+</dd>
+<dt><strong>aggregated</strong><span class="classifier">numpy ndarray, default=None</span></dt><dd><p>Transformed (aggregated) points.</p>
+</dd>
+<dt><strong>clusterer</strong><span class="classifier">HDBSCAN</span></dt><dd><p>Clustering class derived from hdbscan package (see References).</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default=True</span></dt><dd><p>Print process steps.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>aggregate_clusters()</strong></p></td>
+<td><p>Clean and aggregate clustered data.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>fit_clusters()</strong></p></td>
+<td><p>Train and fit HDBSCAN model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_labels()</strong></p></td>
+<td><p>Gets cluster label of each point.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show_clusters()</strong></p></td>
+<td><p>Shows scatterplot with clustered points and their labels.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">aggregate_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cluster_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_aggregated</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#ClusterDetector.aggregate_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method aggregates clusters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cluster_labels</strong><span class="classifier">int or List</span></dt><dd><p>Cluster label or multiple labels to transform dataset.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default=’mean’</span></dt><dd><p>The method of aggregation, available methods are:
+* <code class="docutils literal notranslate"><span class="pre">mean</span></code>,
+* <code class="docutils literal notranslate"><span class="pre">median</span></code>,
+* <code class="docutils literal notranslate"><span class="pre">sum</span></code></p>
+</dd>
+<dt><strong>store_aggregated</strong><span class="classifier">bool</span></dt><dd><p>Should class store aggregated and declustered dataset.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>aggregated</strong><span class="classifier">numpy ndarray</span></dt><dd><p>Transformed (declustered) dataset.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit_clusters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_cluster_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'leaf'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#ClusterDetector.fit_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method detects clusters in a data. It uses DBSCAN algorithm described here:
+<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/index.html">https://hdbscan.readthedocs.io/en/latest/index.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>min_cluster_size</strong><span class="classifier">int, default=5</span></dt><dd><p>The minimum size of clusters.</p>
+</dd>
+<dt><strong>min_samples</strong><span class="classifier">int, optional</span></dt><dd><p>The number of samples in a neighbourhood for a point to be considered a core point.</p>
+</dd>
+<dt><strong>max_cluster_size</strong><span class="classifier">int, default=0</span></dt><dd><p>The maximum number of points within a cluster,</p>
+</dd>
+<dt><strong>cluster_selection_epsilon</strong><span class="classifier">float, default=0, range(0, 1)</span></dt><dd><p>A distance threshold. Clusters below this value will be merged.</p>
+</dd>
+<dt><strong>cluster_selection_method</strong><span class="classifier">str, default=”leaf”</span></dt><dd><p>The method used to select clusters from the condensed tree. Available methods: “eof” or “leaf”</p>
+</dd>
+<dt><strong>kwargs</strong><span class="classifier">Any</span></dt><dd><p>Other parameters that could be passed into clusterer. The full list is available here:
+<a class="reference external" href="https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan">https://hdbscan.readthedocs.io/en/latest/api.html#hdbscan</a></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_labels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#ClusterDetector.get_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method returns cluster labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">numpy ndarray</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show_clusters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/clusters.html#ClusterDetector.show_clusters"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method shows clusters in a data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 
 
             </article>
@@ -512,6 +674,28 @@ other set of points <code class="docutils literal notranslate"><span class="pre"
           
             <div class="bd-sidebar-secondary bd-toc">
               
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Distance calculations
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cluster-detection-and-cleaning">
+   Cluster detection and cleaning
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
 <div class="toc-item">
   
 <div id="searchbox"></div>

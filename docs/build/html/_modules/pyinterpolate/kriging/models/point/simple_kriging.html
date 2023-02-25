@@ -387,14 +387,12 @@
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
 
-<span class="sd">TODO</span>
-<span class="sd">----</span>
-<span class="sd">* log k, predicted, dataset</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Python core</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="c1"># Core calculation and data visualization</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># Pyinterpolate</span>
@@ -457,13 +455,14 @@
 <span class="sd">    RunetimeError</span>
 <span class="sd">        Singularity matrix in a Kriging system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SIMPLE KRIGING | Operation starts&quot;</span><span class="p">)</span>
     <span class="n">k</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">theoretical_model</span><span class="p">,</span>
                                             <span class="n">known_locations</span><span class="p">,</span>
                                             <span class="n">unknown_location</span><span class="p">,</span>
                                             <span class="n">neighbors_range</span><span class="p">,</span>
                                             <span class="n">no_neighbors</span><span class="p">,</span>
                                             <span class="n">use_all_neighbors_in_range</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SIMPLE KRIGING | Weights are prepared&quot;</span><span class="p">)</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">output_weights</span> <span class="o">=</span> <span class="n">solve_weights</span><span class="p">(</span><span class="n">predicted</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">allow_approximate_solutions</span><span class="p">)</span>
@@ -479,8 +478,10 @@
     <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">sigma</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SIMPLE KRIGING | Variance error lower than zero, NaN is returned&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;SIMPLE KRIGING | Process ends&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span></div>
 </pre></div>
 

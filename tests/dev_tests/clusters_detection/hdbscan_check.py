@@ -3,7 +3,6 @@ from matplotlib.colors import LinearSegmentedColormap
 
 from pyinterpolate import Blocks
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import cm
 import matplotlib as mpl
 
 import hdbscan
@@ -28,7 +27,11 @@ yss = centroids[:, 1]
 
 # Detect clusters and show those
 clusterer = hdbscan.HDBSCAN(
-
+    min_cluster_size=5,
+    max_cluster_size=25,
+    cluster_selection_epsilon=0.2,
+    allow_single_cluster=False,
+    cluster_selection_method='leaf'
 )
 
 clusterer.fit(centroids)
@@ -36,7 +39,7 @@ clusterer.fit(centroids)
 lbls = clusterer.labels_
 no_of_labels = len(np.unique(lbls))
 
-color = cm.get_cmap('Wistia')
+color = mpl.colormaps['summer']
 clist = [color(i) for i in range(color.N)]
 cmap = LinearSegmentedColormap.from_list('Clusters cmap', clist, color.N)
 bounds = np.linspace(0, no_of_labels, no_of_labels+1)
@@ -46,7 +49,8 @@ fig, ax = plt.subplots(1,1)
 scat = ax.scatter(xss, yss, c=lbls, cmap=cmap, norm=norm, edgecolor='black')
 cb = plt.colorbar(scat, spacing='proportional', ticks=bounds)
 cb.set_label('Labels')
+
+for i, txt in enumerate(lbls):
+    ax.annotate(txt, (xss[i], yss[i]))
+
 plt.show()
-
-
-

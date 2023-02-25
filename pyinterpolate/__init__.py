@@ -1,5 +1,6 @@
 # Distance
 from pyinterpolate.distance import calc_point_to_point_distance, calc_block_to_block_distance
+from pyinterpolate.distance import aggregate_cluster, ClusterDetector
 
 # IDW
 from pyinterpolate.idw import inverse_distance_weighting
