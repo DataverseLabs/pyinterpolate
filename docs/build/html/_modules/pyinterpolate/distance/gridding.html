@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.distance.gridding &#8212; Pyinterpolate 0.3.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/distance/gridding';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <h1>Source code for pyinterpolate.distance.gridding</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shapely.geometry</span>
+
+
+<span class="k">def</span> <span class="nf">_define_box_step</span><span class="p">(</span><span class="n">lonlimit</span><span class="p">,</span> <span class="n">latlimit</span><span class="p">,</span> <span class="n">no_of_steps</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">lonlimit</span> <span class="o">&lt;</span> <span class="n">latlimit</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">lonlimit</span> <span class="o">/</span> <span class="p">(</span><span class="n">no_of_steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">latlimit</span> <span class="o">/</span> <span class="p">(</span><span class="n">no_of_steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">step</span>
+
+
+<span class="k">def</span> <span class="nf">_define_hex_step</span><span class="p">(</span><span class="n">lonlimit</span><span class="p">,</span> <span class="n">latlimit</span><span class="p">,</span> <span class="n">no_of_steps</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">lonlimit</span> <span class="o">&lt;</span> <span class="n">latlimit</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">lonlimit</span> <span class="o">/</span> <span class="p">(</span><span class="n">no_of_steps</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">latlimit</span> <span class="o">/</span> <span class="p">(</span><span class="n">no_of_steps</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">step</span>
+
+
+<span class="k">def</span> <span class="nf">gen_hex_cells</span><span class="p">(</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function creates hexagonal grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    min_lon : float</span>
+
+<span class="sd">    max_lon : float</span>
+
+<span class="sd">    min_lat : float</span>
+
+<span class="sd">    max_lat : float</span>
+
+<span class="sd">    step : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    grid : gpd.GeoSeries</span>
+<span class="sd">        Grid polygons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">step</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">3</span>
+
+    <span class="n">curr_y</span> <span class="o">=</span> <span class="n">min_lat</span>
+    <span class="k">while</span> <span class="n">curr_y</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">max_lat</span> <span class="o">+</span> <span class="n">step</span><span class="p">):</span>
+        <span class="n">xdirection</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">curr_x</span> <span class="o">=</span> <span class="n">min_lon</span>
+        <span class="n">curr_py</span> <span class="o">=</span> <span class="n">curr_y</span>
+        <span class="k">while</span> <span class="n">curr_x</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">max_lon</span> <span class="o">+</span> <span class="n">step</span><span class="p">):</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="n">_gen_hexagon</span><span class="p">(</span><span class="n">curr_x</span><span class="p">,</span> <span class="n">curr_py</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span>
+
+            <span class="n">grid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">xdirection</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">curr_x</span> <span class="o">=</span> <span class="n">curr_x</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+                <span class="n">curr_py</span> <span class="o">=</span> <span class="n">curr_py</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                <span class="n">xdirection</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr_x</span> <span class="o">=</span> <span class="n">curr_x</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+                <span class="n">curr_py</span> <span class="o">=</span> <span class="n">curr_py</span> <span class="o">-</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+                <span class="n">xdirection</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="n">curr_y</span> <span class="o">=</span> <span class="n">curr_y</span> <span class="o">+</span> <span class="n">step</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">grid</span>
+
+
+<span class="k">def</span> <span class="nf">gen_square_cells</span><span class="p">(</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function creates box-polygons grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    min_lon : float</span>
+
+<span class="sd">    max_lon : float</span>
+
+<span class="sd">    min_lat : float</span>
+
+<span class="sd">    max_lat : float</span>
+
+<span class="sd">    step : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    grid : gpd.GeoSeries</span>
+<span class="sd">        Grid polygons.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">llon_0</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lon</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">llat_0</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lat</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">step</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">,</span> <span class="n">step</span><span class="p">):</span>
+            <span class="n">llon_1</span> <span class="o">=</span> <span class="n">llon_0</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="n">llat_1</span> <span class="o">=</span> <span class="n">llat_0</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">shapely</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">llon_0</span><span class="p">,</span> <span class="n">llat_0</span><span class="p">,</span> <span class="n">llon_1</span><span class="p">,</span> <span class="n">llat_1</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">grid</span>
+
+
+<span class="k">def</span> <span class="nf">_gen_hexagon</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">x</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">a</span><span class="p">),</span>
+            <span class="n">y</span> <span class="o">+</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">a</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">points</span>
+
+
+<div class="viewcode-block" id="create_grid"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.create_grid">[docs]</a><span class="k">def</span> <span class="nf">create_grid</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">],</span>
+                <span class="n">min_number_of_cells</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">grid_type</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function creates grid based on a set of points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : Union[np.ndarray, List, gpd.GeoSeries]</span>
+<span class="sd">        Data to be transformed, point coordinates [x, y] &lt;-&gt; [lon, lat] or GeoSeries with Point geometry.</span>
+
+<span class="sd">    min_number_of_cells : int</span>
+<span class="sd">        Expected number of cells in the smaller dimension.</span>
+
+<span class="sd">    grid_type : str, default = &quot;square&quot;</span>
+<span class="sd">        Available types: ``box``, ``hex``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    grid : gpd.GeoSeries</span>
+<span class="sd">        Empty grid that can be used to aggregate points. It is GeoSeries of Polygons (squares or hexes).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">min_number_of_cells</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">min_number_of_cells</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">List</span><span class="p">):</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+    <span class="c1"># Define thresholds</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">min_lon</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">max_lon</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">min_lat</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="n">max_lat</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">min_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">max_lat</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">total_bounds</span>
+
+    <span class="c1"># Define limits</span>
+    <span class="n">lon_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">max_lon</span> <span class="o">-</span> <span class="n">min_lon</span><span class="p">)</span>
+    <span class="n">lat_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">max_lat</span> <span class="o">-</span> <span class="n">min_lat</span><span class="p">)</span>
+
+    <span class="c1"># Build cells</span>
+    <span class="k">if</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;box&#39;</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">_define_box_step</span><span class="p">(</span><span class="n">lon_abs</span><span class="p">,</span> <span class="n">lat_abs</span><span class="p">,</span> <span class="n">min_number_of_cells</span><span class="p">)</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">gen_square_cells</span><span class="p">(</span>
+            <span class="n">min_lon</span><span class="o">=</span><span class="n">min_lon</span><span class="p">,</span>
+            <span class="n">max_lon</span><span class="o">=</span><span class="n">max_lon</span><span class="p">,</span>
+            <span class="n">min_lat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span>
+            <span class="n">max_lat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="n">step</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">grid_type</span> <span class="o">==</span> <span class="s1">&#39;hex&#39;</span><span class="p">:</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="n">_define_hex_step</span><span class="p">(</span><span class="n">lon_abs</span><span class="p">,</span> <span class="n">lat_abs</span><span class="p">,</span> <span class="n">min_number_of_cells</span><span class="p">)</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">gen_hex_cells</span><span class="p">(</span>
+            <span class="n">min_lon</span><span class="o">=</span><span class="n">min_lon</span><span class="p">,</span>
+            <span class="n">max_lon</span><span class="o">=</span><span class="n">max_lon</span><span class="p">,</span>
+            <span class="n">min_lat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span>
+            <span class="n">max_lat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="n">step</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Unrecognized grid type, available types: &quot;square&quot; or &quot;hex&quot;.&#39;</span><span class="p">)</span>
+
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">set_geometry</span><span class="p">(</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">):</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">crs</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">crs</span>
+
+    <span class="k">return</span> <span class="n">grid</span></div>
+
+
+<div class="viewcode-block" id="points_to_grid"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.points_to_grid">[docs]</a><span class="k">def</span> <span class="nf">points_to_grid</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                   <span class="n">grid</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                   <span class="n">fillna</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function aggregates points over a specified grid.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : geopandas GeoDataFrame</span>
+
+<span class="sd">    grid : geopandas GeoSeries</span>
+
+<span class="sd">    fillna : Any, optional</span>
+<span class="sd">        The value to fill NaN&#39;s, if None given then this step is skipped.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    aggregated : geopandas GeoDataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">joined</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="s1">&#39;within&#39;</span><span class="p">)</span>
+    <span class="n">grouped</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;index_right&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">aggregated</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">grouped</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fillna</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">aggregated</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">fillna</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">aggregated</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+    <span class="n">mpl</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;TkAgg&#39;</span><span class="p">)</span>  <span class="c1"># !IMPORTANT</span>
+    <span class="n">POINTS</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">])</span>
+
+    <span class="n">newgrid</span> <span class="o">=</span> <span class="n">create_grid</span><span class="p">(</span>
+        <span class="n">POINTS</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;hex&#39;</span>
+    <span class="p">)</span>
+    <span class="n">newgrid</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;abc&#39;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">POINTS</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">set_geometry</span><span class="p">(</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">gridded</span> <span class="o">=</span> <span class="n">points_to_grid</span><span class="p">(</span>
+        <span class="n">points</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+        <span class="n">grid</span><span class="o">=</span><span class="n">newgrid</span><span class="p">,</span>
+        <span class="n">fillna</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+    <span class="n">gridded</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, Szymon Moliński.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

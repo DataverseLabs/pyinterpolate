@@ -6,6 +6,17 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-03-XX
+----------
+
+**version 0.4**
+
+* (feature) Cluster detection with DBSCAN,
+* (feature) Cluster aggregation,
+* (feature) Gridding algorithm,
+* (feature) Grid aggregation,
+* (feature) ...
+
 2023-02-09
 ----------
 

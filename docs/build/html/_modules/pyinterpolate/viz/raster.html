@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -37,6 +37,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -98,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
   
 </a>
     
@@ -165,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -303,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -382,7 +397,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point_kriging</span> <span class="kn">import</span> <span class="n">kriging</span>
 
 
-<span class="k">def</span> <span class="nf">_set_dims</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">dmax</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">set_dimensions</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">dmax</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function sets dimensions of the output array.</span>
 
@@ -490,7 +505,7 @@
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-    <span class="n">x_coords</span><span class="p">,</span> <span class="n">y_coords</span><span class="p">,</span> <span class="n">props</span> <span class="o">=</span> <span class="n">_set_dims</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="n">x_coords</span><span class="p">,</span> <span class="n">y_coords</span><span class="p">,</span> <span class="n">props</span> <span class="o">=</span> <span class="n">set_dimensions</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dim</span><span class="p">)</span>
 
     <span class="c1"># Calculate semivariance if not provided</span>
 
@@ -524,8 +539,7 @@
                 <span class="n">theoretical_model</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span>
                 <span class="n">points</span><span class="o">=</span><span class="n">interpolation_points</span><span class="p">,</span>
                 <span class="n">how</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span>
-                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-                <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">)</span>
 
     <span class="n">kriged_matrix</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
     <span class="n">kriged_errors</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
@@ -619,7 +633,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

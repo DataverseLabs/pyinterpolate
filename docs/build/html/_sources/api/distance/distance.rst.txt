@@ -20,3 +20,12 @@ Cluster detection and cleaning
 .. autoclass:: pyinterpolate.ClusterDetector
    :members:
    :noindex:
+
+Gridding
+========
+
+.. autofunction:: pyinterpolate.create_grid
+   :noindex:
+
+.. autofunction:: pyinterpolate.points_to_grid
+   :noindex:
