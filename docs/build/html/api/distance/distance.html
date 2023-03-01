@@ -369,6 +369,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Distance calculations</a></li>
 
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../variogram/experimental/experimental.html">Experimental</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../variogram/theoretical/theoretical.html">Theoretical</a></li>
@@ -642,6 +643,54 @@ In: Journal of Open Source Software, The Open Journal, volume 2, number 11. 2017
 </dd></dl>
 
 </section>
+<section id="gridding">
+<h1>Gridding<a class="headerlink" href="#gridding" title="Permalink to this heading">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">create_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_number_of_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'box'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/gridding.html#create_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function creates grid based on a set of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">Union[np.ndarray, List, gpd.GeoSeries]</span></dt><dd><p>Data to be transformed, point coordinates [x, y] &lt;-&gt; [lon, lat] or GeoSeries with Point geometry.</p>
+</dd>
+<dt><strong>min_number_of_cells</strong><span class="classifier">int</span></dt><dd><p>Expected number of cells in the smaller dimension.</p>
+</dd>
+<dt><strong>grid_type</strong><span class="classifier">str, default = “square”</span></dt><dd><p>Available types: <code class="docutils literal notranslate"><span class="pre">box</span></code>, <code class="docutils literal notranslate"><span class="pre">hex</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>grid</strong><span class="classifier">gpd.GeoSeries</span></dt><dd><p>Empty grid that can be used to aggregate points. It is GeoSeries of Polygons (squares or hexes).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">points_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/gridding.html#points_to_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function aggregates points over a specified grid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>points</strong><span class="classifier">geopandas GeoDataFrame</span></dt><dd></dd>
+<dt><strong>grid</strong><span class="classifier">geopandas GeoSeries</span></dt><dd></dd>
+<dt><strong>fillna</strong><span class="classifier">Any, optional</span></dt><dd><p>The value to fill NaN’s, if None given then this step is skipped.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>aggregated</strong><span class="classifier">geopandas GeoDataFrame</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 
 
             </article>
@@ -689,6 +738,11 @@ In: Journal of Open Source Software, The Open Journal, volume 2, number 11. 2017
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#cluster-detection-and-cleaning">
    Cluster detection and cleaning
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#gridding">
+   Gridding
   </a>
  </li>
 </ul>
