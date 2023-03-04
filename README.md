@@ -189,7 +189,6 @@ Core requirements and dependencies are:
 * prettytable
 * pandas
 * dask
-* requests
 
 You may check a specific version of requirements in the `setup.cfg` file.
 
@@ -207,6 +206,10 @@ High level overview:
     - [x] `variogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution,
     - [x] `viz` - interpolation of smooth surfaces from points into rasters.
  - [x] `tutorials` - tutorials (Basic, Intermediate and Advanced).
+
+## Datasets
+
+Datasets and scripts to download spatial data from external API's are available in a dedicated package: **[pyinterpolate-datasets](https://pypi.org/project/pyinterpolate-datasets/2023.0.0/)**
 
 ## API documentation
 
