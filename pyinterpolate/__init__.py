@@ -19,8 +19,6 @@ from pyinterpolate.kriging import centroid_poisson_kriging, area_to_area_pk, are
 # Excluded: multi_kriging (BlockToBlockKrigingComparison)
 # PK
 from pyinterpolate.pipelines import BlockFilter, smooth_blocks
-# Data
-from pyinterpolate.pipelines import download_air_quality_poland
 
 # Processing
 from pyinterpolate.processing import Blocks, PointSupport
