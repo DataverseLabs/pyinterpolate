@@ -4,9 +4,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>Data download &#8212; Pyinterpolate 0.3.7 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.validation.cross_validation &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -42,11 +41,9 @@
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/pipelines/data/download';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/validation/cross_validation';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Kriging-based processes" href="../kriging_based/kriging_based_processes.html" />
-    <link rel="prev" title="Pipelines" href="../pipelines.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="docsearch:language" content="en">
   </head>
@@ -147,8 +144,8 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../api.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
                         API
                       </a>
                     </li>
@@ -244,7 +241,7 @@
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
   
   <div class="sidebar-header-items sidebar-primary__section">
@@ -287,8 +284,8 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../api.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
                         API
                       </a>
                     </li>
@@ -358,45 +355,6 @@
   </div>
 
   
-  <div class="sidebar-start-items sidebar-primary__section">
-    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">
-    Section Navigation
-  </p>
-  <div class="bd-toc-item navbar-nav">
-    <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../datatypes/core.html">Core data structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../io/io.html">Input / Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../distance/distance.html">Distance calculations</a></li>
-
-
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/experimental/experimental.html">Experimental</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/theoretical/theoretical.html">Theoretical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/block/block.html">Block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../kriging/kriging.html">Kriging</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../kriging/point/point_kriging.html">Point Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../pipelines.html">Pipelines</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Data download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../viz/viz.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../validation/validation.html">Validation</a></li>
-</ul>
-
-  </div>
-</nav>
-    </div>
-  </div>
-  
 
   
   <div class="sidebar-end-items sidebar-primary__section">
@@ -421,11 +379,110 @@
             
             <article class="bd-article" role="main">
               
-  <section id="data-download">
-<h1>Data download<a class="headerlink" href="#data-download" title="Permalink to this heading">#</a></h1>
-<p>Available datasets are stored in the <strong>pyinterpolate-datasets</strong> package: <a class="reference external" href="https://pypi.org/project/pyinterpolate-datasets/2023.0.0/">https://pypi.org/project/pyinterpolate-datasets/2023.0.0/</a></p>
-</section>
+  <h1>Source code for pyinterpolate.validation.cross_validation</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point_kriging</span> <span class="kn">import</span> <span class="n">kriging</span>
+
+
+<div class="viewcode-block" id="validate_kriging"><a class="viewcode-back" href="../../../api/validation/validation.html#pyinterpolate.validation.cross_validation.validate_kriging">[docs]</a><span class="k">def</span> <span class="nf">validate_kriging</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                     <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
+                     <span class="n">how</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span>
+                     <span class="n">neighbors_range</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">no_neighbors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+                     <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">sk_mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                     <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function performs cross-validation of kriging models.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : numpy array</span>
+<span class="sd">        Known points and their values.</span>
+
+<span class="sd">    theoretical_model : TheoreticalVariogram</span>
+<span class="sd">        Fitted variogram model.</span>
+
+<span class="sd">    how : str, default=&#39;ok&#39;</span>
+<span class="sd">        Select what kind of kriging you want to perform:</span>
+<span class="sd">          * &#39;ok&#39;: ordinary kriging,</span>
+<span class="sd">          * &#39;sk&#39;: simple kriging - if it is set then ``sk_mean`` parameter must be provided.</span>
+
+<span class="sd">    neighbors_range : float, default=None</span>
+<span class="sd">        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from</span>
+<span class="sd">        the ``theoretical_model`` ``rang`` attribute.</span>
+
+<span class="sd">    no_neighbors : int, default = 4</span>
+<span class="sd">        The number of the **n-closest neighbors** used for interpolation.</span>
+
+<span class="sd">    use_all_neighbors_in_range : bool, default = False</span>
+<span class="sd">        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the</span>
+<span class="sd">        ``number_of_neighbors`` parameter then take all of them anyway.</span>
+
+<span class="sd">    sk_mean : float, default=None</span>
+<span class="sd">        The mean value of a process over a study area. Should be know before processing. That&#39;s why Simple</span>
+<span class="sd">        Kriging has a limited number of applications. You must have multiple samples and well-known area to</span>
+<span class="sd">        know this parameter.</span>
+
+<span class="sd">    allow_approx_solutions : bool, default=False</span>
+<span class="sd">        Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to ``True``</span>
+<span class="sd">        if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in your dataset,</span>
+<span class="sd">        that can lead to singular or near-singular matrix creation.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    : Tuple</span>
+<span class="sd">        Function returns tuple with:</span>
+<span class="sd">          * Mean Prediction Error,</span>
+<span class="sd">          * Mean Kriging Error: ratio of variance of prediction errors to the average variance error of kriging,</span>
+<span class="sd">          * array with: ``[coordinate x, coordinate y, prediction error, kriging estimate error]``</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    1. Clark, I., (2004) “The Art of Cross Validation in Geostatistical Applications&quot;</span>
+<span class="sd">    2. Clark I., (1979) &quot;Does Geostatistics Work&quot;, Proc. 16th APCOM, pp.213.-225.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Use (2) to calc Z-score</span>
+    <span class="c1"># Initialize array for coordinates and errors</span>
+    <span class="n">coordinates_and_errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Divide observations</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">points</span><span class="p">)):</span>
+        <span class="n">obs_coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">other_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">preds</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span>
+            <span class="n">observations</span><span class="o">=</span><span class="n">other_rows</span><span class="p">,</span>
+            <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
+            <span class="n">points</span><span class="o">=</span><span class="n">obs_coordinates</span><span class="p">,</span>
+            <span class="n">how</span><span class="o">=</span><span class="n">how</span><span class="p">,</span>
+            <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+            <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+            <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+            <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">,</span>
+            <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span><span class="p">,</span>
+            <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">prediction_error</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">coordinates_and_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">obs_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">obs_coordinates</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">prediction_error</span><span class="p">,</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="p">)</span>
+
+    <span class="n">output_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">coordinates_and_errors</span><span class="p">)</span>
+    <span class="n">mean_prediction_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">output_arr</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">mean_variance_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">output_arr</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">output_arr</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">mean_prediction_error</span><span class="p">,</span> <span class="n">mean_variance_error</span><span class="p">,</span> <span class="n">output_arr</span></div>
+</pre></div>
 
             </article>
             
@@ -434,20 +491,6 @@
             <footer class="bd-footer-article">
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="../pipelines.html" title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Pipelines</p>
-      </div>
-  </a>
-  <a class='right-next' id="next-link" href="../kriging_based/kriging_based_processes.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Kriging-based processes</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
 </div>
             </footer>
             
@@ -468,12 +511,6 @@
 
 <div class="toc-item">
   
-<div class="tocsection sourcelink">
-    <a href="../../../_sources/api/pipelines/data/download.rst.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-</div>
-
 </div>
 
             </div>
