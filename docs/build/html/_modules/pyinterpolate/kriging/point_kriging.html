@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point_kriging &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.kriging.point_kriging &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -37,6 +37,7 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -98,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
   
 </a>
     
@@ -165,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -303,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -398,7 +413,8 @@
             <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">sk_mean</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">number_of_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+            <span class="n">number_of_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">show_progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function manages Ordinary Kriging and Simple Kriging predictions.</span>
 
 <span class="sd">    Parameters</span>
@@ -442,6 +458,9 @@
 <span class="sd">        How many processing units can be used for predictions. Increase it only for a very large number of</span>
 <span class="sd">        interpolated points (~10k+).</span>
 
+<span class="sd">    show_progress_bar : bool, default=True</span>
+<span class="sd">        Show progress bar of predictions.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    : numpy array</span>
@@ -473,30 +492,57 @@
 
     <span class="k">if</span> <span class="n">number_of_workers</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="c1"># Don&#39;t use dask</span>
-        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
-            <span class="n">prediction</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">:</span>
-                <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
-                    <span class="n">theoretical_model</span><span class="p">,</span>
-                    <span class="n">observations</span><span class="p">,</span>
-                    <span class="n">point</span><span class="p">,</span>
-                    <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
-                    <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
-                    <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
-                    <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
-                <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;sk&#39;</span><span class="p">:</span>
-                <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
-                    <span class="n">theoretical_model</span><span class="p">,</span>
-                    <span class="n">observations</span><span class="p">,</span>
-                    <span class="n">point</span><span class="p">,</span>
-                    <span class="n">sk_mean</span><span class="p">,</span>
-                    <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
-                    <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
-                    <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
-                    <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
-                <span class="p">)</span>
-            <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">show_progress_bar</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+                <span class="n">prediction</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">:</span>
+                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
+                        <span class="n">theoretical_model</span><span class="p">,</span>
+                        <span class="n">observations</span><span class="p">,</span>
+                        <span class="n">point</span><span class="p">,</span>
+                        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;sk&#39;</span><span class="p">:</span>
+                    <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
+                        <span class="n">theoretical_model</span><span class="p">,</span>
+                        <span class="n">observations</span><span class="p">,</span>
+                        <span class="n">point</span><span class="p">,</span>
+                        <span class="n">sk_mean</span><span class="p">,</span>
+                        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
+                    <span class="p">)</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">points</span><span class="p">:</span>
+                    <span class="n">prediction</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">:</span>
+                        <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
+                            <span class="n">theoretical_model</span><span class="p">,</span>
+                            <span class="n">observations</span><span class="p">,</span>
+                            <span class="n">point</span><span class="p">,</span>
+                            <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                            <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                            <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                            <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">how</span> <span class="o">==</span> <span class="s1">&#39;sk&#39;</span><span class="p">:</span>
+                        <span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span>
+                            <span class="n">theoretical_model</span><span class="p">,</span>
+                            <span class="n">observations</span><span class="p">,</span>
+                            <span class="n">point</span><span class="p">,</span>
+                            <span class="n">sk_mean</span><span class="p">,</span>
+                            <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                            <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                            <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                            <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span>
+                        <span class="p">)</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
         <span class="n">predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Use dask</span>
@@ -603,7 +649,7 @@
   <div class="footer-item">
     
 <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.2.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
 </p>
 
   </div>

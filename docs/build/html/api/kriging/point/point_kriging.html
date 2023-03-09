@@ -369,6 +369,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../io/io.html">Input / Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../distance/distance.html">Distance calculations</a></li>
 
+
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../variogram/experimental/experimental.html">Experimental</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../variogram/theoretical/theoretical.html">Theoretical</a></li>
@@ -388,6 +389,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../viz/viz.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../validation/validation.html">Validation</a></li>
 </ul>
 
   </div>
@@ -423,7 +425,7 @@
 <h1>Point Kriging<a class="headerlink" href="#point-kriging" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">kriging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theoretical_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">how</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ok'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approx_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/point_kriging.html#kriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">kriging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theoretical_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">how</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ok'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approx_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/kriging/point_kriging.html#kriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function manages Ordinary Kriging and Simple Kriging predictions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -460,6 +462,8 @@ that can lead to singular or near-singular matrix creation.</p>
 </dd>
 <dt><strong>number_of_workers</strong><span class="classifier">int, default=1</span></dt><dd><p>How many processing units can be used for predictions. Increase it only for a very large number of
 interpolated points (~10k+).</p>
+</dd>
+<dt><strong>show_progress_bar</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show progress bar of predictions.</p>
 </dd>
 </dl>
 </dd>
