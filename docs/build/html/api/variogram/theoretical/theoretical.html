@@ -368,6 +368,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../datatypes/core.html">Core data structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../io/io.html">Input / Output</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../distance/distance.html">Distance calculations</a></li>
+
+
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../variogram.html">Variogram</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../experimental/experimental.html">Experimental</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Theoretical</a></li>
@@ -387,6 +389,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../viz/viz.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../validation/validation.html">Validation</a></li>
 </ul>
 
   </div>
@@ -547,6 +550,21 @@ larger than a half of a study extent.</p>
 model underestimates values. A large negative value means that model overestimates predictions.</p>
 </dd>
 <dt><strong>smape</strong><span class="classifier">float, default=0</span></dt><dd><p>Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.</p>
+</dd>
+<dt><strong>spatial_dependency_ratio</strong><span class="classifier">float, default = None</span></dt><dd><p>The ratio of nugget vs sill multiplied by 100. Levels from 0 to 25 indicate strong spatial dependency,
+from 25 to 75 moderate spatial dependency, from 75 to 95 weak spatial dependency, and above process is
+considered to be not spatially-depended.</p>
+</dd>
+<dt><strong>spatial_dependency_strength</strong><span class="classifier">str, default = “Unknown”</span></dt><dd><dl class="simple">
+<dt>Descriptive indicator of spatial dependency strength based on the <code class="docutils literal notranslate"><span class="pre">spatial_dependency_level</span></code>. It could be:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">unknown</span></code> if ratio is <code class="docutils literal notranslate"><span class="pre">None</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">strong</span></code> if ratio is below 25,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">moderate</span></code> if ratio is between 25 and 75,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">weak</span></code> if ratio is between 75 and 95,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">spatial</span> <span class="pre">dependency</span></code> if ratio is greater than 95.</p></li>
+</ul>
+</dd>
+</dl>
 </dd>
 <dt><strong>are_params</strong><span class="classifier">bool</span></dt><dd><p>Check if model parameters were given during initialization.</p>
 </dd>
