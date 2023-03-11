@@ -317,7 +317,7 @@ class TheoreticalVariogram:
                 'model_type': model_type,
                 'nugget': nugget,
                 'sill': sill,
-                'rang': rang
+                'range': rang
             }
             attrs_to_update.update(_error)
 
@@ -437,7 +437,7 @@ class TheoreticalVariogram:
             >>> {
             ...     'model_type': model_name,
             ...     'sill': model_sill,
-            ...     'rang': model_range,
+            ...     'range': model_range,
             ...     'nugget': model_nugget,
             ...     'error_type': type_of_error_metrics,
             ...     'error value': error_value
@@ -534,7 +534,7 @@ class TheoreticalVariogram:
             'model_type': '',
             'nugget': 0,
             'sill': 0,
-            'rang': 0
+            'range': 0
         }
 
         for _mtype in mtypes:
@@ -558,7 +558,7 @@ class TheoreticalVariogram:
                         optimal_parameters['model_type'] = _mtype
                         optimal_parameters['nugget'] = nugget
                         optimal_parameters['sill'] = _sill
-                        optimal_parameters['rang'] = _rang
+                        optimal_parameters['range'] = _rang
                         optimal_parameters['fitted_model'] = _fitted_model
                         optimal_parameters.update(_err)
 
@@ -759,7 +759,7 @@ class TheoreticalVariogram:
 
         return modeled_parameters
 
-    def from_dict(self, parameters: dict) -> None:
+    def from_dict(self, parameters: dict):
         """Method updates model with a given set of parameters.
 
         Parameters
@@ -902,7 +902,7 @@ class TheoreticalVariogram:
                            fitted_model=None,
                            model_type=None,
                            nugget=None,
-                           rang=None,
+                           range=None,
                            sill=None,
                            rmse=None,
                            bias=None,
@@ -912,7 +912,7 @@ class TheoreticalVariogram:
         self.fitted_model = fitted_model
         self.name = model_type
         self.nugget = nugget
-        self.rang = rang
+        self.rang = range
         self.sill = sill
 
         # Dynamic parameters

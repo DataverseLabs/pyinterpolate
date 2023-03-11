@@ -17,7 +17,9 @@ Changes by date
 * (feature) Grid aggregation,
 * (feature) Removed connections to external APIs, and `requests` package from requirements,
 * (feature) The new package with datasets has been created: https://pypi.org/project/pyinterpolate-datasets/2023.0.0/
-* (feature) ...
+* (feature) Theoretical Variogram calculates not Spatial Dependence Index,
+* (debugging) `rang` key in theoretical semivariogram model renamed to `range`,
+* (feature) Indicator Kriging.
 
 2023-02-09
 ----------
