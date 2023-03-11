@@ -699,7 +699,7 @@
                 <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_type</span><span class="p">,</span>
                 <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
                 <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
-                <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="n">rang</span>
+                <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
             <span class="p">}</span>
             <span class="n">attrs_to_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
 
@@ -819,7 +819,7 @@
 <span class="sd">            &gt;&gt;&gt; {</span>
 <span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
 <span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
-<span class="sd">            ...     &#39;rang&#39;: model_range,</span>
+<span class="sd">            ...     &#39;range&#39;: model_range,</span>
 <span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
 <span class="sd">            ...     &#39;error_type&#39;: type_of_error_metrics,</span>
 <span class="sd">            ...     &#39;error value&#39;: error_value</span>
@@ -916,7 +916,7 @@
             <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">_mtype</span> <span class="ow">in</span> <span class="n">mtypes</span><span class="p">:</span>
@@ -940,7 +940,7 @@
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nugget</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;rang&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
+                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
                         <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
 
@@ -1141,7 +1141,7 @@
 
         <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -1284,7 +1284,7 @@
                            <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">rmse</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1294,7 +1294,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">rang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
 
         <span class="c1"># Dynamic parameters</span>
