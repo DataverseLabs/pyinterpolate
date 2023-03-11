@@ -28,6 +28,8 @@ from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squar
     symmetric_mean_absolute_percentage_error, mean_absolute_error, weighted_root_mean_squared_error
 from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
 
+from pyinterpolate.variogram.theoretical.spatial_dependency_index import calculate_spatial_dependence_index
+
 
 class TheoreticalVariogram:
     """Theoretical model of a spatial dissimilarity.
@@ -89,6 +91,19 @@ class TheoreticalVariogram:
 
     smape : float, default=0
         Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.
+
+    spatial_dependency_ratio : float, default = None
+        The ratio of nugget vs sill multiplied by 100. Levels from 0 to 25 indicate strong spatial dependency,
+        from 25 to 75 moderate spatial dependency, from 75 to 95 weak spatial dependency, and above process is
+        considered to be not spatially-depended.
+
+    spatial_dependency_strength : str, default = "Unknown"
+        Descriptive indicator of spatial dependency strength based on the ``spatial_dependency_level``. It could be:
+          * ``unknown`` if ratio is ``None``,
+          * ``strong`` if ratio is below 25,
+          * ``moderate`` if ratio is between 25 and 75,
+          * ``weak`` if ratio is between 75 and 95,
+          * ``no spatial dependency`` if ratio is greater than 95.
 
     are_params : bool
         Check if model parameters were given during initialization.
@@ -182,12 +197,16 @@ class TheoreticalVariogram:
         if self.are_params:
             self._set_model_parameters(model_params)
 
-        # Errror
+        # Error
         self.deviation_weighting = None
         self.rmse = 0.
         self.bias = 0.
         self.smape = 0.
         self.mae = 0.
+
+        # Spatial dependency
+        self.spatial_dependency_ratio = None
+        self.spatial_dependency_strength = 'Unknown'
 
     # Core functions
 
@@ -303,6 +322,9 @@ class TheoreticalVariogram:
             attrs_to_update.update(_error)
 
             self._update_attributes(**attrs_to_update)
+
+        # Update spatial dependency
+        self._update_spatial_dependency()
 
         return _theoretical_values, _error
 
@@ -543,6 +565,9 @@ class TheoreticalVariogram:
         if auto_update_attributes:
             self._update_attributes(**optimal_parameters)
 
+        # Update spatial dependency
+        self._update_spatial_dependency()
+
         if return_params:
             return optimal_parameters
 
@@ -692,6 +717,17 @@ class TheoreticalVariogram:
 
         return model_error
 
+    def _update_spatial_dependency(self):
+        """
+        Method updates spatial dependency of a fitted variogram.
+        """
+        if self.nugget > 0:
+            index_ratio, index_strength = calculate_spatial_dependence_index(
+                self.nugget, self.sill
+            )
+            self.spatial_dependency_ratio = index_ratio
+            self.spatial_dependency_strength = index_strength
+
     # I/O
 
     def to_dict(self) -> dict:
@@ -782,13 +818,15 @@ class TheoreticalVariogram:
             msg_nugget = f'* Nugget: {self.nugget}'
             msg_sill = f'* Sill: {self.sill}'
             msg_range = f'* Range: {self.rang}'
+            msg_spatial_dependency = f'* Spatial Dependency Strength is {self.spatial_dependency_strength}'
             mean_bias_msg = f'* Mean Bias: {self.bias}'
             mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
             error_weighting = f'* Error-lag weighting method: {self.deviation_weighting}'
 
-            text_list = [title, msg_nugget, msg_sill, msg_range, mean_bias_msg, mean_rmse_msg, error_weighting]
+            text_list = [title, msg_nugget, msg_sill, msg_range, msg_spatial_dependency,
+                         mean_bias_msg, mean_rmse_msg, error_weighting]
 
-            header = '\n'.join(text_list) + '\n' + '\n'
+            header = '\n'.join(text_list) + '\n\n'
 
             if self.experimental_array is not None:
                 # Build pretty table
@@ -805,7 +843,7 @@ class TheoreticalVariogram:
 
                 pretty_table.add_rows(records)
 
-                msg = header + pretty_table.get_string()
+                msg = header + '\n' + pretty_table.get_string()
                 return msg
             else:
                 return header
@@ -903,8 +941,7 @@ class TheoreticalVariogram:
     def __print_autofit_info(model_type: str, nugget: float, sill: float, rang: float, err_type: str, err_value: float):
         msg_core = f'Model {model_type},\n' \
                    f'Model Parameters - nugget: {nugget:.2f}, sill: {sill:.4f}, range: {rang:.4f},\n' \
-                   f'Model Error {err_type}: {err_value}' \
-                   f'\n'
+                   f'Model Error {err_type}: {err_value}\n'
         print(msg_core)
 
     def _fit_model(self, model_fn: Callable, nugget: float, sill: float, rang: float) -> np.array:
@@ -950,6 +987,7 @@ class TheoreticalVariogram:
         self.sill = float(model_params['sill'])
         self.name = model_params['name']
         self.direction = self._set_direction(model_params)
+        self._update_spatial_dependency()
 
 
 def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,

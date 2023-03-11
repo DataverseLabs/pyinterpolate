@@ -41,6 +41,11 @@ def gen_hex_cells(min_lon, max_lon, min_lat, max_lat, step):
     -------
     grid : gpd.GeoSeries
         Grid polygons.
+
+    References
+    ----------
+    [1] Izan Pérez Cosano (Github @eperezcosano), How to draw a hexagonal grid on HTML Canvas
+    https://eperezcosano.github.io/hex-grid/
     """
     grid = []
 
