@@ -234,7 +234,32 @@ def point_support_to_dict(point_support: PointSupport) -> Dict:
     return d
 
 
-def transform_ps_to_dict(ps: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]) -> Dict:
+def sem_to_cov(semivariances, sill) -> np.ndarray:
+    """
+    Function transforms semivariances into a covariances.
+
+    Parameters
+    ----------
+    semivariances : Iterable
+
+    sill : float
+
+    Returns
+    -------
+    covariances : numpy array
+    """
+
+    if isinstance(semivariances, np.ndarray):
+        return sill - semivariances
+
+    return sill - np.asarray(semivariances)
+
+
+def transform_ps_to_dict(ps: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
+                         df_x_col_name='x',
+                         df_y_col_name='y',
+                         df_value_col_name='ds',
+                         df_index_col_name='index') -> Dict:
     """
 
     Parameters
@@ -245,23 +270,33 @@ def transform_ps_to_dict(ps: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFr
          * DataFrame and GeoDataFrame: columns={x, y, ds, index}
          * PointSupport
 
+    df_x_col_name : str, default='x'
+        If DataFrame or GeoDataFrame is passed then this parameter represents the name of a column x (longitude).
+
+    df_y_col_name : str, default='y'
+        If DataFrame or GeoDataFrame is passed then this parameter represents the name of a column y (latitude).
+
+    df_value_col_name : str, default='ds'
+        If DataFrame or GeoDataFrame is passed then this parameter represents the name of a column with point support
+        values.
+
+    df_index_col_name : str, default='index'
+        If DataFrame or GeoDataFrame is passed then this parameter represents the name of a column that can represent
+        the point support index.
+
     Returns
     -------
     : Dict
         Point Support as a Dict: {block id: [[point x, point y, value]]}
-
-    TODO
-    ----
-    Allow user to pass any column names for DF and GDF data types.
     """
     if isinstance(ps, PointSupport):
         return point_support_to_dict(ps)
     elif isinstance(ps, pd.DataFrame) or isinstance(ps, gpd.GeoDataFrame):
-        expected_cols = {'x', 'y', 'ds', 'index'}
+        expected_cols = {df_x_col_name, df_y_col_name, df_value_col_name, df_index_col_name}
 
         if not expected_cols.issubset(set(ps.columns)):
             raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
-                           f'It has {ps.columns} instead.')
+                           f'It has {ps.columns} instead. Set those columns as function parameters.')
         return block_dataframe_to_dict(ps)
     elif isinstance(ps, np.ndarray):
         return block_arr_to_dict(ps)

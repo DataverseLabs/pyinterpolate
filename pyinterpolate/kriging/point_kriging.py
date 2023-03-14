@@ -31,7 +31,8 @@ def kriging(observations: np.ndarray,
             use_all_neighbors_in_range=False,
             sk_mean: Union[float, None] = None,
             allow_approx_solutions=False,
-            number_of_workers: int = 1) -> np.ndarray:
+            number_of_workers: int = 1,
+            show_progress_bar: bool = True) -> np.ndarray:
     """Function manages Ordinary Kriging and Simple Kriging predictions.
 
     Parameters
@@ -75,6 +76,9 @@ def kriging(observations: np.ndarray,
         How many processing units can be used for predictions. Increase it only for a very large number of
         interpolated points (~10k+).
 
+    show_progress_bar : bool, default=True
+        Show progress bar of predictions.
+
     Returns
     -------
     : numpy array
@@ -106,30 +110,57 @@ def kriging(observations: np.ndarray,
 
     if number_of_workers == 1:
         # Don't use dask
-        for point in tqdm(points):
-            prediction = [np.nan, np.nan, np.nan, np.nan]
-            if how == 'ok':
-                prediction = model(
-                    theoretical_model,
-                    observations,
-                    point,
-                    neighbors_range=neighbors_range,
-                    no_neighbors=no_neighbors,
-                    use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions
-                )
-            elif how == 'sk':
-                prediction = model(
-                    theoretical_model,
-                    observations,
-                    point,
-                    sk_mean,
-                    neighbors_range=neighbors_range,
-                    no_neighbors=no_neighbors,
-                    use_all_neighbors_in_range=use_all_neighbors_in_range,
-                    allow_approximate_solutions=allow_approx_solutions
-                )
-            results.append(prediction)
+
+        if show_progress_bar:
+            for point in tqdm(points):
+                prediction = [np.nan, np.nan, np.nan, np.nan]
+                if how == 'ok':
+                    prediction = model(
+                        theoretical_model,
+                        observations,
+                        point,
+                        neighbors_range=neighbors_range,
+                        no_neighbors=no_neighbors,
+                        use_all_neighbors_in_range=use_all_neighbors_in_range,
+                        allow_approximate_solutions=allow_approx_solutions
+                    )
+                elif how == 'sk':
+                    prediction = model(
+                        theoretical_model,
+                        observations,
+                        point,
+                        sk_mean,
+                        neighbors_range=neighbors_range,
+                        no_neighbors=no_neighbors,
+                        use_all_neighbors_in_range=use_all_neighbors_in_range,
+                        allow_approximate_solutions=allow_approx_solutions
+                    )
+                results.append(prediction)
+        else:
+            for point in points:
+                    prediction = [np.nan, np.nan, np.nan, np.nan]
+                    if how == 'ok':
+                        prediction = model(
+                            theoretical_model,
+                            observations,
+                            point,
+                            neighbors_range=neighbors_range,
+                            no_neighbors=no_neighbors,
+                            use_all_neighbors_in_range=use_all_neighbors_in_range,
+                            allow_approximate_solutions=allow_approx_solutions
+                        )
+                    elif how == 'sk':
+                        prediction = model(
+                            theoretical_model,
+                            observations,
+                            point,
+                            sk_mean,
+                            neighbors_range=neighbors_range,
+                            no_neighbors=no_neighbors,
+                            use_all_neighbors_in_range=use_all_neighbors_in_range,
+                            allow_approximate_solutions=allow_approx_solutions
+                        )
+                    results.append(prediction)
         predictions = np.array(results)
     else:
         # Use dask

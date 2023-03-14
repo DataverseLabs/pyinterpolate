@@ -1,5 +1,7 @@
 # Distance
 from pyinterpolate.distance import calc_point_to_point_distance, calc_block_to_block_distance
+from pyinterpolate.distance import aggregate_cluster, ClusterDetector
+from pyinterpolate.distance import create_grid, points_to_grid
 
 # IDW
 from pyinterpolate.idw import inverse_distance_weighting
@@ -17,8 +19,6 @@ from pyinterpolate.kriging import centroid_poisson_kriging, area_to_area_pk, are
 # Excluded: multi_kriging (BlockToBlockKrigingComparison)
 # PK
 from pyinterpolate.pipelines import BlockFilter, smooth_blocks
-# Data
-from pyinterpolate.pipelines import download_air_quality_poland
 
 # Processing
 from pyinterpolate.processing import Blocks, PointSupport
@@ -38,4 +38,4 @@ from pyinterpolate.variogram import Deconvolution
 from pyinterpolate.viz import interpolate_raster
 
 
-__version__ = "0.3.5"
+__version__ = "0.3.7"

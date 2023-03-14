@@ -1,42 +1,40 @@
+
 <!DOCTYPE html>
-<html lang="en-gb">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-<title>Pyinterpolate - Core data structures</title>
+    <title>Core data structures &#8212; Pyinterpolate 0.3.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
-<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
-    <script>
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.3.5',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        LINK_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-      $(document).data('sizzle', {on_load: []});
-    </script>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
@@ -44,175 +42,387 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../../app-data.js"></script>
-<link rel="index" title="Index" href="../../genindex.html" />
-<link rel="search" title="Search" href="../../search.html" />
-<link rel="next" title="Input / Output" href="../io/io.html" />
-<link rel="prev" title="API" href="../api.html" />
-
-</head>
-<body class="full-height test">
-<noscript>
-  <div>
-    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
-  </div>
-</noscript>
-<div id="whole-page" class="container-fluid content full-height">
-  <div id="header-row" class="row">
-    <div id="header-container" class="col-md-12">
-      <div id="hdr-left">
-        <i class="fa fa-bars menu-toggle"></i>
-        
-<a href="../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
-
-      </div>
-      <div id="hdr-centre" class="text-center stretch">
-        <h3 title="Core data structures">Core data structures</h3>
-        <h6>Core data structures</h6>
-      </div>
-      <div id="hdr-search">
-        
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-      </div>
-
-      <div id="hdr-index">
-        <a href="../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
-      </div>
-
-      <div id="hdr-source">
-        <a href="../../_sources/api/datatypes/core.rst.txt" class="btn btn-default" title="See the source for this page"><i class="fa fa-code"></i></a>
-      </div>
-
-      <div id="hdr-right">
-        
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/datatypes/core';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Input / Output" href="../io/io.html" />
+    <link rel="prev" title="API" href="../api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
   
-  <div class="prev-next">
-    
-      <div class="pull-left">
-        <a class="btn btn-default prev" href="../api.html" title="Previous chapter (API)"><i class="fa fa-chevron-left mr-1em" aria-hidden="true"></i><span class="btn-text">API</span></a>
-      </div>
-    
-      <div class="pull-right">
-        <a class="btn btn-default next" href="../io/io.html" title="Next chapter (Input / Output)"><span class="btn-text">Input / Output</span>&nbsp;<i class="fa fa-chevron-right ml-1em" aria-hidden="true"></i></a>
-      </div>
-    </div>
   
-      </div>
-      <div id="alt-hdr-right">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
 
-        <a href="../api.html"><i class="fa fa-chevron-left mr-8"></i></a>
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
 
-        <a href="../../index.html"><i class="fa fa-home mr-8"></i></a>
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
 
-
-        <a href="../../search.html"><i class="fa fa-search mr-8"></i></a>
-
-
-        <a href="../../genindex.html"><i class="fa fa-list mr-8"></i></a>
-
-
-        <a href="../io/io.html"><i class="fa fa-chevron-right"></i></a>
-
-      </div>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
     </div>
   </div>
 
-  <div id="content-row" class="row">
-    <div id="page-content" class="col-md-12 flex-col">
-      <div id="content-container">
-        <div id="nav">
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
           
-  <div class="navsidebar">
-    <div id="sidebar-search">
-      
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-    </div>
-      <div class="sidebar-block">
-        <div class="sidebar-tocheading">
-          <div class="pull-left">
-            <h2>Table Of Contents</h2>
-          </div>
-          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
         </div>
-        <div class="sidebar-toc">
       
-          <div id="toc-filter" title="Type in here to show only matching topics">
-            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
-          </div>
       
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
         
   
-    <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#core-data-structures">Core data structures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../distance/distance.html">Distance calculations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/variogram.html">Variogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/kriging.html">Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../pipelines/pipelines.html">Pipelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../viz/viz.html">Visualization</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
-</ul>
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
 
-  
-        </div>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
       </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
   </div>
-        </div>
-        <div id="content" tabindex="0" class="stretch">
-          <div id="mnav">
-            
-  
-    <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../../setup/setup.html">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/cite.html">How to cite</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#core-data-structures">Core data structures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../distance/distance.html">Distance calculations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/variogram.html">Variogram</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/kriging.html">Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../pipelines/pipelines.html">Pipelines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../viz/viz.html">Visualization</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../developer/dev.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../community/community.html">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../science/biblio.html">Bibliography</a></li>
-</ul>
 
   
-          </div>
-          <div class="body">
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance calculations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../variogram/experimental/experimental.html">Experimental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../variogram/theoretical/theoretical.html">Theoretical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../variogram/block/block.html">Block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kriging/kriging.html">Kriging</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kriging/point/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../pipelines/pipelines.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/data/download.html">Data download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pipelines/kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/viz.html">Visualization</a></li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
             
-  <div class="section" id="core-data-structures">
-<h1>Core data structures<a class="headerlink" href="#core-data-structures" title="Permalink to this heading">¶</a></h1>
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="core-data-structures">
+<h1>Core data structures<a class="headerlink" href="#core-data-structures" title="Permalink to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">Blocks</span></code><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Blocks</span></span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class stores and prepares aggregated data.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">geocls</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
@@ -222,11 +432,9 @@
 <span class="go">(idx, val, geometry, centroid.x, centroid.y)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>data</strong><span class="classifier">gpd.GeoDataFrame</span></dt><dd><p>Dataset with block values.</p>
 </dd>
 <dt><strong>value_column_name</strong><span class="classifier">Any</span></dt><dd><p>Name of the column with block rates.</p>
@@ -236,34 +444,26 @@
 <dt><strong>index_column_name</strong><span class="classifier">Any</span></dt><dd><p>Name of the column with the index.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
-<table>
-<colgroup>
-<col width="27%" />
-<col width="73%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><strong>from_file()</strong></td>
-<td>Reads and parses data from spatial file supported by GeoPandas.</td>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>from_file()</strong></p></td>
+<td><p>Reads and parses data from spatial file supported by GeoPandas.</p></td>
 </tr>
-<tr class="row-even"><td><strong>from_geodataframe()</strong></td>
-<td>Reads and parses data from GeoPandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>.</td>
+<tr class="row-even"><td><p><strong>from_geodataframe()</strong></p></td>
+<td><p>Reads and parses data from GeoPandas <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">from_file</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">fpath</span></span></em>, <em><span class="n"><span class="pre">value_col</span></span></em>, <em><span class="n"><span class="pre">geometry_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometry'</span></span></em>, <em><span class="n"><span class="pre">index_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometry'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks.from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Loads areal dataset from a file supported by GeoPandas.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>fpath</strong><span class="classifier">str</span></dt><dd><p>Path to the spatial file.</p>
 </dd>
 <dt><strong>value_col</strong><span class="classifier">Any</span></dt><dd><p>The name of a column with values.</p>
@@ -276,27 +476,23 @@ from the index array of <code class="docutils literal notranslate"><span class="
 <dt><strong>layer_name</strong><span class="classifier">Any, default = None</span></dt><dd><p>The name of a layer with data if provided input is a <em>gpkg</em> file.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt>IndexColNotUniqueError</dt><dd><p>Raised when given index column has not unique values.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">from_geodataframe</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">gdf</span></span></em>, <em><span class="n"><span class="pre">value_col</span></span></em>, <em><span class="n"><span class="pre">geometry_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometry'</span></span></em>, <em><span class="n"><span class="pre">index_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks.from_geodataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">from_geodataframe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gdf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometry'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#Blocks.from_geodataframe"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Loads areal dataset from a GeoDataFrame supported by GeoPandas.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>gdf</strong><span class="classifier">gpd.GeoDataFrame</span></dt><dd></dd>
 <dt><strong>value_col</strong><span class="classifier">Any</span></dt><dd><p>The name of a column with values.</p>
 </dd>
@@ -305,16 +501,14 @@ from the index array of <code class="docutils literal notranslate"><span class="
 <dt><strong>index_col</strong><span class="classifier">Any, default = None</span></dt><dd><p>If set then a specific column is treated as an index.</p>
 </dd>
 </dl>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><dl class="first last docutils">
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
 <dt>IndexColNotUniqueError</dt><dd><p>Given index column values are not unique.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -322,8 +516,16 @@ from the index array of <code class="docutils literal notranslate"><span class="
 <hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><code class="sig-name descname"><span class="pre">PointSupport</span></code><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PointSupport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log_not_used_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Class prepares the point support data in relation to block dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>log_not_used_points</strong><span class="classifier">bool, default=False</span></dt><dd><p>Should dropped points be logged?</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>The PointSupport class structure is designed to store the information about the points within polygons.
 During the regularization process, the inblock variograms are estimated from the polygon’s point support, and
@@ -331,12 +533,12 @@ semivariances are calculated between point supports of neighbouring blocks.</p>
 <p>The class takes population grid (support) and blocks data (polygons). Then, spatial join is performed and points
 are assigned to areas within they are placed. The core attribute is <code class="docutils literal notranslate"><span class="pre">point_support</span></code> - GeoDataFrame with columns:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">x_col</span></code> - a floating representation of longitude,</li>
-<li><code class="docutils literal notranslate"><span class="pre">y_col</span></code> - a floating representation of latitude,</li>
-<li><code class="docutils literal notranslate"><span class="pre">value_column</span></code> - the attribute which describes the name of a column with the point-support’s value,</li>
-<li><code class="docutils literal notranslate"><span class="pre">geometry_column</span></code> - the attribute which describes the name of a geometry column with <code class="docutils literal notranslate"><span class="pre">Point()</span></code> representation
-of the point support coordinates,</li>
-<li><code class="docutils literal notranslate"><span class="pre">block_index_column</span></code> - the name of a column which directs to the block index values.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x_col</span></code> - a floating representation of longitude,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y_col</span></code> - a floating representation of latitude,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value_column</span></code> - the attribute which describes the name of a column with the point-support’s value,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geometry_column</span></code> - the attribute which describes the name of a geometry column with <code class="docutils literal notranslate"><span class="pre">Point()</span></code> representation
+of the point support coordinates,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">block_index_column</span></code> - the name of a column which directs to the block index values.</p></li>
 </ul>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -360,42 +562,44 @@ of the point support coordinates,</li>
 <span class="gp">... </span>                                       <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">)</span>
 </pre></div>
 </div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Attributes:</th><td class="field-body"><dl class="first last docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>point_support</strong><span class="classifier">gpd.GeoDataFrame</span></dt><dd><p>Dataset with point support values and indexes of blocks (where points fall into).</p>
 </dd>
+<dt><strong>value_column</strong><span class="classifier">str</span></dt><dd><p>The value column name</p>
+</dd>
+<dt><strong>geometry_column</strong><span class="classifier">str</span></dt><dd><p>The geometry column name.</p>
+</dd>
+<dt><strong>block_index_column</strong><span class="classifier">str</span></dt><dd><p>The area index.</p>
+</dd>
+<dt><strong>x_col</strong><span class="classifier">str, default = “x_col”</span></dt><dd><p>Longitude column name.</p>
+</dd>
+<dt><strong>y_col</strong><span class="classifier">str, default = “y_col”</span></dt><dd><p>Latitude column name.</p>
+</dd>
+<dt><strong>log_dropped</strong><span class="classifier">bool</span></dt><dd><p>See log_not_used_points parameter.</p>
+</dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Methods</p>
-<table>
-<colgroup>
-<col width="32%" />
-<col width="68%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><strong>from_files()</strong></td>
-<td>Loads point support and polygon data from files.</td>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>from_files()</strong></p></td>
+<td><p>Loads point support and polygon data from files.</p></td>
 </tr>
-<tr class="row-even"><td><strong>from_geodataframes()</strong></td>
-<td>Loads point support and polygon data from dataframe.</td>
+<tr class="row-even"><td><p><strong>from_geodataframes()</strong></p></td>
+<td><p>Loads point support and polygon data from dataframe.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">from_files</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">point_support_data_file</span></span></em>, <em><span class="n"><span class="pre">blocks_file</span></span></em>, <em><span class="n"><span class="pre">point_support_geometry_col</span></span></em>, <em><span class="n"><span class="pre">point_support_val_col</span></span></em>, <em><span class="n"><span class="pre">blocks_geometry_col</span></span></em>, <em><span class="n"><span class="pre">blocks_index_col</span></span></em>, <em><span class="n"><span class="pre">use_point_support_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em><span class="n"><span class="pre">point_support_layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em><span class="n"><span class="pre">blocks_layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport.from_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">from_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support_data_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_geometry_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_val_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_geometry_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_index_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_point_support_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_layer_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport.from_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Methods prepares the point support data from files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>point_support_data_file</strong><span class="classifier">str</span></dt><dd><p>Path to the file with point support data. Reads all files processed by the GeoPandas.</p>
 </dd>
 <dt><strong>blocks_file</strong><span class="classifier">str</span></dt><dd><p>Path to the file with polygon data. Reads all files processed by GeoPandas.</p>
@@ -415,21 +619,17 @@ of the point support coordinates,</li>
 <dt><strong>blocks_layer_name</strong><span class="classifier">Any, default = None</span></dt><dd><p>If provided file is <em>.gpkg</em> then this parameter must be provided.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<code class="sig-name descname"><span class="pre">from_geodataframes</span></code><span class="sig-paren">(</span><em><span class="n"><span class="pre">point_support_dataframe</span></span></em>, <em><span class="n"><span class="pre">blocks_dataframe</span></span></em>, <em><span class="n"><span class="pre">point_support_geometry_col</span></span></em>, <em><span class="n"><span class="pre">point_support_val_col</span></span></em>, <em><span class="n"><span class="pre">blocks_geometry_col</span></span></em>, <em><span class="n"><span class="pre">blocks_index_col</span></span></em>, <em><span class="n"><span class="pre">use_point_support_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport.from_geodataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">from_geodataframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support_dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_dataframe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_geometry_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_val_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_geometry_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks_index_col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_point_support_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/processing/preprocessing/blocks.html#PointSupport.from_geodataframes"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Methods prepares the point support data from files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><dl class="first last docutils">
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>point_support_dataframe</strong><span class="classifier">GeoDataFrame or GeoSeries</span></dt><dd></dd>
 <dt><strong>blocks_dataframe</strong><span class="classifier">GeoDataFrame</span></dt><dd><p>Block data with block indexes and geometries.</p>
 </dd>
@@ -446,369 +646,115 @@ of the point support coordinates,</li>
 <dt><strong>use_point_support_crs</strong><span class="classifier">bool, default = True</span></dt><dd><p>If set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then the point support crs is transformed to the same crs as polygon dataset.</p>
 </dd>
 </dl>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
-          </div>
-        </div>
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../api.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">API</p>
       </div>
-    </div>
+  </a>
+  <a class='right-next' id="next-link" href="../io/io.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title">Input / Output</p>
   </div>
-  <div id="footer-row" class="row">
-
-    <div class="col-md-12">
-        <span title="Built on 2022-12-14" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.2.3 and the
-        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
-
-           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
-
-        >Sizzle</a> theme.</span>
-    </div>
-
-  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
 </div>
 
-<div id="tooltips" class="hidden">
+<div class="toc-item">
+  
 </div>
 
-<script>
-$(document).ready(function() {
-  'use strict';
-  var $search = $('.search-query');
-
-  var $filter = $('#toc-filter-query');
-  var $toclist = $('.sidebar-toc > ul').find('li');
-
-  if ($toclist.length === 0) {
-    $toclist = $('.localtoc > ul').find('li');
-  }
-
-
-  var $nav = $('#nav');
-
-  //$('#whole-page').removeClass('hidden');
-  var nav_width = $nav.width();
-
-
-  var search_url = '../../search.html';
-
-  function perform_search(e) {
-    var $elem;
-
-    if (e.type === 'keypress') {
-      $elem = $(e.target);
-    }
-    else if (e.type === 'click') {
-      $elem = $(e.target).parents('.input-group').find('input');
-    }
-    var q = $elem.val().trim();
-
-    if (q) {
-      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
-
-      location.href = url;
-    }
-  }
-
-
-  function apply_filter() {
-    var s = $filter.val().trim().toLowerCase();
-
-    $toclist.find('a').removeClass('hidden');
-    $toclist.each(function() {
-      var $this = $(this);
-      var $link = $this.find('> a');
-      var t = $link.text().toLowerCase();
-      var show = t.indexOf(s) >= 0;
-
-      if (!show) {
-        $link.addClass('hidden');
-      }
-    });
-  }
-
-  $filter.on('keyup', function(e) {
-    apply_filter();
-  });
-
-
-
-  $search.on('keypress', function(e) {
-    if (e.which == 13) {
-      perform_search(e);
-    }
-  });
-  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
-  $(document).on('click', '.summary .fa-caret-right', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $next = $elem.next();
-    $elem.addClass('hidden');
-    $next.removeClass('hidden');
-  });
-  $(document).on('click', '.detail .fa-caret-down', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $prev = $elem.prev();
-    $elem.addClass('hidden');
-    $prev.removeClass('hidden');
-  });
-
-  $('#content').on('click', function() {
-    $('#mnav').hide();
-  });
-
-  var counter = 0;
-  var timer = null;
-
-  function show_nav() {
-    $('#content').off('mousemove', track_mouse);
-    if (timer !== null) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    $nav.show();
-  }
-
-  function track_mouse(e) {
-    var x = e.clientX;
-
-    if (x < 15) {
-      ++counter;
-      if (timer === null) {
-        timer = setTimeout(show_nav, 2000);
-      }
-    }
-    else {
-      counter = 0;
-    }
-    if (counter >= 20) {
-      show_nav();
-    }
-  };
-
-  function hide_nav() {
-    $nav.hide();
-    counter = 0;
-    $('#content').on('mousemove', track_mouse);
-  }
-
-  $('.hidetoc').on('click', hide_nav);
-
-  $(document).on('keyup', function(e) {
-    if (e.ctrlKey) {
-      if (e.which == 37) {      // Ctrl+left arrow
-        hide_nav();
-      }
-      else if (e.which == 39) { // Ctrl+right arrow
-        show_nav();
-      }
-    }
-  });
-
-  $('.menu-toggle').on('click', function(e) {
-    $('#mnav').toggle();
-  });
-
-  function scroll_nav(frag) {
-    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
-
-    var $link = $(sel);
-
-    if ($link.length > 0) {
-      $link[0].scrollIntoView({block: 'center'});
-    }
-  }
-
-  // If the navigator is long, then the item we clicked on to get here might
-  // not be in view. Try to scroll it into the view - a slight delay is needed
-  // to get it to sync properly with other stuff going on (as the page has just
-  // loaded). Hence the setTimeout with a timeout of 0.
-
-  function do_scroll() {
-    scroll_nav(window.location.hash);
-  }
-
-  setTimeout(do_scroll, 0);
-
-  function adjust_size() {
-    // we need to set the height explicitly so that scrolling regions in the
-    // content area work properly.
-    var h = $('#page-content').height();
-
-    $('#nav, #content').height(h);
-    if ($('#nav').is(':visible')) {
-      $('#mnav').hide();
-    }
-  }
-
-  adjust_size();
-
-  $(window).on('resize', adjust_size);
-
-  function focus_content() {
-    $('#content').focus();  // so that keyboard can be used to scroll, etc.
-  }
-
-  setTimeout(focus_content, 150);
-
-  var sizzle = $(document).data('sizzle');
-
-  function make_tooltip(id, h, b) {
-    var $e = $('<div>').attr('id', id);
-    var $b = $('<div>').addClass('tc-body').html(b);
-
-    if (h) {
-      var $h = $('<div>').addClass('tc-heading').html(h);
-      $e.append($h);
-    }
-    $e.append($b);
-    return $e;
-  }
-
-  var default_tt_options = {
-    theme: ['tooltipster-light', 'tooltipster-light-customized'],
-    interactive: true,
-    maxWidth: 600,
-    contentCloning: true
-  };
-
-  function activate_tooltips() {
-    var $tt = $('.tt');
-
-    //console.log('tt links:', $tt.length);
-    $tt.tooltipster(default_tt_options);
-  }
-
-
-
-  function add_glossary_tooltips() {
-    var links = $('a');  // can qualify with .reference.internal
-    var glinks = {};
-    var pat = /(.*)\.html#(term-.*)$/;
-    var found = false;  // links in this document
-
-    $.each(links, function(i, link) {
-        var $link = $(link);
-        var href = $link.attr('href');
-        var m = href.match(pat);
-
-        if (m) {
-          var s = m[1].replace(/^(\.\.\/)+/, '');
-
-          if (s === sizzle.app_data.glossary.document) {
-            var k = m[2];
-
-            if (k in glinks) {
-              glinks[k].push($link);
-            }
-            else {
-              glinks[k] = [$link];
-            }
-            found = true;
-          }
-        }
-    });
-    if (found) {
-      var $t = $('#tooltips');
-      var data = sizzle.app_data.glossary.terms;
-
-      $.each(glinks, function(k, v) {
-        var d = data[k];
-
-        if (d) {  // as a sanity check
-          var s = 'tc-'+ k;
-          var $e = make_tooltip(s, d.term, d.defn);
-          $t.append($e);
-
-          $.each(v, function(i, link) {
-            link.addClass('tt').attr('data-tooltip-content', '#' + s);
-          });
-        }
-      });
-    }
-  }
-
-  if (sizzle.app_data && sizzle.app_data.glossary &&
-      sizzle.app_data.glossary.document) {
-    add_glossary_tooltips();
-  }
-
-
-
-
-  function add_custom_tooltips() {
-    if (!sizzle.app_data) {
-      return;
-    }
-
-    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
-
-    if ($.isEmptyObject(info_tips)) {
-      return;
-    }
-
-    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
-
-    $('.tc-info').each(function() {
-      var $elem = $(this).prev();
-      var classes = $elem.attr('class');
-      var m = /\btci-([\S]+)/.exec(classes);
-
-      if (m !== null) {
-        var key = m[1];
-
-        if (key in info_tips) {
-          var v = info_tips[key];
-          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
-        }
-      }
-    });
-  }
-
-  add_custom_tooltips();
-
-  setTimeout(activate_tooltips, 1000);
-
-
-  // Clipboard copy for code blocks with captions
-
-  $('.code-block-caption').each(function() {
-    var $cap = $(this);
-    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
-    var $code = $cap.parent().find('.highlight');
-
-    $cap.append($btn);
-    $btn.find('.fa-clipboard').data('clip-text', $code.text());
-  });
-
-  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
-    'text': function(trigger) {
-      return $(trigger).data('clip-text');
-    }
-  });
-
-  clipboard.on('success', function(e) {
-    var $copied = $(e.trigger).prev();
-
-    $copied.removeClass('hidden');
-
-    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
-  });
-
-  if (sizzle.on_load) {
-    sizzle.on_load.forEach(function(f) {
-      f();
-    });
-  }
-});
-</script>
-</body>
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/api/datatypes/core.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright 2022, Szymon Moliński.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
 </html>

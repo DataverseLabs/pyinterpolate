@@ -6,7 +6,46 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2022-12-XX
+2023-03-XX
+----------
+
+**version 0.4**
+
+* (feature) Cluster detection with DBSCAN,
+* (feature) Cluster aggregation,
+* (feature) Gridding algorithm,
+* (feature) Grid aggregation,
+* (feature) Removed connections to external APIs, and `requests` package from requirements,
+* (feature) The new package with datasets has been created: https://pypi.org/project/pyinterpolate-datasets/2023.0.0/
+* (feature) Theoretical Variogram calculates not Spatial Dependence Index,
+* (debugging) `rang` key in theoretical semivariogram model renamed to `range`,
+* (feature) Indicator Kriging.
+
+2023-02-09
+----------
+
+**version 0.3.7**
+
+* (enhancement) added logging to Poisson Kriging ATP process,
+* (test) added functional test for `smooth_blocks` function,
+* (debug) too broad exception in `download_air_quality_poland` is narrowed to `KeyError`,
+* (enhancement) log points that cannot be assigned to any area in `PointSupport` class,
+* (enhancement) `transform_ps_to_dict()` function takes custom parameters for lon, lat, value and index,
+* (test) `check_limits()` function tests,
+* (test) plotting function of the `VariogramCloud()` class is tested and slightly changed to return `True` if everything has worked fine,
+* (tutorials) new tutorial about `ExperimentalVariogram` and `VariogramCloud` classes,
+* (test) new tests for `calculate_average_semivariance()` function from `block` module,
+* (enhancement) function `inblock_semivariance` has been optimized,
+* (docs) updated `__init__.py` of `variogram.theoretical` module,
+* (enhancement) scatter plot represented as a swarm plot in `VariogramCloud`,
+* (enhancement) added directional kriging for ATA and ATP Poisson Kriging,
+* (debug) warning for directional kriging functions,
+* (enhancement) initialization of `KrigingObject` dataclass,
+* (ci/cd) added new workflow tests for MacOS and Ubuntu,
+* (enhancement) added logging to Simple Kriging process.
+
+
+2023-01-16
 ----------
 
 **version 0.3.6**
@@ -14,6 +53,15 @@ Changes by date
 * (enhancement) Directional Centroid-based Poisson Kriging,
 * (debug) Added origin (unknown point) to calculate directional Kriging and directional Centroid-based Poisson Kriging,
 * (docs) Directional Ordinary Kriging tutorial,
+* (engancement) logging of area to area PK function,
+* (enhancement) `tests` package moved outside the main package,
+* (feature) ordinary kriging from covariance terms,
+* (feature) area-to-area PK from covariance terms,
+* (debug) area-to-area PK debugged,
+* (feature) area-to-point PK from covariance terms,
+* (debug) area-to-point PK debugged,
+* (feature) centroid-based PK from covariance terms,
+* (debug) centroid-based PK debugged.
 
 
 2022-11-05

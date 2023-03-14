@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath('../..'))
 project = 'Pyinterpolate'
 copyright = '2022, Szymon Moliński'
 author = 'Szymon Moliński'
-release = '0.3.5'
+release = '0.3.7'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -43,10 +43,7 @@ autodoc_typehints = 'none'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'sizzle'
-html_theme_options = {
-    'globaltoc_collapse': True
-}
+html_theme = 'pydata_sphinx_theme'
 
 nbsphinx_execute_arguments = [
     "--InlineBackend.figure_formats={'svg', 'pdf'}",
