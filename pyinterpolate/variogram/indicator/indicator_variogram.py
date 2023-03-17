@@ -170,7 +170,7 @@ class ExperimentalIndicatorVariogram:
         self.tolerance = tolerance
         self.method = method
 
-        self.experimental_models = []
+        self.experimental_models = {}
 
         if fit:
             self.fit()
@@ -190,13 +190,10 @@ class ExperimentalIndicatorVariogram:
                 tolerance=self.tolerance,
                 method=self.method,
                 is_semivariance=True,
-                is_covariance=False,
-                is_variance=False
+                is_covariance=True,
+                is_variance=True
             )
-
-            self.experimental_models.append(
-                [indicator, exp]
-            )
+            self.experimental_models[str(indicator)] = exp
 
     def show(self):
         """
@@ -205,13 +202,9 @@ class ExperimentalIndicatorVariogram:
         legend = []
         plt.figure(figsize=(12, 6))
 
-        lags = self.experimental_models[0][1].lags
-
-        for rec in self.experimental_models:
-            exp = rec[1]
-            lag_name = rec[0]
-            plt.scatter(lags, exp.experimental_semivariances)
-            legend.append(f'{lag_name:.2f}')
+        for idx, rec in self.experimental_models.items():
+            plt.scatter(rec.lags, rec.experimental_semivariances)
+            legend.append(f'{float(idx):.2f}')
 
         plt.legend(legend)
         plt.xlabel('Distance')
@@ -224,11 +217,184 @@ class IndicatorVariograms:
     Class models indicator variograms for all indices.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, experimental_indicator_variogram: ExperimentalIndicatorVariogram):
+        self.experimental_indicator_variogram = experimental_indicator_variogram
+        self.theoretical_indicator_variograms = {}
 
-    def model(self):
-        pass
+    def fit(self,
+            model_type: str = 'linear',
+            nugget=0,
+            rang=None,
+            min_range=0.1,
+            max_range=0.5,
+            number_of_ranges=64,
+            sill=None,
+            min_sill=0.5,
+            max_sill=1.5,
+            number_of_sills=64,
+            direction=None,
+            error_estimator='rmse',
+            deviation_weighting='equal',
+            auto_update_attributes=True,
+            warn_about_set_params=True,
+            verbose=False):
+        """
+        Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.
+
+        Parameters
+        ----------
+        model_type : str, default = "linear"
+            The name of a modeling function. Available models:
+
+            - 'basic' : linear and spherical models are tested,
+            - 'exponential',
+            - 'gaussian',
+            - 'linear',
+            - 'power',
+            - 'spherical'.
+
+        nugget : float, default = 0
+            Nugget (bias) of a variogram. Default value is 0.
+
+        rang : float, optional
+            If given, then range is fixed to this value.
+
+        min_range : float, default = 0.1
+            The minimal fraction of a variogram range, ``0 < min_range <= max_range``.
+
+        max_range : float, default = 0.5
+            The maximum fraction of a variogram range, ``min_range <= max_range <= 1``. Parameter ``max_range`` greater
+            than **0.5** raises warning.
+
+        number_of_ranges : int, default = 64
+            How many equally spaced ranges are tested between ``min_range`` and ``max_range``.
+
+        sill : float, default = None
+            If given, then sill is fixed to this value.
+
+        min_sill : float, default = 0
+            The minimal fraction of the variogram variance at lag 0 to find a sill, ``0 <= min_sill <= max_sill``.
+
+        max_sill : float, default = 1
+            The maximum fraction of the variogram variance at lag 0 to find a sill. It *should be* lower or equal to 1.
+            It is possible to set it above 1, but then warning is printed.
+
+        number_of_sills : int, default = 64
+            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
+
+        direction : float, in range [0, 360], default=None
+            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is
+            required if passed experimental variogram is stored in a numpy array.
+
+        error_estimator : str, default = 'rmse'
+            A model error estimation method. Available options are:
+
+            - 'rmse': Root Mean Squared Error,
+            - 'mae': Mean Absolute Error,
+            - 'bias': Forecast Bias,
+            - 'smape': Symmetric Mean Absolute Percentage Error.
+
+        deviation_weighting : str, default = "equal"
+            The name of a method used to weight error at a given lags. Works only with RMSE. Available methods:
+
+            - equal: no weighting,
+            - closest: lags at a close range have bigger weights,
+            - distant: lags that are further away have bigger weights,
+            - dense: error is weighted by the number of point pairs within a lag.
+
+        auto_update_attributes : bool, default = True
+            Update sill, range, model type and nugget based on the best model.
+
+        warn_about_set_params: bool, default=True
+            Should class invoke warning if model parameters has been set during initialization?
+
+        verbose : bool, default = False
+            Show iteration results.
+
+
+        Returns
+        -------
+        model_attributes : Dict
+            Attributes dict:
+
+            >>> {
+            ...     'model_type': model_name,
+            ...     'sill': model_sill,
+            ...     'range': model_range,
+            ...     'nugget': model_nugget,
+            ...     'error_type': type_of_error_metrics,
+            ...     'error value': error_value
+            ... }
+
+        Warns
+        -----
+        SillOutsideSafeRangeWarning
+            Warning printed when ``max_sill > 1``.
+
+        RangeOutsideSafeDistanceWarning
+            Warning printed when ``max_range > 0.5``.
+
+        Warning
+            Model parameters were given during initilization but program is forced to fit the new set of parameters.
+
+        Warning
+            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.
+
+        Raises
+        ------
+        ValueError
+            Raised when ``sill < 0`` or ``range < 0`` or ``range > 1``.
+
+        KeyError
+            Raised when wrong model name(s) are provided by the users.
+
+        KeyError
+            Raised when wrong error type is provided by the users.
+        """
+
+        experimental_models = self.experimental_indicator_variogram.experimental_models
+
+        if model_type == 'basic':
+            model_type = ['linear', 'spherical']
+
+        for idx, experimental in experimental_models.items():
+            theo = TheoreticalVariogram()
+            theo.autofit(experimental_variogram=experimental,
+                         model_types=model_type,
+                         nugget=nugget,
+                         rang=rang,
+                         min_range=min_range,
+                         max_range=max_range,
+                         number_of_ranges=number_of_ranges,
+                         sill=sill,
+                         min_sill=min_sill,
+                         max_sill=max_sill,
+                         number_of_sills=number_of_sills,
+                         direction=direction,
+                         error_estimator=error_estimator,
+                         deviation_weighting=deviation_weighting,
+                         auto_update_attributes=auto_update_attributes,
+                         warn_about_set_params=warn_about_set_params,
+                         verbose=verbose,
+                         return_params=False)
+            self.theoretical_indicator_variograms[idx] = theo
 
     def show(self):
-        pass
+        """
+        Method plots experimental and theoretical variograms.
+        """
+        number_of_subplots = len(list(self.theoretical_indicator_variograms.keys()))
+        fig, axes = plt.subplots(number_of_subplots, sharey=True, sharex=True, constrained_layout=True)
+        idx_val = 0
+        for _key, _item in self.theoretical_indicator_variograms.items():
+
+            axes[idx_val].scatter(_item.experimental_array[:, 0],
+                        _item.experimental_array[:, 1],
+                        marker='x', c='#101010', alpha=0.2)
+
+            axes[idx_val].plot(_item.lags, _item.fitted_model[:, 1], '--', color='#fc8d62')
+            axes[idx_val].set_title('Threshold: ' + f'{float(_key):.2f}')
+
+            idx_val = idx_val + 1
+
+        plt.show()

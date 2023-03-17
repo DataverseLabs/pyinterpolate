@@ -1,5 +1,5 @@
 from pyinterpolate import read_txt
-from pyinterpolate.variogram.indicator.indicator_variogram import ExperimentalIndicatorVariogram
+from pyinterpolate.variogram.indicator.indicator_variogram import ExperimentalIndicatorVariogram, IndicatorVariograms
 
 dem = read_txt('../samples/point_data/txt/pl_dem_epsg2180.txt')
 
@@ -11,4 +11,9 @@ ind_variogram = ExperimentalIndicatorVariogram(input_array=dem,
                                                step_size=step_radius,
                                                max_range=_max_range)
 
-ind_variogram.show()
+ind_vars = IndicatorVariograms(experimental_indicator_variogram=ind_variogram)
+ind_vars.fit(
+    model_type='basic',
+    verbose=False
+)
+ind_vars.show()
