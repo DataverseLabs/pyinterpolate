@@ -16,4 +16,4 @@ ind_vars.fit(
     model_type='basic',
     verbose=False
 )
-ind_vars.show()
+ind_vars.show(subplots=False)

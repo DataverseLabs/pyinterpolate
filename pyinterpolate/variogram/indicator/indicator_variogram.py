@@ -1,7 +1,9 @@
+from copy import deepcopy
 from typing import Union
 
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib import markers
 from tqdm import tqdm
 
 from pyinterpolate.processing.transform.statistics import select_variogram_thresholds
@@ -379,22 +381,70 @@ class IndicatorVariograms:
                          return_params=False)
             self.theoretical_indicator_variograms[idx] = theo
 
-    def show(self):
+    def show(self, subplots: bool = False):
         """
         Method plots experimental and theoretical variograms.
+
+        Parameters
+        ----------
+        subplots : bool, default = False
+            If ``True`` then each indicator variogram is plotted on a separate plot. Otherwise, all variograms are
+            plotted on a scatter single plot.
         """
-        number_of_subplots = len(list(self.theoretical_indicator_variograms.keys()))
-        fig, axes = plt.subplots(number_of_subplots, sharey=True, sharex=True, constrained_layout=True)
-        idx_val = 0
-        for _key, _item in self.theoretical_indicator_variograms.items():
 
-            axes[idx_val].scatter(_item.experimental_array[:, 0],
-                        _item.experimental_array[:, 1],
-                        marker='x', c='#101010', alpha=0.2)
+        if subplots:
+            number_of_subplots = len(list(self.theoretical_indicator_variograms.keys()))
+            fig, axes = plt.subplots(number_of_subplots, sharey=True, sharex=True, constrained_layout=True)
+            idx_val = 0
+            for _key, _item in self.theoretical_indicator_variograms.items():
 
-            axes[idx_val].plot(_item.lags, _item.fitted_model[:, 1], '--', color='#fc8d62')
-            axes[idx_val].set_title('Threshold: ' + f'{float(_key):.2f}')
+                axes[idx_val].scatter(_item.experimental_array[:, 0],
+                            _item.experimental_array[:, 1],
+                            marker='x', c='#101010', alpha=0.2)
 
-            idx_val = idx_val + 1
+                axes[idx_val].plot(_item.lags, _item.fitted_model[:, 1], '--', color='#fc8d62')
+                axes[idx_val].set_title('Threshold: ' + f'{float(_key):.2f}')
+
+                idx_val = idx_val + 1
+
+        else:
+            # Plot everything on a single plot
+            plt.figure(figsize=(10, 10))
+            legend = []
+            markers_list = list(markers.MarkerStyle.filled_markers)  # Only filled
+            colors_list = [
+                '#66c2a5',
+                '#fc8d62',
+                '#8da0cb'
+            ]
+            cidx = 0
+            mlist = deepcopy(markers_list)
+            _marker_idx = 1
+            for _key, _item in self.theoretical_indicator_variograms.items():
+                try:
+                    plt.scatter(_item.experimental_array[:, 0],
+                                _item.experimental_array[:, 1],
+                                marker=mlist.pop(0),
+                                alpha=0.4, c=colors_list[cidx], edgecolors='black')
+                except IndexError:
+                    mlist = deepcopy(markers_list)
+                    cidx = cidx + 1
+                    plt.scatter(_item.experimental_array[:, 0],
+                                _item.experimental_array[:, 1],
+                                marker=mlist.pop(0),
+                                alpha=0.4, c=colors_list[cidx], edgecolors='black')
+
+                no_items = len(_item.experimental_array[:, 0])
+                plt.annotate(
+                    str(_marker_idx),
+                    [
+                        _item.experimental_array[:, 0][no_items-1],
+                        _item.experimental_array[:, 1][no_items-1]
+                    ]
+                )
+
+                legend.append(str(_marker_idx) + ' | T: ' + f'{float(_key):.2f}')
+                _marker_idx = _marker_idx + 1
+            plt.legend(legend)
 
         plt.show()
