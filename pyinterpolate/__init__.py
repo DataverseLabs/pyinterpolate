@@ -14,6 +14,8 @@ from pyinterpolate.io import read_block, read_csv, read_txt
 from pyinterpolate.kriging import kriging, ordinary_kriging, simple_kriging
 # Block
 from pyinterpolate.kriging import centroid_poisson_kriging, area_to_area_pk, area_to_point_pk
+# Indicator
+from pyinterpolate.kriging import IndicatorKriging
 
 # Pipelines
 # Excluded: multi_kriging (BlockToBlockKrigingComparison)
@@ -33,6 +35,8 @@ from pyinterpolate.variogram import build_theoretical_variogram, TheoreticalVari
 from pyinterpolate.variogram import AggregatedVariogram
 # Deconvolution
 from pyinterpolate.variogram import Deconvolution
+# Indicator
+from pyinterpolate.variogram import IndicatorVariogramData, ExperimentalIndicatorVariogram, IndicatorVariograms
 
 # Viz
 from pyinterpolate.viz import interpolate_raster

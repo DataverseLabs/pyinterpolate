@@ -337,6 +337,9 @@ class ExperimentalVariogram:
     | 2.0 | 5.2272727272727275 | -0.7954545454545454 | 5.0439752555137165 |
     | 3.0 |        6.0         | -1.2599999999999958 | 5.508520710059168  |
     +-----+--------------------+---------------------+--------------------+
+
+    # TODO
+    * calculate variance ALWAYS
     """
 
     def __init__(self,
@@ -366,7 +369,7 @@ class ExperimentalVariogram:
         self.experimental_covariances = None
         self.variance_covariances_diff = None
         self.points_per_lag = None
-        self.variance = 0
+        self.variance = 0.0
 
         self.step = step_size
         self.mx_rng = max_range

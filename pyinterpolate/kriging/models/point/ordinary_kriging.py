@@ -86,8 +86,9 @@ def ordinary_kriging(
     try:
         output_weights = solve_weights(weights, k, allow_approximate_solutions)
     except np.linalg.LinAlgError as _:
-        msg = 'Singular matrix in Kriging system detected, check if you have duplicated coordinates ' \
-              'in the ``known_locations`` variable.'
+        msg = "Singular matrix in Kriging system detected, check if you have duplicated coordinates " \
+              "in the ``known_locations`` variable. If your data doesn't have duplicates then set " \
+              "``allow_approximate_solutions`` parameter to ``True``."
         raise RuntimeError(msg)
 
     zhat = dataset[:, -2].dot(output_weights[:-1])
