@@ -6,7 +6,7 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2023-03-XX
+2023-04-02
 ----------
 
 **version 0.4**
