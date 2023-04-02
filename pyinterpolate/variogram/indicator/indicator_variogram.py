@@ -140,12 +140,6 @@ class ExperimentalIndicatorVariogram:
     show()
         Show experimental variograms for each indicator.
 
-    See Also
-    --------
-
-    Examples
-    --------
-
     References
     ----------
     Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated non-parametric modeling of local uncertainty
@@ -217,6 +211,28 @@ class ExperimentalIndicatorVariogram:
 class IndicatorVariograms:
     """
     Class models indicator variograms for all indices.
+
+    Parameters
+    ----------
+    experimental_indicator_variogram : ExperimentalIndicatorVariogram
+        Fitted experimanetal variograms with indicators for each threshold.
+
+    Attributes
+    ----------
+    experimental_indicator_variogram : ExperimentalIndicatorVariogram
+        See ``experimental_indicator_variogram`` parameter.
+
+    theoretical_indicator_variograms : Dict
+        Dictionary with fitted theoretical models for each threshold.
+
+    Methods
+    -------
+    fit()
+        Fits theoretical models to experimental variograms.
+
+    show()
+        Shows experimental and theoretical variograms for each threshold.
+
     """
 
     def __init__(self, experimental_indicator_variogram: ExperimentalIndicatorVariogram):
@@ -397,10 +413,9 @@ class IndicatorVariograms:
             fig, axes = plt.subplots(number_of_subplots, sharey=True, sharex=True, constrained_layout=True)
             idx_val = 0
             for _key, _item in self.theoretical_indicator_variograms.items():
-
                 axes[idx_val].scatter(_item.experimental_array[:, 0],
-                            _item.experimental_array[:, 1],
-                            marker='x', c='#101010', alpha=0.2)
+                                      _item.experimental_array[:, 1],
+                                      marker='x', c='#101010', alpha=0.2)
 
                 axes[idx_val].plot(_item.lags, _item.fitted_model[:, 1], '--', color='#fc8d62')
                 axes[idx_val].set_title('Threshold: ' + f'{float(_key):.2f}')
@@ -438,8 +453,8 @@ class IndicatorVariograms:
                 plt.annotate(
                     str(_marker_idx),
                     [
-                        _item.experimental_array[:, 0][no_items-1],
-                        _item.experimental_array[:, 1][no_items-1]
+                        _item.experimental_array[:, 0][no_items - 1],
+                        _item.experimental_array[:, 1][no_items - 1]
                     ]
                 )
 

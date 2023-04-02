@@ -389,7 +389,7 @@
 
 
 <div class="viewcode-block" id="aggregate_cluster"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.aggregate_cluster">[docs]</a><span class="k">def</span> <span class="nf">aggregate_cluster</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">cluster</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function aggregates points in a cluster into a single point.</span>
 
 <span class="sd">    Parameters</span>
@@ -442,7 +442,7 @@
 
 
 <div class="viewcode-block" id="ClusterDetector"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.ClusterDetector">[docs]</a><span class="k">class</span> <span class="nc">ClusterDetector</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class detects spatial clusters in data and allows to remove those from a dataset.</span>
 
 <span class="sd">    Parameters</span>
@@ -504,7 +504,7 @@
                            <span class="n">cluster_labels</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">],</span>
                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
                            <span class="n">store_aggregated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method aggregates clusters</span>
 
 <span class="sd">        Parameters</span>
@@ -557,7 +557,7 @@
                      <span class="n">cluster_selection_epsilon</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                      <span class="n">cluster_selection_method</span><span class="o">=</span><span class="s1">&#39;leaf&#39;</span><span class="p">,</span>
                      <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method detects clusters in a data. It uses DBSCAN algorithm described here:</span>
 <span class="sd">        https://hdbscan.readthedocs.io/en/latest/index.html</span>
 
@@ -607,7 +607,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Clusters detected, number of clusters:&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clusterer</span><span class="o">.</span><span class="n">labels_</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="ClusterDetector.get_labels"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.ClusterDetector.get_labels">[docs]</a>    <span class="k">def</span> <span class="nf">get_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method returns cluster labels.</span>
 
 <span class="sd">        Returns</span>
@@ -620,7 +620,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusterer</span><span class="o">.</span><span class="n">labels_</span></div>
 
 <div class="viewcode-block" id="ClusterDetector.show_clusters"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.ClusterDetector.show_clusters">[docs]</a>    <span class="k">def</span> <span class="nf">show_clusters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method shows clusters in a data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">clusterer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

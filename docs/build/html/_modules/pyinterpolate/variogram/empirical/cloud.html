@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.6 documentation</title>
+    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -99,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
   
 </a>
     
@@ -407,7 +407,7 @@
 <span class="k">def</span> <span class="nf">omnidirectional_point_cloud</span><span class="p">(</span><span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                                 <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged omnidirectional point cloud.</span>
 
 <span class="sd">    Parameters</span>
@@ -452,7 +452,7 @@
                             <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                             <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                             <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point</span>
 <span class="sd">        against other point within range specified by step_size parameter.</span>
 
@@ -529,7 +529,7 @@
                                 <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                                 <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates lagged variogram point cloud. Variogram is calculated as a squared difference of each point</span>
 <span class="sd">        against other point within range specified by step_size parameter.</span>
 
@@ -594,7 +594,7 @@
 
 
 <div class="viewcode-block" id="VariogramCloud"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud">[docs]</a><span class="k">class</span> <span class="nc">VariogramCloud</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates Variogram Point Cloud and presents it in a scatterplot, boxplot and violinplot.</span>
 
 <span class="sd">    Parameters</span>
@@ -740,7 +740,7 @@
                        <span class="s1">&#39;kurtosis&#39;</span><span class="p">]</span>
 
 <div class="viewcode-block" id="VariogramCloud.calculate_experimental_variogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.calculate_experimental_variogram">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method transforms the experimental point cloud into the experimental variogram.</span>
 
 <span class="sd">        Raises</span>
@@ -774,7 +774,7 @@
         <span class="k">return</span> <span class="n">experimental_semivariogram</span></div>
 
 <div class="viewcode-block" id="VariogramCloud.describe"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.describe">[docs]</a>    <span class="k">def</span> <span class="nf">describe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates basic statistcs of a data: count (point pairs number), average semivariance,</span>
 <span class="sd">        standard deviation, minimum, 1st quartile, median, 3rd quartile, maximum, skewness, kurtosis.</span>
 
@@ -836,7 +836,7 @@
         <span class="k">return</span> <span class="n">statistics</span></div>
 
 <div class="viewcode-block" id="VariogramCloud.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.VariogramCloud.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;scatter&#39;</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots variogram point cloud.</span>
 
 <span class="sd">        Parameters</span>
@@ -872,7 +872,7 @@
                         <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                         <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
                         <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

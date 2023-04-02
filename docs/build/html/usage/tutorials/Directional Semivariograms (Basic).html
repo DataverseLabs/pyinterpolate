@@ -525,11 +525,10 @@ div.nboutput.container div.prompt > div {
     }
 }
 
-/* disable scrollbars and line breaks on prompts */
+/* disable scrollbars on prompts */
 div.nbinput.container div.prompt pre,
 div.nboutput.container div.prompt pre {
     overflow: hidden;
-    white-space: pre;
 }
 
 /* input/output area */
@@ -851,7 +850,7 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">df2gdf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function transforms DataFrame into GeoDataFrame.</span>
 
 <span class="sd">    Parameters</span>
@@ -1338,7 +1337,7 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span> <span class="o">/</span> <span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 </pre></div>

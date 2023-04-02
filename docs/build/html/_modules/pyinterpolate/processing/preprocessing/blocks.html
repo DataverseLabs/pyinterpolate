@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.3.6 documentation</title>
+    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.3.7 documentation</title>
   
   
   
@@ -99,7 +99,7 @@
 
   
   
-    <p class="title logo__title">Pyinterpolate 0.3.6 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
   
 </a>
     
@@ -166,6 +166,13 @@
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../community/community.html">
                         Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
                       </a>
                     </li>
                 
@@ -304,6 +311,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -383,7 +397,7 @@
 
 
 <div class="viewcode-block" id="Blocks"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.Blocks">[docs]</a><span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class stores and prepares aggregated data.</span>
+    <span class="sd">&quot;&quot;&quot;Class stores and prepares aggregated data.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -433,7 +447,7 @@
             <span class="k">raise</span> <span class="n">IndexColNotUniqueError</span><span class="p">(</span><span class="n">dsl</span><span class="p">,</span> <span class="n">nuniq</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">val_col</span><span class="p">,</span> <span class="n">geo_col</span><span class="p">,</span> <span class="n">idx_col</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parser.</span>
+        <span class="sd">&quot;&quot;&quot;Parser.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -478,7 +492,7 @@
                   <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
                   <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads areal dataset from a file supported by GeoPandas.</span>
 
 <span class="sd">        Parameters</span>
@@ -533,7 +547,7 @@
                           <span class="n">value_col</span><span class="p">,</span>
                           <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
                           <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads areal dataset from a GeoDataFrame supported by GeoPandas.</span>
 
 <span class="sd">        Parameters</span>
@@ -575,7 +589,7 @@
 
 
 <div class="viewcode-block" id="PointSupport"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.PointSupport">[docs]</a><span class="k">class</span> <span class="nc">PointSupport</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class prepares the point support data in relation to block dataset.</span>
+    <span class="sd">&quot;&quot;&quot;Class prepares the point support data in relation to block dataset.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -671,7 +685,7 @@
                    <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="n">point_support_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">blocks_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Methods prepares the point support data from files.</span>
 
 <span class="sd">        Parameters</span>
@@ -730,7 +744,7 @@
                            <span class="n">blocks_geometry_col</span><span class="p">,</span>
                            <span class="n">blocks_index_col</span><span class="p">,</span>
                            <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Methods prepares the point support data from files.</span>
 
 <span class="sd">        Parameters</span>

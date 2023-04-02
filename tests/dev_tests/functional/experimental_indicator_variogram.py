@@ -1,7 +1,7 @@
 from pyinterpolate import read_txt
 from pyinterpolate.variogram.indicator.indicator_variogram import ExperimentalIndicatorVariogram, IndicatorVariograms
 
-dem = read_txt('../samples/point_data/txt/pl_dem_epsg2180.txt')
+dem = read_txt('../../samples/point_data/txt/pl_dem_epsg2180.txt')
 
 step_radius = 500  # meters
 _max_range = 10000  # meters
