@@ -1,6 +1,11 @@
 import unittest
 import pandas as pd
-from pyinterpolate.pipelines.samples import download_air_quality_poland
+# from pyinterpolate.pipelines.samples import download_air_quality_poland
+
+
+# TODO:
+# Deprecated - test should be moved to pyinterpolate-datasets package
+# https://pypi.org/project/pyinterpolate-datasets/2023.0.0/
 
 # class TestDownloadAirQualityDataPoland(unittest.TestCase):
 #

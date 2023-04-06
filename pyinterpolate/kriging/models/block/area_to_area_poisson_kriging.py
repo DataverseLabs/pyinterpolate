@@ -186,7 +186,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     sigmasq = np.matmul(w.T, k_ones)
 
-
     distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
     semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
         u_idx: distances_within_unknown_block

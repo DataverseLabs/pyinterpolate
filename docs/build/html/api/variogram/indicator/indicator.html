@@ -1,0 +1,861 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Indicator &#8212; Pyinterpolate 0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/variogram/indicator/indicator';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Kriging" href="../../kriging/kriging.html" />
+    <link rel="prev" title="Deconvolution" href="../deconvolution/deconvolution.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../datatypes/core.html">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../io/io.html">Input / Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../distance/distance.html">Distance calculations</a></li>
+
+
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../variogram.html">Variogram</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../experimental/experimental.html">Experimental</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../theoretical/theoretical.html">Theoretical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../block/block.html">Block</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deconvolution/deconvolution.html">Deconvolution</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Indicator</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../kriging/kriging.html">Kriging</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../kriging/point/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kriging/indicator/indicator_kriging.html">Indicator Kriging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../idw/idw.html">Inverse Distance Weighting</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../pipelines/pipelines.html">Pipelines</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/data/download.html">Data download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pipelines/kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../viz/viz.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../validation/validation.html">Validation</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../variogram.html" class="nav-link">Variogram</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Indicator</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="indicator">
+<h1>Indicator<a class="headerlink" href="#indicator" title="Permalink to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndicatorVariogramData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_thresholds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#IndicatorVariogramData"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class describes indicator variogram data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_array</strong><span class="classifier">numpy array, list, tuple</span></dt><dd><p>Coordinates and their values: <code class="docutils literal notranslate"><span class="pre">(pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y,</span> <span class="pre">value)</span></code></p>
+</dd>
+<dt><strong>number_of_thresholds: int</strong></dt><dd><p>The number of thresholds to model data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExperimentalIndicatorVariogram</span></code></dt><dd><p>Class that calculates experimental variograms for each indicator.</p>
+</dd>
+</dl>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_array</strong><span class="classifier">numpy array, list, tuple</span></dt><dd><p>Coordinates and their values: <code class="docutils literal notranslate"><span class="pre">(pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y,</span> <span class="pre">value)</span></code></p>
+</dd>
+<dt><strong>n_thresholds: int</strong></dt><dd><p>The number of thresholds to model data.</p>
+</dd>
+<dt><strong>thresholds</strong><span class="classifier">numpy array</span></dt><dd><p>The 1D numpy array with thresholds.</p>
+</dd>
+<dt><strong>ids</strong><span class="classifier">numpy array</span></dt><dd><p>The numpy array with <code class="docutils literal notranslate"><span class="pre">[coordinate_x,</span> <span class="pre">coordinate_y,</span> <span class="pre">threshold_0,</span> <span class="pre">...,</span> <span class="pre">threshold_n]</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExperimentalIndicatorVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_thresholds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#ExperimentalIndicatorVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class describes Experimental Indicator Variogram models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>input_array</strong><span class="classifier">numpy array, list, tuple</span></dt><dd><p>Coordinates and their values: <code class="docutils literal notranslate"><span class="pre">(pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y,</span> <span class="pre">value)</span></code></p>
+</dd>
+<dt><strong>number_of_thresholds: int</strong></dt><dd><p>The number of thresholds to model data.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The distance between lags within each points are included in the calculations.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum range of analysis.</p>
+</dd>
+<dt><strong>weights</strong><span class="classifier">numpy array, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=None</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+the coordinate system and the direction given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>
+then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+for 0 tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>method</strong><span class="classifier">str, default = triangular</span></dt><dd><p>The method used for neighbors selection. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method where a point neighbors are selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, the most accurate method but also the slowest one.</p></li>
+</ul>
+</dd>
+<dt><strong>fit</strong><span class="classifier">bool, default = True</span></dt><dd><p>Should models be fitted in the class initialization?</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<p>Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated non-parametric modeling of local uncertainty
+in earth sciences. DOI: TODO</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">IndicatorVariogramData</span></dt><dd><p>Prepared indicator data.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter.</p>
+</dd>
+<dt><strong>weights</strong><span class="classifier">numpy array</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">weights</span></code> parameter.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">method</span></code> parameter.</p>
+</dd>
+<dt><strong>experimental_models</strong><span class="classifier">List</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">[threshold,</span> <span class="pre">experimental_variogram]</span></code> pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit()</strong></p></td>
+<td><p>Fits indicators to experimental variograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show()</strong></p></td>
+<td><p>Show experimental variograms for each indicator.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#ExperimentalIndicatorVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function fits indicators to models and updates class models.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#ExperimentalIndicatorVariogram.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function shows generated experimental variograms for each indicator.</p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndicatorVariograms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_indicator_variogram</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#IndicatorVariograms"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class models indicator variograms for all indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>experimental_indicator_variogram</strong><span class="classifier">ExperimentalIndicatorVariogram</span></dt><dd><p>Fitted experimanetal variograms with indicators for each threshold.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>experimental_indicator_variogram</strong><span class="classifier">ExperimentalIndicatorVariogram</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">experimental_indicator_variogram</span></code> parameter.</p>
+</dd>
+<dt><strong>theoretical_indicator_variograms</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with fitted theoretical models for each threshold.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit()</strong></p></td>
+<td><p>Fits theoretical models to experimental variograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show()</strong></p></td>
+<td><p>Shows experimental and theoretical variograms for each threshold.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_update_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#IndicatorVariograms.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_type</strong><span class="classifier">str, default = “linear”</span></dt><dd><p>The name of a modeling function. Available models:</p>
+<ul class="simple">
+<li><p>‘basic’ : linear and spherical models are tested,</p></li>
+<li><p>‘exponential’,</p></li>
+<li><p>‘gaussian’,</p></li>
+<li><p>‘linear’,</p></li>
+<li><p>‘power’,</p></li>
+<li><p>‘spherical’.</p></li>
+</ul>
+</dd>
+<dt><strong>nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>Nugget (bias) of a variogram. Default value is 0.</p>
+</dd>
+<dt><strong>rang</strong><span class="classifier">float, optional</span></dt><dd><p>If given, then range is fixed to this value.</p>
+</dd>
+<dt><strong>min_range</strong><span class="classifier">float, default = 0.1</span></dt><dd><p>The minimal fraction of a variogram range, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span></code>.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float, default = 0.5</span></dt><dd><p>The maximum fraction of a variogram range, <code class="docutils literal notranslate"><span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code>. Parameter <code class="docutils literal notranslate"><span class="pre">max_range</span></code> greater
+than <strong>0.5</strong> raises warning.</p>
+</dd>
+<dt><strong>number_of_ranges</strong><span class="classifier">int, default = 64</span></dt><dd><p>How many equally spaced ranges are tested between <code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
+</dd>
+<dt><strong>sill</strong><span class="classifier">float, default = None</span></dt><dd><p>If given, then sill is fixed to this value.</p>
+</dd>
+<dt><strong>min_sill</strong><span class="classifier">float, default = 0</span></dt><dd><p>The minimal fraction of the variogram variance at lag 0 to find a sill, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">min_sill</span> <span class="pre">&lt;=</span> <span class="pre">max_sill</span></code>.</p>
+</dd>
+<dt><strong>max_sill</strong><span class="classifier">float, default = 1</span></dt><dd><p>The maximum fraction of the variogram variance at lag 0 to find a sill. It <em>should be</em> lower or equal to 1.
+It is possible to set it above 1, but then warning is printed.</p>
+</dd>
+<dt><strong>number_of_sills</strong><span class="classifier">int, default = 64</span></dt><dd><p>How many equally spaced sill values are tested between <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then semivariogram is isotropic. This parameter is
+required if passed experimental variogram is stored in a numpy array.</p>
+</dd>
+<dt><strong>error_estimator</strong><span class="classifier">str, default = ‘rmse’</span></dt><dd><p>A model error estimation method. Available options are:</p>
+<ul class="simple">
+<li><p>‘rmse’: Root Mean Squared Error,</p></li>
+<li><p>‘mae’: Mean Absolute Error,</p></li>
+<li><p>‘bias’: Forecast Bias,</p></li>
+<li><p>‘smape’: Symmetric Mean Absolute Percentage Error.</p></li>
+</ul>
+</dd>
+<dt><strong>deviation_weighting</strong><span class="classifier">str, default = “equal”</span></dt><dd><p>The name of a method used to weight error at a given lags. Works only with RMSE. Available methods:</p>
+<ul class="simple">
+<li><p>equal: no weighting,</p></li>
+<li><p>closest: lags at a close range have bigger weights,</p></li>
+<li><p>distant: lags that are further away have bigger weights,</p></li>
+<li><p>dense: error is weighted by the number of point pairs within a lag.</p></li>
+</ul>
+</dd>
+<dt><strong>auto_update_attributes</strong><span class="classifier">bool, default = True</span></dt><dd><p>Update sill, range, model type and nugget based on the best model.</p>
+</dd>
+<dt><strong>warn_about_set_params: bool, default=True</strong></dt><dd><p>Should class invoke warning if model parameters has been set during initialization?</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default = False</span></dt><dd><p>Show iteration results.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt><strong>model_attributes</strong><span class="classifier">Dict</span></dt><dd><p>Attributes dict:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">model_sill</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">model_range</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">model_nugget</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;error_type&#39;</span><span class="p">:</span> <span class="n">type_of_error_metrics</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;error value&#39;</span><span class="p">:</span> <span class="n">error_value</span>
+<span class="gp">... </span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>Raised when <code class="docutils literal notranslate"><span class="pre">sill</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">range</span> <span class="pre">&lt;</span> <span class="pre">0</span></code> or <code class="docutils literal notranslate"><span class="pre">range</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
+</dd>
+<dt>KeyError</dt><dd><p>Raised when wrong model name(s) are provided by the users.</p>
+</dd>
+<dt>KeyError</dt><dd><p>Raised when wrong error type is provided by the users.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Warns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>SillOutsideSafeRangeWarning</dt><dd><p>Warning printed when <code class="docutils literal notranslate"><span class="pre">max_sill</span> <span class="pre">&gt;</span> <span class="pre">1</span></code>.</p>
+</dd>
+<dt>RangeOutsideSafeDistanceWarning</dt><dd><p>Warning printed when <code class="docutils literal notranslate"><span class="pre">max_range</span> <span class="pre">&gt;</span> <span class="pre">0.5</span></code>.</p>
+</dd>
+<dt>Warning</dt><dd><p>Model parameters were given during initilization but program is forced to fit the new set of parameters.</p>
+</dd>
+<dt>Warning</dt><dd><p>Passed <code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> is a numpy array and <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subplots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/indicator/indicator_variogram.html#IndicatorVariograms.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method plots experimental and theoretical variograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>subplots</strong><span class="classifier">bool, default = False</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each indicator variogram is plotted on a separate plot. Otherwise, all variograms are
+plotted on a scatter single plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../deconvolution/deconvolution.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Deconvolution</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../kriging/kriging.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Kriging</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/api/variogram/indicator/indicator.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

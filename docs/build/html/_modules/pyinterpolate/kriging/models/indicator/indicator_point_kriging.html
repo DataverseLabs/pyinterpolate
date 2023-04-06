@@ -1,0 +1,831 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.kriging.models.indicator.indicator_point_kriging &#8212; Pyinterpolate 0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/kriging/models/indicator/indicator_point_kriging';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyinterpolate.kriging.models.indicator.indicator_point_kriging</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for pyinterpolate.kriging.models.indicator.indicator_point_kriging</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Perform indicator kriging.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">Bibliography</span>
+<span class="sd">------------</span>
+<span class="sd">[1] P. Goovaerts, AUTO-IK: A 2D indicator kriging program for the automated non-parametric modeling of local</span>
+<span class="sd">    uncertainty in earth sciences, Computers &amp; Geosciences, Volume 35, Issue 6, 2009, Pages 1255-1270, ISSN 0098-3004,</span>
+<span class="sd">    https://doi.org/10.1016/j.cageo.2008.08.014.</span>
+
+<span class="sd">Indicator kriging is performed for each threshold using four types of destination geography:</span>
+<span class="sd"># TODO: helper methods to perform operations below:</span>
+<span class="sd">1) grid of points specified by the user,</span>
+<span class="sd">2) rectangular grid,</span>
+<span class="sd">3) sampled locations (cross-validation option), and</span>
+<span class="sd">4) set of test locations (jack-knife option).</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.models.point.ordinary_kriging</span> <span class="kn">import</span> <span class="n">ordinary_kriging</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.models.point.simple_kriging</span> <span class="kn">import</span> <span class="n">simple_kriging</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.indicator.indicator_variogram</span> <span class="kn">import</span> <span class="n">IndicatorVariograms</span>
+
+
+<div class="viewcode-block" id="IndicatorKriging"><a class="viewcode-back" href="../../../../../api/kriging/indicator/indicator_kriging.html#pyinterpolate.IndicatorKriging">[docs]</a><span class="k">class</span> <span class="nc">IndicatorKriging</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class performs indicator kriging.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datapoints : numpy ndarray</span>
+<span class="sd">        The known locations ``[x, y, value]``.</span>
+
+<span class="sd">    indicator_variograms : IndicatorVariograms</span>
+<span class="sd">        Modeled variograms for each threshold.</span>
+
+<span class="sd">    unknown_locations : numpy ndarray</span>
+<span class="sd">        Points where we want to estimate value ``(x, y) &lt;-or-&gt; (lon, lat)``.</span>
+
+<span class="sd">    kriging_type : str, default = &#39;ok&#39;</span>
+<span class="sd">        Type of kriging to perform. Possible values: &#39;ok&#39; - ordinary kriging, &#39;sk&#39; - simple kriging.</span>
+
+<span class="sd">    process_mean : float</span>
+<span class="sd">        The mean value of a process over a study area. Should be know before processing. That&#39;s why Simple</span>
+<span class="sd">        Kriging has a limited number of applications. You must have multiple samples and well-known area to</span>
+<span class="sd">        know this parameter.</span>
+
+<span class="sd">    neighbors_range : float, default=None</span>
+<span class="sd">        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from</span>
+<span class="sd">        the ``theoretical_model`` ``rang`` attribute.</span>
+
+<span class="sd">    no_neighbors : int, default = 4</span>
+<span class="sd">        The number of the **n-closest neighbors** used for interpolation.</span>
+
+<span class="sd">    use_all_neighbors_in_range : bool, default = False</span>
+<span class="sd">        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the</span>
+<span class="sd">        ``number_of_neighbors`` parameter then take all of them anyway.</span>
+
+<span class="sd">    allow_approximate_solutions : bool, default=False</span>
+<span class="sd">        Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to</span>
+<span class="sd">        ``True`` if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in</span>
+<span class="sd">        your dataset, that can lead to singular or near-singular matrix creation.</span>
+
+<span class="sd">    get_expected_values : bool, default=True</span>
+<span class="sd">        If ``True`` then expected values and variances are calculated.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    thresholds : numpy ndarray</span>
+<span class="sd">        Thresholds used for indicator kriging.</span>
+
+<span class="sd">    coordinates : numpy ndarray</span>
+<span class="sd">        Coordinates of unknown locations.</span>
+
+<span class="sd">    indicator_predictions : numpy ndarray</span>
+<span class="sd">        Indicator kriging predictions for each threshold and each unknown location.</span>
+
+<span class="sd">    expected_values : numpy ndarray</span>
+<span class="sd">        Expected values derived from ``indicator_predictions`` for each unknown location.</span>
+
+<span class="sd">    variances : numpy ndarray</span>
+<span class="sd">        Variances derived from ``indicator_predictions`` for each unknown location.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_indicator_maps()</span>
+<span class="sd">        Returns dictionary with thresholds and indicator maps for each of them.</span>
+
+<span class="sd">    get_expected_values()</span>
+<span class="sd">        Returns two arrays: one array with coordinates and expected values, and the second</span>
+<span class="sd">        with coordinates and variances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">datapoints</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">indicator_variograms</span><span class="p">:</span> <span class="n">IndicatorVariograms</span><span class="p">,</span>
+                 <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">kriging_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span>
+                 <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">get_expected_values</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">thresholds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">indicator_variograms</span><span class="o">.</span><span class="n">theoretical_indicator_variograms</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">unknown_locations</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">indicator_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate</span><span class="p">(</span><span class="n">datapoints</span><span class="p">,</span>
+                                                    <span class="n">indicator_variograms</span><span class="p">,</span>
+                                                    <span class="n">unknown_locations</span><span class="p">,</span>
+                                                    <span class="n">kriging_type</span><span class="p">,</span>
+                                                    <span class="n">process_mean</span><span class="p">,</span>
+                                                    <span class="n">neighbors_range</span><span class="p">,</span>
+                                                    <span class="n">no_neighbors</span><span class="p">,</span>
+                                                    <span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                                                    <span class="n">allow_approximate_solutions</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">expected_values</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variances</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">get_expected_values</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">expected_values</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">variances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_expected_values</span><span class="p">()</span>
+
+<div class="viewcode-block" id="IndicatorKriging.get_indicator_maps"><a class="viewcode-back" href="../../../../../api/kriging/indicator/indicator_kriging.html#pyinterpolate.IndicatorKriging.get_indicator_maps">[docs]</a>    <span class="k">def</span> <span class="nf">get_indicator_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method returns indicator map for each threshold.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        indicator_maps : Dict</span>
+<span class="sd">            Indicator map for each threshold.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">indicator_maps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">threshold</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">thresholds</span><span class="p">):</span>
+            <span class="n">indicator_maps</span><span class="p">[</span><span class="n">threshold</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">indicator_predictions</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]]</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">indicator_maps</span></div>
+
+<div class="viewcode-block" id="IndicatorKriging.get_expected_values_maps"><a class="viewcode-back" href="../../../../../api/kriging/indicator/indicator_kriging.html#pyinterpolate.IndicatorKriging.get_expected_values_maps">[docs]</a>    <span class="k">def</span> <span class="nf">get_expected_values_maps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method returns expected values and variances for each threshold.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        expected_values, variances : numpy ndarray, numpy ndarray</span>
+<span class="sd">            Expected values and variances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_expected_values</span><span class="p">()</span>
+
+        <span class="c1"># Expected values map</span>
+        <span class="n">expected_values_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">expected_values</span><span class="p">])</span>
+
+        <span class="c1"># Variances map</span>
+        <span class="n">variances_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">variances</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">expected_values_map</span><span class="p">,</span> <span class="n">variances_map</span></div>
+
+    <span class="k">def</span> <span class="nf">_estimate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">datapoints</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">indicator_variograms</span><span class="p">:</span> <span class="n">IndicatorVariograms</span><span class="p">,</span>
+                  <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">kriging_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span>
+                  <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                  <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method estimates probabilities of a location becoming within a given threshold.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        datapoints : numpy ndarray</span>
+<span class="sd">            The known locations ``[x, y, value]``.</span>
+
+<span class="sd">        indicator_variograms : IndicatorVariograms</span>
+<span class="sd">            Modeled variograms for each threshold.</span>
+
+<span class="sd">        unknown_locations : numpy ndarray</span>
+<span class="sd">            Points where we want to estimate value ``(x, y) &lt;-or-&gt; (lon, lat)``.</span>
+
+<span class="sd">        kriging_type : str, default = &#39;ok&#39;</span>
+<span class="sd">            Type of kriging to perform. Possible values: &#39;ok&#39; - ordinary kriging, &#39;sk&#39; - simple kriging.</span>
+
+<span class="sd">        process_mean : float</span>
+<span class="sd">            The mean value of a process over a study area. Should be know before processing. That&#39;s why Simple</span>
+<span class="sd">            Kriging has a limited number of applications. You must have multiple samples and well-known area to</span>
+<span class="sd">            know this parameter.</span>
+
+<span class="sd">        neighbors_range : float, default=None</span>
+<span class="sd">            The maximum distance where we search for neighbors. If ``None`` is given then range is selected from</span>
+<span class="sd">            the ``theoretical_model`` ``rang`` attribute.</span>
+
+<span class="sd">        no_neighbors : int, default = 4</span>
+<span class="sd">            The number of the **n-closest neighbors** used for interpolation.</span>
+
+<span class="sd">        use_all_neighbors_in_range : bool, default = False</span>
+<span class="sd">            ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the</span>
+<span class="sd">            ``number_of_neighbors`` parameter then take all of them anyway.</span>
+
+<span class="sd">        allow_approximate_solutions : bool, default=False</span>
+<span class="sd">            Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to</span>
+<span class="sd">            ``True`` if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in</span>
+<span class="sd">            your dataset, that can lead to singular or near-singular matrix creation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        indicator_predictions : numpy array</span>
+<span class="sd">            The indicator probabilities where each column is a threshold.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Wrong Kriging type, allowed types: &#39;ok&#39; or &#39;sk&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">predictions_all</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">indicator_variograms</span><span class="o">.</span><span class="n">theoretical_indicator_variograms</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+
+            <span class="n">indicator_points</span> <span class="o">=</span> <span class="n">datapoints</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">indicator_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">indicator_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">float</span><span class="p">(</span><span class="n">_key</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+            <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">_point</span> <span class="ow">in</span> <span class="n">unknown_locations</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">:</span>
+                    <span class="n">_pred_arr</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+                        <span class="n">theoretical_model</span><span class="o">=</span><span class="n">_item</span><span class="p">,</span>
+                        <span class="n">known_locations</span><span class="o">=</span><span class="n">indicator_points</span><span class="p">,</span>
+                        <span class="n">unknown_location</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
+                        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
+                    <span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;sk&#39;</span><span class="p">:</span>
+                    <span class="n">_pred_arr</span> <span class="o">=</span> <span class="n">simple_kriging</span><span class="p">(</span>
+                        <span class="n">theoretical_model</span><span class="o">=</span><span class="n">_item</span><span class="p">,</span>
+                        <span class="n">known_locations</span><span class="o">=</span><span class="n">indicator_points</span><span class="p">,</span>
+                        <span class="n">unknown_location</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
+                        <span class="n">process_mean</span><span class="o">=</span><span class="n">process_mean</span><span class="p">,</span>
+                        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+                        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+                        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
+                    <span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Kriging type not supported. Please choose from: &#39;</span>
+                                     <span class="s1">&#39;&quot;ok&quot; - ordinary kriging, &quot;sk&quot; - simple kriging.&#39;</span><span class="p">)</span>
+
+                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pred_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">predictions_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+
+        <span class="n">indicator_predictions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">(</span><span class="n">predictions_all</span><span class="p">)</span>
+
+        <span class="n">indicator_predictions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clean_probabilities</span><span class="p">(</span><span class="n">indicator_predictions</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">indicator_predictions</span>
+
+    <span class="k">def</span> <span class="nf">_get_expected_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ccdf_density</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function gets expected values and their variance for each point based on the ccdf function.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ccdf_density : int, default = 100</span>
+<span class="sd">            The number of points used to interpolate expected value from the ccdf function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        expected_values, expected_variances : Tuple</span>
+<span class="sd">            The expected value and the expected variance for each point.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">expected_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">expected_variances</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indicator_predictions</span><span class="p">:</span>
+            <span class="n">old_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thresholds</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">new_length</span> <span class="o">=</span> <span class="n">ccdf_density</span>
+            <span class="n">new_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">old_indices</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">old_indices</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">new_length</span><span class="p">)</span>
+            <span class="n">spl</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">old_indices</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">new_tvals</span> <span class="o">=</span> <span class="n">spl</span><span class="p">(</span><span class="n">new_indices</span><span class="p">)</span>
+
+            <span class="n">cdf</span> <span class="o">=</span> <span class="n">new_tvals</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">/</span> <span class="n">new_tvals</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">ccdf</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cdf</span>
+            <span class="n">expected_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ccdf</span><span class="p">)</span>
+            <span class="n">expected_c_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">ccdf</span><span class="p">),</span> <span class="n">expected_c</span><span class="p">)</span>
+            <span class="n">expected_c_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ccdf</span><span class="p">)</span> <span class="o">-</span> <span class="n">expected_c_index</span>
+            <span class="n">expected_value</span> <span class="o">=</span> <span class="n">new_indices</span><span class="p">[</span><span class="n">expected_c_index</span><span class="p">]</span>
+
+            <span class="n">expected_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expected_value</span><span class="p">)</span>
+
+            <span class="c1"># Variance</span>
+            <span class="n">expected_variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">new_tvals</span> <span class="o">-</span> <span class="n">expected_value</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="p">)</span>
+            <span class="n">expected_variances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expected_variance</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expected_values</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">expected_variances</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_clean_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function normalizes and transform given probabilities.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        array : numpy array</span>
+<span class="sd">            Array which rows are transformed.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        transformed : numpy array</span>
+<span class="sd">            Transformed (normalized along rows) array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">arr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__cut_to_zero_one</span><span class="p">(</span><span class="n">array</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">arr</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__cut_to_zero_one</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+        <span class="n">arr</span><span class="p">[</span><span class="n">arr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">arr</span><span class="p">[</span><span class="n">arr</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">arr</span></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

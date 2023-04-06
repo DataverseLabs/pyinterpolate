@@ -8,3 +8,4 @@ Variogram
    theoretical/theoretical
    block/block
    deconvolution/deconvolution
+   indicator/indicator

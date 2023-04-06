@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union
+from typing import Dict, Union, List
 
 import geopandas as gpd
 import numpy as np
@@ -68,6 +68,39 @@ def block_dataframe_to_dict(block_df: Union[pd.DataFrame, gpd.GeoDataFrame],
         d[_id] = block_df[block_df[idx_col] == _id][[x_col, y_col, value_col]].values
 
     return d
+
+
+def code_indicators(ds: np.ndarray, thresholds: List) -> np.ndarray:
+    """
+    Function transforms kriging values into a vector of their indicators.
+
+    Parameters
+    ----------
+    ds : numpy array
+        Kriging dataset [lon, lat, value]
+
+    thresholds : List
+        The list of possible thresholds.
+
+    Returns
+    -------
+    ids : numpy array
+        [lon, lat, bin value for thresh 0, ..., bin value for thresh n].
+
+    """
+
+    ids = []
+    thresh_arr = np.array(thresholds)
+
+    for row in ds:
+        _r = [row[0], row[1]]
+        _val = row[2]
+        _indicators = _val <= thresh_arr
+        _r.extend(_indicators.astype(int))
+        ids.append(_r)
+
+    ids = np.array(ids)
+    return ids
 
 
 def get_areal_centroids_from_agg(

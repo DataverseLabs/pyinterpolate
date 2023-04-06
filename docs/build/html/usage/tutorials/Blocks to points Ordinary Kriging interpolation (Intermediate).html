@@ -1,12 +1,15 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Blocks to points Ordinary Kriging interpolation &#8212; Pyinterpolate 0.3.7 documentation</title>
+    <title>Blocks to points Ordinary Kriging interpolation &#8212; Pyinterpolate 0.4 documentation</title>
   
   
   
@@ -16,22 +19,23 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -49,78 +53,87 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Directional Ordinary Kriging" href="Directional%20Ordinary%20Kriging%20%28Intermediate%29.html" />
     <link rel="prev" title="Semivariogram regularization" href="Semivariogram%20Regularization%20%28Intermediate%29.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
-
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
 <a class="navbar-brand logo" href="../../index.html">
-
   
   
   
   
   
+    <p class="title logo__title">Pyinterpolate 0.4 documentation</p>
   
-  
-
-  
-  
-    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
-  
-</a>
+</a></div>
     
   </div>
-
+  
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../setup/setup.html">
                         Setup
@@ -156,7 +169,7 @@
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -191,76 +204,83 @@
                 </div>
             </div>
             
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
-
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
         </div>
       
       
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
+  </button>
+`);
+</script></div>
       
     </div>
+    
   </div>
-
-
   
   
     <div class="navbar-persistent--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
     </div>
   
 
   
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-  </label>
+    </label>
   
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../setup/setup.html">
                         Setup
@@ -296,7 +316,7 @@
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -331,42 +351,35 @@
                 </div>
             </div>
             
-    </ul>
-</nav>
+  </ul>
+</nav></div>
+        
       </div>
-      
-      </div>
-    
-
     
     
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
+  </button>
+`);
+</script></div>
+        
       </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
     
   </div>
-
   
-  <div class="sidebar-start-items sidebar-primary__section">
-    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">
-    Section Navigation
-  </p>
-  <div class="bd-toc-item navbar-nav">
-    <ul class="nav bd-sidenav">
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Semivariogram%20Estimation%20%28Basic%29.html">Semivariogram Estimation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Theoretical%20Models%20%28Basic%29.html">Semivariogram models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Variogram%20Point%20Cloud%20%28Basic%29.html">Variogram Point Cloud</a></li>
@@ -385,294 +398,63 @@
 <li class="toctree-l1"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Area%20%28Advanced%29.html">Poisson Kriging - Area to Area Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Poisson%20Kriging%20-%20Area%20to%20Point%20%28Advanced%29.html">Poisson Kriging - Area to Point Kriging</a></li>
 </ul>
-
-  </div>
-</nav>
+</div>
+</nav></div>
     </div>
-  </div>
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
-
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars and line breaks on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-    white-space: pre;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
 
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
 
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-.jp-RenderedHTMLCommon table,
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-.jp-RenderedHTMLCommon thead,
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-.jp-RenderedHTMLCommon tr,
-.jp-RenderedHTMLCommon th,
-.jp-RenderedHTMLCommon td,
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-.jp-RenderedHTMLCommon th,
-div.rendered_html th {
-  font-weight: bold;
-}
-.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-.jp-RenderedHTMLCommon tbody tr:hover,
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<section id="Blocks-to-points-Ordinary-Kriging-interpolation">
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Blocks to points Ordinary Kriging interpolation</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="Blocks-to-points-Ordinary-Kriging-interpolation">
 <h1>Blocks to points Ordinary Kriging interpolation<a class="headerlink" href="#Blocks-to-points-Ordinary-Kriging-interpolation" title="Permalink to this heading">#</a></h1>
 <section id="Table-of-Contents:">
 <h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">#</a></h2>
@@ -774,12 +556,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import geopandas as gpd
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+import matplotlib.pyplot as plt
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">VariogramCloud</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">kriging</span>
+from pyinterpolate import Blocks, VariogramCloud, TheoreticalVariogram, kriging
 </pre></div>
 </div>
 </div>
@@ -792,20 +574,20 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Read and prepare data
 
-<span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
-<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>
-<span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">40000</span>
+DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+POLYGON_LAYER = &#39;areas&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
+MAX_RANGE = 400000
+STEP_SIZE = 40000
 
-<span class="n">AREAL_INPUT</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+AREAL_INPUT.data.head()
 </pre></div>
 </div>
 </div>
@@ -896,8 +678,8 @@ ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/b
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;rate&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">areal_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>areal_centroids = AREAL_INPUT.data[[&#39;centroid_x&#39;, &#39;centroid_y&#39;, &#39;rate&#39;]].values
+areal_centroids[0]
 </pre></div>
 </div>
 </div>
@@ -918,18 +700,18 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create analysis parameters
 
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">300000</span>
+maximum_range = 300000
 
-<span class="n">number_of_lags</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
-<span class="n">step_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">maximum_range</span> <span class="o">/</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">number_of_lags</span><span class="p">]</span>
+number_of_lags = [4, 8, 16]
+step_sizes = [maximum_range / x for x in number_of_lags]
 
-<span class="n">variogram_clouds</span> <span class="o">=</span> <span class="p">[]</span>
+variogram_clouds = []
 
-<span class="k">for</span> <span class="n">step_size</span> <span class="ow">in</span> <span class="n">step_sizes</span><span class="p">:</span>
-    <span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="o">+</span><span class="n">step_size</span><span class="p">)</span>
-    <span class="n">variogram_clouds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vc</span><span class="p">)</span>
+for step_size in step_sizes:
+    vc = VariogramCloud(input_array=areal_centroids, step_size=step_size, max_range=maximum_range+step_size)
+    variogram_clouds.append(vc)
 </pre></div>
 </div>
 </div>
@@ -937,11 +719,11 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">###########</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for vc in variogram_clouds:
+    print(f&#39;Lags per area: {len(vc.lags)}&#39;)
+    print(&#39;&#39;)
+    vc.plot(&#39;violin&#39;)
+    print(&#39;\n###########\n&#39;)
 </pre></div>
 </div>
 </div>
@@ -1026,9 +808,9 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now remove outliers from each lag</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Now remove outliers from each lag
 
-<span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">vc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">]</span>
+_ = [vc.remove_outliers(method=&#39;iqr&#39;, iqr_lower_limit=3, iqr_upper_limit=1.5, inplace=True) for vc in variogram_clouds]
 </pre></div>
 </div>
 </div>
@@ -1036,13 +818,13 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And show data without outliers</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># And show data without outliers
 
-<span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">###########</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+for vc in variogram_clouds:
+    print(f&#39;Lags per area: {len(vc.lags)}&#39;)
+    print(&#39;&#39;)
+    vc.plot(&#39;violin&#39;)
+    print(&#39;\n###########\n&#39;)
 </pre></div>
 </div>
 </div>
@@ -1119,29 +901,29 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theoretical_semivariograms</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>theoretical_semivariograms = []
 
-<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variogram_clouds</span><span class="p">):</span>
+for idx, vc in enumerate(variogram_clouds):
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="si">}</span><span class="s1"> lags.&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="c1"># Calculate experimental model</span>
-    <span class="n">exp_model</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+    print(f&#39;Semivariance calculated for {vc.lags} lags.&#39;)
+    print(&#39;&#39;)
+    # Calculate experimental model
+    exp_model = vc.calculate_experimental_variogram()
 
-    <span class="c1"># Assign experimental model and data to TheoreticalSemivariogram</span>
+    # Assign experimental model and data to TheoreticalSemivariogram
 
-    <span class="n">theo_semi</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-    <span class="n">theo_semi</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_model</span><span class="p">)</span>
-    <span class="n">theoretical_semivariograms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theo_semi</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model parameters:&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model type:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nugget:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">nugget</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sill:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">sill</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Range:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model error:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">rmse</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#####&#39;</span><span class="p">)</span>
+    theo_semi = TheoreticalVariogram()
+    theo_semi.autofit(experimental_variogram=exp_model)
+    theoretical_semivariograms.append(theo_semi)
+    print(&#39;&#39;)
+    print(&#39;Model parameters:&#39;)
+    print(&#39;Model type:&#39;, theo_semi.name)
+    print(&#39;Nugget:&#39;, theo_semi.nugget)
+    print(&#39;Sill:&#39;, theo_semi.sill)
+    print(&#39;Range:&#39;, theo_semi.rang)
+    print(&#39;Model error:&#39;, theo_semi.rmse)
+    print(&#39;&#39;)
+    print(&#39;#####&#39;)
 </pre></div>
 </div>
 </div>
@@ -1212,12 +994,12 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/shapefile/regular_grid_points.shp&#39;</span>  <span class="c1"># file with grid for analysis</span>
-<span class="n">gdf_pts</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span>
-<span class="n">gdf_pts</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>points = &#39;samples/point_data/shapefile/regular_grid_points.shp&#39;  # file with grid for analysis
+gdf_pts = gpd.read_file(points)
+gdf_pts.set_index(&#39;id&#39;, inplace=True)
+gdf_pts[&#39;x&#39;] = gdf_pts.geometry.x
+gdf_pts[&#39;y&#39;] = gdf_pts.geometry.y
+gdf_pts.head()
 </pre></div>
 </div>
 </div>
@@ -1299,25 +1081,25 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds_cols</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">errs_cols</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>preds_cols = []
+errs_cols = []
 
-<span class="k">for</span> <span class="n">semi_model</span> <span class="ow">in</span> <span class="n">theoretical_semivariograms</span><span class="p">:</span>
-    <span class="n">kriged</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span>
-                     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">semi_model</span><span class="p">,</span>
-                     <span class="n">points</span><span class="o">=</span><span class="n">gdf_pts</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-                     <span class="n">neighbors_range</span><span class="o">=</span><span class="mi">200000</span><span class="p">,</span>
-                     <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                     <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                     <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+for semi_model in theoretical_semivariograms:
+    kriged = kriging(observations=areal_centroids,
+                     theoretical_model=semi_model,
+                     points=gdf_pts[[&#39;x&#39;, &#39;y&#39;]].values,
+                     neighbors_range=200000,
+                     no_neighbors=8,
+                     number_of_workers=1,
+                     use_all_neighbors_in_range=True)
 
-    <span class="c1"># Interpolate missing values and uncertainty</span>
-    <span class="n">pred_col_name</span> <span class="o">=</span> <span class="s1">&#39;p &#39;</span> <span class="o">+</span> <span class="n">semi_model</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_model</span><span class="o">.</span><span class="n">lags</span><span class="p">))</span>
-    <span class="n">uncertainty_col_name</span> <span class="o">=</span> <span class="s1">&#39;e &#39;</span> <span class="o">+</span> <span class="n">semi_model</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_model</span><span class="o">.</span><span class="n">lags</span><span class="p">))</span>
-    <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pred_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">kriged</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">gdf_pts</span><span class="p">[</span><span class="n">uncertainty_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">kriged</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">preds_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_col_name</span><span class="p">)</span>
-    <span class="n">errs_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uncertainty_col_name</span><span class="p">)</span>
+    # Interpolate missing values and uncertainty
+    pred_col_name = &#39;p &#39; + semi_model.name[:3] + &#39; &#39; + str(len(semi_model.lags))
+    uncertainty_col_name = &#39;e &#39; + semi_model.name[:3] + &#39; &#39; + str(len(semi_model.lags))
+    gdf_pts[pred_col_name] = kriged[:, 0]
+    gdf_pts[uncertainty_col_name] = kriged[:, 1]
+    preds_cols.append(pred_col_name)
+    errs_cols.append(uncertainty_col_name)
 </pre></div>
 </div>
 </div>
@@ -1335,7 +1117,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gdf_pts.head()
 </pre></div>
 </div>
 </div>
@@ -1456,9 +1238,9 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save interpolation results</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save interpolation results
 
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;output/interpolation_results_areal_to_point.shp&#39;</span><span class="p">)</span>
+gdf_pts.to_file(&#39;output/interpolation_results_areal_to_point.shp&#39;)
 </pre></div>
 </div>
 </div>
@@ -1470,32 +1252,32 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now compare results to choropleth maps</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Now compare results to choropleth maps
+fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(16, 16), sharex=&#39;all&#39;, sharey=&#39;all&#39;)
 
-<span class="n">base1</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base2</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base3</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base4</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base5</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base6</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+base1 = AREAL_INPUT.data.plot(ax=axes[0, 0], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base2 = AREAL_INPUT.data.plot(ax=axes[0, 1], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base3 = AREAL_INPUT.data.plot(ax=axes[0, 2], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base4 = AREAL_INPUT.data.plot(ax=axes[1, 0], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base5 = AREAL_INPUT.data.plot(ax=axes[1, 1], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base6 = AREAL_INPUT.data.plot(ax=axes[1, 2], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
 
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base4</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base5</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base6</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+gdf_pts.plot(ax=base1, column=preds_cols[0], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base2, column=preds_cols[1], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base3, column=preds_cols[2], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base4, column=errs_cols[0], cmap=&#39;Reds&#39;, alpha=0.3)
+gdf_pts.plot(ax=base5, column=errs_cols[1], cmap=&#39;Reds&#39;, alpha=0.3)
+gdf_pts.plot(ax=base6, column=errs_cols[2], cmap=&#39;Reds&#39;, alpha=0.3)
 
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+axes[0, 0].set_title(preds_cols[0])
+axes[0, 1].set_title(preds_cols[1])
+axes[0, 2].set_title(preds_cols[2])
+axes[1, 0].set_title(errs_cols[0])
+axes[1, 1].set_title(errs_cols[1])
+axes[1, 2].set_title(errs_cols[2])
 
-<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Comparison of different Kriging models outputs&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.suptitle(&#39;Comparison of different Kriging models outputs&#39;)
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1516,16 +1298,16 @@ we have chosen the wrong model - we are not able to retrieve meaningful informat
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pcol1</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Column:&#39;</span><span class="p">,</span> <span class="n">pcol1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">pcol2</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pcol1</span> <span class="o">==</span> <span class="n">pcol2</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">mad</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pcol1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pcol2</span><span class="p">]</span>
-            <span class="n">mad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mad</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean Absolute Difference with </span><span class="si">{</span><span class="n">pcol2</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">mad</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for pcol1 in preds_cols:
+    print(&#39;Column:&#39;, pcol1)
+    for pcol2 in preds_cols:
+        if pcol1 == pcol2:
+            pass
+        else:
+            mad = gdf_pts[pcol1] - gdf_pts[pcol2]
+            mad = np.abs(np.mean(mad))
+            print(f&#39;Mean Absolute Difference with {pcol2} is {mad:.4f}&#39;)
+    print(&#39;&#39;)
 </pre></div>
 </div>
 </div>
@@ -1554,173 +1336,124 @@ Mean Absolute Difference with p exp 8 is 0.4380
 </section>
 
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="Semivariogram%20Regularization%20%28Intermediate%29.html" title="previous page">
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Semivariogram%20Regularization%20%28Intermediate%29.html"
+       title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">Semivariogram regularization</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Semivariogram regularization</p>
       </div>
-  </a>
-  <a class='right-next' id="next-link" href="Directional%20Ordinary%20Kriging%20%28Intermediate%29.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Directional Ordinary Kriging</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
-</div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
-              
-<div class="toc-item">
-  
-<div class="tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-</div>
-<nav id="bd-toc-nav" class="page-toc">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Table-of-Contents:">
-   Table of Contents:
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Level:-Intermediate">
-   Level: Intermediate
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Changelog">
-   Changelog
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Introduction">
-   Introduction
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Import-packages">
-   Import packages
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#1)-Read-areal-data">
-   1) Read areal data
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#2)-Detect-and-remove-outliers">
-   2) Detect and remove outliers
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#3.-Create-a-theoretical-semivariogram-model">
-   3. Create a theoretical semivariogram model
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#4.-Read-point-data-canvas">
-   4. Read point data canvas
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#5.-Build-a-map-of-interpolated-values">
-   5. Build a map of interpolated values
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates">
-   6. Show a map of interpolated values with a choropleth map of the breast cancer rates
-  </a>
- </li>
-</ul>
-
-</nav>
-</div>
-
-<div class="toc-item">
-  
-<div id="searchbox"></div>
-</div>
-
-<div class="toc-item">
-  
-</div>
-
-<div class="toc-item">
-  
-<div class="tocsection sourcelink">
-    <a href="../../_sources/usage/tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate).ipynb.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
+    <a class="right-next"
+       href="Directional%20Ordinary%20Kriging%20%28Intermediate%29.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Directional Ordinary Kriging</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
 </div>
 
-</div>
-
+                </footer>
+              
             </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Level:-Intermediate">Level: Intermediate</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1)-Read-areal-data">1) Read areal data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2)-Detect-and-remove-outliers">2) Detect and remove outliers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Create-a-theoretical-semivariogram-model">3. Create a theoretical semivariogram model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Read-point-data-canvas">4. Read point data canvas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Build-a-map-of-interpolated-values">5. Build a map of interpolated values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates">6. Show a map of interpolated values with a choropleth map of the breast cancer rates</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/usage/tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate).ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
     
-<p class="copyright">
-
-    &copy; Copyright 2022, Szymon Moliński.<br>
-
-</p>
-
-  </div>
-  
-  <div class="footer-item">
-    <p class="theme-version">
-    Built with the
-    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
-        PyData Sphinx Theme
-    </a>
-    0.12.0.
-</p>
-  </div>
-  
-  <div class="footer-item">
+      © Copyright 2023, Szymon Moliński.
+      <br/>
     
-<p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
-</p>
-
-  </div>
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>

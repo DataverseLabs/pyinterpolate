@@ -1,11 +1,14 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.3.5 documentation</title>
+    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.4 documentation</title>
   
   
   
@@ -15,22 +18,22 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link href="../../../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
-<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
@@ -44,78 +47,87 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/theoretical/semivariogram';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
-
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
 <a class="navbar-brand logo" href="../../../../index.html">
-
   
   
   
   
   
+    <p class="title logo__title">Pyinterpolate 0.4 documentation</p>
   
-  
-
-  
-  
-    <p class="title logo__title">Pyinterpolate 0.3.5 documentation</p>
-  
-</a>
+</a></div>
     
   </div>
-
+  
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../setup/setup.html">
                         Setup
@@ -151,7 +163,7 @@
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -171,6 +183,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -179,76 +198,79 @@
                 </div>
             </div>
             
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
-
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
         </div>
       
       
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
+  </button>
+`);
+</script></div>
       
     </div>
+    
   </div>
-
-
   
   
     <div class="navbar-persistent--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
     </div>
   
 
   
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fa-solid fa-outdent"></span>
-  </label>
-  
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../setup/setup.html">
                         Setup
@@ -284,7 +306,7 @@
                     </li>
                 
             <div class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     More
                 </button>
                 <div class="dropdown-menu">
@@ -304,6 +326,13 @@
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../../../science/biblio.html">
                         Bibliography
                       </a>
@@ -312,59 +341,82 @@
                 </div>
             </div>
             
-    </ul>
-</nav>
+  </ul>
+</nav></div>
+        
       </div>
-      
-      </div>
-    
-
     
     
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
+  </button>
+`);
+</script></div>
+        
       </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
     
   </div>
-
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
-
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">pyinterpolate.variogram.theoretical.semivariogram</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
   <h1>Source code for pyinterpolate.variogram.theoretical.semivariogram</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">TheoreticalVariogram class.</span>
@@ -396,9 +448,11 @@
     <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">weighted_root_mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span>
 
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.spatial_dependency_index</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
+
 
 <div class="viewcode-block" id="TheoreticalVariogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a><span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Theoretical model of a spatial dissimilarity.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Theoretical model of a spatial dissimilarity.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -457,6 +511,19 @@
 
 <span class="sd">    smape : float, default=0</span>
 <span class="sd">        Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.</span>
+
+<span class="sd">    spatial_dependency_ratio : float, default = None</span>
+<span class="sd">        The ratio of nugget vs sill multiplied by 100. Levels from 0 to 25 indicate strong spatial dependency,</span>
+<span class="sd">        from 25 to 75 moderate spatial dependency, from 75 to 95 weak spatial dependency, and above process is</span>
+<span class="sd">        considered to be not spatially-depended.</span>
+
+<span class="sd">    spatial_dependency_strength : str, default = &quot;Unknown&quot;</span>
+<span class="sd">        Descriptive indicator of spatial dependency strength based on the ``spatial_dependency_level``. It could be:</span>
+<span class="sd">          * ``unknown`` if ratio is ``None``,</span>
+<span class="sd">          * ``strong`` if ratio is below 25,</span>
+<span class="sd">          * ``moderate`` if ratio is between 25 and 75,</span>
+<span class="sd">          * ``weak`` if ratio is between 75 and 95,</span>
+<span class="sd">          * ``no spatial dependency`` if ratio is greater than 95.</span>
 
 <span class="sd">    are_params : bool</span>
 <span class="sd">        Check if model parameters were given during initialization.</span>
@@ -550,12 +617,16 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
 
-        <span class="c1"># Errror</span>
+        <span class="c1"># Error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmse</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">smape</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mae</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
 
     <span class="c1"># Core functions</span>
 
@@ -568,7 +639,7 @@
             <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">update_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">warn_about_set_params</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -666,11 +737,14 @@
                 <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_type</span><span class="p">,</span>
                 <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
                 <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
-                <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="n">rang</span>
+                <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
             <span class="p">}</span>
             <span class="n">attrs_to_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">attrs_to_update</span><span class="p">)</span>
+
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span></div>
 
@@ -693,7 +767,7 @@
                 <span class="n">warn_about_set_params</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">return_params</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.</span>
 
 <span class="sd">        Parameters</span>
@@ -783,7 +857,7 @@
 <span class="sd">            &gt;&gt;&gt; {</span>
 <span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
 <span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
-<span class="sd">            ...     &#39;rang&#39;: model_range,</span>
+<span class="sd">            ...     &#39;range&#39;: model_range,</span>
 <span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
 <span class="sd">            ...     &#39;error_type&#39;: type_of_error_metrics,</span>
 <span class="sd">            ...     &#39;error value&#39;: error_value</span>
@@ -880,7 +954,7 @@
             <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">_mtype</span> <span class="ow">in</span> <span class="n">mtypes</span><span class="p">:</span>
@@ -904,18 +978,21 @@
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nugget</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;rang&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
+                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
                         <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">auto_update_attributes</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">optimal_parameters</span><span class="p">)</span>
 
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="n">return_params</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">optimal_parameters</span></div>
 
 <div class="viewcode-block" id="TheoreticalVariogram.predict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method returns a semivariance per distance.</span>
 
 <span class="sd">        Parameters</span>
@@ -938,7 +1015,7 @@
     <span class="c1"># Plotting and visualization</span>
 
 <div class="viewcode-block" id="TheoreticalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots theoretical curve and (optionally) experimental scatter plot.</span>
 
 <span class="sd">        Parameters</span>
@@ -978,7 +1055,7 @@
                               <span class="n">mae</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">smape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">deviation_weighting</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates error associated with a difference between the theoretical model and</span>
 <span class="sd">        the experimental semivariogram.</span>
 
@@ -1060,10 +1137,21 @@
 
         <span class="k">return</span> <span class="n">model_error</span></div>
 
+    <span class="k">def</span> <span class="nf">_update_spatial_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method updates spatial dependency of a fitted variogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index_ratio</span><span class="p">,</span> <span class="n">index_strength</span> <span class="o">=</span> <span class="n">calculate_spatial_dependence_index</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="n">index_ratio</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="n">index_strength</span>
+
     <span class="c1"># I/O</span>
 
 <div class="viewcode-block" id="TheoreticalVariogram.to_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Method exports the theoretical variogram parameters to a dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method exports the theoretical variogram parameters to a dictionary.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -1091,8 +1179,8 @@
 
         <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1104,7 +1192,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="TheoreticalVariogram.to_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_json">[docs]</a>    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method stores variogram parameters into a JSON file.</span>
 
 <span class="sd">        Parameters</span>
@@ -1124,7 +1212,7 @@
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_output</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TheoreticalVariogram.from_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_json">[docs]</a>    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method reads data from a JSON file.</span>
 
 <span class="sd">        Parameters</span>
@@ -1150,13 +1238,15 @@
             <span class="n">msg_nugget</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Nugget: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">msg_sill</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Sill: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">msg_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">msg_spatial_dependency</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Spatial Dependency Strength is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">mean_bias_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean Bias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">mean_rmse_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean RMSE: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rmse</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">error_weighting</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Error-lag weighting method: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span><span class="si">}</span><span class="s1">&#39;</span>
 
-            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">,</span> <span class="n">msg_nugget</span><span class="p">,</span> <span class="n">msg_sill</span><span class="p">,</span> <span class="n">msg_range</span><span class="p">,</span> <span class="n">mean_bias_msg</span><span class="p">,</span> <span class="n">mean_rmse_msg</span><span class="p">,</span> <span class="n">error_weighting</span><span class="p">]</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">,</span> <span class="n">msg_nugget</span><span class="p">,</span> <span class="n">msg_sill</span><span class="p">,</span> <span class="n">msg_range</span><span class="p">,</span> <span class="n">msg_spatial_dependency</span><span class="p">,</span>
+                         <span class="n">mean_bias_msg</span><span class="p">,</span> <span class="n">mean_rmse_msg</span><span class="p">,</span> <span class="n">error_weighting</span><span class="p">]</span>
 
-            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Build pretty table</span>
@@ -1173,7 +1263,7 @@
 
                 <span class="n">pretty_table</span><span class="o">.</span><span class="n">add_rows</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
 
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">pretty_table</span><span class="o">.</span><span class="n">get_string</span><span class="p">()</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">pretty_table</span><span class="o">.</span><span class="n">get_string</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">msg</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">header</span>
@@ -1232,7 +1322,7 @@
                            <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">rmse</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1242,7 +1332,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">rang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
 
         <span class="c1"># Dynamic parameters</span>
@@ -1271,12 +1361,11 @@
     <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Parameters - nugget: </span><span class="si">{</span><span class="n">nugget</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, sill: </span><span class="si">{</span><span class="n">sill</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, range: </span><span class="si">{</span><span class="n">rang</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
-                   <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="s1">&#39;</span> \
-                   <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                   <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg_core</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fit_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Method fits selected model into baseline lags.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method fits selected model into baseline lags.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -1317,7 +1406,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
@@ -1326,7 +1416,7 @@
                                 <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
                                 <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1374,86 +1464,74 @@
     <span class="k">return</span> <span class="n">theo</span></div>
 </pre></div>
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-</div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
+                </article>
               
-<div class="toc-item">
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
   
-<div id="searchbox"></div>
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div></div>
+  
 </div>
 
-<div class="toc-item">
-  
-</div>
-
-<div class="toc-item">
-  
-</div>
-
+                </footer>
+              
             </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+            
+            
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
-<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+  <script src="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
     
-<p class="copyright">
-
-    &copy; Copyright 2022, Szymon Moliński.<br>
-
-</p>
-
-  </div>
-  
-  <div class="footer-item">
-    <p class="theme-version">
-    Built with the
-    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
-        PyData Sphinx Theme
-    </a>
-    0.12.0.
-</p>
-  </div>
-  
-  <div class="footer-item">
+      © Copyright 2023, Szymon Moliński.
+      <br/>
     
-<p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
-</p>
-
-  </div>
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>
