@@ -221,6 +221,7 @@ def points_to_grid(points: gpd.GeoDataFrame,
     """
 
     joined = points.sjoin(grid, how='left', predicate='within')
+    joined.drop('geometry', axis=1, inplace=True)
     grouped = joined.groupby('index_right').mean()
     aggregated = grid.join(grouped)
 
