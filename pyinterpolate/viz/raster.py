@@ -10,9 +10,9 @@ from typing import Dict
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
-from pyinterpolate.kriging.point_kriging import kriging
 
 
 def set_dimensions(xs, ys, dmax):
