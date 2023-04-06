@@ -162,9 +162,6 @@ def build_variogram_point_cloud(input_array: np.array,
     max_range : float
         The maximum range of analysis.
 
-    weights : numpy array or None, optional, default=None
-        Weights assigned to points, index of weight must be the same as index of point.
-
     direction : float (in range [0, 360]), default=None
         Direction of semivariogram, values from 0 to 360 degrees:
         - 0 or 180: is E-W,
@@ -225,9 +222,6 @@ class VariogramCloud:
 
     max_range : float
         The maximum range of analysis.
-
-    weights : numpy array or None, optional, default=None
-        Weights assigned to points, index of weight must be the same as index of point.
 
     direction : float (in range [0, 360]), optional, default=None
         Direction of semivariogram, values from 0 to 360 degrees:
@@ -482,7 +476,6 @@ class VariogramCloud:
             msg = f'Plot kind {kind} is not available. Use "scatter", "box" or "violin" instead.'
             raise KeyError(msg)
         return True
-
 
     def remove_outliers(self, method='zscore',
                         z_lower_limit=-3,

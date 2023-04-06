@@ -1,10 +1,10 @@
 ![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov03.jpg?raw=true  "Pyinterpolate logo")
+![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov04.jpg?raw=true  "Pyinterpolate logo")
 
 # Pyinterpolate
 
-**version 0.3.7** - *Kyiv*
+**version 0.4** - *Kharkiv*
 
 ---
 
@@ -189,6 +189,7 @@ Core requirements and dependencies are:
 * prettytable
 * pandas
 * dask
+* dbscan
 
 You may check a specific version of requirements in the `setup.cfg` file.
 
