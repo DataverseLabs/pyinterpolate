@@ -4,3 +4,5 @@ from pyinterpolate.variogram.empirical import VariogramCloud
 from pyinterpolate.variogram.theoretical.semivariogram import build_theoretical_variogram, TheoreticalVariogram
 from pyinterpolate.variogram.regularization.aggregated import AggregatedVariogram
 from pyinterpolate.variogram.regularization.deconvolution import Deconvolution
+from pyinterpolate.variogram.indicator.indicator_variogram import IndicatorVariogramData,\
+    ExperimentalIndicatorVariogram, IndicatorVariograms

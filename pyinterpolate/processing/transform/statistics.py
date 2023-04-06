@@ -88,6 +88,33 @@ def detect_outliers_z_score(dataset: np.ndarray,
     return mask
 
 
+def select_variogram_thresholds(ds: Iterable,
+                                n_thresh: int) -> List[float]:
+    """
+    Function selects ``n_thresh`` thresholds of a sample dataset from its histogram, it divides histogram based on
+    the n-quantiles.
+
+    Parameters
+    ----------
+    ds : Iterable
+        Data values used for interpolation.
+
+    n_thresh : int
+        The number of thresholds.
+
+    Returns
+    -------
+    thresholds : List
+        Thresholds used for indicator Kriging.
+    """
+
+    quantiles = np.linspace(0, 1, n_thresh+1)
+
+    thresholds = [np.quantile(ds, q=q) for q in quantiles[1:]]
+
+    return thresholds
+
+
 def remove_outliers(data: Union[Iterable, Dict],
                     method='zscore',
                     z_lower_limit=-3,

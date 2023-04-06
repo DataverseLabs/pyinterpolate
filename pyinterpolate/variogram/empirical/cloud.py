@@ -19,6 +19,7 @@ from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.processing.transform.statistics import remove_outliers
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
+from pyinterpolate.variogram.utils.plots import build_swarmplot_input
 
 
 def omnidirectional_point_cloud(input_array: np.array,
@@ -94,7 +95,7 @@ def directional_point_cloud(input_array: np.array,
     tolerance : float, default=1
                 Value in range (0-1] to calculate semi-minor axis length of the search area. If tolerance is close
                 to 0 then points must be placed at a single line with beginning in the origin of coordinate system
-                and angle given by y axis and direction parameter.
+                and direction given by y axis and direction parameter.
                     * The major axis length == step_size,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional semivariogram.
@@ -161,9 +162,6 @@ def build_variogram_point_cloud(input_array: np.array,
     max_range : float
         The maximum range of analysis.
 
-    weights : numpy array or None, optional, default=None
-        Weights assigned to points, index of weight must be the same as index of point.
-
     direction : float (in range [0, 360]), default=None
         Direction of semivariogram, values from 0 to 360 degrees:
         - 0 or 180: is E-W,
@@ -173,7 +171,7 @@ def build_variogram_point_cloud(input_array: np.array,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
         the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
@@ -225,9 +223,6 @@ class VariogramCloud:
     max_range : float
         The maximum range of analysis.
 
-    weights : numpy array or None, optional, default=None
-        Weights assigned to points, index of weight must be the same as index of point.
-
     direction : float (in range [0, 360]), optional, default=None
         Direction of semivariogram, values from 0 to 360 degrees:
 
@@ -238,7 +233,7 @@ class VariogramCloud:
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
         the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance.
 
@@ -460,6 +455,11 @@ class VariogramCloud:
         ----------
         kind : string, default='scatter'
                available plot types: 'scatter', 'box', 'violin'
+
+        Returns
+        -------
+        : bool
+            ``True`` if Figure was plotted.
         """
 
         if self.experimental_point_cloud is None:
@@ -475,6 +475,7 @@ class VariogramCloud:
         else:
             msg = f'Plot kind {kind} is not available. Use "scatter", "box" or "violin" instead.'
             raise KeyError(msg)
+        return True
 
     def remove_outliers(self, method='zscore',
                         z_lower_limit=-3,
@@ -558,12 +559,14 @@ class VariogramCloud:
         self.__dist_plots(title_box, 'box')
 
     def _scatter_plot(self):
+
         ds = self.__prep_scatterplot_data()
         plt.figure(figsize=(14, 8))
         xs = ds[:, 0]
         ys = ds[:, 1]
         plt.scatter(x=xs,
-                    y=ys)
+                    y=ys,
+                    s=0.2)
         plt.title('Variogram Point Cloud per lag.')
         plt.show()
 
@@ -633,14 +636,11 @@ class VariogramCloud:
         return data, x_tick_labels
 
     def __prep_scatterplot_data(self) -> np.array:
-        ds = []
-        for idx, values in self.experimental_point_cloud.items():
-            vals_l = len(values)
-            idxs = np.ones(vals_l) * idx
-            elems = list(zip(idxs, values))
-            ds.extend(elems)
 
-        return np.array(ds)
+        ds = build_swarmplot_input(data=self.experimental_point_cloud,
+                                   step_size=self.step)
+
+        return ds
 
     @staticmethod
     def __str_empty():

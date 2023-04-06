@@ -1,5 +1,4 @@
 Data download
 =============
 
-.. autofunction:: pyinterpolate.download_air_quality_poland
-   :noindex:
+Available datasets are stored in the **pyinterpolate-datasets** package: https://pypi.org/project/pyinterpolate-datasets/2023.0.0/

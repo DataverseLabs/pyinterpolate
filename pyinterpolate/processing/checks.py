@@ -34,14 +34,14 @@ def check_limits(value: float, lower_limit=0, upper_limit=1, exclusive_lower=Tru
     ------
     ValueError
         Value is outside given limits.
-
-    TODO
-    ----
-    Tests
     """
 
     msg = f'Value {value} is outside the limits {lower_limit}:{upper_limit}. Lower limit is excluded: ' \
-          f'{exclusive_lower}, Upper limit is excluded" {exclusive_upper}.'
+          f'{exclusive_lower}, Upper limit is excluded: {exclusive_upper}.'
+
+    if value == lower_limit:
+        if lower_limit == upper_limit:
+            raise ValueError('Provided value, lower and upper limits are the same')
 
     # <=
     if exclusive_lower:

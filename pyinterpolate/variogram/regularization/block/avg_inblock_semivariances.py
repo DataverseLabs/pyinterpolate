@@ -104,7 +104,6 @@ def calculate_average_semivariance(block_to_block_distances: Dict,
                 partial_neighbors = [x for x in block_neighbors if x != block_name]
                 n_len = len(partial_neighbors)
                 if n_len > 0:
-                    # TODO: check if it is valid if there are no neighbors
                     n_semivariances = [inblock_semivariances[bid] for bid in partial_neighbors]
                     average_semivariance.extend(n_semivariances)
                     number_of_blocks_per_lag.append(no_of_areas)

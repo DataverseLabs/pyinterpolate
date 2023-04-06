@@ -5,14 +5,12 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 
-TODO
-----
-* log k, predicted, dataset
 """
 # Python core
 from typing import List, Union, Tuple
 
 # Core calculation and data visualization
+import logging
 import numpy as np
 
 # Pyinterpolate
@@ -28,8 +26,7 @@ def simple_kriging(
         neighbors_range=None,
         no_neighbors=1,
         use_all_neighbors_in_range=False,
-        allow_approximate_solutions=False,
-        err_to_nan=False
+        allow_approximate_solutions=False
 ) -> List:
     """
     Function predicts value at unknown location with Ordinary Kriging technique.
@@ -61,7 +58,7 @@ def simple_kriging(
         ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
         ``number_of_neighbors`` parameter then take all of them anyway.
 
-    allow_approx_solutions : bool, default=False
+    allow_approximate_solutions : bool, default=False
         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
@@ -76,13 +73,14 @@ def simple_kriging(
     RunetimeError
         Singularity matrix in a Kriging system.
     """
-
+    logging.info("SIMPLE KRIGING | Operation starts")
     k, predicted, dataset = get_predictions(theoretical_model,
                                             known_locations,
                                             unknown_location,
                                             neighbors_range,
                                             no_neighbors,
                                             use_all_neighbors_in_range)
+    logging.info("SIMPLE KRIGING | Weights are prepared")
 
     try:
         output_weights = solve_weights(predicted, k, allow_approximate_solutions)
@@ -98,6 +96,8 @@ def simple_kriging(
     sigma = np.matmul(output_weights.T, k)
 
     if sigma < 0:
+        logging.info("SIMPLE KRIGING | Variance error lower than zero, NaN is returned")
         return [zhat, np.nan, unknown_location[0], unknown_location[1]]
 
+    logging.info("SIMPLE KRIGING | Process ends")
     return [zhat, sigma, unknown_location[0], unknown_location[1]]

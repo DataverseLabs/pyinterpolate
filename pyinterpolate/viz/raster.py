@@ -10,12 +10,12 @@ from typing import Dict
 import numpy as np
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
-from pyinterpolate.kriging.point_kriging import kriging
 
 
-def _set_dims(xs, ys, dmax):
+def set_dimensions(xs, ys, dmax):
     """
     Function sets dimensions of the output array.
 
@@ -93,7 +93,7 @@ def interpolate_raster(data,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the angle given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
+        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
         the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance:
 
@@ -123,7 +123,7 @@ def interpolate_raster(data,
     if isinstance(data, list):
         data = np.array(data)
 
-    x_coords, y_coords, props = _set_dims(data[:, 0], data[:, 1], dim)
+    x_coords, y_coords, props = set_dimensions(data[:, 0], data[:, 1], dim)
 
     # Calculate semivariance if not provided
 
@@ -157,8 +157,7 @@ def interpolate_raster(data,
                 theoretical_model=ts,
                 points=interpolation_points,
                 how='ok',
-                no_neighbors=number_of_neighbors,
-                err_to_nan=True)
+                no_neighbors=number_of_neighbors)
 
     kriged_matrix = k[:, 0].reshape((len(y_coords), len(x_coords)))
     kriged_errors = k[:, 1].reshape((len(y_coords), len(x_coords)))

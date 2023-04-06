@@ -122,7 +122,7 @@ def solve_weights(weights: np.ndarray, k: np.ndarray, allow_lsa=False) -> np.nda
         else:
             if allow_lsa:
                 warnings.warn(LeastSquaresApproximationWarning().__str__())
-                solved = np.linalg.lstsq(weights, k)
+                solved = np.linalg.lstsq(weights, k, rcond=None)
                 solved = solved[0]
             else:
                 raise linalgerr

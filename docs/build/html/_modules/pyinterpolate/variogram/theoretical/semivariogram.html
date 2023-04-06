@@ -1,42 +1,39 @@
+
 <!DOCTYPE html>
-<html lang="en-gb">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.3.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
 
-<title>Pyinterpolate - pyinterpolate.variogram.theoretical.semivariogram</title>
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha256-NuCn4IvuZXdBaFKJOAcsU2Q3ZpwbdFisd5dux4jkQ5w=" crossorigin="anonymous"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap-theme.min.css" integrity="sha256-8uHMIn1ru0GS5KO+zf7Zccf8Uw12IA5DrdEcmMuWLFM=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/tooltipster.bundle.min.css" integrity="sha256-Qc4lCfqZWYaHF5hgEOFrYzSIX9Rrxk0NPHRac+08QeQ=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/css/plugins/tooltipster/sideTip/themes/tooltipster-sideTip-light.min.css" integrity="sha256-Wa1I4jhSXeWd3N6RhfPlkqr1WlT+zS3Vh2YGCg0129E=" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Code+Pro|Source+Sans+Pro|Source+Serif+Pro|Roboto|Roboto+Mono" rel="stylesheet">
-<link href="https://fonts.red-dove.com/iosevka-ss09-regular/webfont.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
 
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/css/sizzle.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" integrity="sha256-G7A4JrJjJlFqP0yamznwPjAApIKPkadeHfyIwiaa9e0=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/tooltipster@4.2.8/dist/js/tooltipster.bundle.min.js" integrity="sha256-v8akIv8SCqn5f3mbVB7vEWprIizxPh6oV0yhao/dbB4=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
-    <script>
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.3.5',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        LINK_SUFFIX: '.html',
-        HAS_SOURCE:  false,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-      $(document).data('sizzle', {on_load: []});
-    </script>
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../../_static/doctools.js"></script>
@@ -44,129 +41,344 @@
     <script src="../../../../_static/clipboard.min.js"></script>
     <script src="../../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="../../../../app-data.js"></script>
-<link rel="index" title="Index" href="../../../../genindex.html" />
-<link rel="search" title="Search" href="../../../../search.html" />
-
-</head>
-<body class="full-height test">
-<noscript>
-  <div>
-    <div id="noscript-message">JavaScript is not enabled. It is needed for this website to work.</div>
-  </div>
-</noscript>
-<div id="whole-page" class="container-fluid content full-height">
-  <div id="header-row" class="row">
-    <div id="header-container" class="col-md-12">
-      <div id="hdr-left">
-        <i class="fa fa-bars menu-toggle"></i>
-        
-<a href="../../../../index.html" class="text-logo">Pyinterpolate 0.3.5 documentation</a>
-
-      </div>
-      <div id="hdr-centre" class="text-center stretch">
-        <h3 title="pyinterpolate.variogram.theoretical.semivariogram">pyinterpolate.variogram.theoretical.semivariogram</h3>
-        <h6>pyinterpolate.variogram.theoretical.semivariogram</h6>
-      </div>
-      <div id="hdr-search">
-        
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-      </div>
-
-      <div id="hdr-index">
-        <a href="../../../../genindex.html" class="btn btn-default" title="Go to the index"><i class="fa fa-list"></i></a>
-      </div>
-
-      <div id="hdr-right">
-        
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/theoretical/semivariogram';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
   
-      </div>
-      <div id="alt-hdr-right">
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
 
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 
-        <a href="../../../../index.html"><i class="fa fa-home mr-8"></i></a>
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
 
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
 
-        <a href="../../../../search.html"><i class="fa fa-search mr-8"></i></a>
-
-
-        <a href="../../../../genindex.html"><i class="fa fa-list mr-8"></i></a>
-
-
-      </div>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      
+<form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
     </div>
   </div>
 
-  <div id="content-row" class="row">
-    <div id="page-content" class="col-md-12 flex-col">
-      <div id="content-container">
-        <div id="nav">
+  
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.3.7 documentation</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
           
-  <div class="navsidebar">
-    <div id="sidebar-search">
-      
-<div class="input-group" title="Enter something to search for and then either press Enter or click the magnifying glass">
-  <input type="text" class="form-control search-query" placeholder="Search docs ...">
-  <div class="input-group-addon">
-    <i class="fa fa-search"></i>
-  </div>
-</div>
-    </div>
-      <div class="sidebar-block">
-        <div class="sidebar-tocheading">
-          <div class="pull-left">
-            <h2>Table Of Contents</h2>
-          </div>
-          <div class="pull-right" title="Hide this sidebar (hover at left edge to bring it back)"><i class="fa fa-chevron-left hidetoc"></i></div>
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
         </div>
-        <div class="sidebar-toc">
       
-          <div id="toc-filter" title="Type in here to show only matching topics">
-            <input class="form-control" id="toc-filter-query" placeholder="Filter by title ...">
-          </div>
       
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
   
-    <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html#how-to-cite">How to cite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html#bibliography">Bibliography</a></li>
-</ul>
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
 
-  
-        </div>
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
       </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+    
   </div>
-        </div>
-        <div id="content" tabindex="0" class="stretch">
-          <div id="mnav">
-            
-  
-    <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../setup/setup.html#setup">Setup</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/quickstart.html#quickstart">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../usage/tutorials.html#tutorials">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/cite.html#how-to-cite">How to cite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../api/api.html#api">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../developer/dev.html#development">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../community/community.html#community">Community</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../science/biblio.html#bibliography">Bibliography</a></li>
-</ul>
 
   
-          </div>
-          <div class="body">
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
             
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
   <h1>Source code for pyinterpolate.variogram.theoretical.semivariogram</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">TheoreticalVariogram class.</span>
@@ -197,6 +409,8 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.metrics</span> <span class="kn">import</span> <span class="n">forecast_bias</span><span class="p">,</span> <span class="n">root_mean_squared_error</span><span class="p">,</span> \
     <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">weighted_root_mean_squared_error</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.spatial_dependency_index</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
 
 
 <div class="viewcode-block" id="TheoreticalVariogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a><span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
@@ -259,6 +473,19 @@
 
 <span class="sd">    smape : float, default=0</span>
 <span class="sd">        Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.</span>
+
+<span class="sd">    spatial_dependency_ratio : float, default = None</span>
+<span class="sd">        The ratio of nugget vs sill multiplied by 100. Levels from 0 to 25 indicate strong spatial dependency,</span>
+<span class="sd">        from 25 to 75 moderate spatial dependency, from 75 to 95 weak spatial dependency, and above process is</span>
+<span class="sd">        considered to be not spatially-depended.</span>
+
+<span class="sd">    spatial_dependency_strength : str, default = &quot;Unknown&quot;</span>
+<span class="sd">        Descriptive indicator of spatial dependency strength based on the ``spatial_dependency_level``. It could be:</span>
+<span class="sd">          * ``unknown`` if ratio is ``None``,</span>
+<span class="sd">          * ``strong`` if ratio is below 25,</span>
+<span class="sd">          * ``moderate`` if ratio is between 25 and 75,</span>
+<span class="sd">          * ``weak`` if ratio is between 75 and 95,</span>
+<span class="sd">          * ``no spatial dependency`` if ratio is greater than 95.</span>
 
 <span class="sd">    are_params : bool</span>
 <span class="sd">        Check if model parameters were given during initialization.</span>
@@ -352,12 +579,16 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
 
-        <span class="c1"># Errror</span>
+        <span class="c1"># Error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rmse</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">smape</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mae</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
 
     <span class="c1"># Core functions</span>
 
@@ -468,11 +699,14 @@
                 <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_type</span><span class="p">,</span>
                 <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
                 <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
-                <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="n">rang</span>
+                <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
             <span class="p">}</span>
             <span class="n">attrs_to_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">attrs_to_update</span><span class="p">)</span>
+
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span></div>
 
@@ -585,7 +819,7 @@
 <span class="sd">            &gt;&gt;&gt; {</span>
 <span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
 <span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
-<span class="sd">            ...     &#39;rang&#39;: model_range,</span>
+<span class="sd">            ...     &#39;range&#39;: model_range,</span>
 <span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
 <span class="sd">            ...     &#39;error_type&#39;: type_of_error_metrics,</span>
 <span class="sd">            ...     &#39;error value&#39;: error_value</span>
@@ -682,7 +916,7 @@
             <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;rang&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">_mtype</span> <span class="ow">in</span> <span class="n">mtypes</span><span class="p">:</span>
@@ -706,12 +940,15 @@
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nugget</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;rang&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
+                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
                         <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
                         <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">auto_update_attributes</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">optimal_parameters</span><span class="p">)</span>
+
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">return_params</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">optimal_parameters</span></div>
@@ -862,6 +1099,17 @@
 
         <span class="k">return</span> <span class="n">model_error</span></div>
 
+    <span class="k">def</span> <span class="nf">_update_spatial_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method updates spatial dependency of a fitted variogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index_ratio</span><span class="p">,</span> <span class="n">index_strength</span> <span class="o">=</span> <span class="n">calculate_spatial_dependence_index</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="n">index_ratio</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="n">index_strength</span>
+
     <span class="c1"># I/O</span>
 
 <div class="viewcode-block" id="TheoreticalVariogram.to_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
@@ -893,7 +1141,7 @@
 
         <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -952,13 +1200,15 @@
             <span class="n">msg_nugget</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Nugget: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">msg_sill</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Sill: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">msg_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">msg_spatial_dependency</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Spatial Dependency Strength is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">mean_bias_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean Bias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">mean_rmse_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean RMSE: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rmse</span><span class="si">}</span><span class="s1">&#39;</span>
             <span class="n">error_weighting</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Error-lag weighting method: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span><span class="si">}</span><span class="s1">&#39;</span>
 
-            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">,</span> <span class="n">msg_nugget</span><span class="p">,</span> <span class="n">msg_sill</span><span class="p">,</span> <span class="n">msg_range</span><span class="p">,</span> <span class="n">mean_bias_msg</span><span class="p">,</span> <span class="n">mean_rmse_msg</span><span class="p">,</span> <span class="n">error_weighting</span><span class="p">]</span>
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">,</span> <span class="n">msg_nugget</span><span class="p">,</span> <span class="n">msg_sill</span><span class="p">,</span> <span class="n">msg_range</span><span class="p">,</span> <span class="n">msg_spatial_dependency</span><span class="p">,</span>
+                         <span class="n">mean_bias_msg</span><span class="p">,</span> <span class="n">mean_rmse_msg</span><span class="p">,</span> <span class="n">error_weighting</span><span class="p">]</span>
 
-            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># Build pretty table</span>
@@ -975,7 +1225,7 @@
 
                 <span class="n">pretty_table</span><span class="o">.</span><span class="n">add_rows</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
 
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="n">pretty_table</span><span class="o">.</span><span class="n">get_string</span><span class="p">()</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">pretty_table</span><span class="o">.</span><span class="n">get_string</span><span class="p">()</span>
                 <span class="k">return</span> <span class="n">msg</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">header</span>
@@ -1034,7 +1284,7 @@
                            <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">rmse</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1044,7 +1294,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="n">rang</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
 
         <span class="c1"># Dynamic parameters</span>
@@ -1073,8 +1323,7 @@
     <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
         <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Parameters - nugget: </span><span class="si">{</span><span class="n">nugget</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, sill: </span><span class="si">{</span><span class="n">sill</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, range: </span><span class="si">{</span><span class="n">rang</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
-                   <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="s1">&#39;</span> \
-                   <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+                   <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg_core</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_fit_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -1119,7 +1368,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
@@ -1176,358 +1426,86 @@
     <span class="k">return</span> <span class="n">theo</span></div>
 </pre></div>
 
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+            </footer>
+            
           </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+            </div>
+          
+          
         </div>
-      </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
     </div>
   </div>
-  <div id="footer-row" class="row">
 
-    <div class="col-md-12">
-        <span title="Built on 2022-11-05" class="pull-right">&copy; Copyright 2022, Szymon Moliński.
-        Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0 and the
-        <a href="https://pypi.org/project/sphinx-sizzle-theme/"
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
 
-           title="0.1.1/6a5828d9 [2022-05-03T16:20:16]"
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
 
-        >Sizzle</a> theme.</span>
-    </div>
+    &copy; Copyright 2022, Szymon Moliński.<br>
+
+</p>
 
   </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
 </div>
-
-<div id="tooltips" class="hidden">
-</div>
-
-<script>
-$(document).ready(function() {
-  'use strict';
-  var $search = $('.search-query');
-
-  var $filter = $('#toc-filter-query');
-  var $toclist = $('.sidebar-toc > ul').find('li');
-
-  if ($toclist.length === 0) {
-    $toclist = $('.localtoc > ul').find('li');
-  }
-
-
-  var $nav = $('#nav');
-
-  //$('#whole-page').removeClass('hidden');
-  var nav_width = $nav.width();
-
-
-  var search_url = '../../../../search.html';
-
-  function perform_search(e) {
-    var $elem;
-
-    if (e.type === 'keypress') {
-      $elem = $(e.target);
-    }
-    else if (e.type === 'click') {
-      $elem = $(e.target).parents('.input-group').find('input');
-    }
-    var q = $elem.val().trim();
-
-    if (q) {
-      var url = search_url + '?q=' + q + '&check_keywords=yes&area=default';
-
-      location.href = url;
-    }
-  }
-
-
-  function apply_filter() {
-    var s = $filter.val().trim().toLowerCase();
-
-    $toclist.find('a').removeClass('hidden');
-    $toclist.each(function() {
-      var $this = $(this);
-      var $link = $this.find('> a');
-      var t = $link.text().toLowerCase();
-      var show = t.indexOf(s) >= 0;
-
-      if (!show) {
-        $link.addClass('hidden');
-      }
-    });
-  }
-
-  $filter.on('keyup', function(e) {
-    apply_filter();
-  });
-
-
-
-  $search.on('keypress', function(e) {
-    if (e.which == 13) {
-      perform_search(e);
-    }
-  });
-  $search.parents('.input-group').find('.input-group-addon').on('click', perform_search);
-  $(document).on('click', '.summary .fa-caret-right', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $next = $elem.next();
-    $elem.addClass('hidden');
-    $next.removeClass('hidden');
-  });
-  $(document).on('click', '.detail .fa-caret-down', function(e) {
-    var $elem = $(e.target).parents('li');
-    var $prev = $elem.prev();
-    $elem.addClass('hidden');
-    $prev.removeClass('hidden');
-  });
-
-  $('#content').on('click', function() {
-    $('#mnav').hide();
-  });
-
-  var counter = 0;
-  var timer = null;
-
-  function show_nav() {
-    $('#content').off('mousemove', track_mouse);
-    if (timer !== null) {
-      clearTimeout(timer);
-      timer = null;
-    }
-    $nav.show();
-  }
-
-  function track_mouse(e) {
-    var x = e.clientX;
-
-    if (x < 15) {
-      ++counter;
-      if (timer === null) {
-        timer = setTimeout(show_nav, 2000);
-      }
-    }
-    else {
-      counter = 0;
-    }
-    if (counter >= 20) {
-      show_nav();
-    }
-  };
-
-  function hide_nav() {
-    $nav.hide();
-    counter = 0;
-    $('#content').on('mousemove', track_mouse);
-  }
-
-  $('.hidetoc').on('click', hide_nav);
-
-  $(document).on('keyup', function(e) {
-    if (e.ctrlKey) {
-      if (e.which == 37) {      // Ctrl+left arrow
-        hide_nav();
-      }
-      else if (e.which == 39) { // Ctrl+right arrow
-        show_nav();
-      }
-    }
-  });
-
-  $('.menu-toggle').on('click', function(e) {
-    $('#mnav').toggle();
-  });
-
-  function scroll_nav(frag) {
-    var sel = '#nav ' + (frag ? 'a[href="' + frag + '"]' : '.toctree-l1 a.current');
-
-    var $link = $(sel);
-
-    if ($link.length > 0) {
-      $link[0].scrollIntoView({block: 'center'});
-    }
-  }
-
-  // If the navigator is long, then the item we clicked on to get here might
-  // not be in view. Try to scroll it into the view - a slight delay is needed
-  // to get it to sync properly with other stuff going on (as the page has just
-  // loaded). Hence the setTimeout with a timeout of 0.
-
-  function do_scroll() {
-    scroll_nav(window.location.hash);
-  }
-
-  setTimeout(do_scroll, 0);
-
-  function adjust_size() {
-    // we need to set the height explicitly so that scrolling regions in the
-    // content area work properly.
-    var h = $('#page-content').height();
-
-    $('#nav, #content').height(h);
-    if ($('#nav').is(':visible')) {
-      $('#mnav').hide();
-    }
-  }
-
-  adjust_size();
-
-  $(window).on('resize', adjust_size);
-
-  function focus_content() {
-    $('#content').focus();  // so that keyboard can be used to scroll, etc.
-  }
-
-  setTimeout(focus_content, 150);
-
-  var sizzle = $(document).data('sizzle');
-
-  function make_tooltip(id, h, b) {
-    var $e = $('<div>').attr('id', id);
-    var $b = $('<div>').addClass('tc-body').html(b);
-
-    if (h) {
-      var $h = $('<div>').addClass('tc-heading').html(h);
-      $e.append($h);
-    }
-    $e.append($b);
-    return $e;
-  }
-
-  var default_tt_options = {
-    theme: ['tooltipster-light', 'tooltipster-light-customized'],
-    interactive: true,
-    maxWidth: 600,
-    contentCloning: true
-  };
-
-  function activate_tooltips() {
-    var $tt = $('.tt');
-
-    //console.log('tt links:', $tt.length);
-    $tt.tooltipster(default_tt_options);
-  }
-
-
-
-  function add_glossary_tooltips() {
-    var links = $('a');  // can qualify with .reference.internal
-    var glinks = {};
-    var pat = /(.*)\.html#(term-.*)$/;
-    var found = false;  // links in this document
-
-    $.each(links, function(i, link) {
-        var $link = $(link);
-        var href = $link.attr('href');
-        var m = href.match(pat);
-
-        if (m) {
-          var s = m[1].replace(/^(\.\.\/)+/, '');
-
-          if (s === sizzle.app_data.glossary.document) {
-            var k = m[2];
-
-            if (k in glinks) {
-              glinks[k].push($link);
-            }
-            else {
-              glinks[k] = [$link];
-            }
-            found = true;
-          }
-        }
-    });
-    if (found) {
-      var $t = $('#tooltips');
-      var data = sizzle.app_data.glossary.terms;
-
-      $.each(glinks, function(k, v) {
-        var d = data[k];
-
-        if (d) {  // as a sanity check
-          var s = 'tc-'+ k;
-          var $e = make_tooltip(s, d.term, d.defn);
-          $t.append($e);
-
-          $.each(v, function(i, link) {
-            link.addClass('tt').attr('data-tooltip-content', '#' + s);
-          });
-        }
-      });
-    }
-  }
-
-  if (sizzle.app_data && sizzle.app_data.glossary &&
-      sizzle.app_data.glossary.document) {
-    add_glossary_tooltips();
-  }
-
-
-
-
-  function add_custom_tooltips() {
-    if (!sizzle.app_data) {
-      return;
-    }
-
-    var info_tips = sizzle.app_data.custom_data['info-tips'] || {};
-
-    if ($.isEmptyObject(info_tips)) {
-      return;
-    }
-
-    var tt_options = $.extend({contentAsHTML: true}, default_tt_options);
-
-    $('.tc-info').each(function() {
-      var $elem = $(this).prev();
-      var classes = $elem.attr('class');
-      var m = /\btci-([\S]+)/.exec(classes);
-
-      if (m !== null) {
-        var key = m[1];
-
-        if (key in info_tips) {
-          var v = info_tips[key];
-          var tt = $elem.tooltipster(tt_options).tooltipster('content', v);
-        }
-      }
-    });
-  }
-
-  add_custom_tooltips();
-
-  setTimeout(activate_tooltips, 1000);
-
-
-  // Clipboard copy for code blocks with captions
-
-  $('.code-block-caption').each(function() {
-    var $cap = $(this);
-    var $btn = $('<span class="clip-copy"><span class="copied hidden">Copied!</span><i class="fa fa-clipboard" title="Copy contents"></i></span>');
-    var $code = $cap.parent().find('.highlight');
-
-    $cap.append($btn);
-    $btn.find('.fa-clipboard').data('clip-text', $code.text());
-  });
-
-  var clipboard = new ClipboardJS('.code-block-caption .fa-clipboard', {
-    'text': function(trigger) {
-      return $(trigger).data('clip-text');
-    }
-  });
-
-  clipboard.on('success', function(e) {
-    var $copied = $(e.trigger).prev();
-
-    $copied.removeClass('hidden');
-
-    setTimeout(function() {$copied.addClass('hidden'); }, 1000);
-  });
-
-  if (sizzle.on_load) {
-    sizzle.on_load.forEach(function(f) {
-      f();
-    });
-  }
-});
-</script>
-</body>
+  </footer>
+  </body>
 </html>
