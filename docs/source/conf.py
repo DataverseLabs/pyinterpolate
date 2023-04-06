@@ -35,7 +35,7 @@ extensions = [
 ]
 
 templates_path = ['_templates']
-exclude_patterns = ['*/test', '*__*__*']
+exclude_patterns = ['*/test', '*__*__*', '**.ipynb_checkpoints']
 add_module_names = False
 
 autodoc_typehints = 'none'
