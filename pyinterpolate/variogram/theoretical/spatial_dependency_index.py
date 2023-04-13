@@ -40,6 +40,6 @@ def calculate_spatial_dependence_index(nugget: float, sill: float) -> Tuple:
     elif ratio < 95:
         spatial_dependency = 'weak'
     else:
-        spatial_dependency = 'no spatial dependency'
+        spatial_dependency = 'no spatial dependence'
 
     return ratio, spatial_dependency
