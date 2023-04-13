@@ -11,10 +11,12 @@ Beginner
 
    tutorials/Semivariogram Estimation (Basic)
    tutorials/Theoretical Models (Basic)
+   tutorials/Spatial Dependence Index (Basic)
    tutorials/Variogram Point Cloud (Basic)
    tutorials/Directional Semivariograms (Basic)
    tutorials/Ordinary and Simple Kriging (Basic)
    tutorials/How good is our Kriging model - test it against IDW algorithm (Basic)
+   tutorials/Experimental Variogram and Variogram Point Cloud classes (Basic)
 
 Intermediate
 ------------
