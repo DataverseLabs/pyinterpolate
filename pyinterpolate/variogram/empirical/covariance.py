@@ -177,8 +177,7 @@ def calculate_covariance(points: np.array,
                          step_size: float,
                          max_range: float,
                          direction=None,
-                         tolerance=1,
-                         get_c0=True) -> tuple:
+                         tolerance=1) -> np.ndarray:
     """Function calculates covariance from given points. In a default mode it calculates an omnidirectional
        covariance. User can calculate a directional covariogram with a specified tolerance.
 
@@ -209,13 +208,10 @@ def calculate_covariance(points: np.array,
                     * The minor axis size == tolerance * step_size.
                     * Tolerance == 1 creates the omnidirectional covariogram.
 
-    get_c0 : bool, default=True
-             Calculate variance of a dataset and return it.
-
     Returns
     -------
-    : tuple
-        (numpy array [lag, covariance, number of pairs], variance : float or None)
+    : numpy array
+        [lag, covariance, number of pairs]
 
     Notes
     -----
@@ -317,9 +313,4 @@ def calculate_covariance(points: np.array,
         covariance = directional_covariogram(points, lags, step_size, direction, tolerance)
     # END:CALCULATIONS
 
-    cvar = None
-
-    if get_c0:
-        cvar = np.var(points[:, -1])
-
-    return covariance, cvar
+    return covariance

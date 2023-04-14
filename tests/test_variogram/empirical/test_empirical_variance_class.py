@@ -76,8 +76,7 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_max_range,
             is_semivariance=True,
-            is_covariance=False,
-            is_variance=False
+            is_covariance=False
         )
         variogram = calculate_semivariance(
             points=gen_data.input_data_we,
@@ -109,23 +108,17 @@ class TestEmpiricalSemivariance(unittest.TestCase):
             step_size=cls_data.param_step_size,
             max_range=cls_data.param_max_range,
             is_semivariance=False,
-            is_covariance=True,
-            is_variance=True
+            is_covariance=True
         )
-        covariogram, variance = calculate_covariance(
+        covariogram = calculate_covariance(
             gen_data.input_data_we,
             step_size=cls_data.param_step_size,
-            max_range=cls_data.param_max_range,
-            get_c0=True
+            max_range=cls_data.param_max_range
         )
 
         are_equal = np.array_equal(variogram_stats.experimental_covariance_array, covariogram)
         self.assertTrue(are_equal, msg='Covariogram calculated with the EmpiricalSemivariogram class and '
                                        'the calculate_covariance() function must be the same!')
-
-        self.assertEqual(variogram_stats.variance, variance, msg='Variances for the EmpiricalSemivariogram class'
-                                                                 ' and the calculate_covariance() function must'
-                                                                 ' be the same!')
 
         var_stats_str = ''.join(variogram_stats.__str__().split())
 

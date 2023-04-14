@@ -234,9 +234,6 @@ class ExperimentalVariogram:
     is_covariance : bool, optional, default=True
         Should covariance be calculated?
 
-    is_variance : bool, optional, default=True
-        Should variance be calculated?
-
     Attributes
     ----------
     input_array : numpy array
@@ -338,8 +335,6 @@ class ExperimentalVariogram:
     | 3.0 |        6.0         | -1.2599999999999958 | 5.508520710059168  |
     +-----+--------------------+---------------------+--------------------+
 
-    # TODO
-    * calculate variance ALWAYS
     """
 
     def __init__(self,
@@ -351,8 +346,7 @@ class ExperimentalVariogram:
                  tolerance: float = 1.0,
                  method='t',
                  is_semivariance=True,
-                 is_covariance=True,
-                 is_variance=True):
+                 is_covariance=True):
 
         self.input_array = None  # core structure
 
@@ -369,7 +363,7 @@ class ExperimentalVariogram:
         self.experimental_covariances = None
         self.variance_covariances_diff = None
         self.points_per_lag = None
-        self.variance = 0.0
+        self.variance = np.var(self.input_array[:, -1])
 
         self.step = step_size
         self.mx_rng = max_range
@@ -380,7 +374,6 @@ class ExperimentalVariogram:
 
         self.__c_sem = is_semivariance
         self.__c_cov = is_covariance
-        self.__c_var = is_variance
 
         if is_semivariance:
             self._calculate_semivariance()
@@ -389,15 +382,13 @@ class ExperimentalVariogram:
             self.experimental_semivariances = self.experimental_semivariance_array[:, 1]
 
         if is_covariance:
-            self._calculate_covariance(is_variance)
+            self._calculate_covariance()
             self.experimental_covariances = self.experimental_covariance_array[:, 1]
+            self.variance_covariances_diff = self.variance - self.experimental_covariances
 
             if not is_semivariance:
                 self.lags = self.experimental_covariance_array[:, 0]
                 self.points_per_lag = self.experimental_covariance_array[:, 2]
-
-            if is_variance:
-                self.variance_covariances_diff = self.variance - self.experimental_covariances
 
     def plot(self, plot_semivariance=True, plot_covariance=False, plot_variance=False) -> None:
         """
@@ -426,7 +417,6 @@ class ExperimentalVariogram:
         # Validate parameters
         validate_plot_attributes_for_experimental_variogram_class(is_semivar=self.__c_sem,
                                                                   is_covar=self.__c_cov,
-                                                                  is_var=self.__c_var,
                                                                   plot_semivar=plot_semivariance,
                                                                   plot_covar=plot_covariance,
                                                                   plot_var=plot_variance)
@@ -444,7 +434,7 @@ class ExperimentalVariogram:
         if plot_covariance and self.__c_cov:
             plt.scatter(self.lags, self.experimental_covariances, marker='+', c='#8da0cb')
             legend.append('Experimental Covariances')
-        if plot_variance and self.__c_var:
+        if plot_variance:
             var_line = [self.variance for _ in self.lags]
             plt.plot(self.lags, var_line, '--', color='#fc8d62')
             legend.append('Variance')
@@ -453,19 +443,18 @@ class ExperimentalVariogram:
         plt.ylabel('Variance')
         plt.show()
 
-    def _calculate_covariance(self, get_variance=False):
+    def _calculate_covariance(self):
         """
         Method calculates covariance and variance.
 
         See : calculate_covariance function.
         """
-        self.experimental_covariance_array, self.variance = calculate_covariance(
+        self.experimental_covariance_array = calculate_covariance(
             points=self.input_array,
             step_size=self.step,
             max_range=self.mx_rng,
             direction=self.direct,
-            tolerance=self.tol,
-            get_c0=get_variance
+            tolerance=self.tol
         )
 
     def _calculate_semivariance(self):
@@ -488,7 +477,7 @@ class ExperimentalVariogram:
         cname = 'ExperimentalVariogram'
         input_params = f'input_array={self.input_array.tolist()}, step_size={self.step}, max_range={self.mx_rng}, ' \
                        f'weights={self.weights}, direction={self.direct}, tolerance={self.tol}, ' \
-                       f'is_semivariance={self.__c_sem}, is_covariance={self.__c_cov}, is_variance={self.__c_var}'
+                       f'is_semivariance={self.__c_sem}, is_covariance={self.__c_cov}'
         repr_val = cname + '(' + input_params + ')'
         return repr_val
 
@@ -508,42 +497,27 @@ class ExperimentalVariogram:
             return pretty_table.get_string()
 
     def __str_empty(self):
-        if not self.__c_var:
-            return "Empty object"
-        else:
-            return f"Variance: {self.variance:.4f}"
+        return f"Variance: {self.variance:.4f}. Other parameters not calculated."
 
     def __str_populate_both(self):
         rows = []
-        if self.__c_var:
-            for idx, row in enumerate(self.experimental_semivariances):
-                lag = self.lags[idx]
-                smv = row
-                cov = self.experimental_covariances[idx]
-                var_cov_diff = self.variance_covariances_diff[idx]
-                rows.append([lag, smv, cov, var_cov_diff])
-        else:
-            for idx, row in enumerate(self.experimental_semivariances):
-                lag = self.lags[idx]
-                smv = row
-                cov = self.experimental_covariances[idx]
-                rows.append([lag, smv, cov, nan])
+        for idx, row in enumerate(self.experimental_semivariances):
+            lag = self.lags[idx]
+            smv = row
+            cov = self.experimental_covariances[idx]
+            var_cov_diff = self.variance_covariances_diff[idx]
+            rows.append([lag, smv, cov, var_cov_diff])
+
         return rows
 
     def __str_populate_single(self):
         rows = []
         if self.__c_cov:
-            if self.__c_var:
-                for idx, row in enumerate(self.experimental_covariances):
-                    lag = self.lags[idx]
-                    cov = row
-                    var_cov_diff = self.variance_covariances_diff[idx]
-                    rows.append([lag, nan, cov, var_cov_diff])
-            else:
-                for idx, row in enumerate(self.experimental_covariances):
-                    lag = self.lags[idx]
-                    cov = row
-                    rows.append([lag, nan, cov, nan])
+            for idx, row in enumerate(self.experimental_covariances):
+                lag = self.lags[idx]
+                cov = row
+                var_cov_diff = self.variance_covariances_diff[idx]
+                rows.append([lag, nan, cov, var_cov_diff])
         else:
             for idx, row in enumerate(self.experimental_semivariances):
                 lag = self.lags[idx]
@@ -659,7 +633,6 @@ def build_experimental_variogram(input_array: np.array,
         tolerance=tolerance,
         method=method,
         is_semivariance=True,
-        is_covariance=True,
-        is_variance=True
+        is_covariance=True
     )
     return semivariogram_stats

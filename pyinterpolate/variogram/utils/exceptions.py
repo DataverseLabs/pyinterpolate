@@ -173,7 +173,6 @@ def check_sills(mins: float, maxs: float):
 
 def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
                                                               is_covar: bool,
-                                                              is_var: bool,
                                                               plot_semivar: bool,
                                                               plot_covar: bool,
                                                               plot_var: bool):
@@ -185,7 +184,7 @@ def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
     if (is_covar is False) and (plot_covar is True):
         validation['is_covariance'] = True
 
-    if (is_var is False) and (plot_var is True):
+    if plot_var:
         validation['is_variance'] = True
 
     if validation:

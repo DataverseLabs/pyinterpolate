@@ -6,6 +6,14 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-05-XX
+----------
+
+**version 0.4.1**
+
+* (change) The instance `ExperimentalVariogram` always calculates variance (in the previous versions users may decide if they want to).
+*
+
 2023-04-02
 ----------
 
