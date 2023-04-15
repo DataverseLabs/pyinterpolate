@@ -699,7 +699,12 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2022-11-19</p></td>
+<tr class="row-even"><td><p>2023-04-15</p></td>
+<td><p>Update: version 0.4.1</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+<td><p>0.4.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-11-19</p></td>
 <td><p>The first version of tutorial</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 <td><p>0.3.6</p></td>
@@ -926,7 +931,8 @@ div.rendered_html tbody tr:hover {
 <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">DIRECTIONS</span><span class="p">:</span>
     <span class="n">theoretical_model</span> <span class="o">=</span> <span class="n">ptp</span><span class="o">.</span><span class="n">TheoreticalVariogram</span><span class="p">()</span>
     <span class="n">theoretical_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">variograms</span><span class="p">[</span><span class="n">direction</span><span class="p">],</span>
-                              <span class="n">model_types</span><span class="o">=</span><span class="n">MODEL_TYPE</span><span class="p">)</span>
+                              <span class="n">model_types</span><span class="o">=</span><span class="n">MODEL_TYPE</span><span class="p">,</span>
+                              <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">theoretical_models</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">theoretical_model</span>
 </pre></div>
 </div>
@@ -1025,11 +1031,11 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3103/3103 [00:01&lt;00:00, 2607.25it/s]
-100%|██████████| 3103/3103 [00:00&lt;00:00, 3529.22it/s]
-100%|██████████| 3103/3103 [00:00&lt;00:00, 3717.49it/s]
-100%|██████████| 3103/3103 [00:00&lt;00:00, 3725.71it/s]
-100%|██████████| 3103/3103 [00:00&lt;00:00, 3711.66it/s]
+100%|██████████| 3103/3103 [00:01&lt;00:00, 2654.17it/s]
+100%|██████████| 3103/3103 [00:00&lt;00:00, 3383.64it/s]
+100%|██████████| 3103/3103 [00:00&lt;00:00, 3630.54it/s]
+100%|██████████| 3103/3103 [00:00&lt;00:00, 3679.92it/s]
+100%|██████████| 3103/3103 [00:00&lt;00:00, 3713.57it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1073,40 +1079,40 @@ div.rendered_html tbody tr:hover {
   <tbody>
     <tr>
       <th>0</th>
-      <td>6.526509</td>
-      <td>0.289442</td>
+      <td>6.523941</td>
+      <td>0.283231</td>
       <td>181180.0</td>
       <td>333740.0</td>
       <td>POINT (181180.000 333740.000)</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>6.660548</td>
-      <td>0.201562</td>
+      <td>6.664006</td>
+      <td>0.198841</td>
       <td>181140.0</td>
       <td>333700.0</td>
       <td>POINT (181140.000 333700.000)</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>6.528892</td>
-      <td>0.229987</td>
+      <td>6.541937</td>
+      <td>0.224790</td>
       <td>181180.0</td>
       <td>333700.0</td>
       <td>POINT (181180.000 333700.000)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>6.403988</td>
-      <td>0.258053</td>
+      <td>6.407741</td>
+      <td>0.254611</td>
       <td>181220.0</td>
       <td>333700.0</td>
       <td>POINT (181220.000 333700.000)</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>6.807497</td>
-      <td>0.110891</td>
+      <td>6.809450</td>
+      <td>0.109191</td>
       <td>181100.0</td>
       <td>333660.0</td>
       <td>POINT (181100.000 333660.000)</td>

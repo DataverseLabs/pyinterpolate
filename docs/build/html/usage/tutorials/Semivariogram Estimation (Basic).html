@@ -700,39 +700,43 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2023-03-11</p></td>
+<tr class="row-even"><td><p>2023-04-15</p></td>
+<td><p>Tutorial debugged and updated to the 0.4.1 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-03-11</p></td>
 <td><p>Spatial Dependendence Index</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2022-11-05</p></td>
+<tr class="row-even"><td><p>2022-11-05</p></td>
 <td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2022-08-09</p></td>
+<tr class="row-odd"><td><p>2022-08-09</p></td>
 <td><p>Tutorial updated to work with version 0.3.0</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-14</p></td>
+<tr class="row-even"><td><p>2021-12-14</p></td>
 <td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-12-13</p></td>
+<tr class="row-odd"><td><p>2021-12-13</p></td>
 <td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-10-13</p></td>
+<tr class="row-even"><td><p>2021-10-13</p></td>
 <td><p>Refactored TheoreticalSemivariogram (name change of class attribute)</p></td>
 <td><p>&#64;ethmtrgt</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-05-28</p></td>
+<tr class="row-odd"><td><p>2021-05-28</p></td>
 <td><p>Updated paths for input/output data</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
@@ -1019,22 +1023,22 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 * Sill: 489.8203263077297
 * Range: 8000
 * Spatial Dependency Strength is Unknown
-* Mean Bias: -52.60629816538764
-* Mean RMSE: 63.00280857591535
+* Mean Bias: -52.60629816538766
+* Mean RMSE: 63.00280857591537
 * Error-lag weighting method: None
 
 
 +--------+--------------------+--------------------+---------------------+
 |  lag   |    theoretical     |    experimental    |     bias (y-y&#39;)     |
 +--------+--------------------+--------------------+---------------------+
-| 500.0  | 38.953271455641215 | 14.716058620972868 | -24.237212834668348 |
-| 1000.0 | 77.75383379923626  | 34.85400868491261  | -42.899825114323654 |
-| 1500.0 | 116.24715805742842 | 57.712760007769795 |  -58.53439804965863 |
+| 500.0  | 38.95327145564127  | 14.716058620972868 | -24.237212834668405 |
+| 1000.0 | 77.75383379923632  | 34.85400868491261  |  -42.89982511432371 |
+| 1500.0 | 116.24715805742854 | 57.712760007769795 |  -58.53439804965874 |
 | 2000.0 | 154.2749647378938  | 82.49483539006093  |  -71.78012934783288 |
 | 2500.0 | 191.6730553536057  | 111.4449493651956  |  -80.22810598841009 |
-| 3000.0 | 228.26874220429437 | 143.4007980025356  |  -84.86794420175877 |
+| 3000.0 | 228.26874220429443 | 143.4007980025356  |  -84.86794420175883 |
 | 3500.0 | 263.87764398483665 | 175.10704725708965 |   -88.770596727747  |
-| 4000.0 | 298.29949183176774 | 209.3522343651705  |  -88.94725746659725 |
+| 4000.0 | 298.2994918317678  | 209.3522343651705  |  -88.9472574665973  |
 | 4500.0 | 331.3123650670836  | 244.46785072173265 |  -86.84451434535094 |
 | 5000.0 | 362.66434202230323 | 281.0897575749926  |  -81.57458444731066 |
 | 5500.0 | 392.0606537618678  | 315.67549229122216 |  -76.38516147064564 |
@@ -1530,7 +1534,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Model: circular, RMSE: 63.00280857591535
+Model: circular, RMSE: 63.00280857591537
 
 Model: cubic, RMSE: 100.93081804872125
 
@@ -1661,7 +1665,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1678,25 +1682,25 @@ The best model is linear with RMSE 28.218692107535404
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{&#39;model_type&#39;: &#39;cubic&#39;, &#39;nugget&#39;: 0, &#39;sill&#39;: 489.8203263077297, &#39;range&#39;: 12494.786056978368, &#39;fitted_model&#39;: array([[5.00000000e+02, 5.21610005e+00],
-       [1.00000000e+03, 1.97707468e+01],
-       [1.50000000e+03, 4.20423614e+01],
-       [2.00000000e+03, 7.04510784e+01],
-       [2.50000000e+03, 1.03478842e+02],
-       [3.00000000e+03, 1.39688588e+02],
-       [3.50000000e+03, 1.77742213e+02],
-       [4.00000000e+03, 2.16417015e+02],
-       [4.50000000e+03, 2.54620320e+02],
-       [5.00000000e+03, 2.91401965e+02],
-       [5.50000000e+03, 3.25964356e+02],
-       [6.00000000e+03, 3.57669791e+02],
-       [6.50000000e+03, 3.86044729e+02],
-       [7.00000000e+03, 4.10780721e+02],
-       [7.50000000e+03, 4.31731689e+02],
-       [8.00000000e+03, 4.48907251e+02],
-       [8.50000000e+03, 4.62461777e+02],
-       [9.00000000e+03, 4.72678898e+02],
-       [9.50000000e+03, 4.79951132e+02]]), &#39;rmse&#39;: 15.38656191383485, &#39;bias&#39;: nan, &#39;mae&#39;: nan, &#39;smape&#39;: nan}
+{&#39;model_type&#39;: &#39;cubic&#39;, &#39;nugget&#39;: 0, &#39;sill&#39;: 489.8203263077297, &#39;range&#39;: 12335.489979757927, &#39;fitted_model&#39;: array([[5.00000000e+02, 5.34805582e+00],
+       [1.00000000e+03, 2.02557839e+01],
+       [1.50000000e+03, 4.30386760e+01],
+       [2.00000000e+03, 7.20566873e+01],
+       [2.50000000e+03, 1.05735635e+02],
+       [3.00000000e+03, 1.42587601e+02],
+       [3.50000000e+03, 1.81229998e+02],
+       [4.00000000e+03, 2.20402979e+02],
+       [4.50000000e+03, 2.58984845e+02],
+       [5.00000000e+03, 2.96005120e+02],
+       [5.50000000e+03, 3.30654972e+02],
+       [6.00000000e+03, 3.62294630e+02],
+       [6.50000000e+03, 3.90457480e+02],
+       [7.00000000e+03, 4.14850490e+02],
+       [7.50000000e+03, 4.35350655e+02],
+       [8.00000000e+03, 4.51997098e+02],
+       [8.50000000e+03, 4.64978532e+02],
+       [9.00000000e+03, 4.74615706e+02],
+       [9.50000000e+03, 4.81338548e+02]]), &#39;rmse&#39;: 15.444756774880005, &#39;bias&#39;: nan, &#39;mae&#39;: nan, &#39;smape&#39;: nan}
 </pre></div></div>
 </div>
 <p>After <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> our algorithm has chosen a different set of parameters and a model type! Let’s plot it against experimental variogram:</p>
@@ -1801,7 +1805,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 * Selected model: Cubic model
 * Nugget: 0.0
 * Sill: 489.8203263077297
-* Range: 12494.786056978368
+* Range: 12335.489979757927
 * Spatial Dependency Strength is Unknown
 * Mean Bias: 0.0
 * Mean RMSE: 0.0
@@ -1851,7 +1855,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 * Selected model: Cubic model
 * Nugget: 0.0
 * Sill: 489.8203263077297
-* Range: 12494.786056978368
+* Range: 12335.489979757927
 * Spatial Dependency Strength is Unknown
 * Mean Bias: 0.0
 * Mean RMSE: 0.0

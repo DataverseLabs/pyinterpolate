@@ -137,6 +137,25 @@ def validate_selected_errors(val: int):
         raise MetricsTypeSelectionError
 
 
+def check_nuggets(minn: float, maxn: float):
+    # Check if min is lower or equal to max
+    if minn > maxn:
+        msg = f'Minimum nugget to the first lag variance ratio {minn} is larger than maximum ' \
+              f'nugget to the first lag variance ratio {maxn}'
+        raise ValueError(msg)
+
+    # Check if min is negative
+    if minn < 0:
+        msg = f'Minimum nugget to the first lag variance ratio is below 0 and it is equal to {minn}'
+        raise ValueError(msg)
+
+    # Check if max is larger than 1 and throw warning if it is
+    if maxn > 1:
+        msg = f'Maximum nugget to the first lag variance ratio is greater than one, are you sure that nugget is ' \
+              f'larger than the variance for lag 1?'
+        warnings.warn(msg)
+
+
 def check_ranges(minr: float, maxr: float):
     # Check if min is lower or equal to max
     if minr > maxr:

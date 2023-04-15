@@ -13,7 +13,8 @@ Changes by date
 
 * (change) The instance `ExperimentalVariogram` always calculates variance (in the previous versions users may decide if they want to).
 * (enhancement) `"safe"` method of variogram autofit that chooses *linear*, *power*, and *spherical* models,
-* 
+* (enhancement) add automatic nugget selection for `TheoreticalVariogram().autofit()` method,
+*
 
 2023-04-02
 ----------
