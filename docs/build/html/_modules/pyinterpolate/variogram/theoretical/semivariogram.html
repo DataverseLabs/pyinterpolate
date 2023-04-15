@@ -741,6 +741,7 @@
 <span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
+<span class="sd">            - &#39;safe&#39; - ``[&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]``,</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -849,10 +850,6 @@
 
 <span class="sd">        KeyError</span>
 <span class="sd">            Raised when wrong error type is provided by the users.</span>
-
-<span class="sd">        TODO</span>
-<span class="sd">        ----</span>
-<span class="sd">        * add &#39;safe&#39; models list to autofit() method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="n">deviation_weighting</span>
@@ -1252,6 +1249,12 @@
                     <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;spherical&#39;</span>
+                <span class="p">]</span>
+            <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;power&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;spherical&#39;</span>
