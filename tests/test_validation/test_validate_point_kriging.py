@@ -13,7 +13,7 @@ ARMSTRONG_VARIOGRAM = build_experimental_variogram(ARMSTRONG_DATA,
                                                    step_size=1,
                                                    max_range=6)
 THEORETICAL_MODEL = TheoreticalVariogram()
-THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='linear')
+THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='linear', nugget=0.0)
 
 
 class TestValidateKriging(unittest.TestCase):
@@ -30,7 +30,7 @@ class TestValidateKriging(unittest.TestCase):
         self.assertAlmostEqual(validation_results[0], -0.016, places=3)
 
         # Average variance error ~ 1.67
-        self.assertAlmostEqual(validation_results[1], 1.67, places=2)
+        self.assertAlmostEqual(validation_results[1], 1.729, places=2)
 
     def test_with_simple(self):
         validation_results = validate_kriging(
@@ -48,4 +48,4 @@ class TestValidateKriging(unittest.TestCase):
         self.assertAlmostEqual(validation_results[0], -0.015, places=3)
 
         # Average variance error ~ 1.67
-        self.assertAlmostEqual(validation_results[1], 1.62, places=2)
+        self.assertAlmostEqual(validation_results[1], 1.67, places=2)

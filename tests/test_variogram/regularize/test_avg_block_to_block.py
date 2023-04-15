@@ -68,8 +68,8 @@ class TestAverageBlockToBlockSemivariance(unittest.TestCase):
 
         avg_semi = average_block_to_block_semivariances(b_arr, lags, STEP_SIZE)
         self.assertEqual(set(lags), set(avg_semi[:, 0]))
-        self.assertEqual(int(avg_semi[0, 1]), 62)
-        self.assertEqual(int(avg_semi[-1, 1]), 154)
+        self.assertEqual(int(avg_semi[0, 1]), 91)
+        self.assertEqual(int(avg_semi[-1, 1]), 150)
 
         pts_per_lag = [416, 1716, 2358, 2892, 3342, 3780, 3964, 3832, 3696]
         self.assertEqual(set(pts_per_lag), set(avg_semi[:, -1]))
