@@ -122,3 +122,9 @@ class TestTheoreticalVariogram(unittest.TestCase):
         os.remove(fname)
 
         self.assertTrue(test, msg='Theoretical variograms should be the same! Saved and loaded jsons are different!')
+
+    def test_safe_autofit(self):
+
+        variogram = TheoreticalVariogram()
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='safe')
+        self.assertTrue(variogram)

@@ -359,6 +359,7 @@ class TheoreticalVariogram:
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
+            - 'safe' - ``['linear', 'power', 'spherical']``,
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -467,10 +468,6 @@ class TheoreticalVariogram:
 
         KeyError
             Raised when wrong error type is provided by the users.
-
-        TODO
-        ----
-        * add 'safe' models list to autofit() method
         """
 
         self.deviation_weighting = deviation_weighting
@@ -870,6 +867,12 @@ class TheoreticalVariogram:
                     'cubic',
                     'exponential',
                     'gaussian',
+                    'linear',
+                    'power',
+                    'spherical'
+                ]
+            elif model_types == 'safe':
+                mtypes = [
                     'linear',
                     'power',
                     'spherical'
