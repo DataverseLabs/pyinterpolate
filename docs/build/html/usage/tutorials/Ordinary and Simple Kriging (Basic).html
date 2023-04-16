@@ -698,35 +698,39 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2022-11-05</p></td>
+<tr class="row-even"><td><p>2023-04-15</p></td>
+<td><p>Tutorial debugged and updated to the 0.4.1 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-11-05</p></td>
 <td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2022-08-20</p></td>
+<tr class="row-even"><td><p>2022-08-20</p></td>
 <td><p>The tutorial is updated to the version 0.3.0 of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-12-14</p></td>
+<tr class="row-odd"><td><p>2021-12-14</p></td>
 <td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class &amp; error variance estimated in a correct way</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-13</p></td>
+<tr class="row-even"><td><p>2021-12-13</p></td>
 <td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-12-11</p></td>
+<tr class="row-odd"><td><p>2021-12-11</p></td>
 <td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-04-03</p></td>
+<tr class="row-odd"><td><p>2021-04-03</p></td>
 <td><p>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-03-31</p></td>
+<tr class="row-even"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated point data source.</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
@@ -778,7 +782,7 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </div>
 <p>In the beginning, we remove 70 % of our points from the dataset, and we will leave them as a test set to estimate how good our models are.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
@@ -821,7 +825,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <h2>2) Set Semivariogram model<a class="headerlink" href="#2)-Set-Semivariogram-model" title="Permalink to this heading">#</a></h2>
 <p>In this step, we are going to create experimental and theoretical semivariograms.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create experimental semivariogram</span>
@@ -836,7 +840,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot experimental semivariogram</span>
@@ -853,7 +857,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit data into a theoretical model</span>
@@ -863,7 +867,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -878,7 +882,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">semivar</span><span class="p">)</span>
@@ -894,9 +898,11 @@ realization with a fixed random seed, but you should be aware that in the real-w
 * Nugget: 0.0
 * Sill: 493.778772754868
 * Range: 10000
+* Spatial Dependency Strength is Unknown
 * Mean Bias: 21.92700357030904
 * Mean RMSE: 37.17324824914244
 * Error-lag weighting method: None
+
 
 +--------+--------------------+--------------------+---------------------+
 |  lag   |    theoretical     |    experimental    |     bias (y-y&#39;)     |
@@ -943,7 +949,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </ul>
 <p>We use only the first four parameters and <code class="docutils literal notranslate"><span class="pre">sk_mean</span></code> when we perform Simple Kriging. Let’s start! The first step is an interpolation of the value known by our model.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select one known value</span>
@@ -954,7 +960,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -963,7 +969,7 @@ array([2.49304390e+05, 5.40766289e+05, 2.03649998e+01])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
@@ -978,11 +984,11 @@ array([2.49304390e+05, 5.40766289e+05, 2.03649998e+01])
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 524.75it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 520.39it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -993,7 +999,7 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 <p>The first value is our prediction: it is precisely the same as the input in the training set! So far, the algorithm has worked well. The second value is prediction variance error, and it is equal to zero - we are sure it is the exact value.</p>
 <p>Simple Kriging is slightly different than Ordinary Kriging, and we must set the process mean to retrieve valid results. It is rarely the case. That’s why Ordinary Kriging is the first choice for many applications. We know the global mean because we have the whole dataset, but in the real-world scenario, we cannot divide the set into training and test sets and then get the mean from the entire dataset - it is an information leak from the test set into a model!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
@@ -1006,11 +1012,11 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 1/1 [00:00&lt;00:00, 235.93it/s]
+100%|██████████| 1/1 [00:00&lt;00:00, 655.26it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1025,7 +1031,7 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 <p>Using kriging for interpolation of known points values is pointless, and it is an excellent tool for a testing algorithm but nothing more. Here we will interpolate with Kriging, and we will interpolate values at unknown locations. Additionally, we will control the <code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code> parameter to check how it influences predictions.</p>
 <p>In the first step, we will create a simple function to test our kriging results and calculate RMSE.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">variogram_model</span><span class="p">,</span> <span class="n">ktype</span><span class="p">,</span> <span class="n">test_values</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1043,7 +1049,7 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of neighbors</span>
@@ -1075,7 +1081,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 3412.41it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2959.38it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1093,7 +1099,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 3191.84it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2937.47it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1111,7 +1117,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 3390.65it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2899.48it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1129,7 +1135,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:04&lt;00:00, 1122.85it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2617.63it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1147,7 +1153,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:04&lt;00:00, 1147.38it/s]
+100%|██████████| 4826/4826 [00:03&lt;00:00, 1605.16it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1165,7 +1171,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:07&lt;00:00, 647.30it/s]
+100%|██████████| 4826/4826 [00:04&lt;00:00, 1036.40it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1173,7 +1179,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 3.2547868359770336
+RMSE: 3.254786835977034
 
 Number of neighbors: 256
 </pre></div></div>
@@ -1183,7 +1189,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:11&lt;00:00, 415.25it/s]
+100%|██████████| 4826/4826 [00:10&lt;00:00, 476.66it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1191,7 +1197,7 @@ Number of neighbors: 256
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 3.2550170696805005
+RMSE: 3.2550170696805028
 
 </pre></div></div>
 </div>
@@ -1204,7 +1210,7 @@ RMSE: 3.2550170696805005
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Simple Kriging: tests&#39;</span><span class="p">)</span>
@@ -1235,7 +1241,7 @@ Number of neighbors: 4
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 4217.93it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2883.33it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1253,7 +1259,7 @@ Number of neighbors: 8
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 4246.46it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2938.80it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1271,7 +1277,7 @@ Number of neighbors: 16
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:01&lt;00:00, 4154.94it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2818.45it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1289,7 +1295,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:03&lt;00:00, 1539.77it/s]
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2713.67it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1297,7 +1303,7 @@ Number of neighbors: 32
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-RMSE: 3.2785837126433313
+RMSE: 3.278583712643331
 
 Number of neighbors: 64
 </pre></div></div>
@@ -1307,7 +1313,7 @@ Number of neighbors: 64
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:03&lt;00:00, 1396.62it/s]
+100%|██████████| 4826/4826 [00:02&lt;00:00, 1632.18it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1325,7 +1331,7 @@ Number of neighbors: 128
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:04&lt;00:00, 976.35it/s]
+100%|██████████| 4826/4826 [00:04&lt;00:00, 1070.02it/s]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1343,23 +1349,15 @@ Number of neighbors: 256
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 4826/4826 [00:11&lt;00:00, 417.94it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-RMSE: 3.254332343473019
-
+100%|██████████| 4826/4826 [00:10&lt;00:00, 469.33it/s]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
-<div class="output_area stderr docutils container">
+<div class="output_area docutils container">
 <div class="highlight"><pre>
+RMSE: 3.25433234347302
 
 </pre></div></div>
 </div>

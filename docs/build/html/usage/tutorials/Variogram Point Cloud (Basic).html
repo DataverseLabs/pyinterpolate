@@ -799,16 +799,16 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.38021426e+05, 5.50151241e+05, 1.06866257e+02],
-       [2.38826239e+05, 5.39241490e+05, 1.84549274e+01],
-       [2.51375565e+05, 5.30949430e+05, 4.87319641e+01],
-       [2.46801816e+05, 5.43640990e+05, 1.88564606e+01],
-       [2.51547499e+05, 5.35899682e+05, 3.67753220e+01],
-       [2.46691296e+05, 5.50751631e+05, 5.52004814e+01],
-       [2.53616703e+05, 5.40222972e+05, 2.14738140e+01],
-       [2.45014169e+05, 5.34045938e+05, 5.11259308e+01],
-       [2.49423055e+05, 5.42028826e+05, 2.04576187e+01],
-       [2.53275034e+05, 5.39825126e+05, 2.29381065e+01]])
+array([[2.39999210e+05, 5.53113167e+05, 6.43657227e+01],
+       [2.50027301e+05, 5.42320640e+05, 2.03859997e+01],
+       [2.38465362e+05, 5.40506690e+05, 1.64955063e+01],
+       [2.47805081e+05, 5.37683653e+05, 2.29897518e+01],
+       [2.39000133e+05, 5.45968764e+05, 8.26880875e+01],
+       [2.50659647e+05, 5.51491588e+05, 7.05245590e+01],
+       [2.44006308e+05, 5.36820823e+05, 1.71700115e+01],
+       [2.47063702e+05, 5.29072040e+05, 6.59429245e+01],
+       [2.45072418e+05, 5.28483614e+05, 5.76665573e+01],
+       [2.50309304e+05, 5.42075482e+05, 2.12635937e+01]])
 </pre></div></div>
 </div>
 </section>
@@ -847,22 +847,21 @@ array([[2.38021426e+05, 5.50151241e+05, 1.06866257e+02],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 883.7145107499646 has 686 point pairs.
-Lag 1767.4290214999291 has 1904 point pairs.
-Lag 2651.1435322498937 has 3046 point pairs.
-Lag 3534.8580429998583 has 3848 point pairs.
-Lag 4418.572553749823 has 4654 point pairs.
-Lag 5302.287064499787 has 5408 point pairs.
-Lag 6186.001575249752 has 5952 point pairs.
-Lag 7069.716085999717 has 6438 point pairs.
-Lag 7953.430596749681 has 6538 point pairs.
-Lag 8837.145107499646 has 6768 point pairs.
-Lag 9720.859618249611 has 7020 point pairs.
-Lag 10604.574128999575 has 6842 point pairs.
-Lag 11488.288639749539 has 6628 point pairs.
-Lag 12372.003150499502 has 6300 point pairs.
-Lag 13255.71766124947 has 6382 point pairs.
-Lag 14139.432171999433 has 6266 point pairs.
+Lag 890.0717947991943 has 620 point pairs.
+Lag 1780.1435895983886 has 1904 point pairs.
+Lag 2670.215384397583 has 2924 point pairs.
+Lag 3560.2871791967773 has 3798 point pairs.
+Lag 4450.358973995972 has 4672 point pairs.
+Lag 5340.430768795166 has 5190 point pairs.
+Lag 6230.50256359436 has 5844 point pairs.
+Lag 7120.574358393555 has 6264 point pairs.
+Lag 8010.646153192749 has 6378 point pairs.
+Lag 8900.717947991943 has 6786 point pairs.
+Lag 9790.789742791138 has 6834 point pairs.
+Lag 10680.861537590332 has 7046 point pairs.
+Lag 11570.933332389526 has 6844 point pairs.
+Lag 12461.00512718872 has 6570 point pairs.
+Lag 13351.076921987915 has 6174 point pairs.
 </pre></div></div>
 </div>
 <p>As we see, there are a lot of points per lag! Data is probably messy, but to be sure, we must check its distribution. What are those <strong>points per lag</strong>? They are a set of semivariances between all point pairs within a specific lag. This information helps us to understand if there are any undersampled ranges. Then, we can change <code class="docutils literal notranslate"><span class="pre">step_size</span></code> accordingly (to avoid a situation where one lag has the order of magnitude less/more point pairs than the other).</p>
@@ -906,12 +905,21 @@ True
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_13_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_13_0.png" />
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
 </div>
 <p>The orange line in the middle of each box represents the median (50%) value per lag. The trend is more visible if we look into it. What else can be seen here?</p>
 <ol class="arabic simple">
@@ -929,12 +937,21 @@ True
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_15_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_15_0.png" />
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
 </div>
 <p>The violin plot supports our earlier assumptions, but we can learn more from it. For distant lags, a distribution starts to be multimodal. We see one mode around very low values of semivariance and another mode close to the 1st quartile. Multimodality may affect our outcomes, and maybe it tells us that there is more than one level of spatial dependency?</p>
 <p>There is still the elephant in the room. Our data is pulled up with outliers. Do you see long whiskers on the top of every distribution? We can let them be, but maybe the better idea is to clean it before we start Kriging? In the next paragraph, we will detect and remove outliers from a block dataset.</p>
@@ -962,14 +979,6 @@ True
 <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/blogt/share/proj failed
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
@@ -1080,12 +1089,21 @@ ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/b
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_21_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_21_0.png" />
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -1138,12 +1156,21 @@ distribution, and its skewness.</p>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_25_0.png" src="../../_images/usage_tutorials_Variogram_Point_Cloud_%28Basic%29_25_0.png" />
 </div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
 </div>
 <p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is 6-7 times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
 </section>

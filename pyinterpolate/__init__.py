@@ -42,4 +42,4 @@ from pyinterpolate.variogram import IndicatorVariogramData, ExperimentalIndicato
 from pyinterpolate.viz import interpolate_raster
 
 
-__version__ = "0.3.7"
+__version__ = "0.4.1"

@@ -137,6 +137,25 @@ def validate_selected_errors(val: int):
         raise MetricsTypeSelectionError
 
 
+def check_nuggets(minn: float, maxn: float):
+    # Check if min is lower or equal to max
+    if minn > maxn:
+        msg = f'Minimum nugget to the first lag variance ratio {minn} is larger than maximum ' \
+              f'nugget to the first lag variance ratio {maxn}'
+        raise ValueError(msg)
+
+    # Check if min is negative
+    if minn < 0:
+        msg = f'Minimum nugget to the first lag variance ratio is below 0 and it is equal to {minn}'
+        raise ValueError(msg)
+
+    # Check if max is larger than 1 and throw warning if it is
+    if maxn > 1:
+        msg = f'Maximum nugget to the first lag variance ratio is greater than one, are you sure that nugget is ' \
+              f'larger than the variance for lag 1?'
+        warnings.warn(msg)
+
+
 def check_ranges(minr: float, maxr: float):
     # Check if min is lower or equal to max
     if minr > maxr:
@@ -173,7 +192,6 @@ def check_sills(mins: float, maxs: float):
 
 def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
                                                               is_covar: bool,
-                                                              is_var: bool,
                                                               plot_semivar: bool,
                                                               plot_covar: bool,
                                                               plot_var: bool):
@@ -185,7 +203,7 @@ def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
     if (is_covar is False) and (plot_covar is True):
         validation['is_covariance'] = True
 
-    if (is_var is False) and (plot_var is True):
+    if plot_var:
         validation['is_variance'] = True
 
     if validation:

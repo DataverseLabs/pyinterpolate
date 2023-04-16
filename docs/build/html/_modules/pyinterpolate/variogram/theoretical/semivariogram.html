@@ -408,7 +408,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">ExperimentalVariogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.metrics</span> <span class="kn">import</span> <span class="n">forecast_bias</span><span class="p">,</span> <span class="n">root_mean_squared_error</span><span class="p">,</span> \
     <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">weighted_root_mean_squared_error</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span><span class="p">,</span> <span class="n">check_nuggets</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.spatial_dependency_index</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
 
@@ -496,7 +496,7 @@
 <span class="sd">        Fits experimental variogram data into theoretical model.</span>
 
 <span class="sd">    autofit()</span>
-<span class="sd">        The same as fit but tests multiple ranges, sills and models.</span>
+<span class="sd">        The same as fit but tests multiple nuggets, ranges, sills and models.</span>
 
 <span class="sd">    calculate_model_error()</span>
 <span class="sd">        Evaluates the model performance against experimental values.</span>
@@ -713,15 +713,18 @@
 <div class="viewcode-block" id="TheoreticalVariogram.autofit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
                 <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
-                <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">min_nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">number_of_nuggets</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
                 <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">min_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                 <span class="n">max_range</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
                 <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">min_sill</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                 <span class="n">max_sill</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                <span class="n">number_of_sills</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">number_of_sills</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
                 <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">error_estimator</span><span class="o">=</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span>
                 <span class="n">deviation_weighting</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span>
@@ -741,6 +744,7 @@
 <span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
+<span class="sd">            - &#39;safe&#39; - ``[&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]``,</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -749,8 +753,17 @@
 <span class="sd">            - &#39;power&#39;,</span>
 <span class="sd">            - &#39;spherical&#39;.</span>
 
-<span class="sd">        nugget : float, default = 0</span>
-<span class="sd">            Nugget (bias) of a variogram. Default value is 0.</span>
+<span class="sd">        nugget : float, optional</span>
+<span class="sd">            Nugget (bias) of a variogram. If given then it is fixed to this value.</span>
+
+<span class="sd">        min_nugget : float, default = 0</span>
+<span class="sd">            The minimum nugget as the ratio of the parameter to the first lag variance.</span>
+
+<span class="sd">        max_nugget : float, default = 0.5</span>
+<span class="sd">            The maximum nugget as the ratio of the parameter to the first lag variance.</span>
+
+<span class="sd">        number_of_nuggets : int, default = 16</span>
+<span class="sd">            How many equally spaced nuggets tested between ``min_nugget`` and ``max_nugget``.</span>
 
 <span class="sd">        rang : float, optional</span>
 <span class="sd">            If given, then range is fixed to this value.</span>
@@ -762,7 +775,7 @@
 <span class="sd">            The maximum fraction of a variogram range, ``min_range &lt;= max_range &lt;= 1``. Parameter ``max_range`` greater</span>
 <span class="sd">            than **0.5** raises warning.</span>
 
-<span class="sd">        number_of_ranges : int, default = 64</span>
+<span class="sd">        number_of_ranges : int, default = 16</span>
 <span class="sd">            How many equally spaced ranges are tested between ``min_range`` and ``max_range``.</span>
 
 <span class="sd">        sill : float, default = None</span>
@@ -775,7 +788,7 @@
 <span class="sd">            The maximum fraction of the variogram variance at lag 0 to find a sill. It *should be* lower or equal to 1.</span>
 <span class="sd">            It is possible to set it above 1, but then warning is printed.</span>
 
-<span class="sd">        number_of_sills : int, default = 64</span>
+<span class="sd">        number_of_sills : int, default = 16</span>
 <span class="sd">            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.</span>
 
 <span class="sd">        direction : float, in range [0, 360], default=None</span>
@@ -849,10 +862,6 @@
 
 <span class="sd">        KeyError</span>
 <span class="sd">            Raised when wrong error type is provided by the users.</span>
-
-<span class="sd">        TODO</span>
-<span class="sd">        ----</span>
-<span class="sd">        * add &#39;safe&#39; models list to autofit() method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="n">deviation_weighting</span>
@@ -879,7 +888,20 @@
         <span class="c1"># Check model type and set models</span>
         <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
 
-        <span class="c1"># Set ranges and sills</span>
+        <span class="c1"># Set nuggets, ranges and sills</span>
+        <span class="k">if</span> <span class="n">nugget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_nuggets</span><span class="p">(</span><span class="n">min_nugget</span><span class="p">,</span> <span class="n">max_nugget</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">nugget_range_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">min_nugget</span>
+                <span class="n">nugget_range_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_nugget</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nugget_range_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">min_nugget</span>
+                <span class="n">nugget_range_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_nugget</span>
+
+            <span class="n">nugget_ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">nugget_range_min</span><span class="p">,</span> <span class="n">nugget_range_max</span><span class="p">,</span> <span class="n">number_of_nuggets</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nugget_ranges</span> <span class="o">=</span> <span class="p">[</span><span class="n">nugget</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">rang</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">check_ranges</span><span class="p">(</span><span class="n">min_range</span><span class="p">,</span> <span class="n">max_range</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -920,29 +942,35 @@
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">_mtype</span> <span class="ow">in</span> <span class="n">mtypes</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">_rang</span> <span class="ow">in</span> <span class="n">min_max_ranges</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">_sill</span> <span class="ow">in</span> <span class="n">min_max_sill</span><span class="p">:</span>
-                    <span class="c1"># Create model</span>
-                    <span class="n">_mdl_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">_mtype</span><span class="p">]</span>
-                    <span class="n">_fitted_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_mdl_fn</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">_sill</span><span class="p">,</span> <span class="n">_rang</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_nugg</span> <span class="ow">in</span> <span class="n">nugget_ranges</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_rang</span> <span class="ow">in</span> <span class="n">min_max_ranges</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_sill</span> <span class="ow">in</span> <span class="n">min_max_sill</span><span class="p">:</span>
+                        <span class="c1"># Create model</span>
+                        <span class="n">_mdl_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">_mtype</span><span class="p">]</span>
+                        <span class="n">_fitted_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_mdl_fn</span><span class="p">,</span> <span class="n">_nugg</span><span class="p">,</span> <span class="n">_sill</span><span class="p">,</span> <span class="n">_rang</span><span class="p">)</span>
 
-                    <span class="c1"># Calculate Error</span>
-                    <span class="n">_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_model_error</span><span class="p">(</span><span class="n">_fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
-                                                      <span class="o">**</span><span class="n">_errors_keys</span><span class="p">,</span>
-                                                      <span class="n">deviation_weighting</span><span class="o">=</span><span class="n">deviation_weighting</span><span class="p">)</span>
+                        <span class="c1"># Calculate Error</span>
+                        <span class="n">_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_model_error</span><span class="p">(</span><span class="n">_fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                                                          <span class="o">**</span><span class="n">_errors_keys</span><span class="p">,</span>
+                                                          <span class="n">deviation_weighting</span><span class="o">=</span><span class="n">deviation_weighting</span><span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">__print_autofit_info</span><span class="p">(</span><span class="n">_mtype</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">_sill</span><span class="p">,</span> <span class="n">_rang</span><span class="p">,</span> <span class="n">error_estimator</span><span class="p">,</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">])</span>
+                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__print_autofit_info</span><span class="p">(</span><span class="n">_mtype</span><span class="p">,</span>
+                                                      <span class="n">_nugg</span><span class="p">,</span>
+                                                      <span class="n">_sill</span><span class="p">,</span>
+                                                      <span class="n">_rang</span><span class="p">,</span>
+                                                      <span class="n">error_estimator</span><span class="p">,</span>
+                                                      <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">])</span>
 
-                    <span class="c1"># Check if model is better than the previous</span>
-                    <span class="k">if</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">err_val</span><span class="p">:</span>
-                        <span class="n">err_val</span> <span class="o">=</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nugget</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
-                        <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
-                        <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
+                        <span class="c1"># Check if model is better than the previous</span>
+                        <span class="k">if</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">err_val</span><span class="p">:</span>
+                            <span class="n">err_val</span> <span class="o">=</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_nugg</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
+                            <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">auto_update_attributes</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">optimal_parameters</span><span class="p">)</span>
@@ -1252,6 +1280,12 @@
                     <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;spherical&#39;</span>
+                <span class="p">]</span>
+            <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;power&#39;</span><span class="p">,</span>
                     <span class="s1">&#39;spherical&#39;</span>

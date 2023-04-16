@@ -186,8 +186,7 @@ class ExperimentalIndicatorVariogram:
                 tolerance=self.tolerance,
                 method=self.method,
                 is_semivariance=True,
-                is_covariance=True,
-                is_variance=True
+                is_covariance=True
             )
             self.experimental_models[str(indicator)] = exp
 

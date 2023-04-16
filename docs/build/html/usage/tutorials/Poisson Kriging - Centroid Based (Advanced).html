@@ -762,7 +762,7 @@ div.rendered_html tbody tr:hover {
 </section>
 <section id="1)-Read-and-explore-data">
 <h2>1) Read and explore data<a class="headerlink" href="#1)-Read-and-explore-data" title="Permalink to this heading">#</a></h2>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
@@ -774,21 +774,6 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">centroid_poisson_kriging</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/Users/szymonos/Documents/GitHub/pyinterpolate/pyinterpolate/distance/distance.py:11: UserWarning: Shapely 2.0 is installed, but because PyGEOS is also installed, GeoPandas will still use PyGEOS by default for now. To force to use and test Shapely 2.0, you have to set the environment variable USE_PYGEOS=0. You can do this before starting the Python process, or in your code before importing geopandas:
-
-import os
-os.environ[&#39;USE_PYGEOS&#39;] = &#39;0&#39;
-import geopandas
-
-In a future release, GeoPandas will switch to using Shapely by default. If you are using PyGEOS directly (calling PyGEOS functions on geometries from GeoPandas), this will then stop working and you are encouraged to migrate from PyGEOS to Shapely 2.0 (https://shapely.readthedocs.io/en/latest/migration_pygeos.html).
-  import geopandas as gpd
-</pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -835,7 +820,7 @@ In a future release, GeoPandas will switch to using Shapely by default. If you a
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;AxesSubplot: &gt;
+&lt;Axes: &gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1011,7 +996,7 @@ the tutorial.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;AxesSubplot: ylabel=&#39;Frequency&#39;&gt;
+&lt;Axes: ylabel=&#39;Frequency&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1035,7 +1020,7 @@ the tutorial.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;AxesSubplot: ylabel=&#39;Frequency&#39;&gt;
+&lt;Axes: ylabel=&#39;Frequency&#39;&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -1085,59 +1070,59 @@ the tutorial.</p>
   <tbody>
     <tr>
       <th>count</th>
-      <td>84.000000</td>
-      <td>84.000000</td>
-      <td>84.000000</td>
-      <td>84.000000</td>
+      <td>83.000000</td>
+      <td>83.000000</td>
+      <td>83.000000</td>
+      <td>83.000000</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>128.229939</td>
-      <td>8.850195</td>
-      <td>11.665973</td>
-      <td>6.168871</td>
+      <td>130.996236</td>
+      <td>9.162754</td>
+      <td>9.067447</td>
+      <td>0.204969</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>10.873003</td>
-      <td>2.529732</td>
-      <td>8.334586</td>
-      <td>12.987936</td>
+      <td>9.796029</td>
+      <td>2.592915</td>
+      <td>7.417468</td>
+      <td>11.755746</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>103.065880</td>
-      <td>0.742611</td>
-      <td>0.297394</td>
-      <td>-33.959666</td>
+      <td>108.842900</td>
+      <td>2.260881</td>
+      <td>0.489561</td>
+      <td>-27.670511</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>120.197313</td>
-      <td>7.473451</td>
-      <td>4.383765</td>
-      <td>-0.000469</td>
+      <td>122.911443</td>
+      <td>7.680156</td>
+      <td>4.107405</td>
+      <td>-5.742552</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>128.608598</td>
-      <td>9.067609</td>
-      <td>10.543379</td>
-      <td>8.491528</td>
+      <td>129.302106</td>
+      <td>9.524649</td>
+      <td>7.054442</td>
+      <td>1.129265</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>134.004359</td>
-      <td>10.366899</td>
-      <td>16.386895</td>
-      <td>13.063238</td>
+      <td>136.983986</td>
+      <td>10.570546</td>
+      <td>11.711486</td>
+      <td>7.144380</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>170.759666</td>
-      <td>14.449145</td>
-      <td>34.453846</td>
-      <td>34.453846</td>
+      <td>164.129506</td>
+      <td>14.891549</td>
+      <td>37.357100</td>
+      <td>37.357100</td>
     </tr>
   </tbody>
 </table>

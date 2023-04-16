@@ -700,40 +700,44 @@ div.rendered_html tbody tr:hover {
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2022-11-05</p></td>
+<tr class="row-even"><td><p>2023-04-15</p></td>
+<td><p>Tutorial updated for the 0.4.1 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-11-05</p></td>
 <td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2022-10-21</p></td>
+<tr class="row-even"><td><p>2022-10-21</p></td>
 <td><p>Tutorial updated for the 0.3.4 version of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2022-08-23</p></td>
+<tr class="row-odd"><td><p>2022-08-23</p></td>
 <td><p>Tutorial updated for the 0.3.0 version of the package</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-14</p></td>
+<tr class="row-even"><td><p>2021-12-14</p></td>
 <td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-12-13</p></td>
+<tr class="row-odd"><td><p>2021-12-13</p></td>
 <td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-12-06</p></td>
+<tr class="row-even"><td><p>2021-12-06</p></td>
 <td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has changed</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-10-13</p></td>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
 <td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> functions to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
 <td><p>&#64;ethmtrgt &amp;
 &#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-odd"><td><p>2021-05-11</p></td>
+<tr class="row-even"><td><p>2021-05-11</p></td>
 <td><p>Refactored TheoreticalSemivariogram class</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
-<tr class="row-even"><td><p>2021-03-31</p></td>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
 <td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
 <td><p>&#64;SimonMolinsky</p></td>
 </tr>
@@ -773,7 +777,7 @@ div.rendered_html tbody tr:hover {
 <section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -791,7 +795,7 @@ div.rendered_html tbody tr:hover {
 <p>The block data represents the breast cancer rates in the Northeastern part of the United States. Rate is the number of new cases divided by the population in a county, and this fraction is multiplied by a constant factor of 100,000.</p>
 <p>We read data from <code class="docutils literal notranslate"><span class="pre">geopackage</span></code> and use only <code class="docutils literal notranslate"><span class="pre">rate</span></code>, <code class="docutils literal notranslate"><span class="pre">centroid.x</span></code>, and <code class="docutils literal notranslate"><span class="pre">centroid.y</span></code> columns.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
@@ -811,16 +815,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/blogt/share/proj failed
-</pre></div></div>
-</div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -895,7 +891,7 @@ ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/b
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;rate&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
@@ -904,7 +900,7 @@ ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/b
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -917,7 +913,7 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <h2>2) Detect and remove outliers<a class="headerlink" href="#2)-Detect-and-remove-outliers" title="Permalink to this heading">#</a></h2>
 <p>We check and clean data before the semivariogram fitting and the Ordinary Kriging interpolation. Variogram Point Cloud is the best way to analyze data and detect outliers. We inspect and compare different lags and step sizes and their respective point clouds. Then we will create multiple variograms and Kriging models.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
@@ -936,7 +932,7 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
@@ -1025,7 +1021,7 @@ Lags per area: 16
 <li><p>use a small number of neighbors and a range close to 200,000 to avoid unnecessary computations.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now remove outliers from each lag</span>
@@ -1035,7 +1031,7 @@ Lags per area: 16
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And show data without outliers</span>
@@ -1118,7 +1114,7 @@ Lags per area: 16
 <h2>3. Create a theoretical semivariogram model<a class="headerlink" href="#3.-Create-a-theoretical-semivariogram-model" title="Permalink to this heading">#</a></h2>
 <p>Semivariogram may be fitted manually or automatically. In this case, we fit it automatically - we test multiple models, and it’s easier to use the <code class="docutils literal notranslate"><span class="pre">autofit()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> object. We didn’t force any model to see how different results we would get.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theoretical_semivariograms</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1133,7 +1129,7 @@ Lags per area: 16
     <span class="c1"># Assign experimental model and data to TheoreticalSemivariogram</span>
 
     <span class="n">theo_semi</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-    <span class="n">theo_semi</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_model</span><span class="p">)</span>
+    <span class="n">theo_semi</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_model</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">theoretical_semivariograms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theo_semi</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model parameters:&#39;</span><span class="p">)</span>
@@ -1154,29 +1150,13 @@ Lags per area: 16
 <div class="highlight"><pre>
 Semivariance calculated for [ 75000. 150000. 225000. 300000.] lags.
 
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-/home/szymon/Documents/Programming/Repositories/pyinterpolate-environment/pyinterpolate/pyinterpolate/variogram/theoretical/semivariogram.py:472: UserWarning: If you provide experimental variogram as a numpy array you must remember that the direction parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that variogram is isotropic.
-  warnings.warn(msg)
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
 
 Model parameters:
 Model type: circular
 Nugget: 0
 Sill: 104.18060667237297
-Range: 102380.95238095238
-Model error: 7.416168111798283
+Range: 102000.0
+Model error: 7.417032572087163
 
 #####
 Semivariance calculated for [ 37500.  75000. 112500. 150000. 187500. 225000. 262500. 300000.] lags.
@@ -1185,9 +1165,9 @@ Semivariance calculated for [ 37500.  75000. 112500. 150000. 187500. 225000. 262
 Model parameters:
 Model type: exponential
 Nugget: 0
-Sill: 111.82982174537467
-Range: 37619.04761904762
-Model error: 6.604433069510002
+Sill: 109.59322531046718
+Range: 38000.0
+Model error: 6.821956256798301
 
 #####
 Semivariance calculated for [ 18750.  37500.  56250.  75000.  93750. 112500. 131250. 150000. 168750.
@@ -1197,11 +1177,20 @@ Semivariance calculated for [ 18750.  37500.  56250.  75000.  93750. 112500. 131
 Model parameters:
 Model type: cubic
 Nugget: 0
-Sill: 107.66421388064023
+Sill: 111.06413642423938
 Range: 30000.0
-Model error: 19.320002753214663
+Model error: 19.624515289891136
 
 #####
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/szymonos/Documents/GitHub/pyinterpolate/pyinterpolate/variogram/theoretical/semivariogram.py:503: UserWarning: If you provide experimental variogram as a numpy array you must remember that the direction parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that variogram is isotropic.
+  warnings.warn(msg)
 </pre></div></div>
 </div>
 <p>Each case has a different model type, a different sill, and a different range! How do we choose the model parameters appropriately in this scenario? Error rises with the number of lags but is it a good indicator of the semivariogram fit? No, and we should be careful when choosing variograms with a few lags instead of variograms with multiple lags. We may miss some spatial patterns that will be averaged with a smaller number of lags. The 8-lag variogram seems to be the best because RMSE is the
@@ -1211,7 +1200,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <h2>4. Read point data canvas<a class="headerlink" href="#4.-Read-point-data-canvas" title="Permalink to this heading">#</a></h2>
 <p>Our variogram model is ready to load the point file as the <strong>GeoDataFrame</strong> object, which stores the geometry column and data features as tables.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/shapefile/regular_grid_points.shp&#39;</span>  <span class="c1"># file with grid for analysis</span>
@@ -1224,7 +1213,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1298,7 +1287,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <p>We can model all values in a batch. If we set the <code class="docutils literal notranslate"><span class="pre">number_of_workers</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">-1</span></code> or a positive integer, then the algorithm will use parallel processing functions to speed up calculations.</p>
 <p>Based on the learning from a semivariogram modeling step, we will set a number of neighboring areas to 8 and range to 200000. We will append interpolated values and errors to an existing data frame and plot them to compare results.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds_cols</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1328,13 +1317,13 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5419/5419 [00:04&lt;00:00, 1190.56it/s]
-100%|██████████| 5419/5419 [00:03&lt;00:00, 1402.50it/s]
-100%|██████████| 5419/5419 [00:03&lt;00:00, 1392.23it/s]
+100%|██████████| 5419/5419 [00:02&lt;00:00, 1931.85it/s]
+100%|██████████| 5419/5419 [00:02&lt;00:00, 2553.16it/s]
+100%|██████████| 5419/5419 [00:02&lt;00:00, 2052.52it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -1342,7 +1331,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1393,60 +1382,60 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
       <td>POINT (1277277.671 441124.507)</td>
       <td>1.277278e+06</td>
       <td>441124.5068</td>
-      <td>133.085189</td>
-      <td>63.322684</td>
-      <td>132.828256</td>
-      <td>93.647290</td>
+      <td>133.171491</td>
+      <td>63.520824</td>
+      <td>132.828545</td>
+      <td>91.387406</td>
       <td>131.969565</td>
-      <td>112.345267</td>
+      <td>115.893012</td>
     </tr>
     <tr>
       <th>82.0</th>
       <td>POINT (1277277.671 431124.507)</td>
       <td>1.277278e+06</td>
       <td>431124.5068</td>
-      <td>131.879395</td>
-      <td>62.251709</td>
-      <td>131.171342</td>
-      <td>92.859017</td>
+      <td>131.953103</td>
+      <td>62.476583</td>
+      <td>131.172932</td>
+      <td>90.602911</td>
       <td>130.604348</td>
-      <td>112.345267</td>
+      <td>115.893012</td>
     </tr>
     <tr>
       <th>83.0</th>
       <td>POINT (1277277.671 421124.507)</td>
       <td>1.277278e+06</td>
       <td>421124.5068</td>
-      <td>130.817630</td>
-      <td>61.932193</td>
-      <td>130.542053</td>
-      <td>92.252755</td>
+      <td>130.927922</td>
+      <td>62.178751</td>
+      <td>130.539928</td>
+      <td>90.002341</td>
       <td>130.604348</td>
-      <td>112.345267</td>
+      <td>115.893012</td>
     </tr>
     <tr>
       <th>84.0</th>
       <td>POINT (1277277.671 411124.507)</td>
       <td>1.277278e+06</td>
       <td>411124.5068</td>
-      <td>129.655109</td>
-      <td>61.666624</td>
-      <td>130.101171</td>
-      <td>91.857396</td>
+      <td>129.766106</td>
+      <td>61.951684</td>
+      <td>130.096220</td>
+      <td>89.610508</td>
       <td>130.604348</td>
-      <td>112.345267</td>
+      <td>115.893012</td>
     </tr>
     <tr>
       <th>85.0</th>
       <td>POINT (1277277.671 401124.507)</td>
       <td>1.277278e+06</td>
       <td>401124.5068</td>
-      <td>128.853456</td>
-      <td>60.872324</td>
-      <td>130.114977</td>
-      <td>91.603116</td>
+      <td>128.945194</td>
+      <td>61.136626</td>
+      <td>130.107678</td>
+      <td>89.357496</td>
       <td>130.860000</td>
-      <td>111.970782</td>
+      <td>115.506702</td>
     </tr>
   </tbody>
 </table>
@@ -1455,7 +1444,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <p>This is the somewhat complicated function in which we interpolate missing values as new columns of <strong>GeoDataFrame</strong>. <em>Uncertainty</em> is assigned to interpolated results for further analysis.</p>
 <p>Now we can save our <strong>GeoDataFrame</strong> as a shapefile.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save interpolation results</span>
@@ -1469,7 +1458,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <section id="6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates">
 <h2>6. Show a map of interpolated values with a choropleth map of the breast cancer rates<a class="headerlink" href="#6.-Show-a-map-of-interpolated-values-with-a-choropleth-map-of-the-breast-cancer-rates" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now compare results to choropleth maps</span>
@@ -1515,7 +1504,7 @@ we have chosen the wrong model - we are not able to retrieve meaningful informat
 </div></blockquote>
 <p>Are absolute errors between maps large or not? Let’s check it in the last step:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pcol1</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
@@ -1537,16 +1526,16 @@ we have chosen the wrong model - we are not able to retrieve meaningful informat
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Column: p cir 4
-Mean Absolute Difference with p exp 8 is 0.2124
-Mean Absolute Difference with p cub 16 is 0.6504
+Mean Absolute Difference with p exp 8 is 0.2106
+Mean Absolute Difference with p cub 16 is 0.6517
 
 Column: p exp 8
-Mean Absolute Difference with p cir 4 is 0.2124
-Mean Absolute Difference with p cub 16 is 0.4380
+Mean Absolute Difference with p cir 4 is 0.2106
+Mean Absolute Difference with p cub 16 is 0.4411
 
 Column: p cub 16
-Mean Absolute Difference with p cir 4 is 0.6504
-Mean Absolute Difference with p exp 8 is 0.4380
+Mean Absolute Difference with p cir 4 is 0.6517
+Mean Absolute Difference with p exp 8 is 0.4411
 
 </pre></div></div>
 </div>

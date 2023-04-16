@@ -26,7 +26,7 @@ from pyinterpolate.variogram.theoretical.models import circular_model, cubic_mod
 from pyinterpolate.variogram.empirical.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.variogram.utils.metrics import forecast_bias, root_mean_squared_error, \
     symmetric_mean_absolute_percentage_error, mean_absolute_error, weighted_root_mean_squared_error
-from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills
+from pyinterpolate.variogram.utils.exceptions import validate_selected_errors, check_ranges, check_sills, check_nuggets
 
 from pyinterpolate.variogram.theoretical.spatial_dependency_index import calculate_spatial_dependence_index
 
@@ -114,7 +114,7 @@ class TheoreticalVariogram:
         Fits experimental variogram data into theoretical model.
 
     autofit()
-        The same as fit but tests multiple ranges, sills and models.
+        The same as fit but tests multiple nuggets, ranges, sills and models.
 
     calculate_model_error()
         Evaluates the model performance against experimental values.
@@ -331,15 +331,18 @@ class TheoreticalVariogram:
     def autofit(self,
                 experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
                 model_types: Union[str, list] = 'all',
-                nugget=0,
+                nugget=None,
+                min_nugget=0,
+                max_nugget=0.5,
+                number_of_nuggets=16,
                 rang=None,
                 min_range=0.1,
                 max_range=0.5,
-                number_of_ranges=64,
+                number_of_ranges=16,
                 sill=None,
                 min_sill=0.,
                 max_sill=1,
-                number_of_sills=64,
+                number_of_sills=16,
                 direction=None,
                 error_estimator='rmse',
                 deviation_weighting='equal',
@@ -359,6 +362,7 @@ class TheoreticalVariogram:
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
+            - 'safe' - ``['linear', 'power', 'spherical']``,
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -367,8 +371,17 @@ class TheoreticalVariogram:
             - 'power',
             - 'spherical'.
 
-        nugget : float, default = 0
-            Nugget (bias) of a variogram. Default value is 0.
+        nugget : float, optional
+            Nugget (bias) of a variogram. If given then it is fixed to this value.
+
+        min_nugget : float, default = 0
+            The minimum nugget as the ratio of the parameter to the first lag variance.
+
+        max_nugget : float, default = 0.5
+            The maximum nugget as the ratio of the parameter to the first lag variance.
+
+        number_of_nuggets : int, default = 16
+            How many equally spaced nuggets tested between ``min_nugget`` and ``max_nugget``.
 
         rang : float, optional
             If given, then range is fixed to this value.
@@ -380,7 +393,7 @@ class TheoreticalVariogram:
             The maximum fraction of a variogram range, ``min_range <= max_range <= 1``. Parameter ``max_range`` greater
             than **0.5** raises warning.
 
-        number_of_ranges : int, default = 64
+        number_of_ranges : int, default = 16
             How many equally spaced ranges are tested between ``min_range`` and ``max_range``.
 
         sill : float, default = None
@@ -393,7 +406,7 @@ class TheoreticalVariogram:
             The maximum fraction of the variogram variance at lag 0 to find a sill. It *should be* lower or equal to 1.
             It is possible to set it above 1, but then warning is printed.
 
-        number_of_sills : int, default = 64
+        number_of_sills : int, default = 16
             How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
 
         direction : float, in range [0, 360], default=None
@@ -467,10 +480,6 @@ class TheoreticalVariogram:
 
         KeyError
             Raised when wrong error type is provided by the users.
-
-        TODO
-        ----
-        * add 'safe' models list to autofit() method
         """
 
         self.deviation_weighting = deviation_weighting
@@ -497,7 +506,20 @@ class TheoreticalVariogram:
         # Check model type and set models
         mtypes = self._check_models_type_autofit(model_types)
 
-        # Set ranges and sills
+        # Set nuggets, ranges and sills
+        if nugget is None:
+            check_nuggets(min_nugget, max_nugget)
+            if self.experimental_variogram is not None:
+                nugget_range_min = self.experimental_variogram.experimental_semivariances[0] * min_nugget
+                nugget_range_max = self.experimental_variogram.experimental_semivariances[0] * max_nugget
+            else:
+                nugget_range_min = self.experimental_array[0, 1] * min_nugget
+                nugget_range_max = self.experimental_array[0, 1] * max_nugget
+
+            nugget_ranges = np.linspace(nugget_range_min, nugget_range_max, number_of_nuggets)
+        else:
+            nugget_ranges = [nugget]
+
         if rang is None:
             check_ranges(min_range, max_range)
             if self.study_max_range is None:
@@ -538,29 +560,35 @@ class TheoreticalVariogram:
         }
 
         for _mtype in mtypes:
-            for _rang in min_max_ranges:
-                for _sill in min_max_sill:
-                    # Create model
-                    _mdl_fn = self.variogram_models[_mtype]
-                    _fitted_model = self._fit_model(_mdl_fn, nugget, _sill, _rang)
+            for _nugg in nugget_ranges:
+                for _rang in min_max_ranges:
+                    for _sill in min_max_sill:
+                        # Create model
+                        _mdl_fn = self.variogram_models[_mtype]
+                        _fitted_model = self._fit_model(_mdl_fn, _nugg, _sill, _rang)
 
-                    # Calculate Error
-                    _err = self.calculate_model_error(_fitted_model[:, 1],
-                                                      **_errors_keys,
-                                                      deviation_weighting=deviation_weighting)
+                        # Calculate Error
+                        _err = self.calculate_model_error(_fitted_model[:, 1],
+                                                          **_errors_keys,
+                                                          deviation_weighting=deviation_weighting)
 
-                    if verbose:
-                        self.__print_autofit_info(_mtype, nugget, _sill, _rang, error_estimator, _err[error_estimator])
+                        if verbose:
+                            self.__print_autofit_info(_mtype,
+                                                      _nugg,
+                                                      _sill,
+                                                      _rang,
+                                                      error_estimator,
+                                                      _err[error_estimator])
 
-                    # Check if model is better than the previous
-                    if _err[error_estimator] < err_val:
-                        err_val = _err[error_estimator]
-                        optimal_parameters['model_type'] = _mtype
-                        optimal_parameters['nugget'] = nugget
-                        optimal_parameters['sill'] = _sill
-                        optimal_parameters['range'] = _rang
-                        optimal_parameters['fitted_model'] = _fitted_model
-                        optimal_parameters.update(_err)
+                        # Check if model is better than the previous
+                        if _err[error_estimator] < err_val:
+                            err_val = _err[error_estimator]
+                            optimal_parameters['model_type'] = _mtype
+                            optimal_parameters['nugget'] = _nugg
+                            optimal_parameters['sill'] = _sill
+                            optimal_parameters['range'] = _rang
+                            optimal_parameters['fitted_model'] = _fitted_model
+                            optimal_parameters.update(_err)
 
         if auto_update_attributes:
             self._update_attributes(**optimal_parameters)
@@ -870,6 +898,12 @@ class TheoreticalVariogram:
                     'cubic',
                     'exponential',
                     'gaussian',
+                    'linear',
+                    'power',
+                    'spherical'
+                ]
+            elif model_types == 'safe':
+                mtypes = [
                     'linear',
                     'power',
                     'spherical'

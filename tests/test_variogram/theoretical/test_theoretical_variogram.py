@@ -45,7 +45,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_we_direction_case(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=WE_VARIOGRAM, model_types='all')
+        variogram.autofit(experimental_variogram=WE_VARIOGRAM, model_types='all', nugget=0)
 
         expected_nugget = 0
         expected_sill = 4.25
@@ -57,9 +57,9 @@ class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_armstrong_case(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='all')
+        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='all', nugget=0)
         expected_sill = 12.85
-        expected_range = 4.13
+        expected_range = 4.158
         self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
         self.assertAlmostEqual(expected_range, variogram.rang, places=2)
 
@@ -122,3 +122,15 @@ class TestTheoreticalVariogram(unittest.TestCase):
         os.remove(fname)
 
         self.assertTrue(test, msg='Theoretical variograms should be the same! Saved and loaded jsons are different!')
+
+    def test_safe_autofit(self):
+
+        variogram = TheoreticalVariogram()
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='safe')
+        self.assertTrue(variogram)
+
+    def test_nugget_autofit(self):
+
+        variogram = TheoreticalVariogram()
+        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='all')
+        self.assertGreater(variogram.nugget, 0)

@@ -36,6 +36,7 @@ class TestDeconvolution(unittest.TestCase):
         dcv = Deconvolution(verbose=False)
         dcv.fit(agg_dataset=AREAL_INPUT,
                 point_support_dataset=POINT_SUPPORT_INPUT,
+                agg_nugget=0.0,
                 agg_step_size=STEP_SIZE,
                 agg_max_range=MAX_RANGE)
 
