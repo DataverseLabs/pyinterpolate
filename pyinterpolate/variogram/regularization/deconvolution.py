@@ -253,7 +253,7 @@ class Deconvolution:
             point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
             agg_step_size: float,
             agg_max_range: float,
-            agg_nugget: float = 0,
+            agg_nugget: float = None,
             agg_direction: float = None,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
@@ -336,12 +336,14 @@ class Deconvolution:
         # Update class parameters
         self.agg = agg_dataset
         self.ps = point_support_dataset
-        self.agg_step = agg_step_size
-        self.agg_rng = agg_max_range
-        self.agg_nugget = agg_nugget
+        self.agg_step = float(agg_step_size)
+        self.agg_rng = float(agg_max_range)
+        if agg_nugget is not None:
+            self.agg_nugget = float(agg_nugget)
         self.ranges = np.arange(agg_step_size, agg_max_range, agg_step_size)
-        self.direction = agg_direction
-        self.tolerance = agg_tolerance
+        if agg_direction is not None:
+            self.direction = float(agg_direction)
+        self.tolerance = float(agg_tolerance)
         self.weighting_method = variogram_weighting_method
         self.model_types = self._parse_model_types(model_types)
 
@@ -530,7 +532,7 @@ class Deconvolution:
                       point_support_dataset: Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport],
                       agg_step_size: float,
                       agg_max_range: float,
-                      agg_nugget: float = 0,
+                      agg_nugget: float = None,
                       agg_direction: float = None,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
@@ -565,7 +567,7 @@ class Deconvolution:
         agg_max_range : float
             Maximal distance of analysis.
 
-        agg_nugget : float, default = 0
+        agg_nugget : float, default = None
             The nugget of a dataset.
 
         agg_direction : float (in range [0, 360]), default=0

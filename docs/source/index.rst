@@ -6,7 +6,7 @@
 Pyinterpolate
 =============
 
-**version 0.4** - *Kharkiv*
+**version 0.4.1** - *Kharkiv*
 ---------------------------
 
 .. image:: imgs/logov04.jpg

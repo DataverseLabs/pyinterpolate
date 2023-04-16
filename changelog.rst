@@ -6,15 +6,15 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2023-05-XX
+2023-04-15
 ----------
 
 **version 0.4.1**
 
-* (change) The instance `ExperimentalVariogram` always calculates variance (in the previous versions users may decide if they want to).
+* (change) The initialization of `ExperimentalVariogram` instance always calculates variance automatically (in the previous versions users may decide if they want to).
 * (enhancement) `"safe"` method of variogram autofit that chooses *linear*, *power*, and *spherical* models,
 * (enhancement) add automatic nugget selection for `TheoreticalVariogram().autofit()` method,
-*
+* (debug) `Deconvolution().fit()` and `Deconvultion().fit_transform()` transform nugget, range, and sill to `float` to avoid errors related to `numpy` `int64` casting.
 
 2023-04-02
 ----------
