@@ -131,6 +131,10 @@ class Blocks:
         layer_name : Any, default = None
             The name of a layer with data if provided input is a *gpkg* file.
 
+        **kwargs : Any
+            Additional kwargs parameters passed to the ``geopandas.read_file()``,
+            ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.
+
         Raises
         ------
         IndexColNotUniqueError
@@ -139,9 +143,13 @@ class Blocks:
         """
 
         if fpath.lower().endswith('.gpkg'):
-            dataset = gpd.read_file(fpath, layer=layer_name)
+            dataset = gpd.read_file(fpath, layer=layer_name, **kwargs)
+        elif fpath.lower().endswith('.feather'):
+            dataset = gpd.read_feather(fpath, **kwargs)
+        elif fpath.lower().endswith('.parquet'):
+            dataset = gpd.read_parquet(fpath, **kwargs)
         else:
-            dataset = gpd.read_file(fpath)
+            dataset = gpd.read_file(fpath, **kwargs)
 
         if index_col is not None:
             dataset = dataset[[index_col, geometry_col, value_col]]
