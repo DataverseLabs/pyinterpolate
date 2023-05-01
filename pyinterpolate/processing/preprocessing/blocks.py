@@ -4,6 +4,7 @@ Core data structures for block interpolation.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
+2. Taher Chegini | @cheginit
 """
 from pathlib import Path
 import logging

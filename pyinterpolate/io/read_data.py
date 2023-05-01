@@ -4,6 +4,7 @@ Read and load data.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
+2. Taher Chegini | @cheginit
 """
 from pathlib import Path
 from typing import Any
