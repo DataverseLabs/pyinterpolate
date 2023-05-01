@@ -5,13 +5,23 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
+from pathlib import Path
 import logging
-from typing import Union
+from typing import Any, Union
 
 import geopandas as gpd
 import pandas as pd
 
 from pyinterpolate.processing.utils.exceptions import IndexColNotUniqueError
+
+
+def _open_geopandas(fpath: Path, **kwargs: Any)-> gpd.GeoDataFrame:
+    """Open a file with the appropriate geopandas function."""
+    if fpath.suffix == ".feather":
+        return gpd.read_feather(fpath, **kwargs)
+    if fpath.suffix == ".parquet":
+        return gpd.read_parquet(fpath, **kwargs)
+    return gpd.read_file(fpath, **kwargs)
 
 
 class Blocks:
@@ -109,14 +119,16 @@ class Blocks:
                   value_col,
                   geometry_col='geometry',
                   index_col=None,
-                  layer_name=None):
+                  layer_name=None,
+                  **kwargs):
         """
         Loads areal dataset from a file supported by GeoPandas.
 
         Parameters
         ----------
         fpath : str
-            Path to the spatial file.
+            Path to the spatial file with appropriate extension such as ``.shp``,
+        ``.gpkg``, ``.feather``, or ``.parquet``.
 
         value_col : Any
             The name of a column with values.
@@ -141,15 +153,9 @@ class Blocks:
             Raised when given index column has not unique values.
 
         """
-
-        if fpath.lower().endswith('.gpkg'):
-            dataset = gpd.read_file(fpath, layer=layer_name, **kwargs)
-        elif fpath.lower().endswith('.feather'):
-            dataset = gpd.read_feather(fpath, **kwargs)
-        elif fpath.lower().endswith('.parquet'):
-            dataset = gpd.read_parquet(fpath, **kwargs)
-        else:
-            dataset = gpd.read_file(fpath, **kwargs)
+        if layer_name is not None:
+            kwargs['layer'] = layer_name
+        dataset = _open_geopandas(Path(fpath), **kwargs)
 
         if index_col is not None:
             dataset = dataset[[index_col, geometry_col, value_col]]
@@ -310,17 +316,22 @@ class PointSupport:
                    blocks_index_col,
                    use_point_support_crs: bool = True,
                    point_support_layer_name=None,
-                   blocks_layer_name=None):
+                   blocks_layer_name=None,
+                   **kwargs):
         """
         Methods prepares the point support data from files.
 
         Parameters
         ----------
         point_support_data_file : str
-            Path to the file with point support data. Reads all files processed by the GeoPandas.
+            Path to the file with point support data. Reads all files
+            processed by the GeoPandas with appropriate extension such as ``.shp``,
+            ``.gpkg``, ``.feather``, or ``.parquet``.
 
         blocks_file : str
-            Path to the file with polygon data. Reads all files processed by GeoPandas.
+            Path to the file with polygon data. Reads all files processed
+            by GeoPandas with appropriate extension such as ``.shp``,
+        ``.gpkg``, ``.feather``, or ``.parquet``.
 
         point_support_geometry_col : Any
             The name of the point support geometry column.
@@ -342,17 +353,21 @@ class PointSupport:
 
         blocks_layer_name  : Any, default = None
             If provided file is *.gpkg* then this parameter must be provided.
+
+        **kwargs : Any
+            Additional kwargs parameters passed to the ``geopandas.read_file()``,
+            ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.
         """
         # Load data
-        if point_support_data_file.lower().endswith('.gpkg'):
-            point_support = gpd.read_file(point_support_data_file, layer=point_support_layer_name)
-        else:
-            point_support = gpd.read_file(point_support_data_file)
+        if point_support_layer_name is not None:
+            kwargs['layer'] = point_support_layer_name
+        point_support = _open_geopandas(Path(point_support_data_file), **kwargs)
 
-        if blocks_file.lower().endswith('.gpkg'):
-            blocks = gpd.read_file(blocks_file, layer=blocks_layer_name)
+        if blocks_layer_name is not None:
+            kwargs['layer'] = point_support_layer_name
         else:
-            blocks = gpd.read_file(blocks_file)
+            kwargs['layer'] = None
+        blocks = _open_geopandas(Path(blocks_file), **kwargs)
 
         self.from_geodataframes(point_support,
                                 blocks,
