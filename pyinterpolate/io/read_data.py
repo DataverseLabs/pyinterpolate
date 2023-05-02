@@ -4,7 +4,11 @@ Read and load data.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
+2. Taher Chegini | @cheginit
 """
+from pathlib import Path
+from typing import Any
+
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -102,6 +106,15 @@ def read_csv(
     return data_arr
 
 
+def _open_geopandas(fpath: Path, **kwargs: Any)-> gpd.GeoDataFrame:
+    """Open the file with geopandas file."""
+    if fpath.suffix == ".feather":
+        return gpd.read_feather(fpath, **kwargs)
+    if fpath.suffix == ".parquet":
+        return gpd.read_parquet(fpath, **kwargs)
+    return gpd.read_file(fpath, **kwargs)
+
+
 def read_block(
         path: str,
         val_col_name: str,
@@ -109,9 +122,10 @@ def read_block(
         id_col_name=None,
         centroid_col_name=None,
         epsg=None,
-        crs=None
+        crs=None,
+        **kwargs,
 ) -> gpd.GeoDataFrame:
-    """Function reads block data from files supported by fiona / geopandas.
+    """Function reads block data from files supported by geopandas.
 
     Value column name must be provided. If geometry column has different name than `'geometry'` then
     it must be provided too. ID column name is optional, if not given then ``GeoDataFrame`` `index` is
@@ -121,7 +135,8 @@ def read_block(
     Parameters
     ----------
     path : str
-        Path to the file.
+        Path to the file with appropriate extension such as ``.shp``,
+        ``.gpkg``, ``.feather``, or ``.parquet``.
 
     val_col_name : str
         Name of the value column (header title).
@@ -142,6 +157,10 @@ def read_block(
 
     crs : str or None, default=None
         If provided then ``GeoDataFrame`` projection is set to it. You should choose if you provide `CRS` or `EPSG`.
+
+    **kwargs : Any
+        Additional kwargs parameters passed to the ``geopandas.read_file()``,
+        ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.
 
     Returns
     -------
@@ -181,7 +200,7 @@ def read_block(
 
     # FUNCTION'S BODY
 
-    gdf = gpd.read_file(path)
+    gdf = _open_geopandas(Path(path), **kwargs)
 
     # Check if columns exist
     gdf_cols = gdf.columns
