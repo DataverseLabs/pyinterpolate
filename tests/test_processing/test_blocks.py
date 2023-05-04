@@ -9,7 +9,10 @@ SHAPEFILE = 'samples/areal_data/test_areas_pyinterpolate.shp'
 GEOJSON = 'samples/areal_data/test_areas_pyinterpolate.geojson'
 SHAPEFILE_PTS = 'samples/point_data/shapefile/test_points_pyinterpolate.shp'
 
-DATASET = 'samples/regularization/cancer_data.gpkg'
+DATASET_GPKG = 'samples/regularization/cancer_data.gpkg'
+DATASET_PARQUET = 'samples/regularization/cancer_data.parquet'
+DATASET_FEATHER = 'samples/regularization/cancer_data.feather'
+
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -38,6 +41,18 @@ class TestPolyset(unittest.TestCase):
         ds = blocks.data
         self.assertTrue(not ds.empty)
 
+    def test_read_data_from_feather(self):
+        blocks = Blocks()
+        blocks.from_file(DATASET_FEATHER, value_col='rate', geometry_col='geometry', index_col='FIPS')
+        ds = blocks.data
+        self.assertTrue(not ds.empty)
+
+    def test_read_data_from_parquet(self):
+        blocks = Blocks()
+        blocks.from_file(DATASET_PARQUET, value_col='rate', geometry_col='geometry', index_col='FIPS')
+        ds = blocks.data
+        self.assertTrue(not ds.empty)
+
     def test_keys_and_values(self):
         gdf = gpd.read_file(GEOJSON)
         blocks = Blocks()
@@ -51,8 +66,8 @@ class TestPointSupportDataClass(unittest.TestCase):
 
     def test_get_from_files_fn(self):
         ps = PointSupport()
-        ps.from_files(DATASET,
-                      DATASET,
+        ps.from_files(DATASET_GPKG,
+                      DATASET_GPKG,
                       point_support_geometry_col=GEOMETRY_COL,
                       point_support_val_col=POP10,
                       blocks_geometry_col=GEOMETRY_COL,
@@ -65,8 +80,8 @@ class TestPointSupportDataClass(unittest.TestCase):
         self.assertEqual(expected_keys, out_keys)
 
     def test_get_from_geodataframes_fn(self):
-        gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
-        gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
+        gdf_points = gpd.read_file(DATASET_GPKG, layer=POPULATION_LAYER)
+        gdf_polygons = gpd.read_file(DATASET_GPKG, layer=POLYGON_LAYER)
         ps = PointSupport()
         ps.from_geodataframes(gdf_points,
                               gdf_polygons,
@@ -80,8 +95,8 @@ class TestPointSupportDataClass(unittest.TestCase):
         self.assertEqual(expected_keys, out_keys)
 
     def test_get_from_geodataframes_fn_with_logging(self):
-        gdf_points = gpd.read_file(DATASET, layer=POPULATION_LAYER)
-        gdf_polygons = gpd.read_file(DATASET, layer=POLYGON_LAYER)
+        gdf_points = gpd.read_file(DATASET_GPKG, layer=POPULATION_LAYER)
+        gdf_polygons = gpd.read_file(DATASET_GPKG, layer=POLYGON_LAYER)
         ps = PointSupport(log_not_used_points=True)
         ps.from_geodataframes(gdf_points,
                               gdf_polygons,

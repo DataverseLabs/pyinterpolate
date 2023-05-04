@@ -365,7 +365,7 @@ class PointSupport:
         point_support = _open_geopandas(Path(point_support_data_file), **kwargs)
 
         if blocks_layer_name is not None:
-            kwargs['layer'] = point_support_layer_name
+            kwargs['layer'] = blocks_layer_name
         else:
             kwargs['layer'] = None
         blocks = _open_geopandas(Path(blocks_file), **kwargs)

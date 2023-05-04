@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-05-03
+----------
+
+**version 0.4.2**
+
+* (enhancement) added support for reading `feather` and `parquet` files by Point Support and Blocks classes.
+
 2023-04-15
 ----------
 
