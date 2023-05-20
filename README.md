@@ -4,7 +4,7 @@
 
 # Pyinterpolate
 
-**version 0.4** - *Kharkiv*
+**version 0.4.2** - *Kharkiv*
 
 ---
 

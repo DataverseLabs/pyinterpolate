@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.4 documentation</title>
+    <title>pyinterpolate.processing.preprocessing.blocks &#8212; Pyinterpolate 0.4.1 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
   
 </a></div>
     
@@ -424,14 +424,25 @@ document.write(`
 <span class="sd">Authors</span>
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">2. Taher Chegini | @cheginit</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.utils.exceptions</span> <span class="kn">import</span> <span class="n">IndexColNotUniqueError</span>
+
+
+<span class="k">def</span> <span class="nf">_open_geopandas</span><span class="p">(</span><span class="n">fpath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open a file with the appropriate geopandas function.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.feather&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.parquet&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Blocks"><a class="viewcode-back" href="../../../../api/datatypes/core.html#pyinterpolate.Blocks">[docs]</a><span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
@@ -529,14 +540,16 @@ document.write(`
                   <span class="n">value_col</span><span class="p">,</span>
                   <span class="n">geometry_col</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
                   <span class="n">index_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                  <span class="n">layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Loads areal dataset from a file supported by GeoPandas.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        fpath : str</span>
-<span class="sd">            Path to the spatial file.</span>
+<span class="sd">            Path to the spatial file with appropriate extension such as ``.shp``,</span>
+<span class="sd">        ``.gpkg``, ``.feather``, or ``.parquet``.</span>
 
 <span class="sd">        value_col : Any</span>
 <span class="sd">            The name of a column with values.</span>
@@ -551,17 +564,19 @@ document.write(`
 <span class="sd">        layer_name : Any, default = None</span>
 <span class="sd">            The name of a layer with data if provided input is a *gpkg* file.</span>
 
+<span class="sd">        **kwargs : Any</span>
+<span class="sd">            Additional kwargs parameters passed to the ``geopandas.read_file()``,</span>
+<span class="sd">            ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.</span>
+
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        IndexColNotUniqueError</span>
 <span class="sd">            Raised when given index column has not unique values.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
-            <span class="n">dataset</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">layer_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">dataset</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">layer_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">layer_name</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">_open_geopandas</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">fpath</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">index_col</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[[</span><span class="n">index_col</span><span class="p">,</span> <span class="n">geometry_col</span><span class="p">,</span> <span class="n">value_col</span><span class="p">]]</span>
@@ -722,17 +737,22 @@ document.write(`
                    <span class="n">blocks_index_col</span><span class="p">,</span>
                    <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
                    <span class="n">point_support_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">blocks_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                   <span class="n">blocks_layer_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Methods prepares the point support data from files.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        point_support_data_file : str</span>
-<span class="sd">            Path to the file with point support data. Reads all files processed by the GeoPandas.</span>
+<span class="sd">            Path to the file with point support data. Reads all files</span>
+<span class="sd">            processed by the GeoPandas with appropriate extension such as ``.shp``,</span>
+<span class="sd">            ``.gpkg``, ``.feather``, or ``.parquet``.</span>
 
 <span class="sd">        blocks_file : str</span>
-<span class="sd">            Path to the file with polygon data. Reads all files processed by GeoPandas.</span>
+<span class="sd">            Path to the file with polygon data. Reads all files processed</span>
+<span class="sd">            by GeoPandas with appropriate extension such as ``.shp``,</span>
+<span class="sd">        ``.gpkg``, ``.feather``, or ``.parquet``.</span>
 
 <span class="sd">        point_support_geometry_col : Any</span>
 <span class="sd">            The name of the point support geometry column.</span>
@@ -754,17 +774,21 @@ document.write(`
 
 <span class="sd">        blocks_layer_name  : Any, default = None</span>
 <span class="sd">            If provided file is *.gpkg* then this parameter must be provided.</span>
+
+<span class="sd">        **kwargs : Any</span>
+<span class="sd">            Additional kwargs parameters passed to the ``geopandas.read_file()``,</span>
+<span class="sd">            ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Load data</span>
-        <span class="k">if</span> <span class="n">point_support_data_file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
-            <span class="n">point_support</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">point_support_layer_name</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">point_support</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">point_support_layer_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_support_layer_name</span>
+        <span class="n">point_support</span> <span class="o">=</span> <span class="n">_open_geopandas</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">blocks_file</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.gpkg&#39;</span><span class="p">):</span>
-            <span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">blocks_file</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">blocks_layer_name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">blocks_layer_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">blocks_layer_name</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">blocks</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">blocks_file</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;layer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">blocks</span> <span class="o">=</span> <span class="n">_open_geopandas</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">blocks_file</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">from_geodataframes</span><span class="p">(</span><span class="n">point_support</span><span class="p">,</span>
                                 <span class="n">blocks</span><span class="p">,</span>
