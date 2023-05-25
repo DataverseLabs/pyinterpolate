@@ -43,3 +43,4 @@ from pyinterpolate.viz import interpolate_raster
 
 
 __version__ = "0.4.2"
+__app_name__ = 'pyinterpolate-cli'
