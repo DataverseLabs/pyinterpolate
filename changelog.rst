@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-08-XX
+----------
+
+**version 0.4.3**
+
+* (feature) `to_tiff()` function which writes kriging output from the `interpolate_raster()` function to `tiff` and `tfw` files,
+
 2023-05-03
 ----------
 
