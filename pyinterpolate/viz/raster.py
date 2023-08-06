@@ -60,6 +60,10 @@ def set_dimensions(xs, ys, dmax):
     return x_dim_coords, y_dim_coords, [step, xmin, xmax, ymin, ymax]
 
 
+def spatial_reference():
+    pass
+
+
 def interpolate_raster(data,
                        dim=1000,
                        number_of_neighbors=4,
