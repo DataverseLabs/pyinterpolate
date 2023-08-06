@@ -1,6 +1,6 @@
 import unittest
 import numpy as np
-from .consts import prepare_test_data, prepare_zeros_data
+from .consts import prepare_test_data
 from pyinterpolate.kriging.models.point.simple_kriging import simple_kriging
 
 
