@@ -263,7 +263,8 @@ class IndicatorVariograms:
         model_type : str, default = "linear"
             The name of a modeling function. Available models:
 
-            - 'basic' : linear and spherical models are tested,
+            - 'all',
+            - 'safe' : linear, power and spherical models,
             - 'exponential',
             - 'gaussian',
             - 'linear',
@@ -370,9 +371,6 @@ class IndicatorVariograms:
         """
 
         experimental_models = self.experimental_indicator_variogram.experimental_models
-
-        if model_type == 'basic':
-            model_type = ['linear', 'spherical']
 
         for idx, experimental in experimental_models.items():
             theo = TheoreticalVariogram()

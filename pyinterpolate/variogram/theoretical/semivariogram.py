@@ -12,7 +12,7 @@ Contributors
 # Core python packages
 import json
 import warnings
-from typing import Collection, Union, Callable, Tuple
+from typing import Union, Callable, Tuple
 
 # Core calculations and visualization packages
 import numpy as np
@@ -179,6 +179,12 @@ class TheoreticalVariogram:
             'power': power_model,
             'spherical': spherical_model
         }
+
+        self.complex_models = {
+            'safe': [linear_model, power_model, spherical_model],
+            'all': iter(self.variogram_models.values())
+        }
+
         self.study_max_range = None
 
         # Model parameters
@@ -228,7 +234,6 @@ class TheoreticalVariogram:
 
         model_type : str
             Model type. Available models:
-
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -330,7 +335,7 @@ class TheoreticalVariogram:
 
     def autofit(self,
                 experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
-                model_types: Union[str, list] = 'all',
+                model_types: str = 'all',
                 nugget=None,
                 min_nugget=0,
                 max_nugget=0.5,
@@ -358,7 +363,7 @@ class TheoreticalVariogram:
         experimental_variogram : ExperimentalVariogram
             Prepared Empirical Variogram or array.
 
-        model_types : str or list
+        model_types : str
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
@@ -504,6 +509,7 @@ class TheoreticalVariogram:
             self.direction = direction
 
         # Check model type and set models
+
         mtypes = self._check_models_type_autofit(model_types)
 
         # Set nuggets, ranges and sills
@@ -886,50 +892,36 @@ class TheoreticalVariogram:
         _names = list(self.variogram_models.keys())
 
         if mname not in _names:
-            msg = f'Defined model name {mname} not available. You may choose one from {_names} instead.'
+            msg = f'Defined model name {mname} not available. You may choose one from {_names} instead or pass' \
+                  f'"all" or "safe" parameters to `autofit` method.'
             raise KeyError(msg)
 
-    def _check_models_type_autofit(self, model_types: Union[str, Collection]) -> list:
+    def _check_models_type_autofit(self, model_types: str) -> list:
         mtypes = list()
-        if isinstance(model_types, str):
-            if model_types == 'all':
-                mtypes = [
-                    'circular',
-                    'cubic',
-                    'exponential',
-                    'gaussian',
-                    'linear',
-                    'power',
-                    'spherical'
-                ]
-            elif model_types == 'safe':
-                mtypes = [
-                    'linear',
-                    'power',
-                    'spherical'
-                ]
-            else:
-                self._check_model_names(model_types)
-                mtypes.append(model_types)
+
+        if model_types == 'all':
+            mtypes = [
+                'circular',
+                'cubic',
+                'exponential',
+                'gaussian',
+                'linear',
+                'power',
+                'spherical'
+            ]
+            return mtypes
+        elif model_types == 'safe':
+            mtypes = [
+                'linear',
+                'power',
+                'spherical'
+            ]
+            return mtypes
         else:
-            if isinstance(model_types, Collection):
-                for mdl in model_types:
-                    try:
-                        self._check_model_names(mdl)
-                    except KeyError as ke:
-                        if mdl == 'all' and len(model_types) == 1:
-                            mtypes = [
-                                'circular',
-                                'cubic',
-                                'exponential',
-                                'gaussian',
-                                'linear',
-                                'power',
-                                'spherical'
-                            ]
-                        else:
-                            raise ke
-                    mtypes.append(mdl)
+            self._check_model_names(model_types)
+
+        mtypes.append(model_types)
+
         return mtypes
 
     def _update_attributes(self,

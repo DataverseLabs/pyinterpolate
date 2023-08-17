@@ -5,7 +5,7 @@ from pyinterpolate import read_txt
 from pyinterpolate.variogram.indicator.indicator_variogram import ExperimentalIndicatorVariogram, IndicatorVariograms
 from pyinterpolate.kriging.models.indicator.indicator_point_kriging import IndicatorKriging
 
-dem = read_txt('../../samples/point_data/txt/pl_dem_epsg2180.txt')
+dem = read_txt('../../../tests/samples/point_data/txt/pl_dem_epsg2180.txt')
 
 
 step_radius = 500  # meters

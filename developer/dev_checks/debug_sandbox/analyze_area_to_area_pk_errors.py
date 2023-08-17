@@ -18,7 +18,7 @@ logging.basicConfig(filename=LOGGING_FILE,
                     format=LOGGING_FORMAT)
 
 DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../../samples/regularization/regularized_variogram.json'
+VARIOGRAM_MODEL_FILE = '../../../tests/samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'

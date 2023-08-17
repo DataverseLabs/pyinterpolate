@@ -257,7 +257,7 @@ class Deconvolution:
             agg_direction: float = None,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
-            model_types: Union[str, List] = 'basic') -> None:
+            model_types: str = 'safe') -> None:
         """
         Function fits given areal data variogram into point support variogram - it is the first step of regularization
         process.
@@ -315,11 +315,11 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
-        model_types : str or List, default='basic'
+        model_types : str, default='safe'
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
-            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'safe' - ['linear', 'power', 'spherical'],
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -345,7 +345,7 @@ class Deconvolution:
             self.direction = float(agg_direction)
         self.tolerance = float(agg_tolerance)
         self.weighting_method = variogram_weighting_method
-        self.model_types = self._parse_model_types(model_types)
+        self.model_types = model_types
 
         # Compute experimental variogram of areal data
         areal_centroids = get_areal_centroids_from_agg(self.agg)
@@ -536,7 +536,7 @@ class Deconvolution:
                       agg_direction: float = None,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
-                      model_types: Union[str, List] = 'basic',
+                      model_types: str = 'safe',
                       max_iters=25,
                       limit_deviation_ratio=0.1,
                       minimum_deviation_decrease=0.01,
@@ -597,11 +597,11 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
-        model_types : str or List, default='basic'
+        model_types : str, default='safe'
             List of modeling functions or a name of a single function. Available models:
 
             - 'all' - the same as list with all models,
-            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'safe' - ['linear', 'power', 'spherical'],
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -767,50 +767,6 @@ class Deconvolution:
             return True
         return False
 
-    @staticmethod
-    def _parse_model_types(model_types):
-        """
-        The first level check and parser for model types.
-
-        Parameters
-        ----------
-        model_types : List or str
-
-        Returns
-        -------
-        mtypes : List
-        """
-
-        all_models = [
-                    'circular',
-                    'cubic',
-                    'exponential',
-                    'gaussian',
-                    'linear',
-                    'power',
-                    'spherical'
-        ]
-
-        basic_models = [
-            'exponential',
-            'linear',
-            'power',
-            'spherical'
-        ]
-
-        if isinstance(model_types, str):
-            if model_types == 'all':
-                return all_models
-            elif model_types == 'basic':
-                return basic_models
-            else:
-                return [model_types]
-
-        elif isinstance(model_types, Collection):
-            return model_types
-
-        else:
-            raise TypeError('Unknown Type of the input, model_types parameter takes str or List as an input.')
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
         """

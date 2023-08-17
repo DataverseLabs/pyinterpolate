@@ -2,7 +2,7 @@ from pyinterpolate import read_txt, build_experimental_variogram, build_theoreti
 from pyinterpolate.validation.cross_validation import validate_kriging
 
 
-dem = read_txt('../../samples/point_data/txt/pl_dem_epsg2180.txt')
+dem = read_txt('../../../tests/samples/point_data/txt/pl_dem_epsg2180.txt')
 
 step_radius = 500  # meters
 max_range = 10000  # meters

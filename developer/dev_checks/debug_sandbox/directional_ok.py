@@ -15,7 +15,7 @@ from pyinterpolate.variogram.empirical.experimental_variogram import Directional
 from pyinterpolate import TheoreticalVariogram
 
 # Read data
-dem = read_txt('../../samples/point_data/txt/pl_dem_epsg2180.txt')
+dem = read_txt('../../../tests/samples/point_data/txt/pl_dem_epsg2180.txt')
 
 
 def ordinary_kriging2(
