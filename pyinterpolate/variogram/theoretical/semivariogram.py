@@ -909,12 +909,14 @@ class TheoreticalVariogram:
                 'power',
                 'spherical'
             ]
+            return mtypes
         elif model_types == 'safe':
             mtypes = [
                 'linear',
                 'power',
                 'spherical'
             ]
+            return mtypes
         else:
             self._check_model_names(model_types)
 

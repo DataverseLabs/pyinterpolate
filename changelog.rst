@@ -12,6 +12,9 @@ Changes by date
 **version 0.4.3**
 
 * (feature) `to_tiff()` function which writes kriging output from the `interpolate_raster()` function to `tiff` and `tfw` files,
+* (debug) `safe` theoretical variogram models,
+* (enhancement) `model_types` parameter can be string only (in the future the name of this parameter will be changed),
+* (dependencies) fixed dependencies (`hdbscan` and `scikit-learn`),
 
 2023-05-03
 ----------

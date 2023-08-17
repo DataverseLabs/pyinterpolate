@@ -102,7 +102,7 @@ class TestDeconvolution(unittest.TestCase):
                 agg_max_range=MAX_RANGE,
                 variogram_weighting_method='closest')
 
-        max_iters = 3
+        max_iters = 5
         dcv.transform(max_iters=max_iters,
                       limit_deviation_ratio=0.5,
                       minimum_deviation_decrease=0.1)
