@@ -16,7 +16,8 @@ Changes by date
 * (enhancement) `model_types` parameter can be string only (in the future the name of this parameter will be changed),
 * (dependencies) fixed dependencies (`hdbscan` and `scikit-learn`),
 * (enhancement) updated tutorials,
-* (dependencies) End of support for Python 3.7.
+* (dependencies) End of support for Python 3.7,
+* (invalid) Warning when user tries to use `.plot()` method of the `ExperimentalVariogram` class.
 
 2023-05-03
 ----------

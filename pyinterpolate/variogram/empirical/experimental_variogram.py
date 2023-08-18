@@ -390,7 +390,7 @@ class ExperimentalVariogram:
                 self.lags = self.experimental_covariance_array[:, 0]
                 self.points_per_lag = self.experimental_covariance_array[:, 2]
 
-    def plot(self, plot_semivariance=True, plot_covariance=False, plot_variance=False) -> None:
+    def plot(self, plot_semivariance=True, plot_covariance=True, plot_variance=True) -> None:
         """
 
         Parameters
@@ -404,8 +404,7 @@ class ExperimentalVariogram:
             is not plotted and warning is printed.
 
         plot_variance : bool, default=True
-            Show variance level on a plot. If class attribute ``is_variance`` is set to ``False`` then variance is
-            not plotted and warning is printed.
+            Show variance level on a plot.
 
         Warns
         -----
@@ -418,8 +417,7 @@ class ExperimentalVariogram:
         validate_plot_attributes_for_experimental_variogram_class(is_semivar=self.__c_sem,
                                                                   is_covar=self.__c_cov,
                                                                   plot_semivar=plot_semivariance,
-                                                                  plot_covar=plot_covariance,
-                                                                  plot_var=plot_variance)
+                                                                  plot_covar=plot_covariance)
 
         # Plot
         # Cmap - 3 class Set2 https://colorbrewer2.org/#type=qualitative&scheme=Set2&n=3
