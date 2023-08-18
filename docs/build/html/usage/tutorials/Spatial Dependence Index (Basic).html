@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Spatial Dependence Index &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Spatial Dependence Index &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -567,9 +567,9 @@ show a <em>classic variogram curve</em>. The reason is simple: most managers and
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">pyinterpolate</span> <span class="k">as</span> <span class="nn">ptp</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import pyinterpolate as ptp
 </pre></div>
 </div>
 </div>
@@ -577,18 +577,18 @@ show a <em>classic variogram curve</em>. The reason is simple: most managers and
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">MEUSE_FILE</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/csv/meuse/meuse.csv&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>MEUSE_FILE = &#39;samples/point_data/csv/meuse/meuse.csv&#39;
 
-<span class="c1"># Variogram parameters</span>
-<span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">1600</span>
-<span class="n">ALLOWED_MODELS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;spherical&#39;</span><span class="p">]</span>
+# Variogram parameters
+STEP_SIZE = 100
+MAX_RANGE = 1600
+ALLOWED_MODELS = [&#39;linear&#39;, &#39;spherical&#39;]
 
 
-<span class="c1"># Elements</span>
-<span class="n">ELEMENTS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cadmium&#39;</span><span class="p">,</span> <span class="s1">&#39;copper&#39;</span><span class="p">,</span> <span class="s1">&#39;zinc&#39;</span><span class="p">,</span> <span class="s1">&#39;lead&#39;</span><span class="p">]</span>
-<span class="n">COLS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]</span>
-<span class="n">COLS</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">ELEMENTS</span><span class="p">)</span>
+# Elements
+ELEMENTS = [&#39;cadmium&#39;, &#39;copper&#39;, &#39;zinc&#39;, &#39;lead&#39;]
+COLS = [&#39;x&#39;, &#39;y&#39;]
+COLS.extend(ELEMENTS)
 </pre></div>
 </div>
 </div>
@@ -596,8 +596,8 @@ show a <em>classic variogram curve</em>. The reason is simple: most managers and
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">MEUSE_FILE</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">COLS</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>df = pd.read_csv(MEUSE_FILE, usecols=COLS)
+df.head()
 </pre></div>
 </div>
 </div>
@@ -687,24 +687,24 @@ show a <em>classic variogram curve</em>. The reason is simple: most managers and
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">ELEMENTS</span><span class="p">:</span>
-    <span class="c1"># Prepare data</span>
-    <span class="n">ds</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">element</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">ds</span><span class="p">[</span><span class="n">element</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">element</span><span class="p">])</span>
-    <span class="n">arr</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">values</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for element in ELEMENTS:
+    # Prepare data
+    ds = df[[&#39;x&#39;, &#39;y&#39;, element]].copy()
+    ds[element] = np.log(ds[element])
+    arr = ds.values
 
-    <span class="c1"># Get experimental variogram</span>
-    <span class="n">exp_var</span> <span class="o">=</span> <span class="n">ptp</span><span class="o">.</span><span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">STEP_SIZE</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">)</span>
+    # Get experimental variogram
+    exp_var = ptp.build_experimental_variogram(arr, step_size=STEP_SIZE, max_range=MAX_RANGE)
 
-    <span class="c1"># Find optimal theoretical model</span>
-    <span class="n">optimal_model</span> <span class="o">=</span> <span class="n">ptp</span><span class="o">.</span><span class="n">TheoreticalVariogram</span><span class="p">()</span>
-    <span class="n">optimal_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_var</span><span class="p">,</span> <span class="n">model_types</span><span class="o">=</span><span class="n">ALLOWED_MODELS</span><span class="p">,</span> <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Optimal model for element </span><span class="si">{}</span><span class="s1"> has </span><span class="si">{:.2f}% o</span><span class="s1">f nugget to sill ratio. Spatial Dependence is </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-        <span class="n">element</span><span class="p">,</span> <span class="n">optimal_model</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span><span class="p">,</span> <span class="n">optimal_model</span><span class="o">.</span><span class="n">spatial_dependency_strength</span>
-    <span class="p">))</span>
-    <span class="n">optimal_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    # Find optimal theoretical model
+    optimal_model = ptp.TheoreticalVariogram()
+    optimal_model.autofit(experimental_variogram=exp_var, model_types=ALLOWED_MODELS, max_nugget=0.8)
+    print(&#39;Optimal model for element {} has {:.2f}% of nugget to sill ratio. Spatial Dependence is {}.&#39;.format(
+        element, optimal_model.spatial_dependency_ratio, optimal_model.spatial_dependency_strength
+    ))
+    optimal_model.plot()
 
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">---</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    print(&#39;\n---\n&#39;)
 </pre></div>
 </div>
 </div>

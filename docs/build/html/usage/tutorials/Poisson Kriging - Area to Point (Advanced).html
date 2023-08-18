@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Poisson Kriging - Area to Point Kriging &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Poisson Kriging - Area to Point Kriging &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -540,11 +540,11 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">smooth_blocks</span>
+from pyinterpolate import TheoreticalVariogram
+from pyinterpolate import Blocks, PointSupport
+from pyinterpolate import smooth_blocks
 </pre></div>
 </div>
 </div>
@@ -552,32 +552,32 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/regularized_variogram.json&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">POPULATION_LAYER</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
-<span class="n">POP10</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+OUTPUT = &#39;samples/regularization/regularized_variogram.json&#39;
+POLYGON_LAYER = &#39;areas&#39;
+POPULATION_LAYER = &#39;points&#39;
+POP10 = &#39;POP10&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
 
-<span class="n">blocks</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">blocks</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+blocks = Blocks()
+blocks.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">point_support</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">()</span>
-<span class="n">point_support</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">blocks_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">point_support_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">point_support_val_col</span><span class="o">=</span><span class="n">POP10</span><span class="p">,</span>
-                         <span class="n">blocks_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span>
-                         <span class="n">use_point_support_crs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                         <span class="n">point_support_layer_name</span><span class="o">=</span><span class="n">POPULATION_LAYER</span><span class="p">,</span>
-                         <span class="n">blocks_layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+point_support = PointSupport()
+point_support.from_files(point_support_data_file=DATASET,
+                         blocks_file=DATASET,
+                         point_support_geometry_col=GEOMETRY_COL,
+                         point_support_val_col=POP10,
+                         blocks_geometry_col=GEOMETRY_COL,
+                         blocks_index_col=POLYGON_ID,
+                         use_point_support_crs=True,
+                         point_support_layer_name=POPULATION_LAYER,
+                         blocks_layer_name=POLYGON_LAYER)
 
-<span class="c1"># Lets take a look into a map of areal counts</span>
+# Lets take a look into a map of areal counts
 
-<span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+blocks.data.plot(column=blocks.value_column_name, cmap=&#39;plasma&#39;, vmax=200, legend=True, figsize=(12, 8))
 </pre></div>
 </div>
 </div>
@@ -612,8 +612,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
-<span class="n">semivariogram</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s1">&#39;output/regularized_model.json&#39;</span><span class="p">)</span>  <span class="c1"># Load regularized semivariogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivariogram = TheoreticalVariogram()  # Create TheoreticalSemivariogram object
+semivariogram.from_json(&#39;output/regularized_model.json&#39;)  # Load regularized semivariogram
 </pre></div>
 </div>
 </div>
@@ -630,14 +630,14 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smoothed</span> <span class="o">=</span> <span class="n">smooth_blocks</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram</span><span class="p">,</span>
-                         <span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
-                         <span class="n">point_support</span><span class="o">=</span><span class="n">point_support</span><span class="p">,</span>
-                         <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-                         <span class="n">max_range</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-                         <span class="n">crs</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-                         <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                         <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>smoothed = smooth_blocks(semivariogram_model=semivariogram,
+                         blocks=blocks,
+                         point_support=point_support,
+                         number_of_neighbors=16,
+                         max_range=10000,
+                         crs=blocks.data.crs,
+                         raise_when_negative_error=False,
+                         raise_when_negative_prediction=True)
 </pre></div>
 </div>
 </div>
@@ -653,7 +653,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">smoothed</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>smoothed.head()
 </pre></div>
 </div>
 </div>
@@ -734,10 +734,10 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">14</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-<span class="n">smooth_plot_data</span> <span class="o">=</span> <span class="n">smoothed</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="n">smooth_plot_data</span><span class="p">[</span><span class="n">smooth_plot_data</span><span class="p">[</span><span class="s1">&#39;pred&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="n">smooth_plot_data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="s1">&#39;pred&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>base = blocks.data.plot(figsize=(14, 14), color=&#39;white&#39;, edgecolor=&#39;black&#39;)
+smooth_plot_data = smoothed.copy()
+smooth_plot_data[smooth_plot_data[&#39;pred&#39;] &lt; 0.1] = np.nan
+smooth_plot_data.plot(ax=base, column=&#39;pred&#39;, cmap=&#39;plasma&#39;, legend=True, markersize=30, alpha=0.7)
 </pre></div>
 </div>
 </div>

@@ -1,10 +1,10 @@
 ![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/logov04.jpg?raw=true  "Pyinterpolate logo")
+![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/pyinterpolate-banner.png  "Pyinterpolate logo")
 
 # Pyinterpolate
 
-**version 0.4.2** - *Kharkiv*
+**version 0.5** - *Kharkiv*
 
 ---
 
@@ -130,7 +130,7 @@ conda activate [YOUR ENV NAME]
 
 ### pip installation
 
-With **Python>=3.7** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+With **Python>=3.8** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
 
 ```
 pip install pyinterpolate
@@ -175,7 +175,7 @@ Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point 
 
 Core requirements and dependencies are:
 
-* Python >= 3.8 (Python 3.7 may be used with `pip` installation but it won't be supported in the future).
+* Python >= 3.8
 * descartes
 * geopandas
 * matplotlib
@@ -189,7 +189,8 @@ Core requirements and dependencies are:
 * prettytable
 * pandas
 * dask
-* dbscan
+* hdbscan
+* Pillow
 
 You may check a specific version of requirements in the `setup.cfg` file.
 

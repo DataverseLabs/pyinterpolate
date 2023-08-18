@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Ordinary and Simple Kriging &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Ordinary and Simple Kriging &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -531,11 +531,11 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from typing import List
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+import numpy as np
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">build_experimental_variogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">kriging</span>
+from pyinterpolate import read_txt, build_experimental_variogram, build_theoretical_variogram, kriging
 </pre></div>
 </div>
 </div>
@@ -546,8 +546,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
-<span class="n">dem</span><span class="p">[:</span> <span class="mi">3</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dem = read_txt(&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;)
+dem[: 3]
 </pre></div>
 </div>
 </div>
@@ -567,30 +567,30 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function divides base dataset into a training and a test set.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def create_train_test(dataset: np.ndarray, training_set_ratio=0.3):
+    &quot;&quot;&quot;
+    Function divides base dataset into a training and a test set.
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    dataset : np.ndarray</span>
+    Parameters
+    ----------
+    dataset : np.ndarray
 
-<span class="sd">    training_set_ratio : float, default = 0.3</span>
+    training_set_ratio : float, default = 0.3
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    training_set, test_set : List[np.ndarray]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    Returns
+    -------
+    training_set, test_set : List[np.ndarray]
+    &quot;&quot;&quot;
 
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>  <span class="c1"># To ensure that we will get the same results every time</span>
+    np.random.seed(101)  # To ensure that we will get the same results every time
 
-    <span class="n">indexes_of_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">training_set_ratio</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">training_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">indexes_of_training_set</span><span class="p">]</span>
-    <span class="n">validation_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">indexes_of_training_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">training_set</span><span class="p">,</span> <span class="n">validation_set</span>
+    indexes_of_training_set = np.random.choice(range(len(dataset) - 1), int(training_set_ratio * len(dataset)), replace=False)
+    training_set = dataset[indexes_of_training_set]
+    validation_set = np.delete(dataset, indexes_of_training_set, 0)
+    return training_set, validation_set
 
 
-<span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">create_train_test</span><span class="p">(</span><span class="n">dem</span><span class="p">)</span>
+train_set, test_set = create_train_test(dem)
 </pre></div>
 </div>
 </div>
@@ -610,14 +610,14 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create experimental semivariogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create experimental semivariogram
 
-<span class="c1"># Prepare experimental semivariogram</span>
+# Prepare experimental semivariogram
 
-<span class="n">step_radius</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># meters</span>
-<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># meters</span>
+step_radius = 500  # meters
+max_range = 10000  # meters
 
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_radius</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+exp_semivar = build_experimental_variogram(input_array=train_set, step_size=step_radius, max_range=max_range)
 </pre></div>
 </div>
 </div>
@@ -625,9 +625,9 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot experimental semivariogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot experimental semivariogram
 
-<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+exp_semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -642,9 +642,9 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit data into a theoretical model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Fit data into a theoretical model
 
-<span class="n">semivar</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">sill</span><span class="o">=</span><span class="n">exp_semivar</span><span class="o">.</span><span class="n">variance</span><span class="p">,</span> <span class="n">rang</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+semivar = build_theoretical_variogram(experimental_variogram=exp_semivar, model_type=&#39;linear&#39;, sill=exp_semivar.variance, rang=10000)
 </pre></div>
 </div>
 </div>
@@ -652,7 +652,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -667,7 +667,7 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">semivar</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(semivar)
 </pre></div>
 </div>
 </div>
@@ -734,10 +734,10 @@ realization with a fixed random seed, but you should be aware that in the real-w
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select one known value</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Select one known value
 
-<span class="n">known_value</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
-<span class="n">known_value</span>
+known_value = train_set[10]
+known_value
 </pre></div>
 </div>
 </div>
@@ -754,10 +754,10 @@ array([2.49304390e+05, 5.40766289e+05, 2.03649998e+01])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Predict with Ordinary Kriging
 
-<span class="n">ok_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">ok_interpolation</span>
+ok_interpolation = kriging(train_set, semivar, [known_value[:-1]])
+ok_interpolation
 </pre></div>
 </div>
 </div>
@@ -784,8 +784,8 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
-<span class="n">sk_interpolation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sk_interpolation = kriging(train_set, semivar, [known_value[:-1]], how=&#39;sk&#39;, sk_mean=float(np.mean(dem)))
+sk_interpolation
 </pre></div>
 </div>
 </div>
@@ -816,17 +816,17 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">variogram_model</span><span class="p">,</span> <span class="n">ktype</span><span class="p">,</span> <span class="n">test_values</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
-                          <span class="n">theoretical_model</span><span class="o">=</span><span class="n">variogram_model</span><span class="p">,</span>
-                          <span class="n">points</span><span class="o">=</span><span class="n">test_values</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                          <span class="n">how</span><span class="o">=</span><span class="n">ktype</span><span class="p">,</span>
-                          <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-                          <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                          <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean_value</span><span class="p">)</span>
-    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">predictions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">test_values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">rmse</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def test_kriging(train_data, variogram_model, ktype, test_values, number_of_neighbors, sk_mean_value=None):
+    predictions = kriging(observations=train_data,
+                          theoretical_model=variogram_model,
+                          points=test_values[:, :-1],
+                          how=ktype,
+                          no_neighbors=number_of_neighbors,
+                          number_of_workers=1,
+                          sk_mean=sk_mean_value)
+    mse = np.mean((predictions[:, 0] - test_values[:, -1])**2)
+    rmse = np.sqrt(mse)
+    return rmse
 </pre></div>
 </div>
 </div>
@@ -834,17 +834,17 @@ array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of neighbors</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Number of neighbors
 
-<span class="n">no_of_n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ordinary Kriging: tests&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+no_of_n = [4, 8, 16, 32, 64, 128, 256]
+print(&#39;Ordinary Kriging: tests&#39;)
+print(&#39;&#39;)
 
-<span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
-    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+for nn in no_of_n:
+    print(&#39;Number of neighbors:&#39;, nn)
+    rmse_pred = test_kriging(train_data=train_set, variogram_model=semivar, ktype=&#39;ok&#39;, test_values=test_set, number_of_neighbors=nn)
+    print(&#39;RMSE:&#39;, rmse_pred)
+    print(&#39;&#39;)
 </pre></div>
 </div>
 </div>
@@ -995,16 +995,16 @@ RMSE: 3.2550170696805028
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Simple Kriging: tests&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(&#39;Simple Kriging: tests&#39;)
+print(&#39;&#39;)
 
-<span class="n">sk_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+sk_mean = np.mean(dem[:, -1])
 
-<span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
-    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+for nn in no_of_n:
+    print(&#39;Number of neighbors:&#39;, nn)
+    rmse_pred = test_kriging(train_data=train_set, variogram_model=semivar, ktype=&#39;sk&#39;, test_values=test_set, number_of_neighbors=nn, sk_mean_value=sk_mean)
+    print(&#39;RMSE:&#39;, rmse_pred)
+    print(&#39;&#39;)
 </pre></div>
 </div>
 </div>

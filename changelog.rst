@@ -9,12 +9,14 @@ Changes by date
 2023-08-XX
 ----------
 
-**version 0.4.3**
+**version 0.5**
 
 * (feature) `to_tiff()` function which writes kriging output from the `interpolate_raster()` function to `tiff` and `tfw` files,
 * (debug) `safe` theoretical variogram models,
 * (enhancement) `model_types` parameter can be string only (in the future the name of this parameter will be changed),
 * (dependencies) fixed dependencies (`hdbscan` and `scikit-learn`),
+* (enhancement) updated tutorials,
+* (dependencies) End of support for Python 3.7.
 
 2023-05-03
 ----------

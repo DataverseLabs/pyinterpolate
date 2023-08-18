@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.indicator.indicator_variogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.indicator.indicator_variogram &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -683,7 +683,8 @@ document.write(`
 <span class="sd">        model_type : str, default = &quot;linear&quot;</span>
 <span class="sd">            The name of a modeling function. Available models:</span>
 
-<span class="sd">            - &#39;basic&#39; : linear and spherical models are tested,</span>
+<span class="sd">            - &#39;all&#39;,</span>
+<span class="sd">            - &#39;safe&#39; : linear, power and spherical models,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
 <span class="sd">            - &#39;gaussian&#39;,</span>
 <span class="sd">            - &#39;linear&#39;,</span>
@@ -790,9 +791,6 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">experimental_models</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_indicator_variogram</span><span class="o">.</span><span class="n">experimental_models</span>
-
-        <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;basic&#39;</span><span class="p">:</span>
-            <span class="n">model_type</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;spherical&#39;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">experimental</span> <span class="ow">in</span> <span class="n">experimental_models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -432,7 +432,7 @@ document.write(`
 <span class="c1"># Core python packages</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="c1"># Core calculations and visualization packages</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -599,6 +599,12 @@ document.write(`
             <span class="s1">&#39;power&#39;</span><span class="p">:</span> <span class="n">power_model</span><span class="p">,</span>
             <span class="s1">&#39;spherical&#39;</span><span class="p">:</span> <span class="n">spherical_model</span>
         <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">complex_models</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;safe&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">linear_model</span><span class="p">,</span> <span class="n">power_model</span><span class="p">,</span> <span class="n">spherical_model</span><span class="p">],</span>
+            <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="p">}</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Model parameters</span>
@@ -648,7 +654,6 @@ document.write(`
 
 <span class="sd">        model_type : str</span>
 <span class="sd">            Model type. Available models:</span>
-
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -750,7 +755,7 @@ document.write(`
 
 <div class="viewcode-block" id="TheoreticalVariogram.autofit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+                <span class="n">model_types</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
                 <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">min_nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -778,7 +783,7 @@ document.write(`
 <span class="sd">        experimental_variogram : ExperimentalVariogram</span>
 <span class="sd">            Prepared Empirical Variogram or array.</span>
 
-<span class="sd">        model_types : str or list</span>
+<span class="sd">        model_types : str</span>
 <span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
@@ -924,6 +929,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
 
         <span class="c1"># Check model type and set models</span>
+
         <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
 
         <span class="c1"># Set nuggets, ranges and sills</span>
@@ -1306,50 +1312,36 @@ document.write(`
         <span class="n">_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="n">mname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_names</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead or pass&#39;</span> \
+                  <span class="sa">f</span><span class="s1">&#39;&quot;all&quot; or &quot;safe&quot; parameters to `autofit` method.&#39;</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Collection</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
         <span class="n">mtypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
-                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;spherical&#39;</span>
-                <span class="p">]</span>
-            <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
-                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;spherical&#39;</span>
-                <span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
-                <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
+        <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">mdl</span> <span class="ow">in</span> <span class="n">model_types</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">ke</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                                <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;spherical&#39;</span>
-                            <span class="p">]</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="n">ke</span>
-                    <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+
+        <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">mtypes</span>
 
     <span class="k">def</span> <span class="nf">_update_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

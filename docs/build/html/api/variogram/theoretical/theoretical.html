@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Theoretical &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Theoretical &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -652,7 +652,7 @@ considered to be not spatially-depended.</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>Prepared Empirical Variogram or array.</p>
 </dd>
-<dt><strong>model_types</strong><span class="classifier">str or list</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<dt><strong>model_types</strong><span class="classifier">str</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
 <ul class="simple">
 <li><p>‘all’ - the same as list with all models,</p></li>
 <li><p>‘safe’ - <code class="docutils literal notranslate"><span class="pre">['linear',</span> <span class="pre">'power',</span> <span class="pre">'spherical']</span></code>,</p></li>
@@ -813,16 +813,14 @@ Available methods:</p>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>Prepared Empirical Variogram.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>Model type. Available models:</p>
-<ul class="simple">
-<li><p>‘circular’,</p></li>
-<li><p>‘cubic’,</p></li>
-<li><p>‘exponential’,</p></li>
-<li><p>‘gaussian’,</p></li>
-<li><p>‘linear’,</p></li>
-<li><p>‘power’,</p></li>
-<li><p>‘spherical’.</p></li>
-</ul>
+<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>Model type. Available models:
+- ‘circular’,
+- ‘cubic’,
+- ‘exponential’,
+- ‘gaussian’,
+- ‘linear’,
+- ‘power’,
+- ‘spherical’.</p>
 </dd>
 <dt><strong>sill</strong><span class="classifier">float, default=0</span></dt><dd><p>A value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close
 to observations variance.</p>

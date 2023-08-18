@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Blocks to points Ordinary Kriging interpolation &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Blocks to points Ordinary Kriging interpolation &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -562,12 +562,12 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import geopandas as gpd
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+import matplotlib.pyplot as plt
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">VariogramCloud</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">kriging</span>
+from pyinterpolate import Blocks, VariogramCloud, TheoreticalVariogram, kriging
 </pre></div>
 </div>
 </div>
@@ -580,20 +580,20 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Read and prepare data
 
-<span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
-<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>
-<span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">40000</span>
+DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+POLYGON_LAYER = &#39;areas&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
+MAX_RANGE = 400000
+STEP_SIZE = 40000
 
-<span class="n">AREAL_INPUT</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+AREAL_INPUT.data.head()
 </pre></div>
 </div>
 </div>
@@ -676,8 +676,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="s1">&#39;rate&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">areal_centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>areal_centroids = AREAL_INPUT.data[[&#39;centroid_x&#39;, &#39;centroid_y&#39;, &#39;rate&#39;]].values
+areal_centroids[0]
 </pre></div>
 </div>
 </div>
@@ -698,18 +698,18 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create analysis parameters
 
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">300000</span>
+maximum_range = 300000
 
-<span class="n">number_of_lags</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
-<span class="n">step_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">maximum_range</span> <span class="o">/</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">number_of_lags</span><span class="p">]</span>
+number_of_lags = [4, 8, 16]
+step_sizes = [maximum_range / x for x in number_of_lags]
 
-<span class="n">variogram_clouds</span> <span class="o">=</span> <span class="p">[]</span>
+variogram_clouds = []
 
-<span class="k">for</span> <span class="n">step_size</span> <span class="ow">in</span> <span class="n">step_sizes</span><span class="p">:</span>
-    <span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="o">+</span><span class="n">step_size</span><span class="p">)</span>
-    <span class="n">variogram_clouds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vc</span><span class="p">)</span>
+for step_size in step_sizes:
+    vc = VariogramCloud(input_array=areal_centroids, step_size=step_size, max_range=maximum_range+step_size)
+    variogram_clouds.append(vc)
 </pre></div>
 </div>
 </div>
@@ -717,11 +717,11 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">###########</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for vc in variogram_clouds:
+    print(f&#39;Lags per area: {len(vc.lags)}&#39;)
+    print(&#39;&#39;)
+    vc.plot(&#39;violin&#39;)
+    print(&#39;\n###########\n&#39;)
 </pre></div>
 </div>
 </div>
@@ -806,9 +806,9 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now remove outliers from each lag</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Now remove outliers from each lag
 
-<span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">vc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">]</span>
+_ = [vc.remove_outliers(method=&#39;iqr&#39;, iqr_lower_limit=3, iqr_upper_limit=1.5, inplace=True) for vc in variogram_clouds]
 </pre></div>
 </div>
 </div>
@@ -816,13 +816,13 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And show data without outliers</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># And show data without outliers
 
-<span class="k">for</span> <span class="n">vc</span> <span class="ow">in</span> <span class="n">variogram_clouds</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lags per area: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">###########</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+for vc in variogram_clouds:
+    print(f&#39;Lags per area: {len(vc.lags)}&#39;)
+    print(&#39;&#39;)
+    vc.plot(&#39;violin&#39;)
+    print(&#39;\n###########\n&#39;)
 </pre></div>
 </div>
 </div>
@@ -899,29 +899,29 @@ Lags per area: 16
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">theoretical_semivariograms</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>theoretical_semivariograms = []
 
-<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">variogram_clouds</span><span class="p">):</span>
+for idx, vc in enumerate(variogram_clouds):
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Semivariance calculated for </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="si">}</span><span class="s1"> lags.&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="c1"># Calculate experimental model</span>
-    <span class="n">exp_model</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+    print(f&#39;Semivariance calculated for {vc.lags} lags.&#39;)
+    print(&#39;&#39;)
+    # Calculate experimental model
+    exp_model = vc.calculate_experimental_variogram()
 
-    <span class="c1"># Assign experimental model and data to TheoreticalSemivariogram</span>
+    # Assign experimental model and data to TheoreticalSemivariogram
 
-    <span class="n">theo_semi</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-    <span class="n">theo_semi</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_model</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">theoretical_semivariograms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">theo_semi</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model parameters:&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model type:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nugget:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">nugget</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sill:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">sill</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Range:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">rang</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Model error:&#39;</span><span class="p">,</span> <span class="n">theo_semi</span><span class="o">.</span><span class="n">rmse</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#####&#39;</span><span class="p">)</span>
+    theo_semi = TheoreticalVariogram()
+    theo_semi.autofit(experimental_variogram=exp_model, nugget=0)
+    theoretical_semivariograms.append(theo_semi)
+    print(&#39;&#39;)
+    print(&#39;Model parameters:&#39;)
+    print(&#39;Model type:&#39;, theo_semi.name)
+    print(&#39;Nugget:&#39;, theo_semi.nugget)
+    print(&#39;Sill:&#39;, theo_semi.sill)
+    print(&#39;Range:&#39;, theo_semi.rang)
+    print(&#39;Model error:&#39;, theo_semi.rmse)
+    print(&#39;&#39;)
+    print(&#39;#####&#39;)
 </pre></div>
 </div>
 </div>
@@ -985,12 +985,12 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">points</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/shapefile/regular_grid_points.shp&#39;</span>  <span class="c1"># file with grid for analysis</span>
-<span class="n">gdf_pts</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span>
-<span class="n">gdf_pts</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>points = &#39;samples/point_data/shapefile/regular_grid_points.shp&#39;  # file with grid for analysis
+gdf_pts = gpd.read_file(points)
+gdf_pts.set_index(&#39;id&#39;, inplace=True)
+gdf_pts[&#39;x&#39;] = gdf_pts.geometry.x
+gdf_pts[&#39;y&#39;] = gdf_pts.geometry.y
+gdf_pts.head()
 </pre></div>
 </div>
 </div>
@@ -1072,25 +1072,25 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">preds_cols</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">errs_cols</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>preds_cols = []
+errs_cols = []
 
-<span class="k">for</span> <span class="n">semi_model</span> <span class="ow">in</span> <span class="n">theoretical_semivariograms</span><span class="p">:</span>
-    <span class="n">kriged</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span>
-                     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">semi_model</span><span class="p">,</span>
-                     <span class="n">points</span><span class="o">=</span><span class="n">gdf_pts</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-                     <span class="n">neighbors_range</span><span class="o">=</span><span class="mi">200000</span><span class="p">,</span>
-                     <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-                     <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                     <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+for semi_model in theoretical_semivariograms:
+    kriged = kriging(observations=areal_centroids,
+                     theoretical_model=semi_model,
+                     points=gdf_pts[[&#39;x&#39;, &#39;y&#39;]].values,
+                     neighbors_range=200000,
+                     no_neighbors=8,
+                     number_of_workers=1,
+                     use_all_neighbors_in_range=True)
 
-    <span class="c1"># Interpolate missing values and uncertainty</span>
-    <span class="n">pred_col_name</span> <span class="o">=</span> <span class="s1">&#39;p &#39;</span> <span class="o">+</span> <span class="n">semi_model</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_model</span><span class="o">.</span><span class="n">lags</span><span class="p">))</span>
-    <span class="n">uncertainty_col_name</span> <span class="o">=</span> <span class="s1">&#39;e &#39;</span> <span class="o">+</span> <span class="n">semi_model</span><span class="o">.</span><span class="n">name</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">semi_model</span><span class="o">.</span><span class="n">lags</span><span class="p">))</span>
-    <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pred_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">kriged</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-    <span class="n">gdf_pts</span><span class="p">[</span><span class="n">uncertainty_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">kriged</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">preds_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_col_name</span><span class="p">)</span>
-    <span class="n">errs_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uncertainty_col_name</span><span class="p">)</span>
+    # Interpolate missing values and uncertainty
+    pred_col_name = &#39;p &#39; + semi_model.name[:3] + &#39; &#39; + str(len(semi_model.lags))
+    uncertainty_col_name = &#39;e &#39; + semi_model.name[:3] + &#39; &#39; + str(len(semi_model.lags))
+    gdf_pts[pred_col_name] = kriged[:, 0]
+    gdf_pts[uncertainty_col_name] = kriged[:, 1]
+    preds_cols.append(pred_col_name)
+    errs_cols.append(uncertainty_col_name)
 </pre></div>
 </div>
 </div>
@@ -1108,7 +1108,7 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gdf_pts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gdf_pts.head()
 </pre></div>
 </div>
 </div>
@@ -1229,9 +1229,9 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save interpolation results</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Save interpolation results
 
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;output/interpolation_results_areal_to_point.shp&#39;</span><span class="p">)</span>
+gdf_pts.to_file(&#39;output/interpolation_results_areal_to_point.shp&#39;)
 </pre></div>
 </div>
 </div>
@@ -1243,32 +1243,32 @@ lowest. On the other hand, 32-lags variograms work poorly!</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Now compare results to choropleth maps</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Now compare results to choropleth maps
+fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(16, 16), sharex=&#39;all&#39;, sharey=&#39;all&#39;)
 
-<span class="n">base1</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base2</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base3</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base4</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base5</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
-<span class="n">base6</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+base1 = AREAL_INPUT.data.plot(ax=axes[0, 0], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base2 = AREAL_INPUT.data.plot(ax=axes[0, 1], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base3 = AREAL_INPUT.data.plot(ax=axes[0, 2], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base4 = AREAL_INPUT.data.plot(ax=axes[1, 0], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base5 = AREAL_INPUT.data.plot(ax=axes[1, 1], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
+base6 = AREAL_INPUT.data.plot(ax=axes[1, 2], legend=True, edgecolor=&#39;black&#39;, color=&#39;white&#39;)
 
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base3</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base4</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base5</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">gdf_pts</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">base6</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+gdf_pts.plot(ax=base1, column=preds_cols[0], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base2, column=preds_cols[1], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base3, column=preds_cols[2], cmap=&#39;Spectral_r&#39;, alpha=0.3)
+gdf_pts.plot(ax=base4, column=errs_cols[0], cmap=&#39;Reds&#39;, alpha=0.3)
+gdf_pts.plot(ax=base5, column=errs_cols[1], cmap=&#39;Reds&#39;, alpha=0.3)
+gdf_pts.plot(ax=base6, column=errs_cols[2], cmap=&#39;Reds&#39;, alpha=0.3)
 
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">preds_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">errs_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+axes[0, 0].set_title(preds_cols[0])
+axes[0, 1].set_title(preds_cols[1])
+axes[0, 2].set_title(preds_cols[2])
+axes[1, 0].set_title(errs_cols[0])
+axes[1, 1].set_title(errs_cols[1])
+axes[1, 2].set_title(errs_cols[2])
 
-<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Comparison of different Kriging models outputs&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.suptitle(&#39;Comparison of different Kriging models outputs&#39;)
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1289,16 +1289,16 @@ we have chosen the wrong model - we are not able to retrieve meaningful informat
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pcol1</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Column:&#39;</span><span class="p">,</span> <span class="n">pcol1</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">pcol2</span> <span class="ow">in</span> <span class="n">preds_cols</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">pcol1</span> <span class="o">==</span> <span class="n">pcol2</span><span class="p">:</span>
-            <span class="k">pass</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">mad</span> <span class="o">=</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pcol1</span><span class="p">]</span> <span class="o">-</span> <span class="n">gdf_pts</span><span class="p">[</span><span class="n">pcol2</span><span class="p">]</span>
-            <span class="n">mad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mad</span><span class="p">))</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean Absolute Difference with </span><span class="si">{</span><span class="n">pcol2</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">mad</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for pcol1 in preds_cols:
+    print(&#39;Column:&#39;, pcol1)
+    for pcol2 in preds_cols:
+        if pcol1 == pcol2:
+            pass
+        else:
+            mad = gdf_pts[pcol1] - gdf_pts[pcol2]
+            mad = np.abs(np.mean(mad))
+            print(f&#39;Mean Absolute Difference with {pcol2} is {mad:.4f}&#39;)
+    print(&#39;&#39;)
 </pre></div>
 </div>
 </div>

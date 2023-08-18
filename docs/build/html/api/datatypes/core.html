@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Core data structures &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Core data structures &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -590,14 +590,14 @@ of the point support coordinates,</p></li>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">PointSupport</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">POPULATION_DATA</span> <span class="o">=</span> <span class="s2">&quot;path to the point support file&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">POLYGON_DATA</span> <span class="o">=</span> <span class="s2">&quot;path to the polygon data&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s2">&quot;geometry&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">POP10</span> <span class="o">=</span> <span class="s2">&quot;POP10&quot;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s2">&quot;FIPS&quot;</span>
-<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gdf_points</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">POPULATION_DATA</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gdf_polygons</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">POLYGON_DATA</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">point_support</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">()</span>
