@@ -15,7 +15,7 @@ Changes by date
 * (debug) `safe` theoretical variogram models,
 * (enhancement) `model_types` parameter can be string only (in the future the name of this parameter will be changed),
 * (dependencies) fixed dependencies (`hdbscan` and `scikit-learn`),
-* (enhancement) updated tutorials,
+* (enhancement) updated tutorials, we slightly changed their structure,
 * (dependencies) End of support for Python 3.7,
 * (invalid) Warning when user tries to use `.plot()` method of the `ExperimentalVariogram` class.
 
