@@ -9,7 +9,7 @@ import os
 from typing import Dict, Tuple
 
 import numpy as np
-from PIL import Image
+from libtiff import TIFFimage
 
 from pyinterpolate.distance.distance import calc_point_to_point_distance
 from pyinterpolate.kriging.point_kriging import kriging
@@ -95,8 +95,8 @@ def interpolate_raster(data,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance:
 
         * the major axis size == ``step_size``,
@@ -254,8 +254,8 @@ def to_tiff(data,
 
     tolerance : float (in range [0, 1]), optional, default=1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``> 0``
+        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
         for 0 tolerance:
 
         * the major axis size == ``step_size``,
@@ -374,8 +374,9 @@ def _write_tiff(tiff_fname: str, data: np.ndarray):
         Data to write to tiff file.
 
     """
-    image = Image.fromarray(data)
-    image.save(tiff_fname)
+    npdata = data[..., np.newaxis]
+    image = TIFFimage(data=npdata)
+    image.write_file(tiff_fname)
 
 
 def _write_tfw(tfw_fname: str, tfw_content: str):
