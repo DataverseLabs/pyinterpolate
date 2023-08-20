@@ -9,7 +9,7 @@ max_range = 10000  # meters
 
 exp_semivar = build_experimental_variogram(input_array=dem, step_size=step_radius, max_range=max_range)
 semivar = build_theoretical_variogram(experimental_variogram=exp_semivar,
-                                      model_type='linear',
+                                      model_name='linear',
                                       sill=exp_semivar.variance,
                                       rang=10000)
 

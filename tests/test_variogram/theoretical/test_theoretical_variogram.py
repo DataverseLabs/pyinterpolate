@@ -23,6 +23,7 @@ ARMSTRONG_VARIOGRAM_DIRECTIONAL = build_experimental_variogram(ARMSTRONG_DATA,
                                                                direction=135,
                                                                tolerance=0.02)
 
+
 class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_zero_case(self):
@@ -39,13 +40,13 @@ class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_zero_autofit_case(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_name='linear')
         self.assertEqual(0, variogram.rmse)
         self.assertEqual(0, variogram.nugget)
 
     def test_we_direction_case(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=WE_VARIOGRAM, model_types='all', nugget=0)
+        variogram.autofit(experimental_variogram=WE_VARIOGRAM, model_name='all', nugget=0)
 
         expected_nugget = 0
         expected_sill = 4.25
@@ -57,7 +58,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_armstrong_case(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='all', nugget=0)
+        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_name='all', nugget=0)
         expected_sill = 12.85
         expected_range = 4.158
         self.assertAlmostEqual(expected_sill, variogram.sill, places=2)
@@ -66,7 +67,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
     def test_str_output(self):
         variogram = TheoreticalVariogram()
         output_str_empty = variogram.__str__()
-        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_name='linear')
         output_str_trained = variogram.__str__()
         expected_str_empty_model = 'Theoretical model is not calculated yet. ' \
                                    'Use fit() or autofit() methods to build or find a model ' \
@@ -81,7 +82,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
 
     def test_to_and_from_dict(self):
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_name='linear')
         vdict = variogram.to_dict()
 
         variogram2 = TheoreticalVariogram()
@@ -102,7 +103,7 @@ class TestTheoreticalVariogram(unittest.TestCase):
     def test_to_and_from_json(self):
         fname = 'testfile'
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='linear')
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_name='linear')
         variogram.to_json(fname)
 
         variogram2 = TheoreticalVariogram()
@@ -126,11 +127,11 @@ class TestTheoreticalVariogram(unittest.TestCase):
     def test_safe_autofit(self):
 
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_types='safe')
+        variogram.autofit(experimental_variogram=ZEROS_VARIOGRAM, model_name='safe')
         self.assertTrue(variogram)
 
     def test_nugget_autofit(self):
 
         variogram = TheoreticalVariogram()
-        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='all')
+        variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_name='all')
         self.assertGreater(variogram.nugget, 0)

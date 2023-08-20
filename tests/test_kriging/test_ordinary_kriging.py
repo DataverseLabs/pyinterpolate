@@ -70,7 +70,7 @@ class TestOrdinaryKriging(unittest.TestCase):
     def test_from_covariance(self):
         exp_var = ExperimentalVariogram(input_array=KNOWN_POINTS, step_size=500, max_range=20000)
         theo_var = TheoreticalVariogram()
-        theo_var.autofit(exp_var, model_types='spherical')
+        theo_var.autofit(exp_var, model_name='spherical')
 
         for _unknown_pt in UNKNOWN_POINTS:
             predicted_sem = ordinary_kriging(

@@ -62,7 +62,7 @@ class TestIndicatorVariograms(unittest.TestCase):
                                               max_range=MX_RNG)
         variograms = IndicatorVariograms(experimental_indicator_variogram=evar)
         variograms.fit(
-            model_type='safe',
+            model_name='safe',
             verbose=False
         )
         self.assertIsInstance(variograms, IndicatorVariograms)

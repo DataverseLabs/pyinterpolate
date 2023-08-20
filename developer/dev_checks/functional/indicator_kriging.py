@@ -46,7 +46,7 @@ ind_variogram = ExperimentalIndicatorVariogram(input_array=train_set,
 
 ind_vars = IndicatorVariograms(experimental_indicator_variogram=ind_variogram)
 ind_vars.fit(
-    model_type='basic',
+    model_name='basic',
     verbose=False
 )
 
