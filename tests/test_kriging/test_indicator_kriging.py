@@ -46,7 +46,7 @@ EVARIOGRAM = ExperimentalIndicatorVariogram(input_array=TRAIN,
 
 VARIOGRAMS = IndicatorVariograms(experimental_indicator_variogram=EVARIOGRAM)
 VARIOGRAMS.fit(
-    model_type='safe',
+    model_name='safe',
     verbose=False
 )
 

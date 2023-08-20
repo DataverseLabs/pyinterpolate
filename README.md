@@ -65,7 +65,7 @@ experimental_semivariogram = build_experimental_variogram(input_array=point_data
 from pyinterpolate import build_theoretical_variogram
 
 semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
-                                      model_type='spherical',
+                                      model_name='spherical',
                                       sill=400,
                                       rang=20000,
                                       nugget=0)

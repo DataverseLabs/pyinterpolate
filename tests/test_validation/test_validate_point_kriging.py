@@ -13,7 +13,7 @@ ARMSTRONG_VARIOGRAM = build_experimental_variogram(ARMSTRONG_DATA,
                                                    step_size=1,
                                                    max_range=6)
 THEORETICAL_MODEL = TheoreticalVariogram()
-THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_types='linear', nugget=0.0)
+THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, model_name='linear', nugget=0.0)
 
 
 class TestValidateKriging(unittest.TestCase):

@@ -13,7 +13,7 @@ ind_variogram = ExperimentalIndicatorVariogram(input_array=dem,
 
 ind_vars = IndicatorVariograms(experimental_indicator_variogram=ind_variogram)
 ind_vars.fit(
-    model_type='basic',
+    model_name='basic',
     verbose=False
 )
 ind_vars.show(subplots=False)
