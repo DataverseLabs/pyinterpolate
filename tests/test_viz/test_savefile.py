@@ -3,7 +3,7 @@ import unittest
 from tempfile import TemporaryDirectory
 
 from pyinterpolate.viz.raster import to_tiff
-from .consts import prepare_test_data
+from tests.test_viz.consts import prepare_test_data
 
 
 DATASET, VARIOGRAM = prepare_test_data()
