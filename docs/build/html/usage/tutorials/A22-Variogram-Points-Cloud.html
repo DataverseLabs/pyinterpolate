@@ -1,0 +1,1122 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>A.2.2 Variogram Points Cloud &#8212; Pyinterpolate 0.5 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/A22-Variogram-Points-Cloud';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Experimental Variogram and Variogram Cloud classes" href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html" />
+    <link rel="prev" title="A.2.1 Directional semivariograms" href="A21-Directional-Semivariogram.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../setup/setup.html">
+                        Setup
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../quickstart.html">
+                        Quickstart
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../tutorials.html">
+                        Tutorials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/cite.html">
+                        How to cite
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/api.html">
+                        API
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/dev.html">
+                        Development
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../community/community.html">
+                        Community
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../learning_materials.html">
+                        Learning Materials
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../science/biblio.html">
+                        Bibliography
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A11-Semivariogram-Estimation.html">A.1.1 Semivariogram Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A12-Theoretical-Models.html">A.1.2 Semivariogram models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A13-Spatial-Dependence-Index.html">A.1.3 Spatial Dependence Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A21-Directional-Semivariogram.html">A.2.1 Directional semivariograms</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">A.2.2 Variogram Points Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html">Experimental Variogram and Variogram Cloud classes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="B11-Ordinary-and-Simple-Kriging.html">B.1.1 Ordinary and Simple Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B12-Kriging-Benchmarking.html">B.1.2 Kriging Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B13-Outliers-and-Kriging.html">B.1.3 Outliers and Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B21-Directional-Ordinary-Kriging.html">B.2.1 Directional Ordinary Kriging</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="C11-Blocks-to-Points-with-Ordinary-Kriging.html">C.1.1 Blocks to points Ordinary Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C12-Semivariogram-Regularization.html">C.1.2 Semivariogram Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C13-Poisson-Kriging-Centroid-based.html">C.1.3 Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C14-Poisson-Kriging-Area-to-Area.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C15-Poisson-Kriging-Area-to-Point.html">Poisson Kriging - Area to Point Kriging</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">A.2.2 Variogram Points Cloud</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="A.2.2-Variogram-Points-Cloud">
+<h1>A.2.2 Variogram Points Cloud<a class="headerlink" href="#A.2.2-Variogram-Points-Cloud" title="Permalink to this heading">#</a></h1>
+<section id="Table-of-Contents">
+<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Read point data,</p></li>
+<li><p>Create variogram points cloud,</p></li>
+<li><p>Detect and remove outliers.</p></li>
+<li><p>Calculate the experimental semivariance from the points cloud.</p></li>
+</ol>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
+<p>We will learn how to read and prepare data for semivariogram modeling, manually find the best step size between lags, and detect outliers in our data.</p>
+<p>Variogram Point Cloud analysis is an additional, essential data preparation step that may save you a lot of headaches with more sophisticated analysis. You should learn about Variogram Point Cloud analysis before you move on to the semivariogram estimation and semivariogram fitting operations.</p>
+<p>We use:</p>
+<ul class="simple">
+<li><p>for points 1 and 2: DEM data stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code>,</p></li>
+<li><p>for points 3 and 4: Breast cancer rates data is stored in the shapefile in folder <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</p></li>
+</ul>
+</section>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">calc_point_to_point_distance</span><span class="p">,</span> <span class="n">VariogramCloud</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1)-Read-point-data">
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">),</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">dem</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+<span class="c1"># Look into a first few lines of data</span>
+
+<span class="n">dem</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.51837397e+05, 5.45249474e+05, 2.11946869e+01],
+       [2.41974281e+05, 5.38958171e+05, 1.64789104e+01],
+       [2.45063630e+05, 5.43685759e+05, 1.90657024e+01]])
+</pre></div></div>
+</div>
+</section>
+<section id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
+<h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Permalink to this heading">#</a></h2>
+<p>We will generate the Variogram Point Cloud. We calculate it for 16 lags and test different cloud variogram visualization methods.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+
+<span class="c1"># Check max distance between points</span>
+<span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">number_of_lags</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="n">maximum_range</span> <span class="o">/</span> <span class="n">number_of_lags</span>
+
+<span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Check how many points are grouped for each lag:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lag </span><span class="si">{</span><span class="n">_lag</span><span class="si">}</span><span class="s1"> has </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">points_per_lag</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> point pairs.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Lag 809.6271354731758 has 2 point pairs.
+Lag 1619.2542709463517 has 4 point pairs.
+Lag 2428.8814064195276 has 4 point pairs.
+Lag 3238.5085418927033 has 12 point pairs.
+Lag 4048.135677365879 has 8 point pairs.
+Lag 4857.762812839055 has 16 point pairs.
+Lag 5667.389948312231 has 14 point pairs.
+Lag 6477.017083785407 has 16 point pairs.
+Lag 7286.644219258583 has 16 point pairs.
+Lag 8096.271354731759 has 14 point pairs.
+Lag 8905.898490204934 has 10 point pairs.
+Lag 9715.52562567811 has 14 point pairs.
+Lag 10525.152761151287 has 16 point pairs.
+Lag 11334.779896624463 has 8 point pairs.
+Lag 12144.407032097637 has 10 point pairs.
+</pre></div></div>
+</div>
+<p>As we see, there are a lot of points per lag! Data is messy, but to be sure, we must check its distribution. What are those <strong>points per lag</strong>? They are a set of semivariances between all point pairs within a specific lag. This information helps us to understand if there are any undersampled ranges. Then, we can change <code class="docutils literal notranslate"><span class="pre">step_size</span></code> accordingly (to avoid a situation where one lag has the order of magnitude less/more point pairs than the other).</p>
+<p>We know the density of the points per lag. Now we can analyze semivariances distribution per lag. The <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class has three plot types we use for analysis:</p>
+<ol class="arabic simple">
+<li><p><em>Scatter plot</em>. It shows the general dispersion of semivariances.</p></li>
+<li><p><em>Box plot</em> - an excellent tool for outliers detection. It shows dispersion and quartiles of semivariances per lag. We can check distribution differences and their deviation from normality or skewness.</p></li>
+<li><p><em>Violin plot</em>. It is a box plot on steroids. We can read all information from the box plot and see kernel density plots.</p></li>
+</ol>
+<p>Let’s plot them all. The first is a scatter plot.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;scatter&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_11_0.png" src="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_11_0.png" />
+</div>
+</div>
+<p>The output per lag is dense, and distributions are hard to read. But, we can follow a general trend and see maxima on the plot. We can make it better if we use a box plot instead:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_13_0.png" src="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_13_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>The orange line in the middle of each box represents the median (50%) value per lag. The trend is more visible if we look into it. What else can be seen here?</p>
+<ol class="arabic simple">
+<li><p>Dispersion of values is greater with a distance, but at the same time, median and the <strong>3rd quartile</strong> of semivariance values are rising (<strong>3rd quartile</strong> is plotted as a horizontal line on a top of a box.</p></li>
+<li><p>The maximum value rises with a distance (it is a horizontal line on a top of a whisker).</p></li>
+<li><p>Data is skewed towards lower values of semivariance. Why? Because the median is closer to the bottom of a box than the center or the top.</p></li>
+<li><p>The <strong>1st quartile</strong> (25% of the lowest values) is higher for distant lags.</p></li>
+</ol>
+<p>We could stop our analysis here, but there is a better option to analyze data distribution than a box plot. We can use a violin plot:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_15_0.png" src="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_15_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>The violin plot supports our earlier assumptions, but we can learn more from it. For distant lags, a distribution starts to be multimodal. We see one mode around very low semivariance values and another close to the 1st quartile. Multimodality may affect our outcomes, and it may tell us that there is more than one level of spatial dependency.</p>
+<p>There is still the elephant in the room. Our data is pulled up with outliers. Do you see long whiskers on the top of every distribution? Let them be, but the better idea is to clean it before we start Kriging. In the next paragraph, we will detect and remove outliers from a block dataset.</p>
+</section>
+<section id="3)-Detect-and-remove-outliers">
+<h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Permalink to this heading">#</a></h2>
+<p>With the idea of how the Variogram Point Cloud works, we can detect and “remove” outliers from our dataset. In this part of the tutorial, we use another dataset. It represents the breast cancer rates in counties of the Northeastern part of the U.S. Each county will be transformed into its centroid. Those centroids are not evenly spaced, and we expect the dataset may be modeled incorrectly for several steps.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
+
+<span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
+<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>
+<span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">40000</span>
+
+<span class="n">AREAL_INPUT</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
+<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+
+<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+ERROR 1: PROJ: proj_create_from_database: Open of /home/szymon/miniconda3/envs/pyinterpolate38/share/proj failed
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FIPS</th>
+      <th>geometry</th>
+      <th>rate</th>
+      <th>centroid_x</th>
+      <th>centroid_y</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>25019</td>
+      <td>MULTIPOLYGON (((2115688.816 556471.240, 211569...</td>
+      <td>192.2</td>
+      <td>2.132630e+06</td>
+      <td>557971.155949</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>36121</td>
+      <td>POLYGON ((1419423.430 564830.379, 1419729.721 ...</td>
+      <td>166.8</td>
+      <td>1.442153e+06</td>
+      <td>550673.935704</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>33001</td>
+      <td>MULTIPOLYGON (((1937530.728 779787.978, 193751...</td>
+      <td>157.4</td>
+      <td>1.958207e+06</td>
+      <td>766008.383446</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>25007</td>
+      <td>MULTIPOLYGON (((2074073.532 539159.504, 207411...</td>
+      <td>156.7</td>
+      <td>2.082188e+06</td>
+      <td>556830.822367</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>25001</td>
+      <td>MULTIPOLYGON (((2095343.207 637424.961, 209528...</td>
+      <td>155.3</td>
+      <td>2.100747e+06</td>
+      <td>600235.845891</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">cx</span><span class="p">,</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">cy</span><span class="p">,</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+
+<span class="c1"># Check max distance between points</span>
+
+<span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+<span class="n">number_of_lags</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="n">maximum_range</span> <span class="o">/</span> <span class="n">number_of_lags</span>
+
+<span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_21_0.png" src="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_21_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lag </span><span class="si">{</span><span class="n">_lag</span><span class="si">}</span><span class="s1"> has </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">points_per_lag</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> point pairs.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Lag 75303.56650292415 has 1936 point pairs.
+Lag 150607.1330058483 has 4740 point pairs.
+Lag 225910.69950877246 has 6532 point pairs.
+Lag 301214.2660116966 has 7254 point pairs.
+Lag 376517.83251462074 has 7066 point pairs.
+Lag 451821.39901754487 has 5904 point pairs.
+Lag 527124.9655204691 has 4494 point pairs.
+</pre></div></div>
+</div>
+<p>Our data is skewed towards large values. Thus, we will remove outliers from the upper part of the dataset. We will use the interquartile range algorithm. It detects outliers as all points below the first quartile of a data plus <code class="docutils literal notranslate"><span class="pre">m</span></code> (positive or zero <code class="docutils literal notranslate"><span class="pre">float</span></code>) standard deviations and all points above the 3rd quartile plus <code class="docutils literal notranslate"><span class="pre">n</span></code> (positive or zero <code class="docutils literal notranslate"><span class="pre">float</span></code>) standard deviations. The important thing is that the absolute values of <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code> can differ. We should fit those values to the
+distribution and its skewness.</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> has the internal method <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code>. With the parameter <code class="docutils literal notranslate"><span class="pre">inplace</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, we can overwrite the variogram point cloud, but if we set it to <code class="docutils literal notranslate"><span class="pre">False</span></code>, it will return a new <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> object with a cleaned variogram point cloud. Other parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code>: is a string that removes outliers. We have two methods, one based on <strong>z-scores</strong> and the <strong>interquartile range</strong> method. Both have upper and lower bounds. The Z-score method is invoked with <code class="docutils literal notranslate"><span class="pre">method='zscore'</span></code>, and arguments for this function are <code class="docutils literal notranslate"><span class="pre">z_lower_limit</span></code> and <code class="docutils literal notranslate"><span class="pre">z_upper_limit</span></code> (number of standard deviations from the mean down and up, or negative and positive).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iqr_lower_limit</span></code>: how many standard deviations should be subtracted from the first quartile to set a limit of valid values,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iqr_upper_limit</span></code>: how many standard deviations should be added to the 3rd quartile to set a limit of valid values.</p></li>
+</ul>
+<p>The values we will get will be within limits:</p>
+<div class="math notranslate nohighlight">
+\[q1 - (m * std) &lt; V &lt; q3 + (n * std),\]</div>
+<p>Where: * <span class="math notranslate nohighlight">\(q1\)</span>: 1st quartile, * <span class="math notranslate nohighlight">\(q3\)</span>: 3rd quartile, * <span class="math notranslate nohighlight">\(std\)</span>: standard deviation, * <span class="math notranslate nohighlight">\(m\)</span>: real value greater than 0, * <span class="math notranslate nohighlight">\(n\)</span>: real value greater than 0, * <span class="math notranslate nohighlight">\(V\)</span>: the cleaned array.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_25_0.png" src="../../_images/usage_tutorials_A22-Variogram-Points-Cloud_25_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is 6-7 times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
+</section>
+<section id="4)-Calculate-experimental-semivariogram-from-point-cloud">
+<h2>4) Calculate experimental semivariogram from point cloud<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud" title="Permalink to this heading">#</a></h2>
+<p>The last but not least property of the experimental variogram point cloud is that we may calculate the semivariogram directly from it. The method for it is <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. Let’s compare outputs from two algorithms.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_variogram_from_points</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+<span class="n">exp_variogram_from_p_cloud</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">exp_variogram_from_points</span><span class="p">,</span> <span class="n">exp_variogram_from_p_cloud</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Both semivariograms are the same, but methods to obtain these were different.</p>
+<hr class="docutils" />
+</section>
+<section id="Where-to-go-from-here?">
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>A.2.3 Experimental Variogram and Variogram Point Cloud Classes</p></li>
+<li><p>B.1.1 Ordinary and Simple Kriging</p></li>
+<li><p>B.1.3 Outliers and Kriging Model</p></li>
+<li><p>B.2.1 Directional Ordinary Kriging</p></li>
+</ul>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023-08-21</p></td>
+<td><p>The tutorial was refreshed and set along with the 0.5.0 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-02-01</p></td>
+<td><p>Tutorial updated for the version 0.3.7 of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-11-05</p></td>
+<td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-10-21</p></td>
+<td><p>Updated to the version 0.3.4</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-10-17</p></td>
+<td><p>Corrected data selection, now tutorial will run faster</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-08-17</p></td>
+<td><p>Updated to the version 0.3.0</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-12-13</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-10-13</p></td>
+<td><p>Refactored TheoreticalSemivariogram (name change of class attribute) and refactored <code class="docutils literal notranslate"><span class="pre">calc_semivariance_from_pt_cloud()</span></code> function to protect calculations from <code class="docutils literal notranslate"><span class="pre">NaN's</span></code>.</p></td>
+<td><p>&#64;ethmtrgt &amp; &#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-08-22</p></td>
+<td><p>Refactored the Outlier Removal algorithm - quantile based algorithm</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-08-10</p></td>
+<td><p>Refactored the Outlier Removal algorithm</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+</tbody>
+</table>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="A21-Directional-Semivariogram.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">A.2.1 Directional semivariograms</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Experimental Variogram and Variogram Cloud classes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents">Table of Contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1)-Read-point-data">1) Read point data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram">2) Set proper lag size with variogram cloud histogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3)-Detect-and-remove-outliers">3) Detect and remove outliers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4)-Calculate-experimental-semivariogram-from-point-cloud">4) Calculate experimental semivariogram from point cloud</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Where-to-go-from-here?">Where to go from here?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/usage/tutorials/A22-Variogram-Points-Cloud.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2023, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

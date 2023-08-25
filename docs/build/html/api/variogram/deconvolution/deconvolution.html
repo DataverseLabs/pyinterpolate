@@ -619,7 +619,7 @@ for 0 tolerance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'safe'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function fits given areal data variogram into point support variogram - it is the first step of regularization
 process.</p>
 <dl class="field-list simple">
@@ -673,7 +673,7 @@ for 0 tolerance.</p>
 <li><p><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</p></li>
 </ul>
 </dd>
-<dt><strong>model_types</strong><span class="classifier">str, default=’safe’</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<dt><strong>model_name</strong><span class="classifier">str, default=’safe’</span></dt><dd><p>The name of the model to check or special command for multiple models. Available models:</p>
 <ul class="simple">
 <li><p>‘all’ - the same as list with all models,</p></li>
 <li><p>‘safe’ - [‘linear’, ‘power’, ‘spherical’],</p></li>
@@ -683,9 +683,10 @@ for 0 tolerance.</p>
 <li><p>‘gaussian’,</p></li>
 <li><p>‘linear’,</p></li>
 <li><p>‘power’,</p></li>
-<li><p>‘spherical’,</p></li>
-<li><p>or a different set of the above.</p></li>
+<li><p>‘spherical’.</p></li>
 </ul>
+</dd>
+<dt><strong>model_types</strong><span class="classifier">List, default = None</span></dt><dd><p>The list with model names to check excluding ‘all’ and ‘safe’ names.</p>
 </dd>
 </dl>
 </dd>
@@ -694,7 +695,7 @@ for 0 tolerance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">agg_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support_dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variogram_weighting_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'closest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_deviation_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minimum_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reps_deviation_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/regularization/deconvolution.html#Deconvolution.fit_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Method performs <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and <code class="docutils literal notranslate"><span class="pre">transform()</span></code> operations at once.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -747,7 +748,7 @@ for 0 tolerance.</p>
 <li><p><strong>dense</strong>: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</p></li>
 </ul>
 </dd>
-<dt><strong>model_types</strong><span class="classifier">str, default=’safe’</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<dt><strong>model_name</strong><span class="classifier">str, default=’safe’</span></dt><dd><p>The name of the model to check or special command for multiple models. Available models:</p>
 <ul class="simple">
 <li><p>‘all’ - the same as list with all models,</p></li>
 <li><p>‘safe’ - [‘linear’, ‘power’, ‘spherical’],</p></li>
@@ -757,9 +758,10 @@ for 0 tolerance.</p>
 <li><p>‘gaussian’,</p></li>
 <li><p>‘linear’,</p></li>
 <li><p>‘power’,</p></li>
-<li><p>‘spherical’,</p></li>
-<li><p>or a different set of the above.</p></li>
+<li><p>‘spherical’.</p></li>
 </ul>
+</dd>
+<dt><strong>model_types</strong><span class="classifier">List, default = None</span></dt><dd><p>The list with model names to check excluding ‘all’ and ‘safe’ names.</p>
 </dd>
 <dt><strong>max_iters</strong><span class="classifier">int, default = 25</span></dt><dd><p>Maximum number of iterations.</p>
 </dd>

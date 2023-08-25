@@ -429,7 +429,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">libtiff</span> <span class="kn">import</span> <span class="n">TIFFimage</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point_kriging</span> <span class="kn">import</span> <span class="n">kriging</span>
@@ -515,8 +515,8 @@ document.write(`
 
 <span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
-<span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0`` then</span>
-<span class="sd">        the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
 <span class="sd">        for 0 tolerance:</span>
 
 <span class="sd">        * the major axis size == ``step_size``,</span>
@@ -674,8 +674,8 @@ document.write(`
 
 <span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
-<span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0`` then</span>
-<span class="sd">        the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
 <span class="sd">        for 0 tolerance:</span>
 
 <span class="sd">        * the major axis size == ``step_size``,</span>
@@ -794,8 +794,9 @@ document.write(`
 <span class="sd">        Data to write to tiff file.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tiff_fname</span><span class="p">)</span>
+    <span class="n">npdata</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">TIFFimage</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">npdata</span><span class="p">)</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">tiff_fname</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_write_tfw</span><span class="p">(</span><span class="n">tfw_fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tfw_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>

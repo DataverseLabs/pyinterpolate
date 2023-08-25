@@ -432,7 +432,7 @@ document.write(`
 <span class="c1"># Core python packages</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="c1"># Core calculations and visualization packages</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -580,7 +580,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
 <span class="sd">    &gt;&gt;&gt; empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)</span>
 <span class="sd">    &gt;&gt;&gt; theoretical_smv = TheoreticalVariogram()</span>
-<span class="sd">    &gt;&gt;&gt; _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_types=&#39;gaussian&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_name=&#39;gaussian&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; print(theoretical_smv.rmse)</span>
 <span class="sd">    1.5275214898546217</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -638,7 +638,7 @@ document.write(`
 
 <div class="viewcode-block" id="TheoreticalVariogram.fit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-            <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
@@ -652,8 +652,9 @@ document.write(`
 <span class="sd">        experimental_variogram : ExperimentalVariogram</span>
 <span class="sd">            Prepared Empirical Variogram.</span>
 
-<span class="sd">        model_type : str</span>
-<span class="sd">            Model type. Available models:</span>
+<span class="sd">        model_name : str</span>
+<span class="sd">            The name of the model to check. Available models:</span>
+
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -723,13 +724,9 @@ document.write(`
 
         <span class="c1"># Check model type</span>
 
-        <span class="n">_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_names</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">model_type</span><span class="p">]</span>
+        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
 
         <span class="n">_theoretical_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_model</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">rang</span><span class="p">)</span>
 
@@ -739,7 +736,7 @@ document.write(`
         <span class="k">if</span> <span class="n">update_attrs</span><span class="p">:</span>
             <span class="n">attrs_to_update</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;fitted_model&#39;</span><span class="p">:</span> <span class="n">_theoretical_values</span><span class="p">,</span>
-                <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_type</span><span class="p">,</span>
+                <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
                 <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
                 <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
                 <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
@@ -755,7 +752,8 @@ document.write(`
 
 <div class="viewcode-block" id="TheoreticalVariogram.autofit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                <span class="n">model_types</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+                <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">min_nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -783,11 +781,11 @@ document.write(`
 <span class="sd">        experimental_variogram : ExperimentalVariogram</span>
 <span class="sd">            Prepared Empirical Variogram or array.</span>
 
-<span class="sd">        model_types : str</span>
-<span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
+<span class="sd">        model_name : str, default=&#39;safe&#39;</span>
+<span class="sd">            The name of the model to check or special command for multiple models. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
-<span class="sd">            - &#39;safe&#39; - ``[&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]``,</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -795,6 +793,9 @@ document.write(`
 <span class="sd">            - &#39;linear&#39;,</span>
 <span class="sd">            - &#39;power&#39;,</span>
 <span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        model_types : List, default = None</span>
+<span class="sd">            The list with model names to check excluding &#39;all&#39; and &#39;safe&#39; names.</span>
 
 <span class="sd">        nugget : float, optional</span>
 <span class="sd">            Nugget (bias) of a variogram. If given then it is fixed to this value.</span>
@@ -873,7 +874,7 @@ document.write(`
 <span class="sd">            Attributes dict:</span>
 
 <span class="sd">            &gt;&gt;&gt; {</span>
-<span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
+<span class="sd">            ...     &#39;model_name&#39;: model_name,</span>
 <span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
 <span class="sd">            ...     &#39;range&#39;: model_range,</span>
 <span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
@@ -930,7 +931,11 @@ document.write(`
 
         <span class="c1"># Check model type and set models</span>
 
-        <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">model_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="n">model_types</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_name_autofit</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
         <span class="c1"># Set nuggets, ranges and sills</span>
         <span class="k">if</span> <span class="n">nugget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -979,7 +984,7 @@ document.write(`
 
         <span class="c1"># Initlize parameters</span>
         <span class="n">optimal_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
@@ -1009,7 +1014,7 @@ document.write(`
                         <span class="c1"># Check if model is better than the previous</span>
                         <span class="k">if</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">err_val</span><span class="p">:</span>
                             <span class="n">err_val</span> <span class="o">=</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span>
-                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_nugg</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
@@ -1312,14 +1317,16 @@ document.write(`
         <span class="n">_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
         <span class="k">if</span> <span class="n">mname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_names</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead or pass&#39;</span> \
-                  <span class="sa">f</span><span class="s1">&#39;&quot;all&quot; or &quot;safe&quot; parameters to `autofit` method.&#39;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">mtypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
 
-        <span class="k">if</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">mtype</span> <span class="ow">in</span> <span class="n">model_types</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">mtype</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_model_name_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
             <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
@@ -1330,23 +1337,21 @@ document.write(`
                 <span class="s1">&#39;spherical&#39;</span>
             <span class="p">]</span>
             <span class="k">return</span> <span class="n">mtypes</span>
-        <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
             <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;power&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;spherical&#39;</span>
             <span class="p">]</span>
             <span class="k">return</span> <span class="n">mtypes</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
 
-        <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">mtypes</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_update_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                            <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1356,7 +1361,7 @@ document.write(`
                            <span class="n">smape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Model parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
@@ -1384,8 +1389,8 @@ document.write(`
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
+    <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Parameters - nugget: </span><span class="si">{</span><span class="n">nugget</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, sill: </span><span class="si">{</span><span class="n">sill</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, range: </span><span class="si">{</span><span class="n">rang</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg_core</span><span class="p">)</span>
@@ -1437,7 +1442,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
-                                <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
@@ -1448,7 +1453,7 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    experimental_variogram : ExperimentalVariogram</span>
 
-<span class="sd">    model_type : str</span>
+<span class="sd">    model_name : str</span>
 <span class="sd">        Available types:</span>
 
 <span class="sd">        - &#39;circular&#39;,</span>
@@ -1481,7 +1486,7 @@ document.write(`
     <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
     <span class="n">theo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
         <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-        <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
         <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
         <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span>
         <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>

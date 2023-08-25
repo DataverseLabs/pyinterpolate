@@ -9,14 +9,12 @@ Beginner
 .. toctree::
    :maxdepth: 1
 
-   tutorials/Semivariogram Estimation (Basic)
-   tutorials/Theoretical Models (Basic)
-   tutorials/Spatial Dependence Index (Basic)
-   tutorials/Variogram Point Cloud (Basic)
-   tutorials/Directional Semivariograms (Basic)
-   tutorials/Ordinary and Simple Kriging (Basic)
-   tutorials/How good is our Kriging model - test it against IDW algorithm (Basic)
-   tutorials/Experimental Variogram and Variogram Point Cloud classes (Basic)
+   tutorials/A11-Semivariogram-Estimation
+   tutorials/A12-Theoretical-Models
+   tutorials/A13-Spatial-Dependence-Index
+   tutorials/A21-Directional-Semivariogram
+   tutorials/A22-Variogram-Points-Cloud
+   tutorials/A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes
 
 Intermediate
 ------------
@@ -24,10 +22,10 @@ Intermediate
 .. toctree::
    :maxdepth: 1
 
-   tutorials/Semivariogram Regularization (Intermediate)
-   tutorials/Blocks to points Ordinary Kriging interpolation (Intermediate)
-   tutorials/Directional Ordinary Kriging (Intermediate)
-   tutorials/Outliers and Their Influence on the Final Model (Intermediate)
+   tutorials/B11-Ordinary-and-Simple-Kriging
+   tutorials/B12-Kriging-Benchmarking
+   tutorials/B13-Outliers-and-Kriging
+   tutorials/B21-Directional-Ordinary-Kriging
 
 Advanced
 --------
@@ -35,6 +33,8 @@ Advanced
 .. toctree::
    :maxdepth: 1
 
-   tutorials/Poisson Kriging - Centroid Based (Advanced)
-   tutorials/Poisson Kriging - Area to Area (Advanced)
-   tutorials/Poisson Kriging - Area to Point (Advanced)
+   tutorials/C11-Blocks-to-Points-with-Ordinary-Kriging
+   tutorials/C12-Semivariogram-Regularization
+   tutorials/C13-Poisson-Kriging-Centroid-based
+   tutorials/C14-Poisson-Kriging-Area-to-Area
+   tutorials/C15-Poisson-Kriging-Area-to-Point

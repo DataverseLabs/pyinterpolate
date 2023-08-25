@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.experimental_variogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.empirical.experimental_variogram &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -810,7 +810,7 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_covariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">points_per_lag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_covariance_array</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ExperimentalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ExperimentalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -824,8 +824,7 @@ document.write(`
 <span class="sd">            is not plotted and warning is printed.</span>
 
 <span class="sd">        plot_variance : bool, default=True</span>
-<span class="sd">            Show variance level on a plot. If class attribute ``is_variance`` is set to ``False`` then variance is</span>
-<span class="sd">            not plotted and warning is printed.</span>
+<span class="sd">            Show variance level on a plot.</span>
 
 <span class="sd">        Warns</span>
 <span class="sd">        -----</span>
@@ -838,8 +837,7 @@ document.write(`
         <span class="n">validate_plot_attributes_for_experimental_variogram_class</span><span class="p">(</span><span class="n">is_semivar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_sem</span><span class="p">,</span>
                                                                   <span class="n">is_covar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_cov</span><span class="p">,</span>
                                                                   <span class="n">plot_semivar</span><span class="o">=</span><span class="n">plot_semivariance</span><span class="p">,</span>
-                                                                  <span class="n">plot_covar</span><span class="o">=</span><span class="n">plot_covariance</span><span class="p">,</span>
-                                                                  <span class="n">plot_var</span><span class="o">=</span><span class="n">plot_variance</span><span class="p">)</span>
+                                                                  <span class="n">plot_covar</span><span class="o">=</span><span class="n">plot_covariance</span><span class="p">)</span>
 
         <span class="c1"># Plot</span>
         <span class="c1"># Cmap - 3 class Set2 https://colorbrewer2.org/#type=qualitative&amp;scheme=Set2&amp;n=3</span>
