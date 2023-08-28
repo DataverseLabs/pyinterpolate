@@ -4,7 +4,7 @@
 
 # Pyinterpolate
 
-**version 0.5** - *Kharkiv*
+**version 0.5** - *Mykolaiv*
 
 ---
 
