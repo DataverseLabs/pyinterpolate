@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>A.1.1 Semivariogram Estimation &#8212; Pyinterpolate 0.5 documentation</title>
+    <title>A.1.1 Semivariogram Estimation &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -29,22 +28,19 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -114,7 +110,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -457,9 +453,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="A.1.1-Semivariogram-Estimation">
-<h1>A.1.1 Semivariogram Estimation<a class="headerlink" href="#A.1.1-Semivariogram-Estimation" title="Permalink to this heading">#</a></h1>
+<h1>A.1.1 Semivariogram Estimation<a class="headerlink" href="#A.1.1-Semivariogram-Estimation" title="Link to this heading">#</a></h1>
 <section id="Table-of-Contents:">
-<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">#</a></h2>
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data</p></li>
 <li><p>Create the experimental variogram</p></li>
@@ -470,7 +466,7 @@ document.write(`
 </ol>
 </section>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
 <p>In this tutorial, we will learn how to read and prepare data for semivariogram modeling, manually set semivariogram type, and do it automatically. We will compare different semivariogram models by visualizing the outcomes of the models.</p>
 <p>Semivariogram modeling is an initial step before we can perform spatial interpolation of unknown values with Kriging. When you complete this tutorial, you may learn how to:</p>
 <ul class="simple">
@@ -480,7 +476,7 @@ document.write(`
 <p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem.txt</span></code>.</p>
 </section>
 <section id="Import-packages-and-modules">
-<h2>Import packages and modules<a class="headerlink" href="#Import-packages-and-modules" title="Permalink to this heading">#</a></h2>
+<h2>Import packages and modules<a class="headerlink" href="#Import-packages-and-modules" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -500,7 +496,7 @@ document.write(`
 </div>
 </section>
 <section id="1)-Read-point-data">
-<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">#</a></h2>
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -535,7 +531,7 @@ array([[2.55032701e+05, 5.47047700e+05, 6.29624100e+01],
 </div>
 </section>
 <section id="2)-Create-the-experimental-variogram">
-<h2>2) Create the experimental variogram<a class="headerlink" href="#2)-Create-the-experimental-variogram" title="Permalink to this heading">#</a></h2>
+<h2>2) Create the experimental variogram<a class="headerlink" href="#2)-Create-the-experimental-variogram" title="Link to this heading">#</a></h2>
 <p>Checking spatial correlation in our dataset is the first required step. We use variograms - plots of the dissimilarity between point pairs (y-axis) along a rising distance (x-axis). There are two “types” of variograms.</p>
 <ul class="simple">
 <li><p><strong>Experimental (semi)variogram</strong>: directly showing differences between point pairs at specific distances - lags. It could be very messy. We use it to check if there is a spatial correlation.</p></li>
@@ -666,7 +662,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <p>With the experimental variogram, we can create a theoretical model of semivariance.</p>
 </section>
 <section id="3.-Set-manually-different-semivariogram-models">
-<h2>3. Set manually different semivariogram models<a class="headerlink" href="#3.-Set-manually-different-semivariogram-models" title="Permalink to this heading">#</a></h2>
+<h2>3. Set manually different semivariogram models<a class="headerlink" href="#3.-Set-manually-different-semivariogram-models" title="Link to this heading">#</a></h2>
 <p>With an experimental variogram, we can start modeling theoretical function that optimally describes observed data. Our role is to choose the modeling function and to set three hyperparameters: nugget, sill, and range. You can read more about semivariogram models here: <a class="reference external" href="https://ml-gis-service.com/index.php/2022/04/01/geostatistics-theoretical-variogram-models/">Geostatistics: Theoretical Variogram Models</a>.</p>
 <p>Semivariogram has three basic properties:</p>
 <ul class="simple">
@@ -678,7 +674,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <p>We can create a theoretical model in two ways: 1. Manually, with the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function, 2. Semi-automatically, but here’s the catch: we must create a <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> object first, and in the second step, we may use the <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> method. Why is that? The reason is simple - if we want to fit a semivariogram automatically, the algorithm (or creator) assumes we know what we are doing. And with knowledge, we can control multiple parameters of the class.</p>
 <p>We start from the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function and look into different models fitted to our data.</p>
 <section id="Models">
-<h3>Models<a class="headerlink" href="#Models" title="Permalink to this heading">#</a></h3>
+<h3>Models<a class="headerlink" href="#Models" title="Link to this heading">#</a></h3>
 <p>We can choose from a set of predefined models:</p>
 <ul class="simple">
 <li><p>circular,</p></li>
@@ -1260,7 +1256,7 @@ The best model is linear with RMSE 28.218692107535404
 </section>
 </section>
 <section id="4)-Set-automatically-semivariogram-model">
-<h2>4) Set automatically semivariogram model<a class="headerlink" href="#4)-Set-automatically-semivariogram-model" title="Permalink to this heading">#</a></h2>
+<h2>4) Set automatically semivariogram model<a class="headerlink" href="#4)-Set-automatically-semivariogram-model" title="Link to this heading">#</a></h2>
 <p>We can find the optimal semivariogram model automatically, but we can’t do it with the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function. Instead, we use the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class. Manual initialization allows us to find the best set of hyperparameters automatically.</p>
 <p>This process has two steps:</p>
 <ol class="arabic simple">
@@ -1468,7 +1464,7 @@ The best model is linear with RMSE 28.218692107535404
 </div>
 </section>
 <section id="5)-Export-model">
-<h2>5) Export model<a class="headerlink" href="#5)-Export-model" title="Permalink to this heading">#</a></h2>
+<h2>5) Export model<a class="headerlink" href="#5)-Export-model" title="Link to this heading">#</a></h2>
 <p>Models could be exported and used for other purposes. It is vital for the <strong>semivariogram regularization</strong>. Those calculations are computationally intensive, and in production, it is not a good idea to build a complete pipeline; we divide it into two steps.</p>
 <p>Model can be exported to <code class="docutils literal notranslate"><span class="pre">dict</span></code> with <code class="docutils literal notranslate"><span class="pre">.to_dict()</span></code> method or to <code class="docutils literal notranslate"><span class="pre">json</span></code> with <code class="docutils literal notranslate"><span class="pre">.to_json()</span></code> method:</p>
 <div class="nbinput nblast docutils container">
@@ -1486,7 +1482,7 @@ The best model is linear with RMSE 28.218692107535404
 </div>
 </section>
 <section id="6)-Import-model">
-<h2>6) Import model<a class="headerlink" href="#6)-Import-model" title="Permalink to this heading">#</a></h2>
+<h2>6) Import model<a class="headerlink" href="#6)-Import-model" title="Link to this heading">#</a></h2>
 <p>We can import a semivariogram model into a new <strong>TheoreticalSemivariogram</strong> class instance without passing the experimental semivariogram or actual data points. It is helpful for some applications focused on kriging, where we are sure that our semivariogram model fits data well.</p>
 <p>We can import a model with two methods <code class="docutils literal notranslate"><span class="pre">.from_dict()</span></code> if we have our model parameters in the Python dictionary or <code class="docutils literal notranslate"><span class="pre">.from_json()</span></code> if model parameters are stored in a flat file:</p>
 <div class="nbinput docutils container">
@@ -1592,7 +1588,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 </ul>
 </section>
 <section id="Changelog">
-<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -1761,7 +1757,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>
