@@ -17,7 +17,9 @@ Changes by date
 * (dependencies) fixed dependencies (`hdbscan` and `scikit-learn`),
 * (enhancement) updated tutorials, we slightly changed their structure,
 * (dependencies) End of support for Python 3.7,
-* (invalid) Warning when user tries to use `.plot()` method of the `ExperimentalVariogram` class.
+* (invalid) Warning when user tries to use `.plot()` method of the `ExperimentalVariogram` class,
+* (invalid) Default `direction` and `tolerance` are `None` instead of floats,
+* (invalid) Removed unnecessary warning from the `.autofit()` method.
 
 2023-05-03
 ----------

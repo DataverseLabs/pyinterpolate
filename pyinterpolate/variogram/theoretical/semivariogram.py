@@ -502,11 +502,6 @@ class TheoreticalVariogram:
         elif isinstance(experimental_variogram, np.ndarray):
             self.experimental_array = experimental_variogram
             self.lags = experimental_variogram[:, 0]
-            if direction is None:
-                msg = 'If you provide experimental variogram as a numpy array you must remember that the direction' \
-                      ' parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that' \
-                      ' variogram is isotropic.'
-                warnings.warn(msg)
             self.direction = direction
 
         # Check model type and set models

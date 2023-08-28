@@ -66,8 +66,8 @@ def interpolate_raster(data,
                        dim=1000,
                        number_of_neighbors=4,
                        semivariogram_model=None,
-                       direction=0,
-                       tolerance=1) -> Dict:
+                       direction=None,
+                       tolerance=None) -> Dict:
     """
     Function interpolates raster from data points using ordinary kriging.
 
@@ -85,7 +85,7 @@ def interpolate_raster(data,
     semivariogram_model : TheoreticalVariogram, default=None
         Variogram model, if not provided then it is estimated from a given dataset.
 
-    direction : float (in range [0, 360]), default = 0
+    direction : float (in range [0, 360]), optional
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,
@@ -93,7 +93,7 @@ def interpolate_raster(data,
         - 45 or 225 is NE-SW,
         - 135 or 315 is NW-SE.
 
-    tolerance : float (in range [0, 1]), optional, default=1
+    tolerance : float (in range [0, 1]), optional
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
         the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
