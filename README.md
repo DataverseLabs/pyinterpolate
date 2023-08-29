@@ -23,7 +23,7 @@ Then this package may be useful for you. You could use it for:
 
 - spatial interpolation and spatial prediction,
 - alone or with machine learning libraries,
-- for point and areal datasets.
+- for point and block datasets.
 
 Pyinterpolate allows you to perform:
 
