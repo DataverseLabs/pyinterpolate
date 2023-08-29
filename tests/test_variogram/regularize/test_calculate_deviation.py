@@ -12,7 +12,7 @@ WE_VARIOGRAM = build_experimental_variogram(VARIOGRAM_DATA.input_data_we,
                                             max_range=VARIOGRAM_DATA.param_max_range)
 
 VARIOGRAM = TheoreticalVariogram()
-VARIOGRAM.autofit(experimental_variogram=WE_VARIOGRAM, model_types='all')
+VARIOGRAM.autofit(experimental_variogram=WE_VARIOGRAM, model_name='all')
 
 
 class TestCalculateDeviation(unittest.TestCase):

@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Theoretical &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Theoretical &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -29,21 +28,18 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/variogram/theoretical/theoretical';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -111,7 +107,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -465,16 +461,16 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="theoretical">
-<h1>Theoretical<a class="headerlink" href="#theoretical" title="Permalink to this heading">#</a></h1>
+<h1>Theoretical<a class="headerlink" href="#theoretical" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">build_theoretical_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">build_theoretical_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#build_theoretical_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function is a wrapper into <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class and its <code class="docutils literal notranslate"><span class="pre">fit()</span></code> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd></dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>Available types:</p>
+<dt><strong>model_name</strong><span class="classifier">str</span></dt><dd><p>Available types:</p>
 <ul class="simple">
 <li><p>‘circular’,</p></li>
 <li><p>‘cubic’,</p></li>
@@ -547,7 +543,7 @@ larger than a half of a study extent.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">empirical_smv</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span><span class="n">REFERENCE_INPUT</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">STEP_SIZE</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">theoretical_smv</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">theoretical_smv</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">empirical_smv</span><span class="p">,</span> <span class="n">model_types</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">theoretical_smv</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">empirical_smv</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">theoretical_smv</span><span class="o">.</span><span class="n">rmse</span><span class="p">)</span>
 <span class="go">1.5275214898546217</span>
 </pre></div>
@@ -645,17 +641,17 @@ considered to be not spatially-depended.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">autofit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_nuggets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_update_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.autofit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">autofit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_nuggets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_update_attributes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.autofit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>Prepared Empirical Variogram or array.</p>
 </dd>
-<dt><strong>model_types</strong><span class="classifier">str or list</span></dt><dd><p>List of modeling functions or a name of a single function. Available models:</p>
+<dt><strong>model_name</strong><span class="classifier">str, default=’safe’</span></dt><dd><p>The name of the model to check or special command for multiple models. Available models:</p>
 <ul class="simple">
 <li><p>‘all’ - the same as list with all models,</p></li>
-<li><p>‘safe’ - <code class="docutils literal notranslate"><span class="pre">['linear',</span> <span class="pre">'power',</span> <span class="pre">'spherical']</span></code>,</p></li>
+<li><p>‘safe’ - [‘linear’, ‘power’, ‘spherical’],</p></li>
 <li><p>‘circular’,</p></li>
 <li><p>‘cubic’,</p></li>
 <li><p>‘exponential’,</p></li>
@@ -664,6 +660,8 @@ considered to be not spatially-depended.</p>
 <li><p>‘power’,</p></li>
 <li><p>‘spherical’.</p></li>
 </ul>
+</dd>
+<dt><strong>model_types</strong><span class="classifier">List, default = None</span></dt><dd><p>The list with model names to check excluding ‘all’ and ‘safe’ names.</p>
 </dd>
 <dt><strong>nugget</strong><span class="classifier">float, optional</span></dt><dd><p>Nugget (bias) of a variogram. If given then it is fixed to this value.</p>
 </dd>
@@ -724,7 +722,7 @@ required if passed experimental variogram is stored in a numpy array.</p>
 <dd class="field-even"><dl>
 <dt><strong>model_attributes</strong><span class="classifier">Dict</span></dt><dd><p>Attributes dict:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span>
-<span class="gp">... </span>    <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">model_sill</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">model_range</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">model_nugget</span><span class="p">,</span>
@@ -807,13 +805,13 @@ Available methods:</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_attrs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn_about_set_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/theoretical/semivariogram.html#TheoreticalVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>Prepared Empirical Variogram.</p>
 </dd>
-<dt><strong>model_type</strong><span class="classifier">str</span></dt><dd><p>Model type. Available models:</p>
+<dt><strong>model_name</strong><span class="classifier">str</span></dt><dd><p>The name of the model to check. Available models:</p>
 <ul class="simple">
 <li><p>‘circular’,</p></li>
 <li><p>‘cubic’,</p></li>
@@ -1047,7 +1045,7 @@ required if passed experimental variogram is stored in a numpy array.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>

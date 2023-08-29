@@ -119,7 +119,6 @@ def calculate_block_to_block_semivariance(
                     # Select set of points to calculate block-pair semivariance
                     a_block_points = point_support[first_block_id][:, :-1]
                     b_block_points = point_support[second_block_id][:, :-1]
-                    # TODO: it was added, but should be multiplied - check other results
                     no_of_p_pairs = len(a_block_points) * len(b_block_points)
 
                     # Calculate semivariance between blocks

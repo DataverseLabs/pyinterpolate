@@ -12,7 +12,7 @@ Contributors
 # Core python packages
 import json
 import warnings
-from typing import Collection, Union, Callable, Tuple
+from typing import Union, Callable, Tuple, List
 
 # Core calculations and visualization packages
 import numpy as np
@@ -160,7 +160,7 @@ class TheoreticalVariogram:
     >>> MAX_RANGE = 4
     >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)
     >>> theoretical_smv = TheoreticalVariogram()
-    >>> _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_types='gaussian')
+    >>> _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_name='gaussian')
     >>> print(theoretical_smv.rmse)
     1.5275214898546217
     """
@@ -179,6 +179,12 @@ class TheoreticalVariogram:
             'power': power_model,
             'spherical': spherical_model
         }
+
+        self.complex_models = {
+            'safe': [linear_model, power_model, spherical_model],
+            'all': iter(self.variogram_models.values())
+        }
+
         self.study_max_range = None
 
         # Model parameters
@@ -212,7 +218,7 @@ class TheoreticalVariogram:
 
     def fit(self,
             experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
-            model_type: str,
+            model_name: str,
             sill: float,
             rang: float,
             nugget=0.,
@@ -226,8 +232,8 @@ class TheoreticalVariogram:
         experimental_variogram : ExperimentalVariogram
             Prepared Empirical Variogram.
 
-        model_type : str
-            Model type. Available models:
+        model_name : str
+            The name of the model to check. Available models:
 
             - 'circular',
             - 'cubic',
@@ -298,13 +304,9 @@ class TheoreticalVariogram:
 
         # Check model type
 
-        _names = list(self.variogram_models.keys())
+        self._check_model_names(model_name)
 
-        if model_type not in _names:
-            msg = f'Defined model name {model_type} not available. You may choose one from {_names} instead.'
-            raise KeyError(msg)
-
-        _model = self.variogram_models[model_type]
+        _model = self.variogram_models[model_name]
 
         _theoretical_values = self._fit_model(_model, nugget, sill, rang)
 
@@ -314,7 +316,7 @@ class TheoreticalVariogram:
         if update_attrs:
             attrs_to_update = {
                 'fitted_model': _theoretical_values,
-                'model_type': model_type,
+                'model_name': model_name,
                 'nugget': nugget,
                 'sill': sill,
                 'range': rang
@@ -330,7 +332,8 @@ class TheoreticalVariogram:
 
     def autofit(self,
                 experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
-                model_types: Union[str, list] = 'all',
+                model_name: str = 'safe',
+                model_types: List = None,
                 nugget=None,
                 min_nugget=0,
                 max_nugget=0.5,
@@ -358,11 +361,11 @@ class TheoreticalVariogram:
         experimental_variogram : ExperimentalVariogram
             Prepared Empirical Variogram or array.
 
-        model_types : str or list
-            List of modeling functions or a name of a single function. Available models:
+        model_name : str, default='safe'
+            The name of the model to check or special command for multiple models. Available models:
 
             - 'all' - the same as list with all models,
-            - 'safe' - ``['linear', 'power', 'spherical']``,
+            - 'safe' - ['linear', 'power', 'spherical'],
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -370,6 +373,9 @@ class TheoreticalVariogram:
             - 'linear',
             - 'power',
             - 'spherical'.
+
+        model_types : List, default = None
+            The list with model names to check excluding 'all' and 'safe' names.
 
         nugget : float, optional
             Nugget (bias) of a variogram. If given then it is fixed to this value.
@@ -448,7 +454,7 @@ class TheoreticalVariogram:
             Attributes dict:
 
             >>> {
-            ...     'model_type': model_name,
+            ...     'model_name': model_name,
             ...     'sill': model_sill,
             ...     'range': model_range,
             ...     'nugget': model_nugget,
@@ -496,15 +502,15 @@ class TheoreticalVariogram:
         elif isinstance(experimental_variogram, np.ndarray):
             self.experimental_array = experimental_variogram
             self.lags = experimental_variogram[:, 0]
-            if direction is None:
-                msg = 'If you provide experimental variogram as a numpy array you must remember that the direction' \
-                      ' parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that' \
-                      ' variogram is isotropic.'
-                warnings.warn(msg)
             self.direction = direction
 
         # Check model type and set models
-        mtypes = self._check_models_type_autofit(model_types)
+
+        if model_types is not None:
+            self._check_models_type_autofit(model_types)
+            mtypes = model_types
+        else:
+            mtypes = self._check_model_name_autofit(model_name)
 
         # Set nuggets, ranges and sills
         if nugget is None:
@@ -553,7 +559,7 @@ class TheoreticalVariogram:
 
         # Initlize parameters
         optimal_parameters = {
-            'model_type': '',
+            'model_name': '',
             'nugget': 0,
             'sill': 0,
             'range': 0
@@ -583,7 +589,7 @@ class TheoreticalVariogram:
                         # Check if model is better than the previous
                         if _err[error_estimator] < err_val:
                             err_val = _err[error_estimator]
-                            optimal_parameters['model_type'] = _mtype
+                            optimal_parameters['model_name'] = _mtype
                             optimal_parameters['nugget'] = _nugg
                             optimal_parameters['sill'] = _sill
                             optimal_parameters['range'] = _rang
@@ -889,52 +895,38 @@ class TheoreticalVariogram:
             msg = f'Defined model name {mname} not available. You may choose one from {_names} instead.'
             raise KeyError(msg)
 
-    def _check_models_type_autofit(self, model_types: Union[str, Collection]) -> list:
-        mtypes = list()
-        if isinstance(model_types, str):
-            if model_types == 'all':
-                mtypes = [
-                    'circular',
-                    'cubic',
-                    'exponential',
-                    'gaussian',
-                    'linear',
-                    'power',
-                    'spherical'
-                ]
-            elif model_types == 'safe':
-                mtypes = [
-                    'linear',
-                    'power',
-                    'spherical'
-                ]
-            else:
-                self._check_model_names(model_types)
-                mtypes.append(model_types)
-        else:
-            if isinstance(model_types, Collection):
-                for mdl in model_types:
-                    try:
-                        self._check_model_names(mdl)
-                    except KeyError as ke:
-                        if mdl == 'all' and len(model_types) == 1:
-                            mtypes = [
-                                'circular',
-                                'cubic',
-                                'exponential',
-                                'gaussian',
-                                'linear',
-                                'power',
-                                'spherical'
-                            ]
-                        else:
-                            raise ke
-                    mtypes.append(mdl)
-        return mtypes
+    def _check_models_type_autofit(self, model_types: List):
+
+        for mtype in model_types:
+            self._check_model_names(mtype)
+
+    def _check_model_name_autofit(self, model_name: str) -> list:
+        if model_name == 'all':
+            mtypes = [
+                'circular',
+                'cubic',
+                'exponential',
+                'gaussian',
+                'linear',
+                'power',
+                'spherical'
+            ]
+            return mtypes
+        elif model_name == 'safe':
+            mtypes = [
+                'linear',
+                'power',
+                'spherical'
+            ]
+            return mtypes
+
+        self._check_model_names(model_name)
+
+        return [model_name]
 
     def _update_attributes(self,
                            fitted_model=None,
-                           model_type=None,
+                           model_name=None,
                            nugget=None,
                            range=None,
                            sill=None,
@@ -944,7 +936,7 @@ class TheoreticalVariogram:
                            smape=None):
         # Model parameters
         self.fitted_model = fitted_model
-        self.name = model_type
+        self.name = model_name
         self.nugget = nugget
         self.rang = range
         self.sill = sill
@@ -972,8 +964,8 @@ class TheoreticalVariogram:
             raise KeyError(msg)
 
     @staticmethod
-    def __print_autofit_info(model_type: str, nugget: float, sill: float, rang: float, err_type: str, err_value: float):
-        msg_core = f'Model {model_type},\n' \
+    def __print_autofit_info(model_name: str, nugget: float, sill: float, rang: float, err_type: str, err_value: float):
+        msg_core = f'Model {model_name},\n' \
                    f'Model Parameters - nugget: {nugget:.2f}, sill: {sill:.4f}, range: {rang:.4f},\n' \
                    f'Model Error {err_type}: {err_value}\n'
         print(msg_core)
@@ -1025,7 +1017,7 @@ class TheoreticalVariogram:
 
 
 def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
-                                model_type: str,
+                                model_name: str,
                                 sill: float,
                                 rang: float,
                                 nugget: float = 0.,
@@ -1036,7 +1028,7 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
     ----------
     experimental_variogram : ExperimentalVariogram
 
-    model_type : str
+    model_name : str
         Available types:
 
         - 'circular',
@@ -1069,7 +1061,7 @@ def build_theoretical_variogram(experimental_variogram: ExperimentalVariogram,
     theo = TheoreticalVariogram()
     theo.fit(
         experimental_variogram=experimental_variogram,
-        model_type=model_type,
+        model_name=model_name,
         sill=sill,
         rang=rang,
         nugget=nugget,

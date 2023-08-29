@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>How good is my Kriging model? - tests with IDW algorithm &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>How good is my Kriging model? - tests with IDW algorithm &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -547,13 +547,13 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">inverse_distance_weighting</span>  <span class="c1"># function for idw</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>  <span class="c1"># experimental semivariogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span>  <span class="c1"># theoretical models</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">kriging</span>  <span class="c1"># kriging models</span>
+from pyinterpolate import inverse_distance_weighting  # function for idw
+from pyinterpolate import read_txt
+from pyinterpolate import build_experimental_variogram  # experimental semivariogram
+from pyinterpolate import build_theoretical_variogram, TheoreticalVariogram  # theoretical models
+from pyinterpolate import kriging  # kriging models
 </pre></div>
 </div>
 </div>
@@ -564,8 +564,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
-<span class="n">dem</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dem = read_txt(&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;)
+dem
 </pre></div>
 </div>
 </div>
@@ -597,18 +597,18 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create modeling and validation sets</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create modeling and validation sets
 
-<span class="k">def</span> <span class="nf">create_model_validation_sets</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">rnd_seed</span><span class="o">=</span><span class="mi">101</span><span class="p">):</span>
+def create_model_validation_sets(dataset: np.array, training_set_ratio=0.5, rnd_seed=101):
 
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">rnd_seed</span><span class="p">)</span>
+    np.random.seed(rnd_seed)
 
-    <span class="n">indexes_of_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">training_set_ratio</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="n">training_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">indexes_of_training_set</span><span class="p">]</span>
-    <span class="n">validation_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">indexes_of_training_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">training_set</span><span class="p">,</span> <span class="n">validation_set</span>
+    indexes_of_training_set = np.random.choice(range(len(dataset) - 1), int(training_set_ratio * len(dataset)), replace=False)
+    training_set = dataset[indexes_of_training_set]
+    validation_set = np.delete(dataset, indexes_of_training_set, 0)
+    return training_set, validation_set
 
-<span class="n">known_points</span><span class="p">,</span> <span class="n">unknown_points</span> <span class="o">=</span> <span class="n">create_model_validation_sets</span><span class="p">(</span><span class="n">dem</span><span class="p">)</span>
+known_points, unknown_points = create_model_validation_sets(dem)
 </pre></div>
 </div>
 </div>
@@ -624,14 +624,14 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IDW_POWER</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">NUMBER_OF_NEIGHBOURS</span> <span class="o">=</span> <span class="mi">128</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>IDW_POWER = 2
+NUMBER_OF_NEIGHBOURS = 128
 
-<span class="n">idw_predictions</span> <span class="o">=</span> <span class="p">[]</span>
+idw_predictions = []
 
-<span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">unknown_points</span><span class="p">:</span>
-    <span class="n">idw_result</span> <span class="o">=</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_points</span><span class="p">,</span> <span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">NUMBER_OF_NEIGHBOURS</span><span class="p">,</span> <span class="n">IDW_POWER</span><span class="p">)</span>
-    <span class="n">idw_predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idw_result</span><span class="p">)</span>
+for pt in unknown_points:
+    idw_result = inverse_distance_weighting(known_points, pt[:-1], NUMBER_OF_NEIGHBOURS, IDW_POWER)
+    idw_predictions.append(idw_result)
 </pre></div>
 </div>
 </div>
@@ -639,10 +639,10 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Evaluation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Evaluation
 
-<span class="n">idw_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">idw_predictions</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with IDW is </span><span class="si">{</span><span class="n">idw_rmse</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+idw_rmse = np.mean(np.sqrt((unknown_points[:, -1] - np.array(idw_predictions))**2))
+print(f&#39;Root Mean Squared Error of prediction with IDW is {idw_rmse}&#39;)
 </pre></div>
 </div>
 </div>
@@ -665,15 +665,15 @@ Root Mean Squared Error of prediction with IDW is 2.5045203528088513
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IDW_POWERS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
-<span class="n">idw_rmse</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>IDW_POWERS = [0.5, 1, 2, 4]
+idw_rmse = {}
 
-<span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">IDW_POWERS</span><span class="p">:</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">unknown_points</span><span class="p">:</span>
-        <span class="n">idw_result</span> <span class="o">=</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_points</span><span class="p">,</span> <span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">NUMBER_OF_NEIGHBOURS</span><span class="p">,</span> <span class="n">pw</span><span class="p">)</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idw_result</span><span class="p">)</span>
-    <span class="n">idw_rmse</span><span class="p">[</span><span class="n">pw</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+for pw in IDW_POWERS:
+    results = []
+    for pt in unknown_points:
+        idw_result = inverse_distance_weighting(known_points, pt[:-1], NUMBER_OF_NEIGHBOURS, pw)
+        results.append(idw_result)
+    idw_rmse[pw] = np.mean(np.sqrt((unknown_points[:, -1] - np.array(results))**2))
 </pre></div>
 </div>
 </div>
@@ -681,8 +681,8 @@ Root Mean Squared Error of prediction with IDW is 2.5045203528088513
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">IDW_POWERS</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with IDW of power </span><span class="si">{</span><span class="n">pw</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">idw_rmse</span><span class="p">[</span><span class="n">pw</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for pw in IDW_POWERS:
+    print(f&#39;Root Mean Squared Error of prediction with IDW of power {pw} is {idw_rmse[pw]:.4f}&#39;)
 </pre></div>
 </div>
 </div>
@@ -705,10 +705,10 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_range = 10000
+step_size = 500
 
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">known_points</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+exp_semivar = build_experimental_variogram(known_points, step_size=step_size, max_range=max_range)
 </pre></div>
 </div>
 </div>
@@ -716,7 +716,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">,</span> <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span> <span class="n">sill</span><span class="o">=</span><span class="n">exp_semivar</span><span class="o">.</span><span class="n">variance</span><span class="p">,</span> <span class="n">rang</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivar = build_theoretical_variogram(exp_semivar, model_type=&#39;circular&#39;, sill=exp_semivar.variance, rang=max_range)
 </pre></div>
 </div>
 </div>
@@ -724,7 +724,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -743,9 +743,9 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set Kriging model
 
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">known_points</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+predictions = kriging(observations=known_points, theoretical_model=semivar, points=unknown_points[:, :-1], no_neighbors=128)
 </pre></div>
 </div>
 </div>
@@ -761,10 +761,10 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Evaluation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Evaluation
 
-<span class="n">kriging_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with Kriging is </span><span class="si">{</span><span class="n">kriging_rmse</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+kriging_rmse = np.mean(np.sqrt((unknown_points[:, -1] - np.array(predictions[:, 0]))**2))
+print(f&#39;Root Mean Squared Error of prediction with Kriging is {kriging_rmse}&#39;)
 </pre></div>
 </div>
 </div>
@@ -785,9 +785,9 @@ Root Mean Squared Error of prediction with Kriging is 1.6638061333290726
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data preparation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Data preparation
 
-<span class="n">known_points</span><span class="p">,</span> <span class="n">unknown_points</span> <span class="o">=</span> <span class="n">create_model_validation_sets</span><span class="p">(</span><span class="n">dem</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">rnd_seed</span><span class="o">=</span><span class="mi">112</span><span class="p">)</span>
+known_points, unknown_points = create_model_validation_sets(dem, 0.02, rnd_seed=112)
 </pre></div>
 </div>
 </div>
@@ -795,15 +795,15 @@ Root Mean Squared Error of prediction with Kriging is 1.6638061333290726
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">IDW_POWERS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
-<span class="n">idw_rmse</span> <span class="o">=</span> <span class="p">{}</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>IDW_POWERS = [0.5, 1, 2, 4, 6, 8]
+idw_rmse = {}
 
-<span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">IDW_POWERS</span><span class="p">:</span>
-    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">unknown_points</span><span class="p">:</span>
-        <span class="n">idw_result</span> <span class="o">=</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_points</span><span class="p">,</span> <span class="n">pt</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">NUMBER_OF_NEIGHBOURS</span><span class="p">,</span> <span class="n">pw</span><span class="p">)</span>
-        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idw_result</span><span class="p">)</span>
-    <span class="n">idw_rmse</span><span class="p">[</span><span class="n">pw</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+for pw in IDW_POWERS:
+    results = []
+    for pt in unknown_points:
+        idw_result = inverse_distance_weighting(known_points, pt[:-1], NUMBER_OF_NEIGHBOURS, pw)
+        results.append(idw_result)
+    idw_rmse[pw] = np.mean(np.sqrt((unknown_points[:, -1] - np.array(results))**2))
 </pre></div>
 </div>
 </div>
@@ -811,8 +811,8 @@ Root Mean Squared Error of prediction with Kriging is 1.6638061333290726
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">IDW_POWERS</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with IDW of power </span><span class="si">{</span><span class="n">pw</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">idw_rmse</span><span class="p">[</span><span class="n">pw</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for pw in IDW_POWERS:
+    print(f&#39;Root Mean Squared Error of prediction with IDW of power {pw} is {idw_rmse[pw]:.4f}&#39;)
 </pre></div>
 </div>
 </div>
@@ -833,12 +833,12 @@ Root Mean Squared Error of prediction with IDW of power 8 is 5.3415
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Variogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Variogram
 
-<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+max_range = 10000
+step_size = 500
 
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">known_points</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+exp_semivar = build_experimental_variogram(known_points, step_size=step_size, max_range=max_range)
 </pre></div>
 </div>
 </div>
@@ -846,9 +846,9 @@ Root Mean Squared Error of prediction with IDW of power 8 is 5.3415
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-<span class="n">semivar</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">exp_semivar</span><span class="p">,</span> <span class="n">model_types</span><span class="o">=</span><span class="s1">&#39;spherical&#39;</span><span class="p">)</span>
-<span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivar = TheoreticalVariogram()
+semivar.autofit(exp_semivar, model_types=&#39;spherical&#39;)
+semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -863,9 +863,9 @@ Root Mean Squared Error of prediction with IDW of power 8 is 5.3415
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set Kriging model
 
-<span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">known_points</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+predictions = kriging(observations=known_points, theoretical_model=semivar, points=unknown_points[:, :-1], no_neighbors=128, use_all_neighbors_in_range=False)
 </pre></div>
 </div>
 </div>
@@ -881,10 +881,10 @@ Root Mean Squared Error of prediction with IDW of power 8 is 5.3415
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Evaluation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Evaluation
 
-<span class="n">kriging_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">unknown_points</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]))</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with Kriging is </span><span class="si">{</span><span class="n">kriging_rmse</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+kriging_rmse = np.mean(np.sqrt((unknown_points[:, -1] - np.array(predictions[:, 0]))**2))
+print(f&#39;Root Mean Squared Error of prediction with Kriging is {kriging_rmse}&#39;)
 </pre></div>
 </div>
 </div>
@@ -900,11 +900,11 @@ Root Mean Squared Error of prediction with Kriging is 4.886647202272596
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Comparison</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Comparison
 
-<span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">IDW_POWERS</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with IDW of power </span><span class="si">{</span><span class="n">pw</span><span class="si">}</span><span class="s1"> is </span><span class="si">{</span><span class="n">idw_rmse</span><span class="p">[</span><span class="n">pw</span><span class="p">]</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with Kriging is </span><span class="si">{</span><span class="n">kriging_rmse</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+for pw in IDW_POWERS:
+    print(f&#39;Root Mean Squared Error of prediction with IDW of power {pw} is {idw_rmse[pw]:.4f}&#39;)
+print(f&#39;Root Mean Squared Error of prediction with Kriging is {kriging_rmse:.4f}&#39;)
 </pre></div>
 </div>
 </div>

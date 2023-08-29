@@ -6,15 +6,15 @@
 Pyinterpolate
 =============
 
-**version 0.4.2** - *Kharkiv*
----------------------------
+**version 0.5.0** - *Mykolaiv*
+------------------------------
 
-.. image:: imgs/logov04.jpg
+.. image:: imgs/pyinterpolate-banner.png
   :width: 800
-  :alt: The pyinterpolate logo with the name Kyiv and the version of package.
+  :alt: The pyinterpolate logo with the name Mykolaiv and the version of package.
 
 .. note::
-   The last documentation update: *2023-04-02*
+   The last documentation update: *2023-08-29*
 
 **Pyinterpolate** is the Python library for **geostatistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
 

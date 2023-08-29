@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Poisson Kriging - centroid based approach &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Poisson Kriging - centroid based approach &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -548,12 +548,12 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">centroid_poisson_kriging</span>
+from pyinterpolate import TheoreticalVariogram
+from pyinterpolate import Blocks, PointSupport
+from pyinterpolate import centroid_poisson_kriging
 </pre></div>
 </div>
 </div>
@@ -561,28 +561,28 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/regularized_variogram.json&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">POPULATION_LAYER</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
-<span class="n">POP10</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+OUTPUT = &#39;samples/regularization/regularized_variogram.json&#39;
+POLYGON_LAYER = &#39;areas&#39;
+POPULATION_LAYER = &#39;points&#39;
+POP10 = &#39;POP10&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
 
-<span class="n">blocks</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">blocks</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+blocks = Blocks()
+blocks.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">point_support</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">()</span>
-<span class="n">point_support</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">blocks_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">point_support_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">point_support_val_col</span><span class="o">=</span><span class="n">POP10</span><span class="p">,</span>
-                         <span class="n">blocks_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span>
-                         <span class="n">use_point_support_crs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                         <span class="n">point_support_layer_name</span><span class="o">=</span><span class="n">POPULATION_LAYER</span><span class="p">,</span>
-                         <span class="n">blocks_layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+point_support = PointSupport()
+point_support.from_files(point_support_data_file=DATASET,
+                         blocks_file=DATASET,
+                         point_support_geometry_col=GEOMETRY_COL,
+                         point_support_val_col=POP10,
+                         blocks_geometry_col=GEOMETRY_COL,
+                         blocks_index_col=POLYGON_ID,
+                         use_point_support_crs=True,
+                         point_support_layer_name=POPULATION_LAYER,
+                         blocks_layer_name=POLYGON_LAYER)
 </pre></div>
 </div>
 </div>
@@ -590,9 +590,9 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets take a look into a map of areal counts</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Lets take a look into a map of areal counts
 
-<span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Spectral_r&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+blocks.data.plot(column=blocks.value_column_name, cmap=&#39;Spectral_r&#39;, legend=True, figsize=(12, 8))
 </pre></div>
 </div>
 </div>
@@ -627,8 +627,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>  <span class="c1"># Create TheoreticalSemivariogram object</span>
-<span class="n">semivariogram</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s1">&#39;output/regularized_model.json&#39;</span><span class="p">)</span>  <span class="c1"># Load regularized semivariogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivariogram = TheoreticalVariogram()  # Create TheoreticalSemivariogram object
+semivariogram.from_json(&#39;output/regularized_model.json&#39;)  # Load regularized semivariogram
 </pre></div>
 </div>
 </div>
@@ -640,60 +640,60 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Remove 40% of rows (values) to test our model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Remove 40% of rows (values) to test our model
 
-<span class="k">def</span> <span class="nf">create_test_areal_set</span><span class="p">(</span><span class="n">areal_dataset</span><span class="p">:</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">points_dataset</span><span class="p">:</span> <span class="n">PointSupport</span><span class="p">,</span> <span class="n">frac</span><span class="o">=</span><span class="mf">0.4</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+def create_test_areal_set(areal_dataset: Blocks, points_dataset: PointSupport, frac=0.4):
+    &quot;&quot;&quot;
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    areal_dataset : Blocks</span>
-<span class="sd">    points_dataset : PointSupport</span>
-<span class="sd">    frac : float</span>
+    Parameters
+    ----------
+    areal_dataset : Blocks
+    points_dataset : PointSupport
+    frac : float
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    : List</span>
-<span class="sd">        [[training_areas, test_areas, training_points, test_points]]</span>
-<span class="sd">            equal to:</span>
-<span class="sd">        [np.ndarray, np.ndarray, np.ndarray, np.ndarray]</span>
-<span class="sd">            where:</span>
-<span class="sd">        - areas: [[block index, centroid x, centroid y, value]]</span>
-<span class="sd">        - point support: [[block id, x, y, value]]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">block_id_col</span> <span class="o">=</span> <span class="n">areal_dataset</span><span class="o">.</span><span class="n">index_column_name</span>
-    <span class="n">block_data</span> <span class="o">=</span> <span class="n">areal_dataset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">all_ids</span> <span class="o">=</span> <span class="n">block_data</span><span class="p">[</span><span class="n">block_id_col</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-    <span class="n">training_set_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_ids</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">frac</span><span class="p">))</span>
+    Returns
+    -------
+    : List
+        [[training_areas, test_areas, training_points, test_points]]
+            equal to:
+        [np.ndarray, np.ndarray, np.ndarray, np.ndarray]
+            where:
+        - areas: [[block index, centroid x, centroid y, value]]
+        - point support: [[block id, x, y, value]]
+    &quot;&quot;&quot;
+    block_id_col = areal_dataset.index_column_name
+    block_data = areal_dataset.data.copy()
+    all_ids = block_data[block_id_col].unique()
+    training_set_size = int(len(all_ids) * (1 - frac))
 
-    <span class="n">training_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">all_ids</span><span class="p">,</span>
-                                    <span class="n">size</span><span class="o">=</span><span class="n">training_set_size</span><span class="p">,</span>
-                                    <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    training_ids = np.random.choice(all_ids,
+                                    size=training_set_size,
+                                    replace=False)
 
-    <span class="n">training_areas</span> <span class="o">=</span> <span class="n">block_data</span><span class="p">[</span><span class="n">block_data</span><span class="p">[</span><span class="n">block_id_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">training_ids</span><span class="p">)]</span>
-    <span class="n">training_areas</span> <span class="o">=</span> <span class="n">training_areas</span><span class="p">[[</span><span class="n">block_id_col</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="n">areal_dataset</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">test_areas</span> <span class="o">=</span> <span class="n">block_data</span><span class="p">[</span><span class="o">~</span><span class="n">block_data</span><span class="p">[</span><span class="n">block_id_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">training_ids</span><span class="p">)]</span>
-    <span class="n">test_areas</span> <span class="o">=</span> <span class="n">test_areas</span><span class="p">[[</span><span class="n">block_id_col</span><span class="p">,</span> <span class="s1">&#39;centroid_x&#39;</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">,</span> <span class="n">areal_dataset</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    training_areas = block_data[block_data[block_id_col].isin(training_ids)]
+    training_areas = training_areas[[block_id_col, &#39;centroid_x&#39;, &#39;centroid_y&#39;, areal_dataset.value_column_name]].values
+    test_areas = block_data[~block_data[block_id_col].isin(training_ids)]
+    test_areas = test_areas[[block_id_col, &#39;centroid_x&#39;, &#39;centroid_y&#39;, areal_dataset.value_column_name]].values
 
-    <span class="n">ps_data</span> <span class="o">=</span> <span class="n">points_dataset</span><span class="o">.</span><span class="n">point_support</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">ps_ids</span> <span class="o">=</span> <span class="n">points_dataset</span><span class="o">.</span><span class="n">block_index_column</span>
+    ps_data = points_dataset.point_support.copy()
+    ps_ids = points_dataset.block_index_column
 
-    <span class="n">training_points</span> <span class="o">=</span> <span class="n">ps_data</span><span class="p">[</span><span class="n">ps_data</span><span class="p">[</span><span class="n">ps_ids</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">training_ids</span><span class="p">)]</span>
-    <span class="n">training_points</span> <span class="o">=</span> <span class="n">training_points</span><span class="p">[[</span><span class="n">ps_ids</span><span class="p">,</span>
-                                       <span class="n">points_dataset</span><span class="o">.</span><span class="n">x_col</span><span class="p">,</span>
-                                       <span class="n">points_dataset</span><span class="o">.</span><span class="n">y_col</span><span class="p">,</span>
-                                       <span class="n">points_dataset</span><span class="o">.</span><span class="n">value_column</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">test_points</span> <span class="o">=</span> <span class="n">ps_data</span><span class="p">[</span><span class="o">~</span><span class="n">ps_data</span><span class="p">[</span><span class="n">ps_ids</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">training_ids</span><span class="p">)]</span>
-    <span class="n">test_points</span> <span class="o">=</span> <span class="n">test_points</span><span class="p">[[</span><span class="n">ps_ids</span><span class="p">,</span>
-                               <span class="n">points_dataset</span><span class="o">.</span><span class="n">x_col</span><span class="p">,</span>
-                               <span class="n">points_dataset</span><span class="o">.</span><span class="n">y_col</span><span class="p">,</span>
-                               <span class="n">points_dataset</span><span class="o">.</span><span class="n">value_column</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+    training_points = ps_data[ps_data[ps_ids].isin(training_ids)]
+    training_points = training_points[[ps_ids,
+                                       points_dataset.x_col,
+                                       points_dataset.y_col,
+                                       points_dataset.value_column]].values
+    test_points = ps_data[~ps_data[ps_ids].isin(training_ids)]
+    test_points = test_points[[ps_ids,
+                               points_dataset.x_col,
+                               points_dataset.y_col,
+                               points_dataset.value_column]].values
 
 
-    <span class="n">output</span> <span class="o">=</span> <span class="p">[</span><span class="n">training_areas</span><span class="p">,</span> <span class="n">test_areas</span><span class="p">,</span> <span class="n">training_points</span><span class="p">,</span> <span class="n">test_points</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">output</span>
+    output = [training_areas, test_areas, training_points, test_points]
+    return output
 
-<span class="n">ar_train</span><span class="p">,</span> <span class="n">ar_test</span><span class="p">,</span> <span class="n">pt_train</span><span class="p">,</span> <span class="n">pt_test</span> <span class="o">=</span> <span class="n">create_test_areal_set</span><span class="p">(</span><span class="n">blocks</span><span class="p">,</span> <span class="n">point_support</span><span class="p">)</span>
+ar_train, ar_test, pt_train, pt_test = create_test_areal_set(blocks, point_support)
 </pre></div>
 </div>
 </div>
@@ -720,29 +720,29 @@ the tutorial.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">number_of_obs</span> <span class="o">=</span> <span class="mi">4</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>number_of_obs = 4
 
-<span class="n">predslist</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">unknown_area</span> <span class="ow">in</span> <span class="n">ar_test</span><span class="p">:</span>
-    <span class="n">upts</span> <span class="o">=</span> <span class="n">pt_test</span><span class="p">[</span><span class="n">pt_test</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">unknown_area</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-    <span class="n">upts</span> <span class="o">=</span> <span class="n">upts</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">kriging_preds</span> <span class="o">=</span> <span class="n">centroid_poisson_kriging</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram</span><span class="p">,</span>
-                                                 <span class="n">blocks</span><span class="o">=</span><span class="n">ar_train</span><span class="p">,</span>
-                                                 <span class="n">point_support</span><span class="o">=</span><span class="n">pt_train</span><span class="p">,</span>
-                                                 <span class="n">unknown_block</span><span class="o">=</span><span class="n">unknown_area</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                                 <span class="n">unknown_block_point_support</span><span class="o">=</span><span class="n">upts</span><span class="p">,</span>
-                                                 <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_obs</span><span class="p">,</span>
-                                                 <span class="n">is_weighted_by_point_support</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                                 <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                                 <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-        <span class="n">predslist</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">unknown_area</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">kriging_preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">unknown_area</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">fb</span> <span class="o">=</span> <span class="n">unknown_area</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">kriging_preds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">kriging_preds</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">rmse</span><span class="p">,</span> <span class="n">fb</span><span class="p">])</span>
-        <span class="n">predslist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kriging_preds</span><span class="p">)</span>
+predslist = []
+for unknown_area in ar_test:
+    upts = pt_test[pt_test[:, 0] == unknown_area[0]]
+    upts = upts[:, 1:]
+    try:
+        kriging_preds = centroid_poisson_kriging(semivariogram_model=semivariogram,
+                                                 blocks=ar_train,
+                                                 point_support=pt_train,
+                                                 unknown_block=unknown_area[:-1],
+                                                 unknown_block_point_support=upts,
+                                                 number_of_neighbors=number_of_obs,
+                                                 is_weighted_by_point_support=True,
+                                                 raise_when_negative_prediction=True,
+                                                 raise_when_negative_error=True)
+    except ValueError as _:
+        predslist.append([unknown_area[0], np.nan, np.nan, np.nan, np.nan])
+    else:
+        rmse = np.sqrt((kriging_preds[1] - unknown_area[-1])**2)
+        fb = unknown_area[-1] - kriging_preds[1]
+        kriging_preds.extend([rmse, fb])
+        predslist.append(kriging_preds)
 </pre></div>
 </div>
 </div>
@@ -750,11 +750,11 @@ the tutorial.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># [unknown block index, prediction, error, rmse, fb]</span>
-<span class="n">predslist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predslist</span><span class="p">)</span>
-<span class="n">pred_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">predslist</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span>
-                       <span class="n">index</span><span class="o">=</span><span class="n">predslist</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
-                       <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;predicted&#39;</span><span class="p">,</span> <span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span><span class="p">,</span> <span class="s1">&#39;fb&#39;</span><span class="p">])</span>  <span class="c1"># Store results in DataFrame</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># [unknown block index, prediction, error, rmse, fb]
+predslist = np.array(predslist)
+pred_df = pd.DataFrame(data=predslist[:, 1:],
+                       index=predslist[:, 0],
+                       columns=[&#39;predicted&#39;, &#39;err&#39;, &#39;rmse&#39;, &#39;fb&#39;])  # Store results in DataFrame
 </pre></div>
 </div>
 </div>
@@ -766,9 +766,9 @@ the tutorial.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show histograms of errors</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Show histograms of errors
 
-<span class="n">pred_df</span><span class="p">[</span><span class="s1">&#39;fb&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+pred_df[&#39;fb&#39;].plot.hist(bins=10)
 </pre></div>
 </div>
 </div>
@@ -792,7 +792,7 @@ the tutorial.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="p">[</span><span class="s1">&#39;rmse&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_df[&#39;rmse&#39;].plot.hist(bins=10)
 </pre></div>
 </div>
 </div>
@@ -816,7 +816,7 @@ the tutorial.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pred_df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pred_df.describe()
 </pre></div>
 </div>
 </div>

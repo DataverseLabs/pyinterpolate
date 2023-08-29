@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -28,21 +27,18 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../_static/clipboard.min.js"></script>
-    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/theoretical/semivariogram';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -108,7 +104,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -432,7 +428,7 @@ document.write(`
 <span class="c1"># Core python packages</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
 
 <span class="c1"># Core calculations and visualization packages</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -451,7 +447,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.spatial_dependency_index</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
 
 
-<div class="viewcode-block" id="TheoreticalVariogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a><span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a>
+<span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Theoretical model of a spatial dissimilarity.</span>
 
 <span class="sd">    Parameters</span>
@@ -580,7 +578,7 @@ document.write(`
 <span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
 <span class="sd">    &gt;&gt;&gt; empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)</span>
 <span class="sd">    &gt;&gt;&gt; theoretical_smv = TheoreticalVariogram()</span>
-<span class="sd">    &gt;&gt;&gt; _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_types=&#39;gaussian&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_name=&#39;gaussian&#39;)</span>
 <span class="sd">    &gt;&gt;&gt; print(theoretical_smv.rmse)</span>
 <span class="sd">    1.5275214898546217</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -599,6 +597,12 @@ document.write(`
             <span class="s1">&#39;power&#39;</span><span class="p">:</span> <span class="n">power_model</span><span class="p">,</span>
             <span class="s1">&#39;spherical&#39;</span><span class="p">:</span> <span class="n">spherical_model</span>
         <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">complex_models</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;safe&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">linear_model</span><span class="p">,</span> <span class="n">power_model</span><span class="p">,</span> <span class="n">spherical_model</span><span class="p">],</span>
+            <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="p">}</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Model parameters</span>
@@ -630,9 +634,11 @@ document.write(`
 
     <span class="c1"># Core functions</span>
 
-<div class="viewcode-block" id="TheoreticalVariogram.fit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TheoreticalVariogram.fit">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
             <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-            <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
@@ -646,8 +652,8 @@ document.write(`
 <span class="sd">        experimental_variogram : ExperimentalVariogram</span>
 <span class="sd">            Prepared Empirical Variogram.</span>
 
-<span class="sd">        model_type : str</span>
-<span class="sd">            Model type. Available models:</span>
+<span class="sd">        model_name : str</span>
+<span class="sd">            The name of the model to check. Available models:</span>
 
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
@@ -718,13 +724,9 @@ document.write(`
 
         <span class="c1"># Check model type</span>
 
-        <span class="n">_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">model_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_names</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">model_type</span><span class="p">]</span>
+        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
 
         <span class="n">_theoretical_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_model</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">rang</span><span class="p">)</span>
 
@@ -734,7 +736,7 @@ document.write(`
         <span class="k">if</span> <span class="n">update_attrs</span><span class="p">:</span>
             <span class="n">attrs_to_update</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s1">&#39;fitted_model&#39;</span><span class="p">:</span> <span class="n">_theoretical_values</span><span class="p">,</span>
-                <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="n">model_type</span><span class="p">,</span>
+                <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
                 <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
                 <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
                 <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
@@ -748,9 +750,13 @@ document.write(`
 
         <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.autofit"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.autofit">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>
+    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                 <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span>
+                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+                <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                 <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">min_nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
@@ -778,11 +784,11 @@ document.write(`
 <span class="sd">        experimental_variogram : ExperimentalVariogram</span>
 <span class="sd">            Prepared Empirical Variogram or array.</span>
 
-<span class="sd">        model_types : str or list</span>
-<span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
+<span class="sd">        model_name : str, default=&#39;safe&#39;</span>
+<span class="sd">            The name of the model to check or special command for multiple models. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
-<span class="sd">            - &#39;safe&#39; - ``[&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]``,</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
@@ -790,6 +796,9 @@ document.write(`
 <span class="sd">            - &#39;linear&#39;,</span>
 <span class="sd">            - &#39;power&#39;,</span>
 <span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        model_types : List, default = None</span>
+<span class="sd">            The list with model names to check excluding &#39;all&#39; and &#39;safe&#39; names.</span>
 
 <span class="sd">        nugget : float, optional</span>
 <span class="sd">            Nugget (bias) of a variogram. If given then it is fixed to this value.</span>
@@ -868,7 +877,7 @@ document.write(`
 <span class="sd">            Attributes dict:</span>
 
 <span class="sd">            &gt;&gt;&gt; {</span>
-<span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
+<span class="sd">            ...     &#39;model_name&#39;: model_name,</span>
 <span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
 <span class="sd">            ...     &#39;range&#39;: model_range,</span>
 <span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
@@ -916,15 +925,15 @@ document.write(`
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;If you provide experimental variogram as a numpy array you must remember that the direction&#39;</span> \
-                      <span class="s1">&#39; parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that&#39;</span> \
-                      <span class="s1">&#39; variogram is isotropic.&#39;</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
 
         <span class="c1"># Check model type and set models</span>
-        <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">model_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="n">model_types</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_name_autofit</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
 
         <span class="c1"># Set nuggets, ranges and sills</span>
         <span class="k">if</span> <span class="n">nugget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -973,7 +982,7 @@ document.write(`
 
         <span class="c1"># Initlize parameters</span>
         <span class="n">optimal_parameters</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;model_type&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
@@ -1003,7 +1012,7 @@ document.write(`
                         <span class="c1"># Check if model is better than the previous</span>
                         <span class="k">if</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">err_val</span><span class="p">:</span>
                             <span class="n">err_val</span> <span class="o">=</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span>
-                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_nugg</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
                             <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
@@ -1019,7 +1028,10 @@ document.write(`
         <span class="k">if</span> <span class="n">return_params</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">optimal_parameters</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.predict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.predict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method returns a semivariance per distance.</span>
 
@@ -1040,9 +1052,12 @@ document.write(`
 
         <span class="k">return</span> <span class="n">predicted</span></div>
 
+
     <span class="c1"># Plotting and visualization</span>
 
-<div class="viewcode-block" id="TheoreticalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="TheoreticalVariogram.plot">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots theoretical curve and (optionally) experimental scatter plot.</span>
 
@@ -1074,9 +1089,12 @@ document.write(`
             <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
+
     <span class="c1"># Evaluation</span>
 
-<div class="viewcode-block" id="TheoreticalVariogram.calculate_model_error"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.calculate_model_error">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_model_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+<div class="viewcode-block" id="TheoreticalVariogram.calculate_model_error">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.calculate_model_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_model_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                               <span class="n">fitted_values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                               <span class="n">rmse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1165,6 +1183,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">model_error</span></div>
 
+
     <span class="k">def</span> <span class="nf">_update_spatial_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method updates spatial dependency of a fitted variogram.</span>
@@ -1178,7 +1197,9 @@ document.write(`
 
     <span class="c1"># I/O</span>
 
-<div class="viewcode-block" id="TheoreticalVariogram.to_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<div class="viewcode-block" id="TheoreticalVariogram.to_dict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Method exports the theoretical variogram parameters to a dictionary.</span>
 
 <span class="sd">        Returns</span>
@@ -1207,7 +1228,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">modeled_parameters</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.from_dict"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
 
 <span class="sd">        Parameters</span>
@@ -1219,7 +1243,10 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.to_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_json">[docs]</a>    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.to_json">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method stores variogram parameters into a JSON file.</span>
 
@@ -1239,7 +1266,10 @@ document.write(`
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
             <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_output</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TheoreticalVariogram.from_json"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_json">[docs]</a>    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.from_json">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method reads data from a JSON file.</span>
 
@@ -1253,6 +1283,7 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">json_input</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
+
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
@@ -1309,52 +1340,38 @@ document.write(`
             <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Collection</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">mtypes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
-                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;spherical&#39;</span>
-                <span class="p">]</span>
-            <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
-                <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;spherical&#39;</span>
-                <span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
-                <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">mdl</span> <span class="ow">in</span> <span class="n">model_types</span><span class="p">:</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">ke</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">mdl</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
-                                <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                                <span class="s1">&#39;spherical&#39;</span>
-                            <span class="p">]</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">raise</span> <span class="n">ke</span>
-                    <span class="n">mtypes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mdl</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">mtypes</span>
+    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">mtype</span> <span class="ow">in</span> <span class="n">model_types</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">mtype</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_model_name_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
+        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_update_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                            <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                           <span class="n">model_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1364,7 +1381,7 @@ document.write(`
                            <span class="n">smape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Model parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
@@ -1392,8 +1409,8 @@ document.write(`
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-        <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_type</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
+    <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Parameters - nugget: </span><span class="si">{</span><span class="n">nugget</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, sill: </span><span class="si">{</span><span class="n">sill</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, range: </span><span class="si">{</span><span class="n">rang</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
                    <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg_core</span><span class="p">)</span>
@@ -1444,8 +1461,11 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="build_theoretical_variogram"><a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
-                                <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+
+<div class="viewcode-block" id="build_theoretical_variogram">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a>
+<span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+                                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                 <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                 <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
@@ -1456,7 +1476,7 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    experimental_variogram : ExperimentalVariogram</span>
 
-<span class="sd">    model_type : str</span>
+<span class="sd">    model_name : str</span>
 <span class="sd">        Available types:</span>
 
 <span class="sd">        - &#39;circular&#39;,</span>
@@ -1489,13 +1509,14 @@ document.write(`
     <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
     <span class="n">theo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
         <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-        <span class="n">model_type</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
         <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
         <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span>
         <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>
         <span class="n">direction</span><span class="o">=</span><span class="n">direction</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">theo</span></div>
+
 </pre></div>
 
                 </article>
@@ -1548,7 +1569,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>

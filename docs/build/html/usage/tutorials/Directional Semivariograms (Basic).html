@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Directional semivariograms &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Directional semivariograms &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -529,14 +529,14 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import geopandas as gpd
+import numpy as np
+import pandas as pd
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+import matplotlib.pyplot as plt
 
-<span class="c1"># Experimental variogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
+# Experimental variogram
+from pyinterpolate import build_experimental_variogram
 </pre></div>
 </div>
 </div>
@@ -547,16 +547,16 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;PM2.5&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>DATASET = &#39;PM2.5&#39;
 
-<span class="c1"># This block is commented intentionally.</span>
-<span class="c1"># To download data with this function you need to install the pyinterpolate-datasets package.</span>
+# This block is commented intentionally.
+# To download data with this function you need to install the pyinterpolate-datasets package.
 
-<span class="c1"># You may uncomment the last line and download a new dataset, but there is a high chance that you&#39;ll obtain</span>
-<span class="c1"># a different results! To be sure, that results are the same, use data stored in the</span>
-<span class="c1"># &#39;samples/directional_variogram_PM25_20220922.csv&#39; file. See the next cell.</span>
+# You may uncomment the last line and download a new dataset, but there is a high chance that you&#39;ll obtain
+# a different results! To be sure, that results are the same, use data stored in the
+# &#39;samples/directional_variogram_PM25_20220922.csv&#39; file. See the next cell.
 
-<span class="c1"># ds = download_air_quality_poland(DATASET)</span>
+# ds = download_air_quality_poland(DATASET)
 </pre></div>
 </div>
 </div>
@@ -564,8 +564,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;samples/directional_variogram_PM25_20220922.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;station_id&#39;</span><span class="p">)</span>
-<span class="n">ds</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ds = pd.read_csv(&#39;samples/directional_variogram_PM25_20220922.csv&#39;, index_col=&#39;station_id&#39;)
+ds.head()
 </pre></div>
 </div>
 </div>
@@ -642,43 +642,43 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">df2gdf</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function transforms DataFrame into GeoDataFrame.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def df2gdf(df, lon_col=&#39;x&#39;, lat_col=&#39;y&#39;, epsg=4326, crs=None):
+    &quot;&quot;&quot;
+    Function transforms DataFrame into GeoDataFrame.
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    df : pandas DataFrame</span>
+    Parameters
+    ----------
+    df : pandas DataFrame
 
-<span class="sd">    lon_col : str, default = &#39;x&#39;</span>
-<span class="sd">        Longitude column name.</span>
+    lon_col : str, default = &#39;x&#39;
+        Longitude column name.
 
-<span class="sd">    lat_col : str, default = &#39;y&#39;</span>
-<span class="sd">        Latitude column name.</span>
+    lat_col : str, default = &#39;y&#39;
+        Latitude column name.
 
-<span class="sd">    epsg : Union[int, str], default = 4326</span>
-<span class="sd">        EPSG number of projection.</span>
+    epsg : Union[int, str], default = 4326
+        EPSG number of projection.
 
-<span class="sd">    crs : str, default = None</span>
-<span class="sd">        Coordinate Reference System of data.</span>
+    crs : str, default = None
+        Coordinate Reference System of data.
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    gdf : GeoPandas GeoDataFrame</span>
-<span class="sd">        GeoDataFrame with set geometry column (&#39;geometry&#39;), CRS, and all columns from the passed DataFrame.</span>
+    Returns
+    -------
+    gdf : GeoPandas GeoDataFrame
+        GeoDataFrame with set geometry column (&#39;geometry&#39;), CRS, and all columns from the passed DataFrame.
 
-<span class="sd">    &quot;&quot;&quot;</span>
+    &quot;&quot;&quot;
 
-    <span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
-    <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">lon_col</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="n">lat_col</span><span class="p">])</span>
-    <span class="n">gdf</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+    gdf = gpd.GeoDataFrame(df)
+    gdf[&#39;geometry&#39;] = gpd.points_from_xy(x=df[lon_col], y=df[lat_col])
+    gdf.geometry = gdf[&#39;geometry&#39;]
 
-    <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">gdf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    if crs is None:
+        gdf.set_crs(epsg=epsg, inplace=True)
+    else:
+        gdf.set_crs(crs=crs, inplace=True)
 
-    <span class="k">return</span> <span class="n">gdf</span>
+    return gdf
 </pre></div>
 </div>
 </div>
@@ -686,8 +686,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">df2gdf</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-<span class="n">gds</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gds = df2gdf(ds)
+gds.head()
 </pre></div>
 </div>
 </div>
@@ -771,7 +771,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gds.isna().any()
 </pre></div>
 </div>
 </div>
@@ -792,7 +792,7 @@ dtype: bool
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gds = gds.dropna(axis=0)
 </pre></div>
 </div>
 </div>
@@ -800,9 +800,9 @@ dtype: bool
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gds</span> <span class="o">=</span> <span class="n">gds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2180</span><span class="p">)</span>
-<span class="n">gds</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">column</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;PM2.5 concentrations in Poland&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gds = gds.to_crs(epsg=2180)
+gds.plot(figsize=(10, 10), column=DATASET, legend=True, markersize=20, alpha=0.7)
+plt.title(&#39;PM2.5 concentrations in Poland&#39;)
 </pre></div>
 </div>
 </div>
@@ -878,9 +878,9 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">BIN_RADIUS</span> <span class="o">=</span> <span class="mi">60000</span>  <span class="c1"># meters</span>
-<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>  <span class="c1"># meters</span>
-<span class="n">TOLERANCE</span> <span class="o">=</span> <span class="mf">0.2</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>BIN_RADIUS = 60000  # meters
+MAX_RANGE = 400000  # meters
+TOLERANCE = 0.2
 </pre></div>
 </div>
 </div>
@@ -888,9 +888,9 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inp_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gds</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                            <span class="n">gds</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
-                            <span class="n">gds</span><span class="p">[</span><span class="n">DATASET</span><span class="p">])))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>inp_arr = np.array(list(zip(gds[&#39;geometry&#39;].x,
+                            gds[&#39;geometry&#39;].y,
+                            gds[DATASET])))
 </pre></div>
 </div>
 </div>
@@ -898,16 +898,16 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">we_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>we_variogram = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=0,
+    tolerance=TOLERANCE,
+    method=&#39;e&#39;
+)
 
-<span class="n">we_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+we_variogram.plot(plot_semivariance=True)
 </pre></div>
 </div>
 </div>
@@ -925,16 +925,16 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ns_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ns_variogram = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=90,
+    tolerance=TOLERANCE,
+    method=&#39;e&#39;
+)
 
-<span class="n">ns_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+ns_variogram.plot(plot_semivariance=True)
 </pre></div>
 </div>
 </div>
@@ -952,16 +952,16 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nw_se_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>nw_se_variogram = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=135,
+    tolerance=TOLERANCE,
+    method=&#39;e&#39;
+)
 
-<span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+nw_se_variogram.plot(plot_semivariance=True)
 </pre></div>
 </div>
 </div>
@@ -979,16 +979,16 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ne_sw_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>ne_sw_variogram = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=45,
+    tolerance=TOLERANCE,
+    method=&#39;e&#39;
+)
 
-<span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+ne_sw_variogram.plot(plot_semivariance=True)
 </pre></div>
 </div>
 </div>
@@ -1006,13 +1006,13 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iso_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>iso_variogram = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE
+)
 
-<span class="n">iso_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+iso_variogram.plot()
 </pre></div>
 </div>
 </div>
@@ -1039,28 +1039,28 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
-<span class="n">_ns</span> <span class="o">=</span> <span class="n">ns_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
-<span class="n">_we</span> <span class="o">=</span> <span class="n">we_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
-<span class="n">_nw_se</span> <span class="o">=</span> <span class="n">nw_se_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
-<span class="n">_ne_sw</span> <span class="o">=</span> <span class="n">ne_sw_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
-<span class="n">_iso</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_lags = iso_variogram.lags
+_ns = ns_variogram.experimental_semivariances
+_we = we_variogram.experimental_semivariances
+_nw_se = nw_se_variogram.experimental_semivariances
+_ne_sw = ne_sw_variogram.experimental_semivariances
+_iso = iso_variogram.experimental_semivariances
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_iso</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ns</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#c2a5cf&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_we</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e7d4e8&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#5aae61&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_ne_sw</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b7837&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariance models&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Isotropic&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;NS&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;WE&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;NW-SE&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;NE-SW&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.figure(figsize=(20, 8))
+plt.plot(_lags, _iso, color=&#39;black&#39;)
+plt.plot(_lags, _ns, &#39;--&#39;, color=&#39;#c2a5cf&#39;)
+plt.plot(_lags, _we, &#39;--&#39;, color=&#39;#e7d4e8&#39;)
+plt.plot(_lags, _nw_se, &#39;--&#39;, color=&#39;#5aae61&#39;)
+plt.plot(_lags, _ne_sw, &#39;--&#39;, color=&#39;#1b7837&#39;)
+plt.title(&#39;Comparison of experimental semivariance models&#39;)
+plt.legend([&#39;Isotropic&#39;,
+            &#39;NS&#39;,
+            &#39;WE&#39;,
+            &#39;NW-SE&#39;,
+            &#39;NE-SW&#39;])
+plt.xlabel(&#39;Distance&#39;)
+plt.ylabel(&#39;Semivariance&#39;)
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1080,7 +1080,7 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from datetime import datetime
 </pre></div>
 </div>
 </div>
@@ -1088,20 +1088,20 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0e</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t0e = datetime.now()
 
-<span class="c1"># Here elliptical</span>
+# Here elliptical
 
-<span class="n">nw_se_variogram_elliptical</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span>
-<span class="p">)</span>
+nw_se_variogram_elliptical = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=135,
+    tolerance=TOLERANCE,
+    method=&#39;e&#39;
+)
 
-<span class="n">tfin_e</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0e</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+tfin_e = (datetime.now() - t0e).total_seconds()
 </pre></div>
 </div>
 </div>
@@ -1109,20 +1109,20 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0t</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>t0t = datetime.now()
 
-<span class="c1"># Here triangular</span>
+# Here triangular
 
-<span class="n">nw_se_variogram_triangular</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">inp_arr</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">BIN_RADIUS</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="mi">135</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">TOLERANCE</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span>
-<span class="p">)</span>
+nw_se_variogram_triangular = build_experimental_variogram(
+    input_array=inp_arr,
+    step_size=BIN_RADIUS,
+    max_range=MAX_RANGE,
+    direction=135,
+    tolerance=TOLERANCE,
+    method=&#39;t&#39;
+)
 
-<span class="n">tfin_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0t</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+tfin_t = (datetime.now() - t0t).total_seconds()
 </pre></div>
 </div>
 </div>
@@ -1130,9 +1130,9 @@ tolerance.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The triangular method is </span><span class="si">{</span><span class="n">tfin_e</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">tfin_t</span><span class="si">}</span><span class="s1"> times faster than the elliptical selection.&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>msg = f&#39;The triangular method is {tfin_e / tfin_t} times faster than the elliptical selection.&#39;
 
-<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+print(msg)
 </pre></div>
 </div>
 </div>
@@ -1150,18 +1150,18 @@ The triangular method is 1.703348909151172 times faster than the elliptical sele
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">iso_variogram</span><span class="o">.</span><span class="n">lags</span>
-<span class="n">_nw_se_ell</span> <span class="o">=</span> <span class="n">nw_se_variogram_elliptical</span><span class="o">.</span><span class="n">experimental_semivariances</span>
-<span class="n">_nw_se_tri</span> <span class="o">=</span> <span class="n">nw_se_variogram_triangular</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_lags = iso_variogram.lags
+_nw_se_ell = nw_se_variogram_elliptical.experimental_semivariances
+_nw_se_tri = nw_se_variogram_triangular.experimental_semivariances
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se_ell</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_nw_se_tri</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of experimental semivariance models for NW-SE direction.&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Elliptical selection&#39;</span><span class="p">,</span> <span class="s1">&#39;Triangular selection&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.figure(figsize=(20, 8))
+plt.plot(_lags, _nw_se_ell)
+plt.plot(_lags, _nw_se_tri)
+plt.title(&#39;Comparison of experimental semivariance models for NW-SE direction.&#39;)
+plt.legend([&#39;Elliptical selection&#39;, &#39;Triangular selection&#39;])
+plt.xlabel(&#39;Distance&#39;)
+plt.ylabel(&#39;Semivariance&#39;)
+plt.show()
 </pre></div>
 </div>
 </div>

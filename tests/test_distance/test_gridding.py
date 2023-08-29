@@ -13,10 +13,9 @@ POINTS = np.array([
         [0, 7, -1]
     ])
 
-GEOPOINTS = gpd.GeoDataFrame(POINTS)
-GEOPOINTS.columns = ['x', 'y', 'value']
-GEOPOINTS['geometry'] = gpd.points_from_xy(GEOPOINTS['x'], GEOPOINTS['y'])
-GEOPOINTS.geometry = GEOPOINTS['geometry']
+geom = gpd.points_from_xy(POINTS[:, 0], POINTS[:, 1])
+geom.name = 'geometry'
+GEOPOINTS = gpd.GeoDataFrame(POINTS, geometry=geom, columns=['x', 'y', 'value'])
 
 
 class TestCreateGrid(unittest.TestCase):

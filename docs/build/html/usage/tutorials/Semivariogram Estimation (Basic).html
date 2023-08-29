@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Semivariogram Estimation &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Semivariogram Estimation &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -541,16 +541,16 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+import matplotlib.pyplot as plt
 
-<span class="c1"># IO - read text</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span>
-<span class="c1"># Experimental variogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
-<span class="c1"># Theoretical Variogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span>
+# IO - read text
+from pyinterpolate import read_txt
+# Experimental variogram
+from pyinterpolate import build_experimental_variogram
+# Theoretical Variogram
+from pyinterpolate import TheoreticalVariogram, build_theoretical_variogram
 </pre></div>
 </div>
 </div>
@@ -561,8 +561,8 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATA</span> <span class="o">=</span> <span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span>
-<span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="n">DATA</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>DATA = &#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;
+dem = read_txt(DATA)
 </pre></div>
 </div>
 </div>
@@ -570,9 +570,9 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Look into a first few lines of data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Look into a first few lines of data
 
-<span class="n">dem</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:,</span> <span class="p">:]</span>
+dem[-10:, :]
 </pre></div>
 </div>
 </div>
@@ -612,12 +612,12 @@ array([[2.54549783e+05, 5.38007742e+05, 2.96319027e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create experimental semivariogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create experimental semivariogram
 
-<span class="n">step_radius</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># meters</span>
-<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># meters</span>
+step_radius = 500  # meters
+max_range = 10000  # meters
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_radius</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+experimental_variogram = build_experimental_variogram(input_array=dem, step_size=step_radius, max_range=max_range)
 </pre></div>
 </div>
 </div>
@@ -625,9 +625,9 @@ array([[2.54549783e+05, 5.38007742e+05, 2.96319027e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># What is a type of experimental variogram?</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># What is a type of experimental variogram?
 
-<span class="nb">type</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">)</span>
+type(experimental_variogram)
 </pre></div>
 </div>
 </div>
@@ -656,7 +656,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(experimental_variogram)
 </pre></div>
 </div>
 </div>
@@ -701,7 +701,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>experimental_variogram.plot(plot_semivariance=True, plot_covariance=True, plot_variance=True)
 </pre></div>
 </div>
 </div>
@@ -767,9 +767,9 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sill</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">variance</span>
-<span class="n">nugget</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">var_range</span> <span class="o">=</span> <span class="mi">8000</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sill = experimental_variogram.variance
+nugget = 0
+var_range = 8000
 </pre></div>
 </div>
 </div>
@@ -777,13 +777,13 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># circular</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># circular
 
-<span class="n">circular_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                             <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                                             <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                             <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                             <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+circular_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                             model_type=&#39;circular&#39;,
+                                             sill=sill,
+                                             rang=var_range,
+                                             nugget=nugget)
 </pre></div>
 </div>
 </div>
@@ -791,7 +791,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">circular_model</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(circular_model)
 </pre></div>
 </div>
 </div>
@@ -839,7 +839,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circular_model</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>circular_model.plot(experimental=True)
 </pre></div>
 </div>
 </div>
@@ -854,13 +854,13 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cubic</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># cubic
 
-<span class="n">cubic_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                          <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                                          <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                          <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                          <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+cubic_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                          model_type=&#39;cubic&#39;,
+                                          sill=sill,
+                                          rang=var_range,
+                                          nugget=nugget)
 </pre></div>
 </div>
 </div>
@@ -868,7 +868,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cubic_model</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(cubic_model)
 </pre></div>
 </div>
 </div>
@@ -916,7 +916,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cubic_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cubic_model.plot()
 </pre></div>
 </div>
 </div>
@@ -931,14 +931,14 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exponential model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Exponential model
 
-<span class="n">exponential_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                                <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                                                <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                                <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                                <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">exponential_model</span><span class="p">)</span>
+exponential_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                                model_type=&#39;exponential&#39;,
+                                                sill=sill,
+                                                rang=var_range,
+                                                nugget=nugget)
+print(exponential_model)
 </pre></div>
 </div>
 </div>
@@ -986,7 +986,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exponential_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>exponential_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1001,14 +1001,14 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gaussian model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Gaussian model
 
-<span class="n">gaussian_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                             <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                                             <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                             <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                             <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">gaussian_model</span><span class="p">)</span>
+gaussian_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                             model_type=&#39;gaussian&#39;,
+                                             sill=sill,
+                                             rang=var_range,
+                                             nugget=nugget)
+print(gaussian_model)
 </pre></div>
 </div>
 </div>
@@ -1056,7 +1056,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gaussian_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>gaussian_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1071,14 +1071,14 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linear model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Linear model
 
-<span class="n">linear_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                           <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                                           <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                           <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                           <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">linear_model</span><span class="p">)</span>
+linear_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                           model_type=&#39;linear&#39;,
+                                           sill=sill,
+                                           rang=var_range,
+                                           nugget=nugget)
+print(linear_model)
 </pre></div>
 </div>
 </div>
@@ -1126,7 +1126,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>linear_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1141,14 +1141,14 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Power model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Power model
 
-<span class="n">power_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                          <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                                          <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                          <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                          <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">power_model</span><span class="p">)</span>
+power_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                          model_type=&#39;power&#39;,
+                                          sill=sill,
+                                          rang=var_range,
+                                          nugget=nugget)
+print(power_model)
 </pre></div>
 </div>
 </div>
@@ -1196,7 +1196,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">power_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>power_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1211,15 +1211,15 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spherical model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Spherical model
 
-<span class="n">spherical_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-                                              <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;spherical&#39;</span><span class="p">,</span>
-                                              <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
-                                              <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-                                              <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+spherical_model = build_theoretical_variogram(experimental_variogram=experimental_variogram,
+                                              model_type=&#39;spherical&#39;,
+                                              sill=sill,
+                                              rang=var_range,
+                                              nugget=nugget)
 
-<span class="nb">print</span><span class="p">(</span><span class="n">spherical_model</span><span class="p">)</span>
+print(spherical_model)
 </pre></div>
 </div>
 </div>
@@ -1267,7 +1267,7 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spherical_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>spherical_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1283,31 +1283,31 @@ pyinterpolate.variogram.empirical.experimental_variogram.ExperimentalVariogram
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">circular_model</span><span class="p">,</span> <span class="n">cubic_model</span><span class="p">,</span> <span class="n">exponential_model</span><span class="p">,</span> <span class="n">gaussian_model</span><span class="p">,</span> <span class="n">linear_model</span><span class="p">,</span> <span class="n">power_model</span><span class="p">,</span> <span class="n">spherical_model</span>
-<span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>models = [
+    circular_model, cubic_model, exponential_model, gaussian_model, linear_model, power_model, spherical_model
+]
 
-<span class="n">lowest_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
-<span class="n">chosen_model</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+lowest_rmse = np.inf
+chosen_model = &#39;&#39;
 
-<span class="k">for</span> <span class="n">_model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+for _model in models:
 
-    <span class="c1"># Get attrs</span>
-    <span class="n">model_name</span> <span class="o">=</span> <span class="n">_model</span><span class="o">.</span><span class="n">name</span>
-    <span class="n">model_rmse</span> <span class="o">=</span> <span class="n">_model</span><span class="o">.</span><span class="n">rmse</span>
+    # Get attrs
+    model_name = _model.name
+    model_rmse = _model.rmse
 
-    <span class="c1"># Check error</span>
-    <span class="k">if</span> <span class="n">model_rmse</span> <span class="o">&lt;</span> <span class="n">lowest_rmse</span><span class="p">:</span>
-        <span class="n">lowest_rmse</span> <span class="o">=</span> <span class="n">model_rmse</span>
-        <span class="n">chosen_model</span> <span class="o">=</span> <span class="n">model_name</span>
+    # Check error
+    if model_rmse &lt; lowest_rmse:
+        lowest_rmse = model_rmse
+        chosen_model = model_name
 
-    <span class="c1"># Print status</span>
-    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">, RMSE: </span><span class="si">{</span><span class="n">model_rmse</span><span class="si">}</span><span class="s1">&#39;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+    # Print status
+    msg = f&#39;Model: {model_name}, RMSE: {model_rmse}&#39;
+    print(msg)
+    print(&#39;&#39;)
 
-<span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;The best model is </span><span class="si">{</span><span class="n">chosen_model</span><span class="si">}</span><span class="s1"> with RMSE </span><span class="si">{</span><span class="n">lowest_rmse</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+msg = f&#39;The best model is {chosen_model} with RMSE {lowest_rmse}&#39;
+print(msg)
 </pre></div>
 </div>
 </div>
@@ -1381,7 +1381,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram_model</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivariogram_model = TheoreticalVariogram()
 </pre></div>
 </div>
 </div>
@@ -1389,12 +1389,12 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
-    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
-    <span class="n">model_types</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
-    <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">rang</span><span class="o">=</span><span class="n">var_range</span><span class="p">,</span>
-    <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fitted = semivariogram_model.autofit(
+    experimental_variogram=experimental_variogram,
+    model_types=&#39;all&#39;,
+    nugget=0,
+    rang=var_range,
+    sill=sill)
 </pre></div>
 </div>
 </div>
@@ -1402,7 +1402,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fitted
 </pre></div>
 </div>
 </div>
@@ -1447,7 +1447,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fitted = semivariogram_model.autofit(experimental_variogram=experimental_variogram, nugget=0)
 </pre></div>
 </div>
 </div>
@@ -1455,7 +1455,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fitted</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(fitted)
 </pre></div>
 </div>
 </div>
@@ -1490,7 +1490,7 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivariogram_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>semivariogram_model.plot()
 </pre></div>
 </div>
 </div>
@@ -1506,19 +1506,19 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">lags</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_lags = semivariogram_model.lags
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#762a83&#39;</span><span class="p">)</span>  <span class="c1"># Experimental</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;:p&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e7d4e8&#39;</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;:o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b7837&#39;</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of theoretical semivariance models&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Experimental Semivariance&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Linear&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Cubic&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.figure(figsize=(20, 8))
+plt.scatter(_lags, experimental_variogram.experimental_semivariances, color=&#39;#762a83&#39;)  # Experimental
+plt.plot(_lags, linear_model.fitted_model[:, 1], &#39;:p&#39;, color=&#39;#e7d4e8&#39;, mec=&#39;black&#39;)
+plt.plot(_lags, semivariogram_model.fitted_model[:, 1], &#39;:o&#39;, color=&#39;#1b7837&#39;, mec=&#39;black&#39;)
+plt.title(&#39;Comparison of theoretical semivariance models&#39;)
+plt.legend([&#39;Experimental Semivariance&#39;,
+            &#39;Linear&#39;,
+            &#39;Cubic&#39;])
+plt.xlabel(&#39;Distance&#39;)
+plt.ylabel(&#39;Semivariance&#39;)
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1538,12 +1538,12 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set spherical model</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Set spherical model
 
-<span class="n">dict_model</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+dict_model = semivariogram_model.to_dict()
 
-<span class="c1"># Save to json</span>
-<span class="n">semivariogram_model</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s1">&#39;output/semivariogram_calculation_model.json&#39;</span><span class="p">)</span>
+# Save to json
+semivariogram_model.to_json(&#39;output/semivariogram_calculation_model.json&#39;)
 </pre></div>
 </div>
 </div>
@@ -1556,9 +1556,9 @@ The best model is linear with RMSE 28.218692107535404
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">other_model_from_dict</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>other_model_from_dict = TheoreticalVariogram()
 
-<span class="nb">print</span><span class="p">(</span><span class="n">other_model_from_dict</span><span class="p">)</span>
+print(other_model_from_dict)
 </pre></div>
 </div>
 </div>
@@ -1574,8 +1574,8 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">other_model_from_dict</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_model</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">other_model_from_dict</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>other_model_from_dict.from_dict(dict_model)
+print(other_model_from_dict)
 </pre></div>
 </div>
 </div>
@@ -1600,8 +1600,8 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">other_model_from_json</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">other_model_from_json</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>other_model_from_json = TheoreticalVariogram()
+print(other_model_from_json)
 </pre></div>
 </div>
 </div>
@@ -1617,7 +1617,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">other_model_from_json</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s1">&#39;output/semivariogram_calculation_model.json&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>other_model_from_json.from_json(&#39;output/semivariogram_calculation_model.json&#39;)
 </pre></div>
 </div>
 </div>
@@ -1625,7 +1625,7 @@ Theoretical model is not calculated yet. Use fit() or autofit() methods to build
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">other_model_from_json</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>print(other_model_from_json)
 </pre></div>
 </div>
 </div>

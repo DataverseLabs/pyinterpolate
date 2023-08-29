@@ -71,7 +71,7 @@ class AttributeSetToFalseWarning(Warning):
         msg = ''
         for _param in wrong_params:
             attr_msg = f'Warning! Attribute {_param} is set to False but you try to plot this object! Plot has been' \
-                       f' cancelled.\n'
+                       f' cancelled.'
             msg = msg + attr_msg
         self.message = msg
 
@@ -193,8 +193,7 @@ def check_sills(mins: float, maxs: float):
 def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
                                                               is_covar: bool,
                                                               plot_semivar: bool,
-                                                              plot_covar: bool,
-                                                              plot_var: bool):
+                                                              plot_covar: bool):
     validation = {}
 
     if (is_semivar is False) and (plot_semivar is True):
@@ -202,9 +201,6 @@ def validate_plot_attributes_for_experimental_variogram_class(is_semivar: bool,
 
     if (is_covar is False) and (plot_covar is True):
         validation['is_covariance'] = True
-
-    if plot_var:
-        validation['is_variance'] = True
 
     if validation:
         print(AttributeSetToFalseWarning(validation))

@@ -50,6 +50,7 @@ conda install -c conda-forge notebook pyinterpolate
 
 Now you are able to run library from conda notebooks.
 
+## Older issues (Python versions <3.8)
 
 ### The libspatialindex_c.so dependency error
 

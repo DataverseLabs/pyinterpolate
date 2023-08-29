@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Experimental Variogram and Variogram Cloud classes &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Experimental Variogram and Variogram Cloud classes &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -505,10 +505,10 @@ foundation of every other complex function, from semivariogram modeling to Poiss
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">VariogramCloud</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from pyinterpolate import read_txt, ExperimentalVariogram, VariogramCloud
 </pre></div>
 </div>
 </div>
@@ -516,15 +516,15 @@ foundation of every other complex function, from semivariogram modeling to Poiss
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dem = read_txt(&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;)
 
-<span class="c1"># Take a sample</span>
-<span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">),</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">dem</span> <span class="o">=</span> <span class="n">dem</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+# Take a sample
+sample_size = int(0.05 * len(dem))
+indices = np.random.choice(len(dem), sample_size, replace=False)
+dem = dem[indices]
 
-<span class="c1"># Look into a first few lines of data</span>
-<span class="n">dem</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
+# Look into a first few lines of data
+dem[:10, :]
 </pre></div>
 </div>
 </div>
@@ -576,19 +576,19 @@ array([[2.52078128e+05, 5.36841376e+05, 4.12817497e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get max distances for a region</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Get max distances for a region
 
-<span class="n">minx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="n">maxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+minx = np.min(dem[:, 0])
+maxx = np.max(dem[:, 0])
 
-<span class="n">miny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">maxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+miny = np.min(dem[:, 1])
+maxy = np.max(dem[:, 1])
 
-<span class="n">x_max_distance</span> <span class="o">=</span> <span class="n">maxx</span> <span class="o">-</span> <span class="n">minx</span>
-<span class="n">y_max_distance</span> <span class="o">=</span> <span class="n">maxy</span> <span class="o">-</span> <span class="n">miny</span>
+x_max_distance = maxx - minx
+y_max_distance = maxy - miny
 
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max lon distance:&#39;</span><span class="p">,</span> <span class="n">x_max_distance</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max lat distance:&#39;</span><span class="p">,</span> <span class="n">y_max_distance</span><span class="p">)</span>
+print(&#39;Max lon distance:&#39;, x_max_distance)
+print(&#39;Max lat distance:&#39;, y_max_distance)
 </pre></div>
 </div>
 </div>
@@ -607,14 +607,14 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">18000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">100</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_range = 18000
+step_size = 100
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range
+)
 </pre></div>
 </div>
 </div>
@@ -623,7 +623,7 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>experimental_variogram.plot()
 </pre></div>
 </div>
 </div>
@@ -641,10 +641,10 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_ds</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">_ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">_ds</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>_ds = experimental_variogram.experimental_semivariance_array
+plt.figure()
+plt.scatter(x=_ds[:, 0], y=_ds[:, -1])
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -660,16 +660,16 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">12500</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">250</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_range = 12500
+step_size = 250
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range
+)
 
-<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+experimental_variogram.plot()
 </pre></div>
 </div>
 </div>
@@ -685,16 +685,16 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">12500</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>max_range = 12500
+step_size = 500
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range
+)
 
-<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+experimental_variogram.plot()
 </pre></div>
 </div>
 </div>
@@ -721,10 +721,10 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>experimental_variogram.plot(
+    plot_semivariance=True,
+    plot_covariance=True,
+    plot_variance=True)
 </pre></div>
 </div>
 </div>
@@ -760,24 +760,24 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.1</span>
-<span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;e&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>direction = 0
+tolerance = 0.1
+method = &#39;e&#39;
 
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="n">method</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range,
+    direction=direction,
+    tolerance=tolerance,
+    method=method
+)
 
-<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+experimental_variogram.plot(
+    plot_semivariance=True,
+    plot_covariance=True,
+    plot_variance=True)
 </pre></div>
 </div>
 </div>
@@ -801,21 +801,21 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">90</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>direction = 90
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
-    <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
-    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-    <span class="n">method</span><span class="o">=</span><span class="n">method</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range,
+    direction=direction,
+    tolerance=tolerance,
+    method=method
+)
 
-<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+experimental_variogram.plot(
+    plot_semivariance=True,
+    plot_covariance=True,
+    plot_variance=True)
 </pre></div>
 </div>
 </div>
@@ -862,11 +862,11 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>variogram_cloud = VariogramCloud(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range
+)
 </pre></div>
 </div>
 </div>
@@ -875,7 +875,7 @@ Max lat distance: 24485.55675668642
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>variogram_cloud.plot(kind=&#39;box&#39;)
 </pre></div>
 </div>
 </div>
@@ -900,7 +900,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>variogram_cloud.plot(kind=&#39;violin&#39;)
 </pre></div>
 </div>
 </div>
@@ -925,7 +925,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>variogram_cloud.describe()
 </pre></div>
 </div>
 </div>
@@ -1206,7 +1206,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>desc = pd.DataFrame(variogram_cloud.describe())
 </pre></div>
 </div>
 </div>
@@ -1214,7 +1214,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>desc
 </pre></div>
 </div>
 </div>
@@ -1541,16 +1541,16 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-calculate experimental variogram</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Re-calculate experimental variogram
 
-<span class="n">max_range</span> <span class="o">=</span> <span class="mi">12500</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+max_range = 12500
+step_size = 500
 
-<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
-    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
-    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
-<span class="p">)</span>
+experimental_variogram = ExperimentalVariogram(
+    input_array=dem,
+    step_size=step_size,
+    max_range=max_range
+)
 </pre></div>
 </div>
 </div>
@@ -1558,14 +1558,14 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
-         <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;avg semivariance&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;ExperimentalVariogram output&#39;</span><span class="p">,</span> <span class="s1">&#39;Average semivariance from VariogramCloud&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.figure()
+plt.plot(experimental_variogram.experimental_semivariance_array[:, 0],
+         experimental_variogram.experimental_semivariance_array[:, 1])
+plt.plot(desc.loc[&#39;avg semivariance&#39;])
+plt.legend([&#39;ExperimentalVariogram output&#39;, &#39;Average semivariance from VariogramCloud&#39;])
+plt.show()
 </pre></div>
 </div>
 </div>
@@ -1582,7 +1582,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span> <span class="o">=</span> <span class="n">variogram_cloud</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_variogram_cloud = variogram_cloud.remove_outliers(method=&#39;iqr&#39;, iqr_lower_limit=3, iqr_upper_limit=2)
 </pre></div>
 </div>
 </div>
@@ -1591,7 +1591,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>new_variogram_cloud.plot(kind=&#39;violin&#39;)
 </pre></div>
 </div>
 </div>
@@ -1616,16 +1616,16 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
-<span class="n">exp_var_from_point_cloud</span> <span class="o">=</span> <span class="n">new_variogram_cloud</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Plot
+exp_var_from_point_cloud = new_variogram_cloud.calculate_experimental_variogram()
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
-         <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_var_from_point_cloud</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
-         <span class="n">exp_var_from_point_cloud</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;ExperimentalVariogram output&#39;</span><span class="p">,</span> <span class="s1">&#39;Average semivariance from VariogramCloud&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+plt.figure()
+plt.plot(experimental_variogram.experimental_semivariance_array[:, 0],
+         experimental_variogram.experimental_semivariance_array[:, 1])
+plt.plot(exp_var_from_point_cloud[:, 0],
+         exp_var_from_point_cloud[:, 1])
+plt.legend([&#39;ExperimentalVariogram output&#39;, &#39;Average semivariance from VariogramCloud&#39;])
+plt.show()
 </pre></div>
 </div>
 </div>

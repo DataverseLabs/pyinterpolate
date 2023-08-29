@@ -27,6 +27,7 @@ from pyinterpolate.variogram.regularization.block.block_to_block_semivariance im
     calculate_block_to_block_semivariance
 
 
+# noinspection PyTypeChecker
 class AggregatedVariogram:
     """
     Class calculates semivariance of aggregated counts.
@@ -469,7 +470,7 @@ class AggregatedVariogram:
         theoretical_model.autofit(
             experimental_variogram=self.experimental_variogram,
             nugget=self.agg_nugget,
-            model_types='all',
+            model_name='all',
             deviation_weighting=self.weighting_method
         )
 

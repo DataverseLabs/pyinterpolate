@@ -239,7 +239,7 @@ class IndicatorVariograms:
         self.theoretical_indicator_variograms = {}
 
     def fit(self,
-            model_type: str = 'linear',
+            model_name: str = 'linear',
             nugget=0,
             rang=None,
             min_range=0.1,
@@ -260,10 +260,11 @@ class IndicatorVariograms:
 
         Parameters
         ----------
-        model_type : str, default = "linear"
+        model_name : str, default = "linear"
             The name of a modeling function. Available models:
 
-            - 'basic' : linear and spherical models are tested,
+            - 'all',
+            - 'safe' : linear, power and spherical models,
             - 'exponential',
             - 'gaussian',
             - 'linear',
@@ -328,21 +329,6 @@ class IndicatorVariograms:
         verbose : bool, default = False
             Show iteration results.
 
-
-        Returns
-        -------
-        model_attributes : Dict
-            Attributes dict:
-
-            >>> {
-            ...     'model_type': model_name,
-            ...     'sill': model_sill,
-            ...     'range': model_range,
-            ...     'nugget': model_nugget,
-            ...     'error_type': type_of_error_metrics,
-            ...     'error value': error_value
-            ... }
-
         Warns
         -----
         SillOutsideSafeRangeWarning
@@ -371,13 +357,10 @@ class IndicatorVariograms:
 
         experimental_models = self.experimental_indicator_variogram.experimental_models
 
-        if model_type == 'basic':
-            model_type = ['linear', 'spherical']
-
         for idx, experimental in experimental_models.items():
             theo = TheoreticalVariogram()
             theo.autofit(experimental_variogram=experimental,
-                         model_types=model_type,
+                         model_name=model_name,
                          nugget=nugget,
                          rang=rang,
                          min_range=min_range,
@@ -409,7 +392,11 @@ class IndicatorVariograms:
 
         if subplots:
             number_of_subplots = len(list(self.theoretical_indicator_variograms.keys()))
-            fig, axes = plt.subplots(number_of_subplots, sharey=True, sharex=True, constrained_layout=True)
+            # noinspection PyTypeChecker
+            fig, axes = plt.subplots(number_of_subplots,
+                                     sharey=True,
+                                     sharex=True,
+                                     constrained_layout=True)
             idx_val = 0
             for _key, _item in self.theoretical_indicator_variograms.items():
                 axes[idx_val].scatter(_item.experimental_array[:, 0],

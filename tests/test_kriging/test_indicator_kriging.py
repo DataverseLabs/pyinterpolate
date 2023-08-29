@@ -5,11 +5,11 @@ import numpy as np
 
 from pyinterpolate import read_txt, ExperimentalIndicatorVariogram, IndicatorVariograms, IndicatorKriging
 
-
 DEM = read_txt('samples/point_data/txt/pl_dem_epsg2180.txt')
 
 STEP_R = 500  # meters
 MX_RNG = 10000  # meters
+
 
 # Divide data into training and test sets
 def create_train_test(dataset: np.ndarray, training_set_ratio=0.3):
@@ -46,9 +46,10 @@ EVARIOGRAM = ExperimentalIndicatorVariogram(input_array=TRAIN,
 
 VARIOGRAMS = IndicatorVariograms(experimental_indicator_variogram=EVARIOGRAM)
 VARIOGRAMS.fit(
-    model_type='basic',
+    model_name='safe',
     verbose=False
 )
+
 
 class TestIndicatorKriging(unittest.TestCase):
 

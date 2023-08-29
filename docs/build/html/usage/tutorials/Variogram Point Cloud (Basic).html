@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Variogram Point Cloud &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Variogram Point Cloud &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -543,10 +543,10 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
 
-<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">calc_point_to_point_distance</span><span class="p">,</span> <span class="n">VariogramCloud</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">calculate_semivariance</span>
+from pyinterpolate import Blocks, read_txt, calc_point_to_point_distance, VariogramCloud
+from pyinterpolate.variogram.empirical.experimental_variogram import calculate_semivariance
 </pre></div>
 </div>
 </div>
@@ -557,7 +557,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>dem = read_txt(&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;)
 </pre></div>
 </div>
 </div>
@@ -565,13 +565,13 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
-<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">),</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">dem</span> <span class="o">=</span> <span class="n">dem</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>sample_size = int(0.05 * len(dem))
+indices = np.random.choice(len(dem), sample_size, replace=False)
+dem = dem[indices]
 
-<span class="c1"># Look into a first few lines of data</span>
+# Look into a first few lines of data
 
-<span class="n">dem</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
+dem[:10, :]
 </pre></div>
 </div>
 </div>
@@ -601,16 +601,16 @@ array([[2.39999210e+05, 5.53113167e+05, 6.43657227e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create analysis parameters
 
-<span class="c1"># Check max distance between points</span>
-<span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+# Check max distance between points
+distances = calc_point_to_point_distance(dem[:, :-1])
+maximum_range = np.max(distances) / 2
 
-<span class="n">number_of_lags</span> <span class="o">=</span> <span class="mi">16</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="n">maximum_range</span> <span class="o">/</span> <span class="n">number_of_lags</span>
+number_of_lags = 16
+step_size = maximum_range / number_of_lags
 
-<span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+vc = VariogramCloud(input_array=dem, step_size=step_size, max_range=maximum_range)
 </pre></div>
 </div>
 </div>
@@ -619,8 +619,8 @@ array([[2.39999210e+05, 5.53113167e+05, 6.43657227e+01],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lag </span><span class="si">{</span><span class="n">_lag</span><span class="si">}</span><span class="s1"> has </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">points_per_lag</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> point pairs.&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for idx, _lag in enumerate(vc.lags):
+    print(f&#39;Lag {_lag} has {vc.points_per_lag[idx]} point pairs.&#39;)
 </pre></div>
 </div>
 </div>
@@ -658,7 +658,7 @@ Lag 13351.076921987915 has 6174 point pairs.
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;scatter&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vc.plot(&#39;scatter&#39;)
 </pre></div>
 </div>
 </div>
@@ -683,7 +683,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vc.plot(&#39;box&#39;)
 </pre></div>
 </div>
 </div>
@@ -715,7 +715,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vc.plot(&#39;violin&#39;)
 </pre></div>
 </div>
 </div>
@@ -745,20 +745,20 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read and prepare data</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Read and prepare data
 
-<span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
-<span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">400000</span>
-<span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">40000</span>
+DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+POLYGON_LAYER = &#39;areas&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
+MAX_RANGE = 400000
+STEP_SIZE = 40000
 
-<span class="n">AREAL_INPUT</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+AREAL_INPUT = Blocks()
+AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+AREAL_INPUT.data.head()
 </pre></div>
 </div>
 </div>
@@ -841,7 +841,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">cx</span><span class="p">,</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">cy</span><span class="p">,</span> <span class="n">AREAL_INPUT</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>areal_centroids = AREAL_INPUT.data[[AREAL_INPUT.cx, AREAL_INPUT.cy, AREAL_INPUT.value_column_name]].values
 </pre></div>
 </div>
 </div>
@@ -849,17 +849,17 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create analysis parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Create analysis parameters
 
-<span class="c1"># Check max distance between points</span>
+# Check max distance between points
 
-<span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+distances = calc_point_to_point_distance(areal_centroids[:, :-1])
+maximum_range = np.max(distances) / 2
 
-<span class="n">number_of_lags</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="n">maximum_range</span> <span class="o">/</span> <span class="n">number_of_lags</span>
+number_of_lags = 8
+step_size = maximum_range / number_of_lags
 
-<span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+vc = VariogramCloud(input_array=areal_centroids, step_size=step_size, max_range=maximum_range)
 </pre></div>
 </div>
 </div>
@@ -867,7 +867,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>vc.plot(&#39;violin&#39;)
 </pre></div>
 </div>
 </div>
@@ -891,8 +891,8 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">_lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">vc</span><span class="o">.</span><span class="n">lags</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lag </span><span class="si">{</span><span class="n">_lag</span><span class="si">}</span><span class="s1"> has </span><span class="si">{</span><span class="n">vc</span><span class="o">.</span><span class="n">points_per_lag</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="si">}</span><span class="s1"> point pairs.&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>for idx, _lag in enumerate(vc.lags):
+    print(f&#39;Lag {_lag} has {vc.points_per_lag[idx]} point pairs.&#39;)
 </pre></div>
 </div>
 </div>
@@ -926,7 +926,7 @@ distribution, and its skewness.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cvc = vc.remove_outliers(method=&#39;iqr&#39;, iqr_lower_limit=3, iqr_upper_limit=2, inplace=False)
 </pre></div>
 </div>
 </div>
@@ -934,7 +934,7 @@ distribution, and its skewness.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>cvc.plot(&#39;violin&#39;)
 </pre></div>
 </div>
 </div>
@@ -963,8 +963,8 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_variogram_from_points</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
-<span class="n">exp_variogram_from_p_cloud</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>exp_variogram_from_points = calculate_semivariance(areal_centroids, step_size=step_size, max_range=maximum_range)
+exp_variogram_from_p_cloud = vc.calculate_experimental_variogram()
 </pre></div>
 </div>
 </div>
@@ -972,7 +972,7 @@ True
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">array_equal</span><span class="p">(</span><span class="n">exp_variogram_from_points</span><span class="p">,</span> <span class="n">exp_variogram_from_p_cloud</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>np.array_equal(exp_variogram_from_points, exp_variogram_from_p_cloud)
 </pre></div>
 </div>
 </div>

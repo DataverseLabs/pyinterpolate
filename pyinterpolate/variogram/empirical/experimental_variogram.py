@@ -95,7 +95,12 @@ class DirectionalVariogram:
         Plot all variograms on a single plot.
     """
 
-    def __init__(self, input_array: np.array, step_size: float, max_range: float, weights=None, tolerance: float = 0.2,
+    def __init__(self,
+                 input_array: np.ndarray,
+                 step_size: float,
+                 max_range: float,
+                 weights=None,
+                 tolerance: float = 0.2,
                  method='t'):
 
         self.ds = input_array
@@ -203,7 +208,7 @@ class ExperimentalVariogram:
     weights : numpy array, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), default=None
+    direction : float (in range [0, 360]), optional
         Direction of semivariogram, values from 0 to 360 degrees:
         
         - 0 or 180: is E-W,
@@ -211,7 +216,7 @@ class ExperimentalVariogram:
         - 45 or 225 is NE-SW,
         - 135 or 315 is NW-SE.
 
-    tolerance : float (in range [0, 1]), default=1
+    tolerance : float (in range [0, 1]), default = 1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
         the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
@@ -390,7 +395,7 @@ class ExperimentalVariogram:
                 self.lags = self.experimental_covariance_array[:, 0]
                 self.points_per_lag = self.experimental_covariance_array[:, 2]
 
-    def plot(self, plot_semivariance=True, plot_covariance=False, plot_variance=False) -> None:
+    def plot(self, plot_semivariance=True, plot_covariance=True, plot_variance=True) -> None:
         """
 
         Parameters
@@ -404,8 +409,7 @@ class ExperimentalVariogram:
             is not plotted and warning is printed.
 
         plot_variance : bool, default=True
-            Show variance level on a plot. If class attribute ``is_variance`` is set to ``False`` then variance is
-            not plotted and warning is printed.
+            Show variance level on a plot.
 
         Warns
         -----
@@ -418,8 +422,7 @@ class ExperimentalVariogram:
         validate_plot_attributes_for_experimental_variogram_class(is_semivar=self.__c_sem,
                                                                   is_covar=self.__c_cov,
                                                                   plot_semivar=plot_semivariance,
-                                                                  plot_covar=plot_covariance,
-                                                                  plot_var=plot_variance)
+                                                                  plot_covar=plot_covariance)
 
         # Plot
         # Cmap - 3 class Set2 https://colorbrewer2.org/#type=qualitative&scheme=Set2&n=3
@@ -553,7 +556,7 @@ def build_experimental_variogram(input_array: np.array,
     weights : numpy array or None, optional, default=None
         Weights assigned to points, index of weight must be the same as index of point.
 
-    direction : float (in range [0, 360]), default = None
+    direction : float (in range [0, 360]), optional
         Direction of semivariogram, values from 0 to 360 degrees:
         
         - 0 or 180: is E-W,
@@ -561,7 +564,7 @@ def build_experimental_variogram(input_array: np.array,
         - 45 or 225 is NE-SW,
         - 135 or 315 is NW-SE.
 
-    tolerance : float (in range [0, 1]), optional, default=1
+    tolerance : float (in range [0, 1]), default = 1
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
         the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line

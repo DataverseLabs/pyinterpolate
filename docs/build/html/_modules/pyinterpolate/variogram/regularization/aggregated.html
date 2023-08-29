@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.regularization.aggregated &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.regularization.aggregated &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -447,6 +447,7 @@ document.write(`
     <span class="n">calculate_block_to_block_semivariance</span>
 
 
+<span class="c1"># noinspection PyTypeChecker</span>
 <div class="viewcode-block" id="AggregatedVariogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a><span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates semivariance of aggregated counts.</span>
@@ -889,7 +890,7 @@ document.write(`
         <span class="n">theoretical_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
             <span class="n">experimental_variogram</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_nugget</span><span class="p">,</span>
-            <span class="n">model_types</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
             <span class="n">deviation_weighting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span>
         <span class="p">)</span>
 

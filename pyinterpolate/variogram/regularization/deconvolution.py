@@ -208,6 +208,7 @@ class Deconvolution:
         self.ranges = None
         self.tolerance = None
         self.weighting_method = None
+        self.model_name = None
         self.model_types = None
 
         # Deviation and weights
@@ -257,7 +258,8 @@ class Deconvolution:
             agg_direction: float = None,
             agg_tolerance: float = 1,
             variogram_weighting_method: str = "closest",
-            model_types: Union[str, List] = 'basic') -> None:
+            model_name: str = 'safe',
+            model_types: List = None) -> None:
         """
         Function fits given areal data variogram into point support variogram - it is the first step of regularization
         process.
@@ -315,19 +317,21 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
-        model_types : str or List, default='basic'
-            List of modeling functions or a name of a single function. Available models:
+        model_name : str, default='safe'
+            The name of the model to check or special command for multiple models. Available models:
 
             - 'all' - the same as list with all models,
-            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'safe' - ['linear', 'power', 'spherical'],
             - 'circular',
             - 'cubic',
             - 'exponential',
             - 'gaussian',
             - 'linear',
             - 'power',
-            - 'spherical',
-            - or a different set of the above.
+            - 'spherical'.
+
+        model_types : List, default = None
+            The list with model names to check excluding 'all' and 'safe' names.
         """
 
         if self.verbose:
@@ -345,7 +349,8 @@ class Deconvolution:
             self.direction = float(agg_direction)
         self.tolerance = float(agg_tolerance)
         self.weighting_method = variogram_weighting_method
-        self.model_types = self._parse_model_types(model_types)
+        self.model_name = model_name
+        self.model_types = model_types
 
         # Compute experimental variogram of areal data
         areal_centroids = get_areal_centroids_from_agg(self.agg)
@@ -363,6 +368,7 @@ class Deconvolution:
         theo_model_agg.autofit(
             self.initial_experimental_variogram,
             nugget=self.agg_nugget,
+            model_name=self.model_name,
             model_types=self.model_types,
             deviation_weighting=self.weighting_method
         )
@@ -477,6 +483,7 @@ class Deconvolution:
                 temp_theoretical_semivariogram_model = TheoreticalVariogram()
                 temp_theoretical_semivariogram_model.autofit(
                     self._rescaled_to_exp_variogram(rescaled_experimental_variogram),
+                    model_name=self.model_name,
                     model_types=self.model_types,
                     rang=self.initial_theoretical_agg_model.rang,
                     nugget=self.agg_nugget,
@@ -536,7 +543,8 @@ class Deconvolution:
                       agg_direction: float = None,
                       agg_tolerance: float = 1,
                       variogram_weighting_method: str = "closest",
-                      model_types: Union[str, List] = 'basic',
+                      model_name: str = 'safe',
+                      model_types: List = None,
                       max_iters=25,
                       limit_deviation_ratio=0.1,
                       minimum_deviation_decrease=0.01,
@@ -597,19 +605,21 @@ class Deconvolution:
             - **distant**: lags that are further away have bigger weights,
             - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
 
-        model_types : str or List, default='basic'
-            List of modeling functions or a name of a single function. Available models:
+        model_name : str, default='safe'
+            The name of the model to check or special command for multiple models. Available models:
 
             - 'all' - the same as list with all models,
-            - 'basic' - ['exponential', 'linear', 'power', 'spherical'],
+            - 'safe' - ['linear', 'power', 'spherical'],
             - 'circular',
             - 'cubic',
             - 'exponential',
             - 'gaussian',
             - 'linear',
             - 'power',
-            - 'spherical',
-            - or a different set of the above.
+            - 'spherical'.
+
+        model_types : List, default = None
+            The list with model names to check excluding 'all' and 'safe' names.
 
         max_iters : int, default = 25
             Maximum number of iterations.
@@ -634,6 +644,7 @@ class Deconvolution:
                  agg_direction=agg_direction,
                  agg_tolerance=agg_tolerance,
                  variogram_weighting_method=variogram_weighting_method,
+                 model_name=model_name,
                  model_types=model_types)
 
         self.transform(max_iters=max_iters,
@@ -767,50 +778,6 @@ class Deconvolution:
             return True
         return False
 
-    @staticmethod
-    def _parse_model_types(model_types):
-        """
-        The first level check and parser for model types.
-
-        Parameters
-        ----------
-        model_types : List or str
-
-        Returns
-        -------
-        mtypes : List
-        """
-
-        all_models = [
-                    'circular',
-                    'cubic',
-                    'exponential',
-                    'gaussian',
-                    'linear',
-                    'power',
-                    'spherical'
-        ]
-
-        basic_models = [
-            'exponential',
-            'linear',
-            'power',
-            'spherical'
-        ]
-
-        if isinstance(model_types, str):
-            if model_types == 'all':
-                return all_models
-            elif model_types == 'basic':
-                return basic_models
-            else:
-                return [model_types]
-
-        elif isinstance(model_types, Collection):
-            return model_types
-
-        else:
-            raise TypeError('Unknown Type of the input, model_types parameter takes str or List as an input.')
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
         """

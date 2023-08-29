@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.regularization.deconvolution &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.regularization.deconvolution &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -628,6 +628,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_types</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Deviation and weights</span>
@@ -677,7 +678,8 @@ document.write(`
             <span class="n">agg_direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">agg_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
             <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;closest&quot;</span><span class="p">,</span>
-            <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;basic&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+            <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function fits given areal data variogram into point support variogram - it is the first step of regularization</span>
 <span class="sd">        process.</span>
@@ -735,19 +737,21 @@ document.write(`
 <span class="sd">            - **distant**: lags that are further away have bigger weights,</span>
 <span class="sd">            - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
 
-<span class="sd">        model_types : str or List, default=&#39;basic&#39;</span>
-<span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
+<span class="sd">        model_name : str, default=&#39;safe&#39;</span>
+<span class="sd">            The name of the model to check or special command for multiple models. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
-<span class="sd">            - &#39;basic&#39; - [&#39;exponential&#39;, &#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
 <span class="sd">            - &#39;gaussian&#39;,</span>
 <span class="sd">            - &#39;linear&#39;,</span>
 <span class="sd">            - &#39;power&#39;,</span>
-<span class="sd">            - &#39;spherical&#39;,</span>
-<span class="sd">            - or a different set of the above.</span>
+<span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        model_types : List, default = None</span>
+<span class="sd">            The list with model names to check excluding &#39;all&#39; and &#39;safe&#39; names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -765,7 +769,8 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">agg_direction</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">agg_tolerance</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span> <span class="o">=</span> <span class="n">variogram_weighting_method</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model_types</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_model_types</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_types</span> <span class="o">=</span> <span class="n">model_types</span>
 
         <span class="c1"># Compute experimental variogram of areal data</span>
         <span class="n">areal_centroids</span> <span class="o">=</span> <span class="n">get_areal_centroids_from_agg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg</span><span class="p">)</span>
@@ -783,6 +788,7 @@ document.write(`
         <span class="n">theo_model_agg</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">initial_experimental_variogram</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_nugget</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
             <span class="n">model_types</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_types</span><span class="p">,</span>
             <span class="n">deviation_weighting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span>
         <span class="p">)</span>
@@ -897,6 +903,7 @@ document.write(`
                 <span class="n">temp_theoretical_semivariogram_model</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
                 <span class="n">temp_theoretical_semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_rescaled_to_exp_variogram</span><span class="p">(</span><span class="n">rescaled_experimental_variogram</span><span class="p">),</span>
+                    <span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
                     <span class="n">model_types</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_types</span><span class="p">,</span>
                     <span class="n">rang</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_theoretical_agg_model</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
                     <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_nugget</span><span class="p">,</span>
@@ -956,7 +963,8 @@ document.write(`
                       <span class="n">agg_direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="n">agg_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
                       <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;closest&quot;</span><span class="p">,</span>
-                      <span class="n">model_types</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;basic&#39;</span><span class="p">,</span>
+                      <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+                      <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                       <span class="n">max_iters</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
                       <span class="n">limit_deviation_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                       <span class="n">minimum_deviation_decrease</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
@@ -1017,19 +1025,21 @@ document.write(`
 <span class="sd">            - **distant**: lags that are further away have bigger weights,</span>
 <span class="sd">            - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
 
-<span class="sd">        model_types : str or List, default=&#39;basic&#39;</span>
-<span class="sd">            List of modeling functions or a name of a single function. Available models:</span>
+<span class="sd">        model_name : str, default=&#39;safe&#39;</span>
+<span class="sd">            The name of the model to check or special command for multiple models. Available models:</span>
 
 <span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
-<span class="sd">            - &#39;basic&#39; - [&#39;exponential&#39;, &#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
 <span class="sd">            - &#39;circular&#39;,</span>
 <span class="sd">            - &#39;cubic&#39;,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
 <span class="sd">            - &#39;gaussian&#39;,</span>
 <span class="sd">            - &#39;linear&#39;,</span>
 <span class="sd">            - &#39;power&#39;,</span>
-<span class="sd">            - &#39;spherical&#39;,</span>
-<span class="sd">            - or a different set of the above.</span>
+<span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        model_types : List, default = None</span>
+<span class="sd">            The list with model names to check excluding &#39;all&#39; and &#39;safe&#39; names.</span>
 
 <span class="sd">        max_iters : int, default = 25</span>
 <span class="sd">            Maximum number of iterations.</span>
@@ -1054,6 +1064,7 @@ document.write(`
                  <span class="n">agg_direction</span><span class="o">=</span><span class="n">agg_direction</span><span class="p">,</span>
                  <span class="n">agg_tolerance</span><span class="o">=</span><span class="n">agg_tolerance</span><span class="p">,</span>
                  <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="n">variogram_weighting_method</span><span class="p">,</span>
+                 <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
                  <span class="n">model_types</span><span class="o">=</span><span class="n">model_types</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="n">max_iters</span><span class="p">,</span>
@@ -1187,50 +1198,6 @@ document.write(`
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_parse_model_types</span><span class="p">(</span><span class="n">model_types</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        The first level check and parser for model types.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        model_types : List or str</span>
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        mtypes : List</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">all_models</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-                    <span class="s1">&#39;spherical&#39;</span>
-        <span class="p">]</span>
-
-        <span class="n">basic_models</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;power&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;spherical&#39;</span>
-        <span class="p">]</span>
-
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">all_models</span>
-            <span class="k">elif</span> <span class="n">model_types</span> <span class="o">==</span> <span class="s1">&#39;basic&#39;</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">basic_models</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">[</span><span class="n">model_types</span><span class="p">]</span>
-
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_types</span><span class="p">,</span> <span class="n">Collection</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">model_types</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unknown Type of the input, model_types parameter takes str or List as an input.&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_rescale_optimal_theoretical_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

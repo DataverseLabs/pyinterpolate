@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Semivariogram regularization &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Semivariogram regularization &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -547,7 +547,7 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span><span class="p">,</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">,</span> <span class="n">Deconvolution</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from pyinterpolate import build_experimental_variogram, Blocks, PointSupport, Deconvolution
 </pre></div>
 </div>
 </div>
@@ -564,14 +564,14 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
-<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/regularized_variogram.json&#39;</span>
-<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
-<span class="n">POPULATION_LAYER</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
-<span class="n">POP10</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
-<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
-<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
-<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>DATASET = &#39;samples/regularization/cancer_data.gpkg&#39;
+OUTPUT = &#39;samples/regularization/regularized_variogram.json&#39;
+POLYGON_LAYER = &#39;areas&#39;
+POPULATION_LAYER = &#39;points&#39;
+POP10 = &#39;POP10&#39;
+GEOMETRY_COL = &#39;geometry&#39;
+POLYGON_ID = &#39;FIPS&#39;
+POLYGON_VALUE = &#39;rate&#39;
 </pre></div>
 </div>
 </div>
@@ -579,19 +579,19 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">blocks</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
-<span class="n">blocks</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>blocks = Blocks()
+blocks.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
 
-<span class="n">point_support</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">()</span>
-<span class="n">point_support</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">blocks_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
-                         <span class="n">point_support_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">point_support_val_col</span><span class="o">=</span><span class="n">POP10</span><span class="p">,</span>
-                         <span class="n">blocks_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
-                         <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span>
-                         <span class="n">use_point_support_crs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                         <span class="n">point_support_layer_name</span><span class="o">=</span><span class="n">POPULATION_LAYER</span><span class="p">,</span>
-                         <span class="n">blocks_layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+point_support = PointSupport()
+point_support.from_files(point_support_data_file=DATASET,
+                         blocks_file=DATASET,
+                         point_support_geometry_col=GEOMETRY_COL,
+                         point_support_val_col=POP10,
+                         blocks_geometry_col=GEOMETRY_COL,
+                         blocks_index_col=POLYGON_ID,
+                         use_point_support_crs=True,
+                         point_support_layer_name=POPULATION_LAYER,
+                         blocks_layer_name=POLYGON_LAYER)
 </pre></div>
 </div>
 </div>
@@ -604,18 +604,18 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of areal data - this cell may be run multiple times</span>
-<span class="c1"># before you find optimal parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check experimental semivariogram of areal data - this cell may be run multiple times
+# before you find optimal parameters
 
-<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">300000</span>
-<span class="n">step_size</span> <span class="o">=</span> <span class="mi">40000</span>
+maximum_range = 300000
+step_size = 40000
 
-<span class="n">dt</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="n">blocks</span><span class="o">.</span><span class="n">cx</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">cy</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span>  <span class="c1"># x, y, val</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+dt = blocks.data[[blocks.cx, blocks.cy, blocks.value_column_name]]  # x, y, val
+exp_semivar = build_experimental_variogram(input_array=dt, step_size=step_size, max_range=maximum_range)
 
-<span class="c1"># Plot experimental semivariogram</span>
+# Plot experimental semivariogram
 
-<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+exp_semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -630,19 +630,19 @@ document.write(`
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of point data - this cell may be run multiple times</span>
-<span class="c1"># before you find optimal parameters</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check experimental semivariogram of point data - this cell may be run multiple times
+# before you find optimal parameters
 
-<span class="n">maximum_point_range</span> <span class="o">=</span> <span class="mi">300000</span>
-<span class="n">step_size_points</span> <span class="o">=</span> <span class="mi">20000</span>
+maximum_point_range = 300000
+step_size_points = 20000
 
 
-<span class="n">pt</span> <span class="o">=</span> <span class="n">point_support</span><span class="o">.</span><span class="n">point_support</span><span class="p">[[</span><span class="n">point_support</span><span class="o">.</span><span class="n">x_col</span><span class="p">,</span> <span class="n">point_support</span><span class="o">.</span><span class="n">y_col</span><span class="p">,</span> <span class="n">point_support</span><span class="o">.</span><span class="n">value_column</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+pt = point_support.point_support[[point_support.x_col, point_support.y_col, point_support.value_column]].values
+exp_semivar = build_experimental_variogram(input_array=pt, step_size=step_size, max_range=maximum_range)
 
-<span class="c1"># Plot experimental semivariogram</span>
+# Plot experimental semivariogram
 
-<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+exp_semivar.plot()
 </pre></div>
 </div>
 </div>
@@ -668,7 +668,7 @@ equal: no weighting, * <strong>closest</strong>: lags at a close range have bigg
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span> <span class="o">=</span> <span class="n">Deconvolution</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reg_mod = Deconvolution(verbose=True)
 </pre></div>
 </div>
 </div>
@@ -676,13 +676,13 @@ equal: no weighting, * <strong>closest</strong>: lags at a close range have bigg
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">agg_dataset</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
-            <span class="n">point_support_dataset</span><span class="o">=</span><span class="n">point_support</span><span class="p">,</span>
-            <span class="n">agg_step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
-            <span class="n">agg_max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">,</span>
-            <span class="n">agg_nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-            <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span>
-            <span class="n">model_types</span><span class="o">=</span><span class="s1">&#39;basic&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reg_mod.fit(agg_dataset=blocks,
+            point_support_dataset=point_support,
+            agg_step_size=step_size,
+            agg_max_range=maximum_range,
+            agg_nugget=0.,
+            variogram_weighting_method=&#39;closest&#39;,
+            model_types=&#39;basic&#39;)
 </pre></div>
 </div>
 </div>
@@ -699,9 +699,9 @@ Regularization fit process ends
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check initial experimental, theoretical and regularized semivariograms</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check initial experimental, theoretical and regularized semivariograms
 
-<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+reg_mod.plot_variograms()
 </pre></div>
 </div>
 </div>
@@ -717,7 +717,7 @@ Regularization fit process ends
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reg_mod.transform(max_iters=5)
 </pre></div>
 </div>
 </div>
@@ -745,9 +745,9 @@ Transform procedure starts
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First analyze deviation</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># First analyze deviation
 
-<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_deviations</span><span class="p">()</span>
+reg_mod.plot_deviations()
 </pre></div>
 </div>
 </div>
@@ -763,10 +763,10 @@ Transform procedure starts
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check weights - it is important to track problems with algorithm, esepcially if sum of weights is oscillating</span>
-<span class="c1"># then it may be a sign of problems with data, model or (hopefully not!) algorithm itself.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Check weights - it is important to track problems with algorithm, esepcially if sum of weights is oscillating
+# then it may be a sign of problems with data, model or (hopefully not!) algorithm itself.
 
-<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_weights</span><span class="p">()</span>
+reg_mod.plot_weights()
 </pre></div>
 </div>
 </div>
@@ -783,7 +783,7 @@ Transform procedure starts
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>reg_mod.plot_variograms()
 </pre></div>
 </div>
 </div>
@@ -802,11 +802,11 @@ Transform procedure starts
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export semivariogram to the text file. This is important step because calculations are slow...</span>
-<span class="c1"># and it is better to not repeat them.</span>
-<span class="c1"># We will use built-in method: export_model() where we pass only filename and our semivariogram</span>
-<span class="c1"># parameters are stored for other tasks.</span>
-<span class="n">reg_mod</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="s1">&#39;output/regularized_model.json&#39;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span># Export semivariogram to the text file. This is important step because calculations are slow...
+# and it is better to not repeat them.
+# We will use built-in method: export_model() where we pass only filename and our semivariogram
+# parameters are stored for other tasks.
+reg_mod.export_model(&#39;output/regularized_model.json&#39;)
 </pre></div>
 </div>
 </div>

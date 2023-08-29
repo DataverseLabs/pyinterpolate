@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.indicator.indicator_variogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.indicator.indicator_variogram &#8212; Pyinterpolate 0.5 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
   
 </a></div>
     
@@ -659,7 +659,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_indicator_variograms</span> <span class="o">=</span> <span class="p">{}</span>
 
 <div class="viewcode-block" id="IndicatorVariograms.fit"><a class="viewcode-back" href="../../../../api/variogram/indicator/indicator.html#pyinterpolate.IndicatorVariograms.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-            <span class="n">model_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
             <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
             <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">min_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
@@ -680,10 +680,11 @@ document.write(`
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        model_type : str, default = &quot;linear&quot;</span>
+<span class="sd">        model_name : str, default = &quot;linear&quot;</span>
 <span class="sd">            The name of a modeling function. Available models:</span>
 
-<span class="sd">            - &#39;basic&#39; : linear and spherical models are tested,</span>
+<span class="sd">            - &#39;all&#39;,</span>
+<span class="sd">            - &#39;safe&#39; : linear, power and spherical models,</span>
 <span class="sd">            - &#39;exponential&#39;,</span>
 <span class="sd">            - &#39;gaussian&#39;,</span>
 <span class="sd">            - &#39;linear&#39;,</span>
@@ -748,21 +749,6 @@ document.write(`
 <span class="sd">        verbose : bool, default = False</span>
 <span class="sd">            Show iteration results.</span>
 
-
-<span class="sd">        Returns</span>
-<span class="sd">        -------</span>
-<span class="sd">        model_attributes : Dict</span>
-<span class="sd">            Attributes dict:</span>
-
-<span class="sd">            &gt;&gt;&gt; {</span>
-<span class="sd">            ...     &#39;model_type&#39;: model_name,</span>
-<span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
-<span class="sd">            ...     &#39;range&#39;: model_range,</span>
-<span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
-<span class="sd">            ...     &#39;error_type&#39;: type_of_error_metrics,</span>
-<span class="sd">            ...     &#39;error value&#39;: error_value</span>
-<span class="sd">            ... }</span>
-
 <span class="sd">        Warns</span>
 <span class="sd">        -----</span>
 <span class="sd">        SillOutsideSafeRangeWarning</span>
@@ -791,13 +777,10 @@ document.write(`
 
         <span class="n">experimental_models</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_indicator_variogram</span><span class="o">.</span><span class="n">experimental_models</span>
 
-        <span class="k">if</span> <span class="n">model_type</span> <span class="o">==</span> <span class="s1">&#39;basic&#39;</span><span class="p">:</span>
-            <span class="n">model_type</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;spherical&#39;</span><span class="p">]</span>
-
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">experimental</span> <span class="ow">in</span> <span class="n">experimental_models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
             <span class="n">theo</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental</span><span class="p">,</span>
-                         <span class="n">model_types</span><span class="o">=</span><span class="n">model_type</span><span class="p">,</span>
+                         <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
                          <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>
                          <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span>
                          <span class="n">min_range</span><span class="o">=</span><span class="n">min_range</span><span class="p">,</span>
@@ -829,7 +812,11 @@ document.write(`
 
         <span class="k">if</span> <span class="n">subplots</span><span class="p">:</span>
             <span class="n">number_of_subplots</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theoretical_indicator_variograms</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-            <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">number_of_subplots</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># noinspection PyTypeChecker</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">number_of_subplots</span><span class="p">,</span>
+                                     <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">idx_val</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_indicator_variograms</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">axes</span><span class="p">[</span><span class="n">idx_val</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">_item</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>

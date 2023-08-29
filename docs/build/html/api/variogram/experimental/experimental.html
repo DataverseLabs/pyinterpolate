@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,9 +6,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Experimental &#8212; Pyinterpolate 0.4.2 documentation</title>
+    <title>Experimental &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -29,21 +28,18 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../_static/clipboard.min.js"></script>
-    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -113,7 +109,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -467,7 +463,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="experimental">
-<h1>Experimental<a class="headerlink" href="#experimental" title="Permalink to this heading">#</a></h1>
+<h1>Experimental<a class="headerlink" href="#experimental" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">build_experimental_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#build_experimental_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -490,7 +486,7 @@ document.write(`
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array or None, optional, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default = None</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
 <li><p>0 or 180: is E-W,</p></li>
 <li><p>90 or 270 is N-S,</p></li>
@@ -498,7 +494,7 @@ document.write(`
 <li><p>135 or 315 is NW-SE.</p></li>
 </ul>
 </dd>
-<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), optional, default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default = 1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
 the coordinate system and the direction given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>
 then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
 for 0 tolerance:</p>
@@ -635,7 +631,7 @@ for 0 tolerance.</p>
 </dd>
 <dt><strong>weights</strong><span class="classifier">numpy array, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same as index of point.</p>
 </dd>
-<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=None</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
 <ul class="simple">
 <li><p>0 or 180: is E-W,</p></li>
 <li><p>90 or 270 is N-S,</p></li>
@@ -643,7 +639,7 @@ for 0 tolerance.</p>
 <li><p>135 or 315 is NW-SE.</p></li>
 </ul>
 </dd>
-<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default = 1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with the beginning in the origin of
 the coordinate system and the direction given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code>
 then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
 for 0 tolerance.</p>
@@ -763,7 +759,7 @@ for each distance bin) and if the semivariogram has the upper bound.</p>
 </table>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#ExperimentalVariogram.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">plot_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyinterpolate/variogram/empirical/experimental_variogram.html#ExperimentalVariogram.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -773,8 +769,7 @@ not plotted and warning is printed.</p>
 <dt><strong>plot_covariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show covariance on a plot. If class attribute <code class="docutils literal notranslate"><span class="pre">is_covariance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then covariance
 is not plotted and warning is printed.</p>
 </dd>
-<dt><strong>plot_variance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show variance level on a plot. If class attribute <code class="docutils literal notranslate"><span class="pre">is_variance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then variance is
-not plotted and warning is printed.</p>
+<dt><strong>plot_variance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show variance level on a plot.</p>
 </dd>
 </dl>
 </dd>
@@ -1094,7 +1089,7 @@ nothing. Else new VariogramCloud object is returned.</p>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>

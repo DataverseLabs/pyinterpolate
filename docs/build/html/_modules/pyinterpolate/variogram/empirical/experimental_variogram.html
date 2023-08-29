@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.experimental_variogram &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.empirical.experimental_variogram &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -28,21 +27,18 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../_static/clipboard.min.js"></script>
-    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/empirical/experimental_variogram';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -108,7 +104,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -515,7 +511,12 @@ document.write(`
 <span class="sd">        Plot all variograms on a single plot.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">input_array</span>
@@ -603,7 +604,9 @@ document.write(`
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="ExperimentalVariogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram">[docs]</a><span class="k">class</span> <span class="nc">ExperimentalVariogram</span><span class="p">:</span>
+<div class="viewcode-block" id="ExperimentalVariogram">
+<a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram">[docs]</a>
+<span class="k">class</span> <span class="nc">ExperimentalVariogram</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates Experimental Semivariogram and Experimental Covariogram of a given dataset.</span>
 
@@ -623,7 +626,7 @@ document.write(`
 <span class="sd">    weights : numpy array, default=None</span>
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
-<span class="sd">    direction : float (in range [0, 360]), default=None</span>
+<span class="sd">    direction : float (in range [0, 360]), optional</span>
 <span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
 <span class="sd">        </span>
 <span class="sd">        - 0 or 180: is E-W,</span>
@@ -631,7 +634,7 @@ document.write(`
 <span class="sd">        - 45 or 225 is NE-SW,</span>
 <span class="sd">        - 135 or 315 is NW-SE.</span>
 
-<span class="sd">    tolerance : float (in range [0, 1]), default=1</span>
+<span class="sd">    tolerance : float (in range [0, 1]), default = 1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
 <span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0``</span>
 <span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
@@ -810,7 +813,9 @@ document.write(`
                 <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_covariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">points_per_lag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_covariance_array</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
-<div class="viewcode-block" id="ExperimentalVariogram.plot"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ExperimentalVariogram.plot">
+<a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.ExperimentalVariogram.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">plot_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Parameters</span>
@@ -824,8 +829,7 @@ document.write(`
 <span class="sd">            is not plotted and warning is printed.</span>
 
 <span class="sd">        plot_variance : bool, default=True</span>
-<span class="sd">            Show variance level on a plot. If class attribute ``is_variance`` is set to ``False`` then variance is</span>
-<span class="sd">            not plotted and warning is printed.</span>
+<span class="sd">            Show variance level on a plot.</span>
 
 <span class="sd">        Warns</span>
 <span class="sd">        -----</span>
@@ -838,8 +842,7 @@ document.write(`
         <span class="n">validate_plot_attributes_for_experimental_variogram_class</span><span class="p">(</span><span class="n">is_semivar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_sem</span><span class="p">,</span>
                                                                   <span class="n">is_covar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_cov</span><span class="p">,</span>
                                                                   <span class="n">plot_semivar</span><span class="o">=</span><span class="n">plot_semivariance</span><span class="p">,</span>
-                                                                  <span class="n">plot_covar</span><span class="o">=</span><span class="n">plot_covariance</span><span class="p">,</span>
-                                                                  <span class="n">plot_var</span><span class="o">=</span><span class="n">plot_variance</span><span class="p">)</span>
+                                                                  <span class="n">plot_covar</span><span class="o">=</span><span class="n">plot_covariance</span><span class="p">)</span>
 
         <span class="c1"># Plot</span>
         <span class="c1"># Cmap - 3 class Set2 https://colorbrewer2.org/#type=qualitative&amp;scheme=Set2&amp;n=3</span>
@@ -862,6 +865,7 @@ document.write(`
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
 
     <span class="k">def</span> <span class="nf">_calculate_covariance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -946,7 +950,10 @@ document.write(`
         <span class="k">return</span> <span class="n">rows</span></div>
 
 
-<div class="viewcode-block" id="build_experimental_variogram"><a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.build_experimental_variogram">[docs]</a><span class="k">def</span> <span class="nf">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+
+<div class="viewcode-block" id="build_experimental_variogram">
+<a class="viewcode-back" href="../../../../api/variogram/experimental/experimental.html#pyinterpolate.build_experimental_variogram">[docs]</a>
+<span class="k">def</span> <span class="nf">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
                                  <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                  <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                                  <span class="n">weights</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -973,7 +980,7 @@ document.write(`
 <span class="sd">    weights : numpy array or None, optional, default=None</span>
 <span class="sd">        Weights assigned to points, index of weight must be the same as index of point.</span>
 
-<span class="sd">    direction : float (in range [0, 360]), default = None</span>
+<span class="sd">    direction : float (in range [0, 360]), optional</span>
 <span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
 <span class="sd">        </span>
 <span class="sd">        - 0 or 180: is E-W,</span>
@@ -981,7 +988,7 @@ document.write(`
 <span class="sd">        - 45 or 225 is NE-SW,</span>
 <span class="sd">        - 135 or 315 is NW-SE.</span>
 
-<span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
+<span class="sd">    tolerance : float (in range [0, 1]), default = 1</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
 <span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``&gt; 0``</span>
 <span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
@@ -1056,6 +1063,7 @@ document.write(`
         <span class="n">is_covariance</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">semivariogram_stats</span></div>
+
 </pre></div>
 
                 </article>
@@ -1108,7 +1116,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>
