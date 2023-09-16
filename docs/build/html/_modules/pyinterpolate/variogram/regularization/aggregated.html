@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.regularization.aggregated &#8212; Pyinterpolate 0.5 documentation</title>
+    <title>pyinterpolate.variogram.regularization.aggregated &#8212; Pyinterpolate 0.5.0 documentation</title>
   
   
   
@@ -28,21 +27,18 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/sphinx_highlight.js"></script>
-    <script src="../../../../_static/clipboard.min.js"></script>
-    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/regularization/aggregated';</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
@@ -108,7 +104,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
   
 </a></div>
     
@@ -448,7 +444,9 @@ document.write(`
 
 
 <span class="c1"># noinspection PyTypeChecker</span>
-<div class="viewcode-block" id="AggregatedVariogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a><span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a>
+<span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class calculates semivariance of aggregated counts.</span>
 
@@ -626,7 +624,9 @@ document.write(`
         <span class="c1"># Model parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_inblock_semivariance"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_inblock_semivariance">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_inblock_semivariance">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_inblock_semivariance">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`. The average inblock</span>
 <span class="sd">        semivariance is calculated as:</span>
@@ -663,7 +663,10 @@ document.write(`
                                                                   <span class="n">block_max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">avg_inblock_semivariance</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_semivariance_between_blocks"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_semivariance_between_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_semivariance_between_blocks">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_semivariance_between_blocks">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function calculates semivariance between areas based on their division into smaller blocks. It is</span>
 <span class="sd">        :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.</span>
@@ -715,7 +718,10 @@ document.write(`
                                                                                <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">avg_block_to_block_semivariance</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.regularize"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize">[docs]</a>    <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+
+<div class="viewcode-block" id="AggregatedVariogram.regularize">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize">[docs]</a>
+    <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                    <span class="n">average_inblock_semivariances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                    <span class="n">semivariance_between_point_supports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">experimental_block_variogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -799,7 +805,10 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.regularize_variogram"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize_variogram">[docs]</a>    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+
+<div class="viewcode-block" id="AggregatedVariogram.regularize_variogram">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize_variogram">[docs]</a>
+    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function regularizes semivariograms.</span>
 
@@ -837,7 +846,10 @@ document.write(`
 
         <span class="k">return</span> <span class="n">reg_variogram</span></div>
 
-<div class="viewcode-block" id="AggregatedVariogram.show_semivariograms"><a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AggregatedVariogram.show_semivariograms">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Method plots:</span>
 
@@ -875,6 +887,7 @@ document.write(`
             <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
 
     <span class="k">def</span> <span class="nf">_fit_theoretical_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -917,6 +930,7 @@ document.write(`
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">gammas</span></div>
+
 
 
 <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="n">aggregated_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Blocks</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
@@ -1091,7 +1105,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
     <br/>
   </p>
 </div>

@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-09-16
+----------
+
+**version 0.5.0.post1**
+
+* (debug) `hdbscan` is removed from requirements, cluster detection algorithms are blocked, and those will be reimplemented in the closest future. The `HDBSCAN` package breaks installation of the package.
+
 2023-08-29
 ----------
 
