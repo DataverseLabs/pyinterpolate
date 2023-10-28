@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -6,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>A.2.2 Variogram Points Cloud &#8212; Pyinterpolate 0.5.0 documentation</title>
   
@@ -28,19 +29,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../../_static/documentation_options.js?v=70f82a29"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -453,9 +457,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="A.2.2-Variogram-Points-Cloud">
-<h1>A.2.2 Variogram Points Cloud<a class="headerlink" href="#A.2.2-Variogram-Points-Cloud" title="Link to this heading">#</a></h1>
+<h1>A.2.2 Variogram Points Cloud<a class="headerlink" href="#A.2.2-Variogram-Points-Cloud" title="Permalink to this heading">#</a></h1>
 <section id="Table-of-Contents">
-<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Link to this heading">#</a></h2>
+<h2>Table of Contents<a class="headerlink" href="#Table-of-Contents" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
 <li><p>Create variogram points cloud,</p></li>
@@ -464,7 +468,7 @@ document.write(`
 </ol>
 </section>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
 <p>We will learn how to read and prepare data for semivariogram modeling, manually find the best step size between lags, and detect outliers in our data.</p>
 <p>Variogram Point Cloud analysis is an additional, essential data preparation step that may save you a lot of headaches with more sophisticated analysis. You should learn about Variogram Point Cloud analysis before you move on to the semivariogram estimation and semivariogram fitting operations.</p>
 <p>We use:</p>
@@ -474,7 +478,7 @@ document.write(`
 </ul>
 </section>
 <section id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -488,7 +492,7 @@ document.write(`
 </div>
 </section>
 <section id="1)-Read-point-data">
-<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Link to this heading">#</a></h2>
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -524,7 +528,7 @@ array([[2.51837397e+05, 5.45249474e+05, 2.11946869e+01],
 </div>
 </section>
 <section id="2)-Set-proper-lag-size-with-variogram-cloud-histogram">
-<h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Link to this heading">#</a></h2>
+<h2>2) Set proper lag size with variogram cloud histogram<a class="headerlink" href="#2)-Set-proper-lag-size-with-variogram-cloud-histogram" title="Permalink to this heading">#</a></h2>
 <p>We will generate the Variogram Point Cloud. We calculate it for 16 lags and test different cloud variogram visualization methods.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -659,7 +663,7 @@ True
 <p>There is still the elephant in the room. Our data is pulled up with outliers. Do you see long whiskers on the top of every distribution? Let them be, but the better idea is to clean it before we start Kriging. In the next paragraph, we will detect and remove outliers from a block dataset.</p>
 </section>
 <section id="3)-Detect-and-remove-outliers">
-<h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Link to this heading">#</a></h2>
+<h2>3) Detect and remove outliers<a class="headerlink" href="#3)-Detect-and-remove-outliers" title="Permalink to this heading">#</a></h2>
 <p>With the idea of how the Variogram Point Cloud works, we can detect and “remove” outliers from our dataset. In this part of the tutorial, we use another dataset. It represents the breast cancer rates in counties of the Northeastern part of the U.S. Each county will be transformed into its centroid. Those centroids are not evenly spaced, and we expect the dataset may be modeled incorrectly for several steps.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -885,7 +889,7 @@ True
 <p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is 6-7 times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
 </section>
 <section id="4)-Calculate-experimental-semivariogram-from-point-cloud">
-<h2>4) Calculate experimental semivariogram from point cloud<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud" title="Link to this heading">#</a></h2>
+<h2>4) Calculate experimental semivariogram from point cloud<a class="headerlink" href="#4)-Calculate-experimental-semivariogram-from-point-cloud" title="Permalink to this heading">#</a></h2>
 <p>The last but not least property of the experimental variogram point cloud is that we may calculate the semivariogram directly from it. The method for it is <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. Let’s compare outputs from two algorithms.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
@@ -917,7 +921,7 @@ True
 <hr class="docutils" />
 </section>
 <section id="Where-to-go-from-here?">
-<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>A.2.3 Experimental Variogram and Variogram Point Cloud Classes</p></li>
 <li><p>B.1.1 Ordinary and Simple Kriging</p></li>
@@ -926,7 +930,7 @@ True
 </ul>
 </section>
 <section id="Changelog">
-<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -1095,7 +1099,7 @@ True
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     <br/>
   </p>
 </div>

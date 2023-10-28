@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -6,7 +7,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>B.1.2 Kriging Benchmarking &#8212; Pyinterpolate 0.5.0 documentation</title>
   
@@ -28,19 +29,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../../_static/documentation_options.js?v=70f82a29"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -453,9 +457,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="B.1.2-Kriging-Benchmarking">
-<h1>B.1.2 Kriging Benchmarking<a class="headerlink" href="#B.1.2-Kriging-Benchmarking" title="Link to this heading">#</a></h1>
+<h1>B.1.2 Kriging Benchmarking<a class="headerlink" href="#B.1.2-Kriging-Benchmarking" title="Permalink to this heading">#</a></h1>
 <section id="Table-of-Contents:">
-<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
 <li><p>Divide dataset into two sets: modeling and validation set,</p></li>
@@ -466,7 +470,7 @@ document.write(`
 </ol>
 </section>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
 <p>In this tutorial, we will learn how to validate our Kriging model. We’ll compare it to the <strong>Inverse Distance Weighting</strong> function, where the unknown point value is interpolated as the weighted mean of its neighbors. Weights are inversely proportional to the distance between neighboring points, dropping faster with a higher power.</p>
 <ol class="arabic simple">
 <li><p><strong>GENERAL FORM OF IDW</strong></p></li>
@@ -494,7 +498,7 @@ document.write(`
 <p>As you noticed <strong>IDW</strong> is a simple but powerful technique. Unfortunately, it has a significant drawback: <strong>we must set ``p`` - power - manually</strong>, which isn’t derived from the data and variogram. That’s why it can be used for other tasks. An example is to use IDW as a baseline for comparison to the different techniques.</p>
 </section>
 <section id="Import-packages">
-<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -511,7 +515,7 @@ document.write(`
 </div>
 </section>
 <section id="1)-Read-point-data">
-<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Link to this heading">#</a></h2>
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -534,7 +538,7 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </div>
 </section>
 <section id="2)-Divide-the-dataset-into-two-sets:-modeling-and-validation-set">
-<h2>2) Divide the dataset into two sets: modeling and validation set<a class="headerlink" href="#2)-Divide-the-dataset-into-two-sets:-modeling-and-validation-set" title="Link to this heading">#</a></h2>
+<h2>2) Divide the dataset into two sets: modeling and validation set<a class="headerlink" href="#2)-Divide-the-dataset-into-two-sets:-modeling-and-validation-set" title="Permalink to this heading">#</a></h2>
 <p>In this step, we will divide our dataset into two sets:</p>
 <ul class="simple">
 <li><p>modeling set (10%): points used for variogram modeling,</p></li>
@@ -562,7 +566,7 @@ array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
 </div>
 </section>
 <section id="3)-Perform-IDW-and-evaluate-it">
-<h2>3) Perform IDW and evaluate it<a class="headerlink" href="#3)-Perform-IDW-and-evaluate-it" title="Link to this heading">#</a></h2>
+<h2>3) Perform IDW and evaluate it<a class="headerlink" href="#3)-Perform-IDW-and-evaluate-it" title="Permalink to this heading">#</a></h2>
 <p>Inverse Distance Weighting doesn’t require variogram modeling or other steps. We pass power that affects weights in a denominator. Things to remember are:</p>
 <ul class="simple">
 <li><p>Large <code class="docutils literal notranslate"><span class="pre">power</span></code> -&gt; closer neighbors are more important,</p></li>
@@ -647,7 +651,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 </div>
 </section>
 <section id="4)-Perform-variogram-modeling-on-the-modeling-set">
-<h2>4) Perform variogram modeling on the modeling set<a class="headerlink" href="#4)-Perform-variogram-modeling-on-the-modeling-set" title="Link to this heading">#</a></h2>
+<h2>4) Perform variogram modeling on the modeling set<a class="headerlink" href="#4)-Perform-variogram-modeling-on-the-modeling-set" title="Permalink to this heading">#</a></h2>
 <p>In this step, we will go through semivariogram modeling for Kriging interpolation.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
@@ -685,7 +689,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 1.8198
 </div>
 </section>
 <section id="5)-Validate-Kriging-and-compare-Kriging-and-IDW-validation-results">
-<h2>5) Validate Kriging and compare Kriging and IDW validation results<a class="headerlink" href="#5)-Validate-Kriging-and-compare-Kriging-and-IDW-validation-results" title="Link to this heading">#</a></h2>
+<h2>5) Validate Kriging and compare Kriging and IDW validation results<a class="headerlink" href="#5)-Validate-Kriging-and-compare-Kriging-and-IDW-validation-results" title="Permalink to this heading">#</a></h2>
 <p>Lastly, we perform Kriging interpolation and compare results to the <strong>IDW</strong> models. We use all points to weight values at unknown locations and the semivariogram model we chose in the previous step.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
@@ -727,7 +731,7 @@ Root Mean Squared Error of prediction with Kriging is 1.6638061333290732
 <p><strong>Clarification</strong>: Kriging is better than any of the IDW models, and we may assume that our modeling approach gives us better insights into the spatial process we are observing. But this is not the end. Let’s consider a more complex scenario!</p>
 </section>
 <section id="6)-Bonus-scenario:-only-2%-of-values-are-known!">
-<h2>6) Bonus scenario: only 2% of values are known!<a class="headerlink" href="#6)-Bonus-scenario:-only-2%-of-values-are-known!" title="Link to this heading">#</a></h2>
+<h2>6) Bonus scenario: only 2% of values are known!<a class="headerlink" href="#6)-Bonus-scenario:-only-2%-of-values-are-known!" title="Permalink to this heading">#</a></h2>
 <p>Data sampled from the real world is less good than the sample from the tutorial. It is too expensive to densely sample every location, and usually, we get only a tiny percent of the area covered by data. That’s why it is good to compare <strong>IDW vs. Kriging</strong> in this scenario! We repeat steps 1-5 with a change in the division for the modeling/validation set. (I encourage you to try it alone and compare your code and results with those in this notebook).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
@@ -874,7 +878,7 @@ Root Mean Squared Error of prediction with Kriging is 4.8866
 <hr class="docutils" />
 </section>
 <section id="Where-to-go-from-here?">
-<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>B.1.3 Outliers and Kriging Model</p></li>
 <li><p>B.2.1 Directional Ordinary Kriging</p></li>
@@ -883,7 +887,7 @@ Root Mean Squared Error of prediction with Kriging is 4.8866
 </ul>
 </section>
 <section id="Changelog">
-<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -1038,7 +1042,7 @@ Root Mean Squared Error of prediction with Kriging is 4.8866
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     <br/>
   </p>
 </div>
