@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2023-XX-XX
+----------
+
+**version 0.5.1**
+
+* (enhancement) `interpolate_raster()` function takes `allow_approx_solutions` parameter, and it protects from `LinAlgError` that might occur if interpolation points are duplicated (due to the floating point number representation).
+
 2023-09-16
 ----------
 
