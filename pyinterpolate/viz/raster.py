@@ -130,7 +130,7 @@ def interpolate_raster(data,
     # Calculate semivariance if not provided
 
     if semivariogram_model is None:
-        distances = calc_point_to_point_distance(data[:, :-1])
+        distances = point_distance(data[:, :-1], data[:, :-1])
 
         maximum_range = np.max(distances)
         number_of_divisions = 100

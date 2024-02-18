@@ -77,7 +77,7 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     k = theoretical_model.predict(unknown_distances)
     k = k.T
 
-    dists = calc_point_to_point_distance(prepared_data[:, :2])
+    dists = point_distance(prepared_data[:, :2], prepared_data[:, :2])
 
     predicted_weights = theoretical_model.predict(dists.ravel())
     predicted = np.array(predicted_weights.reshape(n, n))

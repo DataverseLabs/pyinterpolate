@@ -60,7 +60,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     """
 
     covariances_and_lags = list()
-    distances = calc_point_to_point_distance(points[:, :-1])
+    distances = point_distance(points[:, :-1], points[:, :-1])
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)

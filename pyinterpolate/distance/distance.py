@@ -4,6 +4,8 @@ Distance calculation functions.
 Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
+
+TODO: the file will be removed in version 1.0
 """
 
 from typing import Dict, Union, Iterable
@@ -17,6 +19,8 @@ from scipy.spatial.distance import cdist
 
 from pyinterpolate.processing.preprocessing.blocks import PointSupport
 from pyinterpolate.processing.transform.transform import point_support_to_dict, block_dataframe_to_dict
+
+from deprecation import deprecated
 
 
 def _calc_b2b_dist_from_array(blocks: np.ndarray) -> Dict:
@@ -305,6 +309,12 @@ def calc_angles(points_b: Iterable, point_a: Iterable = None, origin: Iterable =
     return angles
 
 
+@deprecated(
+    deprecated_in='0.5.1',
+    removed_in='1.0',
+    current_version='0.5.1',
+    details="Use `point_distance()` instead"
+)
 def calc_point_to_point_distance(points_a, points_b=None):
     """Function calculates distances between two group of points of a single group to itself.
 

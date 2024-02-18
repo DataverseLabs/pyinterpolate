@@ -34,7 +34,8 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
     number_of_points_within_block = len(points_of_block)  # P
     p = number_of_points_within_block * number_of_points_within_block  # P^2
 
-    distances_between_points = calc_point_to_point_distance(points_of_block[:, :-1])  # Matrix of size PxP
+    distances_between_points = point_distance(points_of_block[:, :-1],
+                                              points_of_block[:, :-1])  # Matrix of size PxP
     flattened_distances = distances_between_points.flatten()
     semivariances = variogram_model.predict(flattened_distances)
 

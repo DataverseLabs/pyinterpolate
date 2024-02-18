@@ -44,7 +44,7 @@ def omnidirectional_point_cloud(input_array: np.array,
     variogram_cloud : dict
                       {Lag: array of semivariances within a given lag}
     """
-    distances = calc_point_to_point_distance(input_array[:, :-1])
+    distances = point_distance(input_array[:, :-1], input_array[:, :-1])
     lags = np.arange(step_size, max_range, step_size)
     variogram_cloud = OrderedDict()
 

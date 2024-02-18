@@ -42,7 +42,7 @@ def block_pair_semivariance(block_a: Collection,
                                   block a to every point in block b).
     """
 
-    distances_between_points = calc_point_to_point_distance(block_a, block_b).flatten()
+    distances_between_points = point_distance(block_a, block_b).flatten()
 
     predictions = semivariogram_model.predict(distances_between_points)
 
