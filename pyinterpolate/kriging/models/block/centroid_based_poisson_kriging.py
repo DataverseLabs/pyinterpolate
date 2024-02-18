@@ -12,7 +12,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.kriging.models.block.weight import weights_array
 from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.kriging.utils.process import solve_weights

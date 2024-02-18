@@ -12,7 +12,7 @@ from pyinterpolate.variogram.utils.exceptions import validate_direction, validat
     validate_weights
 
 # Temp
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 
 
 # Semivariogram calculations

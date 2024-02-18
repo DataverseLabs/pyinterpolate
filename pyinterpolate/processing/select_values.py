@@ -13,8 +13,9 @@ import pandas as pd
 
 from scipy.linalg import fractional_matrix_power
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance, \
+from pyinterpolate.distance.distance import calc_block_to_block_distance, \
     calc_angles, calculate_angular_distance, calc_angles_between_points
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.preprocessing.blocks import Blocks
 from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg, transform_ps_to_dict
 

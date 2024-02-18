@@ -11,7 +11,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.preprocessing.blocks import PointSupport
 from pyinterpolate.processing.transform.transform import block_arr_to_dict, block_dataframe_to_dict, \
     point_support_to_dict

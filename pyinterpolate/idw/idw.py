@@ -8,7 +8,7 @@ Authors
 from typing import Iterable
 
 import numpy as np
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 
 
 def inverse_distance_weighting(known_points: np.ndarray,

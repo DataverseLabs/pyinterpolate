@@ -10,7 +10,7 @@ from typing import List, Union, Tuple
 
 import numpy as np
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.kriging.utils.kwarnings import ZerosMatrixWarning, LeastSquaresApproximationWarning
 from pyinterpolate.processing.select_values import select_kriging_data, select_kriging_data_from_direction
 from pyinterpolate.variogram import TheoreticalVariogram

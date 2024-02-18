@@ -203,8 +203,8 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
         try:
             w = np.linalg.solve(weights, point)
         except TypeError:
-            weights = weights.astype(np.float)
-            point = point.astype(np.float)
+            weights = weights.astype(float)
+            point = point.astype(float)
             w = np.linalg.solve(weights, point)
 
         zhat = values.dot(w[:-1])

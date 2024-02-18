@@ -7,7 +7,7 @@ Authors
 """
 import numpy as np
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
 

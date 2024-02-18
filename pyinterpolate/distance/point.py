@@ -57,9 +57,9 @@ def point_distance(points: ArrayLike,
     return distances
 
 
-def select_values_in_range(data: np.ndarray,
-                           current_lag: float,
-                           previous_lag: float):
+def select_values_between_lags(data: np.ndarray,
+                               current_lag: float,
+                               previous_lag: float):
     """
     Function selects set of values which are greater than
     (lag - step_size size) and smaller or equal to (lag).
@@ -81,8 +81,8 @@ def select_values_in_range(data: np.ndarray,
 
     # Check conditions
     condition_matrix = np.logical_and(
-            np.greater(data, previous_lag),
-            np.less_equal(data, current_lag))
+        np.greater(data, previous_lag),
+        np.less_equal(data, current_lag))
 
     # Find positions
     position_matrix = np.where(condition_matrix)

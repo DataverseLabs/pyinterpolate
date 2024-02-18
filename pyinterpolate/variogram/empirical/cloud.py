@@ -15,7 +15,7 @@ from prettytable import PrettyTable
 from scipy.stats.stats import skew, kurtosis
 from shapely.geometry import Point
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.processing.transform.statistics import remove_outliers
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
