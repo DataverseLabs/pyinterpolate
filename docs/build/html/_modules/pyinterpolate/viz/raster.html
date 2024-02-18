@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -7,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.5.0 documentation</title>
+    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -27,18 +28,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../../../_static/documentation_options.js?v=70f82a29"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/viz/raster';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -104,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.1 documentation</p>
   
 </a></div>
     
@@ -427,7 +431,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">libtiff</span> <span class="kn">import</span> <span class="n">TIFFimage</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point_kriging</span> <span class="kn">import</span> <span class="n">kriging</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.semivariogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
@@ -478,9 +482,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x_dim_coords</span><span class="p">,</span> <span class="n">y_dim_coords</span><span class="p">,</span> <span class="p">[</span><span class="n">step</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="interpolate_raster">
-<a class="viewcode-back" href="../../../api/viz/viz.html#pyinterpolate.interpolate_raster">[docs]</a>
-<span class="k">def</span> <span class="nf">interpolate_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+<div class="viewcode-block" id="interpolate_raster"><a class="viewcode-back" href="../../../api/viz/viz.html#pyinterpolate.interpolate_raster">[docs]</a><span class="k">def</span> <span class="nf">interpolate_raster</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
                        <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
                        <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                        <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -548,7 +550,7 @@ document.write(`
     <span class="c1"># Calculate semivariance if not provided</span>
 
     <span class="k">if</span> <span class="n">semivariogram_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
         <span class="n">number_of_divisions</span> <span class="o">=</span> <span class="mi">100</span>
@@ -597,7 +599,6 @@ document.write(`
     <span class="k">return</span> <span class="n">raster_dict</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">spatial_reference</span><span class="p">(</span><span class="n">pixel_size_x_direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                       <span class="n">pixel_size_y_direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
                       <span class="n">x_origin</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -631,9 +632,7 @@ document.write(`
     <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="to_tiff">
-<a class="viewcode-back" href="../../../api/viz/viz.html#pyinterpolate.to_tiff">[docs]</a>
-<span class="k">def</span> <span class="nf">to_tiff</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+<div class="viewcode-block" id="to_tiff"><a class="viewcode-back" href="../../../api/viz/viz.html#pyinterpolate.to_tiff">[docs]</a><span class="k">def</span> <span class="nf">to_tiff</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
             <span class="n">dir_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
             <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
             <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
@@ -724,7 +723,6 @@ document.write(`
                  <span class="n">tfw_content</span><span class="o">=</span><span class="n">tfw_content</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data_tiff_fname</span><span class="p">,</span> <span class="n">error_tiff_fname</span></div>
-
 
 
 <span class="c1"># Private functions of to_tiff function</span>
@@ -860,7 +858,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023, Szymon Moliński.
+      © Copyright 2024, Szymon Moliński.
       <br/>
     
   </p>
@@ -868,7 +866,7 @@ document.write(`
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     <br/>
   </p>
 </div>

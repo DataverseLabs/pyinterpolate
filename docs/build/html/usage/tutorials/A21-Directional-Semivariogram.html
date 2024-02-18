@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 
 
@@ -6,9 +7,9 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>A.2.1 Directional semivariograms &#8212; Pyinterpolate 0.5.0 documentation</title>
+    <title>A.2.1 Directional semivariograms &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -28,19 +29,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script src="../../_static/documentation_options.js?v=70f82a29"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -110,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.1 documentation</p>
   
 </a></div>
     
@@ -453,9 +457,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="A.2.1-Directional-semivariograms">
-<h1>A.2.1 Directional semivariograms<a class="headerlink" href="#A.2.1-Directional-semivariograms" title="Link to this heading">#</a></h1>
+<h1>A.2.1 Directional semivariograms<a class="headerlink" href="#A.2.1-Directional-semivariograms" title="Permalink to this heading">#</a></h1>
 <section id="Table-of-Contents:">
-<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Read point data,</p></li>
 <li><p>Create directional and isotropic semivariograms,</p></li>
@@ -464,10 +468,10 @@ document.write(`
 </ol>
 </section>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
 <p>In this tutorial, we will learn about directional semivariograms, how to set the angle of <code class="docutils literal notranslate"><span class="pre">direction</span></code>, and the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter. We compare two neighbor selection methods: <strong>triangular</strong>, which is fast, and <strong>elliptical</strong>, which is accurate.</p>
 <section id="A-directional-process">
-<h3>A directional process<a class="headerlink" href="#A-directional-process" title="Link to this heading">#</a></h3>
+<h3>A directional process<a class="headerlink" href="#A-directional-process" title="Permalink to this heading">#</a></h3>
 <p>Not every spatial process may be described by isotropic semivariograms. Sometimes we see a specific trend in one direction (N-S, W-E, or NE-SW, NW-SE). A well-performed analysis includes directions. That’s why we will learn to write code in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> that retrieves the directional semivariogram.</p>
 <p>We use the air pollution data.</p>
 <blockquote>
@@ -491,7 +495,7 @@ document.write(`
 </section>
 </section>
 <section id="1)-Read-and-show-point-data">
-<h2>1) Read and show point data<a class="headerlink" href="#1)-Read-and-show-point-data" title="Link to this heading">#</a></h2>
+<h2>1) Read and show point data<a class="headerlink" href="#1)-Read-and-show-point-data" title="Permalink to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -764,7 +768,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </div>
 </section>
 <section id="2)-Create-the-experimental-semivariogram">
-<h2>2) Create the experimental semivariogram<a class="headerlink" href="#2)-Create-the-experimental-semivariogram" title="Link to this heading">#</a></h2>
+<h2>2) Create the experimental semivariogram<a class="headerlink" href="#2)-Create-the-experimental-semivariogram" title="Permalink to this heading">#</a></h2>
 <p>If we recall the tutorial <code class="docutils literal notranslate"><span class="pre">A.1.1</span> <span class="pre">Semivariogram</span> <span class="pre">Estimation</span></code>, there are three main parameters to set for the <code class="docutils literal notranslate"><span class="pre">build_experimental_variogram()</span></code> function:</p>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">input_array</span></code>: <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code> with coordinates and observed values, for example: <code class="docutils literal notranslate"><span class="pre">[[0,</span> <span class="pre">0,</span> <span class="pre">10],</span> <span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">20]]</span></code>,</p></li>
@@ -810,7 +814,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </ul>
 <p>We can start the analysis by understanding how our parameters affect the semivariogram bins range. We will set <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> to 0.2 in each case to better visualize the effects of a leading direction.</p>
 <section id="Case-1:-W-E-Direction">
-<h3>Case 1: W-E Direction<a class="headerlink" href="#Case-1:-W-E-Direction" title="Link to this heading">#</a></h3>
+<h3>Case 1: W-E Direction<a class="headerlink" href="#Case-1:-W-E-Direction" title="Permalink to this heading">#</a></h3>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -857,7 +861,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </div>
 </section>
 <section id="Case-2:-N-S-Direction">
-<h3>Case 2: N-S Direction<a class="headerlink" href="#Case-2:-N-S-Direction" title="Link to this heading">#</a></h3>
+<h3>Case 2: N-S Direction<a class="headerlink" href="#Case-2:-N-S-Direction" title="Permalink to this heading">#</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -884,7 +888,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </div>
 </section>
 <section id="Case-3:-NW-SE-Direction">
-<h3>Case 3: NW-SE Direction<a class="headerlink" href="#Case-3:-NW-SE-Direction" title="Link to this heading">#</a></h3>
+<h3>Case 3: NW-SE Direction<a class="headerlink" href="#Case-3:-NW-SE-Direction" title="Permalink to this heading">#</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
@@ -911,7 +915,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </div>
 </section>
 <section id="Case-4:-NE-SW-Direction">
-<h3>Case 4: NE-SW Direction<a class="headerlink" href="#Case-4:-NE-SW-Direction" title="Link to this heading">#</a></h3>
+<h3>Case 4: NE-SW Direction<a class="headerlink" href="#Case-4:-NE-SW-Direction" title="Permalink to this heading">#</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
@@ -938,7 +942,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </div>
 </section>
 <section id="Case-5:-Isotropic-Variogram">
-<h3>Case 5: Isotropic Variogram<a class="headerlink" href="#Case-5:-Isotropic-Variogram" title="Link to this heading">#</a></h3>
+<h3>Case 5: Isotropic Variogram<a class="headerlink" href="#Case-5:-Isotropic-Variogram" title="Permalink to this heading">#</a></h3>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -963,7 +967,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 </section>
 </section>
 <section id="3)-Compare-semivariograms">
-<h2>3) Compare semivariograms<a class="headerlink" href="#3)-Compare-semivariograms" title="Link to this heading">#</a></h2>
+<h2>3) Compare semivariograms<a class="headerlink" href="#3)-Compare-semivariograms" title="Permalink to this heading">#</a></h2>
 <p>We have created a set of variograms. What did we observe?</p>
 <ul class="simple">
 <li><p>The <strong>NE-SW</strong> variogram is very weak at describing a short-range variation (compare it to the map of air pollution from the beginning of the tutorial. Points in this direction are relatively similar).</p></li>
@@ -1011,7 +1015,7 @@ Text(0.5, 1.0, &#39;PM2.5 concentrations in Poland&#39;)
 <p>What do you think about this comparison? Do you agree that the <strong>NW-SE</strong> variogram best fits the data?</p>
 </section>
 <section id="4)-Bonus:-Compare-calculation-times-and-results">
-<h2>4) Bonus: Compare calculation times and results<a class="headerlink" href="#4)-Bonus:-Compare-calculation-times-and-results" title="Link to this heading">#</a></h2>
+<h2>4) Bonus: Compare calculation times and results<a class="headerlink" href="#4)-Bonus:-Compare-calculation-times-and-results" title="Permalink to this heading">#</a></h2>
 <p>Let’s compare calculation times and results from two methods of neighbors interpolation: <code class="docutils literal notranslate"><span class="pre">t</span></code> (triangular) and <code class="docutils literal notranslate"><span class="pre">e</span></code> (elliptical). We will follow data in the <strong>NW-SE</strong> direction.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
@@ -1114,7 +1118,7 @@ The triangular method is 2.7558084695886036 times faster than the elliptical sel
 <hr class="docutils" />
 </section>
 <section id="Where-to-go-from-here?">
-<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>A.2.2 Variogram Point Cloud</p></li>
 <li><p>A.2.3 Experimental Variogram and Variogram Point Cloud Classes</p></li>
@@ -1123,7 +1127,7 @@ The triangular method is 2.7558084695886036 times faster than the elliptical sel
 </ul>
 </section>
 <section id="Changelog">
-<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Permalink to this heading">#</a></h2>
 <table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Date</p></th>
@@ -1277,7 +1281,7 @@ The triangular method is 2.7558084695886036 times faster than the elliptical sel
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023, Szymon Moliński.
+      © Copyright 2024, Szymon Moliński.
       <br/>
     
   </p>
@@ -1285,7 +1289,7 @@ The triangular method is 2.7558084695886036 times faster than the elliptical sel
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.4.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     <br/>
   </p>
 </div>

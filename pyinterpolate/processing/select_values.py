@@ -281,6 +281,10 @@ def select_values_in_range(data, lag, step_size):
     -------
     : numpy array
         Mask with distances within a specified radius.
+
+    Notes
+    -----
+    Todo: deprecated in 1.0
     """
 
     # Check if numpy array is given

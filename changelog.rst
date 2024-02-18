@@ -6,13 +6,14 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
-2024-02-
---------
+2024-02-19
+----------
 
 **version 0.5.1** (*pre production development*)
 
-* (refactoring) `point_distance` and `select_values_in_range` functions,
-*
+* (refactoring) `calc_point_to_point_distance` function refactored to `point_distance`, changed input parameters' schema,
+* (refactoring) new selection method for unequally spaced bins: `select_values_between_lags`
+* (debug) `np.float` type casting has been changed to `float`
 
 2023-09-16
 ----------
