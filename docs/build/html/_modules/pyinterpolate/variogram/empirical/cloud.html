@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.variogram.empirical.cloud &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.1 documentation</p>
   
 </a></div>
     
@@ -435,7 +435,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">scipy.stats.stats</span> <span class="kn">import</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurtosis</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">select_points_within_ellipse</span><span class="p">,</span> <span class="n">select_values_in_range</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.statistics</span> <span class="kn">import</span> <span class="n">remove_outliers</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_direction</span><span class="p">,</span> <span class="n">validate_points</span><span class="p">,</span> <span class="n">validate_tolerance</span>
@@ -464,7 +464,7 @@ document.write(`
 <span class="sd">    variogram_cloud : dict</span>
 <span class="sd">                      {Lag: array of semivariances within a given lag}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">input_array</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span><span class="n">input_array</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">input_array</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
     <span class="n">variogram_cloud</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
@@ -1109,7 +1109,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023, Szymon Moliński.
+      © Copyright 2024, Szymon Moliński.
       <br/>
     
   </p>

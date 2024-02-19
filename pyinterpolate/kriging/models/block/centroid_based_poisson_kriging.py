@@ -12,7 +12,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.kriging.models.block.weight import weights_array
 from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.kriging.utils.process import solve_weights
@@ -135,7 +135,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     # Distances between known blocks
     coordinates = kriging_data[:, :values_column_index]
-    block_distances = calc_point_to_point_distance(coordinates).flatten()
+    block_distances = point_distance(coordinates, coordinates).flatten()
     known_blocks_semivars = semivariogram_model.predict(block_distances)
     predicted = np.array(known_blocks_semivars.reshape(n, n))
     predicted = sem_to_cov(predicted, sill)

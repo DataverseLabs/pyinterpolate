@@ -11,7 +11,7 @@ from typing import Dict, Tuple
 import numpy as np
 from libtiff import TIFFimage
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
@@ -67,7 +67,8 @@ def interpolate_raster(data,
                        number_of_neighbors=4,
                        semivariogram_model=None,
                        direction=None,
-                       tolerance=None) -> Dict:
+                       tolerance=None,
+                       allow_approx_solutions=True) -> Dict:
     """
     Function interpolates raster from data points using ordinary kriging.
 
@@ -104,6 +105,11 @@ def interpolate_raster(data,
         * the baseline point is at a center of the ellipse,
         * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 
+    allow_approx_solutions : bool, default=True
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        that can lead to singular or near-singular matrix creation.
+
     Returns
     -------
     raster_dict : Dict
@@ -130,7 +136,7 @@ def interpolate_raster(data,
     # Calculate semivariance if not provided
 
     if semivariogram_model is None:
-        distances = calc_point_to_point_distance(data[:, :-1])
+        distances = point_distance(data[:, :-1], data[:, :-1])
 
         maximum_range = np.max(distances)
         number_of_divisions = 100
@@ -159,7 +165,8 @@ def interpolate_raster(data,
                 theoretical_model=ts,
                 points=interpolation_points,
                 how='ok',
-                no_neighbors=number_of_neighbors)
+                no_neighbors=number_of_neighbors,
+                allow_approx_solutions=allow_approx_solutions)
 
     kriged_matrix = k[:, 0].reshape((len(y_coords), len(x_coords)))
     kriged_errors = k[:, 1].reshape((len(y_coords), len(x_coords)))
@@ -218,8 +225,9 @@ def to_tiff(data,
             dim=1000,
             number_of_neighbors=4,
             semivariogram_model=None,
-            direction=0,
-            tolerance=1) -> Tuple[str, str]:
+            direction=None,
+            tolerance=None,
+            allow_approx_solutions=True) -> Tuple[str, str]:
     """
     Function interpolates raster from data points using ordinary kriging and stores output results in tiff and tfw
     files.
@@ -244,7 +252,7 @@ def to_tiff(data,
     semivariogram_model : TheoreticalVariogram, default=None
         Variogram model, if not provided then it is estimated from a given dataset.
 
-    direction : float (in range [0, 360]), default = 0
+    direction : float (in range [0, 360]), optional
         Direction of semivariogram, values from 0 to 360 degrees:
 
         - 0 or 180: is E-W,
@@ -252,7 +260,7 @@ def to_tiff(data,
         - 45 or 225 is NE-SW,
         - 135 or 315 is NW-SE.
 
-    tolerance : float (in range [0, 1]), optional, default=1
+    tolerance : float (in range [0, 1]), optional
         If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
         the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``> 0``
         then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
@@ -262,6 +270,11 @@ def to_tiff(data,
         * the minor axis size is ``tolerance * step_size``,
         * the baseline point is at a center of the ellipse,
         * the ``tolerance == 1`` creates an omnidirectional semivariogram.
+
+    allow_approx_solutions : bool, default=True
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        that can lead to singular or near-singular matrix creation.
 
     Returns
     -------
@@ -274,7 +287,8 @@ def to_tiff(data,
                                  number_of_neighbors=number_of_neighbors,
                                  semivariogram_model=semivariogram_model,
                                  direction=direction,
-                                 tolerance=tolerance)
+                                 tolerance=tolerance,
+                                 allow_approx_solutions=allow_approx_solutions)
 
     interpolated_data = results['result']
     interpolation_errors = results['error']

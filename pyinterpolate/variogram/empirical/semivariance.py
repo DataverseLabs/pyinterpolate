@@ -12,7 +12,7 @@ from pyinterpolate.variogram.utils.exceptions import validate_direction, validat
     validate_weights
 
 # Temp
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 
 
 # Semivariogram calculations
@@ -42,7 +42,7 @@ def omnidirectional_semivariogram(points: np.array, lags: np.array, step_size: f
 
     semivariances_and_lags = list()
     pts = points[:, :-1]
-    distances = calc_point_to_point_distance(pts)
+    distances = point_distance(pts, pts)
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)

@@ -7,9 +7,8 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-
-    <title>Data download &#8212; Pyinterpolate 0.5.1 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.distance.point &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -45,11 +44,9 @@
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/pipelines/data/download';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/distance/point';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Kriging-based processes" href="../kriging_based/kriging_based_processes.html" />
-    <link rel="prev" title="Pipelines" href="../pipelines.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -159,8 +156,8 @@
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../api.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
                         API
                       </a>
                     </li>
@@ -249,10 +246,6 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary">
-      <span class="fa-solid fa-outdent"></span>
-    </label>
-  
 </div>
 
     </nav>
@@ -260,7 +253,7 @@ document.write(`
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -306,8 +299,8 @@ document.write(`
                     </li>
                 
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../../api.html">
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../api/api.html">
                         API
                       </a>
                     </li>
@@ -372,42 +365,6 @@ document.write(`
     
   </div>
   
-    <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
-     aria-label="Section Navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../datatypes/core.html">Core data structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../io/io.html">Input / Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../distance/distance.html">Distance calculations</a></li>
-
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../variogram/variogram.html">Variogram</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/experimental/experimental.html">Experimental</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/theoretical/theoretical.html">Theoretical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/block/block.html">Block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../variogram/indicator/indicator.html">Indicator</a></li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../kriging/kriging.html">Kriging</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../kriging/point/point_kriging.html">Point Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../kriging/indicator/indicator_kriging.html">Indicator Kriging</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../pipelines.html">Pipelines</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Data download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="../../viz/viz.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../validation/validation.html">Validation</a></li>
-</ul>
-</div>
-</nav></div>
-    </div>
-  
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
@@ -441,12 +398,9 @@ document.write(`
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../../api.html" class="nav-link">API</a></li>
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    
-    <li class="breadcrumb-item"><a href="../pipelines.html" class="nav-link">Pipelines</a></li>
-    
-    <li class="breadcrumb-item active" aria-current="page">Data download</li>
+    <li class="breadcrumb-item active" aria-current="page">pyinterpolate.distance.point</li>
   </ul>
 </nav>
 </div>
@@ -463,11 +417,97 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="data-download">
-<h1>Data download<a class="headerlink" href="#data-download" title="Permalink to this heading">#</a></h1>
-<p>Available datasets are stored in the <strong>pyinterpolate-datasets</strong> package: <a class="reference external" href="https://pypi.org/project/pyinterpolate-datasets/2023.0.0/">https://pypi.org/project/pyinterpolate-datasets/2023.0.0/</a></p>
-</section>
+  <h1>Source code for pyinterpolate.distance.point</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Distance calculation functions.</span>
 
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
+
+
+<span class="c1"># noinspection PyTypeChecker</span>
+<div class="viewcode-block" id="point_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.point_distance">[docs]</a><span class="k">def</span> <span class="nf">point_distance</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                   <span class="n">other</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                   <span class="n">metrics</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the euclidean distance from one group of points to another</span>
+<span class="sd">    group of points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : array</span>
+<span class="sd">        Spatial coordinates.</span>
+
+<span class="sd">    other : array</span>
+<span class="sd">        Other array with spatial coordinates.</span>
+
+<span class="sd">    metrics : str, default = &#39;euclidean&#39;</span>
+<span class="sd">        Metrics used to calculate distance.</span>
+<span class="sd">        See ``scipy.spatial.distance.cdist`` for more details.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    distances : array</span>
+<span class="sd">        Distances matrix. Row index = ``points`` point index, and column</span>
+<span class="sd">        index = ``other`` point index.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">        The function creates array of size MxN, where M = number of ``points``</span>
+<span class="sd">        and N = number of ``other``. Very big array with coordinates may cause</span>
+<span class="sd">        a memory error.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; points = [(0, 0), (0, 1), (0, 2)]</span>
+<span class="sd">    &gt;&gt;&gt; other = [(2, 2), (3, 3)]</span>
+<span class="sd">    &gt;&gt;&gt; distances = point_distance(points=points, other=other)</span>
+<span class="sd">    &gt;&gt;&gt; print(distances)</span>
+<span class="sd">    [[2.82842712 4.24264069]</span>
+<span class="sd">     [2.23606798 3.60555128]</span>
+<span class="sd">     [2.         3.16227766]]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">other</span><span class="p">,</span> <span class="n">metrics</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distances</span></div>
+
+
+<span class="k">def</span> <span class="nf">select_values_between_lags</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                               <span class="n">current_lag</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                               <span class="n">previous_lag</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function selects set of values which are greater than</span>
+<span class="sd">    (lag - step_size size) and smaller or equal to (lag).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : numpy array</span>
+<span class="sd">           Distances between points.</span>
+
+<span class="sd">    current_lag : float</span>
+
+<span class="sd">    previous_lag : float</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    : numpy array</span>
+<span class="sd">        Mask with distances within a specified radius.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check conditions</span>
+    <span class="n">condition_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">greater</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">previous_lag</span><span class="p">),</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">less_equal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">current_lag</span><span class="p">))</span>
+
+    <span class="c1"># Find positions</span>
+    <span class="n">position_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">condition_matrix</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">position_matrix</span>
+</pre></div>
 
                 </article>
               
@@ -479,24 +519,6 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../pipelines.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Pipelines</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../kriging_based/kriging_based_processes.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Kriging-based processes</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div></div>
   
 </div>
@@ -506,18 +528,6 @@ document.write(`
             </div>
             
             
-              
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-  <div class="sidebar-secondary-item">
-  <div class="tocsection sourcelink">
-    <a href="../../../_sources/api/pipelines/data/download.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
-
-</div></div>
               
             
           </div>
