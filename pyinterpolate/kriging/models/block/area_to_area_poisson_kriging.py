@@ -164,8 +164,8 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     except TypeError:
         if log_process:
             logging.debug('Wrong dtypes used for np.linalg.solve, casting to float.')
-        weights = weights.astype(np.float)
-        k_ones = k_ones.astype(np.float)
+        weights = weights.astype(float)
+        k_ones = k_ones.astype(float)
         w = np.linalg.solve(weights, k_ones)
 
     zhat = values.dot(w[:-1])

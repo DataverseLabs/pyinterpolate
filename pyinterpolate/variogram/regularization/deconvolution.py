@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union, List, Collection
+from typing import Dict, Union, List
 
 import geopandas as gpd
 import numpy as np

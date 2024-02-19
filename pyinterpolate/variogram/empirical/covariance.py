@@ -7,7 +7,7 @@ Authors
 """
 import numpy as np
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.select_values import select_points_within_ellipse, select_values_in_range
 from pyinterpolate.variogram.utils.exceptions import validate_direction, validate_points, validate_tolerance
 
@@ -60,7 +60,7 @@ def omnidirectional_covariogram(points: np.array, lags: np.array, step_size: flo
     """
 
     covariances_and_lags = list()
-    distances = calc_point_to_point_distance(points[:, :-1])
+    distances = point_distance(points[:, :-1], points[:, :-1])
 
     for h in lags:
         distances_in_range = select_values_in_range(distances, h, step_size)

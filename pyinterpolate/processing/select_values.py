@@ -13,8 +13,9 @@ import pandas as pd
 
 from scipy.linalg import fractional_matrix_power
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance, calc_block_to_block_distance, \
+from pyinterpolate.distance.distance import calc_block_to_block_distance, \
     calc_angles, calculate_angular_distance, calc_angles_between_points
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.processing.preprocessing.blocks import Blocks
 from pyinterpolate.processing.transform.transform import get_areal_centroids_from_agg, transform_ps_to_dict
 
@@ -280,6 +281,10 @@ def select_values_in_range(data, lag, step_size):
     -------
     : numpy array
         Mask with distances within a specified radius.
+
+    Notes
+    -----
+    Todo: deprecated in 1.0
     """
 
     # Check if numpy array is given
@@ -368,7 +373,7 @@ def get_distances_within_unknown(point_support: np.ndarray):
         [[value1, value-n, distance between points 1-n], ..., [value-n, value1, distance between points n-1]]
     """
 
-    distances = calc_point_to_point_distance(point_support[:, :-1])
+    distances = point_distance(point_support[:, :-1], point_support[:, :-1])
     fdistances = distances.flatten()
 
     values = []
@@ -437,7 +442,7 @@ def prepare_pk_known_areas(point_support_dict: Dict,
             coordinates_b = ps_b[:, :-1]
             values_b = ps_b[:, -1]
             if bid_a != bid_b:
-                distances = calc_point_to_point_distance(coordinates_a, coordinates_b)
+                distances = point_distance(coordinates_a, coordinates_b)
             else:
                 distances = np.zeros(len(values_a) * len(values_b))
             fdistances = distances.flatten()
@@ -553,7 +558,7 @@ def select_kriging_data_from_direction(unknown_position: Iterable,
     r = np.array([unknown_position])
 
     known_pos = data_array[:, :-1]
-    dists = calc_point_to_point_distance(r, known_pos)
+    dists = point_distance(r, known_pos)
     angles = calc_angles(known_pos, origin=unknown_position)
     angle_diffs = calculate_angular_distance(angles, direction)
 
@@ -606,7 +611,7 @@ def select_kriging_data(unknown_position: Iterable,
     r = np.array([unknown_position])
 
     known_pos = data_array[:, :-1]
-    dists = calc_point_to_point_distance(r, known_pos)
+    dists = point_distance(r, known_pos)
 
     # Prepare data for kriging
     neighbors_and_dists = np.c_[data_array, dists.T]
@@ -753,7 +758,7 @@ def select_poisson_kriging_data(u_block_centroid: np.ndarray,
         point_s = k_point_support_dict[idx]
 
         # Distances between points
-        distances = calc_point_to_point_distance(u_point_support[:, :-1],
+        distances = point_distance(u_point_support[:, :-1],
                                                  point_s[:, :-1])
         fdistances = distances.flatten()
         ldist = len(fdistances)
@@ -972,7 +977,7 @@ def select_centroid_poisson_kriging_data(u_block_centroid: np.ndarray,
         dists = _calculate_weighted_distances(k_point_support_dict, u_index, u_point_support)
     else:
         # Calc from centroids
-        dists = calc_point_to_point_distance(k_centroids[:, :-1], [u_coordinates])
+        dists = point_distance(k_centroids[:, :-1], [u_coordinates])
 
     if direction is not None:
         angles = calc_angles(k_centroids[:, :-1], origin=u_coordinates)

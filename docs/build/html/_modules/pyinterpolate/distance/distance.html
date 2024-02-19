@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.distance.distance &#8212; Pyinterpolate 0.4.1 documentation</title>
+    <title>pyinterpolate.distance.distance &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.4.1 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.1 documentation</p>
   
 </a></div>
     
@@ -424,6 +424,8 @@ document.write(`
 <span class="sd">Authors</span>
 <span class="sd">-------</span>
 <span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">TODO: the file will be removed in version 1.0</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Iterable</span>
@@ -437,6 +439,8 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">PointSupport</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">point_support_to_dict</span><span class="p">,</span> <span class="n">block_dataframe_to_dict</span>
+
+<span class="kn">from</span> <span class="nn">deprecation</span> <span class="kn">import</span> <span class="n">deprecated</span>
 
 
 <span class="k">def</span> <span class="nf">_calc_b2b_dist_from_array</span><span class="p">(</span><span class="n">blocks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
@@ -725,7 +729,13 @@ document.write(`
     <span class="k">return</span> <span class="n">angles</span>
 
 
-<div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="calc_point_to_point_distance"><a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.calc_point_to_point_distance">[docs]</a><span class="nd">@deprecated</span><span class="p">(</span>
+    <span class="n">deprecated_in</span><span class="o">=</span><span class="s1">&#39;0.5.1&#39;</span><span class="p">,</span>
+    <span class="n">removed_in</span><span class="o">=</span><span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+    <span class="n">current_version</span><span class="o">=</span><span class="s1">&#39;0.5.1&#39;</span><span class="p">,</span>
+    <span class="n">details</span><span class="o">=</span><span class="s2">&quot;Use `point_distance()` instead&quot;</span>
+<span class="p">)</span>
+<span class="k">def</span> <span class="nf">calc_point_to_point_distance</span><span class="p">(</span><span class="n">points_a</span><span class="p">,</span> <span class="n">points_b</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function calculates distances between two group of points of a single group to itself.</span>
 
 <span class="sd">    Parameters</span>
@@ -825,7 +835,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023, Szymon Moliński.
+      © Copyright 2024, Szymon Moliński.
       <br/>
     
   </p>

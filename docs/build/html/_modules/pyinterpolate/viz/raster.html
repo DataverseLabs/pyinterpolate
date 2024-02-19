@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.5.0 documentation</title>
+    <title>pyinterpolate.viz.raster &#8212; Pyinterpolate 0.5.1 documentation</title>
   
   
   
@@ -108,7 +108,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.0 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.1 documentation</p>
   
 </a></div>
     
@@ -431,7 +431,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">libtiff</span> <span class="kn">import</span> <span class="n">TIFFimage</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_point_to_point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point_kriging</span> <span class="kn">import</span> <span class="n">kriging</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.semivariogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
@@ -556,7 +556,7 @@ document.write(`
     <span class="c1"># Calculate semivariance if not provided</span>
 
     <span class="k">if</span> <span class="n">semivariogram_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">distances</span> <span class="o">=</span> <span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="n">maximum_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>
         <span class="n">number_of_divisions</span> <span class="o">=</span> <span class="mi">100</span>
@@ -872,7 +872,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2023, Szymon Moliński.
+      © Copyright 2024, Szymon Moliński.
       <br/>
     
   </p>

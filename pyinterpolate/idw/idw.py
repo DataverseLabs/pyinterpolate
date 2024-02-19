@@ -8,7 +8,7 @@ Authors
 from typing import Iterable
 
 import numpy as np
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 
 
 def inverse_distance_weighting(known_points: np.ndarray,
@@ -72,7 +72,7 @@ def inverse_distance_weighting(known_points: np.ndarray,
         unknown_location = unknown_location[np.newaxis, ...]
 
     # Calculate distances
-    distances = calc_point_to_point_distance(unknown_location, known_points[:, :-1])
+    distances = point_distance(unknown_location, known_points[:, :-1])
 
     # Check if any distance is equal to 0 - then return this value
     if not np.all(distances[0]):

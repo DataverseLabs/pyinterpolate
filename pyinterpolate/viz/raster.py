@@ -11,7 +11,7 @@ from typing import Dict, Tuple
 import numpy as np
 from libtiff import TIFFimage
 
-from pyinterpolate.distance.distance import calc_point_to_point_distance
+from pyinterpolate.distance.point import point_distance
 from pyinterpolate.kriging.point_kriging import kriging
 from pyinterpolate.variogram.empirical.experimental_variogram import build_experimental_variogram
 from pyinterpolate.variogram.theoretical.semivariogram import TheoreticalVariogram
@@ -136,7 +136,7 @@ def interpolate_raster(data,
     # Calculate semivariance if not provided
 
     if semivariogram_model is None:
-        distances = calc_point_to_point_distance(data[:, :-1])
+        distances = point_distance(data[:, :-1], data[:, :-1])
 
         maximum_range = np.max(distances)
         number_of_divisions = 100
