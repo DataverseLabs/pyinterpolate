@@ -487,7 +487,8 @@ document.write(`
                        <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                        <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+                       <span class="n">tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function interpolates raster from data points using ordinary kriging.</span>
 
@@ -523,6 +524,11 @@ document.write(`
 <span class="sd">        * the minor axis size is ``tolerance * step_size``,</span>
 <span class="sd">        * the baseline point is at a center of the ellipse,</span>
 <span class="sd">        * the ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    allow_approx_solutions : bool, default=True</span>
+<span class="sd">        Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to ``True``</span>
+<span class="sd">        if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in your dataset,</span>
+<span class="sd">        that can lead to singular or near-singular matrix creation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -579,7 +585,8 @@ document.write(`
                 <span class="n">theoretical_model</span><span class="o">=</span><span class="n">ts</span><span class="p">,</span>
                 <span class="n">points</span><span class="o">=</span><span class="n">interpolation_points</span><span class="p">,</span>
                 <span class="n">how</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span>
-                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">)</span>
+                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+                <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span><span class="p">)</span>
 
     <span class="n">kriged_matrix</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
     <span class="n">kriged_errors</span> <span class="o">=</span> <span class="n">k</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y_coords</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)))</span>
@@ -638,8 +645,9 @@ document.write(`
             <span class="n">dim</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
             <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
             <span class="n">semivariogram_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+            <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function interpolates raster from data points using ordinary kriging and stores output results in tiff and tfw</span>
 <span class="sd">    files.</span>
@@ -664,7 +672,7 @@ document.write(`
 <span class="sd">    semivariogram_model : TheoreticalVariogram, default=None</span>
 <span class="sd">        Variogram model, if not provided then it is estimated from a given dataset.</span>
 
-<span class="sd">    direction : float (in range [0, 360]), default = 0</span>
+<span class="sd">    direction : float (in range [0, 360]), optional</span>
 <span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
 
 <span class="sd">        - 0 or 180: is E-W,</span>
@@ -672,7 +680,7 @@ document.write(`
 <span class="sd">        - 45 or 225 is NE-SW,</span>
 <span class="sd">        - 135 or 315 is NW-SE.</span>
 
-<span class="sd">    tolerance : float (in range [0, 1]), optional, default=1</span>
+<span class="sd">    tolerance : float (in range [0, 1]), optional</span>
 <span class="sd">        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
 <span class="sd">        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``&gt; 0``</span>
 <span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
@@ -682,6 +690,11 @@ document.write(`
 <span class="sd">        * the minor axis size is ``tolerance * step_size``,</span>
 <span class="sd">        * the baseline point is at a center of the ellipse,</span>
 <span class="sd">        * the ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    allow_approx_solutions : bool, default=True</span>
+<span class="sd">        Allows the approximation of kriging weights based on the OLS algorithm. We don&#39;t recommend set it to ``True``</span>
+<span class="sd">        if you don&#39;t know what are you doing. This parameter can be useful when you have clusters in your dataset,</span>
+<span class="sd">        that can lead to singular or near-singular matrix creation.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -694,7 +707,8 @@ document.write(`
                                  <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
                                  <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">,</span>
                                  <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
-                                 <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span>
+                                 <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+                                 <span class="n">allow_approx_solutions</span><span class="o">=</span><span class="n">allow_approx_solutions</span><span class="p">)</span>
 
     <span class="n">interpolated_data</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">]</span>
     <span class="n">interpolation_errors</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;error&#39;</span><span class="p">]</span>
