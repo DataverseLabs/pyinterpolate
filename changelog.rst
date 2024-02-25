@@ -6,10 +6,18 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2024-03-
+--------
+
+**version 0.5.2** (*pre version 1.0 development*)
+
+* (enhancement) added universal kriging functionality along with multivariate regression,
+* (refactoring) ...
+
 2024-02-19
 ----------
 
-**version 0.5.1** (*pre production development*)
+**version 0.5.1** (*pre version 1.0 development*)
 
 * (enhancement) `interpolate_raster()` function takes `allow_approx_solutions` parameter, and it protects from `LinAlgError` that might occur if interpolation points are duplicated (due to the floating point number representation).
 * (refactoring) `calc_point_to_point_distance` function refactored to `point_distance`, changed input parameters' schema,
