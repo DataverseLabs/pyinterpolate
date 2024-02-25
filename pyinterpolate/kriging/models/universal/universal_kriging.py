@@ -4,7 +4,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
 
-from pyinterpolate import TheoreticalVariogram, ExperimentalVariogram, kriging
+from pyinterpolate.kriging.point_kriging import kriging
+from pyinterpolate.variogram.empirical.experimental_variogram import (
+    ExperimentalVariogram)
+from pyinterpolate.variogram.theoretical.semivariogram import (
+    TheoreticalVariogram)
 
 
 class MultivariateRegression:
@@ -24,6 +28,15 @@ class MultivariateRegression:
 
     intercept : float
         Constant bias.
+
+    Methods
+    -------
+    fit()
+        Fits observations into linear regression model.
+
+    predict()
+        Predicts values based on the coefficients from training (``fit()``)
+        step.
     """
 
     def __init__(self):
@@ -33,6 +46,15 @@ class MultivariateRegression:
         self.intercept = None
 
     def fit(self, dataset: np.ndarray):
+        """
+        Method fits dataset into the linear regression model.
+
+        Parameters
+        ----------
+        dataset : numpy array
+            Numpy array with more than 2 columns. The last column represents
+            response - observations.
+        """
         self.features = dataset[:, :-1].copy()
         self.y = dataset[:, -1].copy()
         _features_ones = np.c_[
@@ -43,7 +65,21 @@ class MultivariateRegression:
         self.intercept = params[-1]
 
     def predict(self, features: np.ndarray):
-        # TODO: check if features has the same number of columns as self.features
+        """
+        Predicts response value based on given variables.
+
+        Parameters
+        ----------
+        features : numpy array
+            The variables used for prediction.
+
+        Returns
+        -------
+        : numpy array
+            Predicted values.
+        """
+        # TODO: check if features has the same number of columns
+        #  as self.features
         return np.matmul(self.coefficients, features.T) + self.intercept
 
     def _get_coefficients(self, features_with_ones):
@@ -59,13 +95,54 @@ class UniversalKriging:
     observations : numpy array
         Known points and their values.
 
+    fitted_regression_model : optional
+        Any kind of regression model with `.predict()` method that could be
+        used for trend modeling.
+
     Attributes
     ----------
     observations : numpy array
         See ``observations`` parameter.
 
-    trend_model : MultivariateRegression
-        Modeled spatial trend with coefficients and
+    trend_model : MultivariateRegression or another regression model
+        The model responsible for trend prediction. It could be a model from
+        the external package, but it must have `.predict()` method which takes
+        as an input modeling features (coordinates).
+
+    trend_values : numpy array
+        Observation values predicted by regression model.
+
+    bias_values : numpy array
+        The difference between measured observations and ``trend_values``.
+
+    bias_experimental_model : ExperimentalVariogram
+        The experimental semivariogram of bias.
+
+    bias_model : TheoreticalVariogram
+        Modeled semivariogram of the data bias.
+
+    Methods
+    -------
+    fit_trend()
+        Fits observations into linear regression model.
+
+    detrend()
+        Removes trend from observations (calculates bias).
+
+    fit_bias()
+        Fits bias into semivariogram model.
+
+    predict()
+        Predicts values at unknown locations.
+
+    plot_experimental_bias_model()
+        Plots experimental semivariogram of bias.
+
+    plot_theoretical_bias_model()
+        Plots theoretical semivariogram of bias.
+
+    plot_trend_surfaces()
+        Visual comparison of observations, trend, and bias.
     """
 
     def __init__(self,
@@ -85,7 +162,7 @@ class UniversalKriging:
         # Bias
         self.bias_values = None
         self.bias_experimental_model: ExperimentalVariogram = None
-        self.bias_variogram_model: TheoreticalVariogram = None
+        self.bias_model: TheoreticalVariogram = None
 
     def fit_trend(self):
         """
@@ -100,7 +177,14 @@ class UniversalKriging:
 
     def detrend(self, trend_values: ArrayLike = None):
         """
-        Function detrends observations.
+        Function removes trend from observations.
+
+        Parameters
+        ----------
+        trend_values : optional, numpy array
+            Optional array with trend values. It may be an output from the
+            external regression model.
+
         """
         if trend_values is not None:
             self.bias_values = self.observations[:, -1] - trend_values
@@ -111,6 +195,21 @@ class UniversalKriging:
                  step_size: float,
                  max_range: float,
                  use_all_models=False):
+        """
+        Function fits bias into variogram models.
+
+        Parameters
+        ----------
+        step_size : float
+            Bins width.
+
+        max_range : float
+            Maximum range of analysis.
+
+        use_all_models : bool, default = False
+            Use all available semivariogram models (``True``), or only
+            the selection of models - linear, spherical, and power model.
+        """
         # Get bias
         if self.bias_values is None:
             self.detrend()
@@ -133,8 +232,8 @@ class UniversalKriging:
         else:
             used_models = 'safe'
 
-        self.bias_variogram_model = TheoreticalVariogram()
-        self.bias_variogram_model.autofit(
+        self.bias_model = TheoreticalVariogram()
+        self.bias_model.autofit(
             experimental_variogram=self.bias_experimental_model,
             model_name=used_models
         )
@@ -159,31 +258,39 @@ class UniversalKriging:
         how : str, default='ok'
             Select what kind of kriging you want to perform:
               * 'ok': ordinary kriging,
-              * 'sk': simple kriging - if it is set then ``sk_mean`` parameter must be provided.
+              * 'sk': simple kriging - if it is set then ``sk_mean`` parameter
+                must be provided.
 
         neighbors_range : float, default=None
-            The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
+            The maximum distance where we search for neighbors. If ``None``
+            is given then range is selected from
             the ``theoretical_model`` ``rang`` attribute.
 
         no_neighbors : int, default = 4
             The number of the **n-closest neighbors** used for interpolation.
 
         use_all_neighbors_in_range : bool, default = False
-            ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
+            ``True``: if the real number of neighbors within the
+            ``neighbors_range`` is greater than the
             ``number_of_neighbors`` parameter then take all of them anyway.
 
         sk_mean : float, default=None
-            The mean value of a process over a study area. Should be know before processing. That's why Simple
-            Kriging has a limited number of applications. You must have multiple samples and well-known area to
+            The mean value of a process over a study area. Should be know
+            before processing. That's why Simple
+            Kriging has a limited number of applications. You must have
+            multiple samples and well-known area to
             know this parameter.
 
         allow_approx_solutions : bool, default=False
-            Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
-            if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+            Allows the approximation of kriging weights based on the OLS
+            algorithm. We don't recommend set it to ``True``
+            if you don't know what are you doing. This parameter can be useful
+            when you have clusters in your dataset,
             that can lead to singular or near-singular matrix creation.
 
         number_of_workers : int, default=1
-            How many processing units can be used for predictions. Increase it only for a very large number of
+            How many processing units can be used for predictions. Increase it
+            only for a very large number of
             interpolated points (~10k+).
 
         show_progress_bar : bool, default=True
@@ -202,7 +309,7 @@ class UniversalKriging:
         # Predict bias
         biases = kriging(
             observations=np.c_[self.observations[:, :-1], self.bias_values],
-            theoretical_model=self.bias_variogram_model,
+            theoretical_model=self.bias_model,
             points=points,
             how=how,
             neighbors_range=neighbors_range,
@@ -222,8 +329,10 @@ class UniversalKriging:
         ]
         return predicted
 
-
     def plot_experimental_bias_model(self):
+        """
+        Plots experimental variogram of bias.
+        """
         self.bias_experimental_model.plot(
             plot_semivariance=True,
             plot_covariance=False,
@@ -231,9 +340,15 @@ class UniversalKriging:
         )
 
     def plot_theoretical_bias_model(self):
-        self.bias_variogram_model.plot()
+        """
+        Plots theoretical semivariogram of bias.
+        """
+        self.bias_model.plot()
 
     def plot_trend_surfaces(self):
+        """
+        Plots initial observations, trend surface, and bias surface.
+        """
         fig, ax = plt.subplots(3)
 
         # Base surface
