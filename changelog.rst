@@ -6,6 +6,10 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2024-06-26
+----------
+* (dependencies) `GeoPandas` >= 1; `numpy` < 2
+
 2024-02-19
 ----------
 
