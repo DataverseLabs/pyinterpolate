@@ -426,7 +426,7 @@ class PointSupport:
         point_support, blocks = self._transform_crs(point_support, blocks, use_point_support_crs)
 
         # Merge data
-        joined = gpd.sjoin(point_support, blocks, how='left')
+        joined = gpd.sjoin(point_support, blocks.rename_axis("index_right"), how='left')
 
         # Check which points weren't joined
         if self.log_dropped:
