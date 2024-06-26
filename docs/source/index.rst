@@ -6,7 +6,7 @@
 Pyinterpolate
 =============
 
-**version 0.6** - *Mykolaiv*
+**version 0.5.2** - *Mykolaiv*
 ------------------------------------
 
 .. image:: imgs/pyinterpolate-banner.png

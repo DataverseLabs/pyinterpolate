@@ -8,6 +8,8 @@ Changes by date
 
 2024-06-26
 ----------
+**version 0.5.2**
+
 * (dependencies) `GeoPandas` >= 1; `numpy` < 2
 
 2024-02-19
