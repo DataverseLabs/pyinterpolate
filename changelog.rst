@@ -11,6 +11,7 @@ Changes by date
 **version 0.5.3**
 
 * (bug) https://github.com/DataverseLabs/pyinterpolate/issues/428
+* (enhancement) added universal kriging functionality along with multivariate regression
 
 2024-06-26
 ----------
