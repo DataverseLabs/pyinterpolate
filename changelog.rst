@@ -6,6 +6,12 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2024-10-26
+----------
+**version 0.5.3**
+
+* (logic) debugged variance error calculations for Area-to-Point Poisson Kriging
+
 2024-06-26
 ----------
 **version 0.5.2**
