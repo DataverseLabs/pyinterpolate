@@ -2,7 +2,7 @@ from pyinterpolate.core.validators.experimental_semivariance_warnings import \
     AttributeSetToFalseWarning
 
 
-def validate_plot_attributes_for_experimental_variogram_class(
+def validate_plot_attributes_for_experimental_variogram(
         is_semivar: bool,
         is_covar: bool,
         plot_semivar: bool,

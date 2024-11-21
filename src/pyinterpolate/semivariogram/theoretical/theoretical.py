@@ -4,7 +4,7 @@ from pyinterpolate import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
-def build_theoretical_semivariogram(
+def build_theoretical_variogram(
     experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
     models_group: Union[str, list] = 'safe',
     nugget=None,
