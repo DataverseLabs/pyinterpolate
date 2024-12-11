@@ -30,7 +30,7 @@ Pyinterpolate has functions for:
 
 [MORE ABOUT SEMIVARIOGRAM MODELING]
 
-## How it works
+## How does it work?
 
 The package has multiple spatial interpolation functions. The flow of analysis is usually the same for each method:
 
@@ -87,7 +87,7 @@ You may follow those setup steps to create a *conda* environment with the packag
 
 ### Recommended - conda installation
 
-[1.] Create conda environment with Python >= 3.8. Recommended is Python 3.10.
+[1.] Create conda environment with Python >= 3.10
 
 ```shell
 conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pyinterpolate
@@ -144,44 +144,37 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 
-## Requirements and dependencies (v 0.5.+)
+## Requirements and dependencies (v 1.x)
 
 Core requirements and dependencies are:
 
-* Python >= 3.8
-* descartes
+* Python >= 3.10
 * geopandas
 * matplotlib
 * numpy
-* tqdm
-* pyproj
-* scipy
-* shapely
-* fiona
-* rtree
 * prettytable
-* pandas
-* dask
-* hdbscan
-* pylibtiff
-* pyarrow
+* pydantic
+* scipy
+* tqdm
 
-You may check a specific version of requirements in the `setup.cfg` file.
+You may check a specific version of requirements in the `setup.cfg` file. Required packages versions are updated in a regular interval.
 
 ## Package structure
 
 High level overview:
 
  - [x] `pyinterpolate`
-    - [x] `distance` - distance calculation,
-    - [x] `idw` - inverse distance weighting interpolation,
-    - [x] `io` - reads and prepares input spatial datasets,
-    - [x] `kriging` - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,
-    - [x] `pipelines` - a complex functions to smooth a block data, download sample data, compare different kriging techniques, and filter blocks,
-    - [x] `processing` - core data structures of the package: `Blocks` and `PointSupport`, and additional functions used for internal processes,
-    - [x] `variogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution,
+    - [x] `core` - data structures and models, data processing pipelines
+    - [x] `distance` - distance and angles
+    - [x] `evaluate` - cross-validation and modeling metrics
+    - [x] `idw` - inverse distance weighting
+    - [x] `kriging` - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point, Indicator Kriging
+    - [x] `transform` - internal data processing functions
+    - [x] `semivariogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution, indicator variogram
     - [x] `viz` - interpolation of smooth surfaces from points into rasters.
- - [x] `tutorials` - tutorials (Basic, Intermediate and Advanced).
+ - [x] `tutorials`
+   - [x] `step-by-step` - tutorials covering the API
+   - [x] `use-cases` - tutorials covering concrete use cases
 
 ## Datasets
 
