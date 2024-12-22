@@ -77,17 +77,17 @@ class Blocks:
     distances : numpy array
         Distances between the blocks representative points.
 
-    block_indexes : numpy array
-        Array with blocks indexes.
-
-    block_representative_points : numpy array
-        Array with blocks representative points - lon, lat.
-
-    block_values : numpy array
-        Array with blocks values.
-
     Methods
     -------
+    block_indexes : numpy array, property
+        Array with blocks indexes.
+
+    block_representative_points : numpy array, property
+        Array with blocks representative points - lon, lat.
+
+    block_values : numpy array, property
+        Array with blocks values.
+
     block_coordinates(block_id)
         Single block representative point.
 
@@ -117,12 +117,33 @@ class Blocks:
     transform_crs(target_crs)
         Transform Blocks Coordinate Reference System.
 
-
-
+    See Also
+    --------
+    PointSupport : Class heavily using ``Blocks`` for the semivariogram deconvolution.
 
     Examples
     --------
-
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import Blocks
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> block = Blocks(**CANCER_DATA)
+    >>> print(block.ds.columns)
+    Index(['FIPS', 'rate', 'geometry', 'rep_points', 'lon', 'lat'], dtype='object')
     """
 
     def __init__(self,
@@ -320,6 +341,9 @@ class Blocks:
 
         # distances
         self.distances = self.calculate_distances_between_representative_points(update=False)
+
+        # angles
+        self.angles = self.calculate_angles_between_representative_points(update=False)
 
     def _delete(self, block_index: Union[str, Hashable]):
         if self.index_column_name is None:

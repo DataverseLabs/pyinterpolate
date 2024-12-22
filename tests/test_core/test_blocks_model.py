@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import geopandas as gpd
 import numpy as np
 import pandas as pd
@@ -34,6 +36,8 @@ def test_assigning_with_representative_points_random():
     block = Blocks(
         **CANCER_DATA_WITH_RAND_PTS
     )
+    print('')
+    print(block.ds.columns)
     assert isinstance(block, Blocks)
     assert 'lon' in block.ds.columns
     assert 'lat' in block.ds.columns
@@ -76,6 +80,7 @@ def test_attribute_error_points_from_centroid_and_from_random_samples():
             representative_points_from_random_sample=True
         )
 
+
 def test_pop_method():
     block = Blocks(
         **CANCER_DATA
@@ -102,7 +107,6 @@ def test_select_distances_between_blocks_method():
         **CANCER_DATA
     )
 
-    l_block = len(block)
     indexes = block.ds[block.index_column_name]
     idxs = np.random.choice(indexes, 10)
 
@@ -123,3 +127,29 @@ def test_select_distances_between_blocks_method():
 
     dist = block._select_distances_between_blocks(idxs[1], idxs)
     assert isinstance(dist, np.ndarray)
+
+
+def test_transform_crs():
+    block = Blocks(
+        **CANCER_DATA,
+        angles_between_representative_points=True
+    )
+
+    sample_base = block.ds.iloc[0]
+    sample_base_dists = block.distances.copy(deep=True).iloc[0, 1]
+    sample_base_angles = deepcopy(block.angles)
+
+    ks = list(sample_base_angles.keys())[0]
+
+    block.transform_crs('EPSG:2180')
+
+    sample_transformed = block.ds.iloc[0]
+    sample_transformed_dists = block.distances.copy(deep=True).iloc[0, 1]
+    sample_transformed_angles = deepcopy(block.angles)
+
+    st_angles = sample_transformed_angles[ks]
+    sb_angles = sample_base_angles[ks]
+
+    assert sample_base[block._lon_col_name] != sample_transformed[block._lon_col_name]
+    assert sample_transformed_dists != sample_base_dists
+    assert sb_angles[1] != st_angles[1]
