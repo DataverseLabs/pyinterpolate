@@ -14,8 +14,8 @@ def test_simple_case():
     ps = PointSupport(
         points=POINT_SUPPORT_DATA['ps'],
         blocks=blocks,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column']
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     )
 
     assert isinstance(ps, PointSupport)
@@ -37,8 +37,8 @@ def test_different_crs_case_1():
     ps = PointSupport(
         points=POINT_SUPPORT_DATA['ps'],
         blocks=blocks,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column']
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     )
 
     assert (ps.point_support.crs == new_crs)
@@ -54,8 +54,8 @@ def test_different_crs_case_2():
     ps = PointSupport(
         points=point_support_data,
         blocks=blocks,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column'],
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name'],
         use_point_support_crs=True
     )
 
@@ -68,8 +68,8 @@ def test_stored_points():
     ps = PointSupport(
         points=POINT_SUPPORT_DATA['ps'],
         blocks=blocks,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column'],
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name'],
         store_dropped_points=True
     )
 
@@ -82,8 +82,8 @@ def test_unique_blocks():
     ps = PointSupport(
         points=POINT_SUPPORT_DATA['ps'],
         blocks=blocks,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column'],
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name'],
         store_dropped_points=True
     )
 

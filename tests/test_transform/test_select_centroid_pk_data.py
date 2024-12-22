@@ -24,8 +24,8 @@ THEO_PARAMS = {"experimental_variogram": None,
 PS = PointSupport(
         points=POINT_SUPPORT_DATA['ps'],
         blocks=BLOCKS,
-        points_value_column=POINT_SUPPORT_DATA['value_column'],
-        points_geometry_column=POINT_SUPPORT_DATA['geometry_column']
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     )
 
 MAX_RANGE = 400000

@@ -106,20 +106,20 @@ def test_select_distances_between_blocks_method():
     indexes = block.ds[block.index_column_name]
     idxs = np.random.choice(indexes, 10)
 
-    dists = block.select_distances_between_blocks(idxs)
+    dists = block._select_distances_between_blocks(idxs)
     assert isinstance(dists, np.ndarray)
 
-    dist = block.select_distances_between_blocks(idxs[-1])
+    dist = block._select_distances_between_blocks(idxs[-1])
     assert isinstance(dist, np.ndarray)
 
-    dists = block.select_distances_between_blocks(idxs, idxs)
+    dists = block._select_distances_between_blocks(idxs, idxs)
     assert isinstance(dists, np.ndarray)
 
-    dist = block.select_distances_between_blocks(idxs[-1], idxs[-1])
+    dist = block._select_distances_between_blocks(idxs[-1], idxs[-1])
     assert isinstance(dist, np.floating)
 
-    dists = block.select_distances_between_blocks(idxs, idxs[1])
+    dists = block._select_distances_between_blocks(idxs, idxs[1])
     assert isinstance(dists, np.ndarray)
 
-    dist = block.select_distances_between_blocks(idxs[1], idxs)
+    dist = block._select_distances_between_blocks(idxs[1], idxs)
     assert isinstance(dist, np.ndarray)

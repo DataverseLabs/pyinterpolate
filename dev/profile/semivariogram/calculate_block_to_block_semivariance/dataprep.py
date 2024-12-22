@@ -21,9 +21,9 @@ PS = gpd.read_file(CANCER_DATA_FILE,
 
 CANCER_DATA = {
     'ds': DS,
-    'index_column': AREA_INDEX,
-    'value_column': AREA_VALUES,
-    'geometry_column': AREA_GEOMETRY
+    'index_column_name': AREA_INDEX,
+    'value_column_name': AREA_VALUES,
+    'geometry_column_name': AREA_GEOMETRY
 }
 
 DS_C = DS.copy()
@@ -31,10 +31,10 @@ DS_C['centroid'] = DS_C.centroid
 
 CANCER_DATA_WITH_CENTROIDS = {
     'ds': DS_C,
-    'index_column': AREA_INDEX,
-    'value_column': AREA_VALUES,
-    'geometry_column': AREA_GEOMETRY,
-    'representative_points_column': 'centroid'
+    'index_column_name': AREA_INDEX,
+    'value_column_name': AREA_VALUES,
+    'geometry_column_name': AREA_GEOMETRY,
+    'representative_points_column_name': 'centroid'
 }
 
 DS_R = DS.copy()
@@ -42,14 +42,14 @@ DS_R['rep_points'] = DS_R.representative_point()
 
 CANCER_DATA_WITH_RAND_PTS = {
     'ds': DS_R,
-    'index_column': AREA_INDEX,
-    'value_column': AREA_VALUES,
-    'geometry_column': AREA_GEOMETRY,
-    'representative_points_column': 'rep_points'
+    'index_column_name': AREA_INDEX,
+    'value_column_name': AREA_VALUES,
+    'geometry_column_name': AREA_GEOMETRY,
+    'representative_points_column_name': 'rep_points'
 }
 
 POINT_SUPPORT_DATA = {
     'ps': PS,
-    'value_column': PS_VALUES,
-    'geometry_column': PS_GEOMETRY
+    'value_column_name': PS_VALUES,
+    'geometry_column_name': PS_GEOMETRY
 }

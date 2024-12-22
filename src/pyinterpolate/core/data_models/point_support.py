@@ -155,7 +155,7 @@ class PointSupport:
             Distances from blocks to all other blocks (ordered the same way as input ``block_ids`` list, where
             rows and columns represent block indexes).
         """
-        distances_between_known_blocks = self.blocks.select_distances_between_blocks(
+        distances_between_known_blocks = self.blocks._select_distances_between_blocks(
             block_id=block_ids, other_blocks=block_ids
         )
         return distances_between_known_blocks

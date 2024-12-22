@@ -150,7 +150,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     predicted = predicted.reshape((n, n))
 
     # Add diagonal custom_weights
-    block_values = point_support.blocks.get_block_values(indexes=closest_neighbors)
+    block_values = point_support.blocks.get_blocks_values(indexes=closest_neighbors)
     totals = point_support.point_support_totals(blocks=closest_neighbors)
     p_weights = _weights_array(predicted.shape,
                                block_values,

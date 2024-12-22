@@ -9,7 +9,7 @@ Authors
 Changes in version 1.0
 - Package doesn't read data files, it must be provided as GeoDataFrame
 """
-from typing import Union, Hashable
+from typing import Union, Hashable, Dict
 from numpy.typing import ArrayLike
 
 import geopandas as gpd
@@ -25,6 +25,35 @@ from pyinterpolate.transform.geo import points_to_lon_lat
 class Blocks:
     """Class represents aggregated blocks data.
 
+    Parameters
+    ----------
+    ds : gpd.GeoDataFrame
+        Dataset with block values.
+
+    value_column_name : Any
+        Name of the column with block rates.
+
+    geometry_column_name : Any, default = 'geometry'
+        Name of the column with a block geometry.
+
+    index_column_name : Any, optional
+        Name of the indexing column.
+
+    representative_points_column_name : Any, optional
+        The column with representative points or coordinates.
+
+    representative_points_from_centroid : bool, default = False
+        Calculate representative points from block centroids.
+
+    representative_points_from_random_sample : bool, default = False
+        Calculate representative points from the point sampled from block geometry.
+
+    distances_between_representative_points : bool, default = True
+        Calculate distances between representative points during class initialization.
+
+    angles_between_representative_points : bool, default = False
+        Calculate angles between representative points during class initialization.
+
     Attributes
     ----------
     ds : gpd.GeoDataFrame
@@ -37,10 +66,59 @@ class Blocks:
         Name of the column with a block geometry.
 
     index_column_name : Any, optional
-        Name of the column with the index.
+        Name of the indexing column.
 
     representative_points_column_name : Any, optional
         The column with representative points or coordinates.
+
+    angles : numpy array
+        Angles between the blocks representative points.
+
+    distances : numpy array
+        Distances between the blocks representative points.
+
+    block_indexes : numpy array
+        Array with blocks indexes.
+
+    block_representative_points : numpy array
+        Array with blocks representative points - lon, lat.
+
+    block_values : numpy array
+        Array with blocks values.
+
+    Methods
+    -------
+    block_coordinates(block_id)
+        Single block representative point.
+
+    block_real_value(block_id)
+        Single block observation.
+
+    calculate_angles_between_representative_points(update=True)
+        Angles between blocks, calculated as angles between each representative point and others. If ``update`` is
+        True then it updates ``angles`` attribute. Returns dictionary with block id as key and angles to other blocks
+        ordered the same way as dictionary keys as values. TODO: change format to DataFrame.
+
+    calculate_distances_between_representative_points(update=True)
+        Distances between blocks, calculated as distances between each representative point and others. If ``update``
+        is True then it updates ``distances`` attribute. Returns DataFrame with block ids as columns and indexes and
+        distances as values.
+
+    get_blocks_values(indexes=None)
+        Get multiple blocks values.
+
+    pop(block_index)
+        Experimental. Removes block with specified index from the dataset and returns removed block as
+        the Blocks object.
+
+    representative_points_array()
+        Numpy array with representative points - lon, lat, value.
+
+    transform_crs(target_crs)
+        Transform Blocks Coordinate Reference System.
+
+
+
 
     Examples
     --------
@@ -49,10 +127,10 @@ class Blocks:
 
     def __init__(self,
                  ds: gpd.GeoDataFrame,
-                 value_column,
-                 geometry_column='geometry',
-                 index_column=None,
-                 representative_points_column=None,
+                 value_column_name,
+                 geometry_column_name='geometry',
+                 index_column_name=None,
+                 representative_points_column_name=None,
                  representative_points_from_centroid=False,
                  representative_points_from_random_sample=False,
                  distances_between_representative_points=True,
@@ -66,12 +144,12 @@ class Blocks:
         self._representative_points_from_random_sample = representative_points_from_random_sample
 
         self.ds = ds.copy(deep=True)
-        self.value_column_name = value_column
-        self.index_column_name = index_column
-        self.geometry_column_name = geometry_column
-        self.representative_points_column_name = representative_points_column
+        self.value_column_name = value_column_name
+        self.index_column_name = index_column_name
+        self.geometry_column_name = geometry_column_name
+        self.representative_points_column_name = representative_points_column_name
 
-        if representative_points_column is None:
+        if representative_points_column_name is None:
             self._get_representative_points()
 
         # Set lon, lat for further calculations
@@ -142,7 +220,7 @@ class Blocks:
 
         return value
 
-    def calculate_angles_between_representative_points(self, update=True):
+    def calculate_angles_between_representative_points(self, update=True) -> Dict:
         """
         Angles from each representative point to others.
 
@@ -200,7 +278,7 @@ class Blocks:
 
         return df
 
-    def get_block_values(self, indexes: ArrayLike = None):
+    def get_blocks_values(self, indexes: ArrayLike = None):
         if indexes is None:
             ds = self.ds.copy()
         else:
@@ -211,7 +289,7 @@ class Blocks:
         return ds[self.value_column_name].values
 
     def pop(self, block_index: Union[str, Hashable]):
-        """Removes block with specified index from the dataset, returns removed block as the Blocks object"""
+        """Removes block with specified index from the dataset and returns removed block as the Blocks object"""
         # Get block
         rblock = self._get(block_index)
 
@@ -243,34 +321,6 @@ class Blocks:
         # distances
         self.distances = self.calculate_distances_between_representative_points(update=False)
 
-    def select_distances_between_blocks(self, block_id, other_blocks=None):
-        """
-        Method selects distances between specified blocks and all other blocks.
-
-        Parameters
-        ----------
-        block_id :
-            Single block ID or list with IDs to retrieve.
-
-        other_blocks : optional
-            Other blocks to get distance to those blocks, if not given then all other blocks are returned.
-
-        Returns
-        -------
-        : pandas DataFrame
-            Index is block id, columns are other blocks.
-        """
-        df = self.distances.copy()
-
-        # get specified values
-        if other_blocks is None:
-            return df.loc[block_id].to_numpy()
-        else:
-            try:
-                return df.loc[block_id, other_blocks].to_numpy()
-            except AttributeError:
-                return df.loc[block_id, other_blocks]
-
     def _delete(self, block_index: Union[str, Hashable]):
         if self.index_column_name is None:
             self.ds.drop(index=block_index, inplace=True)
@@ -282,9 +332,9 @@ class Blocks:
             rblock = self.ds.loc[block_index].copy()
             rblock = Blocks(
                 ds=rblock,
-                value_column=self.value_column_name,
-                geometry_column=self.geometry_column_name,
-                representative_points_column=self.representative_points_column_name,
+                value_column_name=self.value_column_name,
+                geometry_column_name=self.geometry_column_name,
+                representative_points_column_name=self.representative_points_column_name,
                 representative_points_from_centroid=self._representative_points_from_centroid,
                 representative_points_from_random_sample=self._representative_points_from_random_sample
             )
@@ -293,9 +343,9 @@ class Blocks:
             rblock = self.ds[self.ds[self.index_column_name] == block_index].copy()
             rblock = Blocks(
                 ds=rblock,
-                value_column=self.value_column_name,
-                geometry_column=self.geometry_column_name,
-                representative_points_column=self.representative_points_column_name,
+                value_column_name=self.value_column_name,
+                geometry_column_name=self.geometry_column_name,
+                representative_points_column_name=self.representative_points_column_name,
                 representative_points_from_centroid=self._representative_points_from_centroid,
                 representative_points_from_random_sample=self._representative_points_from_random_sample
             )
@@ -340,6 +390,34 @@ class Blocks:
         )
         self.ds[self._lon_col_name] = lon
         self.ds[self._lat_col_name] = lat
+
+    def _select_distances_between_blocks(self, block_id, other_blocks=None) -> np.ndarray:
+        """
+        Method selects distances between specified blocks and all other blocks.
+
+        Parameters
+        ----------
+        block_id :
+            Single block ID or list with IDs to retrieve.
+
+        other_blocks : optional
+            Other blocks to get distance to those blocks, if not given then all other blocks are returned.
+
+        Returns
+        -------
+        : numpy array
+            Index is block id, columns are other blocks.
+        """
+        df = self.distances.copy()
+
+        # get specified values
+        if other_blocks is None:
+            return df.loc[block_id].to_numpy()
+        else:
+            try:
+                return df.loc[block_id, other_blocks].to_numpy()
+            except AttributeError:
+                return df.loc[block_id, other_blocks]
 
     def __len__(self):
         return len(self.ds)
