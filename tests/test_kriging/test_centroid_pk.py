@@ -101,6 +101,8 @@ def test_cpk_directional_non_weighted():
         raise_when_negative_error=False,
         raise_when_negative_prediction=True
     )
+
+
     assert isinstance(cpk, dict)
     assert cpk['block_id'] == indexes[-1]
     assert cpk['zhat'] > 0

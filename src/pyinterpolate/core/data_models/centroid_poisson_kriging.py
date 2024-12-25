@@ -12,6 +12,53 @@ class CentroidPoissonKrigingInput:
     """
     Represents Centroid-based Poisson Kriging input.
 
+    Parameters
+    ----------
+    block_id : Union[str, Hashable]
+        ID of the interpolated block.
+
+    point_support : PointSupport
+        Point support object - containing interpolated block ``block_id`` and neighboring blocks.
+
+    semivariogram_model : TheoreticalVariogram
+        Fitted semivariogram.
+
+    blocks_indexes : np.ndarray, optional
+        The list of the known blocks names.
+
+    weighted : bool, default = True
+        Should distances be weighted by the point support values?
+
+    Attributes
+    ----------
+    semivariogram_model : TheoreticalVariogram
+        Fitted semivariogram.
+
+    block_id : Union[str, Hashable]
+        ID of the interpolated block.
+
+    is_weighted : bool
+        Should distances be weighted by the point support values?
+
+    is_directional : bool
+        Is the semivariogram directional? Set to ``True`` if passed ``semivariogram_model`` has a direction.
+
+    angular_tolerance : float, default = 1
+        How many degrees of difference are allowed for the neighbors search.
+
+    max_tick : float, default = 15
+        How wide might the ``angular_tolerance`` (in one direction, in reality it is two times greater).
+
+    base_distances : numpy array
+        The distances to the unknown block ``block_id`` from other blocks.
+
+    angle_differences : numpy array, default = None
+        The angles between the unknown block and other blocks. It is calculated only for a directional semivariogram.
+
+    ds : DataFrame
+        Core structure within the class. It contains all the necessary data for the kriging. DataFrame columns are:
+
+
     [[unknown block index, cx, cy, value, distance to unknown centroid, angle to the origin]]
     """
 
@@ -118,7 +165,7 @@ class CentroidPoissonKrigingInput:
     def select_neighbors(self,
                          max_range: float,
                          min_number_of_neighbors: int,
-                         select_all_possible_neighbors: bool = True):
+                         select_all_possible_neighbors: bool = False):
         """
         Function selects the closest neighbors.
 
@@ -130,12 +177,8 @@ class CentroidPoissonKrigingInput:
         min_number_of_neighbors : int
             The minimum number of neighboring areas.
 
-        select_all_possible_neighbors : bool, default = True
+        select_all_possible_neighbors : bool, default = False
             Should select all possible neighbors or only the ``min_number_of_neighbors``?
-
-        Returns
-        -------
-        : DataFrame
         """
         self._update_private_neighbors_search_params(
             max_range=max_range,
@@ -236,10 +279,7 @@ class CentroidPoissonKrigingInput:
         if select_all_possible_neighbors:
             return df
         else:
-            if len(df) >= min_number_of_neighbors:
-                return df.sort_values(by=self.n_distances_column, ascending=True).iloc[:min_number_of_neighbors]
-            else:
-                return df.sort_values(by=self.n_distances_column, ascending=True)
+            return df.sort_values(by=self.n_distances_column, ascending=True).iloc[:min_number_of_neighbors]
 
     def _update_neighbors_search_params_directional(self,
                                                     angular_tolerance,

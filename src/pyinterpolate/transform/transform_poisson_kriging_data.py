@@ -2,6 +2,7 @@ from typing import Union, Hashable, List
 
 import numpy as np
 import pandas as pd
+from shapely import Point
 
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.distance.angular import calculate_angular_difference
@@ -156,7 +157,8 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
     """
 
     if blocks_indexes is None:
-        blocks_indexes = points.copy()
+        if not isinstance(points[0], Point):
+            blocks_indexes = [Point([x[0], x[1]]) for x in points]
 
     ds = pd.DataFrame()
     ds[blocks_indexes_column] = blocks_indexes
@@ -175,6 +177,7 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
 
     ds.set_index(blocks_indexes_column, inplace=True)
     return ds
+
 
 def parse_kriging_input(unknown_points_and_values: np.ndarray,
                         known_blocks_id: List[Union[Hashable, str]],

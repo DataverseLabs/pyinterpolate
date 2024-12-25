@@ -7,7 +7,7 @@ Authors
 2. Taher Chegini | @cheginit
 
 Changes in version 1.0
-- Package doesn't read data files, it must be provided as GeoDataFrame
+- Package doesn't read data files, data must be loaded into DataFrame and then passed into the Blocks object.
 """
 from typing import Union, Hashable, Dict
 from numpy.typing import ArrayLike
@@ -187,6 +187,7 @@ class Blocks:
 
     @property
     def block_indexes(self):
+        """Returns index column values."""
         if self.index_column_name is None:
             return self.ds.index.values
         else:
@@ -194,10 +195,12 @@ class Blocks:
 
     @property
     def block_representative_points(self):
+        """Returns block representative coordinates."""
         return self.ds[[self._lon_col_name, self._lat_col_name]].values
 
     @property
     def block_values(self):
+        """Returns block values."""
         return self.ds[self.value_column_name].values
 
     def block_coordinates(self, block_id: Hashable):
@@ -300,6 +303,18 @@ class Blocks:
         return df
 
     def get_blocks_values(self, indexes: ArrayLike = None):
+        """
+        Returns values of observations aggregated within blocks.
+
+        Parameters
+        ----------
+        indexes : Array-like, optional
+            Indexes of blocks to get values from. If not given then all blocks are returned.
+
+        Returns
+        -------
+        : numpy array
+        """
         if indexes is None:
             ds = self.ds.copy()
         else:
@@ -310,7 +325,19 @@ class Blocks:
         return ds[self.value_column_name].values
 
     def pop(self, block_index: Union[str, Hashable]):
-        """Removes block with specified index from the dataset and returns removed block as the Blocks object"""
+        """
+        Removes block with specified index from the dataset and returns removed block as the Blocks object
+
+        Parameters
+        ----------
+        block_index : Union[str, Hashable]
+            Index of the block to remove.
+
+        Returns
+        -------
+        : Blocks
+            Single block as the Blocks object.
+        """
         # Get block
         rblock = self._get(block_index)
 
@@ -321,6 +348,14 @@ class Blocks:
         return rblock
 
     def representative_points_array(self):
+        """
+        Returns array with blocks' representative points.
+
+        Returns
+        -------
+        : numpy array
+            ``[lon, lat, value]``
+        """
         return self.ds[[self._lon_col_name, self._lat_col_name, self.value_column_name]].to_numpy(copy=True)
 
     # TODO manage copying and inplace transformations
