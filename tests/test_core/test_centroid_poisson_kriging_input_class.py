@@ -107,7 +107,8 @@ def test_centroid_poisson_kriging_input_class():
     neighbors_indexes = cpki.neighbors_indexes
     values = cpki.values
 
-    print(kriging_input.columns)
+    print('')
+    print(cpki.kriging_input.head())
 
     assert isinstance(coordinates, np.ndarray)
     assert isinstance(distances, np.ndarray)
@@ -117,3 +118,61 @@ def test_centroid_poisson_kriging_input_class():
     assert len(kriging_input) == len(neighbors_indexes) == len(values) == len(coordinates) == len(distances)
     assert len(kriging_input) <= 4  # select_all_possible_neighbors=False
     assert len(kriging_input) != len(pk_input)
+
+
+def test_centroid_poisson_kriging_input_class_directional_variant():
+    indexes = BLOCKS.block_indexes
+
+    cpki = CentroidPoissonKrigingInput(
+        block_id=indexes[-5],
+        point_support=PS,
+        semivariogram_model=THEO_DIR
+    )
+
+    assert isinstance(cpki, CentroidPoissonKrigingInput)
+    assert set(cpki.ds.columns) == set(DS_COLUMNS)
+
+
+    pk_input = cpki.pk_input
+    assert isinstance(pk_input, pd.DataFrame)
+
+    # raise ValueError
+    with pytest.raises(ValueError) as _:
+        coordinates = cpki.coordinates
+
+    with pytest.raises(ValueError) as _:
+        distances = cpki.distances
+
+    with pytest.raises(ValueError) as _:
+        kriging_input = cpki.kriging_input
+
+    with pytest.raises(ValueError) as _:
+        neighbors_indexes = cpki.neighbors_indexes
+
+    with pytest.raises(ValueError) as _:
+        values = cpki.values
+
+    cpki.select_neighbors(
+        max_range=120000,
+        min_number_of_neighbors=4,
+        select_all_possible_neighbors=False
+    )
+
+    coordinates = cpki.coordinates
+    distances = cpki.distances
+    kriging_input = cpki.kriging_input
+    neighbors_indexes = cpki.neighbors_indexes
+    values = cpki.values
+    angles = cpki.angles
+
+    assert isinstance(coordinates, np.ndarray)
+    assert isinstance(distances, np.ndarray)
+    assert isinstance(kriging_input, pd.DataFrame)
+    assert isinstance(neighbors_indexes, np.ndarray)
+    assert isinstance(values, np.ndarray)
+    assert len(kriging_input) == len(neighbors_indexes) == len(values) == len(coordinates) == len(distances) == len(angles)
+    assert len(kriging_input) <= 4  # select_all_possible_neighbors=False
+    assert len(kriging_input) != len(pk_input)
+    for angle in angles:
+        assert angle >= -360
+        assert angle <= 360

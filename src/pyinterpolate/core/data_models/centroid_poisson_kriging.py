@@ -57,9 +57,106 @@ class CentroidPoissonKrigingInput:
 
     ds : DataFrame
         Core structure within the class. It contains all the necessary data for the kriging. DataFrame columns are:
+        ``['points', 'values', 'distances', 'angular_differences', 'block_id']``.
 
+    Methods
+    -------
+    angles
+        Get angles between the neighboring blocks and the unknown block.
 
-    [[unknown block index, cx, cy, value, distance to unknown centroid, angle to the origin]]
+    coordinates
+        Get coordinates of the neighboring blocks.
+
+    distances
+        Get distances to the neighboring blocks from the unknown block.
+
+    kriging_input
+        DataFrame representing unknown block's neighbors.
+
+    neighbors_indexes
+        Get indexes of the neighboring blocks.
+
+    pk_input
+        DataFrame representing all blocks and their relations to the unknown block. (See ``ds`` attribute).
+
+    values
+        Get values of the neighboring blocks.
+
+    select_neighbors()
+        Function selects the closest neighbors.
+
+    select_neighbors_directional()
+        Function selects the closest neighbors within a defined angle.
+
+    len()
+        Returns the number of closest neighbors.
+
+    See Also
+    --------
+    select_centroid_poisson_kriging_data() : function which uses this class to select neighbors for the interpolation.
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
+    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> block = Blocks(**CANCER_DATA)
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> cpki = CentroidPoissonKrigingInput(
+    ...     block_id=indexes[-5],
+    ...     point_support=PS,
+    ...     semivariogram_model=THEO
+    ... )
+    >>> cpki.select_neighbors(
+    ...     max_range=120000,
+    ...     min_number_of_neighbors=4,
+    ...     select_all_possible_neighbors=False
+    ... )
+    >>> print(len(cpki))  # 3 neighbors are selected from this dataset, see tests
+    3
     """
 
     def __init__(self,
@@ -122,6 +219,13 @@ class CentroidPoissonKrigingInput:
 
         # kriging input
         self._kriging_input = None
+
+    @property
+    def angles(self):
+        if self._kriging_input is None:
+            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+        else:
+            return self._kriging_input[self.n_angular_differences_column].to_numpy()
 
     @property
     def coordinates(self):
