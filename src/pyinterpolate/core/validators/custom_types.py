@@ -5,12 +5,12 @@ from pydantic import BeforeValidator, PlainSerializer
 
 
 def nd_array_custom_before_validator(x):
-    # custome before validation logic
+    # custom before validation logic
     return x
 
 
 def nd_array_custom_serializer(x):
-    # custome serialization logic
+    # custom serialization logic
     return str(x)
 
 

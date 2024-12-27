@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
-from pyinterpolate.core.data_models.custom_types import ndarray_pydantic
+from pyinterpolate.core.validators.custom_types import ndarray_pydantic
 from pyinterpolate.core.data_models.experimental_variogram import ExperimentalVariogramModel
 
 

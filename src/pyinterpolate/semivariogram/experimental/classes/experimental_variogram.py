@@ -63,8 +63,7 @@ class ExperimentalVariogram:
         distance.
 
     custom_weights : numpy array, optional
-        Custom custom_weights assigned to points. Only semivariance values are
-        weighted.
+        Custom weights assigned to points. Only semivariance values are weighted.
 
     is_semivariance : bool, default=True
         Calculate experimental semivariance.

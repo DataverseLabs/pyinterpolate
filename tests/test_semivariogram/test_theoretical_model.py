@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 from pyinterpolate import ExperimentalVariogram
-from pyinterpolate.semivariogram.theoretical.theoretical import build_theoretical_semivariogram
+from pyinterpolate.semivariogram.theoretical.theoretical import build_theoretical_variogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 from ._ds import get_armstrong_data, TheoreticalVariogramTestData
@@ -33,7 +33,7 @@ ARMSTRONG_VARIOGRAM_DIRECTIONAL = ExperimentalVariogram(ARMSTRONG_DATA,
 def test_zero_case():
     _sill = 10
     _range = 10
-    _theo = build_theoretical_semivariogram(
+    _theo = build_theoretical_variogram(
         ZEROS_VARIOGRAM, 'linear', sill=_sill, rang=_range
     )
 
