@@ -18,36 +18,143 @@ class PointSupport:
 
     Parameters
     ----------
-    points : RawPoints or numpy array
-        Point Support as lon, lat, value.
+    points: gpd.GeoDataFrame
+        Point support data, it should have geometry (Point) column and value column.
 
-    blocks : Blocks
-        Block data.
+    blocks: Blocks
+        ``Blocks`` object with polygons data.
 
-    store_dropped_points : bool, default = False
-        Save dropped points in the additional attribute (``dropped_points``).
+    points_value_column: str
+        The name of the point-support column with points values (e.g. population).
+
+    points_geometry_column: str
+        The name of the point-support column with a geometry.
+
+    store_dropped_points: bool = False
+        Should object store points which weren't joined with blocks?
+
+    use_point_support_crs: bool = False
+        Should object use point support CRS instead of blocks CRS? Both CRS are projected into the same CRS, and this
+        parameter decides into which CRS the data should be reprojected.
+
+    calculate_weighted_block_to_block_distances: bool = True
+        Should object calculate weighted distances between blocks during initialization?
+
+    calculate_distances_between_point_support_points: bool = True
+        Should object calculate distances between point supports during initialization?
+
+    verbose: bool = True
+        Information about the progress of the calculations.
 
     Attributes
     ----------
+    blocks : Blocks
+        Blocks object with polygons data.
+
+    blocks_distances : numpy array
+        Distances between the blocks' representative points.
+
+    blocks_index_column : str
+        Name of the column with block indexes.
+
+    distances_between_point_support_points : Dict
+        Distances between point supports. ``(block_a, block_b): distances between their points``
+
+    dropped_points : GeoDataFrame, optional
+        Points which weren't joined with blocks (due to the lack of spatial overlap). Attribute can be None if
+        the parameter ``store_dropped_points`` was set to False.
+
     point_support : GeoDataFrame
         Columns: ``lon``, ``lat``, ``point-support-value``, ``block-index``.
 
-    dropped_points : numpy array
-        ``(lon, lat, value)``
+    point_support_blocks_index_name : str, optional
+        Name of the column with block indexes in the point support. If the column name is not given in
+        the ``blocks`` object, then the default name ``"blocks_index"`` is used.
+
+    unique_blocks : numpy array
+        Unique block indexes from the point support.
+
+    weighted_distances : Dict, optional
+        Weighted distances between blocks ``{block id : [weighted distances to other blocks in the same order as
+        the dictionary keys]}``.
+
+    Methods
+    -------
+    calc_distances_between_ps_points()
+        Function calculates distances between all points from point supports between blocks.
+
+    get_distances_between_known_blocks()
+        Function returns distances between given blocks.
+
+    get_point_to_block_indexes()
+        Method returns block indexes for each point in the same order as points are stored in the ``point_support``.
+
+    get_points_array()
+        Method returns point coordinates and their values as a numpy array.
+
+    get_weighted_distance()
+        Function returns weighted distance from a given block to other blocks.
+
+    point_support_totals()
+        Function retrieves total point support values for given blocks.
+
+    weighted_distance()
+        Function calculates weighted distances between blocks using their point supports.
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
+    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> block = Blocks(**CANCER_DATA)
+    >>>
+    >>> ps = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>> print(ps.unique_blocks[:2])
+    [42049. 42039.]
 
     Notes
     -----
-    The PointSupport class structure is designed to store the information about the points within polygons.
-    During the regularization process, the inblock variograms are estimated from the polygon's point support, and
+    The ``PointSupport`` class structure is designed to store the information about the points within polygons.
+    During the regularization process, the inblock semivariograms are estimated from the polygon's point support, and
     semivariances are calculated between point supports of neighbouring blocks.
 
-    The class takes population grid (support) and blocks data (polygons). Then, spatial join is performed and points
-    are assigned to areas within they are placed. The core attribute is ``point_support`` - GeoDataFrame with columns:
+    The class takes the point support grid and blocks data (polygons). Then, spatial join is performed and points
+    are assigned to areas where they fall. The core attribute is ``point_support`` - GeoDataFrame with columns:
 
     * ``lon`` - a floating representation of longitude,
     * ``lat`` - a floating representation of latitude,
-    * ``point-support-value`` - the attribute which describes the name of a column with the point-support's value,
-    * ``block-index`` - the name of a column which directs to the block index values.
+    * ``point-support-value`` - the attribute describing the name of a column with the point-support's value,
+    * ``block-index`` - the name of a column directing to the block index values.
 
     """
 
@@ -67,10 +174,11 @@ class PointSupport:
         self._lat_col_name = 'lat'
         self._verbose = verbose
 
-        self.dropped_points = None
         self.blocks = blocks
         self.blocks_distances = blocks.distances
         self.blocks_index_column = self.blocks.index_column_name
+        self.dropped_points = None
+
         self.value_column_name = points_value_column
         self.geometry_column_name = points_geometry_column
         self._total_ps_column_name = f'total_{self.value_column_name}'
@@ -94,6 +202,14 @@ class PointSupport:
 
         if calculate_distances_between_point_support_points:
             self.calc_distances_between_ps_points(update=True)
+
+    @property
+    def lon_col_name(self):
+        return self._lon_col_name
+
+    @property
+    def lat_col_name(self):
+        return self._lat_col_name
 
     def calc_distances_between_ps_points(self,
                                          update: bool) -> Dict:
@@ -155,7 +271,7 @@ class PointSupport:
             Distances from blocks to all other blocks (ordered the same way as input ``block_ids`` list, where
             rows and columns represent block indexes).
         """
-        distances_between_known_blocks = self.blocks._select_distances_between_blocks(
+        distances_between_known_blocks = self.blocks.select_distances_between_blocks(
             block_id=block_ids, other_blocks=block_ids
         )
         return distances_between_known_blocks
@@ -402,11 +518,3 @@ class PointSupport:
         """
         unique_blocks = self.point_support[self.point_support_blocks_index_name].unique()
         return unique_blocks
-
-    @property
-    def lon_col_name(self):
-        return self._lon_col_name
-
-    @property
-    def lat_col_name(self):
-        return self._lat_col_name

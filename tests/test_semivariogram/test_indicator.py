@@ -46,7 +46,7 @@ def test_experimental_indicator_variogram():
                                           step_size=STEP_R,
                                           max_range=MX_RNG)
 
-    evar.show()
+    # evar.show()
 
     assert isinstance(evar, ExperimentalIndicatorVariogram)
     assert isinstance(evar.experimental_models, Dict)
@@ -62,7 +62,7 @@ def test_theoretical_indicator_variogram():
         experimental_indicator_variogram=evar
     )
     vrgs.fit()
-    vrgs.show()
+    # vrgs.show()
     assert isinstance(vrgs, TheoreticalIndicatorVariogram)
     assert isinstance(vrgs.theoretical_indicator_variograms, Dict)
     assert len(vrgs.theoretical_indicator_variograms) == 5

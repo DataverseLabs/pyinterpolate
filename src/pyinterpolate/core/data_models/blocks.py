@@ -114,6 +114,9 @@ class Blocks:
     representative_points_array()
         Numpy array with representative points - lon, lat, value.
 
+    select_distances_between_blocks()
+        Select distances between a given block and all other blocks.
+
     transform_crs(target_crs)
         Transform Blocks Coordinate Reference System.
 
@@ -450,7 +453,7 @@ class Blocks:
         self.ds[self._lon_col_name] = lon
         self.ds[self._lat_col_name] = lat
 
-    def _select_distances_between_blocks(self, block_id, other_blocks=None) -> np.ndarray:
+    def select_distances_between_blocks(self, block_id, other_blocks=None) -> np.ndarray:
         """
         Method selects distances between specified blocks and all other blocks.
 
