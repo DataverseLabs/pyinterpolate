@@ -1,4 +1,4 @@
-from typing import Dict, Tuple, Union, List
+from typing import Dict, Tuple, Union, List, Iterable
 
 import geopandas as gpd
 import numpy as np
@@ -317,7 +317,7 @@ class PointSupport:
         dists = self.weighted_distances[block_id]
         return dists
 
-    def point_support_totals(self, blocks):
+    def point_support_totals(self, blocks: Iterable):
         """
         Function retrieves total point support values for given blocks.
 

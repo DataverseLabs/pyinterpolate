@@ -88,3 +88,55 @@ def test_unique_blocks():
     )
 
     assert len(ps.unique_blocks) == len(blocks.ds.index)
+
+
+def test_case_without_automatic_calculations():
+    blocks = Blocks(**CANCER_DATA_WITH_CENTROIDS)
+
+    ps = PointSupport(
+        points=POINT_SUPPORT_DATA['ps'],
+        blocks=blocks,
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name'],
+        calculate_weighted_block_to_block_distances=False,
+        calculate_distances_between_point_support_points=False
+    )
+
+    block_id = blocks.block_indexes[1]
+
+    assert isinstance(ps, PointSupport)
+    assert isinstance(ps.point_support, gpd.GeoDataFrame)
+
+    points = ps.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = ps.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
+
+    assert ps.weighted_distances is None
+
+    _ = ps.get_weighted_distance(block_id=block_id)
+    assert ps.weighted_distances is not None
+
+    ps.weighted_distances = None
+    assert ps.weighted_distances is None
+
+    _ = ps.weighted_distance(update=True)
+    assert ps.weighted_distances is not None
+
+    assert ps.distances_between_point_support_points is None
+
+    _ = ps.calc_distances_between_ps_points(update=True)
+    assert ps.distances_between_point_support_points is not None
+
+    distances_from_block_to_others = ps.get_distances_between_known_blocks(
+        block_ids=[block_id]
+    )
+    assert isinstance(distances_from_block_to_others, np.ndarray)
+
+    totals = ps.point_support_totals(
+        blocks=[block_id]
+    )
+    assert len(totals) == 1
+    assert isinstance(totals, np.ndarray)
