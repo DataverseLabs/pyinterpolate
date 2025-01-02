@@ -8,6 +8,7 @@ from pydantic import field_validator, BaseModel, ConfigDict
 
 
 class RawPoints(BaseModel):
+    """Class represents points prepared for Experimental Variogram estimation"""
     model_config = ConfigDict(
         arbitrary_types_allowed=True
     )

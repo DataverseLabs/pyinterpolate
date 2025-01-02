@@ -17,6 +17,143 @@ class PoissonKrigingInput:
     """
     Represents Poisson Kriging input.
 
+    Parameters
+    ----------
+    block_id : Union[str, Hashable]
+        ID of the interpolated block.
+
+    point_support : PointSupport
+        Point support object - containing interpolated block ``block_id`` and neighboring blocks.
+
+    semivariogram_model : TheoreticalVariogram
+        Fitted semivariogram.
+
+    blocks_indexes : np.ndarray, optional
+        The list of the known blocks names.
+
+    Attributes
+    ----------
+    semivariogram_model : TheoreticalVariogram
+        Fitted semivariogram.
+
+    block_id : Union[str, Hashable]
+        ID of the interpolated block.
+
+    is_directional : bool
+        Is the semivariogram directional? Set to ``True`` if passed ``semivariogram_model`` has a direction.
+
+    angular_tolerance : float, default = 1
+        How many degrees of difference are allowed for the neighbors search.
+
+    max_tick : float, default = 15
+        How wide might the ``angular_tolerance`` (in one direction, in reality it is two times greater).
+
+    block_distances : numpy array
+        The distances to the unknown block ``block_id`` from other blocks.
+
+    ds : DataFrame
+        Core structure within the class. It contains all the necessary data for the kriging. DataFrame columns are:
+        ``['points', 'values', 'distances', 'angular_differences', 'block_id']``.
+
+    Methods
+    -------
+    angles
+        Get angles between the neighboring blocks and the unknown block.
+
+    coordinates
+        Get coordinates of the neighboring blocks.
+
+    distances
+        Get distances to the neighboring blocks from the unknown block.
+
+    kriging_input
+        DataFrame representing unknown block's neighbors.
+
+    neighbors_indexes
+        Get indexes of the neighboring blocks.
+
+    pk_input
+        DataFrame representing all blocks and their relations to the unknown block. (See ``ds`` attribute).
+
+    values
+        Get values of the neighboring blocks.
+
+    select_neighbors()
+        Function selects the closest neighbors.
+
+    select_neighbors_directional()
+        Function selects the closest neighbors within a defined angle.
+
+    len()
+        Returns the number of closest neighbors.
+
+    See Also
+    --------
+    select_centroid_poisson_kriging_data() : function which uses this class to select neighbors for the interpolation.
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
+    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> block = Blocks(**CANCER_DATA)
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> cpki = CentroidPoissonKrigingInput(
+    ...     block_id=indexes[-5],
+    ...     point_support=PS,
+    ...     semivariogram_model=THEO
+    ... )
+    >>> cpki.select_neighbors(
+    ...     max_range=120000,
+    ...     min_number_of_neighbors=4,
+    ...     select_all_possible_neighbors=False
+    ... )
+    >>> print(len(cpki))  # 3 neighbors are selected from this dataset, see tests
+    3
+
     # [unknown x, unknown y, unknown point support value,
     #  other x, other y, other point support value,
     #  distance to other,
@@ -29,6 +166,8 @@ class PoissonKrigingInput:
                  point_support: PointSupport,
                  semivariogram_model: TheoreticalVariogram,
                  blocks_indexes: np.ndarray = None):
+
+        # TODO: store Block columns and PointSupport-Neighbors columns in separate dataclasses
 
         # Block columns
         self.blocks_indexes_column = 'blocks_indexes'
@@ -54,7 +193,7 @@ class PoissonKrigingInput:
 
         self.block_id = block_id
         self.blocks_indexes = blocks_indexes
-        self.is_weighted = True  # always weighted
+        self.__is_weighted = True  # always weighted
         self.is_directional = True if self.semivariogram_model.direction is not None else False
         self.angular_tolerance = 1
         self.max_tick = 15
@@ -63,7 +202,7 @@ class PoissonKrigingInput:
         self.block_distances = block_base_distances(
             block_id=self.block_id,
             point_support=point_support,
-            weighted=self.is_weighted
+            weighted=self.__is_weighted
         )
 
         self.block_angle_differences = None
