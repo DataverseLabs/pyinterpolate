@@ -3,8 +3,8 @@ import geopandas as gpd
 from pyinterpolate import smooth_blocks, Blocks, PointSupport, TheoreticalVariogram
 
 
-DATASET = '../samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_variogram.json'
+DATASET = 'samples/regularization/cancer_data.gpkg'
+VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
 POLYGON_LAYER = 'areas'
 POPULATION_LAYER = 'points'
 POP10 = 'POP10'
@@ -28,7 +28,7 @@ POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
 
 THEORETICAL_VARIOGRAM = TheoreticalVariogram()
 THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
-DIRECTIONAL_VARIOGRAM_MODEL_FILE = '../samples/regularization/regularized_directional_variogram.json'
+DIRECTIONAL_VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_directional_variogram.json'
 DIRECTIONAL_VARIOGRAM = TheoreticalVariogram()
 DIRECTIONAL_VARIOGRAM.from_json(DIRECTIONAL_VARIOGRAM_MODEL_FILE)
 

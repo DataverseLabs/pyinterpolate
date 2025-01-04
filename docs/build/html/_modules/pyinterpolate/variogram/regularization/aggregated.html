@@ -1,0 +1,1123 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.variogram.regularization.aggregated &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/regularization/aggregated';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.variogram.regularization.aggregated</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.variogram.regularization.aggregated</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class to work with blocks &amp; point support datasets and transformations.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.distance</span> <span class="kn">import</span> <span class="n">calc_block_to_block_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.preprocessing.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.transform.transform</span> <span class="kn">import</span> <span class="n">get_areal_centroids_from_agg</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.regularization.block.avg_block_to_block_semivariances</span> <span class="kn">import</span> \
+    <span class="n">average_block_to_block_semivariances</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.regularization.block.inblock_semivariance</span> <span class="kn">import</span> <span class="n">calculate_inblock_semivariance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.regularization.block.avg_inblock_semivariances</span> <span class="kn">import</span> <span class="n">calculate_average_semivariance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.regularization.block.block_to_block_semivariance</span> <span class="kn">import</span> \
+    <span class="n">calculate_block_to_block_semivariance</span>
+
+
+<span class="c1"># noinspection PyTypeChecker</span>
+<div class="viewcode-block" id="AggregatedVariogram">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram">[docs]</a>
+<span class="k">class</span> <span class="nc">AggregatedVariogram</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class calculates semivariance of aggregated counts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
+<span class="sd">        Blocks with aggregated data.</span>
+
+<span class="sd">        * Blocks: ``Blocks()`` class object.</span>
+<span class="sd">        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">          Geometry column with polygons is not used.</span>
+<span class="sd">        * numpy array: ``[[block index, centroid x, centroid y, value]]``.</span>
+
+<span class="sd">    agg_step_size : float</span>
+<span class="sd">        Step size between lags.</span>
+
+<span class="sd">    agg_max_range : float</span>
+<span class="sd">        Maximal distance of analysis.</span>
+
+<span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+
+<span class="sd">        * Dict: ``{block id: [[point x, point y, value]]}``</span>
+<span class="sd">        * numpy array: ``[[block id, x, y, value]]``</span>
+<span class="sd">        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``</span>
+<span class="sd">        * PointSupport</span>
+
+<span class="sd">    agg_direction : float (in range [0, 360]), default=0</span>
+<span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
+
+<span class="sd">        - 0 or 180: is E-W,</span>
+<span class="sd">        - 90 or 270 is N-S,</span>
+<span class="sd">        - 45 or 225 is NE-SW,</span>
+<span class="sd">        - 135 or 315 is NW-SE.</span>
+
+<span class="sd">    agg_tolerance : float (in range [0, 1]), default=1</span>
+<span class="sd">        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``agg_tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance.</span>
+
+<span class="sd">        * The major axis size == ``agg_step_size``.</span>
+<span class="sd">        * The minor axis size is ``agg_tolerance * agg_step_size``</span>
+<span class="sd">        * The baseline point is at a center of the ellipse.</span>
+<span class="sd">        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    agg_nugget : float, default = 0</span>
+<span class="sd">        The nugget of blocks data.</span>
+
+<span class="sd">    variogram_weighting_method : str, default = &quot;closest&quot;</span>
+<span class="sd">        Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">        - **equal**: no weighting,</span>
+<span class="sd">        - **closest**: lags at a close range have bigger weights,</span>
+<span class="sd">        - **distant**: lags that are further away have bigger weights,</span>
+<span class="sd">        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        Print steps performed by the algorithm.</span>
+
+<span class="sd">    log_process : bool, default = False</span>
+<span class="sd">        Log process info (Level ``DEBUG``).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    aggregated_data : Union[Blocks, Dict, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
+<span class="sd">        See ``aggregared_data`` parameter.</span>
+
+<span class="sd">    agg_step_size : float</span>
+<span class="sd">        See ``agg_step_size`` parameter.</span>
+
+<span class="sd">    agg_max_range : float</span>
+<span class="sd">        See ``agg_max_range`` parameter.</span>
+
+<span class="sd">    agg_lags : numpy array</span>
+<span class="sd">        Lags calculated as a set of equidistant points from ``agg_step_size`` to ``agg_max_range`` with a step of size</span>
+<span class="sd">        ``agg_step_size``.</span>
+
+<span class="sd">    agg_tolerance : float, default = 1</span>
+<span class="sd">        See ``agg_tolerance`` parameter.</span>
+
+<span class="sd">    agg_direction : float, default = 0</span>
+<span class="sd">        See ``agg_direction`` parameter.</span>
+
+<span class="sd">    agg_nugget : float, default = 0</span>
+<span class="sd">        See ``agg_nugget`` parameter.</span>
+
+<span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+<span class="sd">        See the ``point_support`` parameter.</span>
+
+<span class="sd">    weighting_method : str, default = &#39;closest&#39;</span>
+<span class="sd">        See the ``variogram_weighting_method`` parameter.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        See ``verbose`` parameter.</span>
+
+<span class="sd">    log_process : bool, default = False</span>
+<span class="sd">        See the ``log_process`` parameter.</span>
+
+<span class="sd">    experimental_variogram : ExperimentalVariogram</span>
+<span class="sd">        The experimental variogram calculated from blocks (their centroids).</span>
+
+<span class="sd">    theoretical_model : TheoreticalVariogram</span>
+<span class="sd">        The theoretical model derived from blocks&#39; centroids.</span>
+
+<span class="sd">    inblock_semivariance : Dict</span>
+<span class="sd">        ``{area id: the average inblock semivariance}``</span>
+
+<span class="sd">    avg_inblock_semivariance : numpy array</span>
+<span class="sd">        ``[lag, average inblocks semivariances, number of blocks within a lag]``</span>
+
+<span class="sd">    block_to_block_semivariance : Dict</span>
+<span class="sd">        ``{(block i, block j): [distance, semivariance, number of point pairs between blocks]}``</span>
+
+<span class="sd">    avg_block_to_block_semivariance : numpy array</span>
+<span class="sd">        ``[lag, semivariance, number of point pairs between blocks]``.</span>
+
+<span class="sd">    regularized_variogram : numpy array</span>
+<span class="sd">        ``[lag, semivariance]``</span>
+
+<span class="sd">    distances_between_blocks : Dict</span>
+<span class="sd">        Weighted distances between all blocks: ``{block id : [distances to other blocks]}``.</span>
+
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    regularize()</span>
+<span class="sd">        Method performs semivariogram regularization.</span>
+
+<span class="sd">    show_semivariograms()</span>
+<span class="sd">        Shows experimental variogram, theoretical model, average inblock semivariance,</span>
+<span class="sd">        average block to block semivariance and regularized variogram.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical</span>
+<span class="sd">    Units, Mathematical Geology 40(1), 101-128, 2008</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">aggregated_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Blocks</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                 <span class="n">agg_step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">agg_max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                 <span class="n">point_support</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">],</span>
+                 <span class="n">agg_direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">agg_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                 <span class="n">agg_nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">log_process</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggregated_data</span> <span class="o">=</span> <span class="n">aggregated_data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span> <span class="o">=</span> <span class="n">agg_step_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span> <span class="o">=</span> <span class="n">agg_max_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_nugget</span> <span class="o">=</span> <span class="n">agg_nugget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_tolerance</span> <span class="o">=</span> <span class="n">agg_tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agg_direction</span> <span class="o">=</span> <span class="n">agg_direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_support</span> <span class="o">=</span> <span class="n">point_support</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span> <span class="o">=</span> <span class="n">variogram_weighting_method</span>
+
+        <span class="c1"># Process info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_process</span> <span class="o">=</span> <span class="n">log_process</span>
+
+        <span class="c1"># Variogram models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># from blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># from blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inblock_semivariance</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># from point support within a block</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_inblock_semivariance</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># from inblock semivariances; lags -&gt; from blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_to_block_semivariance</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># from point supports between blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># average from point supports between block pairs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Model parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_inblock_semivariance">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_inblock_semivariance">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_avg_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method calculates the average semivariance within blocks :math:`\gamma_h(v, v)`. The average inblock</span>
+<span class="sd">        semivariance is calculated as:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a})` is a semivariance within a block :math:`a`,</span>
+<span class="sd">        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at a distance :math:`h` from the</span>
+<span class="sd">          block :math:`a`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        avg_inblock_semivariance : numpy array</span>
+<span class="sd">             ``[lag, semivariance, number of block pairs]``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Calculate inblock semivariance</span>
+        <span class="c1"># Pass dict with {area id, [points within area and their values]} and semivariogram model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inblock_semivariance</span> <span class="o">=</span> <span class="n">calculate_inblock_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_support</span><span class="p">,</span>
+                                                                   <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span><span class="p">)</span>
+
+        <span class="c1"># Calculate distances between blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="n">calc_block_to_block_distance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_support</span><span class="p">)</span>
+
+        <span class="c1"># Calc average semivariance</span>
+        <span class="n">avg_inblock_semivariance</span> <span class="o">=</span> <span class="n">calculate_average_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span><span class="p">,</span>
+                                                                  <span class="bp">self</span><span class="o">.</span><span class="n">inblock_semivariance</span><span class="p">,</span>
+                                                                  <span class="n">block_step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">,</span>
+                                                                  <span class="n">block_max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">avg_inblock_semivariance</span></div>
+
+
+<div class="viewcode-block" id="AggregatedVariogram.calculate_avg_semivariance_between_blocks">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.calculate_avg_semivariance_between_blocks">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_avg_semivariance_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function calculates semivariance between areas based on their division into smaller blocks. It is</span>
+<span class="sd">        :math:`\gamma(v, v_h)` - semivariogram value between any two blocks separated by the distance h.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        avg_block_to_block_semivariance : numpy array</span>
+<span class="sd">            The average semivariance between neighboring blocks point-supports:</span>
+<span class="sd">            ``[lag, semivariance, number of block pairs within a range]``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Block-to-block semivariance is calculated as:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma(v_{a}, v_{a+h})=\frac{1}{P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s&#39;=1}^{P_{a+h}}\gamma(u_{s}, u_{s&#39;})</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a+h})` - block-to-block semivariance of block :math:`a` and paired block :math:`a+h`.</span>
+<span class="sd">        - :math:`P_{a}$ and $P_{a+h}` - number of support points within block :math:`a` and block :math:`a+h`.</span>
+<span class="sd">        - :math:`\gamma(u_{s}, u_{s&#39;})` - semivariance of point supports between blocks.</span>
+
+<span class="sd">        Then average block-to-block semivariance is calculated as:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`\gamma_{h}(v, v_{h})` - averaged block-to-block semivariances for a lag :math:`h`,</span>
+<span class="sd">        - :math:`\gamma(v_{a}, v_{a+h})` - semivariance of block :math:`a` and paired block at a distance :math:`h`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check if distances between blocks are calculated</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="n">calc_block_to_block_distance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_support</span><span class="p">)</span>
+
+        <span class="c1"># {(block id a, block id b): [distance, semivariance, number of point pairs between blocks]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_to_block_semivariance</span> <span class="o">=</span> <span class="n">calculate_block_to_block_semivariance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">point_support</span><span class="p">,</span>
+                                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span><span class="p">,</span>
+                                                                                 <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span><span class="p">)</span>
+
+        <span class="n">semivars_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_to_block_semivariance</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">avg_block_to_block_semivariance</span> <span class="o">=</span> <span class="n">average_block_to_block_semivariances</span><span class="p">(</span><span class="n">semivariances_array</span><span class="o">=</span><span class="n">semivars_arr</span><span class="p">,</span>
+                                                                               <span class="n">lags</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span>
+                                                                               <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">avg_block_to_block_semivariance</span></div>
+
+
+<div class="viewcode-block" id="AggregatedVariogram.regularize">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize">[docs]</a>
+    <span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                   <span class="n">average_inblock_semivariances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                   <span class="n">semivariance_between_point_supports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">experimental_block_variogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">theoretical_block_model</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method regularizes point support model. Procedure is described in [1].</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        average_inblock_semivariances : np.ndarray, default = None</span>
+<span class="sd">            The mean semivariance between the blocks. See Notes to learn more.</span>
+
+<span class="sd">        semivariance_between_point_supports : np.ndarray, default = None</span>
+<span class="sd">            Semivariance between all blocks calculated from the theoretical model.</span>
+
+<span class="sd">        experimental_block_variogram : np.ndarray, default = None</span>
+<span class="sd">            The experimental semivariance between area centroids.</span>
+
+<span class="sd">        theoretical_block_model : TheoreticalVariogram, default = None</span>
+<span class="sd">            A modeled variogram.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        regularized_model : numpy array</span>
+<span class="sd">            ``[lag, semivariance, number of point pairs]``</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Function has the form:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_v(h) = \gamma(v, v_h) - \gamma_h(v, v)</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - :math:`\gamma_v(h)` - the regularized variogram,</span>
+<span class="sd">        - :math:`\gamma(v, v_h)` - a variogram value between any two blocks separated by the distance :math:`h`</span>
+<span class="sd">          (calculated from their point support),</span>
+<span class="sd">        - :math:`\gamma_h(v, v)` - average inblock semivariance between blocks.</span>
+
+<span class="sd">        Average inblock semivariance between blocks:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]</span>
+
+<span class="sd">        where :math:`\gamma(v_{a}, v_{a})` and :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block</span>
+<span class="sd">        :math:`a` and block :math:`a+h` separated by the distance :math:`h`.</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        [1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units,</span>
+<span class="sd">            Mathematical Geology 40(1), 101-128, 2008</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Set all variograms and models</span>
+        <span class="k">if</span> <span class="n">experimental_block_variogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_experimental_variogram</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">experimental_block_variogram</span>
+
+        <span class="k">if</span> <span class="n">theoretical_block_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_theoretical_model</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span> <span class="o">=</span> <span class="n">theoretical_block_model</span>
+
+        <span class="c1"># gamma_h(v, v)</span>
+        <span class="k">if</span> <span class="n">average_inblock_semivariances</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avg_inblock_semivariance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_avg_inblock_semivariance</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avg_inblock_semivariance</span> <span class="o">=</span> <span class="n">average_inblock_semivariances</span>
+
+        <span class="c1"># gamma(v, v_h)</span>
+        <span class="k">if</span> <span class="n">semivariance_between_point_supports</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_avg_semivariance_between_blocks</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span> <span class="o">=</span> <span class="n">semivariance_between_point_supports</span>
+
+        <span class="c1"># regularize variogram</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularize_variogram</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span></div>
+
+
+<div class="viewcode-block" id="AggregatedVariogram.regularize_variogram">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.regularize_variogram">[docs]</a>
+    <span class="k">def</span> <span class="nf">regularize_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function regularizes semivariograms.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        reg_variogram : numpy array</span>
+<span class="sd">            ``[lag, semivariance]``</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Semivariance at a given lag is below zero.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Regularized semivariogram is a difference between the average block to block semivariance</span>
+<span class="sd">        :math:`\gamma(v, v_{h})` and the average inblock semivariances :math:`\gamma{h}(v, v)` at a given lag</span>
+<span class="sd">        :math:`h`.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \gamma_{v}(h)=\gamma(v, v_{h}) - \gamma{h}(v, v)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">reg_variogram</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># Get lag and semivariance</span>
+        <span class="n">reg_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_inblock_semivariance</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">reg_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reg_variogram</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Calculated semivariance of regualrized variogram for a lag </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1"> is below zero. &#39;</span> \
+                          <span class="sa">f</span><span class="s1">&#39;Semivariance value: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">reg_variogram</span></div>
+
+
+<div class="viewcode-block" id="AggregatedVariogram.show_semivariograms">
+<a class="viewcode-back" href="../../../../api/variogram/block/block.html#pyinterpolate.AggregatedVariogram.show_semivariograms">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_semivariograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method plots:</span>
+
+<span class="sd">        - experimental variogram,</span>
+<span class="sd">        - theoretical model,</span>
+<span class="sd">        - average inblock semivariance,</span>
+<span class="sd">        - average block-to-block semivariance,</span>
+<span class="sd">        - regularized variogram.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            The semivariogram regularization process has not been performed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Variograms may be plot after regularization process. Use regularize() method.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+            <span class="c1"># Plot experimental</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">,</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;8&#39;</span><span class="p">,</span>
+                        <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+            <span class="c1"># Plot theoretical</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theoretical_model</span><span class="o">.</span><span class="n">fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+            <span class="c1"># Plot average inblock</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_inblock_semivariance</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e66101&#39;</span><span class="p">)</span>
+            <span class="c1"># Plot average block to block</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_block_to_block_semivariance</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#fdb863&#39;</span><span class="p">)</span>
+            <span class="c1"># Plot regularized</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">regularized_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#5e3c99&#39;</span><span class="p">)</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Experimental&#39;</span><span class="p">,</span> <span class="s1">&#39;Theoretical&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg. Inblock&#39;</span><span class="p">,</span> <span class="s1">&#39;Avg. Block-to-block&#39;</span><span class="p">,</span> <span class="s1">&#39;Regularized&#39;</span><span class="p">]</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_fit_theoretical_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method automatically fits experimental curve into WEIGHTED theoretical model if it wasn&#39;t provided as a</span>
+<span class="sd">        parameter in regularize() method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        theoretical_model : TheoreticalVariogram</span>
+<span class="sd">                            Weighted theoretical model of semivariance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theoretical_model</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+        <span class="n">theoretical_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+            <span class="n">experimental_variogram</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="p">,</span>
+            <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_nugget</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
+            <span class="n">deviation_weighting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">weighting_method</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">theoretical_model</span>
+
+    <span class="k">def</span> <span class="nf">_get_experimental_variogram</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method gets experimental variogram from aggregated data if None is given in the regularize method.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        gammas : ExperimentalVariogram</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">get_areal_centroids_from_agg</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aggregated_data</span><span class="p">)</span>
+
+        <span class="n">gammas</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+            <span class="n">input_array</span><span class="o">=</span><span class="n">ds</span><span class="p">,</span>
+            <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_step_size</span><span class="p">,</span>
+            <span class="n">max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_max_range</span><span class="p">,</span>
+            <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_direction</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">agg_tolerance</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">gammas</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">regularize</span><span class="p">(</span><span class="n">aggregated_data</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Blocks</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+               <span class="n">agg_step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+               <span class="n">agg_max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+               <span class="n">point_support</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span>
+               <span class="n">agg_nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+               <span class="n">average_inblock_semivariances</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">semivariance_between_point_supports</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">experimental_block_variogram</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">theoretical_block_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">agg_direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+               <span class="n">agg_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+               <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+               <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+               <span class="n">log_process</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function is an alias for ``AggregatedVariogram`` class and performs semivariogram regularization. Function returns</span>
+<span class="sd">    regularized variogram.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    aggregated_data : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]</span>
+<span class="sd">        Blocks with aggregated data.</span>
+
+<span class="sd">        * Blocks: ``Blocks()`` class object.</span>
+<span class="sd">        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.</span>
+<span class="sd">          Geometry column with polygons is not used.</span>
+<span class="sd">        * numpy array: ``[[block index, centroid x, centroid y, value]]``.</span>
+
+<span class="sd">    agg_step_size : float</span>
+<span class="sd">        Step size between lags.</span>
+
+<span class="sd">    agg_max_range : float</span>
+<span class="sd">        Maximal distance of analysis.</span>
+
+<span class="sd">    agg_nugget : float, default = 0</span>
+<span class="sd">        The nugget of blocks data.</span>
+
+<span class="sd">    average_inblock_semivariances : np.ndarray, default = None</span>
+<span class="sd">        The mean semivariance between the blocks. See Notes to learn more.</span>
+
+<span class="sd">    semivariance_between_point_supports : np.ndarray, default = None</span>
+<span class="sd">        Semivariance between all blocks calculated from the theoretical model.</span>
+
+<span class="sd">    experimental_block_variogram : np.ndarray, default = None</span>
+<span class="sd">        The experimental semivariance between area centroids.</span>
+
+<span class="sd">    theoretical_block_model : TheoreticalVariogram, default = None</span>
+<span class="sd">        A modeled variogram.</span>
+
+<span class="sd">    point_support : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span>
+
+<span class="sd">        * Dict: ``{block id: [[point x, point y, value]]}``</span>
+<span class="sd">        * numpy array: ``[[block id, x, y, value]]``</span>
+<span class="sd">        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``</span>
+<span class="sd">        * PointSupport</span>
+
+<span class="sd">    agg_direction : float (in range [0, 360]), default=0</span>
+<span class="sd">        Direction of semivariogram, values from 0 to 360 degrees:</span>
+
+<span class="sd">        - 0 or 180: is E-W,</span>
+<span class="sd">        - 90 or 270 is N-S,</span>
+<span class="sd">        - 45 or 225 is NE-SW,</span>
+<span class="sd">        - 135 or 315 is NW-SE.</span>
+
+<span class="sd">    agg_tolerance : float (in range [0, 1]), default=1</span>
+<span class="sd">        If ``agg_tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of</span>
+<span class="sd">        the coordinate system and the direction given by y axis and direction parameter. If ``agg_tolerance`` is ``&gt; 0``</span>
+<span class="sd">        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line</span>
+<span class="sd">        for 0 tolerance.</span>
+
+<span class="sd">        * The major axis size == ``agg_step_size``.</span>
+<span class="sd">        * The minor axis size is ``agg_tolerance * agg_step_size``</span>
+<span class="sd">        * The baseline point is at a center of the ellipse.</span>
+<span class="sd">        * ``agg_tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">    variogram_weighting_method : str, default = &quot;closest&quot;</span>
+<span class="sd">        Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">        - **equal**: no weighting,</span>
+<span class="sd">        - **closest**: lags at a close range have bigger weights,</span>
+<span class="sd">        - **distant**: lags that are further away have bigger weights,</span>
+<span class="sd">        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        Print steps performed by the algorithm.</span>
+
+<span class="sd">    log_process : bool, default = False</span>
+<span class="sd">        Log process info (Level ``DEBUG``).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    regularized : numpy array</span>
+<span class="sd">        ``[lag, semivariance]``</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    AggregatedVariogram : core class for block semivariogram regularization</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical</span>
+<span class="sd">    Units, Mathematical Geology 40(1), 101-128, 2008</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">agg_var</span> <span class="o">=</span> <span class="n">AggregatedVariogram</span><span class="p">(</span><span class="n">aggregated_data</span><span class="p">,</span>
+                                  <span class="n">agg_step_size</span><span class="p">,</span>
+                                  <span class="n">agg_max_range</span><span class="p">,</span>
+                                  <span class="n">point_support</span><span class="p">,</span>
+                                  <span class="n">agg_direction</span><span class="p">,</span>
+                                  <span class="n">agg_tolerance</span><span class="p">,</span>
+                                  <span class="n">agg_nugget</span><span class="p">,</span>
+                                  <span class="n">variogram_weighting_method</span><span class="p">,</span>
+                                  <span class="n">verbose</span><span class="p">,</span>
+                                  <span class="n">log_process</span><span class="p">)</span>
+
+    <span class="n">regularized</span> <span class="o">=</span> <span class="n">agg_var</span><span class="o">.</span><span class="n">regularize</span><span class="p">(</span><span class="n">average_inblock_semivariances</span><span class="p">,</span>
+                                     <span class="n">semivariance_between_point_supports</span><span class="p">,</span>
+                                     <span class="n">experimental_block_variogram</span><span class="p">,</span>
+                                     <span class="n">theoretical_block_model</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">regularized</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

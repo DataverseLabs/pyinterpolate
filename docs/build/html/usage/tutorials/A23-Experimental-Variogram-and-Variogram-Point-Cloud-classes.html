@@ -1,0 +1,1670 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Experimental Variogram and Variogram Cloud classes &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="B.1.1 Ordinary and Simple Kriging" href="B11-Ordinary-and-Simple-Kriging.html" />
+    <link rel="prev" title="A.2.2 Variogram Points Cloud" href="A22-Variogram-Points-Cloud.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A11-Semivariogram-Estimation.html">A.1.1 Semivariogram Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A12-Theoretical-Models.html">A.1.2 Semivariogram models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A13-Spatial-Dependence-Index.html">A.1.3 Spatial Dependence Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A21-Directional-Semivariogram.html">A.2.1 Directional semivariograms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A22-Variogram-Points-Cloud.html">A.2.2 Variogram Points Cloud</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Experimental Variogram and Variogram Cloud classes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="B11-Ordinary-and-Simple-Kriging.html">B.1.1 Ordinary and Simple Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B12-Kriging-Benchmarking.html">B.1.2 Kriging Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B13-Outliers-and-Kriging.html">B.1.3 Outliers and Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B21-Directional-Ordinary-Kriging.html">B.2.1 Directional Ordinary Kriging</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="C11-Blocks-to-Points-with-Ordinary-Kriging.html">C.1.1 Blocks to points Ordinary Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C12-Semivariogram-Regularization.html">C.1.2 Semivariogram Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C13-Poisson-Kriging-Centroid-based.html">C.1.3 Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C14-Poisson-Kriging-Area-to-Area.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C15-Poisson-Kriging-Area-to-Point.html">Poisson Kriging - Area to Point Kriging</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Experimental Variogram and Variogram Cloud classes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Experimental-Variogram-and-Variogram-Cloud-classes">
+<h1>Experimental Variogram and Variogram Cloud classes<a class="headerlink" href="#Experimental-Variogram-and-Variogram-Cloud-classes" title="Link to this heading">#</a></h1>
+<section id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Create Experimental Variogram with the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class.</p></li>
+<li><p>Create Experimental Variogram Point Cloud with the <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class.</p></li>
+</ol>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<p>The geostatistical analysis starts with a dissimilarity estimation. We must know if a process is spatially dependent and at which distance points tend to be related to each other. Thus, we start with the experimental variogram estimation. In this tutorial, we will look closely into the API and learn what can be done with two basic experimental semivariogram estimation functionalities. One is the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class, and another is the <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class. The first is a
+foundation of every other complex function, from semivariogram modeling to Poisson Kriging. The latter is used to analyze relations between points and their dispersion.</p>
+<p>We will use <strong>DEM data</strong> stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code></p>
+</section>
+<section id="Import-packages-&amp;-read-data">
+<h2>Import packages &amp; read data<a class="headerlink" href="#Import-packages-&-read-data" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">VariogramCloud</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+
+<span class="c1"># Take a sample</span>
+<span class="n">sample_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">))</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">),</span> <span class="n">sample_size</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">dem</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+<span class="c1"># Look into a first few lines of data</span>
+<span class="n">dem</span><span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.41661547e+05, 5.37106156e+05, 1.56584072e+01],
+       [2.39830169e+05, 5.47469930e+05, 8.91886215e+01],
+       [2.52772215e+05, 5.50460716e+05, 7.42563171e+01],
+       [2.39122771e+05, 5.47254134e+05, 8.59083939e+01],
+       [2.54889391e+05, 5.51091269e+05, 7.20493927e+01],
+       [2.47079296e+05, 5.30409100e+05, 4.63409996e+01],
+       [2.46072757e+05, 5.52214231e+05, 5.38786583e+01],
+       [2.53401471e+05, 5.38619345e+05, 2.30167007e+01],
+       [2.40449088e+05, 5.44529941e+05, 1.66461201e+01],
+       [2.53916790e+05, 5.47726919e+05, 6.56468353e+01]])
+</pre></div></div>
+</div>
+</section>
+<section id="1.-Experimental-Variogram-class">
+<h2>1. Experimental Variogram class<a class="headerlink" href="#1.-Experimental-Variogram-class" title="Link to this heading">#</a></h2>
+<p>Let’s start from the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ExperimentalVariogram</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">input_array</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="p">,</span>
+                 <span class="n">max_range</span><span class="p">,</span>
+                 <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="p">,</span>
+                 <span class="n">is_semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">is_covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="o">...</span>
+</pre></div>
+</div>
+<p>The class has three required parameters and seven optional.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">input_array</span></code> is a list of coordinates and values in the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">value)</span></code>. Those are our observations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter, which describes the distance between lags.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_range</span></code>, which describes the maximum range of analysis.</p></li>
+</ul>
+<p>What do we know at the beginning? Our coordinate reference system is metric. It is <a class="reference external" href="https://epsg.io/2180">EPSG:2180</a>. We don’t know the limits of the region of interest to set the <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter. We must define our area size:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get max distances for a region</span>
+
+<span class="n">minx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">maxx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="n">miny</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">maxy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">x_max_distance</span> <span class="o">=</span> <span class="n">maxx</span> <span class="o">-</span> <span class="n">minx</span>
+<span class="n">y_max_distance</span> <span class="o">=</span> <span class="n">maxy</span> <span class="o">-</span> <span class="n">miny</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max lon distance:&#39;</span><span class="p">,</span> <span class="n">x_max_distance</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Max lat distance:&#39;</span><span class="p">,</span> <span class="n">y_max_distance</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Max lon distance: 17730.22780098894
+Max lat distance: 24552.577515464276
+</pre></div></div>
+</div>
+<p>We can assume that the maximum distance <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter shouldn’t be larger than the maximum distance in a lower dimension (<strong>~18000</strong> m). In reality, the <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter is relatively close to the halved value of this distance, and we can check it on a variogram.</p>
+<p>But we don’t know the <code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter… Let’s assume it is 100 meters, and we will see if we’ve estimated it correctly.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">18000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We will visually inspect semivariogram with the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method of <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_11_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_11_0.png" />
+</div>
+</div>
+<p>Variogram looks nice. We can see a trend, but points are oscillating around it. This piece of information tells us that <code class="docutils literal notranslate"><span class="pre">step_size</span></code> should be larger.</p>
+<p>What with the <code class="docutils literal notranslate"><span class="pre">max_range</span></code>? It is a tricky problem because the semivariogram seems right up to the end of its range. The idea is to set the maximum range around half of the study extent because the number of point pairs will fall from this distance.</p>
+<p>We can check how many point pairs we have for each distance to make a better decision. The <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class stores information about points within its attribute <code class="docutils literal notranslate"><span class="pre">.experimental_semivariance_array</span></code>. It is a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array with three columns: <code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs]</span></code>, and we will use the last column to decide where to cut <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_ds</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">_ds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">_ds</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_13_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_13_0.png" />
+</div>
+</div>
+<p>Around the twelve-kilometer number of point pairs rapidly falls, so we can set <code class="docutils literal notranslate"><span class="pre">max_range</span></code> to some value between 7.5 and 12.5 kilometers, we will choose <strong>10000</strong> kilometers as our <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mi">250</span>
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+
+<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_15_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_15_0.png" />
+</div>
+</div>
+<p>This time variogram looks cleaner. However, it still has oscillating readings. Let’s set <code class="docutils literal notranslate"><span class="pre">step_size</span></code> to 500 meters:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+
+<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_17_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_17_0.png" />
+</div>
+</div>
+<p>We can use those parameters! Next, we will look into the <code class="docutils literal notranslate"><span class="pre">is_covariance</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class. It is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> by default. If we want to know the covariance of a dataset, then we should set the <code class="docutils literal notranslate"><span class="pre">is_covariance</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code>. Covariance is a measure of spatial similarity, opposite to semivariance. You will see in the plot that they mirror each other. But we can use it in kriging systems instead of semivariance.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> plotting function <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> has additional parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_semivariance</span></code> (boolean, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> by default),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_covariance</span></code> (boolean, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> by default),</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot_variance</span></code> (boolean, set to <code class="docutils literal notranslate"><span class="pre">True</span></code> by default).</p></li>
+</ul>
+<p>We will plot all of those objects in a single figure.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_19_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_19_0.png" />
+</div>
+</div>
+<p>Two important things that we can read from this plot:</p>
+<ol class="arabic simple">
+<li><p>Experimental covariance is a mirrored version of experimental semivariance, and we can use it to solve the Kriging system instead of semivariance. It is a measure of similarity between point pairs. The highest similarity can be noticed on the first lags and decreases with a rising distance.</p></li>
+<li><p>Variance calculated from data is used later as the <strong>sill</strong> in kriging models, and it can be used to transform semivariances into covariances.</p></li>
+</ol>
+<p>This plot summarizes the basic steps we can do with the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class. We left many parameters untouched, but only for a moment. Now we are going to explore all capabilities of the class.</p>
+<section id="Optional-parameter:-weights">
+<h3>Optional parameter: <code class="docutils literal notranslate"><span class="pre">weights</span></code><a class="headerlink" href="#Optional-parameter:-weights" title="Link to this heading">#</a></h3>
+<p>We won’t use this parameter in our tutorial, but we should learn where it comes from. It is a part of <strong>Poisson Kriging</strong> operations. <strong>Poisson Kriging</strong> algorithms use <code class="docutils literal notranslate"><span class="pre">weights</span></code> to weight the semivariance between blocks by in-block population.</p>
+</section>
+<section id="Optional-parameters:-direction,-tolerance,-method">
+<h3>Optional parameters: <code class="docutils literal notranslate"><span class="pre">direction,</span> <span class="pre">tolerance,</span> <span class="pre">method</span></code><a class="headerlink" href="#Optional-parameters:-direction,-tolerance,-method" title="Link to this heading">#</a></h3>
+<p>Those three parameters are used to define a directional variogram. We will check how the variogram behaves in the Weast-East axis (0 degrees).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;e&#39;</span>
+
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+<span class="p">)</span>
+
+<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_22_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_22_0.png" />
+</div>
+</div>
+<p>Let’s look into the North-South axis too:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">90</span>
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
+    <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+    <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="n">method</span>
+<span class="p">)</span>
+
+<span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_24_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_24_0.png" />
+</div>
+</div>
+<p>What can we learn from those plots? Variability along the W-E axis is lower than along the N-S axis. It may indicate continuous spatial structures along the W-E axis (for example, a river plain).</p>
+<p>At this point, we are ready for modeling. However, if we want to be precise, we should look into outliers and analyze <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code>.</p>
+<p>A classic variogram analysis tells us almost everything about spatial dependencies and dissimilarities in data. But there are more spatial investigation tools. We need to learn about the distribution of variances within a single lag, which is valuable information. Semivariogram shows us averaged semivariances. If we want to dig deeper, we should use the <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class and plot… the variogram cloud.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class definition API is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">VariogramCloud</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">input_array</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="p">,</span>
+                 <span class="n">max_range</span><span class="p">,</span>
+                 <span class="n">direction</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">tolerance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="n">calculate_on_creation</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>We pass the same parameters to the class as for the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class, and the only difference is the <code class="docutils literal notranslate"><span class="pre">calculate_on_creation</span></code> boolean value. Variogram point cloud calculation is a slow operation, and that’s why we can start it during or after the class initialization. If we set <code class="docutils literal notranslate"><span class="pre">calculate_on_creation</span></code> to <code class="docutils literal notranslate"><span class="pre">False</span></code>, we must run the <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code> method later.</p>
+<p><code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> has more methods than <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">calculate_experimental_variogram()</span></code> to obtain the variogram (similar to the output from the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">describe()</span></code> to get lag statistics,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">plot()</span></code> to plot variogram cloud,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to clean the variogram.</p></li>
+</ul>
+<p>We will start with calculation and plotting variogram cloud.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We can plot three different kinds of distribution plots: <code class="docutils literal notranslate"><span class="pre">'scatter',</span> <span class="pre">'box',</span> <span class="pre">'violin'</span></code>. We will choose <code class="docutils literal notranslate"><span class="pre">box</span></code> because it clearly shows data distribution in contrast to <code class="docutils literal notranslate"><span class="pre">scatter</span></code> and it’s easier to interpret than <code class="docutils literal notranslate"><span class="pre">violin</span></code> plot.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_30_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_30_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>The general shape is similar to the shape of the experimental variogram. We can see that semivariances between point pairs contain outliers, especially for the lags close to our maximum range. To be sure about outliers’ existence, let’s look into a more complex violin plot:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_32_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_32_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Extreme outliers are more visible. Another thing is the difference between the mean and median. Distribution is highly skewed toward large values. If graphical representation is not enough, we may describe statistics with the method <code class="docutils literal notranslate"><span class="pre">.describe()</span></code>:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{500: {&#39;count&#39;: 206,
+  &#39;avg semivariance&#39;: 21.766971989327978,
+  &#39;std&#39;: 99.45858752750664,
+  &#39;min&#39;: 0.00040093438292387873,
+  &#39;max&#39;: 620.3486521877348,
+  &#39;25%&#39;: 0.31618772951424035,
+  &#39;median&#39;: 2.6660517454729415,
+  &#39;75%&#39;: 40.530090990665485,
+  &#39;skewness&#39;: 3.951161453959655,
+  &#39;kurtosis&#39;: 18.051674496024585,
+  &#39;lag&#39;: 500},
+ 1000: {&#39;count&#39;: 626,
+  &#39;avg semivariance&#39;: 34.026074053022796,
+  &#39;std&#39;: 164.31425739577926,
+  &#39;min&#39;: 0.00010762131205410697,
+  &#39;max&#39;: 1404.338628287791,
+  &#39;25%&#39;: 1.3114497620299517,
+  &#39;median&#39;: 13.795076344162226,
+  &#39;75%&#39;: 57.276079500457854,
+  &#39;skewness&#39;: 4.877955962596052,
+  &#39;kurtosis&#39;: 27.891537698567358,
+  &#39;lag&#39;: 1000},
+ 1500: {&#39;count&#39;: 1034,
+  &#39;avg semivariance&#39;: 57.732919734515775,
+  &#39;std&#39;: 313.5418161290796,
+  &#39;min&#39;: 0.000324399476085091,
+  &#39;max&#39;: 2779.9481918220736,
+  &#39;25%&#39;: 1.4431987959542312,
+  &#39;median&#39;: 16.274205634967075,
+  &#39;75%&#39;: 94.3718891301105,
+  &#39;skewness&#39;: 5.455441858944847,
+  &#39;kurtosis&#39;: 34.29966174391724,
+  &#39;lag&#39;: 1500},
+ 2000: {&#39;count&#39;: 1264,
+  &#39;avg semivariance&#39;: 90.05333946033751,
+  &#39;std&#39;: 459.01532850212965,
+  &#39;min&#39;: 1.4074757928028703e-06,
+  &#39;max&#39;: 3666.732273832171,
+  &#39;25%&#39;: 1.769417088004957,
+  &#39;median&#39;: 22.424685948244587,
+  &#39;75%&#39;: 122.82829784085334,
+  &#39;skewness&#39;: 4.2675969002363505,
+  &#39;kurtosis&#39;: 20.274427721642745,
+  &#39;lag&#39;: 2000},
+ 2500: {&#39;count&#39;: 1750,
+  &#39;avg semivariance&#39;: 112.62921922420664,
+  &#39;std&#39;: 518.1359088403215,
+  &#39;min&#39;: 3.541354089975357e-07,
+  &#39;max&#39;: 4884.371802758575,
+  &#39;25%&#39;: 2.7528328841108305,
+  &#39;median&#39;: 23.04713434126461,
+  &#39;75%&#39;: 195.2224424371925,
+  &#39;skewness&#39;: 4.259865094278097,
+  &#39;kurtosis&#39;: 22.90185653384393,
+  &#39;lag&#39;: 2500},
+ 3000: {&#39;count&#39;: 2028,
+  &#39;avg semivariance&#39;: 186.29677676556994,
+  &#39;std&#39;: 801.2254001482236,
+  &#39;min&#39;: 9.880401194095612e-06,
+  &#39;max&#39;: 4902.46044520292,
+  &#39;25%&#39;: 3.615102891493734,
+  &#39;median&#39;: 47.3152665021189,
+  &#39;75%&#39;: 269.8025301229791,
+  &#39;skewness&#39;: 3.0349582269295103,
+  &#39;kurtosis&#39;: 8.957807755889755,
+  &#39;lag&#39;: 3000},
+ 3500: {&#39;count&#39;: 2162,
+  &#39;avg semivariance&#39;: 206.6858675203283,
+  &#39;std&#39;: 836.2111612198677,
+  &#39;min&#39;: 8.101400817395188e-05,
+  &#39;max&#39;: 5262.414516563036,
+  &#39;25%&#39;: 4.3056281661993125,
+  &#39;median&#39;: 56.75368984184752,
+  &#39;75%&#39;: 373.0893607819453,
+  &#39;skewness&#39;: 2.9252374295188086,
+  &#39;kurtosis&#39;: 8.817584141023765,
+  &#39;lag&#39;: 3500},
+ 4000: {&#39;count&#39;: 2342,
+  &#39;avg semivariance&#39;: 230.20533913139218,
+  &#39;std&#39;: 891.6212688235299,
+  &#39;min&#39;: 0.00011012890900019556,
+  &#39;max&#39;: 5256.59405317629,
+  &#39;25%&#39;: 5.180788749203202,
+  &#39;median&#39;: 68.19297934416682,
+  &#39;75%&#39;: 436.1967928296681,
+  &#39;skewness&#39;: 2.757475322103534,
+  &#39;kurtosis&#39;: 7.517835022793976,
+  &#39;lag&#39;: 4000},
+ 4500: {&#39;count&#39;: 2642,
+  &#39;avg semivariance&#39;: 280.24339251679123,
+  &#39;std&#39;: 1033.8240089211154,
+  &#39;min&#39;: 9.495808990322985e-05,
+  &#39;max&#39;: 6374.6671470391775,
+  &#39;25%&#39;: 5.608128756517544,
+  &#39;median&#39;: 73.80311124311993,
+  &#39;75%&#39;: 556.4224173801485,
+  &#39;skewness&#39;: 2.4825291400296945,
+  &#39;kurtosis&#39;: 6.044861032119577,
+  &#39;lag&#39;: 4500},
+ 5000: {&#39;count&#39;: 2908,
+  &#39;avg semivariance&#39;: 281.41088086816995,
+  &#39;std&#39;: 994.1483663681527,
+  &#39;min&#39;: 5.065521690994501e-08,
+  &#39;max&#39;: 6257.5430144792335,
+  &#39;25%&#39;: 8.165557399392128,
+  &#39;median&#39;: 109.80437767487638,
+  &#39;75%&#39;: 576.8961002046708,
+  &#39;skewness&#39;: 2.4028840176235504,
+  &#39;kurtosis&#39;: 5.605768166743784,
+  &#39;lag&#39;: 5000},
+ 5500: {&#39;count&#39;: 3020,
+  &#39;avg semivariance&#39;: 375.33986515453154,
+  &#39;std&#39;: 1204.0555726533005,
+  &#39;min&#39;: 6.915652193129063e-07,
+  &#39;max&#39;: 6368.260883873387,
+  &#39;25%&#39;: 9.603393012206652,
+  &#39;median&#39;: 163.55953333980324,
+  &#39;75%&#39;: 817.4467852390953,
+  &#39;skewness&#39;: 1.8972205190747269,
+  &#39;kurtosis&#39;: 2.874523804405526,
+  &#39;lag&#39;: 5500},
+ 6000: {&#39;count&#39;: 3272,
+  &#39;avg semivariance&#39;: 383.08746076620247,
+  &#39;std&#39;: 1236.3223374864695,
+  &#39;min&#39;: 1.0750085493782535e-05,
+  &#39;max&#39;: 6859.651217085488,
+  &#39;25%&#39;: 11.924021373535652,
+  &#39;median&#39;: 175.98794941541564,
+  &#39;75%&#39;: 865.6176490780963,
+  &#39;skewness&#39;: 2.108061807420301,
+  &#39;kurtosis&#39;: 4.058615796177957,
+  &#39;lag&#39;: 6000},
+ 6500: {&#39;count&#39;: 3340,
+  &#39;avg semivariance&#39;: 410.900125035248,
+  &#39;std&#39;: 1230.7480694696683,
+  &#39;min&#39;: 0.00016931038408074528,
+  &#39;max&#39;: 6738.133074857891,
+  &#39;25%&#39;: 15.551828165131155,
+  &#39;median&#39;: 239.01199268446362,
+  &#39;75%&#39;: 968.9813738767443,
+  &#39;skewness&#39;: 1.8474028349014608,
+  &#39;kurtosis&#39;: 2.8590443316585876,
+  &#39;lag&#39;: 6500},
+ 7000: {&#39;count&#39;: 3644,
+  &#39;avg semivariance&#39;: 435.1087909907367,
+  &#39;std&#39;: 1293.7610697531331,
+  &#39;min&#39;: 1.2069940567016602e-06,
+  &#39;max&#39;: 6853.005666537443,
+  &#39;25%&#39;: 13.923954573841911,
+  &#39;median&#39;: 238.98762327766235,
+  &#39;75%&#39;: 1073.179499642356,
+  &#39;skewness&#39;: 1.8609999136119688,
+  &#39;kurtosis&#39;: 3.0299775499068087,
+  &#39;lag&#39;: 7000},
+ 7500: {&#39;count&#39;: 3600,
+  &#39;avg semivariance&#39;: 480.3201499116964,
+  &#39;std&#39;: 1295.761925044672,
+  &#39;min&#39;: 9.062234676093794e-05,
+  &#39;max&#39;: 6559.992729703023,
+  &#39;25%&#39;: 26.594894890519754,
+  &#39;median&#39;: 403.54315477685304,
+  &#39;75%&#39;: 1340.484880295102,
+  &#39;skewness&#39;: 1.7092511864119562,
+  &#39;kurtosis&#39;: 2.5370147390973345,
+  &#39;lag&#39;: 7500},
+ 8000: {&#39;count&#39;: 3616,
+  &#39;avg semivariance&#39;: 513.0592956800294,
+  &#39;std&#39;: 1318.0590200689155,
+  &#39;min&#39;: 0.00018525496125221252,
+  &#39;max&#39;: 6825.612907118062,
+  &#39;25%&#39;: 34.245417270586586,
+  &#39;median&#39;: 501.459608984007,
+  &#39;75%&#39;: 1419.2799644323059,
+  &#39;skewness&#39;: 1.6164898137657986,
+  &#39;kurtosis&#39;: 2.1062153822822953,
+  &#39;lag&#39;: 8000},
+ 8500: {&#39;count&#39;: 3764,
+  &#39;avg semivariance&#39;: 523.9659812541387,
+  &#39;std&#39;: 1311.0318359818616,
+  &#39;min&#39;: 0.0013469782570609823,
+  &#39;max&#39;: 6785.28491486382,
+  &#39;25%&#39;: 32.434151218272746,
+  &#39;median&#39;: 546.6734647397407,
+  &#39;75%&#39;: 1487.9563730538393,
+  &#39;skewness&#39;: 1.5810369740718768,
+  &#39;kurtosis&#39;: 2.0397884586608805,
+  &#39;lag&#39;: 8500},
+ 9000: {&#39;count&#39;: 3950,
+  &#39;avg semivariance&#39;: 556.138198805293,
+  &#39;std&#39;: 1389.7253374799366,
+  &#39;min&#39;: 9.52557056734804e-05,
+  &#39;max&#39;: 6966.6679725574795,
+  &#39;25%&#39;: 45.418306288650456,
+  &#39;median&#39;: 618.7367785954848,
+  &#39;75%&#39;: 1538.6246190436177,
+  &#39;skewness&#39;: 1.6484962842507787,
+  &#39;kurtosis&#39;: 2.288128027021547,
+  &#39;lag&#39;: 9000},
+ 9500: {&#39;count&#39;: 3740,
+  &#39;avg semivariance&#39;: 578.5038438079913,
+  &#39;std&#39;: 1415.7472548390922,
+  &#39;min&#39;: 0.001942942981258966,
+  &#39;max&#39;: 6828.589286121223,
+  &#39;25%&#39;: 61.39728337325869,
+  &#39;median&#39;: 663.9765396269959,
+  &#39;75%&#39;: 1632.5290925193258,
+  &#39;skewness&#39;: 1.6565995399619,
+  &#39;kurtosis&#39;: 2.4095420944230037,
+  &#39;lag&#39;: 9500}}
+</pre></div></div>
+</div>
+<p>We get Python’s <code class="docutils literal notranslate"><span class="pre">dict</span></code> as an output, but it is not especially readable; let’s convert it to a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>500</th>
+      <th>1000</th>
+      <th>1500</th>
+      <th>2000</th>
+      <th>2500</th>
+      <th>3000</th>
+      <th>3500</th>
+      <th>4000</th>
+      <th>4500</th>
+      <th>5000</th>
+      <th>5500</th>
+      <th>6000</th>
+      <th>6500</th>
+      <th>7000</th>
+      <th>7500</th>
+      <th>8000</th>
+      <th>8500</th>
+      <th>9000</th>
+      <th>9500</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>206.000000</td>
+      <td>626.000000</td>
+      <td>1034.000000</td>
+      <td>1264.000000</td>
+      <td>1.750000e+03</td>
+      <td>2028.000000</td>
+      <td>2162.000000</td>
+      <td>2342.000000</td>
+      <td>2642.000000</td>
+      <td>2.908000e+03</td>
+      <td>3.020000e+03</td>
+      <td>3272.000000</td>
+      <td>3340.000000</td>
+      <td>3644.000000</td>
+      <td>3600.000000</td>
+      <td>3616.000000</td>
+      <td>3764.000000</td>
+      <td>3950.000000</td>
+      <td>3740.000000</td>
+    </tr>
+    <tr>
+      <th>avg semivariance</th>
+      <td>21.766972</td>
+      <td>34.026074</td>
+      <td>57.732920</td>
+      <td>90.053339</td>
+      <td>1.126292e+02</td>
+      <td>186.296777</td>
+      <td>206.685868</td>
+      <td>230.205339</td>
+      <td>280.243393</td>
+      <td>2.814109e+02</td>
+      <td>3.753399e+02</td>
+      <td>383.087461</td>
+      <td>410.900125</td>
+      <td>435.108791</td>
+      <td>480.320150</td>
+      <td>513.059296</td>
+      <td>523.965981</td>
+      <td>556.138199</td>
+      <td>578.503844</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>99.458588</td>
+      <td>164.314257</td>
+      <td>313.541816</td>
+      <td>459.015329</td>
+      <td>5.181359e+02</td>
+      <td>801.225400</td>
+      <td>836.211161</td>
+      <td>891.621269</td>
+      <td>1033.824009</td>
+      <td>9.941484e+02</td>
+      <td>1.204056e+03</td>
+      <td>1236.322337</td>
+      <td>1230.748069</td>
+      <td>1293.761070</td>
+      <td>1295.761925</td>
+      <td>1318.059020</td>
+      <td>1311.031836</td>
+      <td>1389.725337</td>
+      <td>1415.747255</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000401</td>
+      <td>0.000108</td>
+      <td>0.000324</td>
+      <td>0.000001</td>
+      <td>3.541354e-07</td>
+      <td>0.000010</td>
+      <td>0.000081</td>
+      <td>0.000110</td>
+      <td>0.000095</td>
+      <td>5.065522e-08</td>
+      <td>6.915652e-07</td>
+      <td>0.000011</td>
+      <td>0.000169</td>
+      <td>0.000001</td>
+      <td>0.000091</td>
+      <td>0.000185</td>
+      <td>0.001347</td>
+      <td>0.000095</td>
+      <td>0.001943</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>620.348652</td>
+      <td>1404.338628</td>
+      <td>2779.948192</td>
+      <td>3666.732274</td>
+      <td>4.884372e+03</td>
+      <td>4902.460445</td>
+      <td>5262.414517</td>
+      <td>5256.594053</td>
+      <td>6374.667147</td>
+      <td>6.257543e+03</td>
+      <td>6.368261e+03</td>
+      <td>6859.651217</td>
+      <td>6738.133075</td>
+      <td>6853.005667</td>
+      <td>6559.992730</td>
+      <td>6825.612907</td>
+      <td>6785.284915</td>
+      <td>6966.667973</td>
+      <td>6828.589286</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.316188</td>
+      <td>1.311450</td>
+      <td>1.443199</td>
+      <td>1.769417</td>
+      <td>2.752833e+00</td>
+      <td>3.615103</td>
+      <td>4.305628</td>
+      <td>5.180789</td>
+      <td>5.608129</td>
+      <td>8.165557e+00</td>
+      <td>9.603393e+00</td>
+      <td>11.924021</td>
+      <td>15.551828</td>
+      <td>13.923955</td>
+      <td>26.594895</td>
+      <td>34.245417</td>
+      <td>32.434151</td>
+      <td>45.418306</td>
+      <td>61.397283</td>
+    </tr>
+    <tr>
+      <th>median</th>
+      <td>2.666052</td>
+      <td>13.795076</td>
+      <td>16.274206</td>
+      <td>22.424686</td>
+      <td>2.304713e+01</td>
+      <td>47.315267</td>
+      <td>56.753690</td>
+      <td>68.192979</td>
+      <td>73.803111</td>
+      <td>1.098044e+02</td>
+      <td>1.635595e+02</td>
+      <td>175.987949</td>
+      <td>239.011993</td>
+      <td>238.987623</td>
+      <td>403.543155</td>
+      <td>501.459609</td>
+      <td>546.673465</td>
+      <td>618.736779</td>
+      <td>663.976540</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>40.530091</td>
+      <td>57.276080</td>
+      <td>94.371889</td>
+      <td>122.828298</td>
+      <td>1.952224e+02</td>
+      <td>269.802530</td>
+      <td>373.089361</td>
+      <td>436.196793</td>
+      <td>556.422417</td>
+      <td>5.768961e+02</td>
+      <td>8.174468e+02</td>
+      <td>865.617649</td>
+      <td>968.981374</td>
+      <td>1073.179500</td>
+      <td>1340.484880</td>
+      <td>1419.279964</td>
+      <td>1487.956373</td>
+      <td>1538.624619</td>
+      <td>1632.529093</td>
+    </tr>
+    <tr>
+      <th>skewness</th>
+      <td>3.951161</td>
+      <td>4.877956</td>
+      <td>5.455442</td>
+      <td>4.267597</td>
+      <td>4.259865e+00</td>
+      <td>3.034958</td>
+      <td>2.925237</td>
+      <td>2.757475</td>
+      <td>2.482529</td>
+      <td>2.402884e+00</td>
+      <td>1.897221e+00</td>
+      <td>2.108062</td>
+      <td>1.847403</td>
+      <td>1.861000</td>
+      <td>1.709251</td>
+      <td>1.616490</td>
+      <td>1.581037</td>
+      <td>1.648496</td>
+      <td>1.656600</td>
+    </tr>
+    <tr>
+      <th>kurtosis</th>
+      <td>18.051674</td>
+      <td>27.891538</td>
+      <td>34.299662</td>
+      <td>20.274428</td>
+      <td>2.290186e+01</td>
+      <td>8.957808</td>
+      <td>8.817584</td>
+      <td>7.517835</td>
+      <td>6.044861</td>
+      <td>5.605768e+00</td>
+      <td>2.874524e+00</td>
+      <td>4.058616</td>
+      <td>2.859044</td>
+      <td>3.029978</td>
+      <td>2.537015</td>
+      <td>2.106215</td>
+      <td>2.039788</td>
+      <td>2.288128</td>
+      <td>2.409542</td>
+    </tr>
+    <tr>
+      <th>lag</th>
+      <td>500.000000</td>
+      <td>1000.000000</td>
+      <td>1500.000000</td>
+      <td>2000.000000</td>
+      <td>2.500000e+03</td>
+      <td>3000.000000</td>
+      <td>3500.000000</td>
+      <td>4000.000000</td>
+      <td>4500.000000</td>
+      <td>5.000000e+03</td>
+      <td>5.500000e+03</td>
+      <td>6000.000000</td>
+      <td>6500.000000</td>
+      <td>7000.000000</td>
+      <td>7500.000000</td>
+      <td>8000.000000</td>
+      <td>8500.000000</td>
+      <td>9000.000000</td>
+      <td>9500.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>With this detailed table, we can analyze the variogram in detail and decide:</p>
+<ul class="simple">
+<li><p>if lags are correctly placed,</p></li>
+<li><p>if there are enough points per lag,</p></li>
+<li><p>if the maximum range is too low or too high,</p></li>
+<li><p>is distribution close to normal,</p></li>
+</ul>
+<p>And based on the answers to those questions, we can change semivariogram parameters slightly.</p>
+<p>The interesting row is <code class="docutils literal notranslate"><span class="pre">avg</span> <span class="pre">semivariance</span></code>. Let’s plot it against lags, and let’s plot the output from <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> in the same figure:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-calculate experimental variogram</span>
+
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">input_array</span><span class="o">=</span><span class="n">dem</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">desc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;avg semivariance&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;ExperimentalVariogram output&#39;</span><span class="p">,</span> <span class="s1">&#39;Average semivariance from VariogramCloud&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_40_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_40_0.png" />
+</div>
+</div>
+<p>The result is the same, and it shouldn’t be a surprise. The experimental variogram averages all semivariances per lag. We stepped back in computations and focused on all point pairs within a lag.</p>
+<p>There is one last method within the <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class: <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code>. It cleans our variogram from anomalous readings. The cleaning default algorithm uses the z-score, but we can also use the interquartile range analysis. Both methods cut outliers from the largest or the lowest intervals. For data that deviates greately from normal distribution, it is better to use an inter-quartile range for cleaning:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span> <span class="o">=</span> <span class="n">variogram_cloud</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Now we can check what has happend with the variogram:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_44_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_44_0.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+True
+</pre></div></div>
+</div>
+<p>Maximum semivariances are much lower than before. How does look the averaged semivariogram? Now we will use the <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code> method to calculate the variogram directly and compare it to the experimental variogram retrieved from the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
+<span class="n">exp_var_from_point_cloud</span> <span class="o">=</span> <span class="n">new_variogram_cloud</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">exp_var_from_point_cloud</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+         <span class="n">exp_var_from_point_cloud</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;ExperimentalVariogram output&#39;</span><span class="p">,</span> <span class="s1">&#39;Average semivariance from VariogramCloud&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_46_0.png" src="../../_images/usage_tutorials_A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes_46_0.png" />
+</div>
+</div>
+<p>Now we see that the shape of the variogram persisted, but maximum values per lag are lower. It could be helpful for some models, especially if we eliminate outliers with extreme values.</p>
+</section>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<p>After all those steps, you have better insights into the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> and <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> classes. You may check your dataset and compare results to those in the tutorial.</p>
+<p>The main takeaways from this tutorial are:</p>
+<ul class="simple">
+<li><p>API of <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> and <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> classes,</p></li>
+<li><p>differences and similarities between <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> and <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> classes,</p></li>
+<li><p>full variogram analysis and preparation before spatial interpolation.</p></li>
+</ul>
+<hr class="docutils" />
+</section>
+<section id="Where-to-go-from-here?">
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>B.1.1 Ordinary and Simple Kriging</p></li>
+<li><p>B.3.1 Directional Ordinary Kriging</p></li>
+<li><p>C.1.1 Outliers and Kriging Model</p></li>
+</ul>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023-08-22</p></td>
+<td><p>The tutorial was refreshed and set along with the 0.5.0 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-01-23</p></td>
+<td><p>The first release of the tutorial</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="A22-Variogram-Points-Cloud.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">A.2.2 Variogram Points Cloud</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="B11-Ordinary-and-Simple-Kriging.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">B.1.1 Ordinary and Simple Kriging</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages-&amp;-read-data">Import packages &amp; read data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Experimental-Variogram-class">1. Experimental Variogram class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Optional-parameter:-weights">Optional parameter: <code class="docutils literal notranslate"><span class="pre">weights</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Optional-parameters:-direction,-tolerance,-method">Optional parameters: <code class="docutils literal notranslate"><span class="pre">direction,</span> <span class="pre">tolerance,</span> <span class="pre">method</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Where-to-go-from-here?">Where to go from here?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/usage/tutorials/A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

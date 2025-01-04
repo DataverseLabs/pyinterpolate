@@ -1,0 +1,729 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.io.read_data &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/io/read_data';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.io.read_data</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.io.read_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Read and load data.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">2. Taher Chegini | @cheginit</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+<div class="viewcode-block" id="read_txt">
+<a class="viewcode-back" href="../../../api/io/io.html#pyinterpolate.read_txt">[docs]</a>
+<span class="k">def</span> <span class="nf">read_txt</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">skip_header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function reads data from a text file.</span>
+
+<span class="sd">    Provided data format should include: **longitude (x)**, **latitude (y)**, **value**. Function converts data into</span>
+<span class="sd">    numpy array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        Path to the file.</span>
+
+<span class="sd">    delim : str, default=&#39;,&#39;</span>
+<span class="sd">        Delimiter that separates columns.</span>
+
+<span class="sd">    skip_header : bool, default=True</span>
+<span class="sd">        Skips the first row of a file if set to ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data_arr : numpy array</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; path_to_the_data = &#39;path_to_the_data.txt&#39;</span>
+<span class="sd">    &gt;&gt;&gt; data = read_txt(path_to_the_data, skip_header=False)</span>
+<span class="sd">    &gt;&gt;&gt; print(data[:2, :])</span>
+<span class="sd">    [</span>
+<span class="sd">        [15.11524 52.76515 91.275597]</span>
+<span class="sd">        [15.11524 52.74279 96.548294]</span>
+<span class="sd">    ]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">data_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delim</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">skip_header</span><span class="p">:</span>
+        <span class="n">data_arr</span> <span class="o">=</span> <span class="n">data_arr</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">data_arr</span></div>
+
+
+
+<div class="viewcode-block" id="read_csv">
+<a class="viewcode-back" href="../../../api/io/io.html#pyinterpolate.read_csv">[docs]</a>
+<span class="k">def</span> <span class="nf">read_csv</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">val_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lat_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">lon_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">delim</span><span class="o">=</span><span class="s1">&#39;,&#39;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function reads data from a csv file.</span>
+
+<span class="sd">    Provided data should include: **latitude**, **longitude**, **value**.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        Path to the file.</span>
+
+<span class="sd">    val_col_name : str</span>
+<span class="sd">        Name of the value column (header title).</span>
+
+<span class="sd">    lat_col_name : str</span>
+<span class="sd">        Name of the latitude column (header title).</span>
+
+<span class="sd">    lon_col_name : str</span>
+<span class="sd">        Name of the longitude column (header title).</span>
+
+<span class="sd">    delim : str, default=&#39;,&#39;</span>
+<span class="sd">        Delimiter that separates columns.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data_arr : numpy array</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; path_to_the_data = &#39;path_to_the_data.csv&#39;</span>
+<span class="sd">    &gt;&gt;&gt; data = read_csv(path_to_the_data, val_col_name=&#39;value&#39;, lat_col_name=&#39;y&#39;, lon_col_name=&#39;x&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(data[:2, :])</span>
+<span class="sd">    [</span>
+<span class="sd">        [15.11524 52.76515 91.275597]</span>
+<span class="sd">        [15.11524 52.74279 96.548294]</span>
+<span class="sd">    ]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">delim</span>
+    <span class="p">)</span>
+
+    <span class="n">data_arr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="n">lon_col_name</span><span class="p">,</span> <span class="n">lat_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">data_arr</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_open_geopandas</span><span class="p">(</span><span class="n">fpath</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Open the file with geopandas file.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.feather&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">fpath</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.parquet&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="read_block">
+<a class="viewcode-back" href="../../../api/io/io.html#pyinterpolate.read_block">[docs]</a>
+<span class="k">def</span> <span class="nf">read_block</span><span class="p">(</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">val_col_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">geometry_col_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+        <span class="n">id_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">centroid_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function reads block data from files supported by geopandas.</span>
+
+<span class="sd">    Value column name must be provided. If geometry column has different name than `&#39;geometry&#39;` then</span>
+<span class="sd">    it must be provided too. ID column name is optional, if not given then ``GeoDataFrame`` `index` is</span>
+<span class="sd">    treated as an id column. Optional parameters are `epsg` and `crs`. If any is set then data is reprojected</span>
+<span class="sd">    into a specific `crs/epsg`.` Function returns ``GeoDataFrame`` with columns: ``[id, value, geometry, centroid]``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path : str</span>
+<span class="sd">        Path to the file with appropriate extension such as ``.shp``,</span>
+<span class="sd">        ``.gpkg``, ``.feather``, or ``.parquet``.</span>
+
+<span class="sd">    val_col_name : str</span>
+<span class="sd">        Name of the value column (header title).</span>
+
+<span class="sd">    geometry_col_name : str, default=&#39;geometry&#39;</span>
+<span class="sd">        Name of the column with polygons.</span>
+
+<span class="sd">    id_col_name: str or None, default=None, optional</span>
+<span class="sd">        Name of the colum with unique indexes.</span>
+
+
+<span class="sd">    centroid_col_name: str or None, default=None</span>
+<span class="sd">        Name of the column with block centroid. Centroids are calculated from ``MultiPolygon`` or ``Polygon``</span>
+<span class="sd">        later on but their accuracy may be limited. For most applications it does not matter.</span>
+
+<span class="sd">    epsg : str or None, default=None</span>
+<span class="sd">        If provided then ``GeoDataFrame`` projection is set to it. You should choose if you provide `EPSG` or `CRS`.</span>
+
+<span class="sd">    crs : str or None, default=None</span>
+<span class="sd">        If provided then ``GeoDataFrame`` projection is set to it. You should choose if you provide `CRS` or `EPSG`.</span>
+
+<span class="sd">    **kwargs : Any</span>
+<span class="sd">        Additional kwargs parameters passed to the ``geopandas.read_file()``,</span>
+<span class="sd">        ``geopandas.read_feather()`` or ``geopandas.read_parquet()`` functions.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    gpd : GeoDataFrame</span>
+<span class="sd">        Returned output has columns: ``[&#39;id&#39;, &#39;geometry&#39;, &#39;value&#39;, &#39;centroid&#39;]``.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    TypeError</span>
+<span class="sd">        `EPSG` and `CRS` are provided both (should be only one).</span>
+
+<span class="sd">    TypeError</span>
+<span class="sd">        Provided column name does not exist in a dataset.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; bblock = &#39;path_to_the_shapefile.shp&#39;</span>
+<span class="sd">    &gt;&gt;&gt; bdf = read_block(bblock, val_col_name=&#39;rate&#39;, id_col_name=&#39;id&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(bdf.columns)</span>
+<span class="sd">    Index([&#39;id&#39;, &#39;geometry&#39;, &#39;rate&#39;, &#39;centroid&#39;], dtype=&#39;object&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># INPUT TESTS</span>
+
+    <span class="c1"># Check if id column is given</span>
+    <span class="k">if</span> <span class="n">id_col_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">id_col_name</span><span class="p">,</span> <span class="n">geometry_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">geometry_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]</span>
+
+    <span class="c1"># Check if crs | epsg is set that minimum one of those values is None</span>
+    <span class="n">check_geometry_params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">True</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">False</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">crs</span><span class="p">,</span> <span class="n">epsg</span><span class="p">]])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">check_geometry_params</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Only one value CRS or EPSG should be provided but both are given: crs </span><span class="si">{</span><span class="n">crs</span><span class="si">}</span><span class="s1">; epsg: </span><span class="si">{</span><span class="n">epsg</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># FUNCTION&#39;S BODY</span>
+
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">_open_geopandas</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># Check if columns exist</span>
+    <span class="n">gdf_cols</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">columns</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">gdf_cols</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Given column </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s1"> is not present in a dataset. Available columns: </span><span class="si">{</span><span class="n">gdf_cols</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="n">ndf</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">ndf</span><span class="o">.</span><span class="n">geometry</span> <span class="o">=</span> <span class="n">ndf</span><span class="p">[</span><span class="n">geometry_col_name</span><span class="p">]</span>
+
+    <span class="c1"># Check crs and epsg</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">crs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">epsg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ndf</span><span class="o">.</span><span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ndf</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ndf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">crs</span><span class="p">,</span> <span class="n">epsg</span><span class="o">=</span><span class="n">epsg</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Get centroids</span>
+    <span class="n">c_col_name</span> <span class="o">=</span> <span class="s1">&#39;centroid&#39;</span>
+    <span class="k">if</span> <span class="n">centroid_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ndf</span><span class="p">[</span><span class="n">c_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndf</span><span class="o">.</span><span class="n">centroid</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ndf</span><span class="p">[</span><span class="n">c_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdf</span><span class="p">[</span><span class="n">centroid_col_name</span><span class="p">]</span>
+
+    <span class="c1"># Add id column if not given</span>
+    <span class="k">if</span> <span class="n">id_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">id_col_name</span> <span class="o">=</span> <span class="s1">&#39;id&#39;</span>
+        <span class="n">ndf</span><span class="p">[</span><span class="n">id_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndf</span><span class="o">.</span><span class="n">index</span>
+
+    <span class="c1"># Set columns</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">ndf</span><span class="p">[[</span><span class="n">id_col_name</span><span class="p">,</span> <span class="n">geometry_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">,</span> <span class="n">c_col_name</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

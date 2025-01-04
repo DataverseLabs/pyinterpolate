@@ -1,0 +1,967 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>C.1.2 Semivariogram Regularization &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/C12-Semivariogram-Regularization';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="C.1.3 Poisson Kriging - centroid based approach" href="C13-Poisson-Kriging-Centroid-based.html" />
+    <link rel="prev" title="C.1.1 Blocks to points Ordinary Kriging" href="C11-Blocks-to-Points-with-Ordinary-Kriging.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A11-Semivariogram-Estimation.html">A.1.1 Semivariogram Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A12-Theoretical-Models.html">A.1.2 Semivariogram models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A13-Spatial-Dependence-Index.html">A.1.3 Spatial Dependence Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A21-Directional-Semivariogram.html">A.2.1 Directional semivariograms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A22-Variogram-Points-Cloud.html">A.2.2 Variogram Points Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html">Experimental Variogram and Variogram Cloud classes</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="B11-Ordinary-and-Simple-Kriging.html">B.1.1 Ordinary and Simple Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B12-Kriging-Benchmarking.html">B.1.2 Kriging Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B13-Outliers-and-Kriging.html">B.1.3 Outliers and Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B21-Directional-Ordinary-Kriging.html">B.2.1 Directional Ordinary Kriging</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="C11-Blocks-to-Points-with-Ordinary-Kriging.html">C.1.1 Blocks to points Ordinary Kriging</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">C.1.2 Semivariogram Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C13-Poisson-Kriging-Centroid-based.html">C.1.3 Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C14-Poisson-Kriging-Area-to-Area.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C15-Poisson-Kriging-Area-to-Point.html">Poisson Kriging - Area to Point Kriging</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">C.1.2 Semivariogram Regularization</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="C.1.2-Semivariogram-Regularization">
+<h1>C.1.2 Semivariogram Regularization<a class="headerlink" href="#C.1.2-Semivariogram-Regularization" title="Link to this heading">#</a></h1>
+<section id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Prepare areal and point data,</p></li>
+<li><p>Set semivariogram parameters,</p></li>
+<li><p>Perform regularization,</p></li>
+<li><p>Visualize regularized semivariogram and analyze algorithm performance,</p></li>
+<li><p>Export semivariogram to json.</p></li>
+</ol>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<p>We will learn how to regularize a semivariogram of a dataset that consists of irregularly shaped polygons. The procedure of the semivariogram regularization is described here: (1) Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008.</p>
+<p>The main idea is to retrieve the point support semivariogram from the semivariogram of blocks of different shapes and sizes. This is the case in the mining industry, where aggregated blocks are deconvoluted into smaller units, and in epidemiology, where data is aggregated over big administrative units. Or in ecology, where species observations are aggregated over areas or time windows.</p>
+<p>In this tutorial, we use block data of Breast Cancer incidence rates in Northeastern counties of the U.S. and U.S. Census 2010 data for population blocks.</p>
+<blockquote>
+<div><p>The breast cancer rates data and the point support population counts are in the geopackage in a directory: <code class="docutils literal notranslate"><span class="pre">samples/regularization/cancer_data.gpkg</span></code>.</p>
+</div></blockquote>
+</section>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">build_experimental_variogram</span><span class="p">,</span> <span class="n">Blocks</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">,</span> <span class="n">Deconvolution</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1)-Prepare-areal-and-point-data">
+<h2>1) Prepare areal and point data<a class="headerlink" href="#1)-Prepare-areal-and-point-data" title="Link to this heading">#</a></h2>
+<p>Data structures for semivariogram regularization are rather complex, and that’s why <strong>Pyinterpolate</strong> has classes to prepare this data for processing. There are two structures:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Blocks()</span></code>: stores polygon and block data, transforms it, and retrieves centroids,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PointSupport()</span></code>: performs spatial joins between polygons and points support data and manages internal indexing of those datasets.</p></li>
+</ol>
+<p>A researcher can prepare data manually - the <code class="docutils literal notranslate"><span class="pre">Deconvolution</span></code> class processes <code class="docutils literal notranslate"><span class="pre">Dict</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>, or <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> types of objects. For more data types and how to prepare them, we can look at the <a class="reference external" href="https://pyinterpolate.readthedocs.io/en/latest/api/datatypes/core.html">API documentation</a>.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DATASET</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/cancer_data.gpkg&#39;</span>
+<span class="n">OUTPUT</span> <span class="o">=</span> <span class="s1">&#39;samples/regularization/regularized_variogram.json&#39;</span>
+<span class="n">POLYGON_LAYER</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="n">POPULATION_LAYER</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="n">POP10</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="n">GEOMETRY_COL</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="n">POLYGON_ID</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="n">POLYGON_VALUE</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">blocks</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">()</span>
+<span class="n">blocks</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">DATASET</span><span class="p">,</span> <span class="n">value_col</span><span class="o">=</span><span class="n">POLYGON_VALUE</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+
+<span class="n">point_support</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">()</span>
+<span class="n">point_support</span><span class="o">.</span><span class="n">from_files</span><span class="p">(</span><span class="n">point_support_data_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
+                         <span class="n">blocks_file</span><span class="o">=</span><span class="n">DATASET</span><span class="p">,</span>
+                         <span class="n">point_support_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
+                         <span class="n">point_support_val_col</span><span class="o">=</span><span class="n">POP10</span><span class="p">,</span>
+                         <span class="n">blocks_geometry_col</span><span class="o">=</span><span class="n">GEOMETRY_COL</span><span class="p">,</span>
+                         <span class="n">blocks_index_col</span><span class="o">=</span><span class="n">POLYGON_ID</span><span class="p">,</span>
+                         <span class="n">use_point_support_crs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">point_support_layer_name</span><span class="o">=</span><span class="n">POPULATION_LAYER</span><span class="p">,</span>
+                         <span class="n">blocks_layer_name</span><span class="o">=</span><span class="n">POLYGON_LAYER</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2)-Set-semivariogram-parameters">
+<h2>2) Set semivariogram parameters<a class="headerlink" href="#2)-Set-semivariogram-parameters" title="Link to this heading">#</a></h2>
+<p>Now, we must set parameters for the areal semivariogram AND point semivariogram. It is essential to understand data well to set the variogram parameters properly. That’s why you should always check the experimental semivariograms of block data and its point support. We do it for prepared areal and point datasets.</p>
+<p>The <em>step size</em> and the <em>maximum search radius</em> parameters depend on the block data. But we should check the point’s semivariogram too. We won’t create meaningful results if point support data is spatially independent.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of areal data - this cell may be run multiple times</span>
+<span class="c1"># before you find optimal parameters</span>
+
+<span class="n">maximum_range</span> <span class="o">=</span> <span class="mi">300000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="mi">40000</span>
+
+<span class="n">dt</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">data</span><span class="p">[[</span><span class="n">blocks</span><span class="o">.</span><span class="n">cx</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">cy</span><span class="p">,</span> <span class="n">blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]]</span>  <span class="c1"># x, y, val</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+
+<span class="c1"># Plot experimental semivariogram</span>
+
+<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_7_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_7_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of point data - this cell may be run multiple times</span>
+<span class="c1"># before you find optimal parameters</span>
+
+<span class="n">maximum_point_range</span> <span class="o">=</span> <span class="mi">300000</span>
+<span class="n">step_size_points</span> <span class="o">=</span> <span class="mi">20000</span>
+
+
+<span class="n">pt</span> <span class="o">=</span> <span class="n">point_support</span><span class="o">.</span><span class="n">point_support</span><span class="p">[[</span><span class="n">point_support</span><span class="o">.</span><span class="n">x_col</span><span class="p">,</span> <span class="n">point_support</span><span class="o">.</span><span class="n">y_col</span><span class="p">,</span> <span class="n">point_support</span><span class="o">.</span><span class="n">value_column</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+
+<span class="c1"># Plot experimental semivariogram</span>
+
+<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_8_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_8_0.png" />
+</div>
+</div>
+<p>We see that block and point support variograms follow a spatial-dependency pattern. In this case, we can move to the next step - deconvolution. The next step is to create the <code class="docutils literal notranslate"><span class="pre">Deconvolution</span></code> object. We have multiple parameters to choose from, and it is hard to find the best fit initially, so try to avoid multiple loops because it is time-consuming.</p>
+<p>The program is designed to first <code class="docutils literal notranslate"><span class="pre">fit()</span></code> the model and later to <code class="docutils literal notranslate"><span class="pre">transform()</span></code> it. There is a way to perform both steps simultaneously with the <code class="docutils literal notranslate"><span class="pre">fit_transform()</span></code> method. However, I encourage you to divide the process into two parts because transformation can take a long time to end. It is better to check how the model behaves after the first iteration (<code class="docutils literal notranslate"><span class="pre">fit()</span></code>) rather than wait until the end of processing.</p>
+<p>When you <code class="docutils literal notranslate"><span class="pre">fit()</span></code> a model, you have multiple parameters to control, but only a few are necessary for regular purposes (<strong>in bold</strong>):</p>
+<ul class="simple">
+<li><p><strong>agg_dataset</strong>: Blocks with aggregated data. <code class="docutils literal notranslate"><span class="pre">Blocks()</span></code> class object or <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> with columns: <code class="docutils literal notranslate"><span class="pre">centroid.x,</span> <span class="pre">centroid.y,</span> <span class="pre">ds,</span> <span class="pre">index</span></code> or <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">index,</span> <span class="pre">centroid</span> <span class="pre">x,</span> <span class="pre">centroid</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>.</p></li>
+<li><p><strong>point_support_dataset</strong> : <code class="docutils literal notranslate"><span class="pre">PointSupport()</span></code> object, or <code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>, or <code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>, or <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>.</p></li>
+<li><p><strong>agg_step_size</strong> : Step size between lags.</p></li>
+<li><p><strong>agg_max_range</strong> : Maximal distance of analysis.</p></li>
+<li><p><strong>agg_nugget</strong> : The nugget of semivariogram. We will set it to 0.</p></li>
+<li><p><em>agg_direction</em> : Direction of semivariogram, values from 0 to 360 degrees.</p></li>
+<li><p><em>agg_tolerance</em> : (see docs).</p></li>
+<li><p><strong>variogram_weighting_method</strong> : Method used to weight error at a given lags. Available methods:</p>
+<ul>
+<li><p>equal: no weighting,</p></li>
+<li><p><strong>closest</strong>: Lags at a close range have bigger weights,</p></li>
+<li><p>distant: lags that further away have bigger weights,</p></li>
+<li><p>dense: error is weighted by the number of point pairs within a lag - more pairs, smaller weight.</p></li>
+</ul>
+</li>
+<li><p><strong>model_name</strong>: the name of the semivariogram function. Two terms aggregate multiple models: <code class="docutils literal notranslate"><span class="pre">all</span></code> and <code class="docutils literal notranslate"><span class="pre">safe</span></code>, and the latter is recommended to use.</p></li>
+<li><p><strong>model_types</strong> : semivariogram model types to test. You can pass here a list of theoretical models.</p></li>
+</ul>
+<p>We will weight lags, and we do not store semivariograms and semivariogram models.</p>
+<p>After fitting, we perform <code class="docutils literal notranslate"><span class="pre">transform()</span></code>. This function has few parameters to control the regularization process, but we leave them as default with one exception: we set the <strong>max_iters</strong> parameter to 5.</p>
+<p>This process of fitting and transforming takes some time, so it’s a good idea to run it and do something else…</p>
+</section>
+<section id="3)-Regularize-semivariogram">
+<h2>3) Regularize semivariogram<a class="headerlink" href="#3)-Regularize-semivariogram" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span> <span class="o">=</span> <span class="n">Deconvolution</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">agg_dataset</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
+            <span class="n">point_support_dataset</span><span class="o">=</span><span class="n">point_support</span><span class="p">,</span>
+            <span class="n">agg_step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+            <span class="n">agg_max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">,</span>
+            <span class="n">agg_nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;safe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Regularization fit process starts
+Regularization fit process ends
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check initial experimental, theoretical and regularized semivariograms</span>
+
+<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_12_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_12_0.png" />
+</div>
+</div>
+<p>After the first step, we see that the variogram can be regularized. There is a big difference between the theoretical curve and the experimental values. Let’s run the transformation process.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Transform procedure starts
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 5/5 [00:18&lt;00:00,  3.74s/it]
+</pre></div></div>
+</div>
+</section>
+<section id="4)-Visualize-and-check-semivariogram">
+<h2>4) Visualize and check semivariogram<a class="headerlink" href="#4)-Visualize-and-check-semivariogram" title="Link to this heading">#</a></h2>
+<p>The process is fully automatic, but we can check how it behaved through each iteration. We can analyze deviation change (the most important variable, the mean absolute difference between regularized and theoretical models) with the built-in method. Still, if you are more interested in the algorithm stability, you can also analyze weight change over each iteration.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First analyze deviation</span>
+
+<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_deviations</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_16_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_16_0.png" />
+</div>
+</div>
+<p><strong>Clarification</strong>: The deviation between a regularized semivariogram and a theoretical model decreases. However, a significant improvement can be seen after the first step, and then it slows down. That’s why semivariogram regularization usually does not require many steps. However, if there are many lags, optimization may require more steps to achieve a meaningful result.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check weights - it is important to track problems with algorithm, esepcially if sum of weights is oscillating</span>
+<span class="c1"># then it may be a sign of problems with data, model or (hopefully not!) algorithm itself.</span>
+
+<span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_weights</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_18_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_18_0.png" />
+</div>
+</div>
+<p><strong>NOTE</strong>: Weights are smaller with each iteration. It is the expected behavior of the algorithm. The general trend goes downward, and small oscillations may occur due to the optimization process.</p>
+<p>The most important part is to compare semivariograms! You can see that the Regularized Model is different from the initial semivariogram. It is the result of regularization. The population (point support) is considered in the cases of variogram development and further kriging interpolation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_C12-Semivariogram-Regularization_20_0.png" src="../../_images/usage_tutorials_C12-Semivariogram-Regularization_20_0.png" />
+</div>
+</div>
+<p>The regularized model works well for our dataset and follows general trends. It assigns smaller weights for closest lags, and for more significant distances, weights are bigger. It is related to the semivariogram weighting method - we penalize more poorly performing models for the shortest distances from the origin.</p>
+</section>
+<section id="5)-Export-semivariogram-to-text-file">
+<h2>5) Export semivariogram to text file<a class="headerlink" href="#5)-Export-semivariogram-to-text-file" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Export semivariogram to the text file. This is important step because calculations are slow...</span>
+<span class="c1"># and it is better to not repeat them.</span>
+<span class="c1"># We will use built-in method: export_model() where we pass only filename and our semivariogram</span>
+<span class="c1"># parameters are stored for other tasks.</span>
+<span class="n">reg_mod</span><span class="o">.</span><span class="n">export_model</span><span class="p">(</span><span class="s1">&#39;output/regularized_model.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="Where-to-go-from-here?">
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>C.1.3 Poisson Kriging Centroid-based</p></li>
+<li><p>C.1.4 Poisson Kriging Area to Area</p></li>
+<li><p>C.1.5 Poisson Kriging Area to Point</p></li>
+</ul>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023-08-24</p></td>
+<td><p>The tutorial was refreshed and set along with the 0.5.0 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-04-15</p></td>
+<td><p>Tutorial debugged and updated to the 0.4.1 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-11-05</p></td>
+<td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-10-08</p></td>
+<td><p>Update for the 0.3.4 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-10-17</p></td>
+<td><p>Updated variogram models selection (0.3.3 version of the package)</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-10-08</p></td>
+<td><p>Update for the 0.3.2 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-08-27</p></td>
+<td><p>Update for the 0.3.0 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-12-14</p></td>
+<td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-12-13</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-28</p></td>
+<td><p>Updated paths for input/output data</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-04-04</p></td>
+<td><p>Ranges parameter removed from regularize semivariogram class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated cancer rates data.</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="C11-Blocks-to-Points-with-Ordinary-Kriging.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">C.1.1 Blocks to points Ordinary Kriging</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="C13-Poisson-Kriging-Centroid-based.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">C.1.3 Poisson Kriging - centroid based approach</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1)-Prepare-areal-and-point-data">1) Prepare areal and point data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2)-Set-semivariogram-parameters">2) Set semivariogram parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3)-Regularize-semivariogram">3) Regularize semivariogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4)-Visualize-and-check-semivariogram">4) Visualize and check semivariogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5)-Export-semivariogram-to-text-file">5) Export semivariogram to text file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Where-to-go-from-here?">Where to go from here?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/usage/tutorials/C12-Semivariogram-Regularization.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

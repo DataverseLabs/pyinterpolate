@@ -1,0 +1,1301 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>B.1.1 Ordinary and Simple Kriging &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/B11-Ordinary-and-Simple-Kriging';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="B.1.2 Kriging Benchmarking" href="B12-Kriging-Benchmarking.html" />
+    <link rel="prev" title="Experimental Variogram and Variogram Cloud classes" href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="A11-Semivariogram-Estimation.html">A.1.1 Semivariogram Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A12-Theoretical-Models.html">A.1.2 Semivariogram models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A13-Spatial-Dependence-Index.html">A.1.3 Spatial Dependence Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A21-Directional-Semivariogram.html">A.2.1 Directional semivariograms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A22-Variogram-Points-Cloud.html">A.2.2 Variogram Points Cloud</a></li>
+<li class="toctree-l1"><a class="reference internal" href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html">Experimental Variogram and Variogram Cloud classes</a></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">B.1.1 Ordinary and Simple Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B12-Kriging-Benchmarking.html">B.1.2 Kriging Benchmarking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B13-Outliers-and-Kriging.html">B.1.3 Outliers and Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="B21-Directional-Ordinary-Kriging.html">B.2.1 Directional Ordinary Kriging</a></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="C11-Blocks-to-Points-with-Ordinary-Kriging.html">C.1.1 Blocks to points Ordinary Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C12-Semivariogram-Regularization.html">C.1.2 Semivariogram Regularization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C13-Poisson-Kriging-Centroid-based.html">C.1.3 Poisson Kriging - centroid based approach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C14-Poisson-Kriging-Area-to-Area.html">Poisson Kriging - Area to Area Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="C15-Poisson-Kriging-Area-to-Point.html">Poisson Kriging - Area to Point Kriging</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">B.1.1 Ordinary and Simple Kriging</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="B.1.1-Ordinary-and-Simple-Kriging">
+<h1>B.1.1 Ordinary and Simple Kriging<a class="headerlink" href="#B.1.1-Ordinary-and-Simple-Kriging" title="Link to this heading">#</a></h1>
+<section id="Table-of-Contents:">
+<h2>Table of Contents:<a class="headerlink" href="#Table-of-Contents:" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Read point data,</p></li>
+<li><p>Set semivariogram model,</p></li>
+<li><p>Set Ordinary Kriging and Simple Kriging models,</p></li>
+<li><p>Predict values at unknown locations.</p></li>
+</ol>
+</section>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
+<p>This tutorial will teach us how to perform spatial interpolation with Ordinary and Simple Kriging. We will compare a different number of ranges, and test outcomes of processing with the root mean squared error.</p>
+<p>Ordinary and Simple Kriging is the simplest form of Kriging, but they’re still powerful techniques.</p>
+<p>We use DEM data which is stored in a file <code class="docutils literal notranslate"><span class="pre">samples/point_data/txt/pl_dem_epsg2180.txt</span></code>.</p>
+</section>
+<section id="Import-packages">
+<h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">read_txt</span><span class="p">,</span> <span class="n">build_experimental_variogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">kriging</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1)-Read-point-data">
+<h2>1) Read point data<a class="headerlink" href="#1)-Read-point-data" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem</span> <span class="o">=</span> <span class="n">read_txt</span><span class="p">(</span><span class="s1">&#39;samples/point_data/txt/pl_dem_epsg2180.txt&#39;</span><span class="p">)</span>
+<span class="n">dem</span><span class="p">[:</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.37685325e+05, 5.45416708e+05, 5.12545509e+01],
+       [2.37674140e+05, 5.45209671e+05, 4.89582825e+01],
+       [2.37449255e+05, 5.41045935e+05, 1.68178635e+01]])
+</pre></div></div>
+</div>
+<p>In the beginning, we remove 70 % of our points from the dataset, and we will leave them as a test set to estimate how good our models are.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">create_train_test</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">training_set_ratio</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function divides base dataset into a training and a test set.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dataset : np.ndarray</span>
+
+<span class="sd">    training_set_ratio : float, default = 0.3</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    training_set, test_set : List[np.ndarray]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span>  <span class="c1"># To ensure that we will get the same results every time</span>
+
+    <span class="n">indexes_of_training_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">training_set_ratio</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)),</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">training_set</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">indexes_of_training_set</span><span class="p">]</span>
+    <span class="n">validation_set</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">indexes_of_training_set</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">training_set</span><span class="p">,</span> <span class="n">validation_set</span>
+
+
+<span class="n">train_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">create_train_test</span><span class="p">(</span><span class="n">dem</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>We have removed a subset of points from a dataset to be sure that Kriging is working. In this scenario, 70% of available points are removed, but in real-world cases, you will probably have even fewer points to perform estimations, down to the 1% of known values.</p>
+<p>Function <code class="docutils literal notranslate"><span class="pre">create_train_test()</span></code> divides our dataset into two subsets:</p>
+<ul class="simple">
+<li><p><strong>training set</strong> used for semivariogram model derivation,</p></li>
+<li><p><strong>test set</strong> used for the model error calculation.</p></li>
+</ul>
+<p>Points for each set are chosen randomly to avoid bias related to the geographical location. Let’s imagine we have a sorted list of Digital Elevation Model points. The western part of our measurements covers a mountain, and the eastern part is plain. When we use the part of the west for modeling and the east part for tests, we are going directly into a catastrophe! That’s why performing multiple random sampling and testing various realizations from our data is better. We will prepare only one
+realization with a fixed random seed, but you should be aware that in the real-world analysis, we must test more realizations (e.g., set multiple random seeds).</p>
+</section>
+<section id="2)-Set-Semivariogram-model">
+<h2>2) Set Semivariogram model<a class="headerlink" href="#2)-Set-Semivariogram-model" title="Link to this heading">#</a></h2>
+<p>In this step, we are going to create experimental and theoretical semivariograms.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare experimental semivariogram</span>
+
+<span class="n">step_radius</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># meters</span>
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># meters</span>
+
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_radius</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot experimental semivariogram</span>
+
+<span class="n">exp_semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_B11-Ordinary-and-Simple-Kriging_10_0.png" src="../../_images/usage_tutorials_B11-Ordinary-and-Simple-Kriging_10_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit data into a theoretical model</span>
+
+<span class="n">semivar</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_semivar</span><span class="p">,</span>
+                                      <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                                      <span class="n">sill</span><span class="o">=</span><span class="n">exp_semivar</span><span class="o">.</span><span class="n">variance</span><span class="p">,</span>
+                                      <span class="n">rang</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">semivar</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/usage_tutorials_B11-Ordinary-and-Simple-Kriging_12_0.png" src="../../_images/usage_tutorials_B11-Ordinary-and-Simple-Kriging_12_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">semivar</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 0.0
+* Sill: 493.778772754868
+* Range: 10000
+* Spatial Dependency Strength is Unknown
+* Mean Bias: 21.92700357030904
+* Mean RMSE: 37.17324824914244
+* Error-lag weighting method: None
+
+
++--------+--------------------+--------------------+---------------------+
+|  lag   |    theoretical     |    experimental    |     bias (y-y&#39;)     |
++--------+--------------------+--------------------+---------------------+
+| 500.0  |  24.6889386377434  | 15.614084077885668 |  -9.074854559857734 |
+| 1000.0 |  49.3778772754868  | 34.151521896711735 | -15.226355378775068 |
+| 1500.0 |  74.0668159132302  | 56.61060460335831  |  -17.45621130987189 |
+| 2000.0 |  98.7557545509736  | 81.75250857008155  |  -17.00324598089206 |
+| 2500.0 |  123.444693188717  | 107.39147411240353 | -16.053219076313468 |
+| 3000.0 | 148.1336318264604  | 138.01527174633642 | -10.118360080123978 |
+| 3500.0 | 172.82257046420378 | 170.17760461535644 | -2.6449658488473347 |
+| 4000.0 | 197.5115091019472  | 201.7643955690108  |  4.2528864670635755 |
+| 4500.0 | 222.2004477396906  | 235.6737606045218  |   13.4733128648312  |
+| 5000.0 |  246.889386377434  | 274.49115425599933 |  27.60176787856534  |
+| 5500.0 | 271.5783250151774  | 304.81328096735956 |  33.23495595218213  |
+| 6000.0 | 296.2672636529208  | 341.13970843945583 |  44.87244478653503  |
+| 6500.0 | 320.9562022906642  | 367.8150566677254  |  46.85885437706122  |
+| 7000.0 | 345.64514092840756 | 403.5663320998641  |  57.92119117145654  |
+| 7500.0 |  370.334079566151  | 430.51175648403176 |  60.177676917880774 |
+| 8000.0 | 395.0230182038944  | 456.5353159209564  |  61.51229771706198  |
+| 8500.0 | 419.7119568416378  | 472.6792052919712  |  52.967248450333386 |
+| 9000.0 | 444.4008954793812  | 496.87388696572737 |  52.47299148634619  |
+| 9500.0 | 469.08983411712455 | 517.9344861183605  |  48.84465200123594  |
++--------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+</section>
+<section id="3)-Set-Ordinary-Kriging-and-Simple-Kriging-models">
+<h2>3) Set Ordinary Kriging and Simple Kriging models<a class="headerlink" href="#3)-Set-Ordinary-Kriging-and-Simple-Kriging-models" title="Link to this heading">#</a></h2>
+<p>This is the essential step of our tutorial. We’ve set our semivariogram model and can now predict unknown values. We will “predict” a known and arbitrary point in the first run. It is a test of Kriging, which should work as <strong>an unbiased linear estimator</strong>. Thus it should return the <strong>exact</strong> value if we pass into it a point used for training. In the second step, we will try to guess values at unknown locations and calculate the <strong>R</strong>oot <strong>M</strong>ean <strong>S</strong>quared <strong>E</strong>rror (RMSE) of
+interpolated values.</p>
+<p>We can use the same <code class="docutils literal notranslate"><span class="pre">kriging()</span></code> function for both kriging types. It takes those arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">observations</span></code>: array with known points,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">theoretical_model</span></code>: fitted <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> model,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: points to interpolate values,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">how</span></code>: <code class="docutils literal notranslate"><span class="pre">ok</span></code> - ordinary kriging, <code class="docutils literal notranslate"><span class="pre">sk</span></code> - simple kriging,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code>: <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>, the maximum distance where we search for point neighbors. If <code class="docutils literal notranslate"><span class="pre">None</span></code> is given, the range is selected from the <code class="docutils literal notranslate"><span class="pre">theoretical_model</span></code> <code class="docutils literal notranslate"><span class="pre">rang</span></code> attribute.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code>: <code class="docutils literal notranslate"><span class="pre">int</span></code>, number of neighbors to estimate unknown value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_all_neighbors_in_range</span></code>: <code class="docutils literal notranslate"><span class="pre">bool</span></code>, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>. <code class="docutils literal notranslate"><span class="pre">True</span></code>: if the number of neighbors within the <code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code>, then take all of them for modeling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sk_mean</span></code>: <code class="docutils literal notranslate"><span class="pre">None</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>, the mean value of a process over a study area. It should be known before processing, and that’s why Simple Kriging has a limited number of applications. You must have multiple samples and a well-known area to use this parameter.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">allow_approx_solutions</span></code>: Allows the approximation of kriging weights based on the OLS algorithm. Not recommended to set it to <code class="docutils literal notranslate"><span class="pre">True</span></code> if you don’t know what you are doing! By default, it is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_workers</span></code>: if we pass more than 10k points to interpolate, setting this parameter to the number of your CPU workers (or -1) will speed up calculations.</p></li>
+</ul>
+<p>We use only the first four parameters and <code class="docutils literal notranslate"><span class="pre">sk_mean</span></code> when we perform Simple Kriging. Let’s start! The first step is an interpolation of the value known by our model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select one known value</span>
+
+<span class="n">known_value</span> <span class="o">=</span> <span class="n">train_set</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+<span class="n">known_value</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([2.49304390e+05, 5.40766289e+05, 2.03649998e+01])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
+
+<span class="n">ok_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">ok_interpolation</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 1/1 [00:00&lt;00:00, 492.93it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
+</pre></div></div>
+</div>
+<p>The first value is our prediction: it is precisely the same as the input in the training set! So far, the algorithm has worked well. The second value is prediction variance error, equal to zero - we are sure it is the exact value.</p>
+<p>Simple Kriging is slightly different than Ordinary Kriging, and we must set the process mean to retrieve valid results. It is rarely the case. That’s why Ordinary Kriging is the first choice for many applications. We know the global mean because we have the whole dataset, but in the real-world scenario, we cannot divide the set into training and test sets and then get the mean from the entire dataset - it is an information leak from the test set into a model!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">train_set</span><span class="p">,</span> <span class="n">semivar</span><span class="p">,</span> <span class="p">[</span><span class="n">known_value</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">sk_mean</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
+<span class="n">sk_interpolation</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 1/1 [00:00&lt;00:00, 698.35it/s]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[2.03649998e+01, 0.00000000e+00, 2.49304390e+05, 5.40766289e+05]])
+</pre></div></div>
+</div>
+<p>The Simple Kriging algorithm returns the same output as the Ordinary Kriging: <code class="docutils literal notranslate"><span class="pre">[prediction,</span> <span class="pre">error</span> <span class="pre">variance,</span> <span class="pre">pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y]</span></code>. And as with Ordinary Kriging, Simple Kriging has returned the same value as the actual value fed to the algorithm.</p>
+</section>
+<section id="4)-Predict-values-at-unknown-locations">
+<h2>4) Predict values at unknown locations<a class="headerlink" href="#4)-Predict-values-at-unknown-locations" title="Link to this heading">#</a></h2>
+<p>Using kriging for interpolation of known points values is pointless, and it is an excellent tool for a testing algorithm but nothing more. Here we will interpolate with Kriging, and we will interpolate values at unknown locations. Additionally, we will control the <code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code> parameter to check how it influences predictions.</p>
+<p>In the first step, we will create a simple function to test our kriging results and calculate RMSE.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">variogram_model</span><span class="p">,</span> <span class="n">ktype</span><span class="p">,</span> <span class="n">test_values</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">kriging</span><span class="p">(</span><span class="n">observations</span><span class="o">=</span><span class="n">train_data</span><span class="p">,</span>
+                          <span class="n">theoretical_model</span><span class="o">=</span><span class="n">variogram_model</span><span class="p">,</span>
+                          <span class="n">points</span><span class="o">=</span><span class="n">test_values</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                          <span class="n">how</span><span class="o">=</span><span class="n">ktype</span><span class="p">,</span>
+                          <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+                          <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                          <span class="n">sk_mean</span><span class="o">=</span><span class="n">sk_mean_value</span><span class="p">)</span>
+    <span class="n">mse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">predictions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">test_values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mse</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rmse</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of neighbors</span>
+
+<span class="n">no_of_n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ordinary Kriging: tests&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
+    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Ordinary Kriging: tests
+
+Number of neighbors: 4
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2516.48it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.404341396262182
+
+Number of neighbors: 8
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2620.57it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.2909488461696372
+
+Number of neighbors: 16
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:01&lt;00:00, 2494.66it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.2674275543792795
+
+Number of neighbors: 32
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 2273.84it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.2608735889738663
+
+Number of neighbors: 64
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:03&lt;00:00, 1483.94it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.2565732386644757
+
+Number of neighbors: 128
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:07&lt;00:00, 682.77it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.254786835977034
+
+Number of neighbors: 256
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:10&lt;00:00, 479.72it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.2550170696805028
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Simple Kriging: tests&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">sk_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">no_of_n</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of neighbors:&#39;</span><span class="p">,</span> <span class="n">nn</span><span class="p">)</span>
+    <span class="n">rmse_pred</span> <span class="o">=</span> <span class="n">test_kriging</span><span class="p">(</span><span class="n">train_data</span><span class="o">=</span><span class="n">train_set</span><span class="p">,</span> <span class="n">variogram_model</span><span class="o">=</span><span class="n">semivar</span><span class="p">,</span> <span class="n">ktype</span><span class="o">=</span><span class="s1">&#39;sk&#39;</span><span class="p">,</span> <span class="n">test_values</span><span class="o">=</span><span class="n">test_set</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span> <span class="n">sk_mean_value</span><span class="o">=</span><span class="n">sk_mean</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RMSE:&#39;</span><span class="p">,</span> <span class="n">rmse_pred</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Simple Kriging: tests
+
+Number of neighbors: 4
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 2189.68it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 8.697161939348147
+
+Number of neighbors: 8
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 2259.37it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.650066190084651
+
+Number of neighbors: 16
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 2210.26it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.348632949010878
+
+Number of neighbors: 32
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 1860.03it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.278583712643331
+
+Number of neighbors: 64
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:02&lt;00:00, 1653.58it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.261651162610457
+
+Number of neighbors: 128
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:04&lt;00:00, 1194.88it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.255919635781099
+
+Number of neighbors: 256
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 4826/4826 [00:09&lt;00:00, 533.15it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+RMSE: 3.254332343473019
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+</pre></div></div>
+</div>
+<p>Usually, Simple Kriging will give us worse results than Ordinary Kriging because we need to know the process mean to build a valid Simple Kriging model. Only if we know the process mean we can use Simple Kriging with a large number of neighbors. We see that the results of Simple Kriging are better when we pass more values into it. You shouldn’t be shocked. Simple Kriging <em>discovers</em> the global mean and utilizes this information when building a Kriging system.</p>
+<p>On the other hand, Ordinary Kriging is a Swiss knife in our geostatistical toolbox. It works well even if we don’t know the process mean, and it should be our first-choice technique.</p>
+<p>Let’s look into processing times with a growing number of neighbors. We can theoretically take more and more neighbors, but is it worth it?</p>
+<ul class="simple">
+<li><p><strong>Small dataset</strong>: with small datasets (up to 1000 points), we may consider using many neighbors. It shouldn’t be a problem for processing time.</p></li>
+<li><p><strong>Large dataset</strong>: more than 5000 points? Then we must take into account two scenarios:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>A single report or only a one-time analysis - then use as many neighbors as it is possible (within range);</p></li>
+<li><p>Near-real time and systematic analyses - use fewer neighbors, between 8 - 128. I usually use 32 neighbors for datasets with more than 1000 point pairs.</p></li>
+</ol>
+<hr class="docutils" />
+</section>
+<section id="Where-to-go-from-here?">
+<h2>Where to go from here?<a class="headerlink" href="#Where-to-go-from-here?" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>B.1.2 Kriging Benchmarking</p></li>
+<li><p>B.1.3 Outliers and Kriging Model</p></li>
+<li><p>B.2.1 Directional Ordinary Kriging</p></li>
+<li><p>C.1.1 Blocks to Points Interpolation with Ordinary Kriging</p></li>
+</ul>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Change description</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023-08-22</p></td>
+<td><p>The tutorial was refreshed and set along with the 0.5.0 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-04-15</p></td>
+<td><p>Tutorial debugged and updated to the 0.4.1 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2022-11-05</p></td>
+<td><p>Tutorial updated for the 0.3.5 version of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2022-08-20</p></td>
+<td><p>The tutorial is updated to the version 0.3.0 of the package</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-12-14</p></td>
+<td><p>Sill selection was upgraded: now optimal sill is derived from the grid search within <code class="docutils literal notranslate"><span class="pre">TheoreticalSemivariogram</span></code> class &amp; error variance estimated in a correct way</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-12-13</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">select_values_in_range()</span></code> function</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-12-11</p></td>
+<td><p>Behavior of <code class="docutils literal notranslate"><span class="pre">prepare_kriging_data()</span></code> function has benn changed</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-05-11</p></td>
+<td><p>Refactored TheoreticalSemivariogram class</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-even"><td><p>2021-04-03</p></td>
+<td><p>Simple Kriging <code class="docutils literal notranslate"><span class="pre">global_mean</span></code> parameter update.</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+<tr class="row-odd"><td><p>2021-03-31</p></td>
+<td><p>Update related to the change of semivariogram weighting. Updated point data source.</p></td>
+<td><p>&#64;SimonMolinsky</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Experimental Variogram and Variogram Cloud classes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="B12-Kriging-Benchmarking.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">B.1.2 Kriging Benchmarking</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-Contents:">Table of Contents:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Import-packages">Import packages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1)-Read-point-data">1) Read point data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2)-Set-Semivariogram-model">2) Set Semivariogram model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3)-Set-Ordinary-Kriging-and-Simple-Kriging-models">3) Set Ordinary Kriging and Simple Kriging models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4)-Predict-values-at-unknown-locations">4) Predict values at unknown locations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Where-to-go-from-here?">Where to go from here?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/usage/tutorials/B11-Ordinary-and-Simple-Kriging.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

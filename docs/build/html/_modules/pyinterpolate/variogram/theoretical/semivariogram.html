@@ -1,0 +1,1587 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.variogram.theoretical.semivariogram &#8212; Pyinterpolate 0.5.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/variogram/theoretical/semivariogram';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/cite.html">
+    How to cite
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../developer/dev.html">
+    Development
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/biblio.html">
+    Bibliography
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.variogram.theoretical.semivariogram</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.variogram.theoretical.semivariogram</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TheoreticalVariogram class.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+
+<span class="sd">Contributors</span>
+<span class="sd">------------</span>
+<span class="sd">1. Ethem Turgut | @ethmtrgt</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Core python packages</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="c1"># Core calculations and visualization packages</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
+
+<span class="c1"># Pyinterpolate dependencies</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.processing.select_values</span> <span class="kn">import</span> <span class="n">create_min_max_array</span><span class="p">,</span> <span class="n">get_study_max_range</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.models</span> <span class="kn">import</span> <span class="n">circular_model</span><span class="p">,</span> <span class="n">cubic_model</span><span class="p">,</span> <span class="n">linear_model</span><span class="p">,</span> <span class="n">exponential_model</span><span class="p">,</span> \
+    <span class="n">gaussian_model</span><span class="p">,</span> <span class="n">spherical_model</span><span class="p">,</span> <span class="n">power_model</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.empirical.experimental_variogram</span> <span class="kn">import</span> <span class="n">ExperimentalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.metrics</span> <span class="kn">import</span> <span class="n">forecast_bias</span><span class="p">,</span> <span class="n">root_mean_squared_error</span><span class="p">,</span> \
+    <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">,</span> <span class="n">weighted_root_mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.utils.exceptions</span> <span class="kn">import</span> <span class="n">validate_selected_errors</span><span class="p">,</span> <span class="n">check_ranges</span><span class="p">,</span> <span class="n">check_sills</span><span class="p">,</span> <span class="n">check_nuggets</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.variogram.theoretical.spatial_dependency_index</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram">[docs]</a>
+<span class="k">class</span> <span class="nc">TheoreticalVariogram</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Theoretical model of a spatial dissimilarity.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model_params : Dict, default=None</span>
+<span class="sd">        Dictionary with ``&#39;nugget&#39;``, ``&#39;sill&#39;``, ``&#39;range&#39;`` and ``&#39;name&#39;`` of the model.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    experimental_variogram : EmpiricalVariogram, default=None</span>
+<span class="sd">        Empirical Variogram class and its attributes.</span>
+
+<span class="sd">    experimental_array : numpy array, default=None</span>
+<span class="sd">        Empirical variogram in a form of numpy array.</span>
+
+<span class="sd">    variogram_models : Dict</span>
+<span class="sd">        A dictionary with keys representing theoretical variogram models and values that are pointing into a modeling</span>
+<span class="sd">        functions. Available models:</span>
+
+<span class="sd">        - &#39;circular&#39;,</span>
+<span class="sd">        - &#39;cubic&#39;,</span>
+<span class="sd">        - &#39;exponential&#39;,</span>
+<span class="sd">        - &#39;gaussian&#39;,</span>
+<span class="sd">        - &#39;linear&#39;,</span>
+<span class="sd">        - &#39;power&#39;,</span>
+<span class="sd">        - &#39;spherical&#39;.</span>
+
+<span class="sd">    fitted_model : numpy array or None</span>
+<span class="sd">        Trained theoretical model values. Array of ``[lag, variances]``.</span>
+
+<span class="sd">    name : str or None, default=None</span>
+<span class="sd">        The name of the chosen model. Available names are the same as keys in ``variogram_models`` attribute.</span>
+
+<span class="sd">    nugget : float, default=0</span>
+<span class="sd">        The nugget parameter (bias at a zero distance).</span>
+
+<span class="sd">    sill : float, default=0</span>
+<span class="sd">        A value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close</span>
+<span class="sd">        to observations variance.</span>
+
+<span class="sd">    rang : float, default=0</span>
+<span class="sd">        The semivariogram range is a distance at which spatial correlation exists. It shouldn&#39;t be set at a distance</span>
+<span class="sd">        larger than a half of a study extent.</span>
+
+<span class="sd">    direction : float, in range [0, 360], default=None</span>
+<span class="sd">        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.</span>
+
+<span class="sd">    rmse : float, default=0</span>
+<span class="sd">        Root mean squared error of the difference between the empirical observations and the modeled curve.</span>
+
+<span class="sd">    mae : bool, default=True</span>
+<span class="sd">        Mean Absolute Error of a model.</span>
+
+<span class="sd">    bias : float, default=0</span>
+<span class="sd">        Forecast Bias of the modeled variogram vs experimental points. Large positive value means that the estimated</span>
+<span class="sd">        model underestimates values. A large negative value means that model overestimates predictions.</span>
+
+<span class="sd">    smape : float, default=0</span>
+<span class="sd">        Symmetric Mean Absolute Percentage Error of the prediction - values from 0 to 100%.</span>
+
+<span class="sd">    spatial_dependency_ratio : float, default = None</span>
+<span class="sd">        The ratio of nugget vs sill multiplied by 100. Levels from 0 to 25 indicate strong spatial dependency,</span>
+<span class="sd">        from 25 to 75 moderate spatial dependency, from 75 to 95 weak spatial dependency, and above process is</span>
+<span class="sd">        considered to be not spatially-depended.</span>
+
+<span class="sd">    spatial_dependency_strength : str, default = &quot;Unknown&quot;</span>
+<span class="sd">        Descriptive indicator of spatial dependency strength based on the ``spatial_dependency_level``. It could be:</span>
+<span class="sd">          * ``unknown`` if ratio is ``None``,</span>
+<span class="sd">          * ``strong`` if ratio is below 25,</span>
+<span class="sd">          * ``moderate`` if ratio is between 25 and 75,</span>
+<span class="sd">          * ``weak`` if ratio is between 75 and 95,</span>
+<span class="sd">          * ``no spatial dependency`` if ratio is greater than 95.</span>
+
+<span class="sd">    are_params : bool</span>
+<span class="sd">        Check if model parameters were given during initialization.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    fit()</span>
+<span class="sd">        Fits experimental variogram data into theoretical model.</span>
+
+<span class="sd">    autofit()</span>
+<span class="sd">        The same as fit but tests multiple nuggets, ranges, sills and models.</span>
+
+<span class="sd">    calculate_model_error()</span>
+<span class="sd">        Evaluates the model performance against experimental values.</span>
+
+<span class="sd">    to_dict()</span>
+<span class="sd">        Store model parameters in a dict.</span>
+
+<span class="sd">    from_dict()</span>
+<span class="sd">        Read model parameters from a dict.</span>
+
+<span class="sd">    to_json()</span>
+<span class="sd">        Save model parameteres in a JSON file.</span>
+
+<span class="sd">    from_json()</span>
+<span class="sd">        Read model parameters from a JSON file.</span>
+
+<span class="sd">    plot()</span>
+<span class="sd">        Shows theoretical model.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    ExperimentalVariogram : class to calculate experimental variogram and more.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy</span>
+<span class="sd">    &gt;&gt;&gt; REFERENCE_INPUT = numpy.array([</span>
+<span class="sd">    ...    [0, 0, 1],</span>
+<span class="sd">    ...    [1, 0, 2],</span>
+<span class="sd">    ...    [2, 0, 3],</span>
+<span class="sd">    ...    [3, 0, 4],</span>
+<span class="sd">    ...    [4, 0, 5],</span>
+<span class="sd">    ...    [5, 0, 6],</span>
+<span class="sd">    ...    [6, 0, 7],</span>
+<span class="sd">    ...    [7, 0, 5],</span>
+<span class="sd">    ...    [8, 0, 3],</span>
+<span class="sd">    ...    [9, 0, 1],</span>
+<span class="sd">    ...    [10, 0, 4],</span>
+<span class="sd">    ...    [11, 0, 6],</span>
+<span class="sd">    ...    [12, 0, 8]</span>
+<span class="sd">    ...    ])</span>
+<span class="sd">    &gt;&gt;&gt; STEP_SIZE = 1</span>
+<span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
+<span class="sd">    &gt;&gt;&gt; empirical_smv = ExperimentalVariogram(REFERENCE_INPUT, step_size=STEP_SIZE, max_range=MAX_RANGE)</span>
+<span class="sd">    &gt;&gt;&gt; theoretical_smv = TheoreticalVariogram()</span>
+<span class="sd">    &gt;&gt;&gt; _ = theoretical_smv.autofit(experimental_variogram=empirical_smv, model_name=&#39;gaussian&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; print(theoretical_smv.rmse)</span>
+<span class="sd">    1.5275214898546217</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model_params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+
+        <span class="c1"># Model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;circular&#39;</span><span class="p">:</span> <span class="n">circular_model</span><span class="p">,</span>
+            <span class="s1">&#39;cubic&#39;</span><span class="p">:</span> <span class="n">cubic_model</span><span class="p">,</span>
+            <span class="s1">&#39;exponential&#39;</span><span class="p">:</span> <span class="n">exponential_model</span><span class="p">,</span>
+            <span class="s1">&#39;gaussian&#39;</span><span class="p">:</span> <span class="n">gaussian_model</span><span class="p">,</span>
+            <span class="s1">&#39;linear&#39;</span><span class="p">:</span> <span class="n">linear_model</span><span class="p">,</span>
+            <span class="s1">&#39;power&#39;</span><span class="p">:</span> <span class="n">power_model</span><span class="p">,</span>
+            <span class="s1">&#39;spherical&#39;</span><span class="p">:</span> <span class="n">spherical_model</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">complex_models</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;safe&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">linear_model</span><span class="p">,</span> <span class="n">power_model</span><span class="p">,</span> <span class="n">spherical_model</span><span class="p">],</span>
+            <span class="s1">&#39;all&#39;</span><span class="p">:</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Model parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+
+        <span class="c1"># Error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmse</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smape</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mae</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="s1">&#39;Unknown&#39;</span>
+
+    <span class="c1"># Core functions</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.fit">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+            <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+            <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">nugget</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">update_attrs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">warn_about_set_params</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        experimental_variogram : ExperimentalVariogram</span>
+<span class="sd">            Prepared Empirical Variogram.</span>
+
+<span class="sd">        model_name : str</span>
+<span class="sd">            The name of the model to check. Available models:</span>
+
+<span class="sd">            - &#39;circular&#39;,</span>
+<span class="sd">            - &#39;cubic&#39;,</span>
+<span class="sd">            - &#39;exponential&#39;,</span>
+<span class="sd">            - &#39;gaussian&#39;,</span>
+<span class="sd">            - &#39;linear&#39;,</span>
+<span class="sd">            - &#39;power&#39;,</span>
+<span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        sill : float, default=0</span>
+<span class="sd">            A value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close</span>
+<span class="sd">            to observations variance.</span>
+
+<span class="sd">        rang : float, default=0</span>
+<span class="sd">            The semivariogram range is a distance at which spatial correlation exists. It shouldn&#39;t be set at a distance</span>
+<span class="sd">            larger than a half of a study extent.</span>
+
+<span class="sd">        nugget : float, default=0.</span>
+<span class="sd">            Nugget parameter (bias at a zero distance).</span>
+
+<span class="sd">        direction : float, in range [0, 360], default=None</span>
+<span class="sd">            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is</span>
+<span class="sd">            required if passed experimental variogram is stored in a numpy array.</span>
+
+<span class="sd">        update_attrs : bool, default=True</span>
+<span class="sd">            Should class attributes be updated?</span>
+
+<span class="sd">        warn_about_set_params: bool, default=True</span>
+<span class="sd">            Should class invoke warning if model parameters has been set during initialization?</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            Model type (function) not implemented.</span>
+
+<span class="sd">        Warns</span>
+<span class="sd">        -----</span>
+<span class="sd">        Warning</span>
+<span class="sd">            Model parameters were given during initialization but program is forced to fit the new set of parameters.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        _theoretical_values, _error: Tuple[ numpy array, dict ]</span>
+<span class="sd">            ``[ theoretical semivariances, {&#39;rmse bias smape mae&#39;}]``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">warn_about_set_params</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Semivariogram parameters have been set earlier, you are going to overwrite them&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;If you provide experimental variogram as a numpy array you must remember that the direction&#39;</span> \
+                      <span class="s1">&#39; parameter must be set if it is a directional variogram. Otherwise, algorithm assumes that&#39;</span> \
+                      <span class="s1">&#39; variogram is isotropic.&#39;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+
+        <span class="c1"># Check model type</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+
+        <span class="n">_theoretical_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_model</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">rang</span><span class="p">)</span>
+
+        <span class="c1"># Estimate errors</span>
+        <span class="n">_error</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_model_error</span><span class="p">(</span><span class="n">_theoretical_values</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">rmse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">smape</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">update_attrs</span><span class="p">:</span>
+            <span class="n">attrs_to_update</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;fitted_model&#39;</span><span class="p">:</span> <span class="n">_theoretical_values</span><span class="p">,</span>
+                <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="n">model_name</span><span class="p">,</span>
+                <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="n">nugget</span><span class="p">,</span>
+                <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="n">sill</span><span class="p">,</span>
+                <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">rang</span>
+            <span class="p">}</span>
+            <span class="n">attrs_to_update</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_error</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">attrs_to_update</span><span class="p">)</span>
+
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">_theoretical_values</span><span class="p">,</span> <span class="n">_error</span></div>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram.autofit">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.autofit">[docs]</a>
+    <span class="k">def</span> <span class="nf">autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                <span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+                <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">min_nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">max_nugget</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">number_of_nuggets</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                <span class="n">rang</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">min_range</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                <span class="n">max_range</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                <span class="n">number_of_ranges</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">min_sill</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                <span class="n">max_sill</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">number_of_sills</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">error_estimator</span><span class="o">=</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span>
+                <span class="n">deviation_weighting</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span>
+                <span class="n">auto_update_attributes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">warn_about_set_params</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">return_params</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        experimental_variogram : ExperimentalVariogram</span>
+<span class="sd">            Prepared Empirical Variogram or array.</span>
+
+<span class="sd">        model_name : str, default=&#39;safe&#39;</span>
+<span class="sd">            The name of the model to check or special command for multiple models. Available models:</span>
+
+<span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;],</span>
+<span class="sd">            - &#39;circular&#39;,</span>
+<span class="sd">            - &#39;cubic&#39;,</span>
+<span class="sd">            - &#39;exponential&#39;,</span>
+<span class="sd">            - &#39;gaussian&#39;,</span>
+<span class="sd">            - &#39;linear&#39;,</span>
+<span class="sd">            - &#39;power&#39;,</span>
+<span class="sd">            - &#39;spherical&#39;.</span>
+
+<span class="sd">        model_types : List, default = None</span>
+<span class="sd">            The list with model names to check excluding &#39;all&#39; and &#39;safe&#39; names.</span>
+
+<span class="sd">        nugget : float, optional</span>
+<span class="sd">            Nugget (bias) of a variogram. If given then it is fixed to this value.</span>
+
+<span class="sd">        min_nugget : float, default = 0</span>
+<span class="sd">            The minimum nugget as the ratio of the parameter to the first lag variance.</span>
+
+<span class="sd">        max_nugget : float, default = 0.5</span>
+<span class="sd">            The maximum nugget as the ratio of the parameter to the first lag variance.</span>
+
+<span class="sd">        number_of_nuggets : int, default = 16</span>
+<span class="sd">            How many equally spaced nuggets tested between ``min_nugget`` and ``max_nugget``.</span>
+
+<span class="sd">        rang : float, optional</span>
+<span class="sd">            If given, then range is fixed to this value.</span>
+
+<span class="sd">        min_range : float, default = 0.1</span>
+<span class="sd">            The minimal fraction of a variogram range, ``0 &lt; min_range &lt;= max_range``.</span>
+
+<span class="sd">        max_range : float, default = 0.5</span>
+<span class="sd">            The maximum fraction of a variogram range, ``min_range &lt;= max_range &lt;= 1``. Parameter ``max_range`` greater</span>
+<span class="sd">            than **0.5** raises warning.</span>
+
+<span class="sd">        number_of_ranges : int, default = 16</span>
+<span class="sd">            How many equally spaced ranges are tested between ``min_range`` and ``max_range``.</span>
+
+<span class="sd">        sill : float, default = None</span>
+<span class="sd">            If given, then sill is fixed to this value.</span>
+
+<span class="sd">        min_sill : float, default = 0</span>
+<span class="sd">            The minimal fraction of the variogram variance at lag 0 to find a sill, ``0 &lt;= min_sill &lt;= max_sill``.</span>
+
+<span class="sd">        max_sill : float, default = 1</span>
+<span class="sd">            The maximum fraction of the variogram variance at lag 0 to find a sill. It *should be* lower or equal to 1.</span>
+<span class="sd">            It is possible to set it above 1, but then warning is printed.</span>
+
+<span class="sd">        number_of_sills : int, default = 16</span>
+<span class="sd">            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.</span>
+
+<span class="sd">        direction : float, in range [0, 360], default=None</span>
+<span class="sd">            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter is</span>
+<span class="sd">            required if passed experimental variogram is stored in a numpy array.</span>
+
+<span class="sd">        error_estimator : str, default = &#39;rmse&#39;</span>
+<span class="sd">            A model error estimation method. Available options are:</span>
+
+<span class="sd">            - &#39;rmse&#39;: Root Mean Squared Error,</span>
+<span class="sd">            - &#39;mae&#39;: Mean Absolute Error,</span>
+<span class="sd">            - &#39;bias&#39;: Forecast Bias,</span>
+<span class="sd">            - &#39;smape&#39;: Symmetric Mean Absolute Percentage Error.</span>
+
+<span class="sd">        deviation_weighting : str, default = &quot;equal&quot;</span>
+<span class="sd">            The name of a method used to weight error at a given lags. Works only with RMSE. Available methods:</span>
+
+<span class="sd">            - equal: no weighting,</span>
+<span class="sd">            - closest: lags at a close range have bigger weights,</span>
+<span class="sd">            - distant: lags that are further away have bigger weights,</span>
+<span class="sd">            - dense: error is weighted by the number of point pairs within a lag.</span>
+
+<span class="sd">        auto_update_attributes : bool, default = True</span>
+<span class="sd">            Update sill, range, model type and nugget based on the best model.</span>
+
+<span class="sd">        warn_about_set_params: bool, default=True</span>
+<span class="sd">            Should class invoke warning if model parameters has been set during initialization?</span>
+
+<span class="sd">        verbose : bool, default = False</span>
+<span class="sd">            Show iteration results.</span>
+
+<span class="sd">        return_params : bool, default = True</span>
+<span class="sd">            Return model parameters.</span>
+
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        model_attributes : Dict</span>
+<span class="sd">            Attributes dict:</span>
+
+<span class="sd">            &gt;&gt;&gt; {</span>
+<span class="sd">            ...     &#39;model_name&#39;: model_name,</span>
+<span class="sd">            ...     &#39;sill&#39;: model_sill,</span>
+<span class="sd">            ...     &#39;range&#39;: model_range,</span>
+<span class="sd">            ...     &#39;nugget&#39;: model_nugget,</span>
+<span class="sd">            ...     &#39;error_type&#39;: type_of_error_metrics,</span>
+<span class="sd">            ...     &#39;error value&#39;: error_value</span>
+<span class="sd">            ... }</span>
+
+<span class="sd">        Warns</span>
+<span class="sd">        -----</span>
+<span class="sd">        SillOutsideSafeRangeWarning</span>
+<span class="sd">            Warning printed when ``max_sill &gt; 1``.</span>
+
+<span class="sd">        RangeOutsideSafeDistanceWarning</span>
+<span class="sd">            Warning printed when ``max_range &gt; 0.5``.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">            Model parameters were given during initilization but program is forced to fit the new set of parameters.</span>
+
+<span class="sd">        Warning</span>
+<span class="sd">            Passed ``experimental_variogram`` is a numpy array and ``direction`` parameter is ``None``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            Raised when ``sill &lt; 0`` or ``range &lt; 0`` or ``range &gt; 1``.</span>
+
+<span class="sd">        KeyError</span>
+<span class="sd">            Raised when wrong model name(s) are provided by the users.</span>
+
+<span class="sd">        KeyError</span>
+<span class="sd">            Raised when wrong error type is provided by the users.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span> <span class="o">=</span> <span class="n">deviation_weighting</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">warn_about_set_params</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Semivariogram parameters have been set earlier, you are going to overwrite them&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">direct</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="o">=</span> <span class="n">experimental_variogram</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+
+        <span class="c1"># Check model type and set models</span>
+
+        <span class="k">if</span> <span class="n">model_types</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_models_type_autofit</span><span class="p">(</span><span class="n">model_types</span><span class="p">)</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="n">model_types</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_name_autofit</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="c1"># Set nuggets, ranges and sills</span>
+        <span class="k">if</span> <span class="n">nugget</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_nuggets</span><span class="p">(</span><span class="n">min_nugget</span><span class="p">,</span> <span class="n">max_nugget</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">nugget_range_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">min_nugget</span>
+                <span class="n">nugget_range_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_nugget</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">nugget_range_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">min_nugget</span>
+                <span class="n">nugget_range_max</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_nugget</span>
+
+            <span class="n">nugget_ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">nugget_range_min</span><span class="p">,</span> <span class="n">nugget_range_max</span><span class="p">,</span> <span class="n">number_of_nuggets</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">nugget_ranges</span> <span class="o">=</span> <span class="p">[</span><span class="n">nugget</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">rang</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_ranges</span><span class="p">(</span><span class="n">min_range</span><span class="p">,</span> <span class="n">max_range</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="o">=</span> <span class="n">get_study_max_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">input_array</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">min_max_ranges</span> <span class="o">=</span> <span class="n">create_min_max_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">study_max_range</span><span class="p">,</span> <span class="n">min_range</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">number_of_ranges</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_max_ranges</span> <span class="o">=</span> <span class="p">[</span><span class="n">rang</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">sill</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">check_sills</span><span class="p">(</span><span class="n">min_sill</span><span class="p">,</span> <span class="n">max_sill</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">var_sill</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">variance</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ll</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">)</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.2</span> <span class="o">*</span> <span class="n">ll</span><span class="p">)</span>
+                <span class="n">var_sill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[</span><span class="o">-</span><span class="n">pos</span><span class="p">:,</span> <span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">min_max_sill</span> <span class="o">=</span> <span class="n">create_min_max_array</span><span class="p">(</span><span class="n">var_sill</span><span class="p">,</span> <span class="n">min_sill</span><span class="p">,</span> <span class="n">max_sill</span><span class="p">,</span> <span class="n">number_of_sills</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">min_max_sill</span> <span class="o">=</span> <span class="p">[</span><span class="n">sill</span><span class="p">]</span>
+
+        <span class="c1"># Get errors</span>
+        <span class="n">_errors_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_err_keys</span><span class="p">(</span><span class="n">error_estimator</span><span class="p">)</span>
+
+        <span class="c1"># Initialize error</span>
+        <span class="n">err_val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+
+        <span class="c1"># Initlize parameters</span>
+        <span class="n">optimal_parameters</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;model_name&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">_mtype</span> <span class="ow">in</span> <span class="n">mtypes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_nugg</span> <span class="ow">in</span> <span class="n">nugget_ranges</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_rang</span> <span class="ow">in</span> <span class="n">min_max_ranges</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">_sill</span> <span class="ow">in</span> <span class="n">min_max_sill</span><span class="p">:</span>
+                        <span class="c1"># Create model</span>
+                        <span class="n">_mdl_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="n">_mtype</span><span class="p">]</span>
+                        <span class="n">_fitted_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fit_model</span><span class="p">(</span><span class="n">_mdl_fn</span><span class="p">,</span> <span class="n">_nugg</span><span class="p">,</span> <span class="n">_sill</span><span class="p">,</span> <span class="n">_rang</span><span class="p">)</span>
+
+                        <span class="c1"># Calculate Error</span>
+                        <span class="n">_err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_model_error</span><span class="p">(</span><span class="n">_fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                                                          <span class="o">**</span><span class="n">_errors_keys</span><span class="p">,</span>
+                                                          <span class="n">deviation_weighting</span><span class="o">=</span><span class="n">deviation_weighting</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__print_autofit_info</span><span class="p">(</span><span class="n">_mtype</span><span class="p">,</span>
+                                                      <span class="n">_nugg</span><span class="p">,</span>
+                                                      <span class="n">_sill</span><span class="p">,</span>
+                                                      <span class="n">_rang</span><span class="p">,</span>
+                                                      <span class="n">error_estimator</span><span class="p">,</span>
+                                                      <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">])</span>
+
+                        <span class="c1"># Check if model is better than the previous</span>
+                        <span class="k">if</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">err_val</span><span class="p">:</span>
+                            <span class="n">err_val</span> <span class="o">=</span> <span class="n">_err</span><span class="p">[</span><span class="n">error_estimator</span><span class="p">]</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mtype</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_nugg</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_sill</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rang</span>
+                            <span class="n">optimal_parameters</span><span class="p">[</span><span class="s1">&#39;fitted_model&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fitted_model</span>
+                            <span class="n">optimal_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_err</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">auto_update_attributes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_attributes</span><span class="p">(</span><span class="o">**</span><span class="n">optimal_parameters</span><span class="p">)</span>
+
+        <span class="c1"># Update spatial dependency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">return_params</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">optimal_parameters</span></div>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram.predict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.predict">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method returns a semivariance per distance.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        distances : np.ndarray</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        predicted : np.ndarray</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="n">predicted</span> <span class="o">=</span> <span class="n">_model</span><span class="p">(</span>
+            <span class="n">distances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">predicted</span></div>
+
+
+    <span class="c1"># Plotting and visualization</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.plot">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experimental</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method plots theoretical curve and (optionally) experimental scatter plot.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        experimental : bool</span>
+<span class="sd">            Plot experimental observations.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            Model is not fitted yet, nothing to plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Model has not been trained, nothing to plot.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Theoretical Model&#39;</span><span class="p">]</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">experimental</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+                            <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;8&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#66c2a5&#39;</span><span class="p">)</span>
+                <span class="n">legend</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Experimental Semivariances&#39;</span><span class="p">,</span> <span class="s1">&#39;Theoretical Model&#39;</span><span class="p">]</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#fc8d62&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="c1"># Evaluation</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.calculate_model_error">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.calculate_model_error">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_model_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                              <span class="n">fitted_values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+                              <span class="n">rmse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">mae</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">smape</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">deviation_weighting</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method calculates error associated with a difference between the theoretical model and</span>
+<span class="sd">        the experimental semivariogram.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fitted_values : numpy array</span>
+<span class="sd">            ``[lag, fitted value]``</span>
+
+<span class="sd">        rmse : bool, default=True</span>
+<span class="sd">            Root Mean Squared Error of a model.</span>
+
+<span class="sd">        bias : bool, default=True</span>
+<span class="sd">            Forecast Bias of a model.</span>
+
+<span class="sd">        mae : bool, default=True</span>
+<span class="sd">            Mean Absolute Error of a model.</span>
+
+<span class="sd">        smape : bool, default=True</span>
+<span class="sd">            Symmetric Mean Absolute Percentage Error of a model.</span>
+
+<span class="sd">        deviation_weighting : str, default = &quot;equal&quot;</span>
+<span class="sd">            The name of a method used to **weight errors at a given lags**. Works only with RMSE.</span>
+<span class="sd">            Available methods:</span>
+
+<span class="sd">            - equal: no weighting,</span>
+<span class="sd">            - closest: lags at a close range have bigger weights,</span>
+<span class="sd">            - distant: lags that are further away have bigger weights,</span>
+<span class="sd">            - dense: error is weighted by the number of point pairs within a lag.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        model_errors : Dict</span>
+<span class="sd">            Dict with error values per model: rmse, bias, mae, smape.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MetricsTypeSelectionError</span>
+<span class="sd">            User has set all error types to ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Check errors</span>
+        <span class="n">validate_selected_errors</span><span class="p">(</span><span class="n">rmse</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">+</span> <span class="n">mae</span> <span class="o">+</span> <span class="n">smape</span><span class="p">)</span>  <span class="c1"># all False sums to 0 -&gt; error detection</span>
+        <span class="n">model_error</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rmse&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s1">&#39;mae&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+            <span class="s1">&#39;smape&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="p">}</span>
+
+        <span class="n">_real_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Get Forecast Biast</span>
+        <span class="k">if</span> <span class="n">bias</span><span class="p">:</span>
+            <span class="n">_fb</span> <span class="o">=</span> <span class="n">forecast_bias</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">)</span>
+            <span class="n">model_error</span><span class="p">[</span><span class="s1">&#39;bias&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_fb</span>
+
+        <span class="c1"># Get RMSE</span>
+        <span class="k">if</span> <span class="n">rmse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">deviation_weighting</span> <span class="o">!=</span> <span class="s1">&#39;equal&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">deviation_weighting</span> <span class="o">==</span> <span class="s1">&#39;dense&#39;</span><span class="p">:</span>
+                    <span class="n">points_per_lag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">_rmse</span> <span class="o">=</span> <span class="n">weighted_root_mean_squared_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">,</span> <span class="n">deviation_weighting</span><span class="p">,</span>
+                                                             <span class="n">lag_points_distribution</span><span class="o">=</span><span class="n">points_per_lag</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_rmse</span> <span class="o">=</span> <span class="n">weighted_root_mean_squared_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">,</span> <span class="n">deviation_weighting</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">_rmse</span> <span class="o">=</span> <span class="n">root_mean_squared_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">)</span>
+            <span class="n">model_error</span><span class="p">[</span><span class="s1">&#39;rmse&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_rmse</span>
+
+        <span class="c1"># Get MAE</span>
+        <span class="k">if</span> <span class="n">mae</span><span class="p">:</span>
+            <span class="n">_mae</span> <span class="o">=</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">)</span>
+            <span class="n">model_error</span><span class="p">[</span><span class="s1">&#39;mae&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_mae</span>
+
+        <span class="c1"># Get SMAPE</span>
+        <span class="k">if</span> <span class="n">smape</span><span class="p">:</span>
+            <span class="n">_smape</span> <span class="o">=</span> <span class="n">symmetric_mean_absolute_percentage_error</span><span class="p">(</span><span class="n">fitted_values</span><span class="p">,</span> <span class="n">_real_values</span><span class="p">)</span>
+            <span class="n">model_error</span><span class="p">[</span><span class="s1">&#39;smape&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_smape</span>
+
+        <span class="k">return</span> <span class="n">model_error</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_update_spatial_dependency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method updates spatial dependency of a fitted variogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">index_ratio</span><span class="p">,</span> <span class="n">index_strength</span> <span class="o">=</span> <span class="n">calculate_spatial_dependence_index</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_ratio</span> <span class="o">=</span> <span class="n">index_ratio</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span> <span class="o">=</span> <span class="n">index_strength</span>
+
+    <span class="c1"># I/O</span>
+
+<div class="viewcode-block" id="TheoreticalVariogram.to_dict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method exports the theoretical variogram parameters to a dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        model_parameters : Dict</span>
+<span class="sd">            Dictionary with model&#39;s ``&#39;name&#39;``, ``&#39;nugget&#39;``, ``&#39;sill&#39;``, ``&#39;range&#39;`` and ``&#39;direction&#39;``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            The model parameters have not been derived yet.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Model is not set yet, cannot export model parameters to dict&#39;</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">modeled_parameters</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
+            <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">modeled_parameters</span></div>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram.from_dict">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method updates model with a given set of parameters.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters : Dict</span>
+<span class="sd">            Dictionary with model&#39;s: ``&#39;name&#39;, &#39;nugget&#39;, &#39;sill&#39;, &#39;range&#39;, &#39;direction&#39;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram.to_json">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.to_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method stores variogram parameters into a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">json_output</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;nugget&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="p">,</span>
+            <span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="p">,</span>
+            <span class="s1">&#39;sill&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="p">,</span>
+            <span class="s1">&#39;direction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">direction</span>
+        <span class="p">}</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fout</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">json_output</span><span class="p">,</span> <span class="n">fout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TheoreticalVariogram.from_json">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.TheoreticalVariogram.from_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">from_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method reads data from a JSON file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
+            <span class="n">json_input</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_model_parameters</span><span class="p">(</span><span class="n">json_input</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">are_params</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">check_validity</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">check_validity</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model &#39;</span> \
+                   <span class="s1">&#39;or import model with from_dict() or from_json() methods.&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;* Selected model: &#39;</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39; model&#39;</span>
+            <span class="n">msg_nugget</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Nugget: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">nugget</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">msg_sill</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Sill: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sill</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">msg_range</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Range: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rang</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">msg_spatial_dependency</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Spatial Dependency Strength is </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">spatial_dependency_strength</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">mean_bias_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean Bias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bias</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">mean_rmse_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Mean RMSE: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rmse</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">error_weighting</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;* Error-lag weighting method: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">deviation_weighting</span><span class="si">}</span><span class="s1">&#39;</span>
+
+            <span class="n">text_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span><span class="p">,</span> <span class="n">msg_nugget</span><span class="p">,</span> <span class="n">msg_sill</span><span class="p">,</span> <span class="n">msg_range</span><span class="p">,</span> <span class="n">msg_spatial_dependency</span><span class="p">,</span>
+                         <span class="n">mean_bias_msg</span><span class="p">,</span> <span class="n">mean_rmse_msg</span><span class="p">,</span> <span class="n">error_weighting</span><span class="p">]</span>
+
+            <span class="n">header</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">text_list</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">&#39;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># Build pretty table</span>
+                <span class="n">pretty_table</span> <span class="o">=</span> <span class="n">PrettyTable</span><span class="p">()</span>
+                <span class="n">pretty_table</span><span class="o">.</span><span class="n">field_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;lag&quot;</span><span class="p">,</span> <span class="s2">&quot;theoretical&quot;</span><span class="p">,</span> <span class="s2">&quot;experimental&quot;</span><span class="p">,</span> <span class="s2">&quot;bias (y-y&#39;)&quot;</span><span class="p">]</span>
+
+                <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">record</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">):</span>
+                    <span class="n">lag</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">experimental_semivar</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">theoretical_semivar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">bias</span> <span class="o">=</span> <span class="n">experimental_semivar</span> <span class="o">-</span> <span class="n">theoretical_semivar</span>
+                    <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">lag</span><span class="p">,</span> <span class="n">theoretical_semivar</span><span class="p">,</span> <span class="n">experimental_semivar</span><span class="p">,</span> <span class="n">bias</span><span class="p">])</span>
+
+                <span class="n">pretty_table</span><span class="o">.</span><span class="n">add_rows</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">header</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">pretty_table</span><span class="o">.</span><span class="n">get_string</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">msg</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">header</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cname</span> <span class="o">=</span> <span class="s1">&#39;TheoreticalVariogram&#39;</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;empirical_variogram=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_variogram</span><span class="si">}</span><span class="s1">,experimental_array=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="n">repr_val</span> <span class="o">=</span> <span class="n">cname</span> <span class="o">+</span> <span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="n">input_params</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span>
+        <span class="k">return</span> <span class="n">repr_val</span>
+
+    <span class="k">def</span> <span class="nf">_check_model_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mname</span><span class="p">):</span>
+        <span class="n">_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variogram_models</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">mname</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_names</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined model name </span><span class="si">{</span><span class="n">mname</span><span class="si">}</span><span class="s1"> not available. You may choose one from </span><span class="si">{</span><span class="n">_names</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_models_type_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_types</span><span class="p">:</span> <span class="n">List</span><span class="p">):</span>
+
+        <span class="k">for</span> <span class="n">mtype</span> <span class="ow">in</span> <span class="n">model_types</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">mtype</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_model_name_autofit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;all&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;circular&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
+        <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s1">&#39;safe&#39;</span><span class="p">:</span>
+            <span class="n">mtypes</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;spherical&#39;</span>
+            <span class="p">]</span>
+            <span class="k">return</span> <span class="n">mtypes</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_model_names</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="n">model_name</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_update_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                           <span class="n">fitted_model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">nugget</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="nb">range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">sill</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">rmse</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">bias</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">mae</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                           <span class="n">smape</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Model parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitted_model</span> <span class="o">=</span> <span class="n">fitted_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="n">nugget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="n">sill</span>
+
+        <span class="c1"># Dynamic parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmse</span> <span class="o">=</span> <span class="n">rmse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="n">bias</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">smape</span> <span class="o">=</span> <span class="n">smape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mae</span> <span class="o">=</span> <span class="n">mae</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_err_keys</span><span class="p">(</span><span class="n">err_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">err_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;rmse&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;bias&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;smape&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s1">&#39;mae&#39;</span><span class="p">:</span> <span class="kc">False</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">err_name</span> <span class="ow">in</span> <span class="n">err_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">err_dict</span><span class="p">[</span><span class="n">err_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="n">err_dict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Defined error </span><span class="si">{</span><span class="n">err_name</span><span class="si">}</span><span class="s1"> not exists. Use one of </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">err_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1"> instead.&#39;</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__print_autofit_info</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">err_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">err_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">msg_core</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                   <span class="sa">f</span><span class="s1">&#39;Model Parameters - nugget: </span><span class="si">{</span><span class="n">nugget</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">, sill: </span><span class="si">{</span><span class="n">sill</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">, range: </span><span class="si">{</span><span class="n">rang</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">&#39;</span> \
+                   <span class="sa">f</span><span class="s1">&#39;Model Error </span><span class="si">{</span><span class="n">err_type</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">err_value</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">msg_core</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_fit_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_fn</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method fits selected model into baseline lags.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model_fn : Callable</span>
+<span class="sd">                   Selected model.</span>
+
+<span class="sd">        nugget : float</span>
+
+<span class="sd">        sill : float</span>
+
+<span class="sd">        rang : float</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">lags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">experimental_array</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">fitted_values</span> <span class="o">=</span> <span class="n">model_fn</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span> <span class="n">nugget</span><span class="p">,</span> <span class="n">sill</span><span class="p">,</span> <span class="n">rang</span><span class="p">)</span>
+        <span class="n">modeled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lags</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">modeled</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">lags</span>
+        <span class="n">modeled</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">fitted_values</span>
+        <span class="k">return</span> <span class="n">modeled</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_set_direction</span><span class="p">(</span><span class="n">mparams</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">direction</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mparams</span><span class="p">[</span><span class="s1">&#39;direction&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">direction</span>
+
+    <span class="k">def</span> <span class="nf">_set_model_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nugget</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;nugget&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rang</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sill</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;sill&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_params</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_direction</span><span class="p">(</span><span class="n">model_params</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spatial_dependency</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="build_theoretical_variogram">
+<a class="viewcode-back" href="../../../../api/variogram/theoretical/theoretical.html#pyinterpolate.build_theoretical_variogram">[docs]</a>
+<span class="k">def</span> <span class="nf">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+                                <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                <span class="n">sill</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                <span class="n">rang</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.</span><span class="p">,</span>
+                                <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TheoreticalVariogram</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function is a wrapper into ``TheoreticalVariogram`` class and its ``fit()`` method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    experimental_variogram : ExperimentalVariogram</span>
+
+<span class="sd">    model_name : str</span>
+<span class="sd">        Available types:</span>
+
+<span class="sd">        - &#39;circular&#39;,</span>
+<span class="sd">        - &#39;cubic&#39;,</span>
+<span class="sd">        - &#39;exponential&#39;,</span>
+<span class="sd">        - &#39;gaussian&#39;,</span>
+<span class="sd">        - &#39;linear&#39;,</span>
+<span class="sd">        - &#39;power&#39;,</span>
+<span class="sd">        - &#39;spherical&#39;.</span>
+
+<span class="sd">    sill : float</span>
+<span class="sd">        The value at which dissimilarity is close to its maximum if model is bounded. Otherwise, it is usually close</span>
+<span class="sd">        to observations variance.</span>
+
+<span class="sd">    rang : float</span>
+<span class="sd">        The semivariogram range is a distance at which spatial correlation exists. It shouldn&#39;t be set at a distance</span>
+<span class="sd">        larger than a half of a study extent.</span>
+
+<span class="sd">    nugget : float, default=0.</span>
+<span class="sd">        The nugget parameter (bias at a zero distance).</span>
+
+<span class="sd">    direction : float, in range [0, 360], default=None</span>
+<span class="sd">        The direction of a semivariogram. If ``None`` given then semivariogram is isotropic.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    theo : TheoreticalVariogram</span>
+<span class="sd">        Fitted theoretical semivariogram model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">theo</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+    <span class="n">theo</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+        <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+        <span class="n">rang</span><span class="o">=</span><span class="n">rang</span><span class="p">,</span>
+        <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>
+        <span class="n">direction</span><span class="o">=</span><span class="n">direction</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">theo</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

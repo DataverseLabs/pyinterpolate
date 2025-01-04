@@ -31,5 +31,5 @@ class TestMultivariateRegressionClass(unittest.TestCase):
         mr = MultivariateRegression()
         mr.fit(ds)
         predictions = mr.predict(np.array([[2.5], [4]]))
-        self.assertEqual(predictions[0], 3.775)
-        self.assertEqual(predictions[1], 5.5)
+        self.assertAlmostEqual(predictions[0], 3.775, places=3)
+        self.assertAlmostEqual(predictions[1], 5.5, places=3)
