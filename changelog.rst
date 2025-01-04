@@ -6,6 +6,13 @@ Pyinterpolate is the Python library for **geostatistics** and **spatial statisti
 Changes by date
 ===============
 
+2025-01-04
+----------
+**version 0.5.4**
+
+* (python) removed Python 3.8 from the supported versions,
+* (debug) fixed `DivisionByZeroWarning` when semivariogram range is equal to 0
+
 2024-10-26
 ----------
 **version 0.5.3**

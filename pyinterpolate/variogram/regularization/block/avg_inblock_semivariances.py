@@ -50,7 +50,7 @@ def calculate_average_semivariance(block_to_block_distances: Dict,
                                    inblock_semivariances: Dict,
                                    block_step_size: float,
                                    block_max_range: float) -> np.ndarray:
-    """
+    r"""
     Function calculates average inblock semivariance between blocks.
 
     Parameters

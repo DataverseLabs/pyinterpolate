@@ -45,7 +45,7 @@ def inblock_semivariance(points_of_block: np.ndarray, variogram_model: Theoretic
 
 def calculate_inblock_semivariance(point_support: Union[Dict, PointSupport, gpd.GeoDataFrame, pd.DataFrame, np.ndarray],
                                    variogram_model: TheoreticalVariogram) -> Dict:
-    """
+    r"""
     Method calculates inblock semivariance of a given areas.
 
 

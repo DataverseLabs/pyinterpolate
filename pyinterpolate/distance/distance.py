@@ -173,7 +173,8 @@ def calc_block_to_block_distance(blocks: Union[Dict, np.ndarray, gpd.GeoDataFram
 
 
 def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray) -> float:
-    """Function calculates distance between two blocks based on how they are divided (into the point support grid).
+    r"""
+    Function calculates distance between two blocks based on how they are divided (into the point support grid).
 
     Parameters
     ----------
