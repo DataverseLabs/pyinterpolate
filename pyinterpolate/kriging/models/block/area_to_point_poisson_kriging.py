@@ -18,7 +18,7 @@ from pyinterpolate.kriging.models.block.weight import WeightedBlock2BlockSemivar
 from pyinterpolate.kriging.utils.kwarnings import ExperimentalFeatureWarning
 from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
 from pyinterpolate.processing.select_values import select_poisson_kriging_data, prepare_pk_known_areas, \
-    get_aggregated_point_support_values
+    get_aggregated_point_support_values, get_distances_within_unknown
 from pyinterpolate.processing.transform.transform import transform_ps_to_dict, get_areal_values_from_agg, sem_to_cov
 from pyinterpolate.variogram import TheoreticalVariogram
 
@@ -194,6 +194,18 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     transposed = avg_b2p_covariances.T
     logging.info("POISSON KRIGING: AREA-TO-POINT | Kriging system weights has been prepared")
 
+    if isinstance(unknown_block[0], np.ndarray):
+        u_idx = unknown_block[0][0]
+    else:
+        u_idx = unknown_block[0]
+
+    distances_within_unknown_block = get_distances_within_unknown(unknown_block_point_support)
+    semivariance_within_unknown = b2b_semivariance.calculate_average_semivariance({
+        u_idx: distances_within_unknown_block
+    })[u_idx]
+
+    covariance_within_unknown = sem_to_cov([semivariance_within_unknown], sill)[0]
+
     predicted_points = []
 
     for idx, point in enumerate(transposed):
@@ -225,6 +237,8 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         # Calculate error
         sigmasq = np.matmul(w.T, point)
+        sigmasq = covariance_within_unknown - sigmasq
+
         if sigmasq < 0:
             if raise_when_negative_error:
                 logging.info(f"POISSON KRIGING: AREA-TO-POINT | Negative variance error for point {point}")
