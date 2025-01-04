@@ -34,7 +34,8 @@ def _get_zero_lag_value(lag0: float, nugget: float, gamma0: float) -> float:
 
 
 def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates circular model of semivariogram.
+    r"""
+    Function calculates circular model of semivariogram.
 
     Parameters
     ----------
@@ -75,7 +76,10 @@ def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
     """
 
     pic = 2 / np.pi
-    ar = lags / rang
+    if rang != 0:
+        ar = lags / rang
+    else:
+        ar = np.zeros(len(lags))
     ns = nugget + sill
     gamma = np.ones(len(ar)) * ns
     poses = lags <= rang
@@ -90,7 +94,8 @@ def circular_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
 
 
 def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates cubic model of semivariogram.
+    r"""
+    Function calculates cubic model of semivariogram.
 
     Parameters
     ----------
@@ -137,7 +142,11 @@ def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
     # a3 = 3.5 * ar ** 5
     # a4 = -0.75 * ar ** 7
 
-    ar = lags / rang
+    if rang != 0:
+        ar = lags / rang
+    else:
+        ar = np.zeros(len(lags))
+
     ns = nugget + sill
     gamma = np.ones(len(ar)) * ns
     poses = lags <= rang
@@ -164,7 +173,8 @@ def cubic_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
 
 
 def exponential_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates exponential model of semivariogram.
+    r"""
+    Function calculates exponential model of semivariogram.
 
     Parameters
     ----------
@@ -201,7 +211,10 @@ def exponential_model(lags: np.array, nugget: float, sill: float, rang: float) -
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / rang
+    if rang != 0:
+        ar = lags / rang
+    else:
+        ar = np.zeros(len(lags))
     gamma = nugget + sill * (1 - np.exp(-ar))
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
@@ -209,7 +222,8 @@ def exponential_model(lags: np.array, nugget: float, sill: float, rang: float) -
 
 
 def gaussian_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates gaussian model of semivariogram.
+    r"""
+    Function calculates gaussian model of semivariogram.
 
     Parameters
     ----------
@@ -248,7 +262,10 @@ def gaussian_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
     """
 
     rang_sq = rang * rang
-    ar = lags**2 / rang_sq
+    if rang_sq != 0:
+        ar = lags**2 / rang_sq
+    else:
+        ar = np.zeros(len(lags))
     gamma = nugget + sill * (1 - np.exp(-ar))
     g0 = gamma[0]
     gamma[0] = _get_zero_lag_value(lags[0], nugget, g0)
@@ -256,7 +273,8 @@ def gaussian_model(lags: np.array, nugget: float, sill: float, rang: float) -> n
 
 
 def linear_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates linear model of semivariogram.
+    r"""
+    Function calculates linear model of semivariogram.
 
     Parameters
     ----------
@@ -294,7 +312,10 @@ def linear_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / rang
+    if rang == 0:
+        ar = np.zeros(len(lags))
+    else:
+        ar = lags / rang
 
     gamma = np.where(
         lags <= rang,
@@ -307,7 +328,8 @@ def linear_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.
 
 
 def power_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates power model of semivariogram.
+    r"""
+    Function calculates power model of semivariogram.
 
     Parameters
     ----------
@@ -345,7 +367,11 @@ def power_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / rang
+    if rang != 0:
+        ar = lags / rang
+    else:
+        ar = np.zeros(len(lags))
+
     ar_sq = ar * ar
 
     gamma = np.where(
@@ -359,7 +385,8 @@ def power_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.a
 
 
 def spherical_model(lags: np.array, nugget: float, sill: float, rang: float) -> np.array:
-    """Function calculates spherical model of semivariogram.
+    r"""
+    Function calculates spherical model of semivariogram.
 
     Parameters
     ----------
@@ -397,7 +424,11 @@ def spherical_model(lags: np.array, nugget: float, sill: float, rang: float) -> 
     [1] Armstrong, M. Basic Linear Geostatistics. ISBN: 978-3-642-58727-6. Springer 1998.
 
     """
-    ar = lags / rang
+    if rang != 0:
+        ar = lags / rang
+    else:
+        ar = np.zeros(len(lags))
+
     a1 = (3/2) * ar
     a2 = 0.5 * ar**3
 

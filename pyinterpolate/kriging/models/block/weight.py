@@ -11,7 +11,7 @@ from pyinterpolate.variogram import TheoreticalVariogram
 
 
 class WeightedBlock2BlockSemivariance:
-    """
+    r"""
     Class calculates the average weighted block-to-block semivariance.
 
     Parameters
@@ -120,7 +120,7 @@ class WeightedBlock2BlockSemivariance:
 
 
 class WeightedBlock2PointSemivariance:
-    """
+    r"""
     Class calculates the average weighted block-to-point semivariance.
 
     Parameters

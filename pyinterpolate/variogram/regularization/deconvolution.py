@@ -780,7 +780,7 @@ class Deconvolution:
 
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
-        """
+        r"""
         Function rescales points derived from the optimal theoretical model and creates new experimental
         values based on the equation:
 

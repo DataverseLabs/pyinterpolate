@@ -51,3 +51,24 @@ class TestSmoothBlocks(unittest.TestCase):
                                        number_of_neighbors=NN)
 
         self.assertIsInstance(output_results, gpd.GeoDataFrame)
+
+    def test_blocks_as_geodataframe(self):
+        blocks_gdf = gpd.read_file(
+            DATASET, layer=POLYGON_LAYER
+        )
+        # ``centroid.x, centroid.y, ds, index`` - must be in geodataframe
+        blocks_gdf['centroid'] = blocks_gdf.centroid
+        blocks_gdf['centroid.x'] = blocks_gdf['centroid'].x
+        blocks_gdf['centroid.y'] = blocks_gdf['centroid'].y
+        blocks_gdf.rename(columns={
+            'rate': 'ds',
+            'FIPS': 'index'
+        }, inplace=True)
+
+        smoothed = smooth_blocks(
+            semivariogram_model=THEORETICAL_VARIOGRAM,
+            blocks=blocks_gdf,
+            point_support=POINT_SUPPORT_INPUT,
+            number_of_neighbors=NN
+        )
+        self.assertIsInstance(smoothed, gpd.GeoDataFrame)

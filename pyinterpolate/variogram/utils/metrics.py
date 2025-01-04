@@ -11,7 +11,8 @@ from pyinterpolate.variogram.utils.exceptions import UndefinedSMAPEWarning
 
 
 def forecast_bias(predicted_array: np.array, real_array: np.array) -> float:
-    """Function calculates forecast bias of prediction.
+    r"""
+    Function calculates forecast bias of prediction.
 
     Parameters
     ----------
@@ -50,7 +51,8 @@ def forecast_bias(predicted_array: np.array, real_array: np.array) -> float:
 
 
 def mean_absolute_error(predicted_array: np.array, real_array: np.array) -> float:
-    """Function calculates forecast bias of prediction.
+    r"""
+    Function calculates forecast bias of prediction.
 
     Parameters
     ----------
@@ -90,7 +92,7 @@ def mean_absolute_error(predicted_array: np.array, real_array: np.array) -> floa
 
 
 def root_mean_squared_error(predicted_array: np.array, real_array: np.array) -> float:
-    """
+    r"""
 
     Parameters
     ----------
@@ -113,7 +115,7 @@ def root_mean_squared_error(predicted_array: np.array, real_array: np.array) -> 
 
     Equation:
 
-    (1) e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}$$
+    (1) $$e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}$$
 
         where:
         * $e_{rmse}$ - root mean squared error,
@@ -132,7 +134,7 @@ def root_mean_squared_error(predicted_array: np.array, real_array: np.array) -> 
 
 def symmetric_mean_absolute_percentage_error(predicted_array: np.array, real_array: np.array,
                                              test_undefined=True) -> float:
-    """
+    r"""
 
     Parameters
     ----------
@@ -203,7 +205,7 @@ def weighted_root_mean_squared_error(predicted_array: np.array,
                                      real_array: np.array,
                                      weighting_method: str,
                                      lag_points_distribution=None) -> float:
-    """
+    r"""
 
     Parameters
     ----------

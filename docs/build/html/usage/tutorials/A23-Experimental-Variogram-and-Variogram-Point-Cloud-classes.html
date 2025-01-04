@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Experimental Variogram and Variogram Cloud classes &#8212; Pyinterpolate 0.5.2 documentation</title>
+    <title>Experimental Variogram and Variogram Cloud classes &#8212; Pyinterpolate 0.5.4 documentation</title>
   
   
   
@@ -16,29 +16,32 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=8e576371"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -52,6 +55,7 @@
     <link rel="prev" title="A.2.2 Variogram Points Cloud" href="A22-Variogram-Points-Cloud.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -67,19 +71,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -87,7 +80,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -95,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -125,7 +117,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
   
 </a></div>
     
@@ -174,7 +166,9 @@
 </li>
 
             <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
                     More
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
@@ -220,29 +214,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -251,15 +237,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -278,7 +260,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -367,15 +350,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -413,9 +392,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -433,8 +417,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -446,7 +428,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Experimental...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Experimental Variogram and Variogram Cloud classes</span></li>
   </ul>
 </nav>
 </div>
@@ -513,16 +495,16 @@ foundation of every other complex function, from semivariogram modeling to Poiss
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.39250338e+05, 5.48631524e+05, 8.84804077e+01],
-       [2.41201861e+05, 5.49103756e+05, 7.72773132e+01],
-       [2.50945606e+05, 5.48731991e+05, 8.15302811e+01],
-       [2.50384028e+05, 5.36743412e+05, 3.87784348e+01],
-       [2.53739451e+05, 5.44230034e+05, 2.12480278e+01],
-       [2.42744089e+05, 5.29666893e+05, 5.23056946e+01],
-       [2.38056136e+05, 5.34391921e+05, 2.95818558e+01],
-       [2.45023500e+05, 5.51069770e+05, 3.36740112e+01],
-       [2.44771460e+05, 5.32997525e+05, 4.72923431e+01],
-       [2.53090205e+05, 5.48829925e+05, 8.16635361e+01]])
+array([[2.41661547e+05, 5.37106156e+05, 1.56584072e+01],
+       [2.39830169e+05, 5.47469930e+05, 8.91886215e+01],
+       [2.52772215e+05, 5.50460716e+05, 7.42563171e+01],
+       [2.39122771e+05, 5.47254134e+05, 8.59083939e+01],
+       [2.54889391e+05, 5.51091269e+05, 7.20493927e+01],
+       [2.47079296e+05, 5.30409100e+05, 4.63409996e+01],
+       [2.46072757e+05, 5.52214231e+05, 5.38786583e+01],
+       [2.53401471e+05, 5.38619345e+05, 2.30167007e+01],
+       [2.40449088e+05, 5.44529941e+05, 1.66461201e+01],
+       [2.53916790e+05, 5.47726919e+05, 6.56468353e+01]])
 </pre></div></div>
 </div>
 </section>
@@ -576,8 +558,8 @@ array([[2.39250338e+05, 5.48631524e+05, 8.84804077e+01],
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Max lon distance: 17926.58479234294
-Max lat distance: 25125.91187161021
+Max lon distance: 17730.22780098894
+Max lat distance: 24552.577515464276
 </pre></div></div>
 </div>
 <p>We can assume that the maximum distance <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter shouldn’t be larger than the maximum distance in a lower dimension (<strong>~18000</strong> m). In reality, the <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter is relatively close to the halved value of this distance, and we can check it on a variogram.</p>
@@ -599,7 +581,7 @@ Max lat distance: 25125.91187161021
 </div>
 <p>We will visually inspect semivariogram with the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method of <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plot_covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">plot_variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -617,7 +599,7 @@ Max lat distance: 25125.91187161021
 <p>What with the <code class="docutils literal notranslate"><span class="pre">max_range</span></code>? It is a tricky problem because the semivariogram seems right up to the end of its range. The idea is to set the maximum range around half of the study extent because the number of point pairs will fall from this distance.</p>
 <p>We can check how many point pairs we have for each distance to make a better decision. The <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class stores information about points within its attribute <code class="docutils literal notranslate"><span class="pre">.experimental_semivariance_array</span></code>. It is a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array with three columns: <code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs]</span></code>, and we will use the last column to decide where to cut <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_ds</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">experimental_semivariance_array</span>
@@ -636,7 +618,7 @@ Max lat distance: 25125.91187161021
 </div>
 <p>Around the twelve-kilometer number of point pairs rapidly falls, so we can set <code class="docutils literal notranslate"><span class="pre">max_range</span></code> to some value between 7.5 and 12.5 kilometers, we will choose <strong>10000</strong> kilometers as our <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">10_000</span>
@@ -661,7 +643,7 @@ Max lat distance: 25125.91187161021
 </div>
 <p>This time variogram looks cleaner. However, it still has oscillating readings. Let’s set <code class="docutils literal notranslate"><span class="pre">step_size</span></code> to 500 meters:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
@@ -692,7 +674,7 @@ Max lat distance: 25125.91187161021
 </ul>
 <p>We will plot all of those objects in a single figure.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -720,7 +702,7 @@ Max lat distance: 25125.91187161021
 <h3>Optional parameters: <code class="docutils literal notranslate"><span class="pre">direction,</span> <span class="pre">tolerance,</span> <span class="pre">method</span></code><a class="headerlink" href="#Optional-parameters:-direction,-tolerance,-method" title="Link to this heading">#</a></h3>
 <p>Those three parameters are used to define a directional variogram. We will check how the variogram behaves in the Weast-East axis (0 degrees).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">0</span>
@@ -750,7 +732,7 @@ Max lat distance: 25125.91187161021
 </div>
 <p>Let’s look into the North-South axis too:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">direction</span> <span class="o">=</span> <span class="mi">90</span>
@@ -801,7 +783,7 @@ Max lat distance: 25125.91187161021
 </ul>
 <p>We will start with calculation and plotting variogram cloud.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
@@ -814,7 +796,7 @@ Max lat distance: 25125.91187161021
 </div>
 <p>We can plot three different kinds of distribution plots: <code class="docutils literal notranslate"><span class="pre">'scatter',</span> <span class="pre">'box',</span> <span class="pre">'violin'</span></code>. We will choose <code class="docutils literal notranslate"><span class="pre">box</span></code> because it clearly shows data distribution in contrast to <code class="docutils literal notranslate"><span class="pre">scatter</span></code> and it’s easier to interpret than <code class="docutils literal notranslate"><span class="pre">violin</span></code> plot.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
@@ -829,7 +811,7 @@ Max lat distance: 25125.91187161021
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -839,7 +821,7 @@ True
 </div>
 <p>The general shape is similar to the shape of the experimental variogram. We can see that semivariances between point pairs contain outliers, especially for the lags close to our maximum range. To be sure about outliers’ existence, let’s look into a more complex violin plot:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
@@ -854,7 +836,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -864,7 +846,7 @@ True
 </div>
 <p>Extreme outliers are more visible. Another thing is the difference between the mean and median. Distribution is highly skewed toward large values. If graphical representation is not enough, we may describe statistics with the method <code class="docutils literal notranslate"><span class="pre">.describe()</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -872,225 +854,225 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-{500: {&#39;count&#39;: 234,
-  &#39;avg semivariance&#39;: 15.48837895423851,
-  &#39;std&#39;: 129.30689361933185,
-  &#39;min&#39;: 0.0,
-  &#39;max&#39;: 1143.5633926376795,
-  &#39;25%&#39;: 0.3451266676565865,
-  &#39;median&#39;: 1.3447192054627521,
-  &#39;75%&#39;: 13.65846407461504,
-  &#39;skewness&#39;: 6.865653366086163,
-  &#39;kurtosis&#39;: 50.79024671616988,
+{500: {&#39;count&#39;: 206,
+  &#39;avg semivariance&#39;: 21.766971989327978,
+  &#39;std&#39;: 99.45858752750664,
+  &#39;min&#39;: 0.00040093438292387873,
+  &#39;max&#39;: 620.3486521877348,
+  &#39;25%&#39;: 0.31618772951424035,
+  &#39;median&#39;: 2.6660517454729415,
+  &#39;75%&#39;: 40.530090990665485,
+  &#39;skewness&#39;: 3.951161453959655,
+  &#39;kurtosis&#39;: 18.051674496024585,
   &#39;lag&#39;: 500},
- 1000: {&#39;count&#39;: 606,
-  &#39;avg semivariance&#39;: 25.151443803715708,
-  &#39;std&#39;: 130.72724691457688,
-  &#39;min&#39;: 1.3315911928657442e-06,
-  &#39;max&#39;: 1077.959058797118,
-  &#39;25%&#39;: 0.7740007161801259,
-  &#39;median&#39;: 5.823250695397292,
-  &#39;75%&#39;: 31.42736609817075,
-  &#39;skewness&#39;: 4.567298658957882,
-  &#39;kurtosis&#39;: 24.214435519746083,
+ 1000: {&#39;count&#39;: 626,
+  &#39;avg semivariance&#39;: 34.026074053022796,
+  &#39;std&#39;: 164.31425739577926,
+  &#39;min&#39;: 0.00010762131205410697,
+  &#39;max&#39;: 1404.338628287791,
+  &#39;25%&#39;: 1.3114497620299517,
+  &#39;median&#39;: 13.795076344162226,
+  &#39;75%&#39;: 57.276079500457854,
+  &#39;skewness&#39;: 4.877955962596052,
+  &#39;kurtosis&#39;: 27.891537698567358,
   &#39;lag&#39;: 1000},
- 1500: {&#39;count&#39;: 1008,
-  &#39;avg semivariance&#39;: 57.835574935521514,
-  &#39;std&#39;: 331.73215147893416,
-  &#39;min&#39;: 7.597882358822972e-05,
-  &#39;max&#39;: 3046.333026852517,
-  &#39;25%&#39;: 0.968566885097971,
-  &#39;median&#39;: 7.822932168508487,
-  &#39;75%&#39;: 64.66452046956692,
-  &#39;skewness&#39;: 5.608396965535479,
-  &#39;kurtosis&#39;: 37.38797721538239,
+ 1500: {&#39;count&#39;: 1034,
+  &#39;avg semivariance&#39;: 57.732919734515775,
+  &#39;std&#39;: 313.5418161290796,
+  &#39;min&#39;: 0.000324399476085091,
+  &#39;max&#39;: 2779.9481918220736,
+  &#39;25%&#39;: 1.4431987959542312,
+  &#39;median&#39;: 16.274205634967075,
+  &#39;75%&#39;: 94.3718891301105,
+  &#39;skewness&#39;: 5.455441858944847,
+  &#39;kurtosis&#39;: 34.29966174391724,
   &#39;lag&#39;: 1500},
- 2000: {&#39;count&#39;: 1348,
-  &#39;avg semivariance&#39;: 79.75218552208693,
-  &#39;std&#39;: 428.8461018481998,
-  &#39;min&#39;: 3.025872865691781e-05,
-  &#39;max&#39;: 3796.9629175248883,
-  &#39;25%&#39;: 1.2690777453244664,
-  &#39;median&#39;: 18.391886290972252,
-  &#39;75%&#39;: 109.60415145155275,
-  &#39;skewness&#39;: 4.869674455730696,
-  &#39;kurtosis&#39;: 27.620361886790118,
+ 2000: {&#39;count&#39;: 1264,
+  &#39;avg semivariance&#39;: 90.05333946033751,
+  &#39;std&#39;: 459.01532850212965,
+  &#39;min&#39;: 1.4074757928028703e-06,
+  &#39;max&#39;: 3666.732273832171,
+  &#39;25%&#39;: 1.769417088004957,
+  &#39;median&#39;: 22.424685948244587,
+  &#39;75%&#39;: 122.82829784085334,
+  &#39;skewness&#39;: 4.2675969002363505,
+  &#39;kurtosis&#39;: 20.274427721642745,
   &#39;lag&#39;: 2000},
- 2500: {&#39;count&#39;: 1698,
-  &#39;avg semivariance&#39;: 145.95094727929936,
-  &#39;std&#39;: 805.2460216899517,
-  &#39;min&#39;: 4.243338480591774e-08,
-  &#39;max&#39;: 5699.690698992359,
-  &#39;25%&#39;: 1.7351306386444776,
-  &#39;median&#39;: 22.872865243130946,
-  &#39;75%&#39;: 162.32509036679767,
-  &#39;skewness&#39;: 4.209560111010213,
-  &#39;kurtosis&#39;: 18.750587407226615,
+ 2500: {&#39;count&#39;: 1750,
+  &#39;avg semivariance&#39;: 112.62921922420664,
+  &#39;std&#39;: 518.1359088403215,
+  &#39;min&#39;: 3.541354089975357e-07,
+  &#39;max&#39;: 4884.371802758575,
+  &#39;25%&#39;: 2.7528328841108305,
+  &#39;median&#39;: 23.04713434126461,
+  &#39;75%&#39;: 195.2224424371925,
+  &#39;skewness&#39;: 4.259865094278097,
+  &#39;kurtosis&#39;: 22.90185653384393,
   &#39;lag&#39;: 2500},
- 3000: {&#39;count&#39;: 1992,
-  &#39;avg semivariance&#39;: 199.33218908929288,
-  &#39;std&#39;: 911.2555224174007,
-  &#39;min&#39;: 1.0608346201479435e-08,
-  &#39;max&#39;: 5720.016503487772,
-  &#39;25%&#39;: 2.4267591861680557,
-  &#39;median&#39;: 32.15229412448389,
-  &#39;75%&#39;: 249.17055305647318,
-  &#39;skewness&#39;: 3.2787661143480946,
-  &#39;kurtosis&#39;: 11.293592711474577,
+ 3000: {&#39;count&#39;: 2028,
+  &#39;avg semivariance&#39;: 186.29677676556994,
+  &#39;std&#39;: 801.2254001482236,
+  &#39;min&#39;: 9.880401194095612e-06,
+  &#39;max&#39;: 4902.46044520292,
+  &#39;25%&#39;: 3.615102891493734,
+  &#39;median&#39;: 47.3152665021189,
+  &#39;75%&#39;: 269.8025301229791,
+  &#39;skewness&#39;: 3.0349582269295103,
+  &#39;kurtosis&#39;: 8.957807755889755,
   &#39;lag&#39;: 3000},
- 3500: {&#39;count&#39;: 2154,
-  &#39;avg semivariance&#39;: 209.00387222055934,
-  &#39;std&#39;: 913.5411306035585,
-  &#39;min&#39;: 6.0737496824003756e-05,
-  &#39;max&#39;: 5516.191060331708,
-  &#39;25%&#39;: 2.9810246527231357,
-  &#39;median&#39;: 48.88620506064035,
-  &#39;75%&#39;: 306.07525457920565,
-  &#39;skewness&#39;: 3.132272141037236,
-  &#39;kurtosis&#39;: 9.972795491912944,
+ 3500: {&#39;count&#39;: 2162,
+  &#39;avg semivariance&#39;: 206.6858675203283,
+  &#39;std&#39;: 836.2111612198677,
+  &#39;min&#39;: 8.101400817395188e-05,
+  &#39;max&#39;: 5262.414516563036,
+  &#39;25%&#39;: 4.3056281661993125,
+  &#39;median&#39;: 56.75368984184752,
+  &#39;75%&#39;: 373.0893607819453,
+  &#39;skewness&#39;: 2.9252374295188086,
+  &#39;kurtosis&#39;: 8.817584141023765,
   &#39;lag&#39;: 3500},
- 4000: {&#39;count&#39;: 2572,
-  &#39;avg semivariance&#39;: 268.3259773207153,
-  &#39;std&#39;: 1056.4261950767657,
-  &#39;min&#39;: 2.6099187380168587e-06,
-  &#39;max&#39;: 5514.402312608567,
-  &#39;25%&#39;: 2.6644885819441697,
-  &#39;median&#39;: 61.834192301528674,
-  &#39;75%&#39;: 381.5180078523699,
-  &#39;skewness&#39;: 2.473310799225225,
-  &#39;kurtosis&#39;: 5.473415218908773,
+ 4000: {&#39;count&#39;: 2342,
+  &#39;avg semivariance&#39;: 230.20533913139218,
+  &#39;std&#39;: 891.6212688235299,
+  &#39;min&#39;: 0.00011012890900019556,
+  &#39;max&#39;: 5256.59405317629,
+  &#39;25%&#39;: 5.180788749203202,
+  &#39;median&#39;: 68.19297934416682,
+  &#39;75%&#39;: 436.1967928296681,
+  &#39;skewness&#39;: 2.757475322103534,
+  &#39;kurtosis&#39;: 7.517835022793976,
   &#39;lag&#39;: 4000},
- 4500: {&#39;count&#39;: 2832,
-  &#39;avg semivariance&#39;: 307.6134533281816,
-  &#39;std&#39;: 1113.7493026553932,
-  &#39;min&#39;: 4.211964551359415e-06,
-  &#39;max&#39;: 5829.092762578512,
-  &#39;25%&#39;: 5.008626806946268,
-  &#39;median&#39;: 82.54248778484907,
-  &#39;75%&#39;: 606.8352795074716,
-  &#39;skewness&#39;: 2.3016213999312303,
-  &#39;kurtosis&#39;: 4.838611890454055,
+ 4500: {&#39;count&#39;: 2642,
+  &#39;avg semivariance&#39;: 280.24339251679123,
+  &#39;std&#39;: 1033.8240089211154,
+  &#39;min&#39;: 9.495808990322985e-05,
+  &#39;max&#39;: 6374.6671470391775,
+  &#39;25%&#39;: 5.608128756517544,
+  &#39;median&#39;: 73.80311124311993,
+  &#39;75%&#39;: 556.4224173801485,
+  &#39;skewness&#39;: 2.4825291400296945,
+  &#39;kurtosis&#39;: 6.044861032119577,
   &#39;lag&#39;: 4500},
- 5000: {&#39;count&#39;: 2924,
-  &#39;avg semivariance&#39;: 341.33197977216213,
-  &#39;std&#39;: 1184.6820756378802,
-  &#39;min&#39;: 7.017538882791996e-05,
-  &#39;max&#39;: 5967.1652707402245,
-  &#39;25%&#39;: 6.364002417831216,
-  &#39;median&#39;: 105.43215119686101,
-  &#39;75%&#39;: 714.8062540315768,
-  &#39;skewness&#39;: 2.217432052486689,
-  &#39;kurtosis&#39;: 4.458010177884344,
+ 5000: {&#39;count&#39;: 2908,
+  &#39;avg semivariance&#39;: 281.41088086816995,
+  &#39;std&#39;: 994.1483663681527,
+  &#39;min&#39;: 5.065521690994501e-08,
+  &#39;max&#39;: 6257.5430144792335,
+  &#39;25%&#39;: 8.165557399392128,
+  &#39;median&#39;: 109.80437767487638,
+  &#39;75%&#39;: 576.8961002046708,
+  &#39;skewness&#39;: 2.4028840176235504,
+  &#39;kurtosis&#39;: 5.605768166743784,
   &#39;lag&#39;: 5000},
- 5500: {&#39;count&#39;: 3192,
-  &#39;avg semivariance&#39;: 397.7678526465361,
-  &#39;std&#39;: 1310.190495093556,
-  &#39;min&#39;: 3.9138831198215485e-07,
-  &#39;max&#39;: 7494.872101836896,
-  &#39;25%&#39;: 7.306133981550374,
-  &#39;median&#39;: 117.5330814906647,
-  &#39;75%&#39;: 973.5924935907096,
-  &#39;skewness&#39;: 2.048285104289412,
-  &#39;kurtosis&#39;: 3.80948479120119,
+ 5500: {&#39;count&#39;: 3020,
+  &#39;avg semivariance&#39;: 375.33986515453154,
+  &#39;std&#39;: 1204.0555726533005,
+  &#39;min&#39;: 6.915652193129063e-07,
+  &#39;max&#39;: 6368.260883873387,
+  &#39;25%&#39;: 9.603393012206652,
+  &#39;median&#39;: 163.55953333980324,
+  &#39;75%&#39;: 817.4467852390953,
+  &#39;skewness&#39;: 1.8972205190747269,
+  &#39;kurtosis&#39;: 2.874523804405526,
   &#39;lag&#39;: 5500},
- 6000: {&#39;count&#39;: 3188,
-  &#39;avg semivariance&#39;: 441.4588322976255,
-  &#39;std&#39;: 1341.9100279445179,
-  &#39;min&#39;: 4.899957275483757e-07,
-  &#39;max&#39;: 6701.4388024286745,
-  &#39;25%&#39;: 9.152769157113653,
-  &#39;median&#39;: 191.89130915285932,
-  &#39;75%&#39;: 1115.490027037231,
-  &#39;skewness&#39;: 1.8576607961887481,
-  &#39;kurtosis&#39;: 2.8155666464376194,
+ 6000: {&#39;count&#39;: 3272,
+  &#39;avg semivariance&#39;: 383.08746076620247,
+  &#39;std&#39;: 1236.3223374864695,
+  &#39;min&#39;: 1.0750085493782535e-05,
+  &#39;max&#39;: 6859.651217085488,
+  &#39;25%&#39;: 11.924021373535652,
+  &#39;median&#39;: 175.98794941541564,
+  &#39;75%&#39;: 865.6176490780963,
+  &#39;skewness&#39;: 2.108061807420301,
+  &#39;kurtosis&#39;: 4.058615796177957,
   &#39;lag&#39;: 6000},
- 6500: {&#39;count&#39;: 3480,
-  &#39;avg semivariance&#39;: 457.2660981146536,
-  &#39;std&#39;: 1364.1466464135244,
-  &#39;min&#39;: 6.846037285868078e-05,
-  &#39;max&#39;: 7663.801433086061,
-  &#39;25%&#39;: 10.418562886014115,
-  &#39;median&#39;: 204.0729240650271,
-  &#39;75%&#39;: 1193.259201243348,
-  &#39;skewness&#39;: 1.8383466986007484,
-  &#39;kurtosis&#39;: 3.1069471071828714,
+ 6500: {&#39;count&#39;: 3340,
+  &#39;avg semivariance&#39;: 410.900125035248,
+  &#39;std&#39;: 1230.7480694696683,
+  &#39;min&#39;: 0.00016931038408074528,
+  &#39;max&#39;: 6738.133074857891,
+  &#39;25%&#39;: 15.551828165131155,
+  &#39;median&#39;: 239.01199268446362,
+  &#39;75%&#39;: 968.9813738767443,
+  &#39;skewness&#39;: 1.8474028349014608,
+  &#39;kurtosis&#39;: 2.8590443316585876,
   &#39;lag&#39;: 6500},
- 7000: {&#39;count&#39;: 3662,
-  &#39;avg semivariance&#39;: 467.70408815019107,
-  &#39;std&#39;: 1383.7114275988758,
-  &#39;min&#39;: 2.620747545734048e-05,
-  &#39;max&#39;: 7732.3306628377795,
-  &#39;25%&#39;: 12.876975894745556,
-  &#39;median&#39;: 302.43025554287306,
-  &#39;75%&#39;: 1214.8304466051668,
-  &#39;skewness&#39;: 1.9378885777226609,
-  &#39;kurtosis&#39;: 3.5563617512199306,
+ 7000: {&#39;count&#39;: 3644,
+  &#39;avg semivariance&#39;: 435.1087909907367,
+  &#39;std&#39;: 1293.7610697531331,
+  &#39;min&#39;: 1.2069940567016602e-06,
+  &#39;max&#39;: 6853.005666537443,
+  &#39;25%&#39;: 13.923954573841911,
+  &#39;median&#39;: 238.98762327766235,
+  &#39;75%&#39;: 1073.179499642356,
+  &#39;skewness&#39;: 1.8609999136119688,
+  &#39;kurtosis&#39;: 3.0299775499068087,
   &#39;lag&#39;: 7000},
- 7500: {&#39;count&#39;: 3634,
-  &#39;avg semivariance&#39;: 516.9270183174606,
-  &#39;std&#39;: 1389.344310228298,
-  &#39;min&#39;: 1.1408701539039612e-06,
-  &#39;max&#39;: 7813.73612767295,
-  &#39;25%&#39;: 18.949909821152687,
-  &#39;median&#39;: 359.12963762053187,
-  &#39;75%&#39;: 1490.0087687096093,
-  &#39;skewness&#39;: 1.554949463509357,
-  &#39;kurtosis&#39;: 1.7478735159246037,
+ 7500: {&#39;count&#39;: 3600,
+  &#39;avg semivariance&#39;: 480.3201499116964,
+  &#39;std&#39;: 1295.761925044672,
+  &#39;min&#39;: 9.062234676093794e-05,
+  &#39;max&#39;: 6559.992729703023,
+  &#39;25%&#39;: 26.594894890519754,
+  &#39;median&#39;: 403.54315477685304,
+  &#39;75%&#39;: 1340.484880295102,
+  &#39;skewness&#39;: 1.7092511864119562,
+  &#39;kurtosis&#39;: 2.5370147390973345,
   &#39;lag&#39;: 7500},
- 8000: {&#39;count&#39;: 3896,
-  &#39;avg semivariance&#39;: 541.1530674487567,
-  &#39;std&#39;: 1428.070471120106,
-  &#39;min&#39;: 0.00011741125854314305,
-  &#39;max&#39;: 7973.467257830838,
-  &#39;25%&#39;: 19.034676041905186,
-  &#39;median&#39;: 433.6325574710372,
-  &#39;75%&#39;: 1563.9827408457786,
-  &#39;skewness&#39;: 1.528514122993604,
-  &#39;kurtosis&#39;: 1.7506732493933423,
+ 8000: {&#39;count&#39;: 3616,
+  &#39;avg semivariance&#39;: 513.0592956800294,
+  &#39;std&#39;: 1318.0590200689155,
+  &#39;min&#39;: 0.00018525496125221252,
+  &#39;max&#39;: 6825.612907118062,
+  &#39;25%&#39;: 34.245417270586586,
+  &#39;median&#39;: 501.459608984007,
+  &#39;75%&#39;: 1419.2799644323059,
+  &#39;skewness&#39;: 1.6164898137657986,
+  &#39;kurtosis&#39;: 2.1062153822822953,
   &#39;lag&#39;: 8000},
- 8500: {&#39;count&#39;: 3858,
-  &#39;avg semivariance&#39;: 547.5056312500515,
-  &#39;std&#39;: 1468.6396045259646,
-  &#39;min&#39;: 1.7320417100563645e-06,
-  &#39;max&#39;: 7673.916123840958,
-  &#39;25%&#39;: 23.704184239628376,
-  &#39;median&#39;: 448.1990261501778,
-  &#39;75%&#39;: 1405.225225292179,
-  &#39;skewness&#39;: 1.5977571608298324,
-  &#39;kurtosis&#39;: 1.8190966680505722,
+ 8500: {&#39;count&#39;: 3764,
+  &#39;avg semivariance&#39;: 523.9659812541387,
+  &#39;std&#39;: 1311.0318359818616,
+  &#39;min&#39;: 0.0013469782570609823,
+  &#39;max&#39;: 6785.28491486382,
+  &#39;25%&#39;: 32.434151218272746,
+  &#39;median&#39;: 546.6734647397407,
+  &#39;75%&#39;: 1487.9563730538393,
+  &#39;skewness&#39;: 1.5810369740718768,
+  &#39;kurtosis&#39;: 2.0397884586608805,
   &#39;lag&#39;: 8500},
- 9000: {&#39;count&#39;: 3948,
-  &#39;avg semivariance&#39;: 570.1379938012599,
-  &#39;std&#39;: 1447.8532805956781,
-  &#39;min&#39;: 3.0405793950194493e-05,
-  &#39;max&#39;: 6551.827118135992,
-  &#39;25%&#39;: 37.25730361373644,
-  &#39;median&#39;: 532.4391559513406,
-  &#39;75%&#39;: 1588.2390081191297,
-  &#39;skewness&#39;: 1.4628469824631245,
-  &#39;kurtosis&#39;: 1.232784763520586,
+ 9000: {&#39;count&#39;: 3950,
+  &#39;avg semivariance&#39;: 556.138198805293,
+  &#39;std&#39;: 1389.7253374799366,
+  &#39;min&#39;: 9.52557056734804e-05,
+  &#39;max&#39;: 6966.6679725574795,
+  &#39;25%&#39;: 45.418306288650456,
+  &#39;median&#39;: 618.7367785954848,
+  &#39;75%&#39;: 1538.6246190436177,
+  &#39;skewness&#39;: 1.6484962842507787,
+  &#39;kurtosis&#39;: 2.288128027021547,
   &#39;lag&#39;: 9000},
- 9500: {&#39;count&#39;: 3730,
-  &#39;avg semivariance&#39;: 585.3034449746383,
-  &#39;std&#39;: 1511.2436330394091,
-  &#39;min&#39;: 0.00023756933296681382,
-  &#39;max&#39;: 7855.885675042067,
-  &#39;25%&#39;: 39.582661400436336,
-  &#39;median&#39;: 571.2002264822368,
-  &#39;75%&#39;: 1571.7003516764962,
-  &#39;skewness&#39;: 1.5794687444921045,
-  &#39;kurtosis&#39;: 1.8317167345076042,
+ 9500: {&#39;count&#39;: 3740,
+  &#39;avg semivariance&#39;: 578.5038438079913,
+  &#39;std&#39;: 1415.7472548390922,
+  &#39;min&#39;: 0.001942942981258966,
+  &#39;max&#39;: 6828.589286121223,
+  &#39;25%&#39;: 61.39728337325869,
+  &#39;median&#39;: 663.9765396269959,
+  &#39;75%&#39;: 1632.5290925193258,
+  &#39;skewness&#39;: 1.6565995399619,
+  &#39;kurtosis&#39;: 2.4095420944230037,
   &#39;lag&#39;: 9500}}
 </pre></div></div>
 </div>
 <p>We get Python’s <code class="docutils literal notranslate"><span class="pre">dict</span></code> as an output, but it is not especially readable; let’s convert it to a <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">variogram_cloud</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
@@ -1098,7 +1080,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">desc</span>
@@ -1106,7 +1088,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1152,223 +1134,223 @@ True
   <tbody>
     <tr>
       <th>count</th>
-      <td>234.000000</td>
-      <td>606.000000</td>
-      <td>1008.000000</td>
-      <td>1348.000000</td>
-      <td>1.698000e+03</td>
-      <td>1.992000e+03</td>
-      <td>2154.000000</td>
-      <td>2572.000000</td>
-      <td>2832.000000</td>
-      <td>2924.000000</td>
-      <td>3.192000e+03</td>
-      <td>3.188000e+03</td>
-      <td>3480.000000</td>
-      <td>3662.000000</td>
-      <td>3634.000000</td>
-      <td>3896.000000</td>
-      <td>3858.000000</td>
-      <td>3948.000000</td>
-      <td>3730.000000</td>
+      <td>206.000000</td>
+      <td>626.000000</td>
+      <td>1034.000000</td>
+      <td>1264.000000</td>
+      <td>1.750000e+03</td>
+      <td>2028.000000</td>
+      <td>2162.000000</td>
+      <td>2342.000000</td>
+      <td>2642.000000</td>
+      <td>2.908000e+03</td>
+      <td>3.020000e+03</td>
+      <td>3272.000000</td>
+      <td>3340.000000</td>
+      <td>3644.000000</td>
+      <td>3600.000000</td>
+      <td>3616.000000</td>
+      <td>3764.000000</td>
+      <td>3950.000000</td>
+      <td>3740.000000</td>
     </tr>
     <tr>
       <th>avg semivariance</th>
-      <td>15.488379</td>
-      <td>25.151444</td>
-      <td>57.835575</td>
-      <td>79.752186</td>
-      <td>1.459509e+02</td>
-      <td>1.993322e+02</td>
-      <td>209.003872</td>
-      <td>268.325977</td>
-      <td>307.613453</td>
-      <td>341.331980</td>
-      <td>3.977679e+02</td>
-      <td>4.414588e+02</td>
-      <td>457.266098</td>
-      <td>467.704088</td>
-      <td>516.927018</td>
-      <td>541.153067</td>
-      <td>547.505631</td>
-      <td>570.137994</td>
-      <td>585.303445</td>
+      <td>21.766972</td>
+      <td>34.026074</td>
+      <td>57.732920</td>
+      <td>90.053339</td>
+      <td>1.126292e+02</td>
+      <td>186.296777</td>
+      <td>206.685868</td>
+      <td>230.205339</td>
+      <td>280.243393</td>
+      <td>2.814109e+02</td>
+      <td>3.753399e+02</td>
+      <td>383.087461</td>
+      <td>410.900125</td>
+      <td>435.108791</td>
+      <td>480.320150</td>
+      <td>513.059296</td>
+      <td>523.965981</td>
+      <td>556.138199</td>
+      <td>578.503844</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>129.306894</td>
-      <td>130.727247</td>
-      <td>331.732151</td>
-      <td>428.846102</td>
-      <td>8.052460e+02</td>
-      <td>9.112555e+02</td>
-      <td>913.541131</td>
-      <td>1056.426195</td>
-      <td>1113.749303</td>
-      <td>1184.682076</td>
-      <td>1.310190e+03</td>
-      <td>1.341910e+03</td>
-      <td>1364.146646</td>
-      <td>1383.711428</td>
-      <td>1389.344310</td>
-      <td>1428.070471</td>
-      <td>1468.639605</td>
-      <td>1447.853281</td>
-      <td>1511.243633</td>
+      <td>99.458588</td>
+      <td>164.314257</td>
+      <td>313.541816</td>
+      <td>459.015329</td>
+      <td>5.181359e+02</td>
+      <td>801.225400</td>
+      <td>836.211161</td>
+      <td>891.621269</td>
+      <td>1033.824009</td>
+      <td>9.941484e+02</td>
+      <td>1.204056e+03</td>
+      <td>1236.322337</td>
+      <td>1230.748069</td>
+      <td>1293.761070</td>
+      <td>1295.761925</td>
+      <td>1318.059020</td>
+      <td>1311.031836</td>
+      <td>1389.725337</td>
+      <td>1415.747255</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>0.000000</td>
+      <td>0.000401</td>
+      <td>0.000108</td>
+      <td>0.000324</td>
       <td>0.000001</td>
-      <td>0.000076</td>
-      <td>0.000030</td>
-      <td>4.243338e-08</td>
-      <td>1.060835e-08</td>
-      <td>0.000061</td>
-      <td>0.000003</td>
-      <td>0.000004</td>
-      <td>0.000070</td>
-      <td>3.913883e-07</td>
-      <td>4.899957e-07</td>
-      <td>0.000068</td>
-      <td>0.000026</td>
+      <td>3.541354e-07</td>
+      <td>0.000010</td>
+      <td>0.000081</td>
+      <td>0.000110</td>
+      <td>0.000095</td>
+      <td>5.065522e-08</td>
+      <td>6.915652e-07</td>
+      <td>0.000011</td>
+      <td>0.000169</td>
       <td>0.000001</td>
-      <td>0.000117</td>
-      <td>0.000002</td>
-      <td>0.000030</td>
-      <td>0.000238</td>
+      <td>0.000091</td>
+      <td>0.000185</td>
+      <td>0.001347</td>
+      <td>0.000095</td>
+      <td>0.001943</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>1143.563393</td>
-      <td>1077.959059</td>
-      <td>3046.333027</td>
-      <td>3796.962918</td>
-      <td>5.699691e+03</td>
-      <td>5.720017e+03</td>
-      <td>5516.191060</td>
-      <td>5514.402313</td>
-      <td>5829.092763</td>
-      <td>5967.165271</td>
-      <td>7.494872e+03</td>
-      <td>6.701439e+03</td>
-      <td>7663.801433</td>
-      <td>7732.330663</td>
-      <td>7813.736128</td>
-      <td>7973.467258</td>
-      <td>7673.916124</td>
-      <td>6551.827118</td>
-      <td>7855.885675</td>
+      <td>620.348652</td>
+      <td>1404.338628</td>
+      <td>2779.948192</td>
+      <td>3666.732274</td>
+      <td>4.884372e+03</td>
+      <td>4902.460445</td>
+      <td>5262.414517</td>
+      <td>5256.594053</td>
+      <td>6374.667147</td>
+      <td>6.257543e+03</td>
+      <td>6.368261e+03</td>
+      <td>6859.651217</td>
+      <td>6738.133075</td>
+      <td>6853.005667</td>
+      <td>6559.992730</td>
+      <td>6825.612907</td>
+      <td>6785.284915</td>
+      <td>6966.667973</td>
+      <td>6828.589286</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>0.345127</td>
-      <td>0.774001</td>
-      <td>0.968567</td>
-      <td>1.269078</td>
-      <td>1.735131e+00</td>
-      <td>2.426759e+00</td>
-      <td>2.981025</td>
-      <td>2.664489</td>
-      <td>5.008627</td>
-      <td>6.364002</td>
-      <td>7.306134e+00</td>
-      <td>9.152769e+00</td>
-      <td>10.418563</td>
-      <td>12.876976</td>
-      <td>18.949910</td>
-      <td>19.034676</td>
-      <td>23.704184</td>
-      <td>37.257304</td>
-      <td>39.582661</td>
+      <td>0.316188</td>
+      <td>1.311450</td>
+      <td>1.443199</td>
+      <td>1.769417</td>
+      <td>2.752833e+00</td>
+      <td>3.615103</td>
+      <td>4.305628</td>
+      <td>5.180789</td>
+      <td>5.608129</td>
+      <td>8.165557e+00</td>
+      <td>9.603393e+00</td>
+      <td>11.924021</td>
+      <td>15.551828</td>
+      <td>13.923955</td>
+      <td>26.594895</td>
+      <td>34.245417</td>
+      <td>32.434151</td>
+      <td>45.418306</td>
+      <td>61.397283</td>
     </tr>
     <tr>
       <th>median</th>
-      <td>1.344719</td>
-      <td>5.823251</td>
-      <td>7.822932</td>
-      <td>18.391886</td>
-      <td>2.287287e+01</td>
-      <td>3.215229e+01</td>
-      <td>48.886205</td>
-      <td>61.834192</td>
-      <td>82.542488</td>
-      <td>105.432151</td>
-      <td>1.175331e+02</td>
-      <td>1.918913e+02</td>
-      <td>204.072924</td>
-      <td>302.430256</td>
-      <td>359.129638</td>
-      <td>433.632557</td>
-      <td>448.199026</td>
-      <td>532.439156</td>
-      <td>571.200226</td>
+      <td>2.666052</td>
+      <td>13.795076</td>
+      <td>16.274206</td>
+      <td>22.424686</td>
+      <td>2.304713e+01</td>
+      <td>47.315267</td>
+      <td>56.753690</td>
+      <td>68.192979</td>
+      <td>73.803111</td>
+      <td>1.098044e+02</td>
+      <td>1.635595e+02</td>
+      <td>175.987949</td>
+      <td>239.011993</td>
+      <td>238.987623</td>
+      <td>403.543155</td>
+      <td>501.459609</td>
+      <td>546.673465</td>
+      <td>618.736779</td>
+      <td>663.976540</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>13.658464</td>
-      <td>31.427366</td>
-      <td>64.664520</td>
-      <td>109.604151</td>
-      <td>1.623251e+02</td>
-      <td>2.491706e+02</td>
-      <td>306.075255</td>
-      <td>381.518008</td>
-      <td>606.835280</td>
-      <td>714.806254</td>
-      <td>9.735925e+02</td>
-      <td>1.115490e+03</td>
-      <td>1193.259201</td>
-      <td>1214.830447</td>
-      <td>1490.008769</td>
-      <td>1563.982741</td>
-      <td>1405.225225</td>
-      <td>1588.239008</td>
-      <td>1571.700352</td>
+      <td>40.530091</td>
+      <td>57.276080</td>
+      <td>94.371889</td>
+      <td>122.828298</td>
+      <td>1.952224e+02</td>
+      <td>269.802530</td>
+      <td>373.089361</td>
+      <td>436.196793</td>
+      <td>556.422417</td>
+      <td>5.768961e+02</td>
+      <td>8.174468e+02</td>
+      <td>865.617649</td>
+      <td>968.981374</td>
+      <td>1073.179500</td>
+      <td>1340.484880</td>
+      <td>1419.279964</td>
+      <td>1487.956373</td>
+      <td>1538.624619</td>
+      <td>1632.529093</td>
     </tr>
     <tr>
       <th>skewness</th>
-      <td>6.865653</td>
-      <td>4.567299</td>
-      <td>5.608397</td>
-      <td>4.869674</td>
-      <td>4.209560e+00</td>
-      <td>3.278766e+00</td>
-      <td>3.132272</td>
-      <td>2.473311</td>
-      <td>2.301621</td>
-      <td>2.217432</td>
-      <td>2.048285e+00</td>
-      <td>1.857661e+00</td>
-      <td>1.838347</td>
-      <td>1.937889</td>
-      <td>1.554949</td>
-      <td>1.528514</td>
-      <td>1.597757</td>
-      <td>1.462847</td>
-      <td>1.579469</td>
+      <td>3.951161</td>
+      <td>4.877956</td>
+      <td>5.455442</td>
+      <td>4.267597</td>
+      <td>4.259865e+00</td>
+      <td>3.034958</td>
+      <td>2.925237</td>
+      <td>2.757475</td>
+      <td>2.482529</td>
+      <td>2.402884e+00</td>
+      <td>1.897221e+00</td>
+      <td>2.108062</td>
+      <td>1.847403</td>
+      <td>1.861000</td>
+      <td>1.709251</td>
+      <td>1.616490</td>
+      <td>1.581037</td>
+      <td>1.648496</td>
+      <td>1.656600</td>
     </tr>
     <tr>
       <th>kurtosis</th>
-      <td>50.790247</td>
-      <td>24.214436</td>
-      <td>37.387977</td>
-      <td>27.620362</td>
-      <td>1.875059e+01</td>
-      <td>1.129359e+01</td>
-      <td>9.972795</td>
-      <td>5.473415</td>
-      <td>4.838612</td>
-      <td>4.458010</td>
-      <td>3.809485e+00</td>
-      <td>2.815567e+00</td>
-      <td>3.106947</td>
-      <td>3.556362</td>
-      <td>1.747874</td>
-      <td>1.750673</td>
-      <td>1.819097</td>
-      <td>1.232785</td>
-      <td>1.831717</td>
+      <td>18.051674</td>
+      <td>27.891538</td>
+      <td>34.299662</td>
+      <td>20.274428</td>
+      <td>2.290186e+01</td>
+      <td>8.957808</td>
+      <td>8.817584</td>
+      <td>7.517835</td>
+      <td>6.044861</td>
+      <td>5.605768e+00</td>
+      <td>2.874524e+00</td>
+      <td>4.058616</td>
+      <td>2.859044</td>
+      <td>3.029978</td>
+      <td>2.537015</td>
+      <td>2.106215</td>
+      <td>2.039788</td>
+      <td>2.288128</td>
+      <td>2.409542</td>
     </tr>
     <tr>
       <th>lag</th>
@@ -1377,13 +1359,13 @@ True
       <td>1500.000000</td>
       <td>2000.000000</td>
       <td>2.500000e+03</td>
-      <td>3.000000e+03</td>
+      <td>3000.000000</td>
       <td>3500.000000</td>
       <td>4000.000000</td>
       <td>4500.000000</td>
-      <td>5000.000000</td>
+      <td>5.000000e+03</td>
       <td>5.500000e+03</td>
-      <td>6.000000e+03</td>
+      <td>6000.000000</td>
       <td>6500.000000</td>
       <td>7000.000000</td>
       <td>7500.000000</td>
@@ -1396,11 +1378,17 @@ True
 </table>
 </div></div>
 </div>
-<p>With this detailed table, we can analyze the variogram in detail and decide: - if lags are correctly placed, - if there are enough points per lag, - if the maximum range is too low or too high, - is distribution close to normal,</p>
+<p>With this detailed table, we can analyze the variogram in detail and decide:</p>
+<ul class="simple">
+<li><p>if lags are correctly placed,</p></li>
+<li><p>if there are enough points per lag,</p></li>
+<li><p>if the maximum range is too low or too high,</p></li>
+<li><p>is distribution close to normal,</p></li>
+</ul>
 <p>And based on the answers to those questions, we can change semivariogram parameters slightly.</p>
 <p>The interesting row is <code class="docutils literal notranslate"><span class="pre">avg</span> <span class="pre">semivariance</span></code>. Let’s plot it against lags, and let’s plot the output from <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> in the same figure:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Re-calculate experimental variogram</span>
@@ -1417,7 +1405,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
@@ -1441,7 +1429,7 @@ True
 <p>The result is the same, and it shouldn’t be a surprise. The experimental variogram averages all semivariances per lag. We stepped back in computations and focused on all point pairs within a lag.</p>
 <p>There is one last method within the <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class: <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code>. It cleans our variogram from anomalous readings. The cleaning default algorithm uses the z-score, but we can also use the interquartile range analysis. Both methods cut outliers from the largest or the lowest intervals. For data that deviates greately from normal distribution, it is better to use an inter-quartile range for cleaning:</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span> <span class="o">=</span> <span class="n">variogram_cloud</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span> <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -1450,7 +1438,7 @@ True
 </div>
 <p>Now we can check what has happend with the variogram:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_variogram_cloud</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;violin&#39;</span><span class="p">)</span>
@@ -1465,7 +1453,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1475,7 +1463,7 @@ True
 </div>
 <p>Maximum semivariances are much lower than before. How does look the averaged semivariogram? Now we will use the <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code> method to calculate the variogram directly and compare it to the experimental variogram retrieved from the <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> class.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot</span>
@@ -1542,7 +1530,7 @@ True
 </table>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
@@ -1587,7 +1575,8 @@ True
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1613,13 +1602,13 @@ True
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../_sources/usage/tutorials/A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/usage/tutorials/A23-Experimental-Variogram-and-Variogram-Point-Cloud-classes.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1634,8 +1623,8 @@ True
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1646,7 +1635,7 @@ True
 
   <p class="copyright">
     
-      © Copyright 2024, Szymon Moliński.
+      © Copyright 2025, Szymon Moliński.
       <br/>
     
   </p>
@@ -1655,7 +1644,7 @@ True
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1668,7 +1657,8 @@ True
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>

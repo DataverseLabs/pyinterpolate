@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>B.1.3 Outliers and Kriging &#8212; Pyinterpolate 0.5.2 documentation</title>
+    <title>B.1.3 Outliers and Kriging &#8212; Pyinterpolate 0.5.4 documentation</title>
   
   
   
@@ -16,29 +16,32 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=8e576371"></script>
-    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
@@ -52,6 +55,7 @@
     <link rel="prev" title="B.1.2 Kriging Benchmarking" href="B12-Kriging-Benchmarking.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -67,19 +71,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -87,7 +80,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -95,8 +87,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -125,7 +117,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.2 documentation</p>
+    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
   
 </a></div>
     
@@ -174,7 +166,9 @@
 </li>
 
             <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
                     More
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
@@ -220,29 +214,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
     </div>
     
@@ -251,15 +237,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -278,7 +260,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -367,15 +350,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
       </div>
     
@@ -413,9 +392,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -433,8 +417,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -446,7 +428,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">B.1.3...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">B.1.3 Outliers and Kriging</span></li>
   </ul>
 </nav>
 </div>
@@ -487,7 +469,7 @@ document.write(`
 <section id="Import-packages">
 <h2>Import packages<a class="headerlink" href="#Import-packages" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -502,7 +484,7 @@ document.write(`
 <section id="1)-Read-point-data-and-divide-it-into-the-training-and-test-set">
 <h2>1) Read point data and divide it into the training and test set<a class="headerlink" href="#1)-Read-point-data-and-divide-it-into-the-training-and-test-set" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read data from file</span>
@@ -512,7 +494,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Divide data into training and test set</span>
@@ -530,7 +512,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">create_train_test</span><span class="p">(</span><span class="n">dem</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
@@ -538,7 +520,7 @@ document.write(`
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
@@ -546,14 +528,14 @@ document.write(`
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([[2.51238103e+05, 5.50262413e+05, 8.71362305e+01],
-       [2.45382683e+05, 5.28767297e+05, 5.84672661e+01],
-       [2.54519766e+05, 5.51709669e+05, 7.63842850e+01]])
+array([[2.46721795e+05, 5.47751211e+05, 4.28852539e+01],
+       [2.38446705e+05, 5.43645317e+05, 1.76710796e+01],
+       [2.41698613e+05, 5.48385176e+05, 8.05248566e+01]])
 </pre></div></div>
 </div>
 </section>
@@ -561,7 +543,7 @@ array([[2.51238103e+05, 5.50262413e+05, 8.71362305e+01],
 <h2>2) Check outliers: analyze the distribution of the values<a class="headerlink" href="#2)-Check-outliers:-analyze-the-distribution-of-the-values" title="Link to this heading">#</a></h2>
 <p>We will inspect all values in the <code class="docutils literal notranslate"><span class="pre">train</span></code> set to determine if our dataset contains outliers. In the beginning, we plot data distribution with the <code class="docutils literal notranslate"><span class="pre">violinplot</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Distribution plot</span>
@@ -590,7 +572,7 @@ array([[2.51238103e+05, 5.50262413e+05, 8.71362305e+01],
 </ul>
 <p><strong>Violinplot</strong> is suitable for the distribution analysis. Finding outliers in this plot may be challenging because we see mostly distributions. We should change a plot type to understand if outliers exist in a dataset. The excellent choice is the <code class="docutils literal notranslate"><span class="pre">boxplot</span></code>:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Boxplot</span>
@@ -623,7 +605,7 @@ the <code class="docutils literal notranslate"><span class="pre">weight</span></
 </ul>
 <p>We use this knowledge to remove outliers from the dataset, assuming that <em>outliers are anomalies rather than unbiased readings</em>. We will remove outliers from the data, assuming that outliers are placed one standard deviation from Q1 (down) and Q3 (up).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create training set without outliers</span>
@@ -638,7 +620,7 @@ the <code class="docutils literal notranslate"><span class="pre">weight</span></
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Length of the full training set is </span><span class="si">{}</span><span class="s1"> records&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)))</span>
@@ -652,11 +634,11 @@ the <code class="docutils literal notranslate"><span class="pre">weight</span></
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 Length of the full training set is 689 records
-Length of the pre-processed training set is 680 records
+Length of the pre-processed training set is 689 records
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -684,7 +666,7 @@ Length of the pre-processed training set is 680 records
 <h2>3) Create the Variogram Point Cloud model for datasets A and B<a class="headerlink" href="#3)-Create-the-Variogram-Point-Cloud-model-for-datasets-A-and-B" title="Link to this heading">#</a></h2>
 <p>Now, we are going one step further, and we will transform both datasets with- and without- outliers and calculate variogram point clouds. Then, we compare both clouds.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_variogram_point_cloud</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">number_of_lags</span><span class="o">=</span><span class="mi">8</span><span class="p">):</span>
@@ -694,8 +676,8 @@ Length of the pre-processed training set is 680 records
 </pre></div>
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">whole_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">calc_point_to_point_distance</span><span class="p">(</span><span class="n">train</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
@@ -705,8 +687,17 @@ Length of the pre-processed training set is 680 records
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/var/folders/vv/zx11_2ts7tjfsny482gs54s80000gr/T/ipykernel_79475/3646256745.py:1: DeprecatedWarning: calc_point_to_point_distance is deprecated as of 0.5.1 and will be removed in 1.0. Use `point_distance()` instead
+  whole_distance = np.max(calc_point_to_point_distance(train[:, :-1]))
+</pre></div></div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: initial training dataset</span>
@@ -723,7 +714,7 @@ Length of the pre-processed training set is 680 records
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -732,7 +723,7 @@ True
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show variogram cloud: pre-processed training dataset</span>
@@ -749,7 +740,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -760,7 +751,7 @@ True
 <p><strong>Clarification:</strong> a quick look into the results shows that calculated semivariances are skewed into significant positive values for each lag, but most profoundly within middle lags (~15:21 km). The processed dataset has lower semivariances than the raw readings, and both variograms have a similar shape.</p>
 <p>In the next cell, we will check a standard deviation of the per lag variances.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -782,40 +773,40 @@ True
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Lag 3602.70
-Standard Deviation raw dataset: 562
-Standard Deviation processed dataset: 559
-Symmetric Mean Absolute Percentage Error of Variances: 0.54
+Lag 3655.89
+Standard Deviation raw dataset: 615
+Standard Deviation processed dataset: 615
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 7205.39
-Standard Deviation raw dataset: 1078
-Standard Deviation processed dataset: 1005
-Symmetric Mean Absolute Percentage Error of Variances: 7.01
+Lag 7311.78
+Standard Deviation raw dataset: 1100
+Standard Deviation processed dataset: 1100
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 10808.09
-Standard Deviation raw dataset: 1298
-Standard Deviation processed dataset: 1185
-Symmetric Mean Absolute Percentage Error of Variances: 9.10
+Lag 10967.67
+Standard Deviation raw dataset: 1315
+Standard Deviation processed dataset: 1315
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 14410.79
-Standard Deviation raw dataset: 1345
-Standard Deviation processed dataset: 1204
-Symmetric Mean Absolute Percentage Error of Variances: 11.06
+Lag 14623.56
+Standard Deviation raw dataset: 1370
+Standard Deviation processed dataset: 1370
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 18013.49
-Standard Deviation raw dataset: 1269
-Standard Deviation processed dataset: 1136
-Symmetric Mean Absolute Percentage Error of Variances: 11.06
+Lag 18279.45
+Standard Deviation raw dataset: 1323
+Standard Deviation processed dataset: 1323
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 21616.18
-Standard Deviation raw dataset: 974
-Standard Deviation processed dataset: 913
-Symmetric Mean Absolute Percentage Error of Variances: 6.47
+Lag 21935.34
+Standard Deviation raw dataset: 1081
+Standard Deviation processed dataset: 1081
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 
-Lag 25218.88
-Standard Deviation raw dataset: 747
-Standard Deviation processed dataset: 712
-Symmetric Mean Absolute Percentage Error of Variances: 4.80
+Lag 25591.24
+Standard Deviation raw dataset: 850
+Standard Deviation processed dataset: 850
+Symmetric Mean Absolute Percentage Error of Variances: 0.00
 </pre></div></div>
 </div>
 <p><strong>Clarification:</strong> The differences (sMAPE) per lag vary greatly. We can see that the preprocessing of raw values introduces the information lost, and it is especially painful for the closest neighbors. It doesn’t mean that the preprocessing of raw observations is not recommended, but it is a good idea to include the <strong>spatial component</strong> in the outliers’ detection process. By <strong>spatial component</strong>, we mean working with variograms instead of the raw points.</p>
@@ -826,7 +817,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.80
 <h2>4) Remove outliers from the variograms<a class="headerlink" href="#4)-Remove-outliers-from-the-variograms" title="Link to this heading">#</a></h2>
 <p>In this step, we will use <strong>pyinterpolate’s</strong> function <code class="docutils literal notranslate"><span class="pre">remove_outliers()</span></code> to build two additional variogram point clouds from the raw and processed datasets. We delete the top part outliers of the <strong>semivariance values</strong> rather than the raw readings.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_without_outliers</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">z_lower_limit</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">z_upper_limit</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -835,7 +826,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.80
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_raw</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">experimental_point_cloud</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
@@ -846,7 +837,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.80
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
@@ -885,7 +876,7 @@ Symmetric Mean Absolute Percentage Error of Variances: 4.80
 <p><strong>Clarification:</strong> Comparison of multiple variogram clouds could be challenging. We see that the largest semivariances are present in the raw data. Heavily processed data has the lowest number of outliers. The medians in each dataset are distributed over a similar pattern. How is it similar? We can check if we transform the variogram point cloud into the experimental semivariogram. Pyinterpolate has a method for it: <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code>. We use it and compare four plots of
 semivariances to gain more insight into the transformations.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">raw_semivar</span> <span class="o">=</span> <span class="n">cloud_raw</span><span class="o">.</span><span class="n">calculate_experimental_variogram</span><span class="p">()</span>
@@ -896,7 +887,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -931,7 +922,7 @@ semivariances to gain more insight into the transformations.</p>
 <section id="5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance">
 <h2>5) Create Four Ordinary Kriging models based on the four Variogram Point Clouds and compare their performance<a class="headerlink" href="#5)-Create-Four-Ordinary-Kriging-models-based-on-the-four-Variogram-Point-Clouds-and-compare-their-performance" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit different semivariogram models into prepared datasets and variograms</span>
@@ -955,7 +946,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging models</span>
@@ -979,16 +970,16 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-  0%|          | 0/6204 [00:00&lt;?, ?it/s]/home/szymon/Documents/Programming/Repositories/pyinterpolate-environment/pyinterpolate/pyinterpolate/kriging/utils/process.py:124: UserWarning: &#39;Kriging system solution is based on the approximate solution, output may be incorrect!&#39;
+100%|██████████| 6204/6204 [00:01&lt;00:00, 4397.94it/s]
+  0%|          | 0/6204 [00:00&lt;?, ?it/s]/Users/szymonos/Documents/GitHub/pyinterpolate/pyinterpolate/kriging/utils/process.py:124: UserWarning: &#39;Kriging system solution is based on the approximate solution, output may be incorrect!&#39;
   warnings.warn(LeastSquaresApproximationWarning().__str__())
-100%|██████████| 6204/6204 [00:01&lt;00:00, 4084.98it/s]
-100%|██████████| 6204/6204 [00:01&lt;00:00, 4905.61it/s]
-100%|██████████| 6204/6204 [00:01&lt;00:00, 5030.64it/s]
-100%|██████████| 6204/6204 [00:01&lt;00:00, 4967.68it/s]
+100%|██████████| 6204/6204 [00:01&lt;00:00, 4863.86it/s]
+100%|██████████| 6204/6204 [00:01&lt;00:00, 5064.27it/s]
+100%|██████████| 6204/6204 [00:01&lt;00:00, 4507.78it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build test function</span>
@@ -1000,7 +991,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1008,7 +999,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cr_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_raw_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1016,7 +1007,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1024,7 +1015,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cp_test</span> <span class="o">=</span> <span class="n">calculate_model_deviation</span><span class="p">(</span><span class="n">c_prep_model</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
@@ -1032,7 +1023,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r_test</span><span class="p">,</span> <span class="n">cr_test</span><span class="p">,</span> <span class="n">p_test</span><span class="p">,</span> <span class="n">cp_test</span><span class="p">])</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span>
@@ -1042,7 +1033,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <p>We will use <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method from <strong>pandas</strong> to get the errors statistic:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -1050,7 +1041,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1081,59 +1072,59 @@ semivariances to gain more insight into the transformations.</p>
   <tbody>
     <tr>
       <th>count</th>
+      <td>6204.000000</td>
       <td>6.204000e+03</td>
-      <td>6.204000e+03</td>
-      <td>6.204000e+03</td>
+      <td>6204.000000</td>
       <td>6.204000e+03</td>
     </tr>
     <tr>
       <th>mean</th>
-      <td>4.112253e+03</td>
-      <td>1.125479e+03</td>
-      <td>1.616366e+03</td>
-      <td>9.951413e+03</td>
+      <td>21.250840</td>
+      <td>2.426545e+03</td>
+      <td>21.250840</td>
+      <td>2.426545e+03</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>1.496551e+05</td>
-      <td>2.407578e+04</td>
-      <td>4.314202e+04</td>
-      <td>7.176860e+05</td>
+      <td>64.183931</td>
+      <td>1.348008e+05</td>
+      <td>64.183931</td>
+      <td>1.348008e+05</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>7.560711e-08</td>
-      <td>3.693612e-07</td>
-      <td>4.051043e-07</td>
-      <td>2.012364e-07</td>
+      <td>0.000001</td>
+      <td>2.701402e-07</td>
+      <td>0.000001</td>
+      <td>2.701402e-07</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>9.082049e-01</td>
-      <td>8.223928e-01</td>
-      <td>9.574270e-01</td>
-      <td>8.203482e-01</td>
+      <td>0.348949</td>
+      <td>9.466055e-01</td>
+      <td>0.348949</td>
+      <td>9.466055e-01</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>7.449470e+00</td>
-      <td>7.218670e+00</td>
-      <td>7.740437e+00</td>
-      <td>7.111464e+00</td>
+      <td>2.349099</td>
+      <td>7.841154e+00</td>
+      <td>2.349099</td>
+      <td>7.841154e+00</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>5.507547e+01</td>
-      <td>5.230695e+01</td>
-      <td>5.615120e+01</td>
-      <td>5.161227e+01</td>
+      <td>14.756505</td>
+      <td>5.539944e+01</td>
+      <td>14.756505</td>
+      <td>5.539944e+01</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>1.004389e+07</td>
-      <td>1.049016e+06</td>
-      <td>2.625928e+06</td>
-      <td>5.651596e+07</td>
+      <td>1047.916467</td>
+      <td>1.056648e+07</td>
+      <td>1047.916467</td>
+      <td>1.056648e+07</td>
     </tr>
   </tbody>
 </table>
@@ -1208,7 +1199,7 @@ better.</p>
 </table>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
@@ -1253,7 +1244,8 @@ better.</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1278,13 +1270,13 @@ better.</p>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="../../_sources/usage/tutorials/B13-Outliers-and-Kriging.ipynb.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/usage/tutorials/B13-Outliers-and-Kriging.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -1299,8 +1291,8 @@ better.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1311,7 +1303,7 @@ better.</p>
 
   <p class="copyright">
     
-      © Copyright 2024, Szymon Moliński.
+      © Copyright 2025, Szymon Moliński.
       <br/>
     
   </p>
@@ -1320,7 +1312,7 @@ better.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1333,7 +1325,8 @@ better.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
