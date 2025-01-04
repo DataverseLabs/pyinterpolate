@@ -20,6 +20,8 @@ from pyinterpolate.kriging import kriging, ordinary_kriging, simple_kriging
 from pyinterpolate.kriging import centroid_poisson_kriging, area_to_area_pk, area_to_point_pk
 # Indicator
 from pyinterpolate.kriging import IndicatorKriging
+# Universal
+from pyinterpolate.kriging import UniversalKriging, MultivariateRegression
 
 # Pipelines
 # Excluded: multi_kriging (BlockToBlockKrigingComparison)

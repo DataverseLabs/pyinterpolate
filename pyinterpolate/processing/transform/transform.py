@@ -334,7 +334,7 @@ def transform_blocks_to_numpy(blocks: Union[Blocks, gpd.GeoDataFrame, pd.DataFra
             raise KeyError(f'Given dataframe doesnt have all expected columns {expected_cols}. '
                            f'It has {blocks.columns} instead.')
 
-        bvalues = blocks.data[['index', 'centroid.x', 'centroid.y', 'ds']].values
+        bvalues = blocks[['index', 'centroid.x', 'centroid.y', 'ds']].values
         return bvalues
     else:
         raise TypeError(f'Blocks data type {type(blocks)} not recognized. You may use Blocks,'

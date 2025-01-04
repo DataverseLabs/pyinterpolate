@@ -5,3 +5,4 @@ from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import ce
 from pyinterpolate.kriging.models.block.area_to_area_poisson_kriging import area_to_area_pk
 from pyinterpolate.kriging.models.block.area_to_point_poisson_kriging import area_to_point_pk
 from pyinterpolate.kriging.models.indicator.indicator_point_kriging import IndicatorKriging
+from pyinterpolate.kriging.models.universal.universal_kriging import MultivariateRegression, UniversalKriging
