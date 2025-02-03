@@ -15,6 +15,7 @@ from matplotlib import pyplot as plt
 from pyinterpolate import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.semivariogram.deconvolution.avg_inblock_semivariance import calculate_average_semivariance
 from pyinterpolate.semivariogram.deconvolution.block_to_block_semivariance import calculate_block_to_block_semivariance, \
     average_block_to_block_semivariances
@@ -236,10 +237,12 @@ class AggregatedVariogram:
                                                                    self.theoretical_model)
 
         # Calculate distances between blocks
-        if self.point_support.weighted_distances is None:
-            self.distances_between_blocks = self.point_support.weighted_distance(update=True)
-        else:
-            self.distances_between_blocks = self.point_support.weighted_distances
+        psd = PointSupportDistance()
+
+        if self.distances_between_blocks is None:
+            self.distances_between_blocks = psd.calculate_weighted_block_to_block_distances(
+                point_support=self.point_support, return_distances=True
+            )
 
         # Calc average semivariance
         avg_inblock_semivariance = calculate_average_semivariance(self.distances_between_blocks,

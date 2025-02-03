@@ -100,6 +100,14 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     )
 
     closest_neighbors = kriging_data.neighbors_unique_indexes
+    poss_neighbors = point_support.no_possible_neighbors
+
+    if poss_neighbors > 0:
+        if poss_neighbors < len(closest_neighbors):
+            # Move this step into select_poisson_kriging_data
+            closest_neighbors = closest_neighbors[:poss_neighbors]
+            kriging_data._neighbors_unique_indexes = closest_neighbors
+
     n = len(closest_neighbors)
     block_points = point_support.get_points_array(block_id=unknown_block_index)
     tot_unknown_value = np.sum(block_points[:, 2])

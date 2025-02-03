@@ -18,6 +18,7 @@ from shapely.geometry import Point
 from tqdm import tqdm
 
 from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.evaluate.metrics import root_mean_squared_error
 from pyinterpolate.kriging.block.area_to_area_poisson_kriging import area_to_area_pk
 from pyinterpolate.kriging.block.area_to_point_poisson_kriging import area_to_point_pk
@@ -199,6 +200,7 @@ class BlockPoissonKriging:
         # Check if semivariogram exists
         self.semivariogram_model = semivariogram_model
         self.point_support = point_support
+        self.point_support_distance = PointSupportDistance()
 
         # Final GeoDataFrame with regularized data
         self.gdf = None

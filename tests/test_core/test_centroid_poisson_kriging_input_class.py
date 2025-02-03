@@ -96,7 +96,7 @@ def test_centroid_poisson_kriging_input_class():
         values = cpki.values
 
     cpki.select_neighbors(
-        max_range=120000,
+        max_range=200000,
         min_number_of_neighbors=4,
         select_all_possible_neighbors=False
     )
@@ -153,7 +153,7 @@ def test_centroid_poisson_kriging_input_class_directional_variant():
         values = cpki.values
 
     cpki.select_neighbors(
-        max_range=120000,
+        max_range=200000,
         min_number_of_neighbors=4,
         select_all_possible_neighbors=False
     )

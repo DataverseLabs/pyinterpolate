@@ -1,15 +1,11 @@
-from typing import Dict, Tuple, Union, List, Iterable
+from typing import Tuple, Union, List, Iterable
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
 from pyinterpolate.core.data_models.blocks import Blocks
-from pyinterpolate.distance.block import calc_block_to_block_distance
-from pyinterpolate.distance.point import point_distance
 from pyinterpolate.transform.geo import points_to_lon_lat
-from pyinterpolate.transform.transform import parse_point_support_distances_array
 
 
 class PointSupport:
@@ -37,11 +33,9 @@ class PointSupport:
         Should object use point support CRS instead of blocks CRS? Both CRS are projected into the same CRS, and this
         parameter decides into which CRS the data should be reprojected.
 
-    calculate_weighted_block_to_block_distances: bool = True
-        Should object calculate weighted distances between blocks during initialization?
-
-    calculate_distances_between_point_support_points: bool = True
-        Should object calculate distances between point supports during initialization?
+    no_possible_neighbors : int, default = 0
+        The maximum number of the closest blocks used for the calculation of distances between point support
+        coordinates. Default 0 indicates that all blocks are used.
 
     verbose: bool = True
         Information about the progress of the calculations.
@@ -57,9 +51,6 @@ class PointSupport:
     blocks_index_column : str
         Name of the column with block indexes.
 
-    distances_between_point_support_points : Dict
-        Distances between point supports. ``(block_a, block_b): distances between their points``
-
     dropped_points : GeoDataFrame, optional
         Points which weren't joined with blocks (due to the lack of spatial overlap). Attribute can be None if
         the parameter ``store_dropped_points`` was set to False.
@@ -74,15 +65,8 @@ class PointSupport:
     unique_blocks : numpy array
         Unique block indexes from the point support.
 
-    weighted_distances : Dict, optional
-        Weighted distances between blocks ``{block id : [weighted distances to other blocks in the same order as
-        the dictionary keys]}``.
-
     Methods
     -------
-    calc_distances_between_ps_points()
-        Function calculates distances between all points from point supports between blocks.
-
     get_distances_between_known_blocks()
         Function returns distances between given blocks.
 
@@ -97,9 +81,6 @@ class PointSupport:
 
     point_support_totals()
         Function retrieves total point support values for given blocks.
-
-    weighted_distance()
-        Function calculates weighted distances between blocks using their point supports.
 
     Examples
     --------
@@ -165,14 +146,15 @@ class PointSupport:
                  points_geometry_column: str,
                  store_dropped_points: bool = False,
                  use_point_support_crs: bool = False,
-                 calculate_weighted_block_to_block_distances: bool = True,
-                 calculate_distances_between_point_support_points: bool = True,
+                 no_possible_neighbors=0,
                  verbose=True):
 
         self._default_blocks_index_column_name = 'blocks_index'
         self._lon_col_name = 'lon'
         self._lat_col_name = 'lat'
         self._verbose = verbose
+
+        self.no_possible_neighbors = no_possible_neighbors
 
         self.blocks = blocks
         self.blocks_distances = blocks.distances
@@ -193,15 +175,8 @@ class PointSupport:
             store_dropped_points,
             use_point_support_crs
         )
+
         self.unique_blocks = self._get_unique_blocks()
-        self.weighted_distances = None
-        self.distances_between_point_support_points = None
-
-        if calculate_weighted_block_to_block_distances:
-            self.weighted_distances = self.weighted_distance(update=False)
-
-        if calculate_distances_between_point_support_points:
-            self.calc_distances_between_ps_points(update=True)
 
     @property
     def lon_col_name(self):
@@ -210,51 +185,6 @@ class PointSupport:
     @property
     def lat_col_name(self):
         return self._lat_col_name
-
-    def calc_distances_between_ps_points(self,
-                                         update: bool) -> Dict:
-        """
-        Function calculates distances between all points from point supports within blocks.
-
-        Parameters
-        ----------
-        update : bool
-            Should update class attribute ``distances_between_point_support_points``?
-
-        Returns
-        -------
-        : Dict
-            ``(block_a, block_b): distances``
-        """
-
-        data = {}
-        for block_a in tqdm(self.unique_blocks, disable=self._verbose):
-            points_a = self.get_points_array(block_a)
-            for block_b in self.unique_blocks:
-                if (block_a, block_b) in data:
-                    pass
-                else:
-                    points_b = self.get_points_array(block_b)
-                    # a - rows, b - cols
-
-                    distances: np.ndarray
-                    distances = point_distance(points_a[:, :-1],
-                                               points_b[:, :-1])
-
-                    out_arr = parse_point_support_distances_array(
-                        distances=distances,
-                        values_a=points_a[:, -1],
-                        values_b=points_b[:, -1]
-                    )
-
-                    data[(block_a, block_b)] = out_arr
-                    if block_a != block_b:
-                        data[(block_b, block_a)] = out_arr
-
-        if update:
-            self.distances_between_point_support_points = data
-        else:
-            return data
 
     def get_distances_between_known_blocks(self, block_ids: Union[List, np.ndarray]):
         """
@@ -310,13 +240,6 @@ class PointSupport:
                 dtype=np.float32
             )
 
-    def get_weighted_distance(self, block_id):
-        if self.weighted_distances is None:
-            _ = self.weighted_distance(update=True)
-
-        dists = self.weighted_distances[block_id]
-        return dists
-
     def point_support_totals(self, blocks: Iterable):
         """
         Function retrieves total point support values for given blocks.
@@ -333,33 +256,6 @@ class PointSupport:
         """
         values = [self._total_point_support_value(bid) for bid in blocks]
         return np.array(values)
-
-    def weighted_distance(self, update=True) -> pd.DataFrame:
-        """
-        Function calculates weighted distances between blocks using their point supports.
-
-        Parameters
-        ----------
-        update : bool, default = True
-            Update ``weighted_distances`` attribute.
-
-        Returns
-        -------
-        block_distances : Dict
-            Ordered block ids (the order from the list of distances): {block id : [distances to other]}.
-        """
-        block_distances = calc_block_to_block_distance(
-            blocks=self.point_support,
-            lon_col_name=self.lon_col_name,
-            lat_col_name=self.lat_col_name,
-            val_col_name=self.value_column_name,
-            block_index_col_name=self.point_support_blocks_index_name
-        )
-
-        if update:
-            self.weighted_distances = block_distances
-
-        return block_distances
 
     def _get_point_support(self,
                            points: gpd.GeoDataFrame,

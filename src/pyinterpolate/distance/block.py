@@ -10,10 +10,12 @@ from typing import Dict, Union
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 
-def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame], lon, lat, val, bidx) -> pd.DataFrame:
-    """Function calculates distances between blocks.
+def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
+                                  lon, lat, val, bidx, verbose=False) -> pd.DataFrame:
+    r"""Function calculates distances between blocks.
 
     Parameters
     ----------
@@ -31,6 +33,9 @@ def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
     bidx
         Column with block names / indexes.
 
+    verbose : bool, default = False
+        Show progress bar.
+
     Returns
     -------
     block_distances : DataFrame
@@ -42,7 +47,7 @@ def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
 
     results = []
 
-    for block_i in unique_blocks:
+    for block_i in tqdm(unique_blocks, disable=not verbose):
         for block_j in unique_blocks:
             # Check if it was estimated
             if not (block_i, block_j) in calculated_pairs:
@@ -75,12 +80,15 @@ def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
     return df
 
 
-def _calc_b2b_dist_from_ps(blocks: 'PointSupport') -> Dict:
-    """Function calculates distances between blocks.
+def _calc_b2b_dist_from_ps(blocks: 'PointSupport', verbose=False) -> Dict:
+    r"""Function calculates distances between blocks.
 
     Parameters
     ----------
     blocks : PointSupport
+
+    verbose : bool, default = False
+        Show progress bar.
 
     Returns
     -------
@@ -92,7 +100,8 @@ def _calc_b2b_dist_from_ps(blocks: 'PointSupport') -> Dict:
         lon=blocks.lon_col_name,
         lat=blocks.lat_col_name,
         val=blocks.value_column_name,
-        bidx=blocks.point_support_blocks_index_name
+        bidx=blocks.point_support_blocks_index_name,
+        verbose=verbose
     )
 
     return block_distances
@@ -102,8 +111,9 @@ def calc_block_to_block_distance(blocks: Union[pd.DataFrame, 'PointSupport'],
                                  lon_col_name=None,
                                  lat_col_name=None,
                                  val_col_name=None,
-                                 block_index_col_name=None) -> pd.DataFrame:
-    """Function calculates distances between blocks.
+                                 block_index_col_name=None,
+                                 verbose=False) -> pd.DataFrame:
+    r"""Function calculates distances between blocks.
 
     Parameters
     ----------
@@ -123,6 +133,9 @@ def calc_block_to_block_distance(blocks: Union[pd.DataFrame, 'PointSupport'],
 
     block_index_col_name : optional
         Column with block names / indexes.
+
+    verbose : bool, default = False
+        Show progress bar.
 
     Returns
     -------
@@ -149,15 +162,16 @@ def calc_block_to_block_distance(blocks: Union[pd.DataFrame, 'PointSupport'],
                                                         lon=lon_col_name,
                                                         lat=lat_col_name,
                                                         val=val_col_name,
-                                                        bidx=block_index_col_name)
+                                                        bidx=block_index_col_name,
+                                                        verbose=verbose)
     else:
-        block_distances = _calc_b2b_dist_from_ps(blocks)
+        block_distances = _calc_b2b_dist_from_ps(blocks, verbose=verbose)
 
     return block_distances
 
 
 def _calculate_block_to_block_distance(block_1: np.ndarray, block_2: np.ndarray) -> float:
-    """Function calculates distance between two blocks based on how they are divided (into the point support grid).
+    r"""Function calculates distance between two blocks based on how they are divided (into the point support grid).
 
     Parameters
     ----------

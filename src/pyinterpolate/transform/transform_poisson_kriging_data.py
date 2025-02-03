@@ -5,6 +5,7 @@ import pandas as pd
 from shapely import Point
 
 from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.distance.angular import calculate_angular_difference
 
 
@@ -68,7 +69,7 @@ def block_to_blocks_angles(block_id: Union[str, Hashable],
 
 def block_base_distances(block_id: Union[str, Hashable],
                          point_support: PointSupport,
-                         weighted: bool) -> np.ndarray:
+                         point_support_distances: PointSupportDistance = None) -> np.ndarray:
     """
     Function gets distances to the unknown block from other blocks.
 
@@ -78,19 +79,16 @@ def block_base_distances(block_id: Union[str, Hashable],
 
     point_support : PointSupport
 
-    weighted : bool
-        Should distances be weighted by the point support?
+    point_support_distances : PointSupportDistance
+        Object with estimated weighted distances. If not given then it is assumed that function returns
+        not weighted distances.
 
     Returns
     -------
     : numpy array
     """
-    if weighted:
-        # Calc weighted distance from point support
-        if point_support.weighted_distances is None:
-            dists = point_support.weighted_distance(update=True)
-        else:
-            dists = point_support.weighted_distances
+    if point_support_distances.weighted_block_to_block_distances is not None:
+        return point_support_distances.weighted_block_to_block_distances.get(block_id)
     else:
         # Calc from coordinates
         if point_support.blocks_distances is None:
@@ -98,8 +96,8 @@ def block_base_distances(block_id: Union[str, Hashable],
         else:
             dists = point_support.blocks_distances
 
-    distances = dists[block_id]
-    return distances.to_numpy()
+        distances = dists[block_id]
+        return distances.to_numpy()
 
 
 def set_blocks_dataset(block_id: Union[str, Hashable],
@@ -167,7 +165,7 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
 
     if isinstance(distances, pd.Series):
         distances.name = distances_column
-        ds = ds.set_index(blocks_indexes_column).join(distances).reset_index()
+        ds[distances_column] = distances.to_numpy()
     else:
         ds[distances_column] = distances
 

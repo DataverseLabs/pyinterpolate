@@ -1,7 +1,5 @@
 from typing import Dict
 
-import numpy as np
-
 from pyinterpolate import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport

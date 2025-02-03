@@ -3,6 +3,7 @@ from typing import Hashable, Union
 import numpy as np
 
 from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 from pyinterpolate.transform.transform_poisson_kriging_data import block_base_distances, block_to_blocks_angles, \
     set_blocks_dataset
@@ -182,11 +183,15 @@ class CentroidPoissonKrigingInput:
         self.is_directional = True if self.semivariogram_model.direction is not None else False
         self.angular_tolerance = 1
         self.max_tick = 15
+        self.point_support_distances = PointSupportDistance(verbose=False)  # todo set verbose
+
+        if weighted:
+            self.point_support_distances.calculate_weighted_block_to_block_distances(point_support)
 
         self.base_distances = block_base_distances(
             block_id=self.block_id,
             point_support=point_support,
-            weighted=self.is_weighted
+            point_support_distances=self.point_support_distances
         )
 
         self.angle_differences = None

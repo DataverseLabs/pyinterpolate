@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.distance.angular import calc_angles_between_points
 from pyinterpolate.distance.point import point_distance
 from pyinterpolate.semivariogram.deconvolution.block_to_block_semivariance import weighted_avg_point_support_semivariances
@@ -14,7 +15,7 @@ from pyinterpolate.transform.transform_poisson_kriging_data import block_base_di
 
 
 class PoissonKrigingInput:
-    """
+    r"""
     Represents Poisson Kriging input.
 
     Parameters
@@ -50,10 +51,6 @@ class PoissonKrigingInput:
 
     block_distances : numpy array
         The distances to the unknown block ``block_id`` from other blocks.
-
-    ds : DataFrame
-        Core structure within the class. It contains all the necessary data for the kriging. DataFrame columns are:
-        ``['points', 'values', 'distances', 'angular_differences', 'block_id']``.
 
     Methods
     -------
@@ -197,12 +194,13 @@ class PoissonKrigingInput:
         self.is_directional = True if self.semivariogram_model.direction is not None else False
         self.angular_tolerance = 1
         self.max_tick = 15
+        self.point_support_distances = PointSupportDistance(verbose=False)  # todo set verbose
 
         # get distances and angles between blocks
         self.block_distances = block_base_distances(
             block_id=self.block_id,
             point_support=point_support,
-            weighted=self.__is_weighted
+            point_support_distances=self.point_support_distances
         )
 
         self.block_angle_differences = None
@@ -371,22 +369,25 @@ class PoissonKrigingInput:
                 nn = (neighbor_a, neighbor_b)
                 r_nn = (neighbor_b, neighbor_a)
 
-                vals = point_support.distances_between_point_support_points.get(nn, None)
+                if nn not in nset:
+                    vals = self.point_support_distances.calc_pair_distances(
+                        point_support=point_support,
+                        block_pair=nn
+                    )
 
-                if vals is not None:
-                    if nn not in nset:
-                        pdf = pd.DataFrame(data=vals, columns=['block_a_value', 'block_b_value', 'distance'])
-                        pdf['blocks_pair'] = [nn] * len(pdf)
-                        ds.append(pdf)
+                    pdf = pd.DataFrame(data=vals, columns=['block_a_value', 'block_b_value', 'distance'])
+                    pdf['blocks_pair'] = [nn] * len(pdf)
+                    ds.append(pdf)
 
-                        nset.add(
-                            nn
-                        )
-                        if neighbor_a != neighbor_b:
-                            rdf = pd.DataFrame(data=vals, columns=['block_a_value', 'block_b_value', 'distance'])
-                            rdf['blocks_pair'] = [r_nn] * len(pdf)
-                            ds.append(rdf)
-                            nset.add(r_nn)
+                    nset.add(
+                        nn
+                    )
+
+                    if neighbor_a != neighbor_b:
+                        rdf = pd.DataFrame(data=vals, columns=['block_a_value', 'block_b_value', 'distance'])
+                        rdf['blocks_pair'] = [r_nn] * len(pdf)
+                        ds.append(rdf)
+                        nset.add(r_nn)
 
         df = pd.concat(ds, ignore_index=True, axis=0)
 
@@ -406,7 +407,10 @@ class PoissonKrigingInput:
             ``{['point_a_value', 'point_b_value', 'distance', 'block_id']}``
         """
         nn = (self.block_id, self.block_id)
-        vals = point_support.distances_between_point_support_points.get(nn, None)
+        vals = self.point_support_distances.calc_pair_distances(
+            point_support=point_support,
+            block_pair=nn
+        )
         pdf = pd.DataFrame(data=vals, columns=['point_a_value', 'point_b_value', 'distance'])
         pdf['block_id'] = self.block_id
         return pdf
@@ -465,7 +469,7 @@ class PoissonKrigingInput:
         return self._kriging_input
 
     def weighted_b2b_semivariance(self) -> pd.Series:
-        """
+        r"""
         Calculates the average weighted block-to-block semivariance.
 
         Returns

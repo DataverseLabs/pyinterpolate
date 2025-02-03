@@ -17,7 +17,7 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
 
 def average_block_to_block_semivariances(semivariances_array: np.ndarray,
                                          lags: np.ndarray) -> np.ndarray:
-    """
+    r"""
     Function averages block to block semivariances over specified lags.
 
     Parameters
@@ -64,7 +64,7 @@ def average_block_to_block_semivariances(semivariances_array: np.ndarray,
 def block_pair_semivariance(block_a: np.ndarray,
                             block_b: np.ndarray,
                             semivariogram_model: TheoreticalVariogram):
-    """
+    r"""
     Function calculates average semivariance between the blocks' points supports.
 
     Parameters
@@ -98,7 +98,7 @@ def calculate_block_to_block_semivariance(
         point_support: PointSupport,
         block_to_block_distances: pd.DataFrame,
         semivariogram_model: TheoreticalVariogram):
-    """
+    r"""
     Function calculates semivariance between blocks based on their point support and weighted distance between
         block coordinates.
 
@@ -161,7 +161,7 @@ def weighted_avg_point_support_semivariances(
         val1_col: Union[Hashable, str],
         val2_col: Union[Hashable, str],
         dist_col: Union[Hashable, str]) -> pd.Series:
-    """
+    r"""
     Function calculates semivariances between given point support distances.
 
     Parameters

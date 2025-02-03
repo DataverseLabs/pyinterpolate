@@ -36,7 +36,7 @@ class UndefinedSMAPEWarning(Warning):
 
 def forecast_bias(predicted_array: np.ndarray,
                   real_array: np.ndarray) -> float:
-    """Function calculates forecast bias of prediction.
+    r"""Function calculates forecast bias of prediction.
 
     Parameters
     ----------
@@ -76,7 +76,7 @@ def forecast_bias(predicted_array: np.ndarray,
 
 def mean_absolute_error(predicted_array: np.ndarray,
                         real_array: np.ndarray) -> float:
-    """Function calculates Mean Absolute Error (MAE) of prediction.
+    r"""Function calculates Mean Absolute Error (MAE) of prediction.
 
     Parameters
     ----------
@@ -111,7 +111,7 @@ def mean_absolute_error(predicted_array: np.ndarray,
 
 def root_mean_squared_error(predicted_array: np.ndarray,
                             real_array: np.ndarray) -> float:
-    """
+    r"""
     Function calculates Root Mean Squared Error of predictions.
 
     Parameters
@@ -151,7 +151,7 @@ def root_mean_squared_error(predicted_array: np.ndarray,
 def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
                                              real_array: np.ndarray,
                                              test_undefined=True) -> float:
-    """
+    r"""
     Function calculates Symmetric Mean Absolute Percentage Error (SMAPE) of
     predictions, allowing researcher to compare different models.
 
@@ -226,7 +226,7 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
                                      real_array: np.ndarray,
                                      weighting_method: str,
                                      lag_points_distribution=None) -> float:
-    """
+    r"""
     Function custom_weights RMSE of each lag by a specific weighting factor.
 
     Parameters
