@@ -138,6 +138,29 @@ pip install pyinterpolate
 
 A world of advice, you should **always** use Virtual Environment for the installation. You may consider using PipEnv too.
 
+#### Known installation problems (current release)
+
+With installation on a fresh Linux distribution you might encounter problems with `pylibtiff` which is a dependency of `pyinterpolate`. 
+You will get a long error message. The last line of the message is:
+
+```shell
+ERROR: ERROR: Failed to build installable wheels for some pyproject.toml based projects (pylibtiff)
+```
+
+This means that you haven't configured required system libraries yet. You should install those three libraries:
+
+- `libtiff-dev`
+- `python3-dev`
+- `gcc`
+
+Install those using command:
+
+```shell
+sudo apt install gcc python3-dev libtiff-dev
+```
+
+and after installation you should be able to install `pyinterpolate` without problems.
+
 ## Tests and contribution
 
 All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)

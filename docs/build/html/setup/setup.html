@@ -456,6 +456,26 @@
 <p>Now you are able to run library from a notebook.</p>
 </section>
 <hr class="docutils" />
+<section id="failing-pylibtiff-build-linux">
+<h3>Failing pylibtiff build - Linux<a class="headerlink" href="#failing-pylibtiff-build-linux" title="Link to this heading">#</a></h3>
+<p>With installation on a fresh Linux distribution you might encounter problems with <cite>pylibtiff</cite> which is a dependency of <cite>pyinterpolate</cite>.
+You will get a long error message. The last line of the message is:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ERROR: ERROR: Failed to build installable wheels for some pyproject.toml based projects (pylibtiff)</span>
+</pre></div>
+</div>
+<p>This means that you haven’t configured required system libraries yet. You should install those three libraries:</p>
+<ul class="simple">
+<li><p><cite>libtiff-dev</cite></p></li>
+<li><p><cite>python3-dev</cite></p></li>
+<li><p><cite>gcc</cite></p></li>
+</ul>
+<p>Install those using command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install gcc python3-dev libtiff-dev</span>
+</pre></div>
+</div>
+<p>and after installation you should be able to install <cite>pyinterpolate</cite> without problems.</p>
+</section>
+<hr class="docutils" />
 <section id="the-libspatialindex-c-so-dependency-error">
 <h3>The libspatialindex_c.so dependency error<a class="headerlink" href="#the-libspatialindex-c-so-dependency-error" title="Link to this heading">#</a></h3>
 <p>With Python==3.7 installation <cite>rtree</cite> and <cite>GeoPandas</cite> that are requirements for pyinterpolate may be not installed properly
@@ -526,6 +546,7 @@ because your operating system does not have <cite>libspatialindex_c.so</cite> fi
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-additional-topics">Installation - additional topics</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-notebooks">Working with Notebooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#failing-pylibtiff-build-linux">Failing pylibtiff build - Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-libspatialindex-c-so-dependency-error">The libspatialindex_c.so dependency error</a></li>
 </ul>
 </li>
