@@ -71,6 +71,9 @@ class ExperimentalVariogram:
     is_covariance : bool, default=True
         Calculate experimental coviariance.
 
+    as_cloud : bool
+        Calculate semivariance point-pairs cloud.
+
     Attributes
     ----------
     semivariances : numpy array
@@ -393,3 +396,94 @@ class ExperimentalVariogram:
                 sem = row
                 rows.append([lag, sem, np.nan])
         return rows
+
+
+def build_experimental_variogram(ds: np.ndarray,
+                                 step_size: float = None,
+                                 max_range: float = None,
+                                 direction: float = None,
+                                 tolerance: float = None,
+                                 dir_neighbors_selection_method: str = 't',
+                                 custom_bins: Union[np.ndarray, Collection] = None,
+                                 custom_weights: np.ndarray = None,
+                                 is_semivariance=True,
+                                 is_covariance=True,
+                                 as_cloud=False):
+    """
+    Function is an alias to ExperimentalVariogram() class.
+
+    Parameters
+    ----------
+    ds : numpy array
+        ``[x, y, value]``
+
+    step_size : float
+        The fixed distance between lags grouping point neighbors.
+
+    max_range : float
+        The maximum distance at which the semivariance is calculated.
+
+    direction : float, optional
+        Direction of semivariogram, values from 0 to 360 degrees:
+
+        - 0 or 180: is E-W,
+        - 90 or 270 is N-S,
+        - 45 or 225 is NE-SW,
+        - 135 or 315 is NW-SE.
+
+    tolerance : float, optional
+        If ``tolerance`` is 0 then points must be placed at a single line with
+        the beginning in the origin of the coordinate system and the
+        direction given by y-axis and direction parameter.
+        If ``tolerance`` is ``> 0`` then the bin is selected as an elliptical
+        area with major axis pointed in the same direction as the line for
+        ``0`` tolerance.
+
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
+
+    dir_neighbors_selection_method : str, default = 't'
+        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+
+        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+          selected from a triangular area,
+        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+
+    custom_bins : numpy array, optional
+        Custom bins for semivariance calculation. If provided, then parameter
+        ``step_size`` is ignored and ``max_range`` is set to the final bin
+        distance.
+
+    custom_weights : numpy array, optional
+        Custom weights assigned to points. Only semivariance values are weighted.
+
+    is_semivariance : bool, default=True
+        Calculate experimental semivariance.
+
+    is_covariance : bool, default=True
+        Calculate experimental coviariance.
+
+    as_cloud : bool, default=False
+        Calculate semivariance point-pairs cloud.
+
+    Returns
+    -------
+    : ExperimentalVariogram
+    """
+
+    exp_var = ExperimentalVariogram(
+        ds=ds,
+        step_size=step_size,
+        max_range=max_range,
+        direction=direction,
+        tolerance=tolerance,
+        dir_neighbors_selection_method=dir_neighbors_selection_method,
+        custom_bins=custom_bins,
+        custom_weights=custom_weights,
+        is_semivariance=is_semivariance,
+        is_covariance=is_covariance,
+        as_cloud=as_cloud
+    )
+    return exp_var
