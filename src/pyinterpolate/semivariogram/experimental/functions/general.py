@@ -1,4 +1,4 @@
-import threading
+import concurrent.futures
 from typing import Callable, Union, List
 from collections import OrderedDict
 from operator import itemgetter
@@ -51,18 +51,31 @@ def omnidirectional_semivariogram_cloud(
             )
         )
 
-    threads = []
-
-    for idx in range(len(lags)):
-        thread = threading.Thread(
-            target=_get,
-            args=(idx,)
-        )
-        thread.start()
-        threads.append(thread)
-
-    for thread in threads:
-        thread.join()
+    # threads = []
+    #
+    # for idx in range(len(lags)):
+    #     thread = threading.Thread(
+    #         target=_get,
+    #         args=(idx,)
+    #     )
+    #     thread.start()
+    #     threads.append(thread)
+    #
+    # for thread in threads:
+    #     thread.join()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for idx in range(len(lags)):
+            futures.append(
+                executor.submit(
+                    _get, idx
+                )
+            )
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                raise e
 
     # Clean cloud
     sorted_omnidirectional_values = _clean_cloud_data(omnidirectional_values)
@@ -119,17 +132,31 @@ def omnidirectional_variogram(
             )
         )
 
-    threads = []
-    for idx in range(len(lags)):
-        thread = threading.Thread(
-            target=_get,
-            args=(idx,)
-        )
-        thread.start()
-        threads.append(thread)
+    # threads = []
+    # for idx in range(len(lags)):
+    #     thread = threading.Thread(
+    #         target=_get,
+    #         args=(idx,)
+    #     )
+    #     thread.start()
+    #     threads.append(thread)
+    #
+    # for thread in threads:
+    #     thread.join()
 
-    for thread in threads:
-        thread.join()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for idx in range(len(lags)):
+            futures.append(
+                executor.submit(
+                    _get, idx
+                )
+            )
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                raise e
 
     omnidirectional_values = np.array(omnidirectional_values)
     sorted_omnidirectional_values = omnidirectional_values[

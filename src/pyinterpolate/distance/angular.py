@@ -1,4 +1,4 @@
-import threading
+import concurrent.futures
 from typing import List, Tuple
 
 import numpy as np
@@ -42,17 +42,31 @@ def build_mask_indices(coordinates: np.ndarray, edges: List):
 
         indices.append([lag_idx, point_masks])
 
-    threads = []
-    for idx in range(len(edges)):
-        thread = threading.Thread(
-            target=_get,
-            args=(idx,)
-        )
-        thread.start()
-        threads.append(thread)
+    # threads = []
+    # for idx in range(len(edges)):
+    #     thread = threading.Thread(
+    #         target=_get,
+    #         args=(idx,)
+    #     )
+    #     thread.start()
+    #     threads.append(thread)
+    #
+    # for thread in threads:
+    #     thread.join()
 
-    for thread in threads:
-        thread.join()
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = []
+        for idx in range(len(edges)):
+            futures.append(
+                executor.submit(
+                    _get, idx
+                )
+            )
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                future.result()
+            except Exception as e:
+                raise e
 
     indices = sorted(
         indices,
@@ -73,6 +87,9 @@ def calc_angles_between_points(vec1, vec2, flatten_output: bool = True):
 
     vec2 : numpy array
         The second set of coordinates.
+
+    flatten_output : bool, default = True
+        Return flattened array (vector).
 
     Returns
     -------
