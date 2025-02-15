@@ -188,6 +188,10 @@ class TheoreticalVariogram:
             'all': ALL_MODELS
         }
 
+    @property
+    def name(self):
+        return self.model_type
+
     # Core functions
 
     def fit(self,

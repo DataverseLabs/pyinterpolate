@@ -6,4 +6,5 @@ from pyinterpolate.semivariogram.experimental import (
     DirectionalVariogram,
     VariogramCloud
 )
+from pyinterpolate.semivariogram.theoretical import build_theoretical_variogram, TheoreticalVariogram
 from pyinterpolate.transform.geo import reproject_flat
