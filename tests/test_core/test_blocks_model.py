@@ -28,7 +28,7 @@ def test_assigning_with_representative_points_centroids():
     assert 'lon' in block.ds.columns
     assert 'lat' in block.ds.columns
     assert isinstance(block.representative_points_array(), np.ndarray)
-    assert block.representative_points_column_name == 'centroid'
+    assert block.rep_points_column_name == 'centroid'
     assert isinstance(block.distances, pd.DataFrame)
 
 
@@ -42,7 +42,7 @@ def test_assigning_with_representative_points_random():
     assert 'lon' in block.ds.columns
     assert 'lat' in block.ds.columns
     assert isinstance(block.representative_points_array(), np.ndarray)
-    assert block.representative_points_column_name == 'rep_points'
+    assert block.rep_points_column_name == 'rep_points'
     assert isinstance(block.distances, pd.DataFrame)
 
 
@@ -55,7 +55,7 @@ def test_assigning_without_representative_points_calc_centroids():
     assert 'lon' in block.ds.columns
     assert 'lat' in block.ds.columns
     assert isinstance(block.representative_points_array(), np.ndarray)
-    assert block.representative_points_column_name == 'representative_points'
+    assert block.rep_points_column_name == 'representative_points'
     assert isinstance(block.distances, pd.DataFrame)
 
 
@@ -68,7 +68,7 @@ def test_assigning_without_representative_points_calc_random():
     assert 'lon' in block.ds.columns
     assert 'lat' in block.ds.columns
     assert isinstance(block.representative_points_array(), np.ndarray)
-    assert block.representative_points_column_name == 'representative_points'
+    assert block.rep_points_column_name == 'representative_points'
     assert isinstance(block.distances, pd.DataFrame)
 
 

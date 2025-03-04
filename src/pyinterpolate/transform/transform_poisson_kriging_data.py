@@ -25,7 +25,7 @@ def angles_to_unknown_block(block_index: Union[str, Hashable],
     : numpy array
     """
     if point_support.blocks.angles is None:
-        angles = point_support.blocks.calculate_angles_between_representative_points(update=True)
+        angles = point_support.blocks.calculate_angles_between_rep_points(update=True)
     else:
         angles = point_support.blocks.angles
 
@@ -92,7 +92,7 @@ def block_base_distances(block_id: Union[str, Hashable],
     else:
         # Calc from coordinates
         if point_support.blocks_distances is None:
-            dists = point_support.blocks.calculate_distances_between_representative_points(update=True)
+            dists = point_support.blocks.calculate_distances_between_rep_points(update=True)
         else:
             dists = point_support.blocks_distances
 

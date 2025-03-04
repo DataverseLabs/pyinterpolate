@@ -7,7 +7,8 @@ Authors
 2. Taher Chegini | @cheginit
 
 Changes in version 1.0
-- Package doesn't read data files, data must be loaded into DataFrame and then passed into the Blocks object.
+- Package doesn't read data files, data must be loaded into DataFrame and
+  then passed into the Blocks object.
 """
 from typing import Union, Hashable, Dict
 from numpy.typing import ArrayLike
@@ -21,7 +22,8 @@ from pyinterpolate.distance.point import point_distance
 from pyinterpolate.transform.geo import points_to_lon_lat
 
 
-# TODO: if multipolygon then get coordinates / representative points from the largest block - as an option
+# TODO: if multipolygon then get coordinates /
+#       representative points from the largest block - as an option
 class Blocks:
     """Class represents aggregated blocks data.
 
@@ -46,13 +48,16 @@ class Blocks:
         Calculate representative points from block centroids.
 
     representative_points_from_random_sample : bool, default = False
-        Calculate representative points from the point sampled from block geometry.
+        Calculate representative points from the point sampled from block
+        geometry.
 
     distances_between_representative_points : bool, default = True
-        Calculate distances between representative points during class initialization.
+        Calculate distances between representative points during class
+        initialization.
 
     angles_between_representative_points : bool, default = False
-        Calculate angles between representative points during class initialization.
+        Calculate angles between representative points during class
+        initialization.
 
     Attributes
     ----------
@@ -68,7 +73,7 @@ class Blocks:
     index_column_name : Any, optional
         Name of the indexing column.
 
-    representative_points_column_name : Any, optional
+    rep_points_column_name : Any, optional
         The column with representative points or coordinates.
 
     angles : numpy array
@@ -94,25 +99,29 @@ class Blocks:
     block_real_value(block_id)
         Single block observation.
 
-    calculate_angles_between_representative_points(update=True)
-        Angles between blocks, calculated as angles between each representative point and others. If ``update`` is
-        True then it updates ``angles`` attribute. Returns dictionary with block id as key and angles to other blocks
-        ordered the same way as dictionary keys as values. TODO: change format to DataFrame.
+    calculate_angles_between_rep_points(update=True)
+        Angles between blocks, calculated as angles between each
+        representative point and others. If ``update`` is True then it
+        updates ``angles`` attribute. Returns dictionary with block index
+        as a key and angles to other blocks ordered the same way as
+        dictionary keys as values. TODO: change format to DataFrame.
 
-    calculate_distances_between_representative_points(update=True)
-        Distances between blocks, calculated as distances between each representative point and others. If ``update``
-        is True then it updates ``distances`` attribute. Returns DataFrame with block ids as columns and indexes and
-        distances as values.
+    calculate_distances_between_rep_points(update=True)
+        Distances between blocks, calculated as distances between each
+        representative point and others. If ``update`` is set to True
+        then it updates ``distances`` attribute. Returns Data Frame with
+        block indexes as columns and indexes and distances as values.
 
     get_blocks_values(indexes=None)
         Get multiple blocks values.
 
     pop(block_index)
-        Experimental. Removes block with specified index from the dataset and returns removed block as
-        the Blocks object.
+        Experimental. Removes block with specified index from the dataset
+        and returns removed block as the ``Blocks`` object.
 
     representative_points_array()
-        Numpy array with representative points - lon, lat, value.
+        Numpy array with representative points - longitude, latitude, and
+        value.
 
     select_distances_between_blocks()
         Select distances between a given block and all other blocks.
@@ -120,9 +129,16 @@ class Blocks:
     transform_crs(target_crs)
         Transform Blocks Coordinate Reference System.
 
+    Raises
+    ------
+    AttributeError : If both ``representative_points_from_centroid`` and
+                    ``representative_points_from_random_sample`` are set to
+                    True.
+
     See Also
     --------
-    PointSupport : Class heavily using ``Blocks`` for the semivariogram deconvolution.
+    PointSupport : Class heavily using ``Blocks`` for
+                   the semivariogram deconvolution.
 
     Examples
     --------
@@ -146,7 +162,8 @@ class Blocks:
     ... }
     >>> block = Blocks(**CANCER_DATA)
     >>> print(block.ds.columns)
-    Index(['FIPS', 'rate', 'geometry', 'rep_points', 'lon', 'lat'], dtype='object')
+    Index(['FIPS', 'rate', 'geometry', 'rep_points', 'lon', 'lat'],
+          dtype='object')
     """
 
     def __init__(self,
@@ -164,14 +181,20 @@ class Blocks:
         self._lon_col_name = 'lon'
         self._lat_col_name = 'lat'
         self._default_representative_column_name = 'representative_points'
-        self._representative_points_from_centroid = representative_points_from_centroid
-        self._representative_points_from_random_sample = representative_points_from_random_sample
+
+        self.__check_rep_points_params(
+            representative_points_from_centroid,
+            representative_points_from_random_sample
+        )
+
+        self._rep_ps_centroid = representative_points_from_centroid
+        self._rep_ps_sample = representative_points_from_random_sample
 
         self.ds = ds.copy(deep=True)
         self.value_column_name = value_column_name
         self.index_column_name = index_column_name
         self.geometry_column_name = geometry_column_name
-        self.representative_points_column_name = representative_points_column_name
+        self.rep_points_column_name = representative_points_column_name
 
         if representative_points_column_name is None:
             self._get_representative_points()
@@ -184,9 +207,13 @@ class Blocks:
         self.distances = None
 
         if distances_between_representative_points:
-            self.distances = self.calculate_distances_between_representative_points(update=False)
+            self.distances = self.calculate_distances_between_rep_points(
+                update=False
+            )
         if angles_between_representative_points:
-            self.angles = self.calculate_angles_between_representative_points(update=False)
+            self.angles = self.calculate_angles_between_rep_points(
+                update=False
+            )
 
     @property
     def block_indexes(self):
@@ -223,7 +250,7 @@ class Blocks:
         else:
             ds = self.ds[self.ds[self.index_column_name] == block_id]
 
-        coordinates = ds[self.representative_points_column_name].to_numpy()[0]
+        coordinates = ds[self.rep_points_column_name].to_numpy()[0]
         return coordinates
 
     def block_real_value(self, block_id: Hashable):
@@ -247,9 +274,10 @@ class Blocks:
 
         return value
 
-    def calculate_angles_between_representative_points(self, update=True) -> Dict:
+    def calculate_angles_between_rep_points(self, update=True) -> Dict:
         """
-        Angles from each representative point to others.
+        Angles between all representative points to all other
+        representative points.
 
         Parameters
         ----------
@@ -259,7 +287,8 @@ class Blocks:
         Returns
         -------
         : Dict
-            block id: angles to other blocks ordered like block ids in a dictionary
+            block index: angles to other blocks ordered like block
+            indexes (keys) in a dictionary
         """
         points = self.representative_points_array()
         angles = {}
@@ -277,7 +306,8 @@ class Blocks:
 
         return angles
 
-    def calculate_distances_between_representative_points(self, update=True) -> pd.DataFrame:
+    def calculate_distances_between_rep_points(self,
+                                               update=True) -> pd.DataFrame:
         """
         Gets distances between representative points within blocks.
 
@@ -289,7 +319,8 @@ class Blocks:
         Returns
         -------
         : DataFrame
-            Columns and indexes are blocks ids, values are distances between blocks.
+            Columns and indexes are blocks ids, values are
+            distances between blocks.
         """
         points = self.representative_points_array()
         distances: np.ndarray = point_distance(
@@ -312,7 +343,8 @@ class Blocks:
         Parameters
         ----------
         indexes : Array-like, optional
-            Indexes of blocks to get values from. If not given then all blocks are returned.
+            Indexes of blocks to get values from. If not given then
+            all blocks are returned.
 
         Returns
         -------
@@ -329,7 +361,8 @@ class Blocks:
 
     def pop(self, block_index: Union[str, Hashable]):
         """
-        Removes block with specified index from the dataset and returns removed block as the Blocks object
+        Removes block with specified index from the dataset and returns
+        removed block as the ``Blocks`` object.
 
         Parameters
         ----------
@@ -359,7 +392,44 @@ class Blocks:
         : numpy array
             ``[lon, lat, value]``
         """
-        return self.ds[[self._lon_col_name, self._lat_col_name, self.value_column_name]].to_numpy(copy=True)
+
+        result = self.ds[
+            [self._lon_col_name, self._lat_col_name, self.value_column_name]
+        ].to_numpy(copy=True)
+
+        return result
+
+    def select_distances_between_blocks(self,
+                                        block_id,
+                                        other_blocks=None) -> np.ndarray:
+        """
+        Method selects distances between specified blocks and all other
+        blocks.
+
+        Parameters
+        ----------
+        block_id :
+            Single block ID or list with IDs to retrieve.
+
+        other_blocks : optional
+            Other blocks to get distance to those blocks, if not given then
+            all other blocks are returned.
+
+        Returns
+        -------
+        : numpy array
+            Index is block id, columns are other blocks.
+        """
+        df = self.distances.copy()
+
+        # get specified values
+        if other_blocks is None:
+            return df.loc[block_id].to_numpy()
+        else:
+            try:
+                return df.loc[block_id, other_blocks].to_numpy()
+            except AttributeError:
+                return df.loc[block_id, other_blocks]
 
     # TODO manage copying and inplace transformations
     def transform_crs(self, target_crs):
@@ -378,10 +448,14 @@ class Blocks:
         self._points_to_floats()
 
         # distances
-        self.distances = self.calculate_distances_between_representative_points(update=False)
+        self.distances = self.calculate_distances_between_rep_points(
+            update=False
+        )
 
         # angles
-        self.angles = self.calculate_angles_between_representative_points(update=False)
+        self.angles = self.calculate_angles_between_rep_points(
+            update=False
+        )
 
     def _delete(self, block_index: Union[str, Hashable]):
         if self.index_column_name is None:
@@ -396,20 +470,23 @@ class Blocks:
                 ds=rblock,
                 value_column_name=self.value_column_name,
                 geometry_column_name=self.geometry_column_name,
-                representative_points_column_name=self.representative_points_column_name,
-                representative_points_from_centroid=self._representative_points_from_centroid,
-                representative_points_from_random_sample=self._representative_points_from_random_sample
+                representative_points_column_name=self.rep_points_column_name,
+                representative_points_from_centroid=self._rep_ps_centroid,
+                representative_points_from_random_sample=self._rep_ps_sample
             )
             return rblock
         else:
-            rblock = self.ds[self.ds[self.index_column_name] == block_index].copy()
+            rblock = self.ds[
+                self.ds[self.index_column_name] == block_index
+                ].copy()
+
             rblock = Blocks(
                 ds=rblock,
                 value_column_name=self.value_column_name,
                 geometry_column_name=self.geometry_column_name,
-                representative_points_column_name=self.representative_points_column_name,
-                representative_points_from_centroid=self._representative_points_from_centroid,
-                representative_points_from_random_sample=self._representative_points_from_random_sample
+                representative_points_column_name=self.rep_points_column_name,
+                representative_points_from_centroid=self._rep_ps_centroid,
+                representative_points_from_random_sample=self._rep_ps_sample
             )
             return rblock
 
@@ -417,27 +494,24 @@ class Blocks:
         self.ds[self._default_representative_column_name] = self.ds[
             self.geometry_column_name
         ].representative_point()
-        self.representative_points_column_name = self._default_representative_column_name
+
+        self.rep_points_column_name = self._default_representative_column_name
 
     def _get_representative_points(self):
-        if self._representative_points_from_random_sample:
-            if self._representative_points_from_centroid:
-                raise AttributeError(
-                    'Please set only one parameter from ``representative_points_from_centroid`` or '
-                    '``representative_points_from_random_sample`` to True.')
+        if self._rep_ps_sample:
             self._get_random_representative_points()
-            # User hasn't provided own set of points
         else:
             self._get_representative_points_from_centroids()
 
     def _get_representative_points_from_centroids(self):
         """
-        Method estimates representative points as coordinates of given polygons.
+        Method estimates representative points as coordinates of given
+        polygons.
         """
         self.ds[self._default_representative_column_name] = self.ds[
             self.geometry_column_name
         ].centroid
-        self.representative_points_column_name = self._default_representative_column_name
+        self.rep_points_column_name = self._default_representative_column_name
 
     def _points_to_floats(self):
         """
@@ -448,38 +522,19 @@ class Blocks:
         : numpy array
         """
         lon, lat = points_to_lon_lat(
-            self.ds[self.representative_points_column_name]
+            self.ds[self.rep_points_column_name]
         )
         self.ds[self._lon_col_name] = lon
         self.ds[self._lat_col_name] = lat
 
-    def select_distances_between_blocks(self, block_id, other_blocks=None) -> np.ndarray:
-        """
-        Method selects distances between specified blocks and all other blocks.
-
-        Parameters
-        ----------
-        block_id :
-            Single block ID or list with IDs to retrieve.
-
-        other_blocks : optional
-            Other blocks to get distance to those blocks, if not given then all other blocks are returned.
-
-        Returns
-        -------
-        : numpy array
-            Index is block id, columns are other blocks.
-        """
-        df = self.distances.copy()
-
-        # get specified values
-        if other_blocks is None:
-            return df.loc[block_id].to_numpy()
-        else:
-            try:
-                return df.loc[block_id, other_blocks].to_numpy()
-            except AttributeError:
-                return df.loc[block_id, other_blocks]
-
     def __len__(self):
         return len(self.ds)
+
+    @staticmethod
+    def __check_rep_points_params(r1, r2):
+        if r1 and r2:
+            raise AttributeError(
+                'Please set only one parameter from '
+                '``representative_points_from_centroid`` or '
+                '``representative_points_from_random_sample`` to True.'
+            )
