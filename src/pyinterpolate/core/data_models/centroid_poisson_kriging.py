@@ -16,10 +16,11 @@ class CentroidPoissonKrigingInput:
     Parameters
     ----------
     block_id : Union[str, Hashable]
-        ID of the interpolated block.
+        Index of the interpolated block.
 
     point_support : PointSupport
-        Point support object - containing interpolated block ``block_id`` and neighboring blocks.
+        Point support object - containing interpolated block ``block_id``
+        and neighboring blocks.
 
     semivariogram_model : TheoreticalVariogram
         Fitted semivariogram.
@@ -29,6 +30,9 @@ class CentroidPoissonKrigingInput:
 
     weighted : bool, default = True
         Should distances be weighted by the point support values?
+
+    verbose : bool, default = False
+        Should the class print additional information?
 
     Attributes
     ----------
@@ -42,45 +46,50 @@ class CentroidPoissonKrigingInput:
         Should distances be weighted by the point support values?
 
     is_directional : bool
-        Is the semivariogram directional? Set to ``True`` if passed ``semivariogram_model`` has a direction.
+        Is the semivariogram directional? Set to ``True`` if passed
+        ``semivariogram_model`` has a direction.
 
     angular_tolerance : float, default = 1
         How many degrees of difference are allowed for the neighbors search.
 
     max_tick : float, default = 15
-        How wide might the ``angular_tolerance`` (in one direction, in reality it is two times greater).
+        How wide might the ``angular_tolerance`` (in one direction,
+        in reality it is two times greater).
 
     base_distances : numpy array
         The distances to the unknown block ``block_id`` from other blocks.
 
     angle_differences : numpy array, default = None
-        The angles between the unknown block and other blocks. It is calculated only for a directional semivariogram.
+        The angles between the unknown block and other blocks. It is
+        calculated only for a directional semivariogram.
 
     ds : DataFrame
-        Core structure within the class. It contains all the necessary data for the kriging. DataFrame columns are:
-        ``['points', 'values', 'distances', 'angular_differences', 'block_id']``.
+        Core structure within the class. It contains all the necessary data
+        for the kriging. DataFrame columns are:
+        ``['points', 'values', 'distances', 'angular_differences', 'block_id']``
 
     Methods
     -------
-    angles
+    angles : numpy array, property
         Get angles between the neighboring blocks and the unknown block.
 
-    coordinates
+    coordinates : numpy array, property
         Get coordinates of the neighboring blocks.
 
-    distances
+    distances : numpy array, property
         Get distances to the neighboring blocks from the unknown block.
 
-    kriging_input
+    kriging_input : DataFrame, property
         DataFrame representing unknown block's neighbors.
 
-    neighbors_indexes
+    neighbors_indexes : numpy array, property
         Get indexes of the neighboring blocks.
 
-    pk_input
-        DataFrame representing all blocks and their relations to the unknown block. (See ``ds`` attribute).
+    pk_input : DataFrame, property
+        DataFrame representing all blocks and their relations to the unknown
+        block. (See ``ds`` attribute).
 
-    values
+    values : numpy array, property
         Get values of the neighboring blocks.
 
     select_neighbors()
@@ -92,16 +101,35 @@ class CentroidPoissonKrigingInput:
     len()
         Returns the number of closest neighbors.
 
+    Raises
+    ------
+    AttributeError :
+        - Angular differences were not provided and user wants to select
+          neighbors based on direction.
+
+    ValueError :
+        - Kriging input is not calculated and user tries to access ``angles``,
+          ``coordinates``, ``distances``, ``kriging_input`` and
+          ``neighbors_indexes`` properties.
+        - For a given distance or angle no neighbors have been found.
+
+
     See Also
     --------
-    select_centroid_poisson_kriging_data() : function which uses this class to select neighbors for the interpolation.
+    select_centroid_poisson_kriging_data() :
+        function which uses this class to select neighbors for the
+        interpolation.
 
     Examples
     --------
     >>> import os
     >>> import geopandas as gpd
-    >>> from pyinterpolate import Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
-    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
+    >>> from pyinterpolate import (
+    >>> Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
+    >>> )
+    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import (
+    >>> CentroidPoissonKrigingInput
+    >>> )
     >>>
     >>>
     >>> FILENAME = 'cancer_data.gpkg'
@@ -156,7 +184,7 @@ class CentroidPoissonKrigingInput:
     ...     min_number_of_neighbors=4,
     ...     select_all_possible_neighbors=False
     ... )
-    >>> print(len(cpki))  # 3 neighbors are selected from this dataset, see tests
+    >>> print(len(cpki))  # 3 neighbors are selected from this dataset
     3
     """
 
@@ -165,7 +193,8 @@ class CentroidPoissonKrigingInput:
                  point_support: PointSupport,
                  semivariogram_model: TheoreticalVariogram,
                  blocks_indexes: np.ndarray = None,
-                 weighted: bool = True):
+                 weighted: bool = True,
+                 verbose: bool = False):
 
         # Neighbors df columns
         self.n_blocks_indexes_column = 'blocks_indexes'
@@ -180,18 +209,24 @@ class CentroidPoissonKrigingInput:
 
         self.block_id = block_id
         self.is_weighted = weighted
-        self.is_directional = True if self.semivariogram_model.direction is not None else False
+        self.is_directional = (
+            True if self.semivariogram_model.direction is not None else False
+        )
         self.angular_tolerance = 1
         self.max_tick = 15
-        self.point_support_distances = PointSupportDistance(verbose=False)  # todo set verbose
+        self.ps_dists = PointSupportDistance(
+            verbose=verbose
+        )  # todo set verbose
 
         if weighted:
-            self.point_support_distances.calculate_weighted_block_to_block_distances(point_support)
+            self.ps_dists.calculate_weighted_block_to_block_distances(
+                point_support
+            )
 
         self.base_distances = block_base_distances(
             block_id=self.block_id,
             point_support=point_support,
-            point_support_distances=self.point_support_distances
+            point_support_distances=self.ps_dists
         )
 
         self.angle_differences = None
@@ -228,35 +263,47 @@ class CentroidPoissonKrigingInput:
     @property
     def angles(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, please '
+                   'select neighbors first.')
+            raise ValueError(msg)
         else:
-            return self._kriging_input[self.n_angular_differences_column].to_numpy()
+            return self._kriging_input[
+                self.n_angular_differences_column
+            ].to_numpy()
 
     @property
     def coordinates(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, '
+                   'please select neighbors first.')
+            raise ValueError(msg)
         else:
             return self._kriging_input[self.n_points_column].to_numpy()
 
     @property
     def distances(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, '
+                   'please select neighbors first.')
+            raise ValueError(msg)
         else:
             return self._kriging_input[self.n_distances_column].to_numpy()
 
     @property
     def kriging_input(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, '
+                   'please select neighbors first.')
+            raise ValueError(msg)
         else:
             return self._kriging_input.copy()
 
     @property
     def neighbors_indexes(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, '
+                   'please select neighbors first.')
+            raise ValueError(msg)
         else:
             return self._kriging_input.index.values
 
@@ -267,7 +314,9 @@ class CentroidPoissonKrigingInput:
     @property
     def values(self):
         if self._kriging_input is None:
-            raise ValueError('Kriging input is not estimated yet, please select neighbors first.')
+            msg = ('Kriging input is not estimated yet, '
+                   'please select neighbors first.')
+            raise ValueError(msg)
         else:
             return self._kriging_input[self.n_values_column].to_numpy()
 
@@ -287,7 +336,8 @@ class CentroidPoissonKrigingInput:
             The minimum number of neighboring areas.
 
         select_all_possible_neighbors : bool, default = False
-            Should select all possible neighbors or only the ``min_number_of_neighbors``?
+            Should select all possible neighbors or only the
+            ``min_number_of_neighbors``?
         """
         self._update_private_neighbors_search_params(
             max_range=max_range,
@@ -297,7 +347,8 @@ class CentroidPoissonKrigingInput:
         ds = self._select_neighbors_in_range(max_range=max_range)
 
         if len(ds) == 0:
-            raise ValueError(f'For a given distance: {max_range} no neighbors have been found.')
+            raise ValueError(f'For a given distance: {max_range} '
+                             f'no neighbors have been found.')
 
         self._kriging_input = self._select_required_number_of_neighbors(
             df=ds,
@@ -312,8 +363,8 @@ class CentroidPoissonKrigingInput:
                                      angular_tolerance: float = None,
                                      max_tick: float = None):
         """
-        Function selects neighbors to a point using angle (direction) between neighbors as additional filtering
-        parameter.
+        Function selects neighbors to a point using angle
+        (direction) between neighbors as additional filtering parameter.
 
         Parameters
         ----------
@@ -324,14 +375,16 @@ class CentroidPoissonKrigingInput:
             The minimum number of neighboring areas.
 
         select_all_possible_neighbors : bool, default = True
-            Should select all possible neighbors or only the ``min_number_of_neighbors``?
+            Should select all possible neighbors or only the
+            ``min_number_of_neighbors``?
 
         angular_tolerance : float, optional
-            How many degrees of difference are allowed for the neighbors search.
+            How many degrees of difference are allowed for the neighbors
+            search.
 
         max_tick : float, optional
-            How wide might the ``angular_tolerance`` (in one direction, in reality it is two times greater, up to
-            180 -> 360 degrees)
+            How wide might the ``angular_tolerance`` (in one direction,
+            in reality it is two times greater, up to 180 -> 360 degrees)
 
         Returns
         -------
@@ -354,17 +407,26 @@ class CentroidPoissonKrigingInput:
             ds = self._select_neighbors_in_range(max_range=max_range)
 
             # Next, get points in a specific angle
-            ads = ds[ds[self.n_angular_differences_column] <= self.angular_tolerance]
+            ads = ds[
+                ds[self.n_angular_differences_column] <= self.angular_tolerance
+            ]
 
             while len(ads) < min_number_of_neighbors:
                 self.angular_tolerance = self.angular_tolerance + 1
-                ads = ds[ds[self.n_angular_differences_column] <= self.angular_tolerance]
+                ads = ds[
+                    ds[
+                        self.n_angular_differences_column
+                    ] <= self.angular_tolerance
+                ]  # todo move it to helper fn
                 if self.max_tick < self.angular_tolerance:
                     break
 
             if len(ads) == 0:
-                raise ValueError('For a given distances and angle no neighbors have been found. Make ``max_tick`` '
-                                 'larger or search for neighbors in the every direction.')
+                raise ValueError('For a given distances and angle '
+                                 'no neighbors have been found. '
+                                 'Make ``max_tick`` '
+                                 'larger or search for neighbors in '
+                                 'the every direction.')
 
             self._kriging_input = self._select_required_number_of_neighbors(
                 df=ads,
@@ -373,22 +435,31 @@ class CentroidPoissonKrigingInput:
             )
 
         else:
-            raise AttributeError('Angular differences are not provided, cannot find neighbors. Please, initialize '
-                                 'class instance with the ``angular_differences`` array.')
+            raise AttributeError('Angular differences are not provided, '
+                                 'cannot find neighbors. Please, initialize '
+                                 'class instance with '
+                                 'the ``angular_differences`` array.')
 
     def _select_neighbors_in_range(self, max_range):
         ds = self.ds.copy(deep=True)
 
         ds = ds[ds[self.n_distances_column] <= max_range]
         ds = ds[ds[self.n_distances_column] > 0]
-        ds.sort_values(by=self.n_distances_column, ascending=True, inplace=True)
+        ds.sort_values(
+            by=self.n_distances_column, ascending=True, inplace=True
+        )
         return ds
 
-    def _select_required_number_of_neighbors(self, df, min_number_of_neighbors, select_all_possible_neighbors):
+    def _select_required_number_of_neighbors(self,
+                                             df,
+                                             min_number_of_neighbors,
+                                             select_all_possible_neighbors):
         if select_all_possible_neighbors:
             return df
         else:
-            return df.sort_values(by=self.n_distances_column, ascending=True).iloc[:min_number_of_neighbors]
+            return df.sort_values(
+                by=self.n_distances_column, ascending=True
+            ).iloc[:min_number_of_neighbors]
 
     def _update_neighbors_search_params_directional(self,
                                                     angular_tolerance,
