@@ -28,9 +28,11 @@ class ExperimentalVariogramModel(BaseModel):
         Direction of the experimental variogram.
 
     tolerance : float, optional
-        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y-axis and direction parameter.
-        If ``tolerance`` is ``> 0`` then the bin is selected as an elliptical area with major axis pointed in
+        If ``tolerance`` is 0 then points must be placed at a single
+        line with the beginning in the origin of the coordinate system and
+        the direction given by y-axis and direction parameter.
+        If ``tolerance`` is ``> 0`` then the bin is selected as
+        an elliptical area with major axis pointed in
         the same direction as the line for ``0`` tolerance.
 
         * The major axis size == ``step_size``.
