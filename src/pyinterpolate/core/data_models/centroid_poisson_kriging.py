@@ -26,7 +26,9 @@ class CentroidPoissonKrigingInput:
         Fitted semivariogram.
 
     blocks_indexes : np.ndarray, optional
-        The list of the known blocks names.
+        Known blocks (all possible neighbors) indexes. Parameter is optional,
+        because the class can index neighbors based on their representative
+        coordinates.
 
     weighted : bool, default = True
         Should distances be weighted by the point support values?
@@ -216,7 +218,7 @@ class CentroidPoissonKrigingInput:
         self.max_tick = 15
         self.ps_dists = PointSupportDistance(
             verbose=verbose
-        )  # todo set verbose
+        )
 
         if weighted:
             self.ps_dists.calculate_weighted_block_to_block_distances(
@@ -385,10 +387,6 @@ class CentroidPoissonKrigingInput:
         max_tick : float, optional
             How wide might the ``angular_tolerance`` (in one direction,
             in reality it is two times greater, up to 180 -> 360 degrees)
-
-        Returns
-        -------
-        : DataFrame
         """
 
         self._update_private_neighbors_search_params(
@@ -407,17 +405,12 @@ class CentroidPoissonKrigingInput:
             ds = self._select_neighbors_in_range(max_range=max_range)
 
             # Next, get points in a specific angle
-            ads = ds[
-                ds[self.n_angular_differences_column] <= self.angular_tolerance
-            ]
+            ads = self._points_within_angle(ds)
 
             while len(ads) < min_number_of_neighbors:
                 self.angular_tolerance = self.angular_tolerance + 1
-                ads = ds[
-                    ds[
-                        self.n_angular_differences_column
-                    ] <= self.angular_tolerance
-                ]  # todo move it to helper fn
+                ads = self._points_within_angle(ds)
+
                 if self.max_tick < self.angular_tolerance:
                     break
 
@@ -440,7 +433,38 @@ class CentroidPoissonKrigingInput:
                                  'class instance with '
                                  'the ``angular_differences`` array.')
 
+    def _points_within_angle(self, ds):
+        """
+        Function selects points within a given angle.
+
+        Parameters
+        ----------
+        ds : DataFrame
+            Potential neighbors and angles between them.
+
+        Returns
+        -------
+
+        """
+        ads = ds[
+            ds[self.n_angular_differences_column] <= self.angular_tolerance]
+
+        return ads
+
     def _select_neighbors_in_range(self, max_range):
+        """
+        Selects neighbors within a given range.
+
+        Parameters
+        ----------
+        max_range : float
+            The maximum distance for the neighbors search.
+
+        Returns
+        -------
+        : DataFrame
+            Potential neighbors and distances to them.
+        """
         ds = self.ds.copy(deep=True)
 
         ds = ds[ds[self.n_distances_column] <= max_range]
@@ -454,6 +478,26 @@ class CentroidPoissonKrigingInput:
                                              df,
                                              min_number_of_neighbors,
                                              select_all_possible_neighbors):
+        """
+        Selects minimum number of neighbors from the DataFrame.
+
+        Parameters
+        ----------
+        df : DataFrame
+            Potential neighbors and distances to them.
+
+        min_number_of_neighbors : int
+            The minimum number of neighboring areas.
+
+        select_all_possible_neighbors : bool
+            Should select all possible neighbors or only the
+            ``min_number_of_neighbors``?
+
+        Returns
+        -------
+        : DataFrame
+            The minimal set of closest neighbors.
+        """
         if select_all_possible_neighbors:
             return df
         else:
@@ -464,6 +508,20 @@ class CentroidPoissonKrigingInput:
     def _update_neighbors_search_params_directional(self,
                                                     angular_tolerance,
                                                     max_tick):
+        """
+        Updates private parameters related to angles between neighbors
+        for the neighbors search.
+
+        Parameters
+        ----------
+        angular_tolerance : float
+            How many degrees of difference are allowed for the
+            neighbors search.
+
+        max_tick : float
+            How wide might the ``angular_tolerance`` (in one direction,
+            in reality it is two times greater).
+        """
         if angular_tolerance is not None:
             self.angular_tolerance = angular_tolerance
 
@@ -474,11 +532,33 @@ class CentroidPoissonKrigingInput:
                                                 max_range,
                                                 min_number_of_neighbors,
                                                 select_all_possible_neighbors):
+        """
+        Updates private parameters for the neighbors search.
+
+        Parameters
+        ----------
+        max_range : float
+            The maximum distance for the neighbors search.
+
+        min_number_of_neighbors : int
+            The minimum number of neighboring areas.
+
+        select_all_possible_neighbors : bool
+            Should select all possible neighbors or only the
+            ``min_number_of_neighbors``?
+        """
         self._max_range = max_range
         self._select_all_possible_neighbors = select_all_possible_neighbors
         self._min_number_of_neighbors = min_number_of_neighbors
 
     def __len__(self):
+        """
+        Returns the number of closest neighbors.
+
+        Returns
+        -------
+        : int
+        """
         if self._kriging_input is None:
             return 0
         else:
