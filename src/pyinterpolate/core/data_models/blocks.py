@@ -99,25 +99,25 @@ class Blocks:
     block_real_value(block_id)
         Single block observation.
 
-    calculate_angles_between_rep_points(update=True)
+    calculate_angles_between_rep_points()
         Angles between blocks, calculated as angles between each
         representative point and others. If ``update`` is True then it
         updates ``angles`` attribute. Returns dictionary with block index
         as a key and angles to other blocks ordered the same way as
         dictionary keys as values. TODO: change format to DataFrame.
 
-    calculate_distances_between_rep_points(update=True)
+    calculate_distances_between_rep_points()
         Distances between blocks, calculated as distances between each
         representative point and others. If ``update`` is set to True
         then it updates ``distances`` attribute. Returns Data Frame with
         block indexes as columns and indexes and distances as values.
 
-    get_blocks_values(indexes=None)
+    get_blocks_values()
         Get multiple blocks values.
 
-    pop(block_index)
+    pop()
         Experimental. Removes block with specified index from the dataset
-        and returns removed block as the ``Blocks`` object.
+        and returns removed block as the ``Blocks`` object. Alters object.
 
     representative_points_array()
         Numpy array with representative points - longitude, latitude, and
@@ -126,7 +126,7 @@ class Blocks:
     select_distances_between_blocks()
         Select distances between a given block and all other blocks.
 
-    transform_crs(target_crs)
+    transform_crs()
         Transform Blocks Coordinate Reference System.
 
     Raises
@@ -437,8 +437,11 @@ class Blocks:
 
         Parameters
         ----------
-        target_crs :
-            The target CRS.
+        target_crs : pyproj.CRS or EPSG code
+            The value can be anything accepted by
+            :meth:`pyproj.CRS.from_user_input()
+            <pyproj.crs.CRS.from_user_input>`,
+            such as an authority string (eg "EPSG:4326") or a WKT string.
         """
         # Transform core dataset
         self.ds.to_crs(target_crs, inplace=True)
@@ -458,12 +461,33 @@ class Blocks:
         )
 
     def _delete(self, block_index: Union[str, Hashable]):
+        """
+        Removes block with specified index from the dataset.
+
+        Parameters
+        ----------
+        block_index : Union[str, Hashable]
+            Index of the block to remove.
+        """
         if self.index_column_name is None:
             self.ds.drop(index=block_index, inplace=True)
         else:
             self.ds = self.ds[self.ds[self.index_column_name] != block_index]
 
     def _get(self, block_index: Union[str, Hashable]):
+        """
+        Returns block with specified index from the dataset.
+
+        Parameters
+        ----------
+        block_index : Union[str, Hashable]
+            Index of the block to return.
+
+        Returns
+        -------
+        : Blocks
+            Single block as the Blocks object.
+        """
         if self.index_column_name is None:
             rblock = self.ds.loc[block_index].copy()
             rblock = Blocks(
@@ -491,6 +515,10 @@ class Blocks:
             return rblock
 
     def _get_random_representative_points(self):
+        """
+        Method estimates representative points as a point guaranteed to be
+        within the object, cheaply.
+        """
         self.ds[self._default_representative_column_name] = self.ds[
             self.geometry_column_name
         ].representative_point()
@@ -498,6 +526,10 @@ class Blocks:
         self.rep_points_column_name = self._default_representative_column_name
 
     def _get_representative_points(self):
+        """
+        Estimates representative points as centroids or randomly
+        sampled points within the block geometry.
+        """
         if self._rep_ps_sample:
             self._get_random_representative_points()
         else:
@@ -505,8 +537,7 @@ class Blocks:
 
     def _get_representative_points_from_centroids(self):
         """
-        Method estimates representative points as coordinates of given
-        polygons.
+        Estimates representative points as centroids.
         """
         self.ds[self._default_representative_column_name] = self.ds[
             self.geometry_column_name
@@ -528,10 +559,35 @@ class Blocks:
         self.ds[self._lat_col_name] = lat
 
     def __len__(self):
+        """
+        Returns number of blocks in the dataset.
+
+        Returns
+        -------
+        : int
+        """
         return len(self.ds)
 
     @staticmethod
     def __check_rep_points_params(r1, r2):
+        """
+        Checks if users has chosen only one method to calculate representative
+        points.
+
+        Parameters
+        ----------
+        r1 : bool
+            First parameter (``representative_points_from_centroid``).
+
+        r2 : bool
+            Second parameter (``representative_points_from_random_sample``).
+
+        Raises
+        ------
+        AttributeError
+            If both parameters are set to ``True``.
+
+        """
         if r1 and r2:
             raise AttributeError(
                 'Please set only one parameter from '
