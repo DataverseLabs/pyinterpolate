@@ -1,4 +1,4 @@
-from typing import Tuple, Union, List, Iterable
+from typing import Tuple, Union, List, Iterable, Hashable
 
 import geopandas as gpd
 import numpy as np
@@ -15,13 +15,15 @@ class PointSupport:
     Parameters
     ----------
     points: gpd.GeoDataFrame
-        Point support data, it should have geometry (Point) column and value column.
+        Point support data, it should have geometry (Point) column and value
+        column.
 
     blocks: Blocks
         ``Blocks`` object with polygons data.
 
     points_value_column: str
-        The name of the point-support column with points values (e.g. population).
+        The name of the point-support column with points values
+        (e.g. population).
 
     points_geometry_column: str
         The name of the point-support column with a geometry.
@@ -30,12 +32,14 @@ class PointSupport:
         Should object store points which weren't joined with blocks?
 
     use_point_support_crs: bool = False
-        Should object use point support CRS instead of blocks CRS? Both CRS are projected into the same CRS, and this
+        Should object use point support CRS instead of blocks CRS? Both CRS
+        are projected into the same projection, and this
         parameter decides into which CRS the data should be reprojected.
 
     no_possible_neighbors : int, default = 0
-        The maximum number of the closest blocks used for the calculation of distances between point support
-        coordinates. Default 0 indicates that all blocks are used.
+        The maximum number of the closest blocks used for the calculation of
+        distances between point support coordinates. Default 0 indicates
+        that all blocks are used.
 
     verbose: bool = True
         Information about the progress of the calculations.
@@ -52,15 +56,23 @@ class PointSupport:
         Name of the column with block indexes.
 
     dropped_points : GeoDataFrame, optional
-        Points which weren't joined with blocks (due to the lack of spatial overlap). Attribute can be None if
-        the parameter ``store_dropped_points`` was set to False.
+        Points which weren't joined with blocks (due to the lack of
+        spatial overlap). Attribute can be None if the parameter
+        ``store_dropped_points`` was set to False.
+
+    lon_col_name : str, property
+        Name of the column with longitude.
+
+    lat_col_name : str, property
+        Name of the column with latitude.
 
     point_support : GeoDataFrame
         Columns: ``lon``, ``lat``, ``point-support-value``, ``block-index``.
 
     point_support_blocks_index_name : str, optional
-        Name of the column with block indexes in the point support. If the column name is not given in
-        the ``blocks`` object, then the default name ``"blocks_index"`` is used.
+        Name of the column with block indexes in the point support.
+        If the column name is not given in the ``blocks`` object, then
+        the default name ``"blocks_index"`` is used.
 
     unique_blocks : numpy array
         Unique block indexes from the point support.
@@ -71,13 +83,11 @@ class PointSupport:
         Function returns distances between given blocks.
 
     get_point_to_block_indexes()
-        Method returns block indexes for each point in the same order as points are stored in the ``point_support``.
+        Method returns block indexes for each point in the same order as
+        points are stored in the ``point_support``.
 
     get_points_array()
         Method returns point coordinates and their values as a numpy array.
-
-    get_weighted_distance()
-        Function returns weighted distance from a given block to other blocks.
 
     point_support_totals()
         Function retrieves total point support values for given blocks.
@@ -86,8 +96,12 @@ class PointSupport:
     --------
     >>> import os
     >>> import geopandas as gpd
-    >>> from pyinterpolate import Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
-    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
+    >>> from pyinterpolate import (
+    >>> Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
+    >>> )
+    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import (
+    >>> CentroidPoissonKrigingInput
+    >>> )
     >>>
     >>>
     >>> FILENAME = 'cancer_data.gpkg'
@@ -125,17 +139,23 @@ class PointSupport:
 
     Notes
     -----
-    The ``PointSupport`` class structure is designed to store the information about the points within polygons.
-    During the regularization process, the inblock semivariograms are estimated from the polygon's point support, and
-    semivariances are calculated between point supports of neighbouring blocks.
+    The ``PointSupport`` class structure is designed to store the information
+    about the points within polygons. During the regularization process,
+    the inblock semivariograms are estimated from the polygon's point support,
+    and semivariances are calculated between point supports of neighbouring
+    blocks.
 
-    The class takes the point support grid and blocks data (polygons). Then, spatial join is performed and points
-    are assigned to areas where they fall. The core attribute is ``point_support`` - GeoDataFrame with columns:
+    The class takes the point support grid and blocks data (polygons).
+    Then, spatial join is performed and points are assigned to areas where
+    they fall. The core attribute is ``point_support``.
+    It is a ``GeoDataFrame`` with columns:
 
     * ``lon`` - a floating representation of longitude,
     * ``lat`` - a floating representation of latitude,
-    * ``point-support-value`` - the attribute describing the name of a column with the point-support's value,
-    * ``block-index`` - the name of a column directing to the block index values.
+    * ``point-support-value`` - the attribute describing the name of a column
+      with the point-support's value,
+    * ``block-index`` - the name of a column directing to the block index
+      values.
 
     """
 
@@ -186,7 +206,9 @@ class PointSupport:
     def lat_col_name(self):
         return self._lat_col_name
 
-    def get_distances_between_known_blocks(self, block_ids: Union[List, np.ndarray]):
+    def get_distances_between_known_blocks(
+            self, block_ids: Union[List, np.ndarray]
+    ) -> np.ndarray:
         """
         Function returns distances between known blocks.
 
@@ -198,8 +220,9 @@ class PointSupport:
         Returns
         -------
         : numpy array
-            Distances from blocks to all other blocks (ordered the same way as input ``block_ids`` list, where
-            rows and columns represent block indexes).
+            Distances from blocks to all other blocks (ordered the same way
+            as input ``block_ids`` list, where rows and columns represent
+            the block indexes).
         """
         distances_between_known_blocks = self.blocks.select_distances_between_blocks(
             block_id=block_ids, other_blocks=block_ids
@@ -208,7 +231,8 @@ class PointSupport:
 
     def get_point_to_block_indexes(self) -> pd.Series:
         """
-        Method returns block indexes for each point in the same order as points are stored in the ``point_support``.
+        Method returns block indexes for each point in the same order as
+        points are stored in the ``point_support``.
 
         Returns
         -------
@@ -218,12 +242,14 @@ class PointSupport:
         return self.point_support[self.blocks_index_column]
 
     def get_points_array(self, block_id=None) -> np.ndarray:
-        """Method returns point coordinates and their values as a numpy array
+        """
+        Method returns point coordinates and their values as a numpy array
 
         Parameters
         ----------
         block_id : Any
-            Block for which points shuld be retrieved, if not given then all points are returned.
+            Block for which points should be retrieved, if not given then all
+            points are returned.
 
         Returns
         -------
@@ -231,14 +257,19 @@ class PointSupport:
             ((lon, lat, value))
         """
         if block_id is None:
-            return self.point_support[[self._lon_col_name, self._lat_col_name, self.value_column_name]].to_numpy(
-                dtype=np.float32
-            )
+            return self.point_support[
+                [self._lon_col_name,
+                 self._lat_col_name,
+                 self.value_column_name]].to_numpy(dtype=np.float32)
         else:
-            ps = self.point_support[self.point_support[self.point_support_blocks_index_name] == block_id]
-            return ps[[self._lon_col_name, self._lat_col_name, self.value_column_name]].to_numpy(
-                dtype=np.float32
-            )
+            ps = self.point_support[
+                self.point_support[
+                    self.point_support_blocks_index_name] == block_id
+            ]
+            return ps[
+                [self._lon_col_name,
+                 self._lat_col_name,
+                 self.value_column_name]].to_numpy(dtype=np.float32)
 
     def point_support_totals(self, blocks: Iterable):
         """
@@ -292,7 +323,9 @@ class PointSupport:
             ``[lon, lat, point-support-value, point-geometry, block-index]``
         """
         # Transform CRS
-        point_support, blocks = self._transform_crs(points, blocks, use_point_support_crs)
+        point_support, blocks = self._transform_crs(
+            points, blocks, use_point_support_crs
+        )
 
         # Merge data
         joined = gpd.sjoin(point_support, blocks.ds, how='left')
@@ -306,7 +339,7 @@ class PointSupport:
 
         # Clean data
         joined.dropna(inplace=True)
-        # TODO: what if name is None?
+        # TODO: what if the name is None?
 
         joined = self._get_index_geom_val_columns(
             df=joined,
@@ -322,39 +355,69 @@ class PointSupport:
         joined[self._lat_col_name] = lat
 
         # Get total sum of point support values for every block
-        totals = joined[[self.point_support_blocks_index_name, self.value_column_name]].groupby(
-            self.point_support_blocks_index_name
-        ).sum()
+        totals = joined[
+            [self.point_support_blocks_index_name, self.value_column_name]
+        ].groupby(self.point_support_blocks_index_name).sum()
 
-        totals.rename(columns={self.value_column_name: self._total_ps_column_name}, inplace=True)
+        totals.rename(
+            columns={self.value_column_name: self._total_ps_column_name},
+            inplace=True
+        )
         totals.reset_index(inplace=True)
 
-        joined = pd.merge(joined, totals, how="left", on=self.point_support_blocks_index_name)
+        joined = pd.merge(joined,
+                          totals,
+                          how="left",
+                          on=self.point_support_blocks_index_name)
 
         # Set attributes
         return joined
 
-    def _total_point_support_value(self, block_id):
+    def _total_point_support_value(self,
+                                   block_id: Union[Hashable, str]) -> float:
         """
         Function returns total point support value for a given block.
 
         Parameters
         ----------
-        block_id :
+        block_id : Union[Hashable, str]
+            Unique block identifier.
 
         Returns
         -------
         : float
+            Total point support value for a given block.
         """
         ds = self.point_support[
-            self.point_support[self.point_support_blocks_index_name] == block_id
-            ][self._total_ps_column_name].iloc[0]
+            self.point_support[
+                self.point_support_blocks_index_name
+            ] == block_id][self._total_ps_column_name].iloc[0]
         return float(ds)
 
     @staticmethod
-    def _transform_crs(points: gpd.GeoDataFrame,
-                       blocks: Blocks,
-                       use_point_support_crs: bool) -> Tuple[gpd.GeoDataFrame, Blocks]:
+    def _transform_crs(
+            points: gpd.GeoDataFrame,
+            blocks: Blocks,
+            use_point_support_crs: bool) -> Tuple[gpd.GeoDataFrame, Blocks]:
+        """
+        Harmonizes projections of the blocks and point support.
+
+        Parameters
+        ----------
+        points : GeoDataFrame
+            Point support data.
+
+        blocks : Blocks
+            Blocks data.
+
+        use_point_support_crs : bool
+            Should the point support CRS be used instead of blocks CRS?
+
+        Returns
+        -------
+        : (GeoDataFrame, Blocks)
+            Point support and blocks with the same projection.
+        """
         if use_point_support_crs:
             if blocks.ds.crs != points.crs:
                 blocks.transform_crs(points.crs)
@@ -397,7 +460,9 @@ class PointSupport:
         df = df[joined_cols].copy()
 
         if self.blocks_index_column is None:
-            df = df.rename(columns={'index_right': self._default_blocks_index_column_name})
+            df = df.rename(
+                columns={'index_right': self._default_blocks_index_column_name}
+            )
             self.point_support_blocks_index_name = self._default_blocks_index_column_name
         else:
             self.point_support_blocks_index_name = self.blocks_index_column
@@ -412,5 +477,7 @@ class PointSupport:
         -------
         : numpy array
         """
-        unique_blocks = self.point_support[self.point_support_blocks_index_name].unique()
+        unique_blocks = self.point_support[
+            self.point_support_blocks_index_name
+        ].unique()
         return unique_blocks
