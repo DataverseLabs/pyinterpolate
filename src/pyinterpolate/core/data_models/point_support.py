@@ -15,31 +15,34 @@ class PointSupport:
     Parameters
     ----------
     points: gpd.GeoDataFrame
-        Point support data, it should have geometry (Point) column and value
-        column.
+        Point support data, it should have geometry (Point)
+        column and value column.
 
     blocks: Blocks
         ``Blocks`` object with polygons data.
 
     points_value_column: str
-        The name of the point-support column with points values
-        (e.g. population).
+        The name of the point-support column with points
+        values (e.g. population).
 
     points_geometry_column: str
-        The name of the point-support column with a geometry.
+        The name of the point-support column with a
+        geometry.
 
     store_dropped_points: bool = False
-        Should object store points which weren't joined with blocks?
+        Should object store points which weren't joined
+        with blocks?
 
     use_point_support_crs: bool = False
-        Should object use point support CRS instead of blocks CRS? Both CRS
-        are projected into the same projection, and this
-        parameter decides into which CRS the data should be reprojected.
+        Should object use point support CRS instead of
+        blocks CRS? Both CRS are projected into the same
+        projection, and this parameter decides into which
+        CRS the data should be reprojected.
 
     no_possible_neighbors : int, default = 0
-        The maximum number of the closest blocks used for the calculation of
-        distances between point support coordinates. Default 0 indicates
-        that all blocks are used.
+        The maximum number of the closest blocks used for
+        the calculation of distances between point support
+        coordinates. Default 0 indicates that all blocks are used.
 
     verbose: bool = True
         Information about the progress of the calculations.

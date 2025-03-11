@@ -28,23 +28,27 @@ class ExperimentalVariogramModel(BaseModel):
         Direction of the experimental variogram.
 
     tolerance : float, optional
-        If ``tolerance`` is 0 then points must be placed at a single
-        line with the beginning in the origin of the coordinate system and
-        the direction given by y-axis and direction parameter.
-        If ``tolerance`` is ``> 0`` then the bin is selected as
-        an elliptical area with major axis pointed in
-        the same direction as the line for ``0`` tolerance.
+        If ``tolerance`` is 0 then points must be placed at
+        a single line with the beginning in the origin
+        of the coordinate system and the direction given by
+        y-axis and direction parameter.
+        If ``tolerance`` is ``> 0`` then the bin is
+        selected as an elliptical area with major axis
+        pointed in the same direction as the line for
+        ``0`` tolerance.
 
         * The major axis size == ``step_size``.
         * The minor axis size is ``tolerance * step_size``
         * The baseline point is at a center of the ellipse.
-        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
+        * The ``tolerance == 1`` creates an omnidirectional
+          semivariogram.
 
     max_range : float, optional
         Maximum range of the experimental variogram.
 
     step_size : float, optional
-        Step size in the experimental variogram (for evenly-spaced lags).
+        Step size in the experimental variogram
+        (for evenly-spaced lags).
 
     custom_weights : numpy array, optional
         Custom weights for the experimental semivariances.

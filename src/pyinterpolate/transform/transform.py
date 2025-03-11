@@ -33,7 +33,8 @@ def parse_point_support_distances_array(distances: np.ndarray,
 
     if ldist != mult_len:
         raise AttributeError(
-            "Distances length is different than the quotient of both points arrays length!"
+            "Distances length is different than the quotient of both "
+            "points arrays length!"
         )
 
     a_values_arr = np.repeat(values_a, blen)
