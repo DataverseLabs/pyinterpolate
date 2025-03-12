@@ -151,7 +151,8 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
     Returns
     -------
     : DataFrame
-        Columns:
+        Columns representing: other blocks, points, values, distances,
+        angles, core block index.
     """
 
     if blocks_indexes is None:

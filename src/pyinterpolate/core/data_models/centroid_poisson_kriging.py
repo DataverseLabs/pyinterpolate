@@ -156,7 +156,8 @@ class CentroidPoissonKrigingInput:
     ...     'value_column_name': PS_VALUES,
     ...     'geometry_column_name': PS_GEOMETRY
     ... }
-    >>> block = Blocks(**CANCER_DATA)
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
     >>>
     >>> PS = PointSupport(
     ...     points=POINT_SUPPORT_DATA['ps'],
