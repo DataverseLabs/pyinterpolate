@@ -8,7 +8,9 @@ from pydantic import field_validator, BaseModel, ConfigDict
 
 
 class RawPoints(BaseModel):
-    """Class represents points prepared for Experimental Variogram estimation"""
+    """
+    Class represents points prepared for Experimental Variogram estimation
+    """
     model_config = ConfigDict(
         arbitrary_types_allowed=True
     )
@@ -47,12 +49,16 @@ class RawPoints(BaseModel):
 
 
 class VariogramPoints:
-    """Class represents points prepared for Experimental Variogram estimation and
-    transformed to numpy array.
+    """
+    Class represents points prepared for Experimental Variogram estimation
+    and transformed to numpy array.
     """
 
     def __init__(self,
-                 points: Union[List, Tuple, ndarray, GeoDataFrame, GeoSeries, DataFrame]):
+                 points: Union[
+                     List, Tuple, ndarray, GeoDataFrame, GeoSeries, DataFrame
+                 ]
+                 ):
 
         # validate
         self.points = cast(RawPoints, points)
