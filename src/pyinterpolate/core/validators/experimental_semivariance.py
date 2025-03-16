@@ -118,7 +118,7 @@ def validate_direction_and_tolerance(direction, tolerance):
 def validate_semivariance_weights(points: ArrayLike, weights: ArrayLike):
     """
     Validates custom weights array.
-    
+
     Parameters
     ----------
     points : ArrayLike
