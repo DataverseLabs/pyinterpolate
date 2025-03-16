@@ -35,7 +35,9 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
                   raise_when_negative_error=True,
                   verbose=True) -> gpd.GeoDataFrame:
     """
-    Function filters block data using Poisson Kriging.
+    Function filters block data using Poisson Kriging. By filtering we
+    understand computing aggregated values again using point support data
+    for ratios regularization.
 
     Parameters
     ----------
@@ -43,6 +45,7 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
         The fitted variogram model.
 
     point_support : PointSupport
+        Blocks and their point supports.
 
     number_of_neighbors : int
         The minimum number of neighbours that potentially affect a block.
@@ -54,8 +57,8 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
           * ``'cb'``: Centroid-based Poisson Kriging.
 
     data_crs : str, default=None
-        Data crs, look into: https://geopandas.org/projections.html. If None given then returned
-        GeoDataFrame doesn't have a crs.
+        Data crs, look into: https://geopandas.org/projections.html.
+        If None given then returned GeoDataFrame doesn't have a crs.
 
     raise_when_negative_prediction : bool, default=True
         Raise error when prediction is negative.
@@ -69,7 +72,8 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
     Returns
     -------
     : GeoPandas GeoDataFrame
-        Regularized set of blocks: ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+        Regularized set of blocks:
+        ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
     """
 
     block_k = BlockPoissonKriging(
@@ -96,7 +100,8 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
                   raise_when_negative_error=True,
                   verbose=True) -> gpd.GeoDataFrame:
     """
-    Function smooths aggregated block values, and transform those into point support.
+    Function smooths aggregated block values, and transform those into
+    point support.
 
     Parameters
     ----------
@@ -104,13 +109,14 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
         The fitted variogram model.
 
     point_support : PointSupport
+        Blocks and their point supports.
 
     number_of_neighbors : int
         The minimum number of neighbours that potentially affect a block.
 
     data_crs : str, default=None
-        Data crs, look into: https://geopandas.org/projections.html. If None given then returned
-        GeoDataFrame doesn't have a crs.
+        Data crs, look into: https://geopandas.org/projections.html.
+        If ``None`` given then returned GeoDataFrame doesn't have a crs.
 
     raise_when_negative_prediction : bool, default=True
         Raise error when prediction is negative.
@@ -145,7 +151,8 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
 
 class BlockPoissonKriging:
     """
-    Area-to-Area, Area-to-Point, Centroid-based Poisson Kriging regularization.
+    Area-to-Area, Area-to-Point, or Centroid-based Poisson Kriging
+    regularization.
 
     Parameters
     ----------
@@ -153,6 +160,7 @@ class BlockPoissonKriging:
         The fitted variogram model.
 
     point_support : PointSupport
+        Blocks and their point supports.
 
     kriging_type : str, default='ata'
         A type of Poisson Kriging operation. Available methods:
@@ -185,8 +193,9 @@ class BlockPoissonKriging:
     Methods
     -------
     regularize()
-        Regularize blocks (you should use it for a data deconvolution - with Area-to-Point Poisson Kriging,
-        or for a data filtering - with Area-to-Area Poisson Kriging, or Centroid-based Poisson Kriging).
+        Regularize blocks (you should use it for data deconvolution -
+        with Area-to-Point Poisson Kriging, or for data filtering -
+        with Area-to-Area Poisson Kriging, or Centroid-based Poisson Kriging).
     """
 
     def __init__(self,
@@ -219,8 +228,9 @@ class BlockPoissonKriging:
                    raise_when_negative_prediction=True,
                    raise_when_negative_error=True):
         """
-        Function regularizes whole dataset and creates new values and error maps based on the kriging type. Function
-        does not predict unknown and missing values, areas with ``NaN`` values are skipped.
+        Function regularizes whole dataset and creates new values and error
+        maps based on the kriging type. Function does not predict unknown
+        areas and areas with missing values.
 
         Parameters
         ----------
@@ -228,8 +238,8 @@ class BlockPoissonKriging:
             The minimum number of neighbours that potentially affect a block.
 
         data_crs : str, default=None
-            Data crs, look into: https://geopandas.org/projections.html. If None given then returned
-            GeoDataFrame doesn't have a crs.
+            Data crs, look into: https://geopandas.org/projections.html.
+            If ``None`` given then returned GeoDataFrame doesn't have a crs.
 
         raise_when_negative_prediction : bool, default=True
             Raise error when prediction is negative.
@@ -240,7 +250,8 @@ class BlockPoissonKriging:
         Returns
         -------
         regularized : gpd.GeoDataFrame
-            Regularized set of blocks: ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+            Regularized set of blocks:
+            ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
         """
         t_start = time.perf_counter()
 
@@ -248,10 +259,12 @@ class BlockPoissonKriging:
 
         interpolation_results = []
         for block_id in tqdm(block_ids, disable=self._disable_tqdm_bar):
-            prediction_dict = self._interpolate(uid=block_id,
-                                                n_neighbours=number_of_neighbors,
-                                                pred_raise=raise_when_negative_prediction,
-                                                err_raise=raise_when_negative_error)
+            prediction_dict = self._interpolate(
+                uid=block_id,
+                n_neighbours=number_of_neighbors,
+                pred_raise=raise_when_negative_prediction,
+                err_raise=raise_when_negative_error
+            )
 
             interpolation_results.extend(
                 self._parse_results(
@@ -270,6 +283,22 @@ class BlockPoissonKriging:
         return gdf
 
     def _check_given_kriging_type(self, k_type):
+        """
+        Checks if users provided correct kriging type.
+
+        Parameters
+        ----------
+        k_type : str
+            A type of Poisson Kriging operation. Available methods:
+              * ``'ata'``: Area-to-Area Poisson Kriging.
+              * ``'atp'``: Area-to-Point Poisson Kriging.
+              * ``'cb'``: Centroid-based Poisson Kriging.
+
+        Returns
+        -------
+        : str
+            Kriging Type.
+        """
         kriging_fns = ['ata', 'atp', 'cb']
         if k_type not in kriging_fns:
             self._raise_wrong_kriging_type_error()
@@ -277,6 +306,33 @@ class BlockPoissonKriging:
         return k_type
 
     def _interpolate(self, uid, n_neighbours, pred_raise, err_raise) -> Dict:
+        """
+        Function interpolates block values using one of Poisson Kriging types.
+
+        Parameters
+        ----------
+        uid : Union[Hashable, str]
+            Block id - this block will be interpolated.
+
+        n_neighbours : int
+            Number of closest neighbors.
+
+        pred_raise : bool
+            Raise error when prediction is negative.
+
+        err_raise : bool
+            Raise error when prediction error is negative.
+
+        Returns
+        -------
+        : dict
+            For Area to Area Poisson Kriging and Centroid-based Poisson
+            Kriging function returns block index, prediction, error:
+            ``{"block_id": ..., "zhat": number, "sig": number}``.
+            For Area to Point Poisson Kriging function returns dictionary
+            with numpy array of predictions and errors:
+            ``{"block": [["x", "y", "zhat", "sig"], ...]}``
+        """
         # Model
         model_output = {}
 
@@ -309,35 +365,45 @@ class BlockPoissonKriging:
 
     def _parse_results(self, prediction: Dict):
         """
-        Function parses data to form: Regularized set of blocks: ['block id', 'geometry', 'reg.est', 'reg.err', 'rmse']
+        Function parses data to form: Regularized set of blocks:
+        ``['block id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
 
         Parameters
         ----------
-        prediction : Dict
-            For ATA and ATP: ``{"block_id", "zhat", "sig"}``.
-            For ATP: ``{"block_id": [["coordinate x", "coordinate y", "zhat", "sig"], ...]}``
+        prediction : dict
+            For ATA and ATP: ``{"block id", "zhat", "sig"}``.
+            For ATP: ``{"block id": [["x", "y", "zhat", "sig"], ...]}``
 
         Returns
         -------
         parsed_results : List
-                         [block id, point geometry, prediction, variance error, root mean squared error]
+            Block id, point geometry, prediction, variance error,
+            root mean squared error.
         """
 
         if self.kriging_type == 'ata' or self.kriging_type == 'cb':
 
             uid = prediction['block_id']
-            block_real_value = self.point_support.blocks.block_real_value(block_id=uid)
-            block_coordinates = self.point_support.blocks.block_coordinates(block_id=uid)
-            rmse = root_mean_squared_error(prediction['zhat'], block_real_value)
+            block_real_value = self.point_support.blocks.block_real_value(
+                block_id=uid
+            )
+            block_coordinates = self.point_support.blocks.block_coordinates(
+                block_id=uid
+            )
+            rmse = root_mean_squared_error(prediction['zhat'],
+                                           block_real_value)
 
             parsed_results = [
                 [
-                    uid, block_coordinates, prediction['zhat'], prediction['sig'], rmse
+                    uid, block_coordinates,
+                    prediction['zhat'],
+                    prediction['sig'],
+                    rmse
                 ]
             ]
             return parsed_results
         elif self.kriging_type == 'atp':
-            # ``{"block_id": [["coordinate x", "coordinate y", "zhat", "sig"], ...]}``
+            # ``{"block_id": [["x", "y", "zhat", "sig"], ...]}``
             uid = list(prediction.keys())[0]
             vals = prediction[uid]
 
@@ -351,20 +417,33 @@ class BlockPoissonKriging:
         else:
             self._raise_wrong_kriging_type_error()
 
-    def _update_stats(self, gdf, t_end):
-        self.statistics['time (s)'] = t_end
+    def _update_stats(self, gdf, t_delta):
+        """
+        Function updates ``statistics`` dictionary with processing time and RMSE.
+
+        Parameters
+        ----------
+        gdf : GeoDataFrame
+            Columns = ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+
+        t_delta : float
+            Time in seconds how long regularization has taken.
+        """
+        self.statistics['time (s)'] = t_delta
         self.statistics['RMSE'] = np.mean(gdf['rmse'])
 
         if not self._disable_tqdm_bar:
-            print(f'Processing time: {t_end} seconds')
+            print(f'Processing time: {t_delta} seconds')
             print(
                 f'Average RMSE '
-                f'(valid only for area-to-area and centroid-based Poisson Kriging: {self.statistics["RMSE"]}'
+                f'(valid only for area-to-area and centroid-based '
+                f'Poisson Kriging: {self.statistics["RMSE"]}'
             )
 
     @staticmethod
     def _raise_wrong_kriging_type_error():
-        l1 = 'Provided argument is not correct. You must choose kriging type.\n'
+        l1 = ('Provided argument is not correct. '
+              'You must choose kriging type.\n')
         l2 = "'ata' - area to area Poisson Kriging,\n"
         l3 = "'atp' - area to point Poisson Kriging,\n."
         l4 = "'cb' - centroid-based Poisson Kriging."
@@ -372,7 +451,25 @@ class BlockPoissonKriging:
         raise KeyError(message)
 
     @staticmethod
-    def _to_gdf(list_of_results, crs):
+    def _to_gdf(list_of_results, crs=None):
+        """
+        Function transforms list of results into GeoDataFrame.
+
+        Parameters
+        ----------
+        list_of_results : list
+            Block id, point geometry, prediction, variance error,
+            root mean squared error.
+
+        crs : str, optional
+            Data crs, look into: https://geopandas.org/projections.html.
+            If None given then returned GeoDataFrame doesn't have a crs.
+
+        Returns
+        -------
+        : GeoDataFrame
+            Columns = ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+        """
         gdf = gpd.GeoDataFrame(list_of_results)
         gdf.columns = ['id', 'geometry', 'reg.est', 'reg.err', 'rmse']
         gdf.geometry = gdf['geometry']

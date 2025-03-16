@@ -6,6 +6,9 @@ from pyinterpolate.core.data_models.experimental_variogram import ExperimentalVa
 
 
 class SemivariogramErrorsModel(BaseModel):
+    """
+    Error types used for automatic fitting of semivariogram models.
+    """
     bias: Optional[float] = None
     mae: Optional[float] = None
     rmse: Optional[float] = None
