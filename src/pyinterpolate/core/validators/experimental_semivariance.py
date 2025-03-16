@@ -1,14 +1,39 @@
+from numpy.typing import ArrayLike
 from pyinterpolate.core.validators.experimental_semivariance_warnings import \
     AttributeSetToFalseWarning
 
 
-def validate_plot_attributes_for_experimental_variogram(
+def _validate_plot_attributes_for_experimental_variogram(
         is_semivar: bool,
         is_covar: bool,
         plot_semivar: bool,
         plot_covar: bool
 ):
+    """
+    Function checks if users plots requests are valid - semivariance and
+    covariance must be calculated first.
 
+    Parameters
+    ----------
+    is_semivar : bool
+        Is semivariance calculated?
+
+    is_covar : bool
+        Is covariance calculated?
+
+    plot_semivar : bool
+        Does user want to plot semivariance?
+
+    plot_covar : bool
+        Does user want to plot covariance?
+
+    Warns
+    -----
+    AttributeSetToFalseWarning :
+        If user wants to plot semivariance or covariance, but they are not
+        calculated yet then plotting is stopped and the warning is raised.
+
+    """
     validation = {}
 
     semivar_test = (is_semivar is False) and (plot_semivar is True)
@@ -30,8 +55,16 @@ def validate_bins(step_size, max_range, custom_bins):
     Parameters
     ----------
     step_size : float
+
     max_range : float
+
     custom_bins : Iterable
+
+    Raises
+    ------
+    ValueError :
+        At least ``step_size`` and ``max_range`` parameters or ``custom_bins``
+        parameter must be provided.
     """
     if step_size is None and max_range is None:
         if custom_bins is None:
@@ -52,6 +85,11 @@ def validate_direction_and_tolerance(direction, tolerance):
     tolerance : float, optional
         Parameter that defines the shape of the bin, within limits (0:1].
 
+    Raises
+    ------
+    ValueError :
+        If direction is not in range -360:360 or tolerance is not in range
+        (0:1], or direction is set and tolerance is not set, or vice versa.
     """
     if direction is not None and tolerance is not None:
 
@@ -77,9 +115,25 @@ def validate_direction_and_tolerance(direction, tolerance):
                 raise ValueError(msg)
 
 
-def validate_semivariance_weights(points, weights):
+def validate_semivariance_weights(points: ArrayLike, weights: ArrayLike):
     """
-    Check if custom_weights array length is the same as points array.
+    Validates custom weights array.
+    
+    Parameters
+    ----------
+    points : ArrayLike
+        Array of points used for experimental semivariogram calculations.
+
+    weights : ArrayLike
+        Custom weights assigned to points.
+
+    Raises
+    ------
+    IndexError :
+        If custom weights array length is different than points array length.
+
+    ValueError :
+        If one or more custom weights are set to 0.
     """
     if weights is not None:
         len_p = len(points)

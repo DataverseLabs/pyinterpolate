@@ -8,7 +8,7 @@ from pyinterpolate.core.data_models.experimental_variogram import \
     ExperimentalVariogramModel
 from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.core.validators.experimental_semivariance import \
-    validate_plot_attributes_for_experimental_variogram
+    _validate_plot_attributes_for_experimental_variogram
 from pyinterpolate.semivariogram.experimental.experimental_semivariogram import \
     point_cloud_semivariance, calculate_semivariance
 
@@ -207,7 +207,7 @@ class ExperimentalVariogram:
         import matplotlib.pyplot as plt
 
         # Validate parameters
-        validate_plot_attributes_for_experimental_variogram(
+        _validate_plot_attributes_for_experimental_variogram(
             is_semivar=self.__c_sem,
             is_covar=self.__c_cov,
             plot_semivar=semivariance,
