@@ -5,7 +5,7 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union
+from typing import Dict, Union, Hashable
 
 import geopandas as gpd
 import numpy as np
@@ -13,24 +13,31 @@ import pandas as pd
 from tqdm import tqdm
 
 
-def _calc_b2b_dist_from_dataframe(blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
-                                  lon, lat, val, bidx, verbose=False) -> pd.DataFrame:
-    r"""Function calculates distances between blocks.
+def _calc_b2b_dist_from_dataframe(
+        blocks: Union[pd.DataFrame, gpd.GeoDataFrame],
+        lon: Union[str, Hashable],
+        lat: Union[str, Hashable],
+        val: Union[str, Hashable],
+        bidx: Union[str, Hashable],
+        verbose=False
+) -> pd.DataFrame:
+    r"""Function calculates distances between blocks when blocks are
+    DataFrames.
 
     Parameters
     ----------
     blocks : Union[pd.DataFrame, gpd.GeoDataFrame]
 
-    lon
+    lon : Union[str, Hashable]
         Longitude or x coordinate.
 
-    lat
+    lat : Union[str, Hashable]
         Latitude or y coordinate.
 
-    val
+    val : Union[str, Hashable]
         The point support values column.
 
-    bidx
+    bidx : Union[str, Hashable]
         Column with block names / indexes.
 
     verbose : bool, default = False
