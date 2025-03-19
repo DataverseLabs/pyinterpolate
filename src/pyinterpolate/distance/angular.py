@@ -6,22 +6,22 @@ from numpy.typing import ArrayLike
 from scipy.linalg import fractional_matrix_power
 
 
-def build_mask_indices(coordinates: np.ndarray, edges: List):
+def build_mask_indices(coordinates: np.ndarray, vertices: List):
     """
-    Function builds masks for every lag and every point.
+    Function builds masks for points within edges forming triangles.
 
     Parameters
     ----------
     coordinates : numpy array
         Masked points.
 
-    edges : List
+    vertices : List
         Triangle edges.
 
     Returns
     -------
     : List
-        List of length ``len(edges)`` with point-indices.
+        List of length ``edges`` with point-indices.
     """
 
     # Create boolean mask for each lag and coordinate and get True indices
@@ -31,7 +31,7 @@ def build_mask_indices(coordinates: np.ndarray, edges: List):
 
         point_masks = []
 
-        trs = edges[lag_idx]
+        trs = vertices[lag_idx]
         for tr in trs:
             mask = triangle_mask(
                 triangle_1=tr[0],
@@ -42,21 +42,9 @@ def build_mask_indices(coordinates: np.ndarray, edges: List):
 
         indices.append([lag_idx, point_masks])
 
-    # threads = []
-    # for idx in range(len(edges)):
-    #     thread = threading.Thread(
-    #         target=_get,
-    #         args=(idx,)
-    #     )
-    #     thread.start()
-    #     threads.append(thread)
-    #
-    # for thread in threads:
-    #     thread.join()
-
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
-        for idx in range(len(edges)):
+        for idx in range(len(vertices)):
             futures.append(
                 executor.submit(
                     _get, idx
@@ -76,9 +64,12 @@ def build_mask_indices(coordinates: np.ndarray, edges: List):
     return indices
 
 
-def calc_angles_between_points(vec1, vec2, flatten_output: bool = True):
+def calc_angles_between_points(vec1: np.ndarray,
+                               vec2: np.ndarray,
+                               flatten_output: bool = True) -> np.ndarray:
     """
-    Function calculates distances between two groups of points as their cross product.
+    Function calculates distances between two groups of points as their cross
+    product.
 
     Parameters
     ----------
@@ -94,8 +85,9 @@ def calc_angles_between_points(vec1, vec2, flatten_output: bool = True):
     Returns
     -------
     angles : numpy array
-        An array with angles between all points from ``vec1`` to all points from ``vec2``, where rows are angles between
-         points from ``vec1`` to points from ``vec2`` (columns).
+        An array with angles between all points from ``vec1`` to all
+        points from ``vec2``, where rows are angles between
+        points from ``vec1`` to points from ``vec2`` (columns).
     """
     angles = []
 
@@ -111,10 +103,13 @@ def calc_angles_between_points(vec1, vec2, flatten_output: bool = True):
     return angles
 
 
-def calc_angles(points_b: ArrayLike, point_a: ArrayLike = None, origin: ArrayLike = None):
+def calc_angles(points_b: ArrayLike,
+                point_a: ArrayLike = None,
+                origin: ArrayLike = None) -> np.ndarray:
     """
-    Function calculates angles between points and origin or between vectors from origin to points and a vector from
-    a specific point to origin.
+    Function calculates angles between points and origin or between
+    vectors from origin to points and a vector from a specific point to
+    origin.
 
     Parameters
     ----------
@@ -130,8 +125,8 @@ def calc_angles(points_b: ArrayLike, point_a: ArrayLike = None, origin: ArrayLik
     Returns
     -------
     angles : numpy array
-        Angles from the ``points_b`` to origin, or angles between vectors ``points_b`` to origin and ``point_a``
-        to origin.
+        Angles from the ``points_b`` to origin, or angles between vectors
+        ``points_b`` to origin and ``point_a`` to origin.
     """
 
     if origin is None:
@@ -154,21 +149,25 @@ def calc_angles(points_b: ArrayLike, point_a: ArrayLike = None, origin: ArrayLik
     return angles
 
 
-def calculate_angular_difference(angles: np.ndarray, expected_direction: float) -> np.ndarray:
+def calculate_angular_difference(angles: np.ndarray,
+                                 expected_direction: float) -> np.ndarray:
     """
-    Function calculates minimal direction between one vector and other vectors.
+    Function calculates difference between an angle given by vector crossing
+    origin and location coordinates and expected direction of directional
+    variogram.
 
     Parameters
     ----------
     angles : numpy array
-        The array with the direction to the origin of each point.
+        Angles between vectors from origin to points and x-axis on cartesian
+        plane.
 
     expected_direction : float
         The variogram direction in degrees.
 
     Returns
     -------
-    angular_distances : numpy array
+    normalized_angular_diffs : numpy array
         Minimal direction from ``expected_direction`` to other angles.
     """
 
@@ -181,14 +180,15 @@ def calculate_angular_difference(angles: np.ndarray, expected_direction: float) 
     deg_norm_a = np.abs(np.rad2deg(norm_a % (2 * np.pi)))
     norm_b = expected_direction_rad - r_angles
     deg_norm_b = np.abs(np.rad2deg(norm_b % (2 * np.pi)))
-    normalized_angular_dists = np.minimum(deg_norm_a, deg_norm_b)
+    normalized_angular_diffs = np.minimum(deg_norm_a, deg_norm_b)
 
-    return normalized_angular_dists
+    return normalized_angular_diffs
 
 
 def clean_mask_indices(indices: List):
     """
-    Function cleans higher-lag masks.
+    Function cleans a lag masks from the previous lags masks in the same
+    location.
 
     Parameters
     ----------
@@ -218,27 +218,15 @@ def clean_mask_indices(indices: List):
     return cleaned_masks
 
 
-def create_triangles_mask(old_mask, new_mask):
-    mask = []
-    for idx, val in enumerate(new_mask):
-        if old_mask[idx]:
-            mask.append(False)
-        else:
-            if val:
-                mask.append(True)
-            else:
-                mask.append(False)
-    return mask
-
-
-def define_whitening_matrix(theta: float, minor_axis_size: float):
+def define_whitening_matrix(theta: float,
+                            minor_axis_size: float) -> np.ndarray:
     """
     Function defines whitening matrix.
 
     Parameters
     ----------
     theta : float
-        Angle from y axis counterclockwise (W-E is a 0).
+        Angle from y-axis counterclockwise (W-E is a 0).
 
     minor_axis_size : float
         Fraction of the major axis size.
@@ -262,11 +250,42 @@ def define_whitening_matrix(theta: float, minor_axis_size: float):
     return w_matrix
 
 
+def filter_triangles_mask(old_mask, new_mask) -> np.array:
+    """
+    Function checks masks with larger radius to filter values that are set to
+    be a mask in the lag-1 from values that are set to be a mask in the lag+0.
+
+    Parameters
+    ----------
+    old_mask : numpy array
+        Boolean mask for the previous lag.
+
+    new_mask : numpy array
+        Boolean mask for the current lag.
+
+    Returns
+    -------
+    : numpy array
+        New boolean mask (XOR ops).
+    """
+    mask = []
+    for idx, val in enumerate(new_mask):
+        if old_mask[idx]:
+            mask.append(False)
+        else:
+            if val:
+                mask.append(True)
+            else:
+                mask.append(False)
+    return np.array(mask)
+
+
 def generate_triangles(points: np.ndarray,
                        step_size: float,
                        angle: float,
                        tolerance: float) -> List:
-    """Function creates triangles to select points within.
+    """
+    Function creates triangles to select points within.
 
     Parameters
     ----------
@@ -312,17 +331,20 @@ def generate_triangles(points: np.ndarray,
         points, angle - rot_90, base_width
     )
 
-    triangles = _clean_triangle_coordinates(apex=apex,
-                                            inv_apex=inv_apex,
-                                            base_a=base_a,
-                                            base_b=base_b)
+    triangles = _prepare_triangle_coordinates(apex=apex,
+                                              inv_apex=inv_apex,
+                                              base_a=base_a,
+                                              base_b=base_b)
 
     return triangles
 
 
-def get_triangles_edges(coordinates, lags, direction, tolerance):
+def get_triangles_vertices(coordinates: ArrayLike,
+                           lags: ArrayLike,
+                           direction: float,
+                           tolerance: float) -> List:
     """
-    Function creates a dictionary with masks.
+    Function creates a dictionary with triangle masks coordinates.
 
     Parameters
     ----------
@@ -330,6 +352,7 @@ def get_triangles_edges(coordinates, lags, direction, tolerance):
         List of coordinates.
 
     lags : Ordered Collection
+        List of ordered lags.
 
     direction : float
         The direction of a variogram.
@@ -339,8 +362,8 @@ def get_triangles_edges(coordinates, lags, direction, tolerance):
 
     Returns
     -------
-    : dict
-        Masks for each lag.
+    : List
+        Masks for each lag, in the same order as lags.
     """
     t_masks = [generate_triangles(coordinates,
                                   h,
@@ -352,7 +375,7 @@ def get_triangles_edges(coordinates, lags, direction, tolerance):
 def select_points_within_triangle(triangle: Tuple,
                                   points: np.ndarray) -> np.ndarray:
     """
-    Function selects points within a triangle.
+    Function selects points inside a triangle defined as its veritces.
 
     Parameters
     ----------
@@ -391,11 +414,13 @@ def select_points_within_ellipse(ellipse_center: np.array,
                                  lag: float,
                                  step_size: float,
                                  w_matrix: np.ndarray) -> np.array:
-    """Function checks which points from other points are within the point
-    range described as an ellipse with center in the point, the semi-major axis
-    of the ``step_size`` length, and the semi-minor axis of length
-    ``step_size * tolerance``. The direction angle of semi-major starts from
-    W-E axis (0 radian direction) and goes counterclockwise.
+    """
+    Function checks which points from other points are within the point
+    range described as an ellipse with center in the point, the semi-major
+    axis of the ``step_size`` length, and the semi-minor axis of length
+    ``step_size * tolerance``. The direction angle of semi-major axis
+    starts from W-E direction, x-axis on the cartesian plane, and goes
+    counterclockwise.
 
     Parameters
     ----------
@@ -406,6 +431,7 @@ def select_points_within_ellipse(ellipse_center: np.array,
         Array with points for which distance is calculated.
 
     lag : float
+        Lag distance.
 
     step_size : float
         Step size between lags.
@@ -468,20 +494,84 @@ def triangle_mask(triangle_1: Tuple,
     return mask
 
 
-def _calc_angle_between_points(v1, v2, origin):
-    ang1 = np.arctan2(v1[1] - origin[1], v1[0] - origin[0])
-    ang2 = np.arctan2(v2[:, 1] - origin[1], v2[:, 0] - origin[0])
+def _calc_angle_between_points(coor1: ArrayLike,
+                               coor2: ArrayLike,
+                               origin: ArrayLike) -> float:
+    """
+    Calculates angle between two vectors, both starting in the same point
+    but crossing other coordinates.
+
+    Parameters
+    ----------
+    coor1 : ArrayLike
+        Coordinates of the first point.
+
+    coor2 : ArrayLike
+        Coordinates of the second point.
+
+    origin : ArrayLike
+        Coordinates of origin (usually x=0, y=0)
+
+    Returns
+    -------
+    : float
+        Angle between two vectors.
+    """
+    ang1 = np.arctan2(coor1[1] - origin[1], coor1[0] - origin[0])
+    ang2 = np.arctan2(coor2[:, 1] - origin[1], coor2[:, 0] - origin[0])
     return np.rad2deg((ang1 - ang2) % (2 * np.pi))
 
 
-def _calc_angle_from_origin(vec, origin):
-    ys = vec[:, 1] - origin[1]
-    xs = vec[:, 0] - origin[0]
+def _calc_angle_from_origin(coor: ArrayLike, origin: ArrayLike) -> float:
+    """
+    Calculates angle between vector starting from origin and crossing point
+    and x-axis on the cartesian plane.
+
+    Parameters
+    ----------
+    coor : ArrayLike
+        Coordinates of the first point.
+
+    origin : ArrayLike
+        Coordinates of origin (usually x=0, y=0)
+
+    Returns
+    -------
+    : float
+        Angle between line and x-axis.
+    """
+    ys = coor[:, 1] - origin[1]
+    xs = coor[:, 0] - origin[0]
     ang = np.arctan2(ys, xs)
     return np.rad2deg(ang % (2 * np.pi))
 
 
-def _clean_triangle_coordinates(apex, inv_apex, base_a, base_b) -> List:
+def _prepare_triangle_coordinates(apex: ArrayLike,
+                                  inv_apex: ArrayLike,
+                                  base_a: ArrayLike,
+                                  base_b: ArrayLike) -> List:
+    """
+    Function prepares triangle/mask vertices.
+
+    Parameters
+    ----------
+    apex : ArrayLike
+        Vertex.
+
+    inv_apex : ArrayLike
+        Vertex of the inverted triangle.
+
+    base_a : ArrayLike
+        First base vertex.
+
+    base_b : ArrayLike
+        Second base vertex.
+
+    Returns
+    -------
+    : List
+        Triangular masks.
+    """
     triangles = []
     for idx, vertex in enumerate(apex):
         triangle = (
@@ -528,7 +618,8 @@ def _rotate_and_translate(points, angle, distance):
 
 
 def _rotation_matrix(angle: float) -> np.array:
-    """Function builds rotation matrix.
+    """
+    Function builds rotation matrix.
 
     Parameters
     ----------
@@ -551,8 +642,9 @@ def _select_ellipse_distances(distances_array: np.array,
                               weighting_matrix: np.array,
                               lag: float,
                               step_size: float) -> np.array:
-    """Function mutiplies each point from the distances array with
-    a weighting matrix to check if point is within the ellipse.
+    """
+    Function mutiplies each point from the distances array with
+    the weighting matrix to check if point is within elliptical area.
 
     Parameters
     ----------

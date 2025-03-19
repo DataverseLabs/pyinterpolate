@@ -1,7 +1,7 @@
 import numpy as np
 
 from pyinterpolate.distance.angular import generate_triangles, \
-    create_triangles_mask, triangle_mask
+    filter_triangles_mask, triangle_mask
 
 
 def test_masking_xor_ops():
@@ -48,8 +48,8 @@ def test_masking_xor_ops():
         coordinates=coords
     )
 
-    mask = create_triangles_mask(old_mask=mask_a, new_mask=mask_b)
-    mask_2 = create_triangles_mask(old_mask=mask_b, new_mask=mask_c)
+    mask = filter_triangles_mask(old_mask=mask_a, new_mask=mask_b)
+    mask_2 = filter_triangles_mask(old_mask=mask_b, new_mask=mask_c)
 
     mask_xor = np.logical_xor(mask_a, mask_b)
     mask_xor_2 = np.logical_xor(mask_b, mask_c)

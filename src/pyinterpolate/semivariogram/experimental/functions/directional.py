@@ -3,7 +3,7 @@ from typing import Union, List, Callable, Tuple
 import numpy as np
 
 from pyinterpolate.distance.angular import select_points_within_ellipse, \
-    define_whitening_matrix, get_triangles_edges, \
+    define_whitening_matrix, get_triangles_vertices, \
     build_mask_indices, clean_mask_indices
 from pyinterpolate.semivariogram.lags.lags import get_current_and_previous_lag
 
@@ -172,7 +172,7 @@ def from_triangle(
     values_and_lags = []
 
     # Get all triangles instantly
-    tr_edges = get_triangles_edges(
+    tr_edges = get_triangles_vertices(
         coordinates=coordinates,
         lags=lags,
         direction=direction,
@@ -182,7 +182,7 @@ def from_triangle(
     # Build masks for every lag
     mask_indices = build_mask_indices(
         coordinates=coordinates,
-        edges=tr_edges
+        vertices=tr_edges
     )
 
     # Clean indices
@@ -244,7 +244,7 @@ def from_triangle_cloud(
     point_cloud = dict()
 
     # Get all triangles instantly
-    tr_edges = get_triangles_edges(
+    tr_edges = get_triangles_vertices(
         coordinates=coordinates,
         lags=lags,
         direction=direction,
@@ -254,7 +254,7 @@ def from_triangle_cloud(
     # Build masks for every lag
     mask_indices = build_mask_indices(
         coordinates=coordinates,
-        edges=tr_edges
+        vertices=tr_edges
     )
 
     # Clean indices

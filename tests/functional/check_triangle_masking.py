@@ -3,7 +3,7 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
-from pyinterpolate.distance.angular import create_triangles_mask, \
+from pyinterpolate.distance.angular import filter_triangles_mask, \
     generate_triangles, triangle_mask
 
 
@@ -45,8 +45,8 @@ def plot_points_within_triangle(other_points,
         coordinates=other_points
     )
 
-    mask = create_triangles_mask(old_mask=mask_a, new_mask=mask_b)
-    mask_2 = create_triangles_mask(old_mask=mask_b, new_mask=mask_c)
+    mask = filter_triangles_mask(old_mask=mask_a, new_mask=mask_b)
+    mask_2 = filter_triangles_mask(old_mask=mask_b, new_mask=mask_c)
 
     selected = other_points[mask]
     selected_2 = other_points[mask_2]

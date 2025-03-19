@@ -11,7 +11,7 @@ def semivariance_fn(v1, v2):
         1-Dimensional array with the points values of length N.
 
     v2 : numpy array
-        1-Dimensional array with the neighbors of points from ``v1`` of
+        1-Dimensional array with the neighbors of points from ``coor1`` of
         length N.
 
     Returns
