@@ -8,14 +8,16 @@ from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
 
 
-def validate_kriging(points: np.ndarray,
-                     theoretical_model: TheoreticalVariogram,
-                     how: str = 'ok',
-                     neighbors_range: Union[float, None] = None,
-                     no_neighbors: int = 4,
-                     use_all_neighbors_in_range=False,
-                     sk_mean: Union[float, None] = None,
-                     allow_approximate_solutions=False) -> Tuple[float, float, np.ndarray]:
+def validate_kriging(
+        points: np.ndarray,
+        theoretical_model: TheoreticalVariogram,
+        how: str = 'ok',
+        neighbors_range: Union[float, None] = None,
+        no_neighbors: int = 4,
+        use_all_neighbors_in_range=False,
+        sk_mean: Union[float, None] = None,
+        allow_approximate_solutions=False
+) -> Tuple[float, float, np.ndarray]:
     """
     Function performs cross-validation of kriging models.
 
@@ -30,27 +32,33 @@ def validate_kriging(points: np.ndarray,
     how : str, default='ok'
         Select what kind of kriging you want to perform:
           * 'ok': ordinary kriging,
-          * 'sk': simple kriging - if it is set then ``sk_mean`` parameter must be provided.
+          * 'sk': simple kriging - if it is set then ``sk_mean``
+            parameter must be provided.
 
     neighbors_range : float, default=None
-        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
+        The maximum distance where we search for neighbors. If ``None`` is
+        given then range is selected from
         the ``theoretical_model`` ``rang`` attribute.
 
     no_neighbors : int, default = 4
         The number of the **n-closest neighbors** used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
+        ``True``: if the real number of neighbors within
+        the ``neighbors_range`` is greater than the
         ``number_of_neighbors`` parameter then take all of them anyway.
 
     sk_mean : float, default=None
-        The mean value of a process over a study area. Should be know before processing. That's why Simple
-        Kriging has a limited number of applications. You must have multiple samples and well-known area to
+        The mean value of a process over a study area. Should be known
+        before processing. That's why Simple Kriging has a limited number
+        of applications. You must have multiple samples and well-known area to
         know this parameter.
 
     allow_approximate_solutions : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        Allows the approximation of kriging custom_weights based on
+        the OLS algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing. This parameter can be useful
+        when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
     Returns
@@ -58,13 +66,17 @@ def validate_kriging(points: np.ndarray,
     : Tuple
         Function returns tuple with:
           * Mean Prediction Error,
-          * Mean Kriging Error: ratio of variance of prediction errors to the average variance error of kriging,
-          * array with: ``[coordinate x, coordinate y, prediction error, kriging estimate error]``
+          * Mean Kriging Error: ratio of variance of prediction errors to
+            the average variance error of kriging,
+          * array with: ``[coordinate x, coordinate y, prediction error,
+                           kriging estimate error]``
 
     References
     ----------
-    1. Clark, I., (2004) “The Art of Cross Validation in Geostatistical Applications"
-    2. Clark I., (1979) "Does Geostatistics Work", Proc. 16th APCOM, pp.213.-225.
+    1. Clark, I., (2004) “The Art of Cross Validation in Geostatistical
+       Applications"
+    2. Clark I., (1979) "Does Geostatistics Work", Proc. 16th APCOM,
+       pp.213.-225.
     """
     # TODO:
     # Use (2) to calc Z-score
@@ -102,8 +114,11 @@ def validate_kriging(points: np.ndarray,
                 allow_approximate_solutions=allow_approximate_solutions
             )
         else:
-            raise KeyError(f'Allowed kriging types (parameter "how") are: "ok" - ordinary kriging,'
-                           f' and "sk" - simple kriging.')
+            raise KeyError(
+                'Allowed kriging types (parameter "how") are:'
+                ' "ok" - ordinary kriging,'
+                ' and "sk" - simple kriging.'
+            )
 
         prediction_error = row[-1] - preds[0]
 
