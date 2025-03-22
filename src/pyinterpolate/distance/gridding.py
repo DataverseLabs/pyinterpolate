@@ -5,7 +5,39 @@ import numpy as np
 import shapely.geometry
 
 
-def _define_box_step(lonlimit, latlimit, no_of_steps):
+def _define_box_step(lonlimit: float,
+                     latlimit: float,
+                     no_of_steps: int):
+    """
+    Function defines square grid size using difference between
+    maximum and minimum values of longitude and latitude. Function chooses
+    the smaller of the two differences and divides it by the number of steps
+    minus 1.
+
+    Parameters
+    ----------
+    lonlimit : float
+        Difference between maximum and minimum longitude values.
+        Must be positive.
+
+    latlimit : float
+        Difference between maximum and minimum latitude values.
+        Must be positive.
+
+    no_of_steps : int
+        How many squares should fill the space between smaller of the two
+        distances (lonlimit or latlimit)? Must be greater than 2.
+
+    Returns
+    -------
+
+    """
+
+    if no_of_steps < 2:
+        raise ValueError(
+            'Number of steps must be greater than 2.'
+        )
+
     if lonlimit < latlimit:
         step = lonlimit / (no_of_steps - 1)
     else:
@@ -13,7 +45,38 @@ def _define_box_step(lonlimit, latlimit, no_of_steps):
     return step
 
 
-def _define_hex_step(lonlimit, latlimit, no_of_steps):
+def _define_hex_step(lonlimit: float,
+                     latlimit: float,
+                     no_of_steps: float):
+    """
+    Function defines hexagonal grid size using difference between maximum
+    and minimum values of longitude and latitude. Function chooses the smaller
+    of the two differences and divides it by the number of steps minus 2.
+
+    Parameters
+    ----------
+    lonlimit : float
+        Difference between maximum and minimum longitude values.
+        Must be positive.
+
+    latlimit : float
+        Difference between maximum and minimum latitude values.
+        Must be positive.
+
+    no_of_steps : int
+        How many hexes should fill the space between smaller of the two
+        distances (lonlimit or latlimit)? Must be greater than 3.
+
+    Returns
+    -------
+
+    """
+
+    if no_of_steps < 3:
+        raise ValueError(
+            'Number of steps must be greater than 3.'
+        )
+
     if lonlimit < latlimit:
         step = lonlimit / (no_of_steps - 2)
     else:
@@ -28,14 +91,20 @@ def gen_hex_cells(min_lon, max_lon, min_lat, max_lat, step):
     Parameters
     ----------
     min_lon : float
+        Minimal longitude.
 
     max_lon : float
+        Maximum longitude.
 
     min_lat : float
+        Minimal latitude.
 
     max_lat : float
+        Maximum latitude.
 
     step : float
+        Parameter defining the size of the hexagon (two times distance from
+        the center to the vertex).
 
     Returns
     -------
@@ -44,8 +113,8 @@ def gen_hex_cells(min_lon, max_lon, min_lat, max_lat, step):
 
     References
     ----------
-    [1] Izan Pérez Cosano (Github @eperezcosano), How to draw a hexagonal grid on HTML Canvas
-    https://eperezcosano.github.io/hex-grid/
+    [1] Izan Pérez Cosano (Github @eperezcosano), How to draw a hexagonal
+    grid on HTML Canvas: https://eperezcosano.github.io/hex-grid/
     """
     grid = []
 
@@ -86,14 +155,19 @@ def gen_square_cells(min_lon, max_lon, min_lat, max_lat, step):
     Parameters
     ----------
     min_lon : float
+        Minimal longitude.
 
     max_lon : float
+        Maximum longitude.
 
     min_lat : float
+        Minimal latitude.
 
     max_lat : float
+        Maximum latitude.
 
     step : float
+        Length of a side of the square.
 
     Returns
     -------
@@ -113,7 +187,30 @@ def gen_square_cells(min_lon, max_lon, min_lat, max_lat, step):
     return grid
 
 
-def _gen_hexagon(x, y, r, a):
+def _gen_hexagon(x: float, y: float, r: float, a: float) -> list:
+    """
+    Function generates hexagon points (six vertices) based on the center and
+    the radius of the hexagon.
+
+    Parameters
+    ----------
+    x : float
+        Parameter defing the center of the hexagon.
+
+    y : float
+        Parameter defing the center of the hexagon.
+
+    r : float
+        Parameter defining the radius of the hexagon.
+
+    a : float
+        Parameter defining the angle between the center and the vertex.
+
+    Returns
+    -------
+    : list
+        Hexagon vertices.
+    """
     points = []
 
     for i in range(6):
@@ -130,23 +227,30 @@ def create_grid(ds: Union[np.ndarray, List, gpd.GeoSeries],
                 min_number_of_cells: int,
                 grid_type='box'):
     """
-    Function creates grid based on a set of points.
+    Function creates grid based on a set of coordinates.
 
     Parameters
     ----------
     ds : Union[np.ndarray, List, gpd.GeoSeries]
-        Data to be transformed, point coordinates [x, y] <-> [lon, lat] or GeoSeries with Point geometry.
+        Data to be transformed, point coordinates [x, y] <-> [lon, lat] or
+        GeoSeries with Point geometry.
 
     min_number_of_cells : int
         Expected number of cells in the smaller dimension.
 
-    grid_type : str, default = "square"
+    grid_type : str, default = "box"
         Available types: ``box``, ``hex``.
 
     Returns
     -------
     grid : gpd.GeoSeries
-        Empty grid that can be used to aggregate points. It is GeoSeries of Polygons (squares or hexes).
+        Empty grid that can be used to aggregate points. It is GeoSeries of
+        Polygons (squares or hexes).
+
+    Raises
+    ------
+    KeyError
+        If grid type is not recognized.
     """
 
     if min_number_of_cells < 3:
@@ -188,7 +292,8 @@ def create_grid(ds: Union[np.ndarray, List, gpd.GeoSeries],
             step=step
         )
     else:
-        raise KeyError('Unrecognized grid type, available types: "square" or "hex".')
+        raise KeyError('Unrecognized grid type, '
+                       'available types: "box" or "hex".')
 
     grid = gpd.GeoDataFrame(grid)
     grid.columns = ['geometry']
@@ -200,27 +305,32 @@ def create_grid(ds: Union[np.ndarray, List, gpd.GeoSeries],
     return grid
 
 
-def points_to_grid(points: gpd.GeoDataFrame,
-                   grid: gpd.GeoDataFrame,
-                   fillna=None):
+def points_to_grid_avg(points: gpd.GeoDataFrame,
+                       grid: gpd.GeoDataFrame,
+                       fillna=None):
     """
     Function aggregates points over a specified grid.
 
     Parameters
     ----------
-    points : geopandas GeoDataFrame
+    points : GeoDataFrame
+        Points to be aggregated with their respective values.
 
-    grid : geopandas GeoSeries
+    grid : GeoSeries
+        Polygonal grid to which the points will be aggregated.
 
     fillna : Any, optional
         The value to fill NaN's, if None given then this step is skipped.
 
     Returns
     -------
-    aggregated : geopandas GeoDataFrame
+    aggregated : GeoDataFrame
+        Aggregated points over the grid (mean value).
     """
 
-    joined = points.sjoin(grid.rename_axis("index_right"), how='left', predicate='within')
+    joined = points.sjoin(grid.rename_axis("index_right"),
+                          how='left',
+                          predicate='within')
     joined.drop('geometry', axis=1, inplace=True)
     grouped = joined.groupby('index_right').mean()
     aggregated = grid.join(grouped)

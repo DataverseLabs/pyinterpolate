@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 
-from pyinterpolate.distance.gridding import create_grid, points_to_grid
+from pyinterpolate.distance.gridding import create_grid, points_to_grid_avg
 
 POINTS = np.array([
     [0, 0, 3],
@@ -27,7 +27,7 @@ def test_gridding():
     df['geometry'] = gpd.points_from_xy(df['x'], df['y'])
     df.set_geometry('geometry', inplace=True)
 
-    gridded = points_to_grid(
+    gridded = points_to_grid_avg(
         points=df,
         grid=newgrid,
         fillna=0
