@@ -15,12 +15,12 @@ from dev.profile.semivariogram.calculate_average_semivariance.dataprep import CA
 # Old
 # def group_distances(block_to_block_distances: dict, lags: np.ndarray) -> dict:
 #     """
-#     Function prepares lag-neighbor-blocks Dict for semivariance calculations.
+#     Function prepares lag-neighbor-ps_blocks Dict for semivariance calculations.
 #
 #     Parameters
 #     ----------
 #     block_to_block_distances : Dict
-#                                {block id: [distances to all blocks in an order of dict ids]}
+#                                {block id: [distances to all ps_blocks in an order of dict ids]}
 #
 #     lags : numpy array
 #
@@ -52,12 +52,12 @@ from dev.profile.semivariogram.calculate_average_semivariance.dataprep import CA
 #                                    step_size: float,
 #                                    max_range: float) -> np.ndarray:
 #     """
-#     Function calculates average inblock semivariance between blocks.
+#     Function calculates average inblock semivariance between ps_blocks.
 #
 #     Parameters
 #     ----------
 #     block_to_block_distances : Dict
-#                                {block id : [distances to other blocks in order of keys]}
+#                                {block id : [distances to other ps_blocks in order of keys]}
 #
 #     inblock_semivariances : Dict
 #                             {area id: the inblock semivariance}
@@ -71,12 +71,12 @@ from dev.profile.semivariogram.calculate_average_semivariance.dataprep import CA
 #     Returns
 #     -------
 #     avg_block_to_block_semivariance : numpy array
-#                                       [lag, semivariance, number of blocks within lag]
+#                                       [lag, semivariance, number of ps_blocks within lag]
 #
 #
 #     Notes
 #     -----
-#     Average inblock semivariance between blocks is defined as:
+#     Average inblock semivariance between ps_blocks is defined as:
 #
 #     $$\gamma_{h}(v, v) = \frac{1}{2*N(h)} \sum_{a=1}^{N(h)} \gamma(v_{a}, v_{a}) + \gamma(v_{a_h}, v_{a_h})$$
 #

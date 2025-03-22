@@ -25,7 +25,7 @@ from pyinterpolate.transform.geo import points_to_lon_lat
 # TODO: if multipolygon then get coordinates /
 #       representative points from the largest block - as an option
 class Blocks:
-    """Class represents aggregated blocks data.
+    """Class represents aggregated ps_blocks data.
 
     Parameters
     ----------
@@ -77,21 +77,21 @@ class Blocks:
         The column with representative points or coordinates.
 
     angles : numpy array
-        Angles between the blocks representative points.
+        Angles between the ps_blocks representative points.
 
     distances : numpy array
-        Distances between the blocks representative points.
+        Distances between the ps_blocks representative points.
 
     Methods
     -------
     block_indexes : numpy array, property
-        Array with blocks indexes.
+        Array with ps_blocks indexes.
 
     block_representative_points : numpy array, property
-        Array with blocks representative points - lon, lat.
+        Array with ps_blocks representative points - lon, lat.
 
     block_values : numpy array, property
-        Array with blocks values.
+        Array with ps_blocks values.
 
     block_coordinates(block_id)
         Single block representative point.
@@ -100,20 +100,20 @@ class Blocks:
         Single block observation.
 
     calculate_angles_between_rep_points()
-        Angles between blocks, calculated as angles between each
+        Angles between ps_blocks, calculated as angles between each
         representative point and others. If ``update`` is True then it
         updates ``angles`` attribute. Returns dictionary with block index
-        as a key and angles to other blocks ordered the same way as
+        as a key and angles to other ps_blocks ordered the same way as
         dictionary keys as values. TODO: change format to DataFrame.
 
     calculate_distances_between_rep_points()
-        Distances between blocks, calculated as distances between each
+        Distances between ps_blocks, calculated as distances between each
         representative point and others. If ``update`` is set to True
         then it updates ``distances`` attribute. Returns Data Frame with
         block indexes as columns and indexes and distances as values.
 
     get_blocks_values()
-        Get multiple blocks values.
+        Get multiple ps_blocks values.
 
     pop()
         Experimental. Removes block with specified index from the dataset
@@ -124,7 +124,7 @@ class Blocks:
         value.
 
     select_distances_between_blocks()
-        Select distances between a given block and all other blocks.
+        Select distances between a given block and all other ps_blocks.
 
     transform_crs()
         Transform Blocks Coordinate Reference System.
@@ -287,7 +287,7 @@ class Blocks:
         Returns
         -------
         : Dict
-            block index: angles to other blocks ordered like block
+            block index: angles to other ps_blocks ordered like block
             indexes (keys) in a dictionary
         """
         points = self.representative_points_array()
@@ -309,7 +309,7 @@ class Blocks:
     def calculate_distances_between_rep_points(self,
                                                update=True) -> pd.DataFrame:
         """
-        Gets distances between representative points within blocks.
+        Gets distances between representative points within ps_blocks.
 
         Parameters
         ----------
@@ -319,8 +319,8 @@ class Blocks:
         Returns
         -------
         : DataFrame
-            Columns and indexes are blocks ids, values are
-            distances between blocks.
+            Columns and indexes are ps_blocks ids, values are
+            distances between ps_blocks.
         """
         points = self.representative_points_array()
         distances: np.ndarray = point_distance(
@@ -338,13 +338,13 @@ class Blocks:
 
     def get_blocks_values(self, indexes: ArrayLike = None):
         """
-        Returns values of observations aggregated within blocks.
+        Returns values of observations aggregated within ps_blocks.
 
         Parameters
         ----------
         indexes : Array-like, optional
-            Indexes of blocks to get values from. If not given then
-            all blocks are returned.
+            Indexes of ps_blocks to get values from. If not given then
+            all ps_blocks are returned.
 
         Returns
         -------
@@ -385,7 +385,7 @@ class Blocks:
 
     def representative_points_array(self):
         """
-        Returns array with blocks' representative points.
+        Returns array with ps_blocks' representative points.
 
         Returns
         -------
@@ -403,8 +403,8 @@ class Blocks:
                                         block_id,
                                         other_blocks=None) -> np.ndarray:
         """
-        Method selects distances between specified blocks and all other
-        blocks.
+        Method selects distances between specified ps_blocks and all other
+        ps_blocks.
 
         Parameters
         ----------
@@ -412,13 +412,13 @@ class Blocks:
             Single block ID or list with IDs to retrieve.
 
         other_blocks : optional
-            Other blocks to get distance to those blocks, if not given then
-            all other blocks are returned.
+            Other ps_blocks to get distance to those ps_blocks, if not given then
+            all other ps_blocks are returned.
 
         Returns
         -------
         : numpy array
-            Index is block id, columns are other blocks.
+            Index is block id, columns are other ps_blocks.
         """
         df = self.distances.copy()
 
@@ -560,7 +560,7 @@ class Blocks:
 
     def __len__(self):
         """
-        Returns number of blocks in the dataset.
+        Returns number of ps_blocks in the dataset.
 
         Returns
         -------

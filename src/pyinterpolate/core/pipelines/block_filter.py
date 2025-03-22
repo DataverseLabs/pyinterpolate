@@ -7,7 +7,7 @@ Authors
 
 TODO
 ----
-* impute 0s in ata, atp and cb if val < 0?
+* impute 0s in ata, atp and cb if val_col_name < 0?
 """
 import time
 from typing import Dict, List
@@ -72,7 +72,7 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
     Returns
     -------
     : GeoPandas GeoDataFrame
-        Regularized set of blocks:
+        Regularized set of ps_blocks:
         ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
     """
 
@@ -193,7 +193,7 @@ class BlockPoissonKriging:
     Methods
     -------
     regularize()
-        Regularize blocks (you should use it for data deconvolution -
+        Regularize ps_blocks (you should use it for data deconvolution -
         with Area-to-Point Poisson Kriging, or for data filtering -
         with Area-to-Area Poisson Kriging, or Centroid-based Poisson Kriging).
     """
@@ -250,7 +250,7 @@ class BlockPoissonKriging:
         Returns
         -------
         regularized : gpd.GeoDataFrame
-            Regularized set of blocks:
+            Regularized set of ps_blocks:
             ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
         """
         t_start = time.perf_counter()
@@ -365,7 +365,7 @@ class BlockPoissonKriging:
 
     def _parse_results(self, prediction: Dict):
         """
-        Function parses data to form: Regularized set of blocks:
+        Function parses data to form: Regularized set of ps_blocks:
         ``['block id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
 
         Parameters

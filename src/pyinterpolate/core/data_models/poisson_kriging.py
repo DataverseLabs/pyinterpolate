@@ -25,13 +25,13 @@ class PoissonKrigingInput:
 
     point_support : PointSupport
         Point support object - containing interpolated block ``block_id``
-        and neighboring blocks.
+        and neighboring ps_blocks.
 
     semivariogram_model : TheoreticalVariogram
         Fitted semivariogram.
 
     blocks_indexes : np.ndarray, optional
-        The list of the known blocks names.
+        The list of the known ps_blocks names.
 
     Attributes
     ----------
@@ -42,7 +42,7 @@ class PoissonKrigingInput:
         Block index.
 
     blocks_indexes : np.ndarray
-        Indexes of other blocks.
+        Indexes of other ps_blocks.
 
     is_directional : bool
         Is the semivariogram directional? Set to ``True`` if passed
@@ -57,18 +57,18 @@ class PoissonKrigingInput:
 
     point_support_distances : PointSupportDistance
         Object that calculates and stores distances between point supports
-        of multiple blocks.
+        of multiple ps_blocks.
 
     block_distances : numpy array
-        Distances to the unknown block from other blocks.
+        Distances to the unknown block from other ps_blocks.
 
     block_angle_differences : numpy array, optional
-        Angles between the neighboring blocks and the unknown block. Estimated
+        Angles between the neighboring ps_blocks and the unknown block. Estimated
         only when the semivariogram is directional.
 
     block_ds : DataFrame
         DataFrame for Poisson Kriging, with columns representing:
-        other blocks, points, values, distances, angles, core block index.
+        other ps_blocks, points, values, distances, angles, core block index.
 
     unknown_n : int
         The number of unique point support samples in unknown area.
@@ -76,29 +76,29 @@ class PoissonKrigingInput:
     Methods
     -------
     neighbors_angles : numpy array, property
-        Get angles between the neighboring blocks and the unknown block.
+        Get angles between the neighboring ps_blocks and the unknown block.
 
     neighbors_coordinates : numpy array, property
-        Get coordinates of the neighboring blocks.
+        Get coordinates of the neighboring ps_blocks.
 
     neighbors_distances : numpy array, property
-        Get distances to the neighboring blocks from the unknown block.
+        Get distances to the neighboring ps_blocks from the unknown block.
 
     kriging_input : DataFrame, property
         DataFrame representing unknown block's neighbors.
 
     neighbors_unique_indexes : numpy array, property
-        Get indexes of the neighboring blocks.
+        Get indexes of the neighboring ps_blocks.
 
     pk_input : DataFrame, property
-        DataFrame representing all blocks and their relations to the unknown
+        DataFrame representing all ps_blocks and their relations to the unknown
         block. (See ``ds`` attribute).
 
     neighbors_values : numpy array, property
-        Get values of the neighboring blocks.
+        Get values of the neighboring ps_blocks.
 
     blocks_dataframe : DataFrame, property
-        DataFrame representing: other blocks, points, values, distances,
+        DataFrame representing: other ps_blocks, points, values, distances,
         angles, core block index.
 
     point_to_block_ps_semivariance()
@@ -108,7 +108,7 @@ class PoissonKrigingInput:
 
     point_to_block_ps_semivariance_array()
         Method calculates semivariances from each point of the block to
-        other blocks point support.
+        other ps_blocks point support.
 
     distances_between_neighboring_point_supports()
         Parses distances between block neighbors.
@@ -176,7 +176,7 @@ class PoissonKrigingInput:
     >>>
     >>> PS = PointSupport(
     ...     points=POINT_SUPPORT_DATA['ps'],
-    ...     blocks=BLOCKS,
+    ...     ps_blocks=BLOCKS,
     ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
     ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     ... )
@@ -249,7 +249,7 @@ class PoissonKrigingInput:
             verbose=False
         )  # todo set verbose
 
-        # get distances and angles between blocks
+        # get distances and angles between ps_blocks
         self.block_distances = block_base_distances(
             block_id=self.block_id,
             point_support=point_support,
@@ -349,7 +349,7 @@ class PoissonKrigingInput:
         ----------
         point_support : PointSupport
             Point Support representation with calculated distances
-            between all points and all blocks.
+            between all points and all ps_blocks.
 
         Returns
         -------
@@ -407,7 +407,7 @@ class PoissonKrigingInput:
         ----------
         point_support : PointSupport
             Point Support representation with calculated distances between
-            all points and all blocks.
+            all points and all ps_blocks.
 
         Returns
         -------
@@ -428,7 +428,7 @@ class PoissonKrigingInput:
     def point_to_block_ps_semivariance(self):
         """
         Method calculates semivariances from each point of the block to
-        other blocks point support. Semivariance is
+        other ps_blocks point support. Semivariance is
         averaged over neighbor's point support.
 
         Returns
@@ -475,7 +475,7 @@ class PoissonKrigingInput:
     def point_to_block_ps_semivariance_array(self):
         """
         Method calculates semivariances from each point of the block to
-        other blocks point support. Semivariance is
+        other ps_blocks point support. Semivariance is
         averaged over neighbor's point support.
 
         Returns
@@ -631,14 +631,14 @@ class PoissonKrigingInput:
         )
 
         # distances between all points from unknown block point support
-        # and other blocks point supports
+        # and other ps_blocks point supports
         others_point_support = [
             point_support.get_points_array(
                 block_id=_other
             ) for _other in valid_blocks
         ]
 
-        # get distances between all points from unknown block and other blocks
+        # get distances between all points from unknown block and other ps_blocks
         distances_to_others = [
             point_distance(
                 points=unknown_block_point_support[:, :-1],

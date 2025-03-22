@@ -20,13 +20,13 @@ class CentroidPoissonKrigingInput:
 
     point_support : PointSupport
         Point support object - containing interpolated block ``block_id``
-        and neighboring blocks.
+        and neighboring ps_blocks.
 
     semivariogram_model : TheoreticalVariogram
         Fitted semivariogram.
 
     blocks_indexes : np.ndarray, optional
-        Known blocks (all possible neighbors) indexes. Parameter is optional,
+        Known ps_blocks (all possible neighbors) indexes. Parameter is optional,
         because the class can index neighbors based on their representative
         coordinates.
 
@@ -59,10 +59,10 @@ class CentroidPoissonKrigingInput:
         in reality it is two times greater).
 
     base_distances : numpy array
-        The distances to the unknown block ``block_id`` from other blocks.
+        The distances to the unknown block ``block_id`` from other ps_blocks.
 
     angle_differences : numpy array, default = None
-        The angles between the unknown block and other blocks. It is
+        The angles between the unknown block and other ps_blocks. It is
         calculated only for a directional semivariogram.
 
     ds : DataFrame
@@ -73,26 +73,26 @@ class CentroidPoissonKrigingInput:
     Methods
     -------
     angles : numpy array, property
-        Get angles between the neighboring blocks and the unknown block.
+        Get angles between the neighboring ps_blocks and the unknown block.
 
     coordinates : numpy array, property
-        Get coordinates of the neighboring blocks.
+        Get coordinates of the neighboring ps_blocks.
 
     distances : numpy array, property
-        Get distances to the neighboring blocks from the unknown block.
+        Get distances to the neighboring ps_blocks from the unknown block.
 
     kriging_input : DataFrame, property
         DataFrame representing unknown block's neighbors.
 
     neighbors_indexes : numpy array, property
-        Get indexes of the neighboring blocks.
+        Get indexes of the neighboring ps_blocks.
 
     pk_input : DataFrame, property
-        DataFrame representing all blocks and their relations to the unknown
+        DataFrame representing all ps_blocks and their relations to the unknown
         block. (See ``ds`` attribute).
 
     values : numpy array, property
-        Get values of the neighboring blocks.
+        Get values of the neighboring ps_blocks.
 
     select_neighbors()
         Function selects the closest neighbors.
@@ -161,7 +161,7 @@ class CentroidPoissonKrigingInput:
     >>>
     >>> PS = PointSupport(
     ...     points=POINT_SUPPORT_DATA['ps'],
-    ...     blocks=BLOCKS,
+    ...     ps_blocks=BLOCKS,
     ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
     ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     ... )

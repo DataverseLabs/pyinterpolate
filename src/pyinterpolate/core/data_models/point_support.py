@@ -10,7 +10,7 @@ from pyinterpolate.transform.geo import points_to_lon_lat
 
 class PointSupport:
     """
-    Class represents blocks and their point support.
+    Class represents ps_blocks and their point support.
 
     Parameters
     ----------
@@ -31,18 +31,18 @@ class PointSupport:
 
     store_dropped_points: bool = False
         Should object store points which weren't joined
-        with blocks?
+        with ps_blocks?
 
     use_point_support_crs: bool = False
         Should object use point support CRS instead of
-        blocks CRS? Both CRS are projected into the same
+        ps_blocks CRS? Both CRS are projected into the same
         projection, and this parameter decides into which
         CRS the data should be reprojected.
 
     no_possible_neighbors : int, default = 0
-        The maximum number of the closest blocks used for
+        The maximum number of the closest ps_blocks used for
         the calculation of distances between point support
-        coordinates. Default 0 indicates that all blocks are used.
+        coordinates. Default 0 indicates that all ps_blocks are used.
 
     verbose: bool = True
         Information about the progress of the calculations.
@@ -53,13 +53,13 @@ class PointSupport:
         Blocks object with polygons data.
 
     blocks_distances : numpy array
-        Distances between the blocks' representative points.
+        Distances between the ps_blocks' representative points.
 
     blocks_index_column : str
         Name of the column with block indexes.
 
     dropped_points : GeoDataFrame, optional
-        Points which weren't joined with blocks (due to the lack of
+        Points which weren't joined with ps_blocks (due to the lack of
         spatial overlap). Attribute can be None if the parameter
         ``store_dropped_points`` was set to False.
 
@@ -70,11 +70,11 @@ class PointSupport:
         Name of the column with latitude.
 
     point_support : GeoDataFrame
-        Columns: ``lon``, ``lat``, ``point-support-value``, ``block-index``.
+        Columns: ``lon_col_name``, ``lat_col_name``, ``point-support-value``, ``block-index``.
 
     point_support_blocks_index_name : str, optional
         Name of the column with block indexes in the point support.
-        If the column name is not given in the ``blocks`` object, then
+        If the column name is not given in the ``ps_blocks`` object, then
         the default name ``"blocks_index"`` is used.
 
     unique_blocks : numpy array
@@ -83,7 +83,7 @@ class PointSupport:
     Methods
     -------
     get_distances_between_known_blocks()
-        Function returns distances between given blocks.
+        Function returns distances between given ps_blocks.
 
     get_point_to_block_indexes()
         Method returns block indexes for each point in the same order as
@@ -93,7 +93,7 @@ class PointSupport:
         Method returns point coordinates and their values as a numpy array.
 
     point_support_totals()
-        Function retrieves total point support values for given blocks.
+        Function retrieves total point support values for given ps_blocks.
 
     Examples
     --------
@@ -133,7 +133,7 @@ class PointSupport:
     >>>
     >>> ps = PointSupport(
     ...     points=POINT_SUPPORT_DATA['ps'],
-    ...     blocks=BLOCKS,
+    ...     ps_blocks=BLOCKS,
     ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
     ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     ... )
@@ -146,15 +146,15 @@ class PointSupport:
     about the points within polygons. During the regularization process,
     the inblock semivariograms are estimated from the polygon's point support,
     and semivariances are calculated between point supports of neighbouring
-    blocks.
+    ps_blocks.
 
-    The class takes the point support grid and blocks data (polygons).
+    The class takes the point support grid and ps_blocks data (polygons).
     Then, spatial join is performed and points are assigned to areas where
     they fall. The core attribute is ``point_support``.
     It is a ``GeoDataFrame`` with columns:
 
-    * ``lon`` - a floating representation of longitude,
-    * ``lat`` - a floating representation of latitude,
+    * ``lon_col_name`` - a floating representation of longitude,
+    * ``lat_col_name`` - a floating representation of latitude,
     * ``point-support-value`` - the attribute describing the name of a column
       with the point-support's value,
     * ``block-index`` - the name of a column directing to the block index
@@ -173,8 +173,8 @@ class PointSupport:
                  verbose=True):
 
         self._default_blocks_index_column_name = 'blocks_index'
-        self._lon_col_name = 'lon'
-        self._lat_col_name = 'lat'
+        self._lon_col_name = 'lon_col_name'
+        self._lat_col_name = 'lat_col_name'
         self._verbose = verbose
 
         self.no_possible_neighbors = no_possible_neighbors
@@ -213,7 +213,7 @@ class PointSupport:
             self, block_ids: Union[List, np.ndarray]
     ) -> np.ndarray:
         """
-        Function returns distances between known blocks.
+        Function returns distances between known ps_blocks.
 
         Parameters
         ----------
@@ -223,7 +223,7 @@ class PointSupport:
         Returns
         -------
         : numpy array
-            Distances from blocks to all other blocks (ordered the same way
+            Distances from ps_blocks to all other ps_blocks (ordered the same way
             as input ``block_ids`` list, where rows and columns represent
             the block indexes).
         """
@@ -257,7 +257,7 @@ class PointSupport:
         Returns
         -------
         : numpy array
-            ((lon, lat, value))
+            ((lon_col_name, lat_col_name, value))
         """
         if block_id is None:
             return self.point_support[
@@ -276,7 +276,7 @@ class PointSupport:
 
     def point_support_totals(self, blocks: Iterable):
         """
-        Function retrieves total point support values for given blocks.
+        Function retrieves total point support values for given ps_blocks.
 
         Parameters
         ----------
@@ -299,7 +299,7 @@ class PointSupport:
                            store_dropped_points: bool,
                            use_point_support_crs: bool = False) -> gpd.GeoDataFrame:
         """
-        Method selects points within blocks. Blocks CRS is used as a baseline.
+        Method selects points within ps_blocks. Blocks CRS is used as a baseline.
 
         Parameters
         ----------
@@ -318,12 +318,12 @@ class PointSupport:
             Should object store point support points without linked areas?
 
         use_point_support_crs : bool, default = False
-            Use point support CRS instead of blocks CRS.
+            Use point support CRS instead of ps_blocks CRS.
 
         Returns
         -------
         : GeoDataFrame
-            ``[lon, lat, point-support-value, point-geometry, block-index]``
+            ``[lon_col_name, lat_col_name, point-support-value, point-geometry, block-index]``
         """
         # Transform CRS
         point_support, blocks = self._transform_crs(
@@ -350,7 +350,7 @@ class PointSupport:
             points_value_column=points_value_column
         )
 
-        # Set lon lat columns
+        # Set lon_col_name lat_col_name columns
         lon, lat = points_to_lon_lat(
             joined[self.geometry_column_name]
         )
@@ -403,7 +403,7 @@ class PointSupport:
             blocks: Blocks,
             use_point_support_crs: bool) -> Tuple[gpd.GeoDataFrame, Blocks]:
         """
-        Harmonizes projections of the blocks and point support.
+        Harmonizes projections of the ps_blocks and point support.
 
         Parameters
         ----------
@@ -414,12 +414,12 @@ class PointSupport:
             Blocks data.
 
         use_point_support_crs : bool
-            Should the point support CRS be used instead of blocks CRS?
+            Should the point support CRS be used instead of ps_blocks CRS?
 
         Returns
         -------
         : (GeoDataFrame, Blocks)
-            Point support and blocks with the same projection.
+            Point support and ps_blocks with the same projection.
         """
         if use_point_support_crs:
             if blocks.ds.crs != points.crs:
@@ -439,7 +439,7 @@ class PointSupport:
         Parameters
         ----------
         df : GeoDataFrame
-            Joined blocks and point support.
+            Joined ps_blocks and point support.
 
         points_geometry_column : str
             The name of a column with the point support geometry.
@@ -450,7 +450,7 @@ class PointSupport:
         Returns
         -------
         : GeoDataFrame
-            ``[blocks index, points geometry, points values]``
+            ``[ps_blocks index, points geometry, points values]``
         """
 
         joined_cols = [points_geometry_column, points_value_column]
@@ -474,7 +474,7 @@ class PointSupport:
 
     def _get_unique_blocks(self) -> np.ndarray:
         """
-        Function gets indexes of unique blocks from the point support.
+        Function gets indexes of unique ps_blocks from the point support.
 
         Returns
         -------

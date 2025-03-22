@@ -13,7 +13,7 @@ from pyinterpolate.transform.transform import \
 class PointSupportDistance:
     """
     Class calculates and stores distances between point supports of multiple
-    blocks.
+    ps_blocks.
 
     Parameters
     ----------
@@ -32,20 +32,20 @@ class PointSupportDistance:
         Number of closest neighbors for each block.
 
     closest_neighbors : Dict
-        Block id: [the closest blocks].
+        Block id: [the closest ps_blocks].
 
 
     Methods
     -------
     calc_pair_distances()
-        Returns distances between point supports from two blocks and
+        Returns distances between point supports from two ps_blocks and
         updates distances dictionary.
 
     calculate_point_support_distances()
         Calculates distances between point supports.
 
     calculate_weighted_block_to_block_distances()
-        Calculates weighted distances between blocks using their
+        Calculates weighted distances between ps_blocks using their
         point supports.
 
     get_weighted_distance()
@@ -78,7 +78,7 @@ class PointSupportDistance:
                             block_pair: Tuple,
                             update=True):
         """
-        Returns distances between point supports from two blocks and
+        Returns distances between point supports from two ps_blocks and
         updates distances dictionary.
 
         Parameters
@@ -95,7 +95,7 @@ class PointSupportDistance:
         Returns
         -------
         : numpy array
-            Distances between point supports from two blocks.
+            Distances between point supports from two ps_blocks.
         """
 
         block_a = block_pair[0]
@@ -169,7 +169,7 @@ class PointSupportDistance:
                                                     point_support,
                                                     return_distances=False):
         """
-        Calculates weighted distances between blocks using their
+        Calculates weighted distances between ps_blocks using their
         point supports.
 
         Parameters
@@ -186,14 +186,14 @@ class PointSupportDistance:
             Indexes: block indexes, Columns: block indexes, Cells: distances.
         """
         if self.verbose:
-            print('Calculating weighted distances between blocks...')
+            print('Calculating weighted distances between ps_blocks...')
 
         block_distances = calc_block_to_block_distance(
-            blocks=point_support,
+            ps_blocks=point_support,
             lon_col_name=point_support.lon_col_name,
             lat_col_name=point_support.lat_col_name,
             val_col_name=point_support.value_column_name,
-            block_index_col_name=point_support.point_support_blocks_index_name,
+            block_id_col_name=point_support.point_support_blocks_index_name,
             verbose=self.verbose
         )
 
@@ -216,7 +216,7 @@ class PointSupportDistance:
         Returns
         -------
         : pd.Series
-            Weighted distances between the block and other blocks centroids.
+            Weighted distances between the block and other ps_blocks centroids.
         """
 
         dists = self.weighted_block_to_block_distances[block_id]
@@ -226,7 +226,7 @@ class PointSupportDistance:
                                               point_support,
                                               disable_progress_bar: bool):
         """
-        Calculates distances between point supports of all blocks.
+        Calculates distances between point supports of all ps_blocks.
 
         Parameters
         ----------
@@ -239,7 +239,7 @@ class PointSupportDistance:
         Returns
         -------
         : Dict
-            Dictionary with distances between point supports of all blocks.
+            Dictionary with distances between point supports of all ps_blocks.
             Key is a block pair, and value is a numpy array with distances
             and point support values,
             where each row represents a point from the first block and each
@@ -271,7 +271,7 @@ class PointSupportDistance:
                                                     disable_progress_bar):
         """
         Function calculates distances between point supports of neighbouring
-        blocks.
+        ps_blocks.
 
         Parameters
         ----------
@@ -280,7 +280,7 @@ class PointSupportDistance:
 
         block_id : Union[Hashable, str]
             Unique index of a block for which distances to its neighboring
-            blocks are calculated.
+            ps_blocks are calculated.
 
         disable_progress_bar : bool
             Disable progress bar.
@@ -352,7 +352,7 @@ class PointSupportDistance:
     @staticmethod
     def _point_support_distances_between_blocks(points_a, points_b):
         """
-        Function calculates distances between point supports of two blocks.
+        Function calculates distances between point supports of two ps_blocks.
 
         Parameters
         ----------
