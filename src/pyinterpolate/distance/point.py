@@ -6,7 +6,6 @@ Authors
 1. Szymon Moliński | @SimonMolinsky
 """
 import numpy as np
-import pandas as pd
 from numpy.typing import ArrayLike
 from scipy.spatial.distance import cdist
 
@@ -16,7 +15,8 @@ def point_distance(points: ArrayLike,
                    other: ArrayLike,
                    metrics: str = 'euclidean') -> np.ndarray:
     """
-    Calculates the euclidean distance from one group of points to another group of points.
+    Calculates the Euclidean distance from set of points to
+    other set of points.
 
     Parameters
     ----------
@@ -27,17 +27,20 @@ def point_distance(points: ArrayLike,
         Other array with spatial coordinates.
 
     metrics : str, default = 'euclidean'
-        Metrics used to calculate distance. See ``scipy.spatial.distance.cdist`` for more details.
+        Metrics used to calculate distance.
+        See ``scipy.spatial.distance.cdist`` for more details.
 
     Returns
     -------
     distances : array
-        Distances matrix. Row index = ``points`` point index, and column index = ``other`` point index.
+        Distances matrix. Row index = ``points`` point index,
+        and column index = ``other`` point index.
 
     Notes
     -----
-    The function creates array of size MxN, where M = number of ``points`` and N = number of ``other``.
-    Very big coordinates array may cause memory errors.
+    The function creates array of size MxN, where M = number of
+    ``points`` and N = number of ``other``.
+    Large arrays may cause memory errors.
 
     Examples
     --------
@@ -59,21 +62,24 @@ def select_values_in_range(data: np.ndarray,
                            current_lag: float,
                            previous_lag: float):
     """
-    Function selects set of values which are greater than (lag - step_size size) and smaller or equal to (lag).
+    Function selects distances between lags.
 
     Parameters
     ----------
     data : numpy array
-           Distances between points.
+        Distances between points.
 
     current_lag : float
+        Actual maximum distance.
 
     previous_lag : float
+        Previous maximum distance.
 
     Returns
     -------
     : numpy array
-        Mask with distances within a specified radius.
+        Mask with distances between the previous maximum distance and
+        the actual maximum distance.
     """
 
     # Check conditions
@@ -84,41 +90,3 @@ def select_values_in_range(data: np.ndarray,
     # Find positions
     position_matrix = np.where(condition_matrix)
     return position_matrix
-
-
-def select_values_in_range_from_dataframe(data: pd.DataFrame,
-                                          current_lag: float,
-                                          previous_lag: float):
-    """
-    Function selects set of values which are greater than (lag - step_size size) and smaller or equal to (lag).
-
-    Parameters
-    ----------
-    data : DataFrame
-        Distances between points.
-
-    current_lag : float
-
-    previous_lag : float
-
-    Returns
-    -------
-    neighbors : numpy array
-        Indexes of blocks in range.
-    """
-
-    cols = list(data.columns)
-    neighbors = data.reset_index(names='block_i')
-    neighbors = neighbors.melt(id_vars='block_i', value_vars=cols)
-
-    neighbors = neighbors[(neighbors > previous_lag) & (neighbors <= current_lag)]
-    dneighbors = neighbors.dropna()
-
-    if len(dneighbors) == 0:
-        return {}
-    else:
-        pneighbors = dneighbors.drop(columns='value')
-        other_neighbors_col = pneighbors.columns[-1]
-        pneighbors = pneighbors.groupby('block_i')[other_neighbors_col].apply(list)
-
-        return pneighbors.to_dict()

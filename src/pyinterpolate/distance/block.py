@@ -250,3 +250,51 @@ def _calculate_block_to_block_distance(ps_block_1: np.ndarray,
     wdist = dist * w
     distances_sum = np.sum(wdist) / np.sum(w)
     return distances_sum
+
+
+def select_neighbors_in_range(data: pd.DataFrame,
+                              current_lag: float,
+                              previous_lag: float):
+    """
+    Function selects the neighbors of each block within a range given by
+    previous and current lags.
+
+    Parameters
+    ----------
+    data : DataFrame
+        Distances between blocks, columns and rows are block indexes.
+
+    current_lag : float
+        Actual maximum distance.
+
+    previous_lag : float
+        Previous maximum distance.
+
+    Returns
+    -------
+    neighbors : Dict
+        block id: [list of neighbors within a range
+        given by previous and current lags]
+    """
+
+    cols = list(data.columns)
+    neighbors = data.reset_index(names='block_i')
+    neighbors = neighbors.melt(id_vars='block_i', value_vars=cols)
+
+    neighbors = neighbors[
+        (neighbors > previous_lag) & (neighbors <= current_lag)
+    ]
+    dneighbors = neighbors.dropna()
+
+    if len(dneighbors) == 0:
+        return {}
+    else:
+        pneighbors = dneighbors.drop(columns='value')
+        other_neighbors_col = pneighbors.columns[-1]
+        pneighbors = pneighbors.groupby('block_i')[
+            other_neighbors_col
+        ].apply(list)
+
+        output = pneighbors.to_dict()
+
+        return output

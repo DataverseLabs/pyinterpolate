@@ -1,6 +1,6 @@
 import numpy as np
 
-from pyinterpolate.distance.point import select_values_in_range, select_values_in_range_from_dataframe
+from distance.block import select_neighbors_in_range
 from pyinterpolate.semivariogram.lags.lags import get_current_and_previous_lag
 
 
@@ -25,9 +25,9 @@ def group_distances(block_to_block_distances: dict, lags: np.ndarray) -> dict:
 
     for idx, _ in enumerate(lags):
         current_lag, previous_lag = get_current_and_previous_lag(idx, lags)
-        neighbors_in_range = select_values_in_range_from_dataframe(block_to_block_distances,
-                                                                   current_lag=current_lag,
-                                                                   previous_lag=previous_lag)
+        neighbors_in_range = select_neighbors_in_range(block_to_block_distances,
+                                                       current_lag=current_lag,
+                                                       previous_lag=previous_lag)
         grouped_lags[current_lag] = neighbors_in_range
 
     return grouped_lags
