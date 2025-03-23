@@ -3,9 +3,12 @@ from typing import Tuple
 import numpy as np
 
 
-def _weights_array(predicted_semivariances_shape, block_vals, point_support_vals) -> np.array:
+def pk_weights_array(predicted_semivariances_shape: tuple,
+                     block_vals: np.ndarray,
+                     point_support_vals: np.ndarray) -> np.ndarray:
     """
-    Function calculates additional diagonal custom_weights for the matrix of predicted semivariances.
+    Function calculates additional diagonal custom weight in
+    the matrix of predicted semivariances.
 
     Parameters
     ----------
@@ -13,10 +16,10 @@ def _weights_array(predicted_semivariances_shape, block_vals, point_support_vals
         The size of semivariances array (nrows x ncols).
 
     block_vals : numpy array
-        Array with values to calculate diagonal weight.
+        Aggregated values of blocks.
 
     point_support_vals : numpy array
-        Array with values to calculate diagonal weight.
+        Total point support values in each block.
 
     Returns
     -------

@@ -10,7 +10,7 @@ from typing import Union, Hashable, Dict
 import numpy as np
 
 from pyinterpolate.core.data_models.point_support import PointSupport
-from pyinterpolate.kriging.block.weights import _weights_array
+from pyinterpolate.kriging.block.weights import pk_weights_array
 from pyinterpolate.kriging.utils.point_kriging_solve import solve_weights
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 from pyinterpolate.transform.select_poisson_kriging_data import select_centroid_poisson_kriging_data
@@ -117,9 +117,9 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     totals = point_support.point_support_totals(
         kindexes
     )
-    weights = _weights_array(predicted.shape,
-                             values,
-                             totals)
+    weights = pk_weights_array(predicted.shape,
+                               values,
+                               totals)
     weighted_and_predicted = predicted + weights
 
     # Prepare matrix for solving kriging system

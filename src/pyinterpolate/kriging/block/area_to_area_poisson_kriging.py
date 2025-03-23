@@ -11,7 +11,7 @@ from typing import Dict, Union, Hashable
 import numpy as np
 
 from pyinterpolate.core.data_models.point_support import PointSupport
-from pyinterpolate.kriging.block.weights import _weights_array
+from pyinterpolate.kriging.block.weights import pk_weights_array
 from pyinterpolate.semivariogram.deconvolution.block_to_block_semivariance import weighted_avg_point_support_semivariances
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 from pyinterpolate.transform.select_poisson_kriging_data import select_poisson_kriging_data
@@ -126,9 +126,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         indexes=closest_neighbors
     )
     totals = point_support.point_support_totals(blocks=closest_neighbors)
-    p_weights = _weights_array(predicted.shape,
-                               block_values,
-                               totals)
+    p_weights = pk_weights_array(predicted.shape,
+                                 block_values,
+                                 totals)
     weighted_and_predicted = predicted + p_weights
 
     # Prepare custom_weights matrix
