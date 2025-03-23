@@ -41,3 +41,22 @@ def parse_point_support_distances_array(distances: np.ndarray,
     b_values_arr = np.tile(values_b, alen)
     out_arr = np.array(list(zip(a_values_arr, b_values_arr, distances)))
     return out_arr
+
+
+def add_ones(array: np.ndarray) -> np.ndarray:
+    """
+    Function adds rows of ones to a given array.
+
+    Parameters
+    ----------
+    array : numpy array
+        Array of size MxN (M rows, N cols)
+
+    Returns
+    -------
+    list_with_ones : numpy array
+        Array of size M+1xN (M+1 rows, N cols) where the last row are N ones.
+    """
+    ones = np.ones(np.shape(array)[1])
+    list_with_ones = np.vstack((array, ones))
+    return list_with_ones
