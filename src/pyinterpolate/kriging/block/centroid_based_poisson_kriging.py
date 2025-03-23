@@ -42,14 +42,16 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         The id of the block with the unknown value.
 
     number_of_neighbors : int
-        The minimum number of neighbours that can potentially affect the unknown block.
+        The minimum number of neighbours that can potentially affect
+        the unknown block.
 
     neighbors_range : float, optional
-        The maximum range for neighbors search. If not provided then it is read from the semivariogram model.
+        The maximum range for neighbors search. If not provided then it is
+        read from the semivariogram model.
 
     use_all_neighbors_in_range : bool, default = False
-        Limits number of neighbors to the ``number_of_neighbors`` or takes as many neighbors as possible from the
-        ``neighbors_range``.
+        Limits number of neighbors to the ``number_of_neighbors`` or takes
+        as many neighbors as possible from the ``neighbors_range``.
 
     is_weighted_by_point_support : bool, default = True
         Are distances between blocks weighted by the point support?
@@ -61,8 +63,10 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         Raise error when prediction error is negative.
 
     allow_lsa : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
+        Allows the approximation of kriging custom_weights based on the OLS
+        algorithm. We don't recommend set it to ``True``
+        if you don't know what are you doing. This parameter can be useful
+        when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
     Returns
@@ -103,7 +107,9 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     block_distances = point_support.get_distances_between_known_blocks(
         block_ids=kindexes
     )
-    known_blocks_semivars = semivariogram_model.predict(block_distances.flatten())
+    known_blocks_semivars = semivariogram_model.predict(
+        block_distances.flatten()
+    )
     predicted = np.array(known_blocks_semivars.reshape(n, n))
     predicted = sem_to_cov(predicted, sill)
 
@@ -129,24 +135,29 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                                        k=covars,
                                        allow_lsa=allow_lsa)
     except np.linalg.LinAlgError as _:
-        msg = 'Singular matrix in Kriging system detected, check if you have duplicated coordinates ' \
-              'in the input dataset.'
+        msg = ('Singular matrix in Kriging system detected, check if you '
+               'have duplicated coordinates in the input dataset.')
         raise RuntimeError(msg)
 
     zhat = values.dot(output_weights[:-1])
 
     if raise_when_negative_prediction:
         if zhat < 0:
-            raise ValueError(f'Predicted value is {zhat} and it should not be lower than 0. Check your sampling '
-                             f'grid, samples, number of neighbors or semivariogram model type.')
+            raise ValueError(f'Predicted value is {zhat} and it should not '
+                             f'be lower than 0. Check your sampling '
+                             f'grid, samples, number of neighbors or '
+                             f'semivariogram model type.')
 
     sigmasq = np.matmul(output_weights.T, covars)
 
     if sigmasq < 0:
         if raise_when_negative_error:
-            raise ValueError(f'Predicted error value is {sigmasq} and it should not be lower than 0. '
-                             f'Check your sampling grid, samples, number of neighbors or semivariogram model type.'
-                             f'Error is related to the block with id {unknown_block_index}')
+            raise ValueError(f'Predicted error value is {sigmasq} and it '
+                             f'should not be lower than 0. '
+                             f'Check your sampling grid, samples, number of '
+                             f'neighbors or semivariogram model type.'
+                             f'Error is related to the block with index '
+                             f'{unknown_block_index}')
         sigma = np.nan
     else:
         sigma = np.sqrt(sigmasq)
