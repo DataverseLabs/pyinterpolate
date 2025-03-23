@@ -58,7 +58,7 @@ def ordinary_kriging(
         ``number_of_neighbors`` parameter then take all of them anyway.
 
     allow_approximate_solutions : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
@@ -152,7 +152,7 @@ def ordinary_kriging_from_cov(
         ``number_of_neighbors`` parameter then take all of them anyway.
 
     allow_approximate_solutions : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 

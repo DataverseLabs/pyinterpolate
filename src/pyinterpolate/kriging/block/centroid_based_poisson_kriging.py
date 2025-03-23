@@ -63,7 +63,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         Raise error when prediction error is negative.
 
     allow_lsa : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS
+        Allows the approximation of kriging weights based on the OLS
         algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful
         when you have clusters in your dataset,
