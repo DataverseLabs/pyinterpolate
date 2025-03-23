@@ -1,5 +1,5 @@
 """
-Solves kriging custom_weights and gets per-distance custom_weights from a semivariogram model.
+Solves kriging weights and gets per-distance custom_weights from a semivariogram model.
 
 Authors
 -------

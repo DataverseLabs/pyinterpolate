@@ -7,11 +7,14 @@ Authors
 
 Bibliography
 ------------
-[1] P. Goovaerts, AUTO-IK: A 2D indicator kriging program for the automated non-parametric modeling of local
-    uncertainty in earth sciences, Computers & Geosciences, Volume 35, Issue 6, 2009, Pages 1255-1270, ISSN 0098-3004,
+[1] P. Goovaerts, AUTO-IK: A 2D indicator kriging program for the automated
+    non-parametric modeling of local uncertainty in earth sciences,
+    Computers & Geosciences, Volume 35, Issue 6, 2009, Pages 1255-1270,
+    ISSN 0098-3004,
     https://doi.org/10.1016/j.cageo.2008.08.014.
 
-Indicator kriging is performed for each threshold using four types of destination geography:
+Indicator kriging is performed for each threshold using four types of
+destination geography:
 # TODO: helper methods to perform operations below:
 1) grid of points specified by the user,
 2) rectangular grid,
@@ -47,57 +50,67 @@ class IndicatorKriging:
         Points where we want to estimate value ``(x, y) <-or-> (lon, lat)``.
 
     kriging_type : str, default = 'ok'
-        Type of kriging to perform. Possible values: 'ok' - ordinary kriging, 'sk' - simple kriging.
+        Type of kriging to perform. Possible values: 'ok' - ordinary kriging,
+        'sk' - simple kriging.
 
     process_mean : float
-        The mean value of a process over a study area. Should be know before processing. That's why Simple
-        Kriging has a limited number of applications. You must have multiple samples and well-known area to
+        The mean value of a process over a study area. Should be known
+        before processing. That's why Simple Kriging has a limited number of
+        applications. You must have multiple samples and well-known area to
         know this parameter.
 
     neighbors_range : float, default=None
-        The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
-        the ``theoretical_model`` ``rang`` attribute.
+        The maximum distance where we search for neighbors. If ``None`` is
+        given then range is selected from the ``theoretical_model``
+        ``rang`` attribute.
 
     no_neighbors : int, default = 4
         The number of the **n-closest neighbors** used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-        ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
+        ``True``: if the real number of neighbors within
+        the ``neighbors_range`` is greater than the
         ``number_of_neighbors`` parameter then take all of them anyway.
 
     allow_approximate_solutions : bool, default=False
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to
-        ``True`` if you don't know what are you doing. This parameter can be useful when you have clusters in
-        your dataset, that can lead to singular or near-singular matrix creation.
+        Allows the approximation of kriging weights based on the OLS
+        algorithm. We don't recommend set it to ``True`` if you don't know
+        what are you doing. This parameter can be useful when you have
+        clusters in your dataset, that can lead to singular or
+        near-singular matrix creation.
 
     get_expected_values : bool, default=True
         If ``True`` then expected values and variances are calculated.
 
     Attributes
     ----------
-    thresholds : numpy ndarray
+    thresholds : array
         Thresholds used for indicator kriging.
 
-    coordinates : numpy ndarray
+    coordinates : array
         Coordinates of unknown locations.
 
-    indicator_predictions : numpy ndarray
-        Indicator kriging predictions for each threshold and each unknown location.
+    indicator_predictions : array
+        Indicator kriging predictions for each threshold and each unknown
+        location.
 
-    expected_values : numpy ndarray
-        Expected values derived from ``indicator_predictions`` for each unknown location.
+    expected_values : array
+        Expected values derived from ``indicator_predictions`` for each
+        unknown location.
 
-    variances : numpy ndarray
-        Variances derived from ``indicator_predictions`` for each unknown location.
+    variances : array
+        Variances derived from ``indicator_predictions`` for each
+        unknown location.
 
     Methods
     -------
     get_indicator_maps()
-        Returns dictionary with thresholds and indicator maps for each of them.
+        Returns dictionary with thresholds and indicator maps for each of
+        them.
 
     get_expected_values()
-        Returns two arrays: one array with coordinates and expected values, and the second
-        with coordinates and variances.
+        Returns two arrays: one array with coordinates and expected values,
+        and the second with coordinates and variances.
     """
 
     def __init__(self,
@@ -113,19 +126,25 @@ class IndicatorKriging:
                  allow_approximate_solutions=False,
                  get_expected_values=True):
 
-        self.thresholds = np.array(list(indicator_variograms.theoretical_indicator_variograms.keys())).astype(float)
+        self.thresholds = np.array(
+            list(
+                indicator_variograms.theoretical_indicator_variograms.keys()
+            )
+        ).astype(float)
         self.coordinates = np.array(unknown_locations)
 
-        self.indicator_predictions = self._estimate(known_locations,
-                                                    indicator_variograms,
-                                                    unknown_locations,
-                                                    kriging_type,
-                                                    process_mean,
-                                                    neighbors_range,
-                                                    no_neighbors,
-                                                    max_tick,
-                                                    use_all_neighbors_in_range,
-                                                    allow_approximate_solutions)
+        self.indicator_predictions = self._estimate(
+            known_locations,
+            indicator_variograms,
+            unknown_locations,
+            kriging_type,
+            process_mean,
+            neighbors_range,
+            no_neighbors,
+            max_tick,
+            use_all_neighbors_in_range,
+            allow_approximate_solutions
+        )
 
         self.expected_values = None
         self.variances = None
@@ -164,10 +183,18 @@ class IndicatorKriging:
             self._get_expected_values()
 
         # Expected values map
-        expected_values_map = np.column_stack([self.coordinates[:, 0], self.coordinates[:, 1], self.expected_values])
+        expected_values_map = np.column_stack(
+            [self.coordinates[:, 0],
+             self.coordinates[:, 1],
+             self.expected_values]
+        )
 
         # Variances map
-        variances_map = np.column_stack([self.coordinates[:, 0], self.coordinates[:, 1], self.variances])
+        variances_map = np.column_stack(
+            [self.coordinates[:, 0],
+             self.coordinates[:, 1],
+             self.variances]
+        )
         return expected_values_map, variances_map
 
     def _estimate(self,
@@ -182,7 +209,8 @@ class IndicatorKriging:
                   use_all_neighbors_in_range=False,
                   allow_approximate_solutions=False) -> np.ndarray:
         """
-        Method estimates probabilities of a location becoming within a given threshold.
+        Method estimates probabilities of a location becoming within
+        a given threshold.
 
         Parameters
         ----------
@@ -193,31 +221,38 @@ class IndicatorKriging:
             Modeled variograms for each threshold.
 
         unknown_locations : numpy ndarray
-            Points where we want to estimate value ``(x, y) <-or-> (lon, lat)``.
+            Points where we want to estimate value
+            ``(x, y) <-or-> (lon, lat)``.
 
         kriging_type : str, default = 'ok'
-            Type of kriging to perform. Possible values: 'ok' - ordinary kriging, 'sk' - simple kriging.
+            Type of kriging to perform. Possible values: 'ok' - ordinary
+            kriging, 'sk' - simple kriging.
 
         process_mean : float
-            The mean value of a process over a study area. Should be know before processing. That's why Simple
-            Kriging has a limited number of applications. You must have multiple samples and well-known area to
-            know this parameter.
+            The mean value of a process over a study area. Should be known
+            before processing. That's why Simple Kriging has a limited
+            number of applications. You must have multiple samples and
+            well-sampled area to know this parameter.
 
         neighbors_range : float, default=None
-            The maximum distance where we search for neighbors. If ``None`` is given then range is selected from
+            The maximum distance where we search for neighbors. If ``None``
+            is given then range is selected from
             the ``theoretical_model`` ``rang`` attribute.
 
         no_neighbors : int, default = 4
             The number of the **n-closest neighbors** used for interpolation.
 
         use_all_neighbors_in_range : bool, default = False
-            ``True``: if the real number of neighbors within the ``neighbors_range`` is greater than the
-            ``number_of_neighbors`` parameter then take all of them anyway.
+            ``True``: if the real number of neighbors within the
+            ``neighbors_range`` is greater than the ``number_of_neighbors``
+            then take all of them anyway.
 
         allow_approximate_solutions : bool, default=False
-            Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to
-            ``True`` if you don't know what are you doing. This parameter can be useful when you have clusters in
-            your dataset, that can lead to singular or near-singular matrix creation.
+            Allows the approximation of kriging weights based on the
+            OLS algorithm. We don't recommend set it to ``True`` if you don't
+            know what are you doing. This parameter can be useful when you
+            have clusters in your dataset, that can lead to singular or
+            near-singular matrix creation.
 
         Returns
         -------
@@ -231,10 +266,13 @@ class IndicatorKriging:
         """
         predictions_all = []
 
-        for _key, _item in tqdm(indicator_variograms.theoretical_indicator_variograms.items()):
+        d_items = indicator_variograms.theoretical_indicator_variograms.items()
+        for _key, _item in tqdm(d_items):
 
             indicator_points = known_locations.copy()
-            indicator_points[:, -1] = (indicator_points[:, -1] <= float(_key)).astype(int)
+            indicator_points[:, -1] = (
+                    indicator_points[:, -1] <= float(_key)
+            ).astype(int)
 
             predictions = []
 
@@ -265,8 +303,10 @@ class IndicatorKriging:
                     )
 
                 else:
-                    raise ValueError('Kriging type not supported. Please choose from: '
-                                     '"ok" - ordinary kriging, "sk" - simple kriging.')
+                    raise ValueError('Kriging type not supported. '
+                                     'Please choose from: '
+                                     '"ok" - ordinary kriging, '
+                                     '"sk" - simple kriging.')
 
                 predictions.append(_pred_arr[0])
 
@@ -274,18 +314,25 @@ class IndicatorKriging:
 
         indicator_predictions = np.column_stack(predictions_all)
 
-        indicator_predictions = self._clean_probabilities(indicator_predictions)
+        indicator_predictions = self._clean_probabilities(
+            indicator_predictions
+        )
 
         return indicator_predictions
 
-    def _get_expected_values(self, ccdf_density=100) -> Tuple[np.ndarray, np.ndarray]:
+    def _get_expected_values(
+            self,
+            ccdf_density=100
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Function gets expected values and their variance for each point based on the ccdf function.
+        Function gets expected values and their variance for each point
+        based on the ccdf function.
 
         Parameters
         ----------
         ccdf_density : int, default = 100
-            The number of points used to interpolate expected value from the ccdf function.
+            The number of points used to interpolate expected value from
+            the ccdf function.
 
         Returns
         -------
@@ -299,11 +346,16 @@ class IndicatorKriging:
         for row in self.indicator_predictions:
             old_indices = self.thresholds.copy()
             new_length = ccdf_density
-            new_indices = np.linspace(old_indices.min(), old_indices.max(), new_length)
+            new_indices = np.linspace(old_indices.min(),
+                                      old_indices.max(),
+                                      new_length)
             if len(old_indices) >= 4:
                 spl = UnivariateSpline(old_indices, row, s=0)
             else:
-                spl = UnivariateSpline(old_indices, row, k=(len(old_indices) - 1), s=0)
+                spl = UnivariateSpline(old_indices,
+                                       row,
+                                       k=(len(old_indices) - 1),
+                                       s=0)
             new_tvals = spl(new_indices)
 
             cdf = new_tvals.cumsum() / new_tvals.sum()
