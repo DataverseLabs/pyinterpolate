@@ -18,26 +18,34 @@ def inverse_distance_weighting(known_points: np.ndarray,
                                unknown_location: Iterable,
                                number_of_neighbours=-1,
                                power=2.) -> float:
-    """Inverse Distance Weighting with a given set of points and an unknown location.
+    """
+    Inverse Distance Weighting with a given set of points and
+    the unknown location.
 
     Parameters
     ----------
     known_points : numpy array
-        The MxN array, where **M** is a number of rows (points) and **N** is the number of columns, where the last
-        column represents a value of a known point. (It could be **(N-1)**-dimensional data).
+        The MxN array, where **M** is a number of rows (points) and **N**
+        is the number of columns, where the last column represents a value
+        observed in a known point. (It could be **(N-1)**-dimensional data).
 
     unknown_location : Iterable
-        Array or list with coordinates of the unknown point. Its length is N-1 (number of dimensions). The unknown
-        location `shape` should be the same as the ``known_points`` parameter `shape`, if not, then new dimension
-        is added once - vector of points ``[x, y]`` becomes ``[[x, y]]`` for 2-dimensional data.
+        Array or list with coordinates of the unknown point.
+        Its length is N-1 (number of dimensions). The unknown
+        location `shape` should be the same as the ``known_points``
+        parameter `shape`, if not, then new dimension
+        is added once - vector of points ``[x, y]``
+        becomes ``[[x, y]]`` for 2-dimensional data.
 
     number_of_neighbours : int, default = -1
-        If default value **(-1)** then all known points will be used to estimate value at the unknown location.
+        If default value **(-1)** then all known points will be used to
+        estimate value at the unknown location.
         Can be any number within the limits ``[2, len(known_points)]``,
 
     power : float, default = 2.
-        Power value must be larger or equal to 0. It controls weight assigned to each known point. Larger power means
-        stronger influence of the closest neighbors, but it decreases quickly.
+        Power value must be larger or equal to 0. It controls weight
+        assigned to each known point. Larger power means
+        stronger influence of the closest neighbors, but it decreases faster.
 
     Returns
     -------
@@ -50,8 +58,8 @@ def inverse_distance_weighting(known_points: np.ndarray,
         Power parameter set to be smaller than 0.
 
     ValueError
-        Less than 2 neighbours or more than the number of ``known_points`` neighbours are given in the
-        ``number_of_neighbours`` parameter.
+        Less than 2 neighbours or more than the number of ``known_points``
+        neighbours are given in the ``number_of_neighbours`` parameter.
     """
 
     # Check power parameter
@@ -59,13 +67,17 @@ def inverse_distance_weighting(known_points: np.ndarray,
         raise ValueError('Power cannot be smaller than 0')
 
     # Check number of neighbours parameter
-    if number_of_neighbours == -1:
-        number_of_closest = len(known_points)
-    elif (number_of_neighbours >= 2) and (number_of_neighbours <= len(known_points)):
+    nn_neighbors_ge_2 = number_of_neighbours >= 2
+    nn_neighbors_le_known_points = number_of_neighbours <= len(known_points)
+    n_closest_eq_nn = nn_neighbors_ge_2 and nn_neighbors_le_known_points
+
+    number_of_closest = len(known_points)
+
+    if n_closest_eq_nn:
         number_of_closest = number_of_neighbours
     else:
-        raise ValueError(f'Number of closest neighbors must be between 2 and the number of known points '
-                         f'({len(known_points)}) and {number_of_neighbours} neighbours were given instead.')
+        _idw_value_error_nn(length_known=len(known_points),
+                            nn=number_of_neighbours)
 
     # Pre-process unknown location parameter
     if not isinstance(unknown_location, np.ndarray):
@@ -98,3 +110,29 @@ def inverse_distance_weighting(known_points: np.ndarray,
     # Estimate value
     result = np.sum(weights * values) / np.sum(weights)
     return result
+
+
+def _idw_value_error_nn(length_known: int, nn: int):
+    """
+    Helper function to raise ValueError when the number of closest neighbours
+    is out of bounds.
+
+    Parameters
+    ----------
+    length_known : int
+        Number of known points.
+
+    nn : int
+        Number of neighbours defined by the user.
+
+    Raises
+    ------
+    ValueError
+        Less than 2 neighbours or more than the number of ``known_points``
+        neighbours are given in the ``number_of_neighbours`` parameter.
+
+    """
+    raise ValueError(
+        f'Number of closest neighbors must be between 2 '
+        f'and the number of known points '
+        f'({length_known}) and {nn} neighbours were given instead.')
