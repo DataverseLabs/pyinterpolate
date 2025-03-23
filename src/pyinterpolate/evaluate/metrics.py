@@ -10,7 +10,8 @@ import numpy as np
 
 
 class UndefinedSMAPEWarning(Warning):
-    """Warning invoked by the scenario when predicted value is equal to 0
+    """
+    Warning invoked by the scenario when predicted value is equal to 0
     and observation is equal to 0. It leads to the 0/0 division and,
     in return, to the ``NaN`` value at a specific position.
     Finally, user gets ``NaN`` as the output.
@@ -18,10 +19,12 @@ class UndefinedSMAPEWarning(Warning):
     Parameters
     ----------
     zero_idx : int
+        Index where observation and prediction are equal to 0.
 
     Attributes
     ----------
     message : str
+        Warning message.
     """
 
     def __init__(self, zero_idx: int):
@@ -36,15 +39,16 @@ class UndefinedSMAPEWarning(Warning):
 
 def forecast_bias(predicted_array: np.ndarray,
                   real_array: np.ndarray) -> float:
-    r"""Function calculates forecast bias of prediction.
+    r"""
+    Function calculates forecast bias of prediction.
 
     Parameters
     ----------
     predicted_array : numpy array
-        Array with predicted values.
+        Predicted values.
 
     real_array : numpy array
-        Array with real observations.
+        Real observations.
 
     Returns
     -------
@@ -76,7 +80,8 @@ def forecast_bias(predicted_array: np.ndarray,
 
 def mean_absolute_error(predicted_array: np.ndarray,
                         real_array: np.ndarray) -> float:
-    r"""Function calculates Mean Absolute Error (MAE) of prediction.
+    r"""
+    Function calculates Mean Absolute Error (MAE) of prediction.
 
     Parameters
     ----------
@@ -192,7 +197,8 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
 
     Equation:
 
-    (1) $$e_{smape} = \frac{100}{N} \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}$$
+    (1) $$e_{smape} = \frac{100}{N}
+          \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}$$
 
         where:
         * $e_{smape}$ - symmetric mean absolute percentage error,
@@ -238,7 +244,8 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
         Observations.
 
     weighting_method : str
-        The name of a dir_neighbors_selection_method used to weight error at a given lags.
+        The name of a dir_neighbors_selection_method used to weight error at
+        a given lags.
         Available methods:
         - closest: lags at a close range have greater custom_weights,
         - distant: lags that are further away have greater custom_weights,
@@ -254,21 +261,25 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
 
     Raises
     ------
-    AttributeError : The ``lag_points_distribution`` parameter is
-                     undefined when "dense" dir_neighbors_selection_method is selected.
+    AttributeError :
+        The ``lag_points_distribution`` parameter is undefined when
+        "dense" ``dir_neighbors_selection_method`` is set.
 
     Notes
     -----
-    Error weighting is a useful dir_neighbors_selection_method in the case when we want to
+    Error weighting is a useful in the case when we want to
     force semivariogram to better represent semivariances at specific ranges.
-    The most popular is "closest" weighting dir_neighbors_selection_method - we create model that
+    The most popular is the ``"closest"`` method - we create model that
     fits better semivariogram at a close distances.
 
     Equations:
 
     - "closest"
 
-    (1) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}}$$
+    (1) $$e_{wrmse} = \sqrt{
+              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}
+              }
+        $$
 
         where:
         * $e_{rmse}$ - weighted root mean squared error,
@@ -279,7 +290,10 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
 
     - "distant"
 
-    (2) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}}$$
+    (2) $$e_{wrmse} = \sqrt{
+              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}
+              }
+        $$
 
         where:
         * $e_{rmse}$ - weighted root mean squared error,
@@ -290,7 +304,10 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
 
     - "dense"
 
-    (3) $$e_{wrmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}}$$
+    (3) $$e_{wrmse} = \sqrt{
+              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}
+              }
+        $$
 
         where:
         * $e_{rmse}$ - weighted root mean squared error,
@@ -314,8 +331,8 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
         weights = sequence / arr_length
     elif weighting_method == 'dense':
         if lag_points_distribution is None:
-            msg = ('The "dense" weighting dir_neighbors_selection_method requires you '
-                   'to pass number of point pairs per lag!')
+            msg = ('The "dense" weighting method requires '
+                   'passing the number of point pairs per lag!')
             raise AttributeError(msg)
         else:
             weights = lag_points_distribution / sum(lag_points_distribution)
