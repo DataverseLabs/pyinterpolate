@@ -72,8 +72,10 @@ def inverse_distance_weighting(known_points: np.ndarray,
     n_closest_eq_nn = nn_neighbors_ge_2 and nn_neighbors_le_known_points
 
     number_of_closest = len(known_points)
-
-    if n_closest_eq_nn:
+    
+    if number_of_neighbours == -1:
+        pass
+    elif n_closest_eq_nn:
         number_of_closest = number_of_neighbours
     else:
         _idw_value_error_nn(length_known=len(known_points),
