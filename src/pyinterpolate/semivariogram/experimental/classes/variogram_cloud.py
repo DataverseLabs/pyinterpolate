@@ -128,7 +128,7 @@ class VariogramCloud:
         distance.
 
     custom_weights : numpy array, optional
-        Custom custom_weights assigned to points. Only semivariance values are
+        Custom weights assigned to points. Only semivariance values are
         weighted.
 
     Attributes

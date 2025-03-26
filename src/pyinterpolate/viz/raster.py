@@ -103,7 +103,7 @@ def interpolate_raster(data,
         * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     allow_approx_solutions : bool, default=True
-        Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
+        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
@@ -270,7 +270,7 @@ def spatial_reference(pixel_size_x_direction: float,
 #         * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 #
 #     allow_approx_solutions : bool, default=True
-#         Allows the approximation of kriging custom_weights based on the OLS algorithm. We don't recommend set it to ``True``
+#         Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
 #         if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
 #         that can lead to singular or near-singular matrix creation.
 #

@@ -143,7 +143,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     predicted = sem_to_cov(semivariances_nn, sill)
     predicted = predicted.reshape((n, n))
 
-    # Add diagonal custom_weights
+    # Add diagonal weights
     block_values = point_support.blocks.get_blocks_values(
         indexes=closest_neighbors
     )
@@ -153,7 +153,7 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                                  totals)
     weighted_and_predicted = predicted + p_weights
 
-    # Prepare custom_weights matrix
+    # Prepare weights matrix
     p_ones = np.ones((predicted.shape[0], 1))
     predicted_with_ones_col = np.c_[weighted_and_predicted, p_ones]
     p_ones_row = np.ones((1, predicted_with_ones_col.shape[1]))

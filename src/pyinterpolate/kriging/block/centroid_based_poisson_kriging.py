@@ -113,7 +113,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     predicted = np.array(known_blocks_semivars.reshape(n, n))
     predicted = sem_to_cov(predicted, sill)
 
-    # Add diagonal custom_weights to predicted semivars array
+    # Add diagonal weights to predicted semivars array
     totals = point_support.point_support_totals(
         kindexes
     )

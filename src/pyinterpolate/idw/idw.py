@@ -106,7 +106,7 @@ def inverse_distance_weighting(known_points: np.ndarray,
     values = known_points[sdists].copy()
     values = values[:, -1]
 
-    # Create custom_weights
+    # Create weights
     weights = 1 / dists**power
 
     # Estimate value

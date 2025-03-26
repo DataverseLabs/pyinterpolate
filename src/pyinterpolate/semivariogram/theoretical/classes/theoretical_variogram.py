@@ -392,8 +392,8 @@ class TheoreticalVariogram:
             only with RMSE. Available methods:
 
             - equal: no weighting,
-            - closest: lags at a close range have bigger custom_weights,
-            - distant: lags that are further away have bigger custom_weights,
+            - closest: lags at a close range have bigger weights,
+            - distant: lags that are further away have bigger weights,
             - dense: error is weighted by the number of point pairs within lag.
 
         return_params : bool, default = True
@@ -580,8 +580,8 @@ class TheoreticalVariogram:
             Works only with RMSE. Available methods:
 
             - equal: no weighting,
-            - closest: lags at a close range have bigger custom_weights,
-            - distant: lags that are further away have bigger custom_weights,
+            - closest: lags at a close range have bigger weights,
+            - distant: lags that are further away have bigger weights,
             - dense: error is weighted by the number of point pairs within
               a lag.
 

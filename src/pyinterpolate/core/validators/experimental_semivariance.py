@@ -139,7 +139,7 @@ def validate_semivariance_weights(points: ArrayLike, weights: ArrayLike):
         len_p = len(points)
         len_w = len(weights)
         _t = len_p == len_w
-        # Check custom_weights and points
+        # Check weights and points
         if not _t:
             msg = f'Weights array length must be the same as length of points ' \
                   f'array but it has {len_w} records and' \
@@ -147,7 +147,7 @@ def validate_semivariance_weights(points: ArrayLike, weights: ArrayLike):
             raise IndexError(msg)
         # Check if there is any 0 weight -> error
         if any([x == 0 for x in weights]):
-            msg = 'One or more of custom_weights in dataset is set to 0, ' \
+            msg = 'One or more of weights in dataset is set to 0, ' \
                   'remove point with a zero weight from a dataset, and ' \
                   'do not pass 0 as a weight.'
             raise ValueError(msg)

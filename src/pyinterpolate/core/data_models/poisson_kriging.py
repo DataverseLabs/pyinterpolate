@@ -574,7 +574,7 @@ class PoissonKrigingInput:
                 \gamma(u_{s}, u_{s'})$$
 
         where:
-        * $w_{ss'}$ - product of point-support custom_weights from
+        * $w_{ss'}$ - product of point-support weights from
           block a and block b.
         * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of
           block a and block b.

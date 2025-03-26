@@ -652,7 +652,7 @@ def _select_ellipse_distances(distances_array: np.array,
         Array with distances between points.
 
     weighting_matrix : numpy array
-        The matrix of custom_weights for each distance.
+        The matrix of weights for each distance.
 
     lag : float
 

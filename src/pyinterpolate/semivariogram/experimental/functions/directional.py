@@ -290,7 +290,7 @@ def directional_weighted_semivariance(points: np.array,
     lags : numpy array
 
     custom_weights : optional, Iterable
-        Custom custom_weights assigned to points.
+        Custom weights assigned to points.
 
     direction : float, optional
         Direction of semivariogram, values from 0 to 360 degrees:

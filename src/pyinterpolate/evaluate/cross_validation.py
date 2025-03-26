@@ -55,7 +55,7 @@ def validate_kriging(
         know this parameter.
 
     allow_approximate_solutions : bool, default=False
-        Allows the approximation of kriging custom_weights based on
+        Allows the approximation of kriging weights based on
         the OLS algorithm. We don't recommend set it to ``True``
         if you don't know what are you doing. This parameter can be useful
         when you have clusters in your dataset,

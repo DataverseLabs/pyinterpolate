@@ -233,7 +233,7 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
                                      weighting_method: str,
                                      lag_points_distribution=None) -> float:
     r"""
-    Function custom_weights RMSE of each lag by a specific weighting factor.
+    Function weights RMSE of each lag by a specific weighting factor.
 
     Parameters
     ----------
@@ -247,8 +247,8 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
         The name of a dir_neighbors_selection_method used to weight error at
         a given lags.
         Available methods:
-        - closest: lags at a close range have greater custom_weights,
-        - distant: lags that are further away have greater custom_weights,
+        - closest: lags at a close range have greater weights,
+        - distant: lags that are further away have greater weights,
         - dense: error is weighted by the number of point pairs within a lag.
 
     lag_points_distribution : numpy array, optional

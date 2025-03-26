@@ -198,7 +198,7 @@ def weighted_avg_point_support_semivariances(
             \sum_{s}^{P_{i}} \sum_{s'}^{P_{j}} w_{ss'} * \gamma(u_{s}, u_{s'})$$
 
     where:
-    * $w_{ss'}$ - product of point-support custom_weights from block a and block b.
+    * $w_{ss'}$ - product of point-support weights from block a and block b.
     * $\gamma(u_{s}, u_{s'})$ - semivariance between point-supports of block a and block b.
     """
 

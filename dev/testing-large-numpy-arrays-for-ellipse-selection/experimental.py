@@ -72,7 +72,7 @@ def calculate_semivariance(ds: np.ndarray,
         distance.
 
     custom_weights : numpy array, optional
-        Custom custom_weights assigned to points.
+        Custom weights assigned to points.
 
     Returns
     -------
@@ -273,7 +273,7 @@ def directional_semivariance(points: np.ndarray,
         * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
 
     custom_weights : optional, Iterable
-        Custom custom_weights assigned to points.
+        Custom weights assigned to points.
 
     Returns
     -------

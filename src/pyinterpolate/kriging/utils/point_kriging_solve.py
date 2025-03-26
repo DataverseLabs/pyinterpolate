@@ -1,5 +1,5 @@
 """
-Solves kriging weights and gets per-distance custom_weights from a semivariogram model.
+Gets and solves Kriging System weights.
 
 Authors
 -------
@@ -25,8 +25,8 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
                     use_all_neighbors_in_range=False,
                     max_tick=5) -> List:
     """
-    Function predicts semivariances for distances between points and unknown points, and between known points and
-    returns two predicted arrays.
+    Function predicts semivariances for distances between known and unknown
+    points pairs.
 
     Parameters
     ----------
@@ -34,30 +34,33 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
         Trained theoretical variogram model.
 
     known_locations : numpy array
-        Locations with observed values.
+        Locations with measured values: ``[x, y, value]``.
 
     unknown_location : Union[List, Tuple, numpy array]
-        Point where you want to estimate value (x, y) <-> (lon, lat)
+        Point where you want to estimate value ``(x, y) <-> (lon, lat)``
 
     neighbors_range : float, default = None
-        The maximum distance where we search for ``unknown_location`` neighbors.
-        If ``None`` given then range is selected from the ``theoretical_model`` ``rang`` attribute.
+        The maximum distance where we search for the ``unknown_location``
+        neighbors. If ``None`` given then range is selected from
+        the Theoretical Model.
 
     no_neighbors : int, default = 4
         Number of the n-closest neighbors used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-        If ``True``: if number of neighbors within the ``neighbors_range`` is greater than the
-        ``number_of_neighbors`` then take all of them for modeling.
+        If ``True``: if number of neighbors within the ``neighbors_range``
+        is greater than the ``number_of_neighbors`` then take all of them
+        for modeling.
 
     max_tick : float, default=5.
-        If searching for neighbors in a specific direction how big should be a tolerance for increasing
-        the search angle (how many degrees more).
+        If searching for neighbors in a specific direction how large should
+        be tolerance for increasing the search angle (how many degrees more).
 
     Returns
     -------
     : List
-        Predictions from distance to unknown point, predictions from distance between known points,
+        Predictions from distance to unknown point,
+        predictions from distance between known points,
         and prepared Kriging data.
     """
 
@@ -66,19 +69,23 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
         neighbors_range = theoretical_model.rang
 
     if theoretical_model.direction is not None:
-        prepared_data = select_kriging_data_from_direction(unknown_position=unknown_location,
-                                                           data_array=known_locations,
-                                                           neighbors_range=neighbors_range,
-                                                           direction=theoretical_model.direction,
-                                                           number_of_neighbors=no_neighbors,
-                                                           use_all_neighbors_in_range=use_all_neighbors_in_range,
-                                                           max_tick=max_tick)
+        prepared_data = select_kriging_data_from_direction(
+            unknown_position=unknown_location,
+            data_array=known_locations,
+            neighbors_range=neighbors_range,
+            direction=theoretical_model.direction,
+            number_of_neighbors=no_neighbors,
+            use_all_neighbors_in_range=use_all_neighbors_in_range,
+            max_tick=max_tick
+        )
     else:
-        prepared_data = select_kriging_data(unknown_position=unknown_location,
-                                            data_array=known_locations,
-                                            neighbors_range=neighbors_range,
-                                            number_of_neighbors=no_neighbors,
-                                            use_all_neighbors_in_range=use_all_neighbors_in_range)
+        prepared_data = select_kriging_data(
+            unknown_position=unknown_location,
+            data_array=known_locations,
+            neighbors_range=neighbors_range,
+            number_of_neighbors=no_neighbors,
+            use_all_neighbors_in_range=use_all_neighbors_in_range
+        )
 
     unknown_distances = prepared_data[:, -1]
 
@@ -94,31 +101,35 @@ def get_predictions(theoretical_model: TheoreticalVariogram,
     return [k, predicted, prepared_data]
 
 
-def solve_weights(weights: np.ndarray, k: np.ndarray, allow_lsa=False) -> np.ndarray:
+def solve_weights(weights: np.ndarray,
+                  k: np.ndarray,
+                  allow_lsa=False) -> np.ndarray:
     """
-    Function solves Kriging System.
+    Solves Kriging System.
 
     Parameters
     ----------
     weights : numpy array
-        Array of custom_weights of size m:m.
+        Array of weights of size m:m.
 
     k : numpy array
         Array of semivariances of size m:n.
 
     allow_lsa : bool, default = False
-                Allow algorithm to use Least Squares Approximation when solver fails.
+        Allow algorithm to use Least Squares Approximation when solver fails.
 
     Returns
     -------
     solved : numpy array
-             Final custom_weights to estimate predicted value.
+        Final weights to estimate predicted value.
 
     Warns
     -----
-    ZerosMatrixWarning : raised when custom_weights / k matrices are full of zeros.
+    ZerosMatrixWarning :
+        Weights or k matrices are zero-matrices.
 
-    LeastSquaresApproximationWarning : raised when all custom_weights are solved by the LSA algorithm
+    LeastSquaresApproximationWarning :
+        Weights are solved using the LSA algorithm
     """
 
     try:
