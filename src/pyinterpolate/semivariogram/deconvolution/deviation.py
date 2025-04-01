@@ -9,7 +9,8 @@ def calculate_deviation(theoretical: np.ndarray,
                         regularized: np.ndarray,
                         method='mrd') -> float:
     """
-    Function calculates deviation between initial block variogram model and the regularized point support model.
+    Function calculates deviation between the initial block semivariogram
+    model and the regularized point support model.
 
     Parameters
     ----------
@@ -17,10 +18,10 @@ def calculate_deviation(theoretical: np.ndarray,
         Semivariances.
 
     regularized : numpy array
-        Semivariances
+        Semivariances.
 
     method : str, default=`'mrd'`
-        Deviation dir_neighbors_selection_method, available options:
+        Deviation monitoring method, available options:
           * `'mrd'` - mean relative difference
           * `'smrd'` - symmetric mean relative difference
           * `'rmse'` - root mean squared error
@@ -54,7 +55,8 @@ def mean_relative_difference(y_exp: np.ndarray, y_init: np.ndarray):
         Output from model regularization, array of length N.
 
     y_init : numpy array
-        Semivariances calculated from baseline Theoretical Model, array of length N.
+        Semivariances calculated from the block Theoretical Model,
+        array of length N.
 
     Returns
     -------
@@ -85,12 +87,14 @@ def symmetric_mean_relative_difference(y_exp: np.ndarray, y_init: np.ndarray):
         Output from model regularization, array of length N.
 
     y_init : numpy array
-        Semivariances calculated from baseline Theoretical Model, array of length N.
+        Semivariances calculated from the blocks Theoretical Model,
+        array of length N.
 
     Returns
     -------
     deviation : float
-        ``|Theoretical - Regularized| / [0.5 * (|Regularized| + |Theoretical|)]``
+        ``|Theoretical - Regularized| /
+          [0.5 * (|Regularized| + |Theoretical|)]``
     """
     # Ensure that both arrays are floats
     y_exp = y_exp.astype(float)
@@ -106,8 +110,10 @@ def symmetric_mean_relative_difference(y_exp: np.ndarray, y_init: np.ndarray):
 
 class Deviation:
     """
-    Regularization process deviation calculation and monitoring. Deviation in its base form
-    is defined as ``|Theoretical semivariances - Regularized semivariances| / Regularized semivariances``.
+    Regularization process deviation calculation and monitoring.
+    Deviation is defined as:
+    ``|Theoretical semivariances - Regularized semivariances| /
+      Regularized semivariances``.
 
     Parameters
     ----------
@@ -117,7 +123,7 @@ class Deviation:
                   [lag, semivariance]
 
     method : str, default=`'mrd'`
-        Deviation dir_neighbors_selection_method, available options:
+        Deviation monitoring method, available options:
           * `'mrd'` - mean relative difference
           * `'smrd'` - symmetric mean relative difference
           * `'rmse'` - root mean squared error
@@ -125,17 +131,57 @@ class Deviation:
     Attributes
     ----------
     deviations : list
-        Deviations of each iteration. The first element is the initial deviation.
+        Deviations of each iteration. The first element is
+        the initial deviation.
 
     initial_deviation : float
-        The initial deviation (
+        The initial deviation.
+
+    Attributes
+    ----------
+    method : str
+        See ``method`` parameter.
+
+    initial_deviation : float
+        See ``initial_deviation`` parameter.
+
+    deviations : list
+        The list of deviations. The first element is the initial deviation.
+
+    optimal_deviation : float
+        Minimal deviation. During the first iteration it is equal to the
+        initial deviation. It is updated only when the current deviation
+        is lower than the optimal deviation.
 
     Methods
     -------
+    current_deviation_decrease(), property
+        Current deviation decrease (current deviation minus the lowest
+        deviation).
+
+    current_ratio(), property
+        Ratio of current deviation to initial deviation.
+
+    calculate_deviation_decrease()
+        Current deviation decrease (current deviation minus the lowest
+        deviation).
+
+    calculate_deviation_ratio()
+        Ratio of current deviation to initial deviation.
+
+    deviation_direction()
+        Returns True if deviation is increasing,
+        False if deviation is decreasing.
+
+    normalize()
+        Ratios of current deviations to initial deviations. (Element-wise).
+
+    plot()
+        Plots the deviations.
 
     Raises
     ------
-    KeyError : User provides not supported deviation dir_neighbors_selection_method
+    KeyError : User provides unsupported deviation method name.
 
     """
 
@@ -155,6 +201,29 @@ class Deviation:
 
         self._current_deviation_decrease = self.calculate_deviation_decrease()
         self._current_deviation_ratio = self.calculate_deviation_ratio()
+
+    @property
+    def current_deviation_decrease(self):
+        """
+        Current deviation decrease (current deviation minus the lowest
+        deviation).
+
+        Returns
+        -------
+        : float
+        """
+        return self._current_deviation_decrease
+
+    @property
+    def current_ratio(self):
+        """
+        Ratio of current deviation to initial deviation.
+
+        Returns
+        -------
+        : float
+        """
+        return self._current_deviation_ratio
 
     def calculate_deviation_decrease(self):
         """
@@ -179,15 +248,10 @@ class Deviation:
         ratio = self.deviations[-1] / self.initial_deviation
         return ratio
 
-    def current_deviation_decrease(self):
-        return self._current_deviation_decrease
-
-    def current_ratio(self):
-        return self._current_deviation_ratio
-
     def deviation_direction(self) -> bool:
         """
-        Returns ``False`` if deviation is decreasing, ``True`` if deviation is increasing.
+        Returns ``False`` if deviation is decreasing,
+        ``True`` if deviation is increasing.
 
         Returns
         -------
@@ -199,6 +263,14 @@ class Deviation:
         return True
 
     def normalize(self):
+        """
+        Normalizes the deviations by dividing them by the initial deviation.
+
+        Returns
+        -------
+        : numpy array
+            Normalized array of deviations.
+        """
         return np.array(self.deviations) / self.initial_deviation
 
     def plot(self, normalized=True):
@@ -217,25 +289,43 @@ class Deviation:
             iters, deviations
         )
 
-        plt.title(f'Deviation change, baseline deviation: {self.initial_deviation}')
+        plt.title(f'Deviation change, '
+                  f'baseline deviation: {self.initial_deviation}')
         plt.xlabel('Iteration')
         plt.ylabel(ylabel)
         plt.show()
 
-    def set_current_as_optimal(self):
+    def _set_current_as_optimal(self):
+        """
+        Sets current deviation as optimal deviation. It is used when the
+        current deviation is lower than the optimal deviation.
+        """
         self.optimal_deviation = self.deviations[-1]
 
     def update(self,
                theoretical_model: np.ndarray,
                regularized_variances: np.ndarray):
+        """
+        Updates the deviation list with the current deviation.
 
-        deviation = calculate_deviation(theoretical_model, regularized_variances)
+        Parameters
+        ----------
+        theoretical_model : numpy array
+            The initial semivariances.
+
+        regularized_variances : numpy array
+            Regularized semivariances.
+        """
+        deviation = calculate_deviation(theoretical_model,
+                                        regularized_variances)
         self.deviations.append(deviation)
 
     def _check_deviation_method(self, method: str):
         if method in self._allowed_methods:
             return method
         else:
-            raise KeyError(f'Deviation dir_neighbors_selection_method {method} is not supported, please use "mrd" - mean relative difference, '
-                           f'"smrd" - symmetric mean relative difference, "rmse" - root mean squared error instead.')
-
+            raise KeyError(f'Deviation estimation method '
+                           f'{method} is not supported, please use '
+                           f'"mrd" - mean relative difference, '
+                           f'"smrd" - symmetric mean relative difference, '
+                           f'"rmse" - root mean squared error instead.')
