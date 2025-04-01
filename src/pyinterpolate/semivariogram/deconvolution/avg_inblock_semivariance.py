@@ -6,28 +6,32 @@ from pyinterpolate.semivariogram.lags.lags import get_current_and_previous_lag
 
 def group_distances(block_to_block_distances: dict, lags: np.ndarray) -> dict:
     """
-    Function prepares lag-neighbor-blocks Dict for semivariance calculations.
+    Function prepares lag -> block -> distances to neighbors dictionary for
+    semivariance calculations.
 
     Parameters
     ----------
     block_to_block_distances : Dict
-                               {block id: [distances to all blocks in an order of dict ids]}
+        ``{block id: [distances to all blocks in an order of dict ids]}``
 
     lags : numpy array
+        Ordered lags.
 
     Returns
     -------
     grouped_lags : Dict
-                   {lag: {area id: [list of neighbors within a lag]}}
+        ``{lag: {area id: [list of neighbors within a lag]}}``
     """
 
     grouped_lags = {}
 
     for idx, _ in enumerate(lags):
         current_lag, previous_lag = get_current_and_previous_lag(idx, lags)
-        neighbors_in_range = select_neighbors_in_range(block_to_block_distances,
-                                                       current_lag=current_lag,
-                                                       previous_lag=previous_lag)
+        neighbors_in_range = select_neighbors_in_range(
+            block_to_block_distances,
+            current_lag=current_lag,
+            previous_lag=previous_lag
+        )
         grouped_lags[current_lag] = neighbors_in_range
 
     return grouped_lags
@@ -43,34 +47,37 @@ def calculate_average_semivariance(block_to_block_distances: dict,
     Parameters
     ----------
     block_to_block_distances : Dict
-                               {block id : [distances to other blocks in order of keys]}
+        ``{block id : [distances to other blocks in order of keys]}``
 
     inblock_semivariances : Dict
-                            {area id: the inblock semivariance}
+        ``{area id: the inblock semivariance}``
 
     step_size : float
-                      Step size between lags.
+        Step size between lags.
 
     max_range : float
-                      Maximal distance of analysis.
+        Maximal distance of analysis.
 
     Returns
     -------
     avg_block_to_block_semivariance : numpy array
-                                      [lag, semivariance, number of blocks within lag]
+        ``[lag, semivariance, number of blocks within lag]``
 
 
     Notes
     -----
     Average inblock semivariance between blocks is defined as:
 
-    $$\gamma_{h}(v, v) = \frac{1}{2*N(h)} \sum_{a=1}^{N(h)} \gamma(v_{a}, v_{a}) + \gamma(v_{a_h}, v_{a_h})$$
+    $$\gamma_{h}(v, v) =
+      \frac{1}{2*N(h)} \sum_{a=1}^{N(h)} \gamma(v_{a}, v_{a}) +
+      \gamma(v_{a_h}, v_{a_h})$$
 
     where:
         - $\gamma_{h}(v, v)$ - average inblock semivariance per lag,
         - $N(h)$ - number of block pairs within a lag,
         - $\gamma(v_{a}, v_{a})$ - inblock semivariance of block a,
-        - $\gamma(v_{a_h}, v_{a_h})$ - inblock semivariance of neighbouring block at a distance h.
+        - $\gamma(v_{a_h}, v_{a_h})$ - inblock semivariance of neighbouring
+          block at a distance h.
     """
 
     avg_block_to_block_semivariance = []
