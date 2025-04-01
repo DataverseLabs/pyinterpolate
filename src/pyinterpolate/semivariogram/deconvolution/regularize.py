@@ -461,7 +461,7 @@ class Deconvolution:
 
                 if not self.deviation.deviation_direction():
                     self.w_change = False
-                    self.deviation.set_current_as_optimal()
+                    self.deviation._set_current_as_optimal()
 
                     self.optimal_theoretical_model = temp_theoretical_semivariogram_model
                     self.optimal_regularized_variogram = temp_regularized_variogram
