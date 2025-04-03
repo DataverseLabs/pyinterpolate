@@ -244,7 +244,7 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
         Observations.
 
     weighting_method : str
-        The name of a dir_neighbors_selection_method used to weight error at
+        The name of a method used to weight error at
         a given lags.
         Available methods:
         - closest: lags at a close range have greater weights,
@@ -263,7 +263,7 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
     ------
     AttributeError :
         The ``lag_points_distribution`` parameter is undefined when
-        "dense" ``dir_neighbors_selection_method`` is set.
+        "dense" method is set.
 
     Notes
     -----

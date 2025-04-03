@@ -24,15 +24,15 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
 
 class Deconvolution:
     """
-    Class performs deconvolution of semivariogram of areal data. Whole procedure is based on the iterative process
-    described in: [1].
+    Class performs deconvolution of semivariogram of areal data. Whole
+    procedure is based on the iterative process described in: [1].
 
     Steps to regularize semivariogram:
 
     - initialize your object (no parameters),
-    - use ``fit()`` dir_neighbors_selection_method to build initial point support model,
-    - use ``transform()`` dir_neighbors_selection_method to perform semivariogram regularization,
-    - save deconvoluted semivariogram model with ``export_model()`` dir_neighbors_selection_method.
+    - use ``fit()`` method to build the initial point support model,
+    - use ``transform()`` method to perform the semivariogram regularization,
+    - save deconvoluted semivariogram model with ``export_model()`` method.
 
     Attributes
     ----------
@@ -385,7 +385,7 @@ class Deconvolution:
         Raises
         ------
         AttributeError
-            ``initial_regularized_model`` is undefined (user didn't perform ``fit()`` dir_neighbors_selection_method).
+            ``initial_regularized_model`` is undefined (user didn't perform ``fit()`` method).
 
         ValueError
             ``limit_deviation_ratio`` or ``minimum_deviation_decrease`` parameters ``<= 0 or >= 1``.
@@ -617,7 +617,7 @@ class Deconvolution:
     def plot_variograms(self):
         """
         Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
-        semivariogram regularization with ``transform()`` dir_neighbors_selection_method.
+        semivariogram regularization with ``transform()`` method.
         """
         lags = self._initial_experimental_variogram.lags
 

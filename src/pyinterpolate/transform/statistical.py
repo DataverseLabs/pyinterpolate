@@ -203,7 +203,7 @@ def remove_outliers(data: Union[Iterable, Dict],
     Raises
     ------
     KeyError
-        Given detection dir_neighbors_selection_method is not 'zscore' or 'iqr'.
+        Given detection method is not 'zscore' or 'iqr'.
     """
 
     detection_fns = {
@@ -211,9 +211,9 @@ def remove_outliers(data: Union[Iterable, Dict],
         'iqr': [detect_outliers_iqr, iqr_lower_limit, iqr_upper_limit]
     }
 
-    # Check detection dir_neighbors_selection_method
+    # Check detection method
     if method not in detection_fns:
-        msg = (f'Given detection dir_neighbors_selection_method: {method} is not available. '
+        msg = (f'Given detection method: {method} is not available. '
                f'Available methods are "zscore" and "iqr".')
         raise KeyError(msg)
 

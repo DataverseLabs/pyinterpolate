@@ -442,8 +442,7 @@ class PoissonKrigingInput:
 
         Notes
         -----
-        In the first step ``dir_neighbors_selection_method`` creates
-        dataframe with this structure:
+        In the first step method creates DataFrame with this structure:
           * (unknown) block point support coordinate x
           * (unknown) block point support coordinate y
           * (unknown) block point support value

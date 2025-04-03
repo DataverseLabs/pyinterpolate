@@ -739,7 +739,7 @@ class TheoreticalVariogram:
                                       f'{self.spatial_dependency_strength}')
             mean_bias_msg = f'* Mean Bias: {self.bias}'
             mean_rmse_msg = f'* Mean RMSE: {self.rmse}'
-            error_weighting = (f'* Error-lag weighting dir_neighbors_selection_method: '
+            error_weighting = (f'* Error-lag weighting method: '
                                f'{self.deviation_weighting}')
 
             text_list = [title,
