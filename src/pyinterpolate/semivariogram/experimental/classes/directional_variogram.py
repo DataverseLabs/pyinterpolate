@@ -7,7 +7,7 @@ from pyinterpolate.semivariogram.experimental.classes.experimental_variogram imp
 
 class DirectionalVariogram:
     """
-    Class prepares four directional variograms and one isotropic variogram.
+    Class prepares four directional variograms and isotropic variogram.
 
     Parameters
     ----------
@@ -34,11 +34,12 @@ class DirectionalVariogram:
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = "t"
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
-
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+        Method used for neighbors selection in a given direction.
+        Available methods:
+          * "triangle" or "t", default method where point neighbors
+            are selected from a triangular area,
+          * "ellipse" or "e", the most accurate method but also the slowest
+            one.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
