@@ -47,8 +47,8 @@ def code_indicators(ds: np.ndarray, thresholds: ArrayLike) -> np.ndarray:
 def select_variogram_thresholds(ds: ArrayLike,
                                 n_thresh: int) -> List[float]:
     """
-    Function selects ``n_thresh`` thresholds of a sample dataset from its histogram, it divides histogram based on
-    the n-quantiles.
+    Function selects ``n_thresh`` thresholds of a sample dataset from
+    its histogram, it divides histogram based on the n-quantiles.
 
     Parameters
     ----------
@@ -95,7 +95,8 @@ class IndicatorVariogramData:
         The 1D numpy array with thresholds.
 
     ids : numpy array
-        The numpy array with ``[coordinate_x, coordinate_y, threshold_0, ..., threshold_n]``.
+        The numpy array with
+        ``[coordinate_x, coordinate_y, threshold_0, ..., threshold_n]``.
 
     See Also
     --------
@@ -129,13 +130,15 @@ class ExperimentalIndicatorVariogram:
         The number of thresholds to model data.
 
     step_size : float
-        The distance between lags within each points are included in the calculations.
+        The distance between lags within each points are included in
+        the calculations.
 
     max_range : float
         The maximum range of analysis.
 
     custom_weights : numpy array, default=None
-        Weights assigned to points, index of weight must be the same as index of point.
+        Weights assigned to points, index of weight must be the same
+        as index of point.
 
     direction : float (in range [0, 360]), default=None
         Direction of semivariogram, values from 0 to 360 degrees:
@@ -146,21 +149,23 @@ class ExperimentalIndicatorVariogram:
         - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1]), default=1
-        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0``
-        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-        for 0 tolerance.
+        If ``tolerance`` is 0 then points must be placed at a single line
+        with the beginning in the origin of the coordinate system and the
+        direction given by y axis and direction parameter. If ``tolerance``
+        is ``> 0`` then the bin is selected as an elliptical area with major
+        axis pointed in the same direction as the line for 0 tolerance.
 
-        * The major axis size == ``step_size``.
-        * The minor axis size is ``tolerance * step_size``
-        * The baseline point is at a center of the ellipse.
-        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
+          * The major axis size == ``step_size``.
+          * The minor axis size is ``tolerance * step_size``
+          * The baseline point is at a center of the ellipse.
+          * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = triangular
-        The method used for neighbors selection. Available methods:
+        Neighbors selection in a given distance. Available methods:
 
-        * "triangle" or "t", default method where a point neighbors are selected from a triangular area,
-        * "ellipse" or "e", the most accurate method but also the slowest one.
+        * "triangle" or "t", default method where point neighbors are
+          selected from triangular area,
+        * "ellipse" or "e", more accurate method but also slower.
 
     fit : bool, default = True
         Should models be fitted in the class initialization?
@@ -185,8 +190,8 @@ class ExperimentalIndicatorVariogram:
     tolerance : float
         Derived from the ``tolerance`` parameter.
 
-    method : str
-        Derived from the ``method`` parameter.
+    dir_neighbors_selection_method : str
+        Derived from the ``dir_neighbors_selection_method`` parameter.
 
     experimental_models : List
         The ``[threshold, experimental_variogram]`` pairs.
@@ -201,7 +206,8 @@ class ExperimentalIndicatorVariogram:
 
     References
     ----------
-    Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated non-parametric modeling of local uncertainty
+    Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
+    non-parametric modeling of local uncertainty
     in earth sciences. DOI: TODO
     """
 
@@ -217,7 +223,10 @@ class ExperimentalIndicatorVariogram:
                  dir_neighbors_selection_method='t',
                  fit=True):
 
-        self.ds = IndicatorVariogramData(ds=ds, number_of_thresholds=number_of_thresholds)
+        self.ds = IndicatorVariogramData(
+            ds=ds,
+            number_of_thresholds=number_of_thresholds
+        )
 
         self.step_size = step_size
         self.max_range = max_range
@@ -225,7 +234,7 @@ class ExperimentalIndicatorVariogram:
         self.custom_bins = custom_bins
         self.direction = direction
         self.tolerance = tolerance
-        self.method = dir_neighbors_selection_method
+        self.dir_neighbors_selection_method = dir_neighbors_selection_method
 
         self.experimental_models = {}
 
@@ -246,7 +255,7 @@ class ExperimentalIndicatorVariogram:
                 custom_bins=self.custom_bins,
                 direction=self.direction,
                 tolerance=self.tolerance,
-                dir_neighbors_selection_method=self.method,
+                dir_neighbors_selection_method=self.dir_neighbors_selection_method,
                 is_semivariance=True,
                 is_covariance=True
             )
@@ -297,7 +306,10 @@ class TheoreticalIndicatorVariogram:
 
     """
 
-    def __init__(self, experimental_indicator_variogram: ExperimentalIndicatorVariogram):
+    def __init__(
+            self,
+            experimental_indicator_variogram: ExperimentalIndicatorVariogram
+    ):
         self.experimental_indicator_variogram = experimental_indicator_variogram
         self.theoretical_indicator_variograms = {}
 
@@ -321,7 +333,8 @@ class TheoreticalIndicatorVariogram:
             error_estimator='rmse',
             deviation_weighting='equal'):
         """
-        Method tries to find the optimal range, sill and model (function) of the theoretical semivariogram.
+        Method tries to find the optimal range, sill and model
+        (function) of the theoretical semivariogram.
 
         Parameters
         ----------
@@ -376,28 +389,32 @@ class TheoreticalIndicatorVariogram:
             If given, then sill is fixed to this value.
 
         n_sill_values : int, default = 5
-            The last n experimental semivariance records for sill estimation. (Used only when ``sill_from_variance``
-            is set to ``False``).
+            The last n experimental semivariance records for sill estimation.
+            (Used only when ``sill_from_variance`` is set to ``False``).
 
         sill_from_variance : bool, default = False
             Estimate sill from the variance (semivariance at distance 0).
 
         min_sill : float, default = 1
-            The minimal fraction of the value chosen with the sill estimation method. The value is: for
-            ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
+            The minimal fraction of the value chosen with the sill estimation
+            method. The value is: for ``sill_from_values`` - the mean of
+            the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
         max_sill : float, default = 5
-            The maximum fraction of the value chosen with the sill estimation method. The value is: for
-            ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
+            The maximum fraction of the value chosen with the sill estimation
+            method. The value is: for ``sill_from_values`` - the mean of
+            the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
         number_of_sills : int, default = 16
-            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
+            How many equally spaced sill values are tested between
+            ``min_sill`` and ``max_sill``.
 
         direction : float, in range [0, 360], default=None
-            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter
-            is required if passed experimental variogram is stored in a numpy array.
+            The direction of a semivariogram. If ``None`` given then
+            semivariogram is isotropic. This parameter is required if passed
+            experimental variogram is stored in a numpy array.
 
         error_estimator : str, default = 'rmse'
             A model error estimation method. Available options are:
@@ -450,12 +467,14 @@ class TheoreticalIndicatorVariogram:
         Parameters
         ----------
         subplots : bool, default = False
-            If ``True`` then each indicator variogram is plotted on a separate plot. Otherwise, all variograms are
-            plotted on a scatter single plot.
+            If ``True`` then each indicator variogram is plotted on a separate
+            plot. Otherwise, all variograms are plotted on a single plot.
         """
 
         if subplots:
-            number_of_subplots = len(list(self.theoretical_indicator_variograms.keys()))
+            number_of_subplots = len(
+                list(self.theoretical_indicator_variograms.keys())
+            )
             fig, axes = plt.subplots(number_of_subplots,
                                      sharey=True,
                                      sharex=True,
@@ -468,7 +487,10 @@ class TheoreticalIndicatorVariogram:
                                       _item.experimental_semivariances,
                                       marker='x', c='#101010', alpha=0.2)
 
-                axes[idx_val].plot(_item.lags, _item.yhat, '--', color='#fc8d62')
+                axes[idx_val].plot(_item.lags,
+                                   _item.yhat,
+                                   '--',
+                                   color='#fc8d62')
                 axes[idx_val].set_title('Threshold: ' + f'{float(_key):.2f}')
 
                 idx_val = idx_val + 1
@@ -477,7 +499,9 @@ class TheoreticalIndicatorVariogram:
             # Plot everything on a single plot
             plt.figure(figsize=(10, 10))
             legend = []
-            markers_list = list(markers.MarkerStyle.filled_markers)  # Only filled
+            markers_list = list(
+                markers.MarkerStyle.filled_markers
+            )  # Only filled
             colors_list = [
                 '#66c2a5',
                 '#fc8d62',
@@ -492,14 +516,18 @@ class TheoreticalIndicatorVariogram:
                     plt.scatter(_item.lags,
                                 _item.experimental_semivariances,
                                 marker=mlist.pop(0),
-                                alpha=0.4, c=colors_list[cidx], edgecolors='black')
+                                alpha=0.4,
+                                c=colors_list[cidx],
+                                edgecolors='black')
                 except IndexError:
                     mlist = deepcopy(markers_list)
                     cidx = cidx + 1
                     plt.scatter(_item.lags,
                                 _item.experimental_semivariances,
                                 marker=mlist.pop(0),
-                                alpha=0.4, c=colors_list[cidx], edgecolors='black')
+                                alpha=0.4,
+                                c=colors_list[cidx],
+                                edgecolors='black')
 
                 no_items = len(_item.lags)
                 plt.annotate(
@@ -510,7 +538,9 @@ class TheoreticalIndicatorVariogram:
                     ]
                 )
 
-                legend.append(str(_marker_idx) + ' | T: ' + f'{float(_key):.2f}')
+                legend.append(
+                    str(_marker_idx) + ' | T: ' + f'{float(_key):.2f}'
+                )
                 _marker_idx = _marker_idx + 1
             plt.legend(legend)
 
