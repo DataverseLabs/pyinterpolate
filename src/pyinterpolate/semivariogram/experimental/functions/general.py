@@ -51,18 +51,6 @@ def omnidirectional_semivariogram_cloud(
             )
         )
 
-    # threads = []
-    #
-    # for idx in range(len(lags)):
-    #     thread = threading.Thread(
-    #         target=_get,
-    #         args=(idx,)
-    #     )
-    #     thread.start()
-    #     threads.append(thread)
-    #
-    # for thread in threads:
-    #     thread.join()
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
         for idx in range(len(lags)):
@@ -131,18 +119,6 @@ def omnidirectional_variogram(
                 custom_weights=custom_weights
             )
         )
-
-    # threads = []
-    # for idx in range(len(lags)):
-    #     thread = threading.Thread(
-    #         target=_get,
-    #         args=(idx,)
-    #     )
-    #     thread.start()
-    #     threads.append(thread)
-    #
-    # for thread in threads:
-    #     thread.join()
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = []
@@ -297,11 +273,6 @@ def _calc_omnidirectional_values(fn: Callable,
             return current_lag, 0, 0
         else:
             return current_lag, np.nan, np.nan
-        # else:
-        #     return curr
-        #     msg = f'There are no neighbors for a lag {current_lag},' \
-        #           f'the process has been stopped.'
-        #     raise RuntimeError(msg)
     else:
         vals_0 = points[distances_in_range[0], 2]
         vals_h = points[distances_in_range[1], 2]
