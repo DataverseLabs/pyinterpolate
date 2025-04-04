@@ -29,7 +29,7 @@ def test_fit_and_transform_methods():
             max_range=MAX_RANGE)
 
     assert isinstance(dcv._initial_theoretical_model, TheoreticalVariogram)
-    assert dcv.s2 > 0
+    assert dcv._s2 > 0
     assert isinstance(dcv._initial_theoretical_model_prediction, np.ndarray)
     assert dcv._initial_regularized_variogram is not None
 

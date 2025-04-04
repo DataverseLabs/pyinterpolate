@@ -5,11 +5,9 @@ Authors
 -------
 1. Szymon Moliński | @SimonMolinsky
 """
-from typing import Dict, Union, List
+from typing import Union, List
 
-import geopandas as gpd
 import numpy as np
-import pandas as pd
 from tqdm import trange
 import matplotlib.pyplot as plt
 
@@ -17,10 +15,14 @@ from pyinterpolate import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.core.validators.common import check_limits
-from pyinterpolate.semivariogram.deconvolution.aggregated_variogram import regularize
+from pyinterpolate.semivariogram.deconvolution.aggregated_variogram import \
+    regularize
 from pyinterpolate.semivariogram.deconvolution.deviation import Deviation
-from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
+from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import \
+    TheoreticalVariogram
 
+
+# TODO check line lenght and underscores
 
 class Deconvolution:
     """
@@ -34,97 +36,67 @@ class Deconvolution:
     - use ``transform()`` method to perform the semivariogram regularization,
     - save deconvoluted semivariogram model with ``export_model()`` method.
 
+    Parameters
+    ----------
+    verbose : bool, default = True
+        Print process steps into a terminal.
+
+    store_models : bool, default = False
+        Should theoretical and regularized models be stored after each
+        iteration.
+
     Attributes
     ----------
-    ps : Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]
+    ps : PointSupport
+        Point support data.
 
-        * Dict: ``{block id: [[point x, point y, value]]}``
-        * numpy array: ``[[block id, x, y, value]]``
-        * DataFrame and GeoDataFrame: columns = ``{x, y, ds, index}``
-        * PointSupport
-
-    blocks : Union[Blocks, gpd.GeoDataFrame, pd.DataFrame, np.ndarray]
+    blocks : Blocks
         Blocks with aggregated data.
 
-        * Blocks: ``Blocks()`` class object.
-        * GeoDataFrame and DataFrame must have columns: ``centroid.x, centroid.y, ds, index``.
-          Geometry column with polygons is not used and optional.
-        * numpy array: ``[[block index, centroid x, centroid y, value]]``.
+    deviation : Deviation
+        Deviation object tracking the fit error between the initial model and
+        regularized model.
 
-    _initial_regularized_variogram : numpy array
-        ``[lag, semivariance]``
+    min_deviation_ratio : float
+        Minimal ratio of model deviation to initial deviation when algorithm
+        is stopped. Parameter must be set within the limits ``(0, 1)``. Set
+        in ``transform()`` method.
 
-    _initial_theoretical_model : TheoreticalVariogram
+    min_deviation_decrease : float
+        The minimum ratio of the difference between model deviation and
+        optimal deviation to the optimal deviation:
+        ``|dev - opt_dev| / opt_dev``.
+        Parameter must be set within the limits ``(0, 1)``. Set in
+        ``transform()`` method.
 
-    _initial_theoretical_model_prediction : numpy array
-        ``[lag, semivariance]``
+    reps_deviation_decrease : int
+        How many repetitions of small deviation decrease before termination
+        of the algorithm.
 
-    _initial_experimental_variogram : numpy array
-        ``[lag, semivariance, number of pairs]``
+    weights : List
+        Weights applied to each lag during each regularization iteration.
 
     final_theoretical_model : TheoreticalVariogram
+        Optimal model with the lowest deviation between this model and initial
+        theoretical variogram derived from blocks.
 
     final_regularized_variogram : numpy array
         ``[lag, semivariance]``
 
-    step_size : float
-        Step size between lags.
+    is_fit : bool, default = False
+        Was model fitted? (The first step of regularization).
 
-    max_range : float
-        Maximal distance of analysis.
-
-    ranges : numpy array
-        ``np.arange(agg_step, agg_rng, agg_step)``
-
-    direction : float (in range [0, 360])
-        Direction of semivariogram, values from 0 to 360 degrees:
-
-        - 0 or 180: is E-W,
-        - 90 or 270 is N-S,
-        - 45 or 225 is NE-SW,
-        - 135 or 315 is NW-SE.
-
-    tolerance : float (in range [0, 1])
-
-        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y axis and direction parameter. If ``tolerance`` is ``> 0`` then
-        the bin is selected as an elliptical area with major axis pointed in the same direction as the line
-        for 0 tolerance.
-
-        * The major axis size == ``step_size``.
-        * The minor axis size is ``tolerance * step_size``
-        * The baseline point is at a center of the ellipse.
-        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
-
-    weighting_method : str
-        Method used to weight error at a given lags. Available methods:
-
-        - **equal**: no weighting,
-        - **closest**: lags at a close range have bigger weights,
-        - **distant**: lags that are further away have bigger weights,
-        - **dense**: error is weighted by the number of point pairs within a lag - more pairs, lesser weight.
-
-    weights : List
-        List of custom_weights applied to lags in each iteration.
-
-    verbose : bool
-        Should algorithm ``print()`` process steps into a terminal.
-
-    store_models : bool
-        Should theoretical and regularized models be stored after each iteration.
-
-    theoretical_models : List
-        List with theoretical models parameters.
-
-    regularized_models : List
-        List with numpy arrays with regularized models.
+    is_transformed : bool, default = False
+        Was model transformed?
 
 
     Methods
     -------
     fit()
-        Fits areal data and the point support data into a model, initializes the experimental semivariogram,
-        the theoretical semivariogram model, regularized point support model, and deviation.
+        Fits areal data and the point support data into a model,
+        initializes the experimental semivariogram,
+        the theoretical semivariogram model,
+        regularized point support model, and deviation.
 
     transform()
         Performs semivariogram regularization.
@@ -146,8 +118,9 @@ class Deconvolution:
 
     References
     ----------
-    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical
-    Units, Mathematical Geology 40(1), 101-128, 2008
+    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in
+    the Presence of Irregular Geographical Units,
+    Mathematical Geology 40(1), 101-128, 2008
 
     Examples
     --------
@@ -157,7 +130,7 @@ class Deconvolution:
     ...         step_size=...,
     ...         max_range=...,
     ...         variogram_weighting_method='closest')
-    >>> dcv.transform(max_iters=5)
+    >>> dcv.transform(_max_iters=5)
     >>> dcv.plot_variograms()
     >>> dcv.plot_deviations()
     >>> dcv.plot_weights()
@@ -170,22 +143,28 @@ class Deconvolution:
         self.ps = None  # point support
         self.blocks = None  # aggregated dataset
 
-        # Initial variogram parameters
-        self.step_size = None
-        self.max_range = None
-        self.nugget = None
-        self.direction = None
-        self.ranges = None
-        self.tolerance = None
-        self.weighting_method = None
-        self.models_group = None
-
         # Deviation and custom_weights
         self.deviation: Deviation = None
         self.min_deviation_ratio = None
         self.min_deviation_decrease = None
         self.reps_deviation_decrease = None
         self.weights = []
+
+        # Variograms - final
+        self.final_theoretical_model = None
+        self.final_regularized_variogram = None
+
+        # Control
+        self.is_fit = False
+        self.is_transformed = False
+
+        self._max_iters = 0
+        self._iters_deviation_decrease = 0
+        self._deviation_counter = 0
+        self._w_change = False
+        self._verbose = verbose
+        self._store_models = store_models
+        self._iter = 0
 
         # Variograms - initial
         self._initial_regularized_variogram = None
@@ -194,28 +173,25 @@ class Deconvolution:
         self._initial_experimental_variogram: ExperimentalVariogram = None
 
         # Variograms - optimal
-        self.s2 = None  # sill of initial theoretical model squared
-        self.optimal_theoretical_model: TheoreticalVariogram = None
-        self.optimal_regularized_variogram = None
+        self._s2 = None  # sill of initial theoretical model squared
+        self._optimal_theoretical_model: TheoreticalVariogram = None
+        self._optimal_regularized_variogram = None
 
-        # Variograms - final
-        self.final_theoretical_model = None
-        self.final_regularized_variogram = None
-
-        # Control
-        self.verbose = verbose
-        self.store_models = store_models
-        self.iter = 0
-        self.max_iters = 0
-        self.reps_deviation_decrease = 0
-        self.deviation_counter = 0
-        self.w_change = False
-        self.is_fit = False
-        self.is_transformed = False
+        # Initial variogram parameters
+        self._step_size = None
+        self._max_range = None
+        self._nugget = None
+        self._direction = None
+        self._ranges = None
+        self._tolerance = None
+        self._weighting_method = None
+        self._models_group = None
 
         # Debug and stability
-        self.theoretical_models = []  # List with theoretical models parameters
-        self.regularized_models = []  # List with numpy arrays with regularized models
+        # List with theoretical models parameters
+        self._theoretical_models = []
+        # List with arrays with regularized models
+        self._regularized_models = []
 
     def fit(self,
             blocks: Blocks,
@@ -228,7 +204,8 @@ class Deconvolution:
             variogram_weighting_method: str = 'closest',
             models_group: Union[str, list] = 'safe') -> None:
         """
-        Fits the blocks semivariogram into the point support semivariogram. The initial step of regularization.
+        Fits the blocks semivariogram into the point support semivariogram.
+        The initial step of regularization.
 
         Parameters
         ----------
@@ -248,7 +225,8 @@ class Deconvolution:
             The nugget of a data - estimated for ``blocks``.
 
         direction : float (in range [0, 360]), optional
-            Direction of ``blocks`` semivariogram, values from 0 to 360 degrees:
+            Direction of ``blocks`` semivariogram, values from 0 to 360
+            degrees:
 
             - 0 or 180: is E-W,
             - 90 or 270 is N-S,
@@ -256,12 +234,12 @@ class Deconvolution:
             - 135 or 315 is NW-SE.
 
         tolerance : float (in range [0, 1]), optional
-            If ``tolerance`` is 0 then points must be placed at a single line with
-            the beginning in the origin of the coordinate system and the
-            direction given by y axis and direction parameter.
-            If ``tolerance`` is ``> 0`` then the bin is selected as an elliptical
-            area with major axis pointed in the same direction as the line for
-            ``0`` tolerance.
+            If ``tolerance`` is 0 then points must be placed at a single
+            line with the beginning in the origin of the coordinate system
+            and the direction given by y axis and direction parameter.
+            If ``tolerance`` is ``> 0`` then the points are selected in
+            elliptical area with major axis pointed in the same direction as
+            the line for ``0`` tolerance.
 
             * The major axis size == ``step_size``.
             * The minor axis size is ``tolerance * step_size``
@@ -292,57 +270,57 @@ class Deconvolution:
                 - 'spherical'.
         """
 
-        if self.verbose:
+        if self._verbose:
             print('Initial fit of semivariogram')
 
         # Update class parameters
         self.blocks = blocks
         self.ps = point_support
-        self.step_size = step_size
-        self.max_range = max_range
+        self._step_size = step_size
+        self._max_range = max_range
 
         if nugget is not None:
-            self.nugget = nugget
-        self.ranges = np.arange(step_size, max_range, step_size)
+            self._nugget = nugget
+        self._ranges = np.arange(step_size, max_range, step_size)
         if direction is not None:
-            self.direction = direction
-        self.tolerance = tolerance
-        self.weighting_method = variogram_weighting_method
-        self.models_group = models_group
+            self._direction = direction
+        self._tolerance = tolerance
+        self._weighting_method = variogram_weighting_method
+        self._models_group = models_group
 
         # Compute experimental variogram of areal data
         areal_centroids = self.blocks.representative_points_array()
 
         self._initial_experimental_variogram = ExperimentalVariogram(
             ds=areal_centroids,
-            step_size=self.step_size,
-            max_range=self.max_range,
-            direction=self.direction,
-            tolerance=self.tolerance
+            step_size=self._step_size,
+            max_range=self._max_range,
+            direction=self._direction,
+            tolerance=self._tolerance
         )
 
         # Compute theoretical variogram of areal data
         self._initial_theoretical_model.autofit(
             experimental_variogram=self._initial_experimental_variogram,
-            nugget=self.nugget,
-            models_group=self.models_group,
-            deviation_weighting=self.weighting_method
+            nugget=self._nugget,
+            models_group=self._models_group,
+            deviation_weighting=self._weighting_method
         )
-        self.s2 = self._initial_theoretical_model.sill
+        self._s2 = self._initial_theoretical_model.sill
         self._initial_theoretical_model_prediction = self._initial_theoretical_model.experimental_semivariances
 
         # Regularize
         self._initial_regularized_variogram = regularize(
             blocks=self.blocks,
             point_support=self.ps,
-            step_size=self.step_size,
-            max_range=self.max_range,
-            nugget=self.nugget,
-            direction=self.direction,
-            tolerance=self.tolerance,
+            step_size=self._step_size,
+            max_range=self._max_range,
+            nugget=self._nugget,
+            direction=self._direction,
+            tolerance=self._tolerance,
             theoretical_block_model=self._initial_theoretical_model,
-            variogram_weighting_method=self.weighting_method,
-            verbose=self.verbose,
+            variogram_weighting_method=self._weighting_method,
+            verbose=self._verbose,
             log_process=False
         )
 
@@ -352,15 +330,15 @@ class Deconvolution:
         )
 
         self.is_fit = True
-        self.iter = 1
+        self._iter = 1
 
-        if self.verbose:
+        if self._verbose:
             print('Regularization fit process ends')
 
     def transform(self,
                   max_iters=25,
-                  limit_deviation_ratio=0.1,
-                  minimum_deviation_decrease=0.01,
+                  min_deviation_ratio=0.1,
+                  min_deviation_decrease=0.01,
                   reps_deviation_decrease=3):
         """
         Method performs semivariogram regularization after model fitting.
@@ -370,25 +348,30 @@ class Deconvolution:
         max_iters : int, default = 25
             Maximum number of iterations.
 
-        limit_deviation_ratio : float, default = 0.1
-            Minimal ratio of model deviation to initial deviation when algorithm is stopped.
-            Parameter must be set within the limits ``(0, 1)``.
+        min_deviation_ratio : float, default = 0.1
+            Minimal ratio of model deviation to initial deviation when
+            algorithm is stopped. Parameter must be set within the limits
+            ``(0, 1)``.
 
-        minimum_deviation_decrease : float, default = 0.01
-            The minimum ratio of the difference between model deviation and optimal deviation
-            to the optimal deviation: ``|dev - opt_dev| / opt_dev``.
+        min_deviation_decrease : float, default = 0.01
+            The minimum ratio of the difference between model deviation
+            and optimal deviation to the optimal deviation:
+            ``|dev - opt_dev| / opt_dev``.
             Parameter must be set within the limits ``(0, 1)``.
 
         reps_deviation_decrease : int, default = 3
-            How many repetitions of small deviation decrease before termination of the algorithm.
+            How many repetitions of small deviation decrease before
+            termination of the algorithm.
 
         Raises
         ------
         AttributeError
-            ``initial_regularized_model`` is undefined (user didn't perform ``fit()`` method).
+            ``initial_regularized_model`` is undefined (user didn't
+            perform ``fit()`` method).
 
         ValueError
-            ``limit_deviation_ratio`` or ``minimum_deviation_decrease`` parameters ``<= 0 or >= 1``.
+            ``limit_deviation_ratio`` or ``minimum_deviation_decrease``
+            parameters ``<= 0 or >= 1``.
 
         """
 
@@ -398,57 +381,60 @@ class Deconvolution:
         self._check_fit()
 
         # Check limits
-        check_limits(limit_deviation_ratio)
-        check_limits(minimum_deviation_decrease)
+        check_limits(min_deviation_ratio)
+        check_limits(min_deviation_decrease)
 
-        # Update optimal models with initial models - make copies to be sure that we didn't overwrite values
-        self.max_iters = max_iters
-        self.min_deviation_ratio = limit_deviation_ratio
-        self.min_deviation_decrease = minimum_deviation_decrease
+        # Update optimal models with initial models -
+        # make copies to be sure that we didn't overwrite values
+        self._max_iters = max_iters
+        self.min_deviation_ratio = min_deviation_ratio
+        self.min_deviation_decrease = min_deviation_decrease
         self.reps_deviation_decrease = reps_deviation_decrease
 
         initial_model_params = self._initial_theoretical_model.to_dict()
-        self.optimal_theoretical_model = self._initial_theoretical_model
-        self.optimal_regularized_variogram = self._initial_regularized_variogram.copy()
+        self._optimal_theoretical_model = self._initial_theoretical_model
+        self._optimal_regularized_variogram = self._initial_regularized_variogram.copy()
 
-        # Append models if store_models parameter is set to True
-        if self.store_models:
-            self.theoretical_models.append(initial_model_params)
-            self.regularized_models.append(self._initial_regularized_variogram)
+        # Append models if _store_models parameter is set to True
+        if self._store_models:
+            self._theoretical_models.append(initial_model_params)
+            self._regularized_models.append(
+                self._initial_regularized_variogram)
 
         # Start iterative procedure
-        for i in trange(self.max_iters, disable=not self.verbose):
+        for i in trange(self._max_iters, disable=not self._verbose):
             deviation_test = self._check_deviation_gains(i)
             if deviation_test:
-                if self.verbose:
+                if self._verbose:
                     print('Process terminated: deviation gain is too small')
                 break
             else:
-                # Compute new experimental values for new experimental point support model
+                # Compute new experimental values for
+                # the new experimental point support model
                 rescaled_experimental_variogram = self._rescale_optimal_theoretical_model()
 
                 # Fit rescaled model to the new theoretical fn
                 temp_theoretical_semivariogram_model = TheoreticalVariogram()
                 temp_theoretical_semivariogram_model.autofit(
                     experimental_variogram=rescaled_experimental_variogram,
-                    nugget=self.nugget,
-                    models_group=self.models_group,
-                    deviation_weighting=self.weighting_method
+                    nugget=self._nugget,
+                    models_group=self._models_group,
+                    deviation_weighting=self._weighting_method
                 )
 
                 # Regularize model
                 temp_regularized_variogram = regularize(
                     blocks=self.blocks,
-                    step_size=self.step_size,
-                    max_range=self.max_range,
-                    nugget=self.nugget,
+                    step_size=self._step_size,
+                    max_range=self._max_range,
+                    nugget=self._nugget,
                     point_support=self.ps,
                     theoretical_block_model=temp_theoretical_semivariogram_model,
                     experimental_block_semivariances=rescaled_experimental_variogram,
-                    direction=self.direction,
-                    tolerance=self.tolerance,
-                    variogram_weighting_method=self.weighting_method,
-                    verbose=self.verbose,
+                    direction=self._direction,
+                    tolerance=self._tolerance,
+                    variogram_weighting_method=self._weighting_method,
+                    verbose=self._verbose,
                     log_process=False
                 )
 
@@ -460,25 +446,29 @@ class Deconvolution:
                 )
 
                 if not self.deviation.deviation_direction():
-                    self.w_change = False
-                    self.deviation._set_current_as_optimal()
+                    self._w_change = False
+                    self.deviation.set_current_as_optimal()
 
-                    self.optimal_theoretical_model = temp_theoretical_semivariogram_model
-                    self.optimal_regularized_variogram = temp_regularized_variogram
+                    self._optimal_theoretical_model = temp_theoretical_semivariogram_model
+                    self._optimal_regularized_variogram = temp_regularized_variogram
 
                 else:
-                    self.w_change = True
+                    self._w_change = True
 
-                self.iter = self.iter + 1
+                self._iter = self._iter + 1
 
-                # Append models if store_models parameter is set to True
-                if self.store_models:
-                    self.theoretical_models.append(temp_theoretical_semivariogram_model)
-                    self.regularized_models.append(temp_regularized_variogram)
+                # Append models if _store_models parameter is set to True
+                if self._store_models:
+                    self._theoretical_models.append(
+                        temp_theoretical_semivariogram_model
+                    )
+                    self._regularized_models.append(
+                        temp_regularized_variogram
+                    )
 
         # Get theoretical model from regularized
-        self.final_theoretical_model = self.optimal_theoretical_model
-        self.final_regularized_variogram = self.optimal_regularized_variogram
+        self.final_theoretical_model = self._optimal_theoretical_model
+        self.final_regularized_variogram = self._optimal_regularized_variogram
 
         self.is_transformed = True
 
@@ -501,7 +491,8 @@ class Deconvolution:
 
         Parameters
         ----------
-        Fits the blocks semivariogram into the point support semivariogram. The initial step of regularization.
+        Fits the blocks semivariogram into the point support semivariogram.
+        The initial step of regularization.
 
         Parameters
         ----------
@@ -521,7 +512,8 @@ class Deconvolution:
             The nugget of a data - estimated for ``blocks``.
 
         direction : float (in range [0, 360]), optional
-            Direction of ``blocks`` semivariogram, values from 0 to 360 degrees:
+            Direction of ``blocks`` semivariogram, values from 0 to 360
+            degrees:
 
             - 0 or 180: is E-W,
             - 90 or 270 is N-S,
@@ -529,12 +521,12 @@ class Deconvolution:
             - 135 or 315 is NW-SE.
 
         tolerance : float (in range [0, 1]), optional
-            If ``tolerance`` is 0 then points must be placed at a single line with
-            the beginning in the origin of the coordinate system and the
+            If ``tolerance`` is 0 then points must be placed at a single line
+            with the beginning in the origin of the coordinate system and the
             direction given by y axis and direction parameter.
-            If ``tolerance`` is ``> 0`` then the bin is selected as an elliptical
-            area with major axis pointed in the same direction as the line for
-            ``0`` tolerance.
+            If ``tolerance`` is ``> 0`` then the bin is selected as an
+            elliptical area with major axis pointed in the same direction
+            as the line for ``0`` tolerance.
 
             * The major axis size == ``step_size``.
             * The minor axis size is ``tolerance * step_size``
@@ -568,15 +560,19 @@ class Deconvolution:
             Maximum number of iterations.
 
         limit_deviation_ratio : float, default = 0.01
-            Minimal ratio of model deviation to initial deviation when algorithm is stopped. Parameter must be set
+            Minimal ratio of model deviation to initial deviation when
+            algorithm is stopped. Parameter must be set
             within the limits ``(0, 1)``.
 
         minimum_deviation_decrease : float, default = 0.001
-            The minimum ratio of the difference between model deviation and optimal deviation to the optimal
-            deviation: ``|dev - opt_dev| / opt_dev``. The parameter must be set within the limits ``(0, 1)``.
+            The minimum ratio of the difference between model deviation
+            and optimal deviation to the optimal deviation:
+            ``|dev - opt_dev| / opt_dev``. The parameter must be set within
+            the limits ``(0, 1)``.
 
         reps_deviation_decrease : int, default = 3
-            How many repetitions of small deviation decrease before termination of the algorithm.
+            How many repetitions of small deviation decrease before
+            termination of the algorithm.
         """
 
         self.fit(blocks=blocks,
@@ -590,8 +586,8 @@ class Deconvolution:
                  models_group=models_group)
 
         self.transform(max_iters=max_iters,
-                       limit_deviation_ratio=limit_deviation_ratio,
-                       minimum_deviation_decrease=minimum_deviation_decrease,
+                       min_deviation_ratio=limit_deviation_ratio,
+                       min_deviation_decrease=minimum_deviation_decrease,
                        reps_deviation_decrease=reps_deviation_decrease)
 
     def export_model(self, fname: str):
@@ -610,14 +606,16 @@ class Deconvolution:
         """
 
         if self.final_theoretical_model is None:
-            raise RuntimeError('You cannot export any model if you not transform data.')
+            raise RuntimeError('You cannot export any '
+                               'model if you not transform data.')
 
         self.final_theoretical_model.to_json(fname)
 
     def plot_variograms(self):
         """
-        Function shows experimental semivariogram, theoretical semivariogram and regularized semivariogram after
-        semivariogram regularization with ``transform()`` method.
+        Function shows experimental semivariogram, theoretical
+        semivariogram and regularized semivariogram after
+        semivariogram regularization (transforming).
         """
         lags = self._initial_experimental_variogram.lags
 
@@ -632,13 +630,22 @@ class Deconvolution:
             plt.plot(lags, self.final_regularized_variogram[:, 1], 'go')
 
             plt.plot(lags,
-                     self.final_theoretical_model.predict(lags), color='black', linestyle='dotted')
-            plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data',
-                        'Regularized data points, iteration {}'.format(self.iter),
+                     self.final_theoretical_model.predict(lags),
+                     color='black',
+                     linestyle='dotted')
+            plt.legend(['Experimental semivariogram of areal data',
+                        'Initial Semivariogram of areal data',
+                        'Regularized data points, iteration {}'.format(
+                            self._iter),
                         'Optimized theoretical point support model'])
-            plt.title('Semivariograms comparison. Deviation value: {}'.format(self.deviation.optimal_deviation))
+            plt.title(
+                'Semivariograms comparison. Deviation value: {}'.format(
+                    self.deviation.optimal_deviation
+                )
+            )
         else:
-            plt.legend(['Experimental semivariogram of areal data', 'Initial Semivariogram of areal data'])
+            plt.legend(['Experimental semivariogram of areal data',
+                        'Initial Semivariogram of areal data'])
             plt.title('Semivariograms comparison')
         plt.xlabel('Distance')
         plt.ylabel('Semivariance')
@@ -660,7 +667,7 @@ class Deconvolution:
             plt.ylabel('Average weight')
         else:
             legend = []
-            for idx, lag in enumerate(self.optimal_theoretical_model.lags):
+            for idx, lag in enumerate(self._optimal_theoretical_model.lags):
                 legend.append(f'Lag: {lag:.4f}')
                 plt.plot(
                     iter_no,
@@ -678,8 +685,8 @@ class Deconvolution:
 
     def _check_fit(self):
         if self._initial_regularized_variogram is None:
-            msg = 'The initial regularized model (initial_regularized_model attribute) is undefined. Perform fit()' \
-                  'before transformation!'
+            msg = ('The initial regularized model is undefined. Perform fit()'
+                   ' before transformation!')
             raise AttributeError(msg)
 
     def _check_deviation_gains(self, iter_no: int):
@@ -711,13 +718,14 @@ class Deconvolution:
             dev_decrease = self.deviation.calculate_deviation_decrease()
 
             # TODO this condition is very hard to met, have to be changed
-            if dev_decrease < 0 and abs(dev_decrease) <= self.min_deviation_decrease:
-                self.deviation_counter = self.deviation_counter + 1
-                if self.deviation_counter == self.reps_deviation_decrease:
+            if dev_decrease < 0 and abs(
+                    dev_decrease) <= self.min_deviation_decrease:
+                self._deviation_counter = self._deviation_counter + 1
+                if self._deviation_counter == self._iters_deviation_decrease:
                     return True
                 return False
             else:
-                self.deviation_counter = 0
+                self._deviation_counter = 0
                 return False
 
     def _deviation_ratio(self) -> bool:
@@ -735,21 +743,25 @@ class Deconvolution:
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
         """
-        Function rescales points derived from the optimal theoretical model and creates new experimental
-        values based on the equation:
+        Function rescales points derived from the optimal theoretical model
+        and creates new experimental values based on the equation:
 
         $$\gamma_{res}(h) = \gamma_{opt}(h) \times w(h)$$
 
-        $$w(h) = w(h) = 1 + \frac{\gamma_{v}^{exp}(h)-\gamma_{v}^{opt}}{s^{2}\sqrt{iter}}$$
+        $$w(h) =
+          1 + \frac{\gamma_{v}^{exp}(h)-\gamma_{v}^{opt}}{s^{2}\sqrt{_iter}}$$
 
         where:
 
-        - $\gamma_{v}^{exp}(h)$ : theoretical model fitted to blocks (1st iter), then point support model that has been
-                                  derived from a rescaled values.
-        - $\gamma_{v}^{opt}$ : optimal point support model (after regularization),
-        - $w(h)$ : custom_weights vector (each record is a weight applied to a specific lag),
+        - $\gamma_{v}^{exp}(h)$ : theoretical model fitted to blocks
+            (1st _iter), then point support model that has been derived from
+            a rescaled values.
+        - $\gamma_{v}^{opt}$ : optimal point support model (after
+            regularization),
+        - $w(h)$ : custom_weights vector (each record is a weight applied
+            to a specific lag),
         - $s$ - sill of the theoretical model fitted to the blocks,
-        - $iter$ - iteration number.
+        - $_iter$ - iteration number.
 
         Returns
         -------
@@ -758,29 +770,49 @@ class Deconvolution:
 
         """
 
-        y_opt_h = self.optimal_theoretical_model.predict(self.ranges)
+        y_opt_h = self._optimal_theoretical_model.predict(self._ranges)
 
-        if not self.w_change:
-            denom = self.s2 * np.sqrt(self.iter)
-            numer = self._initial_theoretical_model_prediction - self.optimal_regularized_variogram[:, 1]
+        if not self._w_change:
+            denom = self._s2 * np.sqrt(self._iter)
+            numer = (self._initial_theoretical_model_prediction -
+                     self._optimal_regularized_variogram[:, 1])
             w = 1 + (numer / denom)
         else:
             w = 1 + (self.weights[-1] - 1) / 2
 
-        rescaled = np.zeros_like(self.optimal_regularized_variogram)
-        rescaled[:, 0] = self.optimal_regularized_variogram[:, 0]
+        rescaled = np.zeros_like(self._optimal_regularized_variogram)
+        rescaled[:, 0] = self._optimal_regularized_variogram[:, 0]
         rescaled[:, 1] = y_opt_h * w
 
         self.weights.append(w)
 
         return rescaled
 
-    def _rescaled_to_exp_variogram(self, rescaled: np.ndarray) -> ExperimentalVariogram:
-        exp_var = ExperimentalVariogram(ds=self._initial_experimental_variogram.ds,
-                                        custom_bins=self._initial_experimental_variogram.lags,
-                                        custom_weights=self._initial_experimental_variogram.custom_weights,
-                                        direction=self._initial_experimental_variogram.direction,
-                                        tolerance=self._initial_experimental_variogram.tolerance)
+    def _rescaled_to_exp_variogram(
+            self,
+            rescaled: np.ndarray
+    ) -> ExperimentalVariogram:
+        """
+        Function sets new experimental variogram based on the rescaled
+        semivariances; variance of experimental variogram is calculated
+        as the mean of the last 5 rescaled semivariances.
+
+        Parameters
+        ----------
+        rescaled : numpy array
+            Rescaled semivariances.
+
+        Returns
+        -------
+        exp_var : ExperimentalVariogram
+            Experimental variogram of rescaled semivariances.
+        """
+        exp_var = ExperimentalVariogram(
+            ds=self._initial_experimental_variogram.ds,
+            custom_bins=self._initial_experimental_variogram.lags,
+            custom_weights=self._initial_experimental_variogram.custom_weights,
+            direction=self._initial_experimental_variogram.direction,
+            tolerance=self._initial_experimental_variogram.tolerance)
 
         exp_var.semivariances = rescaled
         variance = np.mean(exp_var.semivariances[:, 1][-5:])
@@ -789,7 +821,13 @@ class Deconvolution:
         return exp_var
 
     def __str__(self):
+        """
+        Modeling status.
 
+        Returns
+        -------
+        : str
+        """
         if self.is_fit:
             msg_fit = '* Model has been fitted'
         else:

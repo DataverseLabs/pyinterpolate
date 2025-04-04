@@ -35,7 +35,7 @@
 #         point_support=PS,
 #         number_of_neighbors=8,
 #         kriging_type='cb',
-#         verbose=True,
+#         _verbose=True,
 #         raise_when_negative_error=False
 #     )
 #     assert isinstance(filtered, gpd.GeoDataFrame)
@@ -47,7 +47,7 @@
 #         point_support=PS,
 #         number_of_neighbors=8,
 #         kriging_type='ata',
-#         verbose=True,
+#         _verbose=True,
 #         raise_when_negative_error=False
 #     )
 #     assert isinstance(filtered, gpd.GeoDataFrame)
@@ -59,7 +59,7 @@
 #         point_support=PS,
 #         number_of_neighbors=8,
 #         kriging_type='atp',
-#         verbose=True,
+#         _verbose=True,
 #         raise_when_negative_error=False
 #     )
 #     assert isinstance(filtered, gpd.GeoDataFrame)

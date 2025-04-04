@@ -28,8 +28,8 @@ if __name__ == '__main__':
 
     transformed = dcv.transform(
         max_iters=10,
-        limit_deviation_ratio=0.1,
-        minimum_deviation_decrease=0.01,
+        min_deviation_ratio=0.1,
+        min_deviation_decrease=0.01,
         reps_deviation_decrease=2
     )
     dcv.plot_variograms()

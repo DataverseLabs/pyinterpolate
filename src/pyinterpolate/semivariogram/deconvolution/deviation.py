@@ -295,7 +295,7 @@ class Deviation:
         plt.ylabel(ylabel)
         plt.show()
 
-    def _set_current_as_optimal(self):
+    def set_current_as_optimal(self):
         """
         Sets current deviation as optimal deviation. It is used when the
         current deviation is lower than the optimal deviation.

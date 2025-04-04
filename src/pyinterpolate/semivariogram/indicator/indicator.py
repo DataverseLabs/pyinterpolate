@@ -369,7 +369,7 @@ class TheoreticalIndicatorVariogram:
             than **0.5** raises warning.
 
         number_of_ranges : int, default = 16
-            How many equally spaced ranges are tested between
+            How many bins are tested between
             ``min_range`` and ``max_range``.
 
         sill : float, default = None
