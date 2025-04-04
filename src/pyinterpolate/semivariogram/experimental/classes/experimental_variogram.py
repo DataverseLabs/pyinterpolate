@@ -8,7 +8,7 @@ from pyinterpolate.core.data_models.experimental_variogram import \
     ExperimentalVariogramModel
 from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.core.validators.experimental_semivariance import \
-    _validate_plot_attributes_for_experimental_variogram
+    validate_plot_attributes_for_experimental_variogram
 from pyinterpolate.semivariogram.experimental.experimental_semivariogram import \
     point_cloud_semivariance, calculate_semivariance
 
@@ -51,11 +51,11 @@ class ExperimentalVariogram:
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in within a given angle. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+          * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+          * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -63,7 +63,8 @@ class ExperimentalVariogram:
         distance.
 
     custom_weights : numpy array, optional
-        Custom weights assigned to points. Only semivariance values are weighted.
+        Custom weights assigned to points. Only semivariance values are
+        weighted.
 
     is_semivariance : bool, default=True
         Calculate experimental semivariance.
@@ -82,9 +83,7 @@ class ExperimentalVariogram:
     Methods
     -------
     plot()
-        Shows experimental variances. Methods won't work if you have installed
-        ``[min]`` version of the package, and you don't have ``matplotlib``
-        in your environment.
+        Shows experimental variances.
 
     See Also
     --------
@@ -207,7 +206,7 @@ class ExperimentalVariogram:
         import matplotlib.pyplot as plt
 
         # Validate parameters
-        _validate_plot_attributes_for_experimental_variogram(
+        validate_plot_attributes_for_experimental_variogram(
             is_semivar=self.__c_sem,
             is_covar=self.__c_cov,
             plot_semivar=semivariance,
@@ -404,13 +403,15 @@ def build_experimental_variogram(ds: np.ndarray,
                                  direction: float = None,
                                  tolerance: float = None,
                                  dir_neighbors_selection_method: str = 't',
-                                 custom_bins: Union[np.ndarray, Collection] = None,
+                                 custom_bins: Union[
+                                     np.ndarray, Collection
+                                 ] = None,
                                  custom_weights: np.ndarray = None,
                                  is_semivariance=True,
                                  is_covariance=True,
                                  as_cloud=False):
     """
-    Function is an alias to ExperimentalVariogram() class.
+    Function is an alias to ``ExperimentalVariogram()``.
 
     Parameters
     ----------
@@ -445,11 +446,11 @@ def build_experimental_variogram(ds: np.ndarray,
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in within a given angle. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+          * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+          * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -457,7 +458,8 @@ def build_experimental_variogram(ds: np.ndarray,
         distance.
 
     custom_weights : numpy array, optional
-        Custom weights assigned to points. Only semivariance values are weighted.
+        Custom weights assigned to points. Only semivariance values are
+        weighted.
 
     is_semivariance : bool, default=True
         Calculate experimental semivariance.
@@ -465,7 +467,7 @@ def build_experimental_variogram(ds: np.ndarray,
     is_covariance : bool, default=True
         Calculate experimental coviariance.
 
-    as_cloud : bool, default=False
+    as_cloud : bool
         Calculate semivariance point-pairs cloud.
 
     Returns
