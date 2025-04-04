@@ -116,11 +116,11 @@ class VariogramCloud:
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in within a given angle. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+          * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+          * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -133,12 +133,26 @@ class VariogramCloud:
 
     Attributes
     ----------
+    experimental_variogram : ExperimentalVariogram
+        Estimated experimental semivariogram and point cloud.
 
+    semivariances : Dict
+        Lag - all semivariances between point pairs:
+        ``{lag: [semivariances], }``.
+
+    lags : ArrayLike
+        Lags.
+
+    direction : float
+        See ``direction`` parameter.
+
+    tolerance : float
+        See ``tolerance`` parameter.
 
     Methods
     -------
     describe()
-        The cloud points statistics.
+        The point cloud statistics.
 
     plot()
         Plots scatterplot, boxplot or violinplot of the point cloud.
@@ -150,10 +164,6 @@ class VariogramCloud:
     --------
     ExperimentalVariogram : class that calculates experimental semivariogram,
         experimental covariogram and data variance.
-
-    Examples
-    --------
-
     """
 
     def __init__(self,
@@ -321,7 +331,7 @@ class VariogramCloud:
         Returns
         -------
         : VariogramCloud
-            If ``inplace`` is set to ``False`` then dir_neighbors_selection_method returns new
+            If ``inplace`` is set to ``False`` then method returns new
             instance of an object with cleaned semivariances.
 
         Raises
