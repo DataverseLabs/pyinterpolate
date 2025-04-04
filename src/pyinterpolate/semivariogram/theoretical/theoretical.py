@@ -100,7 +100,7 @@ def build_theoretical_variogram(
         passed experimental variogram is stored in a numpy array.
 
     error_estimator : str, default = 'rmse'
-        A model error estimation dir_neighbors_selection_method. Available options are:
+        A model error estimation method. Available options are:
 
         - 'rmse': Root Mean Squared Error,
         - 'mae': Mean Absolute Error,
@@ -108,7 +108,7 @@ def build_theoretical_variogram(
         - 'smape': Symmetric Mean Absolute Percentage Error.
 
     deviation_weighting : str, default = "equal"
-        The name of a dir_neighbors_selection_method used to weight error at a given lags. Works
+        The name of the method used to weight error at a given lags. Works
         only with RMSE. Available methods:
 
         - equal: no weighting,

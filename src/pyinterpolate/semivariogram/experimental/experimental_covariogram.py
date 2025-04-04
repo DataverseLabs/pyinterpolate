@@ -58,11 +58,11 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
         * The ``tolerance == 1`` creates an omnidirectional covariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+          * "triangle" or "t", default method where a point neighbors are
+            selected from a triangular area,
+          * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for covariance calculation. If provided, then parameter
@@ -176,7 +176,7 @@ def directional_covariance(points: np.ndarray,
                            lags: Union[List, np.ndarray],
                            direction: float,
                            tolerance: float,
-                           method: str):
+                           dir_neighbors_selection_method: str):
     """
     Function calculates directional covariances.
 
@@ -208,12 +208,12 @@ def directional_covariance(points: np.ndarray,
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    method : str
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+    dir_neighbors_selection_method : str, default = 't'
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+          * "triangle" or "t", default method where a point neighbors are
+            selected from a triangular area,
+          * "ellipse" or "e", more accurate method but also slower.
 
     Returns
     -------
@@ -223,13 +223,15 @@ def directional_covariance(points: np.ndarray,
 
     output_covariances = np.array([])
 
-    if method == "e" or method == "ellipse":
+    if (dir_neighbors_selection_method == "e" or
+        dir_neighbors_selection_method == "ellipse"):
         output_covariances = from_ellipse(covariance_fn,
                                           points,
                                           lags,
                                           direction,
                                           tolerance)
-    elif method == "t" or method == "triangle":
+    elif (dir_neighbors_selection_method == "t" or
+          dir_neighbors_selection_method == "triangle"):
         output_covariances = from_triangle(covariance_fn,
                                            points,
                                            lags,

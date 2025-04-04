@@ -383,12 +383,12 @@ class TheoreticalIndicatorVariogram:
             Estimate sill from the variance (semivariance at distance 0).
 
         min_sill : float, default = 1
-            The minimal fraction of the value chosen with the sill estimation dir_neighbors_selection_method. The value is: for
+            The minimal fraction of the value chosen with the sill estimation method. The value is: for
             ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
         max_sill : float, default = 5
-            The maximum fraction of the value chosen with the sill estimation dir_neighbors_selection_method. The value is: for
+            The maximum fraction of the value chosen with the sill estimation method. The value is: for
             ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
@@ -400,7 +400,7 @@ class TheoreticalIndicatorVariogram:
             is required if passed experimental variogram is stored in a numpy array.
 
         error_estimator : str, default = 'rmse'
-            A model error estimation dir_neighbors_selection_method. Available options are:
+            A model error estimation method. Available options are:
 
             - 'rmse': Root Mean Squared Error,
             - 'mae': Mean Absolute Error,
@@ -408,7 +408,7 @@ class TheoreticalIndicatorVariogram:
             - 'smape': Symmetric Mean Absolute Percentage Error.
 
         deviation_weighting : str, default = "equal"
-            The name of a dir_neighbors_selection_method used to weight error at a given lags. Works
+            The name of the method used to weight error at a given lags. Works
             only with RMSE. Available methods:
 
             - equal: no weighting,

@@ -60,11 +60,11 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+        * "triangle" or "t", default method where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -267,11 +267,11 @@ def directional_semivariance_cloud(points: np.ndarray,
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     method : str
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+        * "triangle" or "t", default method where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+        * "ellipse" or "e", more accurate method but also slower.
 
     Returns
     -------
@@ -335,11 +335,11 @@ def directional_semivariance(points: np.ndarray,
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     method : str
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+        * "triangle" or "t", default method where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+        * "ellipse" or "e", more accurate method but also slower.
 
     custom_weights : optional, Iterable
         Custom weights assigned to points.
@@ -462,11 +462,11 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = 't'
-        The dir_neighbors_selection_method used for neighbors selection. Available methods:
+        Neighbors selection in a given direction. Available methods:
 
-        * "triangle" or "t", default dir_neighbors_selection_method where a point neighbors are
+        * "triangle" or "t", default method where point neighbors are
           selected from a triangular area,
-        * "ellipse" or "e", the most accurate dir_neighbors_selection_method but also the slowest one.
+        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
