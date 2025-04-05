@@ -8,8 +8,10 @@ def calculate_spatial_dependence_index(nugget: float, sill: float) -> Tuple:
     Parameters
     ----------
     nugget : float
+        Semivariogram nugget.
 
     sill : float
+        Semivariogram sill.
 
     Returns
     -------
