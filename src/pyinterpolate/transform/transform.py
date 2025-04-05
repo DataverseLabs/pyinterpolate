@@ -10,13 +10,16 @@ def parse_point_support_distances_array(distances: np.ndarray,
     Parameters
     ----------
     distances : numpy array
-        Array of size MxN with distances from each point from the set ``a`` to each point from the set ``b``.
+        Array of size MxN with distances from each point from the set ``a``
+        to each point from the set ``b``.
 
     values_a : numpy array
-        Vector of length M with values. Represents values assigned to the points in the set ``a``.
+        Vector of length M with values. Represents values assigned
+        to the points in the set ``a``.
 
     values_b : numpy array
-        Vector of length N with values. Represents values assigned to the points in the set ``b``.
+        Vector of length N with values. Represents values assigned
+        to the points in the set ``b``.
 
     Returns
     -------
