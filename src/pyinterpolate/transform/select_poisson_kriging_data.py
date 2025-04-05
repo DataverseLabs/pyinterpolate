@@ -10,21 +10,24 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
 
 
 # TODO u block centroid and point support as another way of pk
-def select_centroid_poisson_kriging_data(block_index: Union[str, Hashable],
-                                         point_support: PointSupport,
-                                         semivariogram_model: TheoreticalVariogram,
-                                         number_of_neighbors: int,
-                                         weighted: bool,
-                                         neighbors_range: float = None,
-                                         use_all_neighbors_in_range=False) -> CentroidPoissonKrigingInput:
+def select_centroid_poisson_kriging_data(
+        block_index: Union[str, Hashable],
+        point_support: PointSupport,
+        semivariogram_model: TheoreticalVariogram,
+        number_of_neighbors: int,
+        weighted: bool,
+        neighbors_range: float = None,
+        use_all_neighbors_in_range=False
+) -> CentroidPoissonKrigingInput:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
 
     Parameters
     ----------
     block_index : Union[str, Hashable]
-        Index of unknown block, then it will be used to take unknown block geometry from Blocks, and unknown block's
-        point support from the PointSupport.
+        Index of unknown block, then it will be used to take unknown block
+        geometry from Blocks, and unknown block's point support from
+        the PointSupport.
 
     point_support : PointSupport
         Point support of polygons.
@@ -39,19 +42,22 @@ def select_centroid_poisson_kriging_data(block_index: Union[str, Hashable],
         Are distances between blocks weighted by point support values?
 
     neighbors_range : float, optional
-        The maximum range where other blocks are considered as the neighbors. If not provided then function uses
-        semivariogram's max range.
+        The maximum range where other blocks are considered as the neighbors.
+        If not provided then function uses semivariogram max range.
 
     use_all_neighbors_in_range : bool, default = None
-        Should algorithm select all neighbors within a specified range and direction (if provided)?
+        Should algorithm select all neighbors within a specified range
+        and direction (if provided)?
 
     Returns
     -------
     dataset : numpy array
-        ``[[cx, cy, value, distance to unknown block centroid, angles, aggregated point support sum]]``
+        coordinate x, coordinate y, value, distance to unknown block centroid,
+        angles, aggregated point support sum
     """
     # Prepare Kriging data
-    # [x, y, value, distance to unknown centroid, difference between angles, block id]
+    # [x, y, value, distance to unknown centroid,
+    # difference between angles, block id]
     pk_input = CentroidPoissonKrigingInput(
         block_id=block_index,
         point_support=point_support,
