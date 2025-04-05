@@ -149,13 +149,9 @@ class TheoreticalVariogram:
         self.lags = None
         self.experimental_variogram = None
 
-        # self.experimental_array = None  # TODO: the same as self.experimental_semivariances | deprecated!
         self.experimental_semivariances = None
-
-        # self.fitted_model = None  # TODO: the same as self.yhat | deprecated!
         self.yhat = None
 
-        # self.name = None  # TODO: the same as self.variogram_model_type | deprecated
         self.model_type = None
 
         self.nugget = 0.
@@ -190,6 +186,9 @@ class TheoreticalVariogram:
 
     @property
     def name(self):
+        """
+        Returns theoretical model name.
+        """
         return self.model_type
 
     # Core functions
@@ -202,6 +201,7 @@ class TheoreticalVariogram:
             nugget=0.,
             direction=None) -> Tuple[np.ndarray, dict]:
         """
+        Fits theoretical model into experimental semivariances.
 
         Parameters
         ----------
@@ -277,7 +277,9 @@ class TheoreticalVariogram:
         return theoretical_values, _error
 
     def autofit(self,
-                experimental_variogram: Union[ExperimentalVariogram, np.ndarray],
+                experimental_variogram: Union[
+                    ExperimentalVariogram, np.ndarray
+                ],
                 models_group: Union[str, list] = 'safe',
                 nugget=None,
                 min_nugget=0,
@@ -298,7 +300,8 @@ class TheoreticalVariogram:
                 deviation_weighting='equal',
                 return_params=True) -> Optional[TheoreticalVariogramModel]:
         """
-        Method finds the optimal range, sill and model (function) of theoretical semivariogram.
+        Method finds the optimal range, sill and model (function)
+        of theoretical semivariogram.
 
         Parameters
         ----------
@@ -356,28 +359,32 @@ class TheoreticalVariogram:
             If given, then sill is fixed to this value.
 
         n_sill_values : int, default = 5
-            The last n experimental semivariance records for sill estimation. (Used only when ``sill_from_variance``
-            is set to ``False``).
+            The last n experimental semivariance records for sill estimation.
+            (Used only when ``sill_from_variance`` is set to ``False``).
 
         sill_from_variance : bool, default = False
             Estimate sill from the variance (semivariance at distance 0).
 
         min_sill : float, default = 1
-            The minimal fraction of the value chosen with the sill estimation method. The value is: for
-            ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
+            The minimal fraction of the value chosen with the sill estimation
+            method. The value is: for ``sill_from_values`` - the mean of
+            the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
         max_sill : float, default = 5
-            The maximum fraction of the value chosen with the sill estimation method. The value is: for
-            ``sill_from_values`` - the mean of the last ``n_sill_values`` number of experimental semivariances,
+            The maximum fraction of the value chosen with the sill estimation
+            method. The value is: for ``sill_from_values`` - the mean of
+            the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
         number_of_sills : int, default = 16
-            How many equally spaced sill values are tested between ``min_sill`` and ``max_sill``.
+            How many equally spaced sill values are tested between
+            ``min_sill`` and ``max_sill``.
 
         direction : float, in range [0, 360], default=None
-            The direction of a semivariogram. If ``None`` given then semivariogram is isotropic. This parameter
-            is required if passed experimental variogram is stored in a numpy array.
+            The direction of a semivariogram. If ``None`` given then
+            semivariogram is isotropic. This parameter is required if passed
+            experimental variogram is stored as a numpy array.
 
         error_estimator : str, default = 'rmse'
             A model error estimation method. Available options are:
@@ -488,16 +495,18 @@ class TheoreticalVariogram:
 
     def predict(self, distances: np.ndarray) -> np.ndarray:
         """
-        Method returns semivariances based on the theoretical model.
+        Method predicts semivariances from distances using fitted
+        semivariogram model.
 
         Parameters
         ----------
         distances : numpy array
+            Distances between points.
 
         Returns
         -------
         predicted : numpy array
-
+            Predicted semivariances.
         """
 
         model = TheoreticalModelFunction(
@@ -521,7 +530,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         experimental : bool
-            Plot experimental observations along theoretical semivariogram.
+            Plots experimental observations with theoretical semivariogram.
 
         Raises
         ------
@@ -651,8 +660,8 @@ class TheoreticalVariogram:
         Returns
         -------
         model_parameters : Dict
-            Dictionary with model's ``'variogram_model_type'``, ``'nugget'``, ``'sill'``,
-            ``'rang'`` and ``'direction'``.
+            Dictionary with model's ``'variogram_model_type'``, ``'nugget'``,
+            ``'sill'``, ``'rang'`` and ``'direction'``.
 
         Raises
         ------
@@ -682,8 +691,8 @@ class TheoreticalVariogram:
         Parameters
         ----------
         parameters : Dict
-            Dictionary with model's: ``'variogram_model_type', 'nugget', 'sill',
-            'range', 'direction'``.
+            Dictionary with model's: ``'variogram_model_type', 'nugget',
+            'sill', 'range', 'direction'``.
         """
 
         self._set_model_parameters(parameters)
@@ -695,6 +704,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         fname : str
+            JSON file name.
         """
 
         json_output = self.to_dict()
@@ -709,6 +719,7 @@ class TheoreticalVariogram:
         Parameters
         ----------
         fname : str
+            JSON file name.
         """
 
         with open(fname, 'r') as fin:
@@ -779,15 +790,47 @@ class TheoreticalVariogram:
             else:
                 return header
 
-    def _autofit_grid_search(self,
-                             models: ArrayLike,
-                             nugget_ranges: ArrayLike,
-                             distance_ranges: ArrayLike,
-                             sill_ranges: ArrayLike,
-                             errors_keys: Dict,
-                             error_estimator: str,
-                             deviation_weighting: str) -> TheoreticalVariogramModel:
-        """Method searches for the best model"""
+    def _autofit_grid_search(
+            self,
+            models: ArrayLike,
+            nugget_ranges: ArrayLike,
+            distance_ranges: ArrayLike,
+            sill_ranges: ArrayLike,
+            errors_keys: Dict,
+            error_estimator: str,
+            deviation_weighting: str
+    ) -> TheoreticalVariogramModel:
+        """
+        Theoretical model grid search
+
+        Parameters
+        ----------
+        models : ArrayLike
+            Theoretical model to test.
+
+        nugget_ranges : ArrayLike
+            Nuggets to test.
+
+        distance_ranges : ArrayLike
+            Variogram ranges to test.
+
+        sill_ranges : ArrayLike
+            Sills to test.
+
+        errors_keys : Dict
+            Deviation parameters to test (rmse, bias, smape, mae).
+
+        error_estimator : str
+            Deviation parameter used to select the best model.
+
+        deviation_weighting : str
+            Method used to weight error at a given lags.
+
+        Returns
+        -------
+        : TheoreticalVariogramModel
+            The optimal semivariogram model, and the errors of fit.
+        """
         # Initialize error
         err_val = np.inf
 
@@ -855,7 +898,7 @@ class TheoreticalVariogram:
                    nugget: float,
                    sill: float,
                    rang: float) -> np.ndarray:
-        """Method fits selected model into baseline lags.
+        """Method fits selected model.
 
         Parameters
         ----------
@@ -871,6 +914,7 @@ class TheoreticalVariogram:
         Returns
         -------
         : numpy array
+            Predicted semivariances.
         """
 
         _input = {
@@ -891,6 +935,28 @@ class TheoreticalVariogram:
                                  number_of_ranges: int = None,
                                  min_range: float = None,
                                  max_range: float = None) -> ArrayLike:
+        """
+        Method prepares distance ranges for the model.
+
+        Parameters
+        ----------
+        rang : float, optional
+            Baseline range.
+
+        number_of_ranges : int, optional
+            Number of possible ranges to test.
+
+        min_range : float, optional
+            Minimum range.
+
+        max_range : float, optional
+            Maximum range.
+
+        Returns
+        -------
+        : numpy array
+            Ranges.
+        """
         if rang is None:
             self.__validate_distance_ranges(min_range, max_range)
 
@@ -934,12 +1000,43 @@ class TheoreticalVariogram:
                              number_of_sills: int = None,
                              min_sill: float = None,
                              max_sill: float = None):
+        """
+        Method prepares sill ranges for the model.
+
+        Parameters
+        ----------
+        sill : float, optional
+            Baseline sill.
+
+        n_sill_values : int, default=5
+            Number of the last N experimental semivariances to use for sill
+            estimation.
+
+        sill_from_variance : bool, default = False
+            Should set sill to the variance of a dataset?
+
+        number_of_sills : int, optional
+            Number of possible sills to test.
+
+        min_sill : float, optional
+            Minimum sill.
+
+        max_sill : float, optional
+            Maximum sill.
+
+        Returns
+        -------
+        : numpy array
+            Sills.
+        """
         if sill is None:
             self.__validate_sill_ranges(min_sill, max_sill)
             if sill_from_variance:
                 var_sill = self.experimental_variogram.variance
             else:
-                var_sill = np.mean(self.experimental_semivariances[-n_sill_values:])
+                var_sill = np.mean(
+                    self.experimental_semivariances[-n_sill_values:]
+                )
 
             min_max_sill = create_min_max_array(var_sill,
                                                 min_sill,
@@ -954,6 +1051,14 @@ class TheoreticalVariogram:
             self,
             model_params: Union[dict, TheoreticalVariogramModel]
     ):
+        """
+        Sets model parameters.
+
+        Parameters
+        ----------
+        model_params : Union[dict, TheoreticalVariogramModel]
+            Parameters of the fitted semivariogram.
+        """
         if isinstance(model_params, dict):
             model_params = TheoreticalVariogramModel(
                 **model_params
