@@ -11,16 +11,18 @@ import numpy as np
 
 def _get_zero_lag_value(lag0: float, nugget: float, gamma0: float) -> float:
     """Function checks if lag zero should be larger than zero (nugget is
-    provided & lag on a distance 0 exists).
+    provided & lag at a distance 0 exists).
 
     Parameters
     ----------
     lag0 : float
+        The first lag on the lags list.
 
     nugget : float
+        Semivariogram nugget.
 
     gamma0 : float
-             Semivariance of a lag 0 estimated by a model.
+        Semivariance at the distance 0.
 
     Returns
     -------
@@ -38,7 +40,8 @@ def circular_model(lags: np.ndarray,
                    nugget: float,
                    sill: float,
                    rang: float) -> np.ndarray:
-    """Function calculates circular model of semivariogram.
+    """
+    Function calculates circular model of semivariogram.
 
     Parameters
     ----------
