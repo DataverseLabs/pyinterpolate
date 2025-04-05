@@ -10,8 +10,13 @@ def get_lags(step_size, max_range, custom_bins):
     Parameters
     ----------
     step_size : float
+        Step size between lags.
+
     max_range : float
+        Maximum range.
+
     custom_bins : Union[Iterable, np.ndarray]
+        Custom lags given by user.
 
     Returns
     -------
@@ -28,18 +33,20 @@ def get_lags(step_size, max_range, custom_bins):
 
 def get_current_and_previous_lag(lag_idx: int, lags: Union[List, np.ndarray]):
     """
-    Function returns y_exp and previous lag.
+    Function returns current and previous lag positions.
 
     Parameters
     ----------
     lag_idx : int
+        Index of the current lag.
 
     lags : Iterable
+        Array of lags.
 
     Returns
     -------
     : float, float
-        y_exp lag, previous lag
+        current lag, previous lag
     """
     if lag_idx == 0:
         current_lag = lags[lag_idx]
