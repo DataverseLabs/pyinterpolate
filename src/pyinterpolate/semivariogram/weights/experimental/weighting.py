@@ -11,16 +11,21 @@ def weight_experimental_semivariance(weights: np.ndarray,
     Parameters
     ----------
     weights : numpy array
+        Weights of the semivariogram.
 
     distances_in_range : numpy array
+        Distances between point pairs.
 
     vals_0 : numpy array
+        Values of the first point in the pair.
 
     vals_h : numpy array
+        Values of the second point in the pair.
 
     Returns
     -------
-
+    : float
+        Weighted semivariance.
     """
 
     # Weights
