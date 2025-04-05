@@ -75,13 +75,15 @@ def interpolate_raster(data,
         ``[coordinate x, coordinate y, value]``.
 
     dim : int
-        Number of pixels (points) of a larger dimension (it could be width or height). Ratio is preserved.
+        Number of pixels (points) of a larger dimension (it could be width
+        or height). Ratio is preserved.
 
     number_of_neighbors : int, default=16
         Number of points used to interpolate data.
 
     semivariogram_model : TheoreticalVariogram, default=None
-        Variogram model, if not provided then it is estimated from a given dataset.
+        Variogram model, if not provided then it is estimated from a given
+        dataset.
 
     direction : float (in range [0, 360]), optional
         Direction of semivariogram, values from 0 to 360 degrees:
@@ -92,20 +94,24 @@ def interpolate_raster(data,
         - 135 or 315 is NW-SE.
 
     tolerance : float (in range [0, 1]), optional
-        If ``tolerance`` is 0 then points must be placed at a single line with the beginning in the origin of
-        the coordinate system and the direction given by y-axis and direction parameter. If ``tolerance`` is ``> 0``
-        then the bin is selected as an elliptical area with major axis pointed in the same direction as the line
+        If ``tolerance`` is 0 then points must be placed at a single line
+        with the beginning in the origin of the coordinate system and the
+        direction given by y-axis and direction parameter.
+        If ``tolerance`` is ``> 0`` then the bin is selected as an elliptical
+        area with major axis pointed in the same direction as the line
         for 0 tolerance:
 
-        * the major axis size == ``step_size``,
-        * the minor axis size is ``tolerance * step_size``,
-        * the baseline point is at a center of the ellipse,
-        * the ``tolerance == 1`` creates an omnidirectional semivariogram.
+          * the major axis size == ``step_size``,
+          * the minor axis size is ``tolerance * step_size``,
+          * the baseline point is at a center of the ellipse,
+          * the ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     allow_approx_solutions : bool, default=True
-        Allows the approximation of kriging weights based on the OLS algorithm. We don't recommend set it to ``True``
-        if you don't know what are you doing. This parameter can be useful when you have clusters in your dataset,
-        that can lead to singular or near-singular matrix creation.
+        Allows the approximation of kriging weights based on the OLS
+        algorithm. We don't recommend set it to ``True`` if you don't know
+        what are you doing. This parameter can be useful when you have
+        clusters in your dataset, that can lead to singular or near-singular
+        matrix creation.
 
     Returns
     -------
@@ -199,11 +205,12 @@ def spatial_reference(pixel_size_x_direction: float,
         - Line 1: A: pixel size in the x-direction in map units/pixel
         - Line 2: D: rotation about y-axis
         - Line 3: B: rotation about x-axis
-        - Line 4: E: pixel size in the y-direction in map units, almost always negative2
+        - Line 4: E: pixel size in the y-direction in map units, almost always
+          negative2
         - Line 5: C: x-coordinate of the center of the upper left pixel
         - Line 6: F: y-coordinate of the center of the upper left pixel
-        - All four parameters are expressed in the map units, which are described by the spatial reference system
-          for the raster.
+        - All four parameters are expressed in the map units, which are
+          described by the spatial reference system for the raster.
 
         Source: https://en.wikipedia.org/wiki/World_file
     """
