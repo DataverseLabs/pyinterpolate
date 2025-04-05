@@ -17,15 +17,20 @@ def angles_to_unknown_block(block_index: Union[str, Hashable],
     Parameters
     ----------
     block_index : str | Hashable
+        Unique block index.
 
     point_support : PointSupport
+        Point support data.
 
     Returns
     -------
     : numpy array
+        Angles between the unknown block and other blocks.
     """
     if point_support.blocks.angles is None:
-        angles = point_support.blocks.calculate_angles_between_rep_points(update=True)
+        angles = point_support.blocks.calculate_angles_between_rep_points(
+            update=True
+        )
     else:
         angles = point_support.blocks.angles
 
@@ -43,8 +48,10 @@ def block_to_blocks_angles(block_id: Union[str, Hashable],
     Parameters
     ----------
     block_id : Union[str, Hashable]
+        Unique block index.
 
     point_support : PointSupport
+        Point support data.
 
     direction : float
         Expected direction.
@@ -52,8 +59,8 @@ def block_to_blocks_angles(block_id: Union[str, Hashable],
     Returns
     -------
     : numpy array
-        Difference between the angle from unknown block centroid to origin, and from other blocks representative points
-        to origin.
+        Difference between the angle from unknown block centroid to origin,
+        and from other blocks representative points to origin.
     """
 
     angles = angles_to_unknown_block(
@@ -67,9 +74,11 @@ def block_to_blocks_angles(block_id: Union[str, Hashable],
     return angle_differences
 
 
-def block_base_distances(block_id: Union[str, Hashable],
-                         point_support: PointSupport,
-                         point_support_distances: PointSupportDistance = None) -> np.ndarray:
+def block_base_distances(
+        block_id: Union[str, Hashable],
+        point_support: PointSupport,
+        point_support_distances: PointSupportDistance = None
+) -> np.ndarray:
     """
     Function gets distances to the unknown block from other blocks.
 
@@ -80,12 +89,13 @@ def block_base_distances(block_id: Union[str, Hashable],
     point_support : PointSupport
 
     point_support_distances : PointSupportDistance
-        Object with estimated weighted distances. If not given then it is assumed that function returns
-        not weighted distances.
+        Object with estimated weighted distances. If not given then it is
+        assumed that function returns not weighted distances.
 
     Returns
     -------
     : numpy array
+        Distances from the unknown block to other blocks.
     """
     if point_support_distances.weighted_block_to_block_distances is not None:
         return point_support_distances.weighted_block_to_block_distances.get(block_id)
@@ -113,7 +123,8 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
                        points_column: str = "points",
                        values_column: str = "values") -> pd.DataFrame:
     """
-    Function sets DataFrame for Poisson Kriging using blocks (representative points) data.
+    Function sets DataFrame for Poisson Kriging using blocks
+    (representative points) data.
 
     Parameters
     ----------
@@ -133,8 +144,8 @@ def set_blocks_dataset(block_id: Union[str, Hashable],
         The list of the known blocks names.
 
     angular_differences : optional, numpy array
-        Angular differences between origin and ``block_id`` representative point, and origin with other representative
-        points.
+        Angular differences between origin and ``block_id`` representative
+        point, and origin with other representative points.
 
     angular_differences_column : str, default = "angular_differences"
 
@@ -198,12 +209,14 @@ def parse_kriging_input(unknown_points_and_values: np.ndarray,
         ``[[ux_1, uy_1, uz_1], ..., [ux_n, uy_n, uz_n]]``
 
     distances : numpy array
-        Distances between ALL points from the unknown block and ALL points from the known blocks. Rows -> unknown
-        block coordinates, columns -> known block coordinates.
+        Distances between ALL points from the unknown block and ALL points
+        from the known blocks. Rows -> unknown block coordinates,
+        columns -> known block coordinates.
 
     angle_diffs : numpy array, optional
-        Angles between ALL points from the unknown block and ALL points from the known blocks. Rows -> unknown
-        block coordinates, columns -> known block coordinates.
+        Angles between ALL points from the unknown block and ALL points from
+        the known blocks. Rows -> unknown block coordinates,
+        columns -> known block coordinates.
 
     Returns
     -------
@@ -217,12 +230,21 @@ def parse_kriging_input(unknown_points_and_values: np.ndarray,
           * ``uy``: y-coordinate of the unknown block's point support
           * ``u-value``: value of the unknown block's point support
           * ``distance``: distance between points ``(kx, ky)`` and ``(ux, uy)``
-          * ``angular_difference``: optional, angle between points ``(kx, ky)`` and ``(ux, uy)``.
+          * ``angular_difference``: optional, angle between points
+            ``(kx, ky)`` and ``(ux, uy)``.
     """
 
     data = []
     columns = [
-        'known_block_id', 'kx', 'ky', 'k_value', 'ux', 'uy', 'u_value', 'distance', 'angular_difference'
+        'known_block_id',
+        'kx',
+        'ky',
+        'k_value',
+        'ux',
+        'uy',
+        'u_value',
+        'distance',
+        'angular_difference'
     ]
 
     for pos, k_block_idx in enumerate(known_blocks_id):
