@@ -8,9 +8,11 @@ import pandas as pd
 def points_to_lon_lat(points: gpd.GeoSeries) -> Tuple:
     """
     Function transform GeoSeries to lon / lat series.
+
     Parameters
     ----------
     points : GeoSeries
+        Shapely points as GeoSeries.
 
     Returns
     -------
@@ -29,19 +31,19 @@ def reproject_flat(ds: Union[pd.DataFrame, np.ndarray],
                    lon_col=None,
                    lat_col=None) -> Union[pd.DataFrame, np.ndarray]:
     """
-    Function applies the CRS reprojection to flat objects - pandas DataFrames and numpy arrays.
+    Function reprojects geometries in pandas DataFrames and numpy arrays.
 
     Parameters
     ----------
     ds : DataFrame | array
-        DataFrame with longitude (x) and latitude (y) columns or numpy array where first two columns are coordinates
-        - longitude and latitude.
+        DataFrame with longitude (x) and latitude (y) columns or numpy
+        array where first two columns are coordinates - longitude and latitude.
 
-    in_crs
-        CRS of input dataset.
+    in_crs : CRS
+        Projection of input dataset.
 
-    out_crs
-        CRS to reproject the coordinates.
+    out_crs : CRS
+        Projection of the output.
 
     lon_col : Hashable
         The name of longitude column.
@@ -52,8 +54,10 @@ def reproject_flat(ds: Union[pd.DataFrame, np.ndarray],
     Returns
     -------
     : DataFrame | array
-        Returns the same data structure as was given in the input. DataFrame has the same columns, values in longitude
-        and latitude columns are changed. The same for numpy array - only first two columns have changed values.
+        Returns the same data structure as was given in the input.
+        DataFrame has the same columns, values in longitude
+        and latitude columns are changed. The same for numpy array -
+        only first two columns have changed values.
     """
 
     if isinstance(ds, pd.DataFrame):
