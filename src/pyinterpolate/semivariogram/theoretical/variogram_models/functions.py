@@ -4,14 +4,13 @@ from pyinterpolate.semivariogram.theoretical.variogram_models.models import \
     circular_model, cubic_model, exponential_model, gaussian_model, \
     linear_model, power_model, spherical_model
 
-
 ALL_MODELS = ['circular',
-             'cubic',
-             'exponential',
-             'gaussian',
-             'linear',
-             'power',
-             'spherical']
+              'cubic',
+              'exponential',
+              'gaussian',
+              'linear',
+              'power',
+              'spherical']
 
 SAFE_MODELS = ['linear', 'power', 'spherical']
 
@@ -22,10 +21,13 @@ class TheoreticalModelFunction:
     Parameters
     ----------
     lags : numpy array
+        Array of lags.
 
     nugget : float
+        Semivariogram Nugget.
 
     sill : float
+        Semivariogram Sill.
 
     rang : float
         Semivariogram Range.
@@ -33,10 +35,13 @@ class TheoreticalModelFunction:
     Attributes
     ----------
     lags : numpy array
+        Lags.
 
     nugget : float
+        Semivariogram Nugget.
 
     sill : float
+        Semivariogram Sill.
 
     rang : float
         Semivariogram Range.
@@ -49,7 +54,7 @@ class TheoreticalModelFunction:
 
     Methods
     -------
-    fit()
+    fit_predict()
         Fits a specific model to lags, nugget, sill, and range.
     """
 
@@ -108,7 +113,21 @@ class TheoreticalModelFunction:
             return self.yhat
 
     def _validate_model_name(self, model_type: str):
+        """
+        Checks if semivariogram model type is available.
+
+        Parameters
+        ----------
+        model_type : str
+            The name of the model to check.
+
+        Raises
+        ------
+        KeyError
+            Semivariogram model is not implemented.
+
+        """
         if model_type not in self.models:
-            msg = (f'Defined model name {model_type} not available. '
+            msg = (f'Defined model name {model_type} is not implemented. '
                    f'You may choose one from {self.models} instead.')
             raise KeyError(msg)
