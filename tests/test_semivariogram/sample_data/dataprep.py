@@ -4,7 +4,7 @@ import geopandas as gpd
 
 
 my_dir = os.path.dirname(__file__)
-filename = 'cancer_data.gpkg'
+filename = 'cancer_data_small.gpkg'
 CANCER_DATA_FILE = os.path.join(my_dir, filename)
 LAYER_NAME = 'areas'
 AREA_VALUES = 'rate'

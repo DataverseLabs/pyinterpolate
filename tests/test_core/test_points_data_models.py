@@ -72,3 +72,4 @@ def test_geopandas_input():
 def test_pandas_input():
     kp = VariogramPoints(PANDAS_INPUT)
     assert isinstance(kp.points, np.ndarray)
+

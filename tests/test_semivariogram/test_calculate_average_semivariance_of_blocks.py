@@ -19,7 +19,7 @@ PS = PointSupport(
         points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     )
 
-MAX_RANGE = 400000
+MAX_RANGE = 300000
 STEP_SIZE = 20000
 
 EXP = ExperimentalVariogram(

@@ -4,6 +4,7 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 import pytest
+from shapely.geometry.point import Point
 
 from pyinterpolate.core.data_models.blocks import Blocks
 from .sample_data.dataprep import CANCER_DATA, CANCER_DATA_WITH_RAND_PTS, CANCER_DATA_WITH_CENTROIDS
@@ -153,3 +154,18 @@ def test_transform_crs():
     assert sample_base[block._lon_col_name] != sample_transformed[block._lon_col_name]
     assert sample_transformed_dists != sample_base_dists
     assert sb_angles[1] != st_angles[1]
+
+
+def test_block_index_outputs():
+    block = Blocks(**CANCER_DATA)
+
+    # Check block coordinates
+    indexes = block.ds[block.index_column_name]
+    idxs = np.random.choice(indexes, 10)
+    block_id = idxs[0]
+
+    coordinates = block.block_coordinates(block_id=block_id)
+    assert isinstance(coordinates, Point)
+
+    real_value = block.block_real_value(block_id=block_id)
+    assert isinstance(real_value, float)

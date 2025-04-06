@@ -63,12 +63,6 @@ class PointSupport:
         spatial overlap). Attribute can be None if the parameter
         ``store_dropped_points`` was set to False.
 
-    lon_col_name : str, property
-        Name of the column with longitude.
-
-    lat_col_name : str, property
-        Name of the column with latitude.
-
     point_support : GeoDataFrame
         Columns: ``lon_col_name``, ``lat_col_name``, ``point-support-value``, ``block-index``.
 
@@ -82,6 +76,12 @@ class PointSupport:
 
     Methods
     -------
+    lon_col_name : str, property
+        Name of the column with longitude.
+
+    lat_col_name : str, property
+        Name of the column with latitude.
+
     get_distances_between_known_blocks()
         Function returns distances between given ps_blocks.
 

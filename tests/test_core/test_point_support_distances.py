@@ -24,9 +24,9 @@ def test_simple_case():
     psd = PointSupportDistance()
 
     assert psd.weighted_block_to_block_distances is None
-    assert not(psd.distances_between_point_supports)
+    assert not psd.distances_between_point_supports
     assert psd.no_closest_neighbors == 0
-    assert not(psd.closest_neighbors)
+    assert not psd.closest_neighbors
 
     psd.calculate_weighted_block_to_block_distances(ps)
     assert isinstance(psd.weighted_block_to_block_distances, pd.DataFrame)
@@ -34,7 +34,9 @@ def test_simple_case():
 
     indexes = ps.blocks.block_indexes
     idx = np.random.choice(indexes)
-    psd.calculate_point_support_distances(point_support=ps, block_id=idx, no_closest_neighbors=3)
+    psd.calculate_point_support_distances(point_support=ps,
+                                          block_id=idx,
+                                          no_closest_neighbors=3)
     assert psd.no_closest_neighbors == 3
     print(psd.closest_neighbors)
     print(psd.distances_between_point_supports)
@@ -42,4 +44,5 @@ def test_simple_case():
     print(psd._calculated_block_pairs)
     assert isinstance(psd.closest_neighbors, Dict)
 
-
+    weighted_distace = psd.get_weighted_distance(idx)
+    assert isinstance(weighted_distace, pd.Series)

@@ -15,6 +15,12 @@ The fastest way of communication with the core maintainers is *Discord*, and you
 
 ### **[Discord Server](https://discord.gg/3EMuRkj)**
 
+## Development version installation
+
+```shell
+pip install .[dev]
+```
+
 ---
 
 ## We Use [GitHub Flow](https://guides.github.com/introduction/flow/index.html), So All Code Changes Happen Through Pull Requests
