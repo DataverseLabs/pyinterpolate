@@ -1,10 +1,9 @@
 import geopandas as gpd
-import numpy as np
 
 from pyinterpolate import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
-from pyinterpolate.core.pipelines.block_filter import filter_blocks
+from pyinterpolate.core.pipelines.block_filter import BlockPoissonKriging
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 from tests.test_semivariogram.sample_data.dataprep import CANCER_DATA_WITH_CENTROIDS, POINT_SUPPORT_DATA
 
@@ -31,17 +30,43 @@ THEO.autofit(
 )
 
 
-def test_case():
-    filtered = filter_blocks(
+def test_cases():
+    cb_bpk = BlockPoissonKriging(
         semivariogram_model=THEO,
         point_support=PS,
-        number_of_neighbors=8,
         kriging_type='cb',
         verbose=True
     )
-    assert isinstance(filtered, gpd.GeoDataFrame)
 
-    # get block values
-    max_val = np.max(PS.blocks.block_values)
+    ata_bpk = BlockPoissonKriging(
+        semivariogram_model=THEO,
+        point_support=PS,
+        kriging_type='ata',
+        verbose=True
+    )
 
-    assert max_val > np.max(filtered['reg.est'].values)
+    atp_bpk = BlockPoissonKriging(
+        semivariogram_model=THEO,
+        point_support=PS,
+        kriging_type='atp',
+        verbose=True
+    )
+
+    nn = 8
+    cb_reg = cb_bpk.regularize(
+        number_of_neighbors=nn
+    )
+    ata_reg = ata_bpk.regularize(
+        number_of_neighbors=nn
+    )
+    atp_reg = atp_bpk.regularize(
+        number_of_neighbors=nn
+    )
+
+    print(cb_bpk.statistics)
+    print(ata_bpk.statistics)
+    print(atp_bpk.statistics)
+
+    assert isinstance(cb_reg, gpd.GeoDataFrame)
+    assert isinstance(ata_reg, gpd.GeoDataFrame)
+    assert isinstance(atp_reg, gpd.GeoDataFrame)

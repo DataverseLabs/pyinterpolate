@@ -226,7 +226,7 @@ class BlockPoissonKriging:
                    number_of_neighbors,
                    data_crs=None,
                    raise_when_negative_prediction=True,
-                   raise_when_negative_error=True):
+                   raise_when_negative_error=True) -> gpd.GeoDataFrame:
         """
         Function regularizes whole dataset and creates new values and error
         maps based on the kriging type. Function does not predict unknown
