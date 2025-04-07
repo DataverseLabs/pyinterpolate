@@ -32,7 +32,7 @@ def set_dimensions(xs, ys, dmax):
 
     Returns
     -------
-    : List
+    : Tuple
         x_dim_coords, y_dim_coords, [properties]
     """
 
@@ -189,39 +189,39 @@ def interpolate_raster(data,
 
     return raster_dict
 
-
-def spatial_reference(pixel_size_x_direction: float,
-                      pixel_size_y_direction: float,
-                      x_origin: float,
-                      y_origin: float) -> str:
-    """
-    Function creates content for ``.tfw`` file.
-
-    Returns
-    -------
-    georeference : str
-        Content of the file:
-
-        - Line 1: A: pixel size in the x-direction in map units/pixel
-        - Line 2: D: rotation about y-axis
-        - Line 3: B: rotation about x-axis
-        - Line 4: E: pixel size in the y-direction in map units, almost always
-          negative2
-        - Line 5: C: x-coordinate of the center of the upper left pixel
-        - Line 6: F: y-coordinate of the center of the upper left pixel
-        - All four parameters are expressed in the map units, which are
-          described by the spatial reference system for the raster.
-
-        Source: https://en.wikipedia.org/wiki/World_file
-    """
-    line_1 = str(pixel_size_x_direction) + '\n'
-    line_2 = '0.0\n'
-    line_3 = '0.0\n'
-    line_4 = str(-1 * pixel_size_y_direction) + '\n'
-    line_5 = str(x_origin) + '\n'
-    line_6 = str(y_origin) + '\n'
-    lines = [line_1, line_2, line_3, line_4, line_5, line_6]
-    return ''.join(lines)
+#
+# def spatial_reference(pixel_size_x_direction: float,
+#                       pixel_size_y_direction: float,
+#                       x_origin: float,
+#                       y_origin: float) -> str:
+#     """
+#     Function creates content for ``.tfw`` file.
+#
+#     Returns
+#     -------
+#     georeference : str
+#         Content of the file:
+#
+#         - Line 1: A: pixel size in the x-direction in map units/pixel
+#         - Line 2: D: rotation about y-axis
+#         - Line 3: B: rotation about x-axis
+#         - Line 4: E: pixel size in the y-direction in map units, almost always
+#           negative2
+#         - Line 5: C: x-coordinate of the center of the upper left pixel
+#         - Line 6: F: y-coordinate of the center of the upper left pixel
+#         - All four parameters are expressed in the map units, which are
+#           described by the spatial reference system for the raster.
+#
+#         Source: https://en.wikipedia.org/wiki/World_file
+#     """
+#     line_1 = str(pixel_size_x_direction) + '\n'
+#     line_2 = '0.0\n'
+#     line_3 = '0.0\n'
+#     line_4 = str(-1 * pixel_size_y_direction) + '\n'
+#     line_5 = str(x_origin) + '\n'
+#     line_6 = str(y_origin) + '\n'
+#     lines = [line_1, line_2, line_3, line_4, line_5, line_6]
+#     return ''.join(lines)
 
 
 # def to_tiff(data,
