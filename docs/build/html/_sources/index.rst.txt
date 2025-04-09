@@ -12,7 +12,7 @@ Pyinterpolate
 .. note::
    The last documentation update: *2025-04-08*
 
-**Pyinterpolate** is the Python library for **spatial interpolation and disaggregation of choropleth maps**.
+``Pyinterpolate`` is the Python library for **spatial interpolation and disaggregation of choropleth maps**.
 This package helps you **interpolate spatial data** with multiple *Kriging* types and other interpolation methods.
 
 If you’re:
@@ -34,12 +34,13 @@ Then this package may be useful for you. You could use it for:
 
 You can run:
 
-1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
-2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
-3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
-4. *Inverse Distance Weighting*.
-5. *Semivariogram regularization and deconvolution*.
-6. *Semivariogram modeling and analysis*.
+1. **Ordinary Kriging** and **Simple Kriging** (spatial interpolation from points)
+2. **Centroid-based Poisson Kriging** of polygons (spatial interpolation from blocks and areas)
+3. **Area-to-area** and **Area-to-point Poisson Kriging** of Polygons (spatial interpolation and data deconvolution from areas to points)
+4. **Indicator Kriging** (spatial interpolation of discrete data distribution)
+4. **Inverse Distance Weighting** (spatial interpolation from points)
+5. **Semivariogram regularization and deconvolution**
+6. **Semivariogram modeling and analysis**
 
 With ``Pyinterpolate`` you can transform data aggregated on a county-level to better resolution.
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:
@@ -53,6 +54,16 @@ Contents
 
 .. toctree::
    :maxdepth: 1
+
+   setup/setup
+   usage/quickstart
+   usage/tutorials
+   science/cite
+   api/api
+   developer/dev
+   community/community
+   usage/learning_materials
+   science/biblio
 
 How to cite
 -----------

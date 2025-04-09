@@ -45,9 +45,12 @@
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Setup" href="setup/setup.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -126,6 +129,26 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -201,6 +224,26 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -259,7 +302,7 @@
 <p class="admonition-title">Note</p>
 <p>The last documentation update: <em>2025-04-08</em></p>
 </div>
-<p><strong>Pyinterpolate</strong> is the Python library for <strong>spatial interpolation and disaggregation of choropleth maps</strong>.
+<p><code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> is the Python library for <strong>spatial interpolation and disaggregation of choropleth maps</strong>.
 This package helps you <strong>interpolate spatial data</strong> with multiple <em>Kriging</em> types and other interpolation methods.</p>
 <p>If you’re:</p>
 <ul class="simple">
@@ -280,13 +323,14 @@ This package helps you <strong>interpolate spatial data</strong> with multiple <
 </ul>
 <p>You can run:</p>
 <ol class="arabic simple">
-<li><p><em>Ordinary Kriging</em> and <em>Simple Kriging</em> (spatial interpolation from points),</p></li>
-<li><p><em>Centroid-based Poisson Kriging</em> of polygons (spatial interpolation from blocks and areas),</p></li>
-<li><p><em>Area-to-area</em> and <em>Area-to-point Poisson Kriging</em> of Polygons (spatial interpolation and data deconvolution from areas to points).</p></li>
-<li><p><em>Inverse Distance Weighting</em>.</p></li>
-<li><p><em>Semivariogram regularization and deconvolution</em>.</p></li>
-<li><p><em>Semivariogram modeling and analysis</em>.</p></li>
+<li><p><strong>Ordinary Kriging</strong> and <strong>Simple Kriging</strong> (spatial interpolation from points)</p></li>
+<li><p><strong>Centroid-based Poisson Kriging</strong> of polygons (spatial interpolation from blocks and areas)</p></li>
+<li><p><strong>Area-to-area</strong> and <strong>Area-to-point Poisson Kriging</strong> of Polygons (spatial interpolation and data deconvolution from areas to points)</p></li>
 </ol>
+<p>4. <strong>Indicator Kriging</strong> (spatial interpolation of discrete data distribution)
+4. <strong>Inverse Distance Weighting</strong> (spatial interpolation from points)
+5. <strong>Semivariogram regularization and deconvolution</strong>
+6. <strong>Semivariogram modeling and analysis</strong></p>
 <p>With <code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> you can transform data aggregated on a county-level to better resolution.
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:</p>
 <a class="reference internal image-reference" href="imgs/deconvoluted_risk_areas.jpg"><img alt="Covid-19 infection risk in Poland for 14th April, 2020." src="imgs/deconvoluted_risk_areas.jpg" style="width: 400px;" />
@@ -295,6 +339,11 @@ The example is COVID-19 population at risk mapping. Countries worldwide aggregat
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/tutorials.html">Tutorials</a></li>
+</ul>
 </div>
 </section>
 <section id="how-to-cite">
@@ -313,6 +362,15 @@ The example is COVID-19 population at risk mapping. Countries worldwide aggregat
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="right-next"
+       href="setup/setup.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Setup</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               

@@ -37,35 +37,62 @@ The package has multiple spatial interpolation functions. The flow of analysis i
 **[1.]** Load your dataset with `GeoPandas` or `numpy`.
 
 ```python
-...
+import geopandas as gpd
+
+
+point_data = gpd.read_file('dem.gpkg')  # x (lon), y (lat), value
 ```
 
 **[2.]** Pass loaded data to `pyinterpolate`, calculate experimental variogram.
 
 ```python
-...
+from pyinterpolate import calculate_semivariance
+
+
+search_radius = 500
+max_range = 40000
+
+experimental_semivariogram = calculate_semivariance(ds=point_data,
+                                                    step_size=search_radius,
+                                                    max_range=max_range)
 ```
 
 **[3.]** Fit experimental semivariogram to theoretical model, it is equivalent of the `fit()` method known from machine learning packages.
 
 ```python
-...
+from pyinterpolate import build_theoretical_variogram
+
+
+semivar = build_theoretical_variogram(
+   experimental_variogram=experimental_semivariogram,
+   models_group='spherical',
+   sill=400,
+   rang=20000,
+   nugget=0
+)
 ```
 
 **[4.]** Interpolate values in unknown locations.
 
 ```python
-...
+from pyinterpolate import ordinary_kriging
+
+
+unknown_point = (20000, 65000)
+prediction = ordinary_kriging(theoretical_model=semivar,
+                              known_locations=point_data,
+                              unknown_location=unknown_point,
+                              no_neighbors=32)
 ```
 
 **[5.]** Analyze error and uncertainty of predictions.
 
 ```python
-...
+print(prediction)  # [predicted, variance error, lon, lat]
 ```
 
 ```bash
-...
+>> [211.23, 0.89, 20000, 60000]
 ```
 
 With Pyinterpolate you can analyze and transform aggregated data. [TODO: example figure cancer]
@@ -103,7 +130,7 @@ conda activate [YOUR ENV NAME]
 
 ### pip installation
 
-With **Python>=3.8** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+With **Python>=3.9** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
 
 ```
 pip install pyinterpolate
