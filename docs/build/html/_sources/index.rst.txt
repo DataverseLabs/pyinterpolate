@@ -38,9 +38,9 @@ You can run:
 2. **Centroid-based Poisson Kriging** of polygons (spatial interpolation from blocks and areas)
 3. **Area-to-area** and **Area-to-point Poisson Kriging** of Polygons (spatial interpolation and data deconvolution from areas to points)
 4. **Indicator Kriging** (spatial interpolation of discrete data distribution)
-4. **Inverse Distance Weighting** (spatial interpolation from points)
-5. **Semivariogram regularization and deconvolution**
-6. **Semivariogram modeling and analysis**
+5. **Inverse Distance Weighting** (spatial interpolation from points)
+6. **Semivariogram regularization and deconvolution**
+7. **Semivariogram modeling and analysis**
 
 With ``Pyinterpolate`` you can transform data aggregated on a county-level to better resolution.
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:
@@ -58,13 +58,11 @@ Contents
    setup/setup
    usage/quickstart
    usage/tutorials
-   science/cite
-   api/api
-   developer/dev
-   community/community
    usage/learning_materials
-   science/biblio
+   science/citation
+   science/bibliography
+   api/api
 
-How to cite
------------
+Citation
+--------
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869

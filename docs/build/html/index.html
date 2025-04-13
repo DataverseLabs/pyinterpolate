@@ -149,6 +149,44 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="api/api.html">
+    API
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
   </ul>
 </nav></div>
       
@@ -244,6 +282,34 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="api/api.html">
+    API
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -326,11 +392,11 @@ This package helps you <strong>interpolate spatial data</strong> with multiple <
 <li><p><strong>Ordinary Kriging</strong> and <strong>Simple Kriging</strong> (spatial interpolation from points)</p></li>
 <li><p><strong>Centroid-based Poisson Kriging</strong> of polygons (spatial interpolation from blocks and areas)</p></li>
 <li><p><strong>Area-to-area</strong> and <strong>Area-to-point Poisson Kriging</strong> of Polygons (spatial interpolation and data deconvolution from areas to points)</p></li>
+<li><p><strong>Indicator Kriging</strong> (spatial interpolation of discrete data distribution)</p></li>
+<li><p><strong>Inverse Distance Weighting</strong> (spatial interpolation from points)</p></li>
+<li><p><strong>Semivariogram regularization and deconvolution</strong></p></li>
+<li><p><strong>Semivariogram modeling and analysis</strong></p></li>
 </ol>
-<p>4. <strong>Indicator Kriging</strong> (spatial interpolation of discrete data distribution)
-4. <strong>Inverse Distance Weighting</strong> (spatial interpolation from points)
-5. <strong>Semivariogram regularization and deconvolution</strong>
-6. <strong>Semivariogram modeling and analysis</strong></p>
 <p>With <code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> you can transform data aggregated on a county-level to better resolution.
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:</p>
 <a class="reference internal image-reference" href="imgs/deconvoluted_risk_areas.jpg"><img alt="Covid-19 infection risk in Poland for 14th April, 2020." src="imgs/deconvoluted_risk_areas.jpg" style="width: 400px;" />
@@ -343,11 +409,15 @@ The example is COVID-19 population at risk mapping. Countries worldwide aggregat
 <li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage/learning_materials.html">Learning Materials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api.html">API</a></li>
 </ul>
 </div>
 </section>
-<section id="how-to-cite">
-<h2>How to cite<a class="headerlink" href="#how-to-cite" title="Link to this heading">#</a></h2>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
 <p>Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, <a class="reference external" href="https://doi.org/10.21105/joss.02869">https://doi.org/10.21105/joss.02869</a></p>
 </section>
 </section>
@@ -392,7 +462,7 @@ The example is COVID-19 population at risk mapping. Countries worldwide aggregat
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0"><strong>version 1.0.0</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite">How to cite</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citation">Citation</a></li>
 </ul>
   </nav></div>
 

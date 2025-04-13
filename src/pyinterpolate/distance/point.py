@@ -39,15 +39,15 @@ def point_distance(points: ArrayLike,
     Notes
     -----
     The function creates array of size MxN, where M = number of
-    ``points`` and N = number of ``other``.
-    Large arrays may cause memory errors.
+    ``points`` and N = number of ``other``. Large arrays may cause
+    memory errors.
 
     Examples
     --------
-    >> points = [(0, 0), (0, 1), (0, 2)]
-    >> other = [(2, 2), (3, 3)]
-    >> distances = point_distance(points=points, other=other)
-    >> print(distances)
+    >>> points = [(0, 0), (0, 1), (0, 2)]
+    >>> other = [(2, 2), (3, 3)]
+    >>> distances = point_distance(points=points, other=other)
+    >>> print(distances)
     [[2.82842712 4.24264069]
      [2.23606798 3.60555128]
      [2.         3.16227766]]

@@ -1,0 +1,1103 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.core.data_models.blocks &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/core/data_models/blocks';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.core.data_models.blocks</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.core.data_models.blocks</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Core data structures for block interpolation.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">2. Taher Chegini | @cheginit</span>
+
+<span class="sd">Changes in version 1.0</span>
+<span class="sd">- Package doesn&#39;t read data files, data must be loaded into DataFrame and</span>
+<span class="sd">  then passed into the Blocks object.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Dict</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.angular</span> <span class="kn">import</span> <span class="n">calc_angles</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span>
+
+
+<span class="c1"># TODO: if multipolygon then get coordinates /</span>
+<span class="c1">#       representative points from the largest block - as an option</span>
+<div class="viewcode-block" id="Blocks">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks">[docs]</a>
+<span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class represents aggregated blocks data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : gpd.GeoDataFrame</span>
+<span class="sd">        Dataset with block values.</span>
+
+<span class="sd">    value_column_name : Any</span>
+<span class="sd">        Name of the column with block rates.</span>
+
+<span class="sd">    geometry_column_name : Any, default = &#39;geometry&#39;</span>
+<span class="sd">        Name of the column with a block geometry.</span>
+
+<span class="sd">    index_column_name : Any, optional</span>
+<span class="sd">        Name of the indexing column.</span>
+
+<span class="sd">    representative_points_column_name : Any, optional</span>
+<span class="sd">        The column with representative points or coordinates.</span>
+
+<span class="sd">    representative_points_from_centroid : bool, default = False</span>
+<span class="sd">        Calculate representative points from block centroids.</span>
+
+<span class="sd">    representative_points_from_random_sample : bool, default = False</span>
+<span class="sd">        Calculate representative points from the point sampled from block</span>
+<span class="sd">        geometry.</span>
+
+<span class="sd">    distances_between_representative_points : bool, default = True</span>
+<span class="sd">        Calculate distances between representative points during class</span>
+<span class="sd">        initialization.</span>
+
+<span class="sd">    angles_between_representative_points : bool, default = False</span>
+<span class="sd">        Calculate angles between representative points during class</span>
+<span class="sd">        initialization.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ds : gpd.GeoDataFrame</span>
+<span class="sd">        Dataset with block values.</span>
+
+<span class="sd">    value_column_name : Any</span>
+<span class="sd">        Name of the column with block rates.</span>
+
+<span class="sd">    geometry_column_name : Any, default = &#39;geometry&#39;</span>
+<span class="sd">        Name of the column with a block geometry.</span>
+
+<span class="sd">    index_column_name : Any, optional</span>
+<span class="sd">        Name of the indexing column.</span>
+
+<span class="sd">    rep_points_column_name : Any, optional</span>
+<span class="sd">        The column with representative points or coordinates.</span>
+
+<span class="sd">    angles : numpy array</span>
+<span class="sd">        Angles between the blocks representative points.</span>
+
+<span class="sd">    distances : numpy array</span>
+<span class="sd">        Distances between the blocks representative points.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_indexes : numpy array, property</span>
+<span class="sd">        Block indexes.</span>
+
+<span class="sd">    block_representative_points : numpy array, property</span>
+<span class="sd">        Representative points - lon, lat.</span>
+
+<span class="sd">    block_values : numpy array, property</span>
+<span class="sd">        Block values.</span>
+
+<span class="sd">    block_coordinates(block_id)</span>
+<span class="sd">        Single block representative point.</span>
+
+<span class="sd">    block_real_value(block_id)</span>
+<span class="sd">        Single block observation.</span>
+
+<span class="sd">    calculate_angles_between_rep_points()</span>
+<span class="sd">        Angles between blocks, calculated as angles between each</span>
+<span class="sd">        representative point and others. If ``update`` is True then it</span>
+<span class="sd">        updates ``angles`` attribute. Returns dictionary with block index</span>
+<span class="sd">        as a key and angles to other blocks ordered the same way as</span>
+<span class="sd">        dictionary keys as values.</span>
+
+<span class="sd">    calculate_distances_between_rep_points()</span>
+<span class="sd">        Distances between blocks, calculated as distances between each</span>
+<span class="sd">        representative point and others. If ``update`` is set to True</span>
+<span class="sd">        then it updates ``distances`` attribute. Returns Data Frame with</span>
+<span class="sd">        block indexes as columns and indexes and distances as values.</span>
+
+<span class="sd">    get_blocks_values()</span>
+<span class="sd">        Get multiple blocks values.</span>
+
+<span class="sd">    pop()</span>
+<span class="sd">        Experimental. Removes block with specified index from the dataset</span>
+<span class="sd">        and returns removed block as the ``Blocks`` object. Alters object.</span>
+
+<span class="sd">    representative_points_array()</span>
+<span class="sd">        Numpy array with representative points - longitude, latitude, and</span>
+<span class="sd">        value.</span>
+
+<span class="sd">    select_distances_between_blocks()</span>
+<span class="sd">        Select distances between a given block and all other blocks.</span>
+
+<span class="sd">    transform_crs()</span>
+<span class="sd">        Transform Blocks Coordinate Reference System.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AttributeError : If both ``representative_points_from_centroid`` and</span>
+<span class="sd">                    ``representative_points_from_random_sample`` are set to</span>
+<span class="sd">                    True.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    PointSupport : Class heavily using ``Blocks`` for</span>
+<span class="sd">                   the semivariogram deconvolution.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import Blocks</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; FILENAME = &#39;cancer_data.gpkg&#39;</span>
+<span class="sd">    &gt;&gt;&gt; LAYER_NAME = &#39;areas&#39;</span>
+<span class="sd">    &gt;&gt;&gt; DS = gpd.read_file(FILENAME, layer=LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt; AREA_VALUES = &#39;rate&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_INDEX = &#39;FIPS&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; CANCER_DATA = {</span>
+<span class="sd">    ...    &#39;ds&#39;: DS,</span>
+<span class="sd">    ...    &#39;index_column_name&#39;: AREA_INDEX,</span>
+<span class="sd">    ...    &#39;value_column_name&#39;: AREA_VALUES,</span>
+<span class="sd">    ...    &#39;geometry_column_name&#39;: AREA_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; block = Blocks(**CANCER_DATA)</span>
+<span class="sd">    &gt;&gt;&gt; print(block.ds.columns)</span>
+<span class="sd">    Index([&#39;FIPS&#39;, &#39;rate&#39;, &#39;geometry&#39;, &#39;rep_points&#39;, &#39;lon&#39;, &#39;lat&#39;],</span>
+<span class="sd">          dtype=&#39;object&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">ds</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
+                 <span class="n">value_column_name</span><span class="p">,</span>
+                 <span class="n">geometry_column_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+                 <span class="n">index_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">representative_points_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">representative_points_from_centroid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">representative_points_from_random_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">distances_between_representative_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">angles_between_representative_points</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="c1"># Helper params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span> <span class="o">=</span> <span class="s1">&#39;lon&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lat_col_name</span> <span class="o">=</span> <span class="s1">&#39;lat&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span> <span class="o">=</span> <span class="s1">&#39;representative_points&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">__check_rep_points_params</span><span class="p">(</span>
+            <span class="n">representative_points_from_centroid</span><span class="p">,</span>
+            <span class="n">representative_points_from_random_sample</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_centroid</span> <span class="o">=</span> <span class="n">representative_points_from_centroid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span> <span class="o">=</span> <span class="n">representative_points_from_random_sample</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="n">value_column_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="o">=</span> <span class="n">index_column_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span> <span class="o">=</span> <span class="n">geometry_column_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span> <span class="o">=</span> <span class="n">representative_points_column_name</span>
+
+        <span class="k">if</span> <span class="n">representative_points_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_representative_points</span><span class="p">()</span>
+
+        <span class="c1"># Set lon, lat for further calculations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_points_to_floats</span><span class="p">()</span>
+
+        <span class="c1"># get distances &amp; angles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">distances_between_representative_points</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">angles_between_representative_points</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns index column values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            Block indexes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_representative_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns block representative coordinates.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            Block representative coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lat_col_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns block values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            Block values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<div class="viewcode-block" id="Blocks.block_coordinates">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.block_coordinates">[docs]</a>
+    <span class="k">def</span> <span class="nf">block_coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_id</span><span class="p">:</span> <span class="n">Hashable</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets block representative point.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_id : Hashable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : Point</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_id</span><span class="p">]</span>
+
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">coordinates</span></div>
+
+
+<div class="viewcode-block" id="Blocks.block_real_value">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.block_real_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">block_real_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_id</span><span class="p">:</span> <span class="n">Hashable</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets block total value.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_id : Hashable</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_id</span><span class="p">]</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="Blocks.calculate_angles_between_rep_points">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.calculate_angles_between_rep_points">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_angles_between_rep_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Angles between all representative points to all other</span>
+<span class="sd">        representative points.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        update : bool, default = True</span>
+<span class="sd">            Update ``angles`` attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : Dict</span>
+<span class="sd">            block index: angles to other blocks ordered like block</span>
+<span class="sd">            indexes (keys) in a dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">()</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_indexes</span>
+
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">):</span>
+            <span class="n">angle</span> <span class="o">=</span> <span class="n">calc_angles</span><span class="p">(</span>
+                <span class="n">points_b</span><span class="o">=</span><span class="n">points</span><span class="p">,</span>
+                <span class="n">origin</span><span class="o">=</span><span class="n">pt</span>
+            <span class="p">)</span>
+            <span class="n">angles</span><span class="p">[</span><span class="n">indexes</span><span class="p">[</span><span class="n">idx</span><span class="p">]]</span> <span class="o">=</span> <span class="n">angle</span>
+
+        <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">angles</span>
+
+        <span class="k">return</span> <span class="n">angles</span></div>
+
+
+<div class="viewcode-block" id="Blocks.calculate_distances_between_rep_points">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.calculate_distances_between_rep_points">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_distances_between_rep_points</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                               <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets distances between representative points within blocks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        update : bool, default = True</span>
+<span class="sd">            Update ``distances`` attribute.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : DataFrame</span>
+<span class="sd">            Columns and indexes are blocks ids, values are</span>
+<span class="sd">            distances between blocks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">()</span>
+        <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span>
+            <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span>
+            <span class="n">other</span><span class="o">=</span><span class="n">points</span>
+        <span class="p">)</span>
+        <span class="n">indexes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_indexes</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">distances</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">indexes</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">indexes</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="n">df</span>
+
+        <span class="k">return</span> <span class="n">df</span></div>
+
+
+<div class="viewcode-block" id="Blocks.get_blocks_values">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.get_blocks_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_blocks_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indexes</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns values of observations aggregated within blocks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indexes : Array-like, optional</span>
+<span class="sd">            Indexes of blocks to get values from. If not given then</span>
+<span class="sd">            all blocks are returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">indexes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">indexes</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">indexes</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="Blocks.pop">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.pop">[docs]</a>
+    <span class="k">def</span> <span class="nf">pop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes block with specified index from the dataset and returns</span>
+<span class="sd">        removed block as the ``Blocks`` object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_index : Union[str, Hashable]</span>
+<span class="sd">            Index of the block to remove.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : Blocks</span>
+<span class="sd">            Single block as the Blocks object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get block</span>
+        <span class="n">rblock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="n">block_index</span><span class="p">)</span>
+
+        <span class="c1"># remove block</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">(</span><span class="n">block_index</span><span class="p">)</span>
+
+        <span class="c1"># return</span>
+        <span class="k">return</span> <span class="n">rblock</span></div>
+
+
+<div class="viewcode-block" id="Blocks.representative_points_array">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.representative_points_array">[docs]</a>
+    <span class="k">def</span> <span class="nf">representative_points_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns array with blocks&#39; representative points.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            ``[lon, lat, value]``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lat_col_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="Blocks.select_distances_between_blocks">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.select_distances_between_blocks">[docs]</a>
+    <span class="k">def</span> <span class="nf">select_distances_between_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                        <span class="n">block_id</span><span class="p">,</span>
+                                        <span class="n">other_blocks</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method selects distances between specified blocks and all other</span>
+<span class="sd">        blocks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_id :</span>
+<span class="sd">            Single block ID or list with IDs to retrieve.</span>
+
+<span class="sd">        other_blocks : optional</span>
+<span class="sd">            Other blocks to get distance to those blocks, if not given then</span>
+<span class="sd">            all other blocks are returned.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            Index is block id, columns are other blocks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># get specified values</span>
+        <span class="k">if</span> <span class="n">other_blocks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">,</span> <span class="n">other_blocks</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">,</span> <span class="n">other_blocks</span><span class="p">]</span></div>
+
+
+    <span class="c1"># TODO manage copying and inplace transformations</span>
+<div class="viewcode-block" id="Blocks.transform_crs">
+<a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.transform_crs">[docs]</a>
+    <span class="k">def</span> <span class="nf">transform_crs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function transforms Blocks CRS</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_crs : pyproj.CRS or EPSG code</span>
+<span class="sd">            The value can be anything accepted by</span>
+<span class="sd">            :meth:`pyproj.CRS.from_user_input()</span>
+<span class="sd">            &lt;pyproj.crs.CRS.from_user_input&gt;`,</span>
+<span class="sd">            such as an authority string (eg &quot;EPSG:4326&quot;) or a WKT string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Transform core dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># representative points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_get_representative_points</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_points_to_floats</span><span class="p">()</span>
+
+        <span class="c1"># distances</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances_between_rep_points</span><span class="p">(</span>
+            <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="c1"># angles</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
+            <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes block with specified index from the dataset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_index : Union[str, Hashable]</span>
+<span class="sd">            Index of the block to remove.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">block_index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span> <span class="o">!=</span> <span class="n">block_index</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns block with specified index from the dataset.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_index : Union[str, Hashable]</span>
+<span class="sd">            Index of the block to return.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : Blocks</span>
+<span class="sd">            Single block as the Blocks object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">rblock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_index</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">rblock</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span>
+                <span class="n">ds</span><span class="o">=</span><span class="n">rblock</span><span class="p">,</span>
+                <span class="n">value_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span>
+                <span class="n">geometry_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">,</span>
+                <span class="n">representative_points_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span><span class="p">,</span>
+                <span class="n">representative_points_from_centroid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_centroid</span><span class="p">,</span>
+                <span class="n">representative_points_from_random_sample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">rblock</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rblock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_index</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="n">rblock</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span>
+                <span class="n">ds</span><span class="o">=</span><span class="n">rblock</span><span class="p">,</span>
+                <span class="n">value_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span>
+                <span class="n">geometry_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">,</span>
+                <span class="n">representative_points_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span><span class="p">,</span>
+                <span class="n">representative_points_from_centroid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_centroid</span><span class="p">,</span>
+                <span class="n">representative_points_from_random_sample</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">rblock</span>
+
+    <span class="k">def</span> <span class="nf">_get_random_representative_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method estimates representative points as a point guaranteed to be</span>
+<span class="sd">        within the object, cheaply.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">representative_point</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span>
+
+    <span class="k">def</span> <span class="nf">_get_representative_points</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates representative points as centroids or randomly</span>
+<span class="sd">        sampled points within the block geometry.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_random_representative_points</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_representative_points_from_centroids</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_get_representative_points_from_centroids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Estimates representative points as centroids.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">centroid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span>
+
+    <span class="k">def</span> <span class="nf">_points_to_floats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method creates array with [lon, lat, value]</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">points_to_lon_lat</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lat_col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lat</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns number of blocks in the dataset.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">__check_rep_points_params</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Checks if users has chosen only one method to calculate representative</span>
+<span class="sd">        points.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r1 : bool</span>
+<span class="sd">            First parameter (``representative_points_from_centroid``).</span>
+
+<span class="sd">        r2 : bool</span>
+<span class="sd">            Second parameter (``representative_points_from_random_sample``).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            If both parameters are set to ``True``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">r1</span> <span class="ow">and</span> <span class="n">r2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Please set only one parameter from &#39;</span>
+                <span class="s1">&#39;``representative_points_from_centroid`` or &#39;</span>
+                <span class="s1">&#39;``representative_points_from_random_sample`` to True.&#39;</span>
+            <span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
