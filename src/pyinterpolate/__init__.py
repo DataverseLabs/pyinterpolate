@@ -5,15 +5,4 @@ from pyinterpolate.core.data_models.point_support_distances import (
 )
 from pyinterpolate.core.pipelines.block_filter import (filter_blocks,
                                                        smooth_blocks)
-
-from pyinterpolate.semivariogram.experimental import (
-    build_experimental_variogram,
-    calculate_covariance,
-    calculate_semivariance,
-    point_cloud_semivariance,
-    ExperimentalVariogram,
-    DirectionalVariogram,
-    VariogramCloud
-)
-from pyinterpolate.semivariogram.theoretical import build_theoretical_variogram, TheoreticalVariogram
-from pyinterpolate.transform.geo import reproject_flat
+from pyinterpolate.idw.idw import inverse_distance_weighting

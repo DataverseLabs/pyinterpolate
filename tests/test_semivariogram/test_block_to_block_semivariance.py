@@ -1,6 +1,6 @@
 import numpy as np
 
-from pyinterpolate import ExperimentalVariogram
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.distance.block import calc_block_to_block_distance

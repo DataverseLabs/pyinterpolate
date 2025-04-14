@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from pyinterpolate import calculate_semivariance
+from pyinterpolate.semivariogram.experimental.experimental_semivariogram import calculate_semivariance
 
 
 def test_omnidirectional_semivariogram():

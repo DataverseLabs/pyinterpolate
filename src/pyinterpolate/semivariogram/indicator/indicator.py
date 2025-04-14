@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib import markers
 from tqdm import tqdm
 
-from pyinterpolate import ExperimentalVariogram
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 

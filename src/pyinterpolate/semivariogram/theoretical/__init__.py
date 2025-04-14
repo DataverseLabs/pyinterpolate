@@ -1,2 +1,0 @@
-from pyinterpolate.semivariogram.theoretical.theoretical import build_theoretical_variogram
-from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram

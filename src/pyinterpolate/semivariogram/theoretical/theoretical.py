@@ -1,6 +1,6 @@
 from typing import Union
 import numpy as np
-from pyinterpolate import ExperimentalVariogram
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 

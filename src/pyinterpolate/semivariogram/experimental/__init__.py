@@ -1,8 +1,0 @@
-from pyinterpolate.semivariogram.experimental.experimental_semivariogram import (
-    calculate_semivariance,
-    point_cloud_semivariance
-)
-from pyinterpolate.semivariogram.experimental.experimental_covariogram import calculate_covariance
-from pyinterpolate.semivariogram.experimental.classes.variogram_cloud import VariogramCloud
-from pyinterpolate.semivariogram.experimental.classes.directional_variogram import DirectionalVariogram
-from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram, build_experimental_variogram

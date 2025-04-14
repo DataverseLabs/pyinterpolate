@@ -1,8 +1,10 @@
 import numpy as np
+from pyinterpolate.semivariogram.experimental.classes.variogram_cloud import \
+    VariogramCloud
 
-from pyinterpolate import (calculate_semivariance,
-                           point_cloud_semivariance,
-                           VariogramCloud)
+from pyinterpolate.semivariogram.experimental.experimental_semivariogram import \
+    calculate_semivariance, point_cloud_semivariance
+
 from ._ds import get_armstrong_data
 
 
@@ -122,12 +124,12 @@ def test_printing():
 
 def test_directional_semivariogram():
     ds = get_armstrong_data()
-    STEP_SIZE = 1.5
-    MAX_RANGE = 6
+    _STEP_SIZE = 1.5
+    _MAX_RANGE = 6
     dirvar = calculate_semivariance(
         ds=ds,
-        step_size=STEP_SIZE,
-        max_range=MAX_RANGE,
+        step_size=_STEP_SIZE,
+        max_range=_MAX_RANGE,
         direction=15,
         tolerance=0.25,
         dir_neighbors_selection_method='e'
@@ -135,8 +137,8 @@ def test_directional_semivariogram():
 
     cloud_semivariance = point_cloud_semivariance(
         ds=ds,
-        step_size=STEP_SIZE,
-        max_range=MAX_RANGE,
+        step_size=_STEP_SIZE,
+        max_range=_MAX_RANGE,
         direction=15,
         tolerance=0.25,
         dir_neighbors_selection_method='e'

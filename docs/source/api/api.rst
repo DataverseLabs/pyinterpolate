@@ -6,4 +6,6 @@ API
 
    core/core
    distance/distance
+   idw/idw
+   evaluate/evaluate
    core/pipelines

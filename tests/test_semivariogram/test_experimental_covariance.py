@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 
-from pyinterpolate import calculate_covariance
+from pyinterpolate.semivariogram.experimental.experimental_covariogram import calculate_covariance
 
 
 @dataclass
