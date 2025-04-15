@@ -65,13 +65,13 @@ def forecast_bias(predicted_array: np.ndarray,
 
     Equation:
 
-    (1) $$e_{fb} = \frac{\sum_{i}^{N}{y_{i} - \bar{y_{i}}}}{N}$$
+    .. math:: e_{fb} = \frac{\sum_{i}^{N}{y_{i} - \bar{y_{i}}}}{N}
 
-        where:
-        * $e_{fb}$ - forecast bias,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        - :math:`e_{fb}` - forecast bias,
+        - :math:`y_{i}` - i-th observation,
+        - :math:`\bar{y_{i}}` - i-th prediction,
+        - :math:`N` - number of observations.
     """
 
     fb = float(np.mean(real_array - predicted_array))
@@ -98,13 +98,13 @@ def mean_absolute_error(predicted_array: np.ndarray,
 
     Equation:
 
-    (1) $$e_{mae} = \frac{\sum_{i}^{N}{|y_{i} - \bar{y_{i}}|}}{N}$$
+    .. math:: e_{mae} = \frac{\sum_{i}^{N}{|y_{i} - \bar{y_{i}}|}}{N}
 
-        where:
-        * $e_{mae}$ - mean absolute error,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        * :math:`e_{mae}` - mean absolute error,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`N` - number of observations.
     """
     mae = float(
         np.mean(
@@ -136,13 +136,13 @@ def root_mean_squared_error(predicted_array: np.ndarray,
     -----
     Equation:
 
-    (1) e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}$$
+    .. math:: e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}
 
-        where:
-        * $e_{rmse}$ - root mean squared error,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        * :math:`e_{rmse}` - root mean squared error,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`N` - number of observations.
 
     """
     rmse = np.sqrt(
@@ -197,14 +197,14 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
 
     Equation:
 
-    (1) $$e_{smape} = \frac{100}{N}
-          \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}$$
+    .. math:: e_{smape} = \frac{100}{N}
+        \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}
 
-        where:
-        * $e_{smape}$ - symmetric mean absolute percentage error,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        * :math:`e_{smape}` - symmetric mean absolute percentage error,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`N` - number of observations.
 
     """
     smape = 100
@@ -257,7 +257,7 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
     Returns
     -------
     wrmse : float
-        Weighted Root Mean Squared Error..
+        Weighted Root Mean Squared Error.
 
     Raises
     ------
@@ -274,49 +274,42 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
 
     Equations:
 
-    - "closest"
+    ``"closest"``
 
-    (1) $$e_{wrmse} = \sqrt{
-              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}
-              }
-        $$
+    .. math:: e_{wrmse} =
+        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}}
 
-        where:
-        * $e_{rmse}$ - weighted root mean squared error,
-        * $i$ - lag, i > 0,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        * :math:`e_{rmse}` - weighted root mean squared error,
+        * :math:`i` - lag, i > 0,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`N` - number of observations.
 
-    - "distant"
+    ``"distant"``
 
-    (2) $$e_{wrmse} = \sqrt{
-              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}
-              }
-        $$
+    .. math:: e_{wrmse} =
+        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}}
 
-        where:
-        * $e_{rmse}$ - weighted root mean squared error,
-        * $i$ - lag, i > 0,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $N$ - number of observations.
+    where:
+        * :math:`e_{rmse}` - weighted root mean squared error,
+        * :math:`i` - lag, i > 0,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`N` - number of observations.
 
-    - "dense"
+    ``"dense"``
 
-    (3) $$e_{wrmse} = \sqrt{
-              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}
-              }
-        $$
+    .. math:: e_{wrmse} =
+        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}}
 
-        where:
-        * $e_{rmse}$ - weighted root mean squared error,
-        * $y_{i}$ - i-th observation,
-        * $\bar{y_{i}}$ - i-th prediction,
-        * $p_{i}$ - number of points within i-th lag,
-        * $P$ - number of all points,
-        * $N$ - number of observations.
-
+    where:
+        * :math:`e_{rmse}` - weighted root mean squared error,
+        * :math:`y_{i}` - i-th observation,
+        * :math:`\bar{y_{i}}` - i-th prediction,
+        * :math:`p_{i}` - number of points within i-th lag,
+        * :math:`P` - number of all points,
+        * :math:`N` - number of observations.
 
     """
     error = (real_array - predicted_array) ** 2

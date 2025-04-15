@@ -449,13 +449,13 @@
 
 <span class="sd">    Equation:</span>
 
-<span class="sd">    (1) $$e_{fb} = \frac{\sum_{i}^{N}{y_{i} - \bar{y_{i}}}}{N}$$</span>
+<span class="sd">    .. math:: e_{fb} = \frac{\sum_{i}^{N}{y_{i} - \bar{y_{i}}}}{N}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{fb}$ - forecast bias,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        - :math:`e_{fb}` - forecast bias,</span>
+<span class="sd">        - :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        - :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        - :math:`N` - number of observations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">fb</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">predicted_array</span><span class="p">))</span>
@@ -485,13 +485,13 @@
 
 <span class="sd">    Equation:</span>
 
-<span class="sd">    (1) $$e_{mae} = \frac{\sum_{i}^{N}{|y_{i} - \bar{y_{i}}|}}{N}$$</span>
+<span class="sd">    .. math:: e_{mae} = \frac{\sum_{i}^{N}{|y_{i} - \bar{y_{i}}|}}{N}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{mae}$ - mean absolute error,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{mae}` - mean absolute error,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mae</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
@@ -526,13 +526,13 @@
 <span class="sd">    -----</span>
 <span class="sd">    Equation:</span>
 
-<span class="sd">    (1) e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}$$</span>
+<span class="sd">    .. math:: e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{rmse}$ - root mean squared error,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{rmse}` - root mean squared error,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
@@ -590,14 +590,14 @@
 
 <span class="sd">    Equation:</span>
 
-<span class="sd">    (1) $$e_{smape} = \frac{100}{N}</span>
-<span class="sd">          \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}$$</span>
+<span class="sd">    .. math:: e_{smape} = \frac{100}{N}</span>
+<span class="sd">        \sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{smape}$ - symmetric mean absolute percentage error,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{smape}` - symmetric mean absolute percentage error,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">smape</span> <span class="o">=</span> <span class="mi">100</span>
@@ -653,7 +653,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    wrmse : float</span>
-<span class="sd">        Weighted Root Mean Squared Error..</span>
+<span class="sd">        Weighted Root Mean Squared Error.</span>
 
 <span class="sd">    Raises</span>
 <span class="sd">    ------</span>
@@ -670,49 +670,42 @@
 
 <span class="sd">    Equations:</span>
 
-<span class="sd">    - &quot;closest&quot;</span>
+<span class="sd">    ``&quot;closest&quot;``</span>
 
-<span class="sd">    (1) $$e_{wrmse} = \sqrt{</span>
-<span class="sd">              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}</span>
-<span class="sd">              }</span>
-<span class="sd">        $$</span>
+<span class="sd">    .. math:: e_{wrmse} =</span>
+<span class="sd">        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{rmse}$ - weighted root mean squared error,</span>
-<span class="sd">        * $i$ - lag, i &gt; 0,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{rmse}` - weighted root mean squared error,</span>
+<span class="sd">        * :math:`i` - lag, i &gt; 0,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 
-<span class="sd">    - &quot;distant&quot;</span>
+<span class="sd">    ``&quot;distant&quot;``</span>
 
-<span class="sd">    (2) $$e_{wrmse} = \sqrt{</span>
-<span class="sd">              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}</span>
-<span class="sd">              }</span>
-<span class="sd">        $$</span>
+<span class="sd">    .. math:: e_{wrmse} =</span>
+<span class="sd">        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{rmse}$ - weighted root mean squared error,</span>
-<span class="sd">        * $i$ - lag, i &gt; 0,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $N$ - number of observations.</span>
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{rmse}` - weighted root mean squared error,</span>
+<span class="sd">        * :math:`i` - lag, i &gt; 0,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 
-<span class="sd">    - &quot;dense&quot;</span>
+<span class="sd">    ``&quot;dense&quot;``</span>
 
-<span class="sd">    (3) $$e_{wrmse} = \sqrt{</span>
-<span class="sd">              \frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}</span>
-<span class="sd">              }</span>
-<span class="sd">        $$</span>
+<span class="sd">    .. math:: e_{wrmse} =</span>
+<span class="sd">        \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}}</span>
 
-<span class="sd">        where:</span>
-<span class="sd">        * $e_{rmse}$ - weighted root mean squared error,</span>
-<span class="sd">        * $y_{i}$ - i-th observation,</span>
-<span class="sd">        * $\bar{y_{i}}$ - i-th prediction,</span>
-<span class="sd">        * $p_{i}$ - number of points within i-th lag,</span>
-<span class="sd">        * $P$ - number of all points,</span>
-<span class="sd">        * $N$ - number of observations.</span>
-
+<span class="sd">    where:</span>
+<span class="sd">        * :math:`e_{rmse}` - weighted root mean squared error,</span>
+<span class="sd">        * :math:`y_{i}` - i-th observation,</span>
+<span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
+<span class="sd">        * :math:`p_{i}` - number of points within i-th lag,</span>
+<span class="sd">        * :math:`P` - number of all points,</span>
+<span class="sd">        * :math:`N` - number of observations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">predicted_array</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>

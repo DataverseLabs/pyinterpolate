@@ -45,6 +45,8 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/evaluate/evaluate';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -438,15 +440,17 @@ higher than expected values. Our model overestimates predictions.</p></li>
 </dd>
 </dl>
 <p>Equation:</p>
-<ol class="arabic">
-<li><p>$$e_{fb} = frac{sum_{i}^{N}{y_{i} - bar{y_{i}}}}{N}$$</p>
-<p>where:
-* $e_{fb}$ - forecast bias,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p>
-</li>
-</ol>
+<div class="math notranslate nohighlight">
+\[e_{fb} = \frac{\sum_{i}^{N}{y_{i} - \bar{y_{i}}}}{N}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{fb}\)</span> - forecast bias,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -468,14 +472,18 @@ higher than expected values. Our model overestimates predictions.</p></li>
 </dd>
 <dt>Equation:</dt><dd></dd>
 </dl>
-<ol class="arabic simple">
-<li><p>$$e_{mae} = frac{sum_{i}^{N}{<a href="#id1"><span class="problematic" id="id2">|y_{i} - \bar{y_{i}}|</span></a>}}{N}$$
-where:
-* $e_{mae}$ - mean absolute error,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p></li>
-</ol>
+<div class="math notranslate nohighlight">
+\[e_{mae} = \frac{\sum_{i}^{N}{|y_{i} - \bar{y_{i}}|}}{N}
+..\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{mae}\)</span> - mean absolute error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
+</ul>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -502,15 +510,17 @@ where:
 </dl>
 <p class="rubric">Notes</p>
 <p>Equation:</p>
-<ol class="arabic">
-<li><p>e_{rmse} = sqrt{frac{sum_{i}^{N}({y_{i} - bar{y_{i}})^2}}{N}}$$</p>
-<p>where:
-* $e_{rmse}$ - root mean squared error,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p>
-</li>
-</ol>
+<div class="math notranslate nohighlight">
+\[e_{rmse} = \sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}}{N}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{rmse}\)</span> - root mean squared error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -554,18 +564,18 @@ models and algorithms.</p>
 <p>More about SMAPE here:
 <a class="reference external" href="https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error">https://en.wikipedia.org/wiki/Symmetric_mean_absolute_percentage_error</a></p>
 <p>Equation:</p>
-<ol class="arabic">
-<li><dl class="simple">
-<dt>$$e_{smape} = frac{100}{N}</dt><dd><p>sum_{i}^{N}{frac{<a href="#id3"><span class="problematic" id="id4">|\bar{y_{i}} - y_{i}|</span></a>}{<a href="#id5"><span class="problematic" id="id6">|y_{i}|+|</span></a>bar{y_{i}}|}}$$</p>
+<div class="math notranslate nohighlight">
+\[e_{smape} = \frac{100}{N}
+\sum_{i}^{N}{\frac{|\bar{y_{i}} - y_{i}|}{|y_{i}|+|\bar{y_{i}}|}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{smape}\)</span> - symmetric mean absolute percentage error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
+</ul>
 </dd>
 </dl>
-<p>where:
-* $e_{smape}$ - symmetric mean absolute percentage error,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p>
-</li>
-</ol>
 </dd></dl>
 
 <dl class="py function">
@@ -592,7 +602,7 @@ Available methods:
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>wrmse</strong><span class="classifier">float</span></dt><dd><p>Weighted Root Mean Squared Error..</p>
+<dt><strong>wrmse</strong><span class="classifier">float</span></dt><dd><p>Weighted Root Mean Squared Error.</p>
 </dd>
 </dl>
 </dd>
@@ -610,61 +620,49 @@ force semivariogram to better represent semivariances at specific ranges.
 The most popular is the <code class="docutils literal notranslate"><span class="pre">&quot;closest&quot;</span></code> method - we create model that
 fits better semivariogram at a close distances.</p>
 <p>Equations:</p>
-<ul class="simple">
-<li><p>“closest”</p></li>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;closest&quot;</span></code></p>
+<div class="math notranslate nohighlight">
+\[e_{wrmse} =
+\sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{N-i}{N}}{N}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{rmse}\)</span> - weighted root mean squared error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(i\)</span> - lag, i &gt; 0,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
 </ul>
-<ol class="arabic">
-<li><dl class="simple">
-<dt>$$e_{wrmse} = sqrt{</dt><dd><p>frac{sum_{i}^{N}({y_{i} - bar{y_{i}})^2}*frac{N-i}{N}}{N}
-}</p>
 </dd>
 </dl>
-<p>$$</p>
-<p>where:
-* $e_{rmse}$ - weighted root mean squared error,
-* $i$ - lag, i &gt; 0,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p>
-</li>
-</ol>
-<ul class="simple">
-<li><p>“distant”</p></li>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;distant&quot;</span></code></p>
+<div class="math notranslate nohighlight">
+\[e_{wrmse} =
+\sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{i}{N}}{N}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{rmse}\)</span> - weighted root mean squared error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(i\)</span> - lag, i &gt; 0,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
 </ul>
-<ol class="arabic" start="2">
-<li><dl class="simple">
-<dt>$$e_{wrmse} = sqrt{</dt><dd><p>frac{sum_{i}^{N}({y_{i} - bar{y_{i}})^2}*frac{i}{N}}{N}
-}</p>
 </dd>
 </dl>
-<p>$$</p>
-<p>where:
-* $e_{rmse}$ - weighted root mean squared error,
-* $i$ - lag, i &gt; 0,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $N$ - number of observations.</p>
-</li>
-</ol>
-<ul class="simple">
-<li><p>“dense”</p></li>
+<p><code class="docutils literal notranslate"><span class="pre">&quot;dense&quot;</span></code></p>
+<div class="math notranslate nohighlight">
+\[e_{wrmse} =
+\sqrt{\frac{\sum_{i}^{N}({y_{i} - \bar{y_{i}})^2}*\frac{p_{i}}{P}}{N}}\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e_{rmse}\)</span> - weighted root mean squared error,</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_{i}\)</span> - i-th observation,</p></li>
+<li><p><span class="math notranslate nohighlight">\(\bar{y_{i}}\)</span> - i-th prediction,</p></li>
+<li><p><span class="math notranslate nohighlight">\(p_{i}\)</span> - number of points within i-th lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(P\)</span> - number of all points,</p></li>
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observations.</p></li>
 </ul>
-<ol class="arabic" start="3">
-<li><dl class="simple">
-<dt>$$e_{wrmse} = sqrt{</dt><dd><p>frac{sum_{i}^{N}({y_{i} - bar{y_{i}})^2}*frac{p_{i}}{P}}{N}
-}</p>
 </dd>
 </dl>
-<p>$$</p>
-<p>where:
-* $e_{rmse}$ - weighted root mean squared error,
-* $y_{i}$ - i-th observation,
-* $bar{y_{i}}$ - i-th prediction,
-* $p_{i}$ - number of points within i-th lag,
-* $P$ - number of all points,
-* $N$ - number of observations.</p>
-</li>
-</ol>
 </dd></dl>
 
 </section>
