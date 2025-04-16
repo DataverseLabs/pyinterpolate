@@ -30,10 +30,11 @@ def validate_kriging(
         Fitted variogram model.
 
     how : str, default='ok'
-        Select what kind of kriging you want to perform:
+        Select what kind of kriging you want to perform
+
           * 'ok': ordinary kriging,
-          * 'sk': simple kriging - if it is set then ``sk_mean``
-            parameter must be provided.
+          * 'sk': simple kriging - if it is set then ``sk_mean`` parameter
+            must be provided.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors. If ``None`` is
@@ -44,9 +45,10 @@ def validate_kriging(
         The number of the **n-closest neighbors** used for interpolation.
 
     use_all_neighbors_in_range : bool, default = False
-        ``True``: if the real number of neighbors within
-        the ``neighbors_range`` is greater than the
-        ``number_of_neighbors`` parameter then take all of them anyway.
+        ``True``: if the number of neighbors within the
+        ``neighbors_range`` is greater than the
+        ``number_of_neighbors`` parameter then use all neighbors, do not
+        clip their number.
 
     sk_mean : float, default=None
         The mean value of a process over a study area. Should be known
@@ -65,17 +67,17 @@ def validate_kriging(
     -------
     : Tuple
         Function returns tuple with:
+
           * Mean Prediction Error,
           * Mean Kriging Error: ratio of variance of prediction errors to
             the average variance error of kriging,
-          * array with: ``[coordinate x, coordinate y, prediction error,
-                           kriging estimate error]``
+          * array with: ``[coordinate x, coordinate y, prediction error, kriging estimate error]``
 
     References
     ----------
-    1. Clark, I., (2004) “The Art of Cross Validation in Geostatistical
-       Applications"
-    2. Clark I., (1979) "Does Geostatistics Work", Proc. 16th APCOM,
+    1. Clark, I., (2004), The Art of Cross Validation in Geostatistical
+       Applications
+    2. Clark I., (1979), Does Geostatistics Work, Proc. 16th APCOM,
        pp.213.-225.
     """
     # TODO:

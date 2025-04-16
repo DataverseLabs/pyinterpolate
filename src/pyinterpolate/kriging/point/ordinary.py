@@ -12,7 +12,7 @@ from typing import List, Union, Tuple
 import numpy as np
 from numpy.typing import ArrayLike
 
-from kriging.utils.errors import singular_matrix_error
+from pyinterpolate.kriging.utils.errors import singular_matrix_error
 # Pyinterpolate
 from pyinterpolate.kriging.utils.point_kriging_solve import (get_predictions,
                                                              solve_weights)

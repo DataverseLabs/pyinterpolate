@@ -178,7 +178,7 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
             Symmetric Mean Absolute Percentage Error.
 
     Warns
-    --------
+    -----
     UndefinedSMAPEWarning
         Observation and prediction are equal to 0 - SMAPE of this pair is
         undefined, algorithm assumes that SMAPE equals to 0.

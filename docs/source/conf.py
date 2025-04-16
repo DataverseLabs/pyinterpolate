@@ -6,7 +6,15 @@ import os
 import sys
 
 # -- Path setup --------------------------------------------------------------
-sys.path.insert(0, os.path.abspath('../../src/'))
+sys.path.insert(0, os.path.abspath('../../src'))
+
+# print(sys.path)  # Check the Python path
+# try:
+#     # Try importing your module
+#     from pyinterpolate.evaluate.cross_validation import validate_kriging
+#     print("Import successful")
+# except ImportError as e:
+#     print(f"Import failed: {e}")
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

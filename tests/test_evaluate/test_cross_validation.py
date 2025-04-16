@@ -1,5 +1,3 @@
-import os
-
 import numpy as np
 
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram

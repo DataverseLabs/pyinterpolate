@@ -10,7 +10,7 @@ from typing import List, Union, Tuple
 
 import numpy as np
 
-from kriging.utils.errors import singular_matrix_error
+from pyinterpolate.kriging.utils.errors import singular_matrix_error
 from pyinterpolate.kriging.utils.point_kriging_solve import (get_predictions,
                                                              solve_weights)
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
