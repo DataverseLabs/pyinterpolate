@@ -12,4 +12,9 @@ from pyinterpolate.kriging.block.centroid_based_poisson_kriging import centroid_
 from pyinterpolate.kriging.point.indicator import IndicatorKriging
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
+from pyinterpolate.semivariogram.experimental.experimental_semivariogram import calculate_semivariance
+from pyinterpolate.semivariogram.experimental.experimental_covariogram import calculate_covariance
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram, build_experimental_variogram
+from pyinterpolate.semivariogram.experimental.classes.directional_variogram import DirectionalVariogram
+from pyinterpolate.semivariogram.experimental.classes.variogram_cloud import VariogramCloud
 
