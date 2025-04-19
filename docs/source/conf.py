@@ -45,6 +45,7 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['*__*__*', '**.ipynb_checkpoints']
 add_module_names = True
+# numpydoc_class_members_toctree = False
 # autodoc_typehints = 'none'
 
 

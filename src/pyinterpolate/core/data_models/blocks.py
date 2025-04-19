@@ -84,14 +84,14 @@ class Blocks:
 
     Methods
     -------
-    block_indexes : numpy array, property
-        Block indexes.
+    block_indexes()
+        Block indexes as numpy array.
 
-    block_representative_points : numpy array, property
-        Representative points - lon, lat.
+    block_representative_points()
+        Representative points - lon, lat as numpy array.
 
-    block_values : numpy array, property
-        Block values.
+    block_values()
+        Block values as numpy array.
 
     block_coordinates(block_id)
         Single block representative point.

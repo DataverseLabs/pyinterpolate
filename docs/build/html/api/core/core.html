@@ -337,6 +337,9 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Core data structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/experimental.html">Experimental Semivariance and Covariance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
@@ -452,47 +455,42 @@ initialization.</p>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_indexes</span></code></p></td>
-<td><p>Returns index column values.</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_representative_points</span></code></p></td>
-<td><p>Returns block representative coordinates.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">block_values</span></code></p></td>
-<td><p>Returns block values.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="pst-scrollable-table-container"><table class="table">
 <tbody>
-<tr class="row-odd"><td><p><strong>block_coordinates(block_id)</strong></p></td>
+<tr class="row-odd"><td><p><strong>block_indexes()</strong></p></td>
+<td><p>Block indexes as numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>block_representative_points()</strong></p></td>
+<td><p>Representative points - lon, lat as numpy array.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>block_values()</strong></p></td>
+<td><p>Block values as numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>block_coordinates(block_id)</strong></p></td>
 <td><p>Single block representative point.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>block_real_value(block_id)</strong></p></td>
+<tr class="row-odd"><td><p><strong>block_real_value(block_id)</strong></p></td>
 <td><p>Single block observation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>calculate_angles_between_rep_points()</strong></p></td>
+<tr class="row-even"><td><p><strong>calculate_angles_between_rep_points()</strong></p></td>
 <td><p>Angles between blocks, calculated as angles between each representative point and others. If <code class="docutils literal notranslate"><span class="pre">update</span></code> is True then it updates <code class="docutils literal notranslate"><span class="pre">angles</span></code> attribute. Returns dictionary with block index as a key and angles to other blocks ordered the same way as dictionary keys as values.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>calculate_distances_between_rep_points()</strong></p></td>
+<tr class="row-odd"><td><p><strong>calculate_distances_between_rep_points()</strong></p></td>
 <td><p>Distances between blocks, calculated as distances between each representative point and others. If <code class="docutils literal notranslate"><span class="pre">update</span></code> is set to True then it updates <code class="docutils literal notranslate"><span class="pre">distances</span></code> attribute. Returns Data Frame with block indexes as columns and indexes and distances as values.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>get_blocks_values()</strong></p></td>
+<tr class="row-even"><td><p><strong>get_blocks_values()</strong></p></td>
 <td><p>Get multiple blocks values.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>pop()</strong></p></td>
+<tr class="row-odd"><td><p><strong>pop()</strong></p></td>
 <td><p>Experimental. Removes block with specified index from the dataset and returns removed block as the <code class="docutils literal notranslate"><span class="pre">Blocks</span></code> object. Alters object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>representative_points_array()</strong></p></td>
+<tr class="row-even"><td><p><strong>representative_points_array()</strong></p></td>
 <td><p>Numpy array with representative points - longitude, latitude, and value.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>select_distances_between_blocks()</strong></p></td>
+<tr class="row-odd"><td><p><strong>select_distances_between_blocks()</strong></p></td>
 <td><p>Select distances between a given block and all other blocks.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>transform_crs()</strong></p></td>
+<tr class="row-even"><td><p><strong>transform_crs()</strong></p></td>
 <td><p>Transform Blocks Coordinate Reference System.</p></td>
 </tr>
 </tbody>
