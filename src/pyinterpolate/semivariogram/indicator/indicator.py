@@ -155,10 +155,10 @@ class ExperimentalIndicatorVariogram:
         is ``> 0`` then the bin is selected as an elliptical area with major
         axis pointed in the same direction as the line for 0 tolerance.
 
-          * The major axis size == ``step_size``.
-          * The minor axis size is ``tolerance * step_size``
-          * The baseline point is at a center of the ellipse.
-          * The ``tolerance == 1`` creates an omnidirectional semivariogram.
+        * The major axis size == ``step_size``.
+        * The minor axis size is ``tolerance * step_size``
+        * The baseline point is at a center of the ellipse.
+        * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = triangular
         Neighbors selection in a given distance. Available methods:

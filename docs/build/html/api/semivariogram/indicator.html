@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>&lt;no title&gt; &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>Indicator Semivariogram &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -48,6 +48,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/semivariogram/indicator';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Semivariogram Deconvolution" href="deconvolution.html" />
+    <link rel="prev" title="Theoretical Semivariogram" href="theoretical.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -175,7 +177,7 @@
 </li>
 
 
-<li class=" ">
+<li class=" current active">
   <a class="nav-link dropdown-item nav-internal" href="../api.html">
     API
   </a>
@@ -241,10 +243,8 @@
       
       
       
-        
-      
       <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -301,7 +301,7 @@
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../api.html">
     API
   </a>
@@ -328,6 +328,29 @@
       </div>
     
   </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../core/core.html">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="experimental.html">Experimental Semivariance and Covariance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deconvolution.html">Semivariogram Deconvolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
@@ -364,7 +387,10 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">&lt;no title&gt;</span></li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Indicator Semivariogram</span></li>
   </ul>
 </nav>
 </div>
@@ -381,7 +407,258 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  
+  <section id="indicator-semivariogram">
+<h1>Indicator Semivariogram<a class="headerlink" href="#indicator-semivariogram" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">ExperimentalIndicatorVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_thresholds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#ExperimentalIndicatorVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class describes Experimental Indicator Variogram models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array, list, tuple</span></dt><dd><p>Coordinates and their values: <code class="docutils literal notranslate"><span class="pre">(pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y,</span> <span class="pre">value)</span></code></p>
+</dd>
+<dt><strong>number_of_thresholds: int</strong></dt><dd><p>The number of thresholds to model data.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The distance between lags within each points are included in
+the calculations.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum range of analysis.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, default=None</span></dt><dd><p>Weights assigned to points, index of weight must be the same
+as index of point.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), default=None</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), default=1</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line
+with the beginning in the origin of the coordinate system and the
+direction given by y axis and direction parameter. If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>
+is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical area with major
+axis pointed in the same direction as the line for 0 tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = triangular</span></dt><dd><p>Neighbors selection in a given distance. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method where point neighbors are
+selected from triangular area,</p></li>
+<li><p>“ellipse” or “e”, more accurate method but also slower.</p></li>
+</ul>
+</dd>
+<dt><strong>fit</strong><span class="classifier">bool, default = True</span></dt><dd><p>Should models be fitted in the class initialization?</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">IndicatorVariogramData</span></dt><dd><p>Prepared indicator data.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">weights</span></code> parameter.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str</span></dt><dd><p>Derived from the <code class="docutils literal notranslate"><span class="pre">dir_neighbors_selection_method</span></code> parameter.</p>
+</dd>
+<dt><strong>experimental_models</strong><span class="classifier">List</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">[threshold,</span> <span class="pre">experimental_variogram]</span></code> pairs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit()</strong></p></td>
+<td><p>Fits indicators to experimental variograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show()</strong></p></td>
+<td><p>Show experimental variograms for each indicator.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p class="rubric">References</p>
+<p>Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
+non-parametric modeling of local uncertainty
+in earth sciences. DOI: TODO</p>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#ExperimentalIndicatorVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function fits indicators to models and updates class models.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#ExperimentalIndicatorVariogram.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function shows generated experimental variograms for each indicator.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">TheoreticalIndicatorVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_indicator_variogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExperimentalIndicatorVariogram</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#TheoreticalIndicatorVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class models indicator variograms for all indices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>experimental_indicator_variogram</strong><span class="classifier">ExperimentalIndicatorVariogram</span></dt><dd><p>Fitted experimanetal variograms with indicators for each threshold.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>experimental_indicator_variogram</strong><span class="classifier">ExperimentalIndicatorVariogram</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">experimental_indicator_variogram</span></code> parameter.</p>
+</dd>
+<dt><strong>theoretical_indicator_variograms</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with fitted theoretical models for each threshold.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit()</strong></p></td>
+<td><p>Fits theoretical models to experimental variograms.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show()</strong></p></td>
+<td><p>Shows experimental and theoretical variograms for each threshold.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_nuggets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_sill_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill_from_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#TheoreticalIndicatorVariogram.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method tries to find the optimal range, sill and model
+(function) of the theoretical semivariogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>models_group</strong><span class="classifier">str or list, default=’safe’</span></dt><dd><p>Models group to test:</p>
+<ul class="simple">
+<li><p>‘all’ - the same as list with all models,</p></li>
+<li><p>‘safe’ - [‘linear’, ‘power’, ‘spherical’]</p></li>
+<li><p>as a list: multiple model types to test</p></li>
+<li><dl class="simple">
+<dt>as a single model type from:</dt><dd><ul>
+<li><p>‘circular’,</p></li>
+<li><p>‘cubic’,</p></li>
+<li><p>‘exponential’,</p></li>
+<li><p>‘gaussian’,</p></li>
+<li><p>‘linear’,</p></li>
+<li><p>‘power’,</p></li>
+<li><p>‘spherical’.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>nugget</strong><span class="classifier">float, optional</span></dt><dd><p>Nugget (bias) of a variogram. If given then it is
+fixed to this value.</p>
+</dd>
+<dt><strong>min_nugget</strong><span class="classifier">float, default = 0</span></dt><dd><p>The minimum nugget as the ratio of the parameter to
+the first lag variance.</p>
+</dd>
+<dt><strong>max_nugget</strong><span class="classifier">float, default = 0.5</span></dt><dd><p>The maximum nugget as the ratio of the parameter to
+the first lag variance.</p>
+</dd>
+<dt><strong>number_of_nuggets</strong><span class="classifier">int, default = 16</span></dt><dd><p>How many equally spaced nuggets tested between
+<code class="docutils literal notranslate"><span class="pre">min_nugget</span></code> and <code class="docutils literal notranslate"><span class="pre">max_nugget</span></code>.</p>
+</dd>
+<dt><strong>rang</strong><span class="classifier">float, optional</span></dt><dd><p>If given, then range is fixed to this value.</p>
+</dd>
+<dt><strong>min_range</strong><span class="classifier">float, default = 0.1</span></dt><dd><p>The minimal fraction of a variogram range,
+<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span></code>.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float, default = 0.5</span></dt><dd><p>The maximum fraction of a variogram range,
+<code class="docutils literal notranslate"><span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code>. Parameter <code class="docutils literal notranslate"><span class="pre">max_range</span></code> greater
+than <strong>0.5</strong> raises warning.</p>
+</dd>
+<dt><strong>number_of_ranges</strong><span class="classifier">int, default = 16</span></dt><dd><p>How many bins are tested between
+<code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
+</dd>
+<dt><strong>sill</strong><span class="classifier">float, default = None</span></dt><dd><p>If given, then sill is fixed to this value.</p>
+</dd>
+<dt><strong>n_sill_values</strong><span class="classifier">int, default = 5</span></dt><dd><p>The last n experimental semivariance records for sill estimation.
+(Used only when <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
+</dd>
+<dt><strong>sill_from_variance</strong><span class="classifier">bool, default = False</span></dt><dd><p>Estimate sill from the variance (semivariance at distance 0).</p>
+</dd>
+<dt><strong>min_sill</strong><span class="classifier">float, default = 1</span></dt><dd><p>The minimal fraction of the value chosen with the sill estimation
+method. The value is: for <code class="docutils literal notranslate"><span class="pre">sill_from_values</span></code> - the mean of
+the last <code class="docutils literal notranslate"><span class="pre">n_sill_values</span></code> number of experimental semivariances,
+for <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> - the experimental variogram variance.</p>
+</dd>
+<dt><strong>max_sill</strong><span class="classifier">float, default = 5</span></dt><dd><p>The maximum fraction of the value chosen with the sill estimation
+method. The value is: for <code class="docutils literal notranslate"><span class="pre">sill_from_values</span></code> - the mean of
+the last <code class="docutils literal notranslate"><span class="pre">n_sill_values</span></code> number of experimental semivariances,
+for <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> - the experimental variogram variance.</p>
+</dd>
+<dt><strong>number_of_sills</strong><span class="classifier">int, default = 16</span></dt><dd><p>How many equally spaced sill values are tested between
+<code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, in range [0, 360], default=None</span></dt><dd><p>The direction of a semivariogram. If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then
+semivariogram is isotropic. This parameter is required if passed
+experimental variogram is stored in a numpy array.</p>
+</dd>
+<dt><strong>error_estimator</strong><span class="classifier">str, default = ‘rmse’</span></dt><dd><p>A model error estimation method. Available options are:</p>
+<ul class="simple">
+<li><p>‘rmse’: Root Mean Squared Error,</p></li>
+<li><p>‘mae’: Mean Absolute Error,</p></li>
+<li><p>‘bias’: Forecast Bias,</p></li>
+<li><p>‘smape’: Symmetric Mean Absolute Percentage Error.</p></li>
+</ul>
+</dd>
+<dt><strong>deviation_weighting</strong><span class="classifier">str, default = “equal”</span></dt><dd><p>The name of the method used to weight error at a given lags. Works
+only with RMSE. Available methods:</p>
+<ul class="simple">
+<li><p>equal: no weighting,</p></li>
+<li><p>closest: lags at a close range have bigger weights,</p></li>
+<li><p>distant: lags that are further away have bigger weights,</p></li>
+<li><p>dense: error is weighted by the number of point pairs within lag.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subplots</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/indicator/indicator.html#TheoreticalIndicatorVariogram.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method plots experimental and theoretical variograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>subplots</strong><span class="classifier">bool, default = False</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> then each indicator variogram is plotted on a separate
+plot. Otherwise, all variograms are plotted on a single plot.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
 
                 </article>
               
@@ -392,6 +669,24 @@
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="theoretical.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Theoretical Semivariogram</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="deconvolution.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Semivariogram Deconvolution</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -402,18 +697,6 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

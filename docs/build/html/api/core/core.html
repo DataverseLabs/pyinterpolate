@@ -339,11 +339,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../semivariogram/experimental.html">Experimental Semivariance and Covariance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../semivariogram/theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/indicator.html">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/deconvolution.html">Semivariogram Deconvolution</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kriging/point_kriging.html">Point Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
 </ul>
 </div>
 </nav></div>
@@ -406,6 +409,8 @@
                   
   <section id="core-data-structures">
 <h1>Core data structures<a class="headerlink" href="#core-data-structures" title="Link to this heading">#</a></h1>
+<section id="blocks">
+<h2>Blocks<a class="headerlink" href="#blocks" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">Blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_column_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geometry_column_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'geometry'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index_column_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">representative_points_column_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">representative_points_from_centroid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">representative_points_from_random_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distances_between_representative_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_between_representative_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/blocks.html#Blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -756,7 +761,9 @@ such as an authority string (eg “EPSG:4326”) or a WKT string.</p>
 
 </dd></dl>
 
-<hr class="docutils" />
+</section>
+<section id="point-support">
+<h2>Point Support<a class="headerlink" href="#point-support" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">PointSupport</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GeoDataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Blocks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_value_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_geometry_column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">store_dropped_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_point_support_crs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_possible_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support.html#PointSupport"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -981,7 +988,6 @@ points are returned.</p>
 
 </dd></dl>
 
-<hr class="docutils" />
 <dl class="py class">
 <dt class="sig sig-object py">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">PointSupportDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support_distances.html#PointSupportDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -1136,6 +1142,7 @@ point supports.</p>
 </dd></dl>
 
 </section>
+</section>
 
 
                 </article>
@@ -1175,6 +1182,19 @@ point supports.</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blocks">Blocks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#point-support">Point Support</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

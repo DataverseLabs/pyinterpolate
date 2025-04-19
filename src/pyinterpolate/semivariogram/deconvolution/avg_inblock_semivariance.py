@@ -1,6 +1,6 @@
 import numpy as np
 
-from distance.block import select_neighbors_in_range
+from pyinterpolate.distance.block import select_neighbors_in_range
 from pyinterpolate.semivariogram.lags.lags import get_current_and_previous_lag
 
 
@@ -41,7 +41,7 @@ def calculate_average_semivariance(block_to_block_distances: dict,
                                    inblock_semivariances: dict,
                                    step_size: float,
                                    max_range: float) -> np.ndarray:
-    """
+    r"""
     Function calculates average inblock semivariance between blocks.
 
     Parameters

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pipelines (Automated Poisson Kriging) &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>Visualization &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -45,11 +45,10 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/core/pipelines';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/viz/raster';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Visualization" href="../viz/raster.html" />
-    <link rel="prev" title="Models evaluation" href="../evaluate/evaluate.html" />
+    <link rel="prev" title="Pipelines (Automated Poisson Kriging)" href="../core/pipelines.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -335,7 +334,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="core.html">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/core.html">Core data structures</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../semivariogram/experimental.html">Experimental Semivariance and Covariance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../semivariogram/theoretical.html">Theoretical Semivariogram</a></li>
@@ -345,8 +344,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pipelines (Automated Poisson Kriging)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Visualization</a></li>
 </ul>
 </div>
 </nav></div>
@@ -390,7 +389,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Pipelines (Automated Poisson Kriging)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Visualization</span></li>
   </ul>
 </nav>
 </div>
@@ -407,87 +406,83 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="pipelines-automated-poisson-kriging">
-<h1>Pipelines (Automated Poisson Kriging)<a class="headerlink" href="#pipelines-automated-poisson-kriging" title="Link to this heading">#</a></h1>
+  <section id="visualization">
+<h1>Visualization<a class="headerlink" href="#visualization" title="Link to this heading">#</a></h1>
+<section id="raster">
+<h2>Raster<a class="headerlink" href="#raster" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">filter_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PointSupport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kriging_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/block_filter.html#filter_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function filters block data using Poisson Kriging. By filtering we
-understand computing aggregated values again using point support data
-for ratios regularization.</p>
-<dl class="field-list simple">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">interpolate_raster</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approx_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/viz/raster.html#interpolate_raster"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function interpolates raster from data points using ordinary kriging.</p>
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>The fitted variogram model.</p>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[coordinate</span> <span class="pre">x,</span> <span class="pre">coordinate</span> <span class="pre">y,</span> <span class="pre">value]</span></code>.</p>
 </dd>
-<dt><strong>point_support</strong><span class="classifier">PointSupport</span></dt><dd><p>Blocks and their point supports.</p>
+<dt><strong>dim</strong><span class="classifier">int</span></dt><dd><p>Number of pixels (points) of a larger dimension (it could be width
+or height). Ratio is preserved.</p>
 </dd>
-<dt><strong>number_of_neighbors</strong><span class="classifier">int</span></dt><dd><p>The minimum number of neighbours that potentially affect a block.</p>
+<dt><strong>number_of_neighbors</strong><span class="classifier">int, default=16</span></dt><dd><p>Number of points used to interpolate data.</p>
 </dd>
-<dt><strong>kriging_type</strong><span class="classifier">str, default=’ata’</span></dt><dd><dl class="simple">
-<dt>A type of Poisson Kriging operation. Available methods:</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">'ata'</span></code>: Area-to-Area Poisson Kriging.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'atp'</span></code>: Area-to-Point Poisson Kriging.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'cb'</span></code>: Centroid-based Poisson Kriging.</p></li>
+<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram, default=None</span></dt><dd><p>Variogram model, if not provided then it is estimated from a given
+dataset.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float (in range [0, 360]), optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float (in range [0, 1]), optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line
+with the beginning in the origin of the coordinate system and the
+direction given by y-axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line
+for 0 tolerance:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>the major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>,</p></li>
+<li><p>the minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code>,</p></li>
+<li><p>the baseline point is at a center of the ellipse,</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>allow_approx_solutions</strong><span class="classifier">bool, default=True</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS
+algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code> if you don’t know
+what are you doing. This parameter can be useful when you have
+clusters in your dataset, that can lead to singular or near-singular
+matrix creation.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>raster_dict</strong><span class="classifier">Dict</span></dt><dd><p>A dictionary with keys:</p>
+<ul class="simple">
+<li><p><strong>‘result’</strong>: numpy array of interpolated values,</p></li>
+<li><p><strong>‘error’</strong>: numpy array of interpolation errors,</p></li>
+<li><dl class="simple">
+<dt><strong>‘params’</strong>:</dt><dd><ul>
+<li><p>‘pixel size’,</p></li>
+<li><p>‘min x’,</p></li>
+<li><p>‘max x’,</p></li>
+<li><p>‘min y’,</p></li>
+<li><p>‘max y’</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>
 </dd>
-<dt><strong>data_crs</strong><span class="classifier">str, default=None</span></dt><dd><p>Data crs, look into: <a class="reference external" href="https://geopandas.org/projections.html">https://geopandas.org/projections.html</a>.
-If None given then returned GeoDataFrame doesn’t have a crs.</p>
-</dd>
-<dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
-</dd>
-<dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show progress bar</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>: GeoPandas GeoDataFrame</dt><dd><p>Regularized set of ps_blocks:
-<code class="docutils literal notranslate"><span class="pre">['id',</span> <span class="pre">'geometry',</span> <span class="pre">'reg.est',</span> <span class="pre">'reg.err',</span> <span class="pre">'rmse']</span></code></p>
-</dd>
-</dl>
-</dd>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">smooth_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PointSupport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/block_filter.html#smooth_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function smooths aggregated block values, and transform those into
-point support.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>semivariogram_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>The fitted variogram model.</p>
-</dd>
-<dt><strong>point_support</strong><span class="classifier">PointSupport</span></dt><dd><p>Blocks and their point supports.</p>
-</dd>
-<dt><strong>number_of_neighbors</strong><span class="classifier">int</span></dt><dd><p>The minimum number of neighbours that potentially affect a block.</p>
-</dd>
-<dt><strong>data_crs</strong><span class="classifier">str, default=None</span></dt><dd><p>Data crs, look into: <a class="reference external" href="https://geopandas.org/projections.html">https://geopandas.org/projections.html</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code> given then returned GeoDataFrame doesn’t have a crs.</p>
-</dd>
-<dt><strong>raise_when_negative_prediction</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction is negative.</p>
-</dd>
-<dt><strong>raise_when_negative_error</strong><span class="classifier">bool, default=True</span></dt><dd><p>Raise error when prediction error is negative.</p>
-</dd>
-<dt><strong>verbose</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show progress bar</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt>: GeoPandas GeoDataFrame</dt><dd><p>columns = <code class="docutils literal notranslate"><span class="pre">['id',</span> <span class="pre">'geometry',</span> <span class="pre">'reg.est',</span> <span class="pre">'reg.err',</span> <span class="pre">'rmse']</span></code></p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
+</section>
 </section>
 
 
@@ -501,22 +496,13 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../evaluate/evaluate.html"
+       href="../core/pipelines.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Models evaluation</p>
+        <p class="prev-next-title">Pipelines (Automated Poisson Kriging)</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="../viz/raster.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Visualization</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -530,10 +516,22 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#raster">Raster</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/api/core/pipelines.rst.txt"
+      <li><a href="../../_sources/api/viz/raster.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>

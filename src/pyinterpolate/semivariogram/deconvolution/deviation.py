@@ -111,31 +111,24 @@ def symmetric_mean_relative_difference(y_exp: np.ndarray, y_init: np.ndarray):
 class Deviation:
     """
     Regularization process deviation calculation and monitoring.
-    Deviation is defined as:
-    ``|Theoretical semivariances - Regularized semivariances| /
-      Regularized semivariances``.
+    Deviation is defined as absolute difference between the theoretical
+    semivariances and the regularized semivariances divided by the
+    regularized semivariances.
 
     Parameters
     ----------
     theoretical_model : TheoreticalVariogram
+        Fitted model.
 
     regularized_variances : numpy array
-                  [lag, semivariance]
+        ``[lag, semivariance]``
 
     method : str, default=`'mrd'`
         Deviation monitoring method, available options:
-          * `'mrd'` - mean relative difference
-          * `'smrd'` - symmetric mean relative difference
-          * `'rmse'` - root mean squared error
 
-    Attributes
-    ----------
-    deviations : list
-        Deviations of each iteration. The first element is
-        the initial deviation.
-
-    initial_deviation : float
-        The initial deviation.
+        * `'mrd'` - mean relative difference
+        * `'smrd'` - symmetric mean relative difference
+        * `'rmse'` - root mean squared error
 
     Attributes
     ----------

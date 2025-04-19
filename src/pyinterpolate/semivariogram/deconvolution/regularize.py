@@ -22,7 +22,7 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
     TheoreticalVariogram
 
 
-# TODO check line lenght and underscores
+# TODO check line length and underscores
 
 class Deconvolution:
     """
@@ -89,7 +89,6 @@ class Deconvolution:
     is_transformed : bool, default = False
         Was model transformed?
 
-
     Methods
     -------
     fit()
@@ -102,7 +101,7 @@ class Deconvolution:
         Performs semivariogram regularization.
 
     fit_transform()
-        Performs fit() and transform() at one time.
+        Performs fit() and transform() at once.
 
     export_model()
         Exports regularized (or fitted) model.
@@ -489,8 +488,6 @@ class Deconvolution:
         """
         Method performs ``fit()`` and ``transform()`` operations at once.
 
-        Parameters
-        ----------
         Fits the blocks semivariogram into the point support semivariogram.
         The initial step of regularization.
 
@@ -742,7 +739,7 @@ class Deconvolution:
         return False
 
     def _rescale_optimal_theoretical_model(self) -> np.ndarray:
-        """
+        r"""
         Function rescales points derived from the optimal theoretical model
         and creates new experimental values based on the equation:
 

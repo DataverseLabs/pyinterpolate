@@ -78,9 +78,9 @@ class AggregatedVariogram:
         Models group to test:
 
         - 'all' - the same as list with all models,
-        - 'safe' - ['linear', 'power', 'spherical']
+        - 'safe' - ``['linear', 'power', 'spherical']``
         - as a list: multiple model types to test
-        - as a single model type from:
+        - as a single model type from the list:
             - 'circular',
             - 'cubic',
             - 'exponential',
@@ -123,7 +123,7 @@ class AggregatedVariogram:
         See ``models_group`` parameter.
 
     point_support : PointSupport
-        See the ``point_support` parameter.
+        See the ``point_support`` parameter.
 
     weighting_method : str, default = 'closest'
         See the ``variogram_weighting_method`` parameter.
@@ -144,22 +144,20 @@ class AggregatedVariogram:
         ``{area id: the average inblock semivariance}``
 
     avg_inblock_semivariance : numpy array
-        ``[lag, average inblocks semivariances,
-           number of blocks within a lag]``
+        ``[lag, average inblocks semivariances, number of blocks within a lag]``
 
     block_to_block_semivariance : Dict
-        ``{(block i, block j): [distance, semivariance,
-          number of point pairs between blocks]}``
+        ``{(block i, block j): [distance, semivariance, number of point pairs between blocks]}``
 
     avg_block_to_block_semivariance : numpy array
-        ``[lag, semivariance, number of point pairs between blocks]``.
+        ``[lag, semivariance, number of point pairs between blocks]``
 
     regularized_variogram : numpy array
         ``[lag, semivariance]``
 
     distances_between_blocks : Dict
         Weighted distances between all blocks:
-        ``{block id : [distances to other blocks]}``.
+        ``{block id : [distances to other blocks]}``
 
 
     Methods
@@ -231,17 +229,17 @@ class AggregatedVariogram:
     def calculate_avg_inblock_semivariance(self) -> np.ndarray:
         r"""
         Method calculates the average semivariance within blocks
-        $\gamma_h(v, v)$. The average inblock semivariance is calculated as:
+        :math:`\gamma_h(v, v)`. The average inblock semivariance is
+        calculated as:
 
-        $$\gamma_h(v, v) =
-          \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) +
-          \gamma(v_{a+h}, v_{a+h})]$$
+        .. math:: \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]
 
         where:
 
-        - $\gamma(v_{a}, v_{a})$ is a semivariance within a block $a$,
-        - $\gamma(v_{a+h}, v_{a+h})$ is samivariance within a block at
-          a distance $h$ from the block $a$.
+        - :math:`\gamma(v_{a}, v_{a})` is a semivariance within
+          a block :math:`a`,
+        - :math:`\gamma(v_{a+h}, v_{a+h})` is samivariance within a block at
+          a distance :math:`h` from the block :math:`a`.
 
         Returns
         -------
@@ -277,8 +275,8 @@ class AggregatedVariogram:
     def calculate_avg_semivariance_between_blocks(self) -> np.ndarray:
         r"""
         Function calculates semivariance between areas based on their division
-        into smaller blocks. It is $\gamma(v, v_h)$ - semivariogram value
-        between any two blocks separated by the distance $h$.
+        into smaller blocks. It is :math:`\gamma(v, v_h)` - semivariogram value
+        between any two blocks separated by the distance :math:`h`.
 
         Returns
         -------
@@ -291,29 +289,27 @@ class AggregatedVariogram:
         -----
         Block-to-block semivariance is calculated as:
 
-        $$\gamma(v_{a}, v_{a+h})=
-          \frac{1} {P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})$$
+        .. math:: \gamma(v_{a}, v_{a+h})=\frac{1} {P_{a}P_{a+h}}\sum_{s=1}^{P_{a}}\sum_{s'=1}^{P_{a+h}}\gamma(u_{s}, u_{s'})
 
         where:
 
-        - $\gamma(v_{a}, v_{a+h})$ - block-to-block semivariance of
-          the block $a$ and paired block $a+h$.
-        - $P_{a}$ and $P_{a+h}$ - number of support points within
-          the block $a$ and block $a+h$.
-        - $\gamma(u_{s}, u_{s'})$ - semivariance of point supports
+        - :math:`\gamma(v_{a}, v_{a+h})` - block-to-block semivariance of
+          the block :math:`a` and paired block :math:`a+h`.
+        - :math:`P_{a}` and :math:`P_{a+h}` - number of support points within
+          the block :math:`a` and block :math:`a+h`.
+        - :math:`\gamma(u_{s}, u_{s'})` - semivariance of point supports
           between blocks.
 
         Then average block-to-block semivariance is calculated as:
 
-        $$\gamma_{h}(v, v_{h}) =
-        \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})$$
+        .. math:: \gamma_{h}(v, v_{h}) = \frac{1}{N(h)}\sum_{a=1}^{N(h)}\gamma(v_{a}, v_{a+h})
 
         where:
 
-        - $\gamma_{h}(v, v_{h})$ - averaged block-to-block semivariances
-          for a lag $h$,
-        - $\gamma(v_{a}, v_{a+h})$ - semivariance of block $a$ and paired
-          block at a distance $h$.
+        - :math:`\gamma_{h}(v, v_{h})` - averaged block-to-block semivariances
+          for a lag :math:`h`,
+        - :math:`\gamma(v_{a}, v_{a+h})` - semivariance of block :math:`a`
+          and paired block at a distance :math:`h`.
         """
 
         # Check if distances between blocks are calculated
@@ -372,31 +368,29 @@ class AggregatedVariogram:
         Returns
         -------
         regularized_model : numpy array
-            ``[lag, semivariance, number of point pairs,
-            number of blocks included]``
+            ``[lag, semivariance, number of point pairs, number of blocks included]``
 
         Notes
         -----
         Function has the form:
 
-        $$\gamma_v(h) = \gamma(v, v_h) - \gamma_h(v, v)$$
+        .. math:: \gamma_v(h) = \gamma(v, v_h) - \gamma_h(v, v)
 
         where:
 
-        - $\gamma_v(h)$ - the regularized variogram,
-        - $\gamma(v, v_h)$ - a variogram value between any two blocks
-          separated by the distance $h$ (calculated from their point support),
-        - $\gamma_h(v, v)$ - average inblock semivariance between blocks.
+        - :math:`\gamma_v(h)` - the regularized variogram,
+        - :math:`\gamma(v, v_h)` - a variogram value between any two blocks
+          separated by the distance :math:`h` (calculated from their
+          point support),
+        - :math:`\gamma_h(v, v)` - average inblock semivariance between blocks.
 
         Average inblock semivariance between blocks:
 
-        $$\gamma_h(v, v) =
-        \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) +
-        \gamma(v_{a+h}, v_{a+h})]$$
+        .. math:: \gamma_h(v, v) = \frac{1}{(2*N(h))} \sum_{a=1}^{N(h)} [\gamma(v_{a}, v_{a}) + \gamma(v_{a+h}, v_{a+h})]
 
-        where $\gamma(v_{a}, v_{a})$ and $\gamma(v_{a+h}, v_{a+h})$ are
-        inblock semivariances of block $a$ and block $a+h$ separated by
-        the distance $h$.
+        where :math:`\gamma(v_{a}, v_{a})` and
+        :math:`\gamma(v_{a+h}, v_{a+h})` are inblock semivariances of block
+        :math:`a` and block :math:`a+h` separated by the distance :math:`h`.
 
         References
         ----------
@@ -450,10 +444,10 @@ class AggregatedVariogram:
         Notes
         -----
         Regularized semivariogram is a difference between the average block
-        to block semivariance $\gamma(v, v_{h})$ and the average inblock
-        semivariances $\gamma_{h}(v, v)$ at a given lag $h$.
+        to block semivariance :math:`\gamma(v, v_{h})` and the average inblock
+        semivariances :math:`\gamma_{h}(v, v)` at a given lag :math:`h`.
 
-        $$\gamma_{v}(h)=\gamma(v, v_{h}) - \gamma_{h}(v, v)$$
+        .. math:: \gamma_{v}(h)=\gamma(v, v_{h}) - \gamma_{h}(v, v)
 
         """
 
