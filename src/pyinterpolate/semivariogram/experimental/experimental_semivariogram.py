@@ -88,23 +88,21 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
     Law). Distant observations are less and less similar up to the distance
     where the influence of one point value on the other is negligible.
 
-
     We calculate the empirical semivariance as:
 
-        (1)    g(h) = 0.5 * n(h)^(-1) * (
-                      SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2
-                      )
+    .. math:: g(h) = 0.5 * n(h)^(-1) * (SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2)
 
-        where:
-            h: lag,
-            g(h): empirical semivariance for lag h,
-            n(h): number of point pairs within a specific lag,
-            z(x_i): point a (value of observation at point a),
-            z(x_i + h): point b in distance h from point a (value of
-              observation at point b).
+    where:
 
-    As an output we get array of lags h, semivariances g and number of
-    points within each lag n.
+    - :math:`h`: lag,
+    - :math:`g(h)`: empirical semivariance for lag :math:`h`,
+    - :math:`n(h)`: number of point pairs within a specific lag,
+    - :math:`z(x_i)`: point a (value of observation at point a),
+    - :math:`z(x_i + h)`: point b in distance h from point a (value of
+      observation at point b).
+
+    As an output we get array of lags :math:`h`, semivariances :math:`g`
+    and number of points within each lag :math:`n`.
 
     # Weighted Semivariance
 
@@ -115,13 +113,13 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
     block (public health). Implementation of the algorithm follows
     publications:
 
-
         1. A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:
         Comparison of model based geostatistical methods in ecology:
         application to fin whale spatial distribution in northwestern
         Mediterranean Sea. In Geostatistics Banff 2004 Volume 2.
         Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands,
         Kluwer Academic Publishers; 2005:777-786.
+
         2. B. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:
         Geostatistical modelling of spatial distribution of Balenoptera
         physalus in the northwestern Mediterranean Sea from sparse count data
@@ -129,27 +127,28 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
 
     We calculate the weighted empirical semivariance as:
 
-        (2)    g_w(h) = 0.5 * (SUM|i=1, n(h)|: w(h))^(-1) * ...
-                            * (SUM|i=1, n(h)|: w(h) * z_w(h))
+    .. math:: g_w(h) = 0.5 * (SUM|i=1, n(h)|: w(h))^(-1) * (SUM|i=1, n(h)|: w(h) * z_w(h))
 
-        (3)    w(h) = [n(x_i) * n(x_i + h)] / [n(u_i) + n(u_i + h)]
+    .. math:: w(h) = [n(x_i) * n(x_i + h)] / [n(u_i) + n(u_i + h)]
 
-        (4)    z_w(h) = (z(x_i) - z(x_i + h))^2 - m'
+    .. math:: z_w(h) = (z(x_i) - z(x_i + h))^2 - m'
 
-        where:
-            h: lag,
-            g_w(h): weighted empirical semivariance for lag h,
-            n(h): number of point pairs within a specific lag,
-            z(x_i): point a (rate of specific process at point a),
-            z(x_i + h): point b in distance h from point a (rate of specific
-              process at point b),
-            n(x_i): denominator value size at point a (time, population ...),
-            n(x_i + h): denominator value size at point b in distance h from
-              point a,
-            m': weighted mean of rates.
+    where:
+
+    - :math:`h`: lag,
+    - :math:`g_w(h)`: weighted empirical semivariance for lag :math:`h`,
+    - :math:`n(h)`: number of point pairs within a specific lag,
+    - :math:`z(x_i)`: point a (rate of specific process at point a),
+    - :math:`z(x_i + h)`: point b in distance :math:`h` from point a
+      (rate of specific process at point b),
+    - :math:`n(x_i)`: denominator value size at point a (time, population ...),
+    - :math:`n(x_i + h)`: denominator value size at point b in distance
+      :math:`h` from point a,
+    - :math:`m'`: weighted mean of rates.
 
     The output of weighted algorithm is the same as for non-weighted data:
-    array of lags h, semivariances g and number of points within each lag n.
+    array of lags :math:`h`, semivariances :math:`g` and number of
+    points within each lag :math:`n`.
 
     # Directional Semivariogram
 
@@ -161,9 +160,9 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
     a directional semivariogram is that we take into account a different
     subset of neighbors:
 
-       - Omnidirectional semivariogram: we test neighbors in a circle,
-       - Directional semivariogram: we test neighbors within an ellipse,
-         and one direction is major.
+    - Omnidirectional semivariogram: we test neighbors in a circle,
+    - Directional semivariogram: we test neighbors within an ellipse,
+      and one direction is major.
 
     Examples
     --------
@@ -492,7 +491,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
     Law). Distant observations are less and less similar up to the distance
     where the influence of one point value on the other is negligible.
 
-
     We calculate the empirical semivariance as:
 
         (1)    g(h) = 0.5 * n(h)^(-1) * (
@@ -518,7 +516,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
     observation at a location (ecology) or population size at a specific
     block (public health). Implementation of the algorithm follows
     publications:
-
 
         1. A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:
         Comparison of model based geostatistical methods in ecology:

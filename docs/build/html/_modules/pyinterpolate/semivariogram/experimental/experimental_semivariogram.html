@@ -472,23 +472,21 @@
 <span class="sd">    Law). Distant observations are less and less similar up to the distance</span>
 <span class="sd">    where the influence of one point value on the other is negligible.</span>
 
-
 <span class="sd">    We calculate the empirical semivariance as:</span>
 
-<span class="sd">        (1)    g(h) = 0.5 * n(h)^(-1) * (</span>
-<span class="sd">                      SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2</span>
-<span class="sd">                      )</span>
+<span class="sd">    .. math:: g(h) = 0.5 * n(h)^(-1) * (SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2)</span>
 
-<span class="sd">        where:</span>
-<span class="sd">            h: lag,</span>
-<span class="sd">            g(h): empirical semivariance for lag h,</span>
-<span class="sd">            n(h): number of point pairs within a specific lag,</span>
-<span class="sd">            z(x_i): point a (value of observation at point a),</span>
-<span class="sd">            z(x_i + h): point b in distance h from point a (value of</span>
-<span class="sd">              observation at point b).</span>
+<span class="sd">    where:</span>
 
-<span class="sd">    As an output we get array of lags h, semivariances g and number of</span>
-<span class="sd">    points within each lag n.</span>
+<span class="sd">    - :math:`h`: lag,</span>
+<span class="sd">    - :math:`g(h)`: empirical semivariance for lag :math:`h`,</span>
+<span class="sd">    - :math:`n(h)`: number of point pairs within a specific lag,</span>
+<span class="sd">    - :math:`z(x_i)`: point a (value of observation at point a),</span>
+<span class="sd">    - :math:`z(x_i + h)`: point b in distance h from point a (value of</span>
+<span class="sd">      observation at point b).</span>
+
+<span class="sd">    As an output we get array of lags :math:`h`, semivariances :math:`g`</span>
+<span class="sd">    and number of points within each lag :math:`n`.</span>
 
 <span class="sd">    # Weighted Semivariance</span>
 
@@ -499,13 +497,13 @@
 <span class="sd">    block (public health). Implementation of the algorithm follows</span>
 <span class="sd">    publications:</span>
 
-
 <span class="sd">        1. A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:</span>
 <span class="sd">        Comparison of model based geostatistical methods in ecology:</span>
 <span class="sd">        application to fin whale spatial distribution in northwestern</span>
 <span class="sd">        Mediterranean Sea. In Geostatistics Banff 2004 Volume 2.</span>
 <span class="sd">        Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands,</span>
 <span class="sd">        Kluwer Academic Publishers; 2005:777-786.</span>
+
 <span class="sd">        2. B. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:</span>
 <span class="sd">        Geostatistical modelling of spatial distribution of Balenoptera</span>
 <span class="sd">        physalus in the northwestern Mediterranean Sea from sparse count data</span>
@@ -513,27 +511,28 @@
 
 <span class="sd">    We calculate the weighted empirical semivariance as:</span>
 
-<span class="sd">        (2)    g_w(h) = 0.5 * (SUM|i=1, n(h)|: w(h))^(-1) * ...</span>
-<span class="sd">                            * (SUM|i=1, n(h)|: w(h) * z_w(h))</span>
+<span class="sd">    .. math:: g_w(h) = 0.5 * (SUM|i=1, n(h)|: w(h))^(-1) * (SUM|i=1, n(h)|: w(h) * z_w(h))</span>
 
-<span class="sd">        (3)    w(h) = [n(x_i) * n(x_i + h)] / [n(u_i) + n(u_i + h)]</span>
+<span class="sd">    .. math:: w(h) = [n(x_i) * n(x_i + h)] / [n(u_i) + n(u_i + h)]</span>
 
-<span class="sd">        (4)    z_w(h) = (z(x_i) - z(x_i + h))^2 - m&#39;</span>
+<span class="sd">    .. math:: z_w(h) = (z(x_i) - z(x_i + h))^2 - m&#39;</span>
 
-<span class="sd">        where:</span>
-<span class="sd">            h: lag,</span>
-<span class="sd">            g_w(h): weighted empirical semivariance for lag h,</span>
-<span class="sd">            n(h): number of point pairs within a specific lag,</span>
-<span class="sd">            z(x_i): point a (rate of specific process at point a),</span>
-<span class="sd">            z(x_i + h): point b in distance h from point a (rate of specific</span>
-<span class="sd">              process at point b),</span>
-<span class="sd">            n(x_i): denominator value size at point a (time, population ...),</span>
-<span class="sd">            n(x_i + h): denominator value size at point b in distance h from</span>
-<span class="sd">              point a,</span>
-<span class="sd">            m&#39;: weighted mean of rates.</span>
+<span class="sd">    where:</span>
+
+<span class="sd">    - :math:`h`: lag,</span>
+<span class="sd">    - :math:`g_w(h)`: weighted empirical semivariance for lag :math:`h`,</span>
+<span class="sd">    - :math:`n(h)`: number of point pairs within a specific lag,</span>
+<span class="sd">    - :math:`z(x_i)`: point a (rate of specific process at point a),</span>
+<span class="sd">    - :math:`z(x_i + h)`: point b in distance :math:`h` from point a</span>
+<span class="sd">      (rate of specific process at point b),</span>
+<span class="sd">    - :math:`n(x_i)`: denominator value size at point a (time, population ...),</span>
+<span class="sd">    - :math:`n(x_i + h)`: denominator value size at point b in distance</span>
+<span class="sd">      :math:`h` from point a,</span>
+<span class="sd">    - :math:`m&#39;`: weighted mean of rates.</span>
 
 <span class="sd">    The output of weighted algorithm is the same as for non-weighted data:</span>
-<span class="sd">    array of lags h, semivariances g and number of points within each lag n.</span>
+<span class="sd">    array of lags :math:`h`, semivariances :math:`g` and number of</span>
+<span class="sd">    points within each lag :math:`n`.</span>
 
 <span class="sd">    # Directional Semivariogram</span>
 
@@ -545,9 +544,9 @@
 <span class="sd">    a directional semivariogram is that we take into account a different</span>
 <span class="sd">    subset of neighbors:</span>
 
-<span class="sd">       - Omnidirectional semivariogram: we test neighbors in a circle,</span>
-<span class="sd">       - Directional semivariogram: we test neighbors within an ellipse,</span>
-<span class="sd">         and one direction is major.</span>
+<span class="sd">    - Omnidirectional semivariogram: we test neighbors in a circle,</span>
+<span class="sd">    - Directional semivariogram: we test neighbors within an ellipse,</span>
+<span class="sd">      and one direction is major.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -877,7 +876,6 @@
 <span class="sd">    Law). Distant observations are less and less similar up to the distance</span>
 <span class="sd">    where the influence of one point value on the other is negligible.</span>
 
-
 <span class="sd">    We calculate the empirical semivariance as:</span>
 
 <span class="sd">        (1)    g(h) = 0.5 * n(h)^(-1) * (</span>
@@ -903,7 +901,6 @@
 <span class="sd">    observation at a location (ecology) or population size at a specific</span>
 <span class="sd">    block (public health). Implementation of the algorithm follows</span>
 <span class="sd">    publications:</span>
-
 
 <span class="sd">        1. A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:</span>
 <span class="sd">        Comparison of model based geostatistical methods in ecology:</span>

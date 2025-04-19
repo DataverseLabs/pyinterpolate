@@ -60,9 +60,9 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
     dir_neighbors_selection_method : str, default = 't'
         Neighbors selection in a given direction. Available methods:
 
-          * "triangle" or "t", default method where a point neighbors are
-            selected from a triangular area,
-          * "ellipse" or "e", more accurate method but also slower.
+        * "triangle" or "t", default method where a point neighbors are
+          selected from a triangular area,
+        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for covariance calculation. If provided, then parameter
@@ -84,18 +84,18 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
 
     We calculate the empirical covariance as:
 
-        (1)    covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2
+    .. math:: covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2
 
-        where:
+    where:
 
-            - N         - number of observation pairs,
-            - h         - distance (lag),
-            - z(x_i)    - value at location z_i,
-            - (x_i + h) - location at a distance h from x_i,
-            - u -         mean of observations at a given lag distance.
+    - :math:`N` - number of observation pairs,
+    - :math:`h` - distance (lag),
+    - :math:`z(x_i)` - value at location :math:`z_i`,
+    - :math:`(x_i + h)` - location at a distance :math:`h` from :math:`x_i`,
+    - :math:`u` - average value of observations at a given lag distance.
 
-    As an output we get array of lags h, covariances c and number of points
-    within each lag n.
+    As an output we get array of lags :math:`h`, covariances :math:`c` and
+    number of points within each lag :math:`n`.
 
     # Directional Covariogram
 
@@ -107,9 +107,9 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
     a directional covariogram is that we take into account a different
     subset of neighbors:
 
-       - Omnidirectional covariogram: we test neighbors in a circle,
-       - Directional covariogram: we test neighbors within an ellipse,
-         and one direction is major.
+    - Omnidirectional covariogram: we test neighbors in a circle,
+    - Directional covariogram: we test neighbors within an ellipse,
+      and one direction is major.
 
     Examples
     --------

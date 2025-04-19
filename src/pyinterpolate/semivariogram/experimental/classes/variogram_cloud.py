@@ -118,9 +118,9 @@ class VariogramCloud:
     dir_neighbors_selection_method : str, default = 't'
         Neighbors selection in within a given angle. Available methods:
 
-          * "triangle" or "t", default method, where point neighbors are
+        * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-          * "ellipse" or "e", the more accurate method but also the slowest.
+        * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter

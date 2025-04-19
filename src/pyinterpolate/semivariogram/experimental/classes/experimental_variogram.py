@@ -32,10 +32,10 @@ class ExperimentalVariogram:
     direction : float, optional
         Direction of semivariogram, values from 0 to 360 degrees:
 
-        - 0 or 180: is E-W,
-        - 90 or 270 is N-S,
-        - 45 or 225 is NE-SW,
-        - 135 or 315 is NW-SE.
+        * 0 or 180: is E-W,
+        * 90 or 270 is N-S,
+        * 45 or 225 is NE-SW,
+        * 135 or 315 is NW-SE.
 
     tolerance : float, optional
         If ``tolerance`` is 0 then points must be placed at a single line with
@@ -53,9 +53,9 @@ class ExperimentalVariogram:
     dir_neighbors_selection_method : str, default = 't'
         Neighbors selection in within a given angle. Available methods:
 
-          * "triangle" or "t", default method, where point neighbors are
+        * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-          * "ellipse" or "e", the more accurate method but also the slowest.
+        * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -448,9 +448,9 @@ def build_experimental_variogram(ds: np.ndarray,
     dir_neighbors_selection_method : str, default = 't'
         Neighbors selection in within a given angle. Available methods:
 
-          * "triangle" or "t", default method, where point neighbors are
+        * "triangle" or "t", default method, where point neighbors are
           selected from a triangular area,
-          * "ellipse" or "e", the more accurate method but also the slowest.
+        * "ellipse" or "e", the more accurate method but also the slowest.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter

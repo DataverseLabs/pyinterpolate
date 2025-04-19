@@ -34,12 +34,12 @@ class DirectionalVariogram:
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
     dir_neighbors_selection_method : str, default = "t"
-        Method used for neighbors selection in a given direction.
-        Available methods:
-          * "triangle" or "t", default method where point neighbors
-            are selected from a triangular area,
-          * "ellipse" or "e", the most accurate method but also the slowest
-            one.
+        Method used for neighbors selection in a given direction. Available
+        methods:
+
+        * "triangle" or "t", default method where point neighbors
+          are selected from a triangular area,
+        * "ellipse" or "e", more accurate but slower.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter

@@ -444,9 +444,9 @@
 <span class="sd">    dir_neighbors_selection_method : str, default = &#39;t&#39;</span>
 <span class="sd">        Neighbors selection in a given direction. Available methods:</span>
 
-<span class="sd">          * &quot;triangle&quot; or &quot;t&quot;, default method where a point neighbors are</span>
-<span class="sd">            selected from a triangular area,</span>
-<span class="sd">          * &quot;ellipse&quot; or &quot;e&quot;, more accurate method but also slower.</span>
+<span class="sd">        * &quot;triangle&quot; or &quot;t&quot;, default method where a point neighbors are</span>
+<span class="sd">          selected from a triangular area,</span>
+<span class="sd">        * &quot;ellipse&quot; or &quot;e&quot;, more accurate method but also slower.</span>
 
 <span class="sd">    custom_bins : numpy array, optional</span>
 <span class="sd">        Custom bins for covariance calculation. If provided, then parameter</span>
@@ -468,18 +468,18 @@
 
 <span class="sd">    We calculate the empirical covariance as:</span>
 
-<span class="sd">        (1)    covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2</span>
+<span class="sd">    .. math:: covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2</span>
 
-<span class="sd">        where:</span>
+<span class="sd">    where:</span>
 
-<span class="sd">            - N         - number of observation pairs,</span>
-<span class="sd">            - h         - distance (lag),</span>
-<span class="sd">            - z(x_i)    - value at location z_i,</span>
-<span class="sd">            - (x_i + h) - location at a distance h from x_i,</span>
-<span class="sd">            - u -         mean of observations at a given lag distance.</span>
+<span class="sd">    - :math:`N` - number of observation pairs,</span>
+<span class="sd">    - :math:`h` - distance (lag),</span>
+<span class="sd">    - :math:`z(x_i)` - value at location :math:`z_i`,</span>
+<span class="sd">    - :math:`(x_i + h)` - location at a distance :math:`h` from :math:`x_i`,</span>
+<span class="sd">    - :math:`u` - average value of observations at a given lag distance.</span>
 
-<span class="sd">    As an output we get array of lags h, covariances c and number of points</span>
-<span class="sd">    within each lag n.</span>
+<span class="sd">    As an output we get array of lags :math:`h`, covariances :math:`c` and</span>
+<span class="sd">    number of points within each lag :math:`n`.</span>
 
 <span class="sd">    # Directional Covariogram</span>
 
@@ -491,9 +491,9 @@
 <span class="sd">    a directional covariogram is that we take into account a different</span>
 <span class="sd">    subset of neighbors:</span>
 
-<span class="sd">       - Omnidirectional covariogram: we test neighbors in a circle,</span>
-<span class="sd">       - Directional covariogram: we test neighbors within an ellipse,</span>
-<span class="sd">         and one direction is major.</span>
+<span class="sd">    - Omnidirectional covariogram: we test neighbors in a circle,</span>
+<span class="sd">    - Directional covariogram: we test neighbors within an ellipse,</span>
+<span class="sd">      and one direction is major.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
