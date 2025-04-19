@@ -7,6 +7,7 @@ API
    core/core
    distance/distance
    semivariogram/experimental
+   semivariogram/theoretical
    kriging/point_kriging
    kriging/block_kriging
    idw/idw

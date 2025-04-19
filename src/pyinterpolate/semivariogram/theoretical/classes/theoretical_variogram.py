@@ -90,11 +90,12 @@ class TheoreticalVariogram:
     spatial_dependency_strength : str, default = "Unknown"
         Descriptive indicator of spatial dependency strength based on the
         ``spatial_dependency_level``. It could be:
-          * ``unknown`` if ratio is ``None``,
-          * ``strong`` if ratio is below 25,
-          * ``moderate`` if ratio is between 25 and 75,
-          * ``weak`` if ratio is between 75 and 95,
-          * ``no spatial dependency`` if ratio is greater than 95.
+
+        * ``unknown`` if ratio is ``None``,
+        * ``strong`` if ratio is below 25,
+        * ``moderate`` if ratio is between 25 and 75,
+        * ``weak`` if ratio is between 75 and 95,
+        * ``no spatial dependency`` if ratio is greater than 95.
 
     protect_from_overwriting : bool, default = True
         Protect model parameters from overwriting.

@@ -17,4 +17,6 @@ from pyinterpolate.semivariogram.experimental.experimental_covariogram import ca
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram, build_experimental_variogram
 from pyinterpolate.semivariogram.experimental.classes.directional_variogram import DirectionalVariogram
 from pyinterpolate.semivariogram.experimental.classes.variogram_cloud import VariogramCloud
-
+from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
+from pyinterpolate.semivariogram.theoretical.theoretical import build_theoretical_variogram
+from pyinterpolate.semivariogram.theoretical.spatial_dependency_index import calculate_spatial_dependence_index
