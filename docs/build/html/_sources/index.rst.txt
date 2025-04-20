@@ -61,7 +61,9 @@ Contents
    usage/learning_materials
    science/citation
    science/bibliography
+   community/community
    api/api
+   contributor/development
 
 Citation
 --------
