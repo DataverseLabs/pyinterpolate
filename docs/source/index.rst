@@ -10,7 +10,7 @@ Pyinterpolate
 -----------------
 
 .. note::
-   The last documentation update: *2025-04-08*
+   The last documentation update: *2025-04-20*
 
 ``Pyinterpolate`` is the Python library for **spatial interpolation and disaggregation of choropleth maps**.
 This package helps you **interpolate spatial data** with multiple *Kriging* types and other interpolation methods.
