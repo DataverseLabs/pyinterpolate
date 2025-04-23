@@ -24,4 +24,5 @@ from pyinterpolate.semivariogram.indicator.indicator import ExperimentalIndicato
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 from pyinterpolate.semivariogram.theoretical.theoretical import build_theoretical_variogram
 from pyinterpolate.semivariogram.theoretical.spatial_dependency_index import calculate_spatial_dependence_index
+from pyinterpolate.transform.geo import reproject_flat
 from pyinterpolate.viz.raster import interpolate_raster
