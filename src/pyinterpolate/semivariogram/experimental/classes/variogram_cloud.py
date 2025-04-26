@@ -2,6 +2,7 @@ import copy
 from typing import Collection, Dict, Union
 
 import numpy as np
+import pandas as pd
 from prettytable import PrettyTable
 from scipy.stats import skew, kurtosis
 
@@ -133,9 +134,6 @@ class VariogramCloud:
 
     Attributes
     ----------
-    experimental_variogram : ExperimentalVariogram
-        Estimated experimental semivariogram and point cloud.
-
     semivariances : Dict
         Lag - all semivariances between point pairs:
         ``{lag: [semivariances], }``.
@@ -176,7 +174,7 @@ class VariogramCloud:
                  custom_bins: Union[np.ndarray, Collection] = None,
                  custom_weights: np.ndarray = None):
 
-        experimental_variogram = ExperimentalVariogram(
+        self._experimental_variogram = ExperimentalVariogram(
             ds=ds,
             step_size=step_size,
             max_range=max_range,
@@ -190,8 +188,8 @@ class VariogramCloud:
             as_cloud=True
         )
 
-        self.semivariances = experimental_variogram.point_cloud_semivariances
-        self.lags = experimental_variogram.lags
+        self.semivariances = self._experimental_variogram.point_cloud_semivariances
+        self.lags = self._experimental_variogram.lags
         self.direction = direction
         self.tolerance = tolerance
 
@@ -208,7 +206,7 @@ class VariogramCloud:
                              'skewness',
                              'kurtosis']
 
-    def describe(self) -> Dict:
+    def describe(self, as_dataframe=False) -> Union[Dict, pd.DataFrame]:
         """
         Method calculates basic statistics. Includes count (point pairs
         number), average semivariance, standard deviation, minimum,
@@ -265,7 +263,21 @@ class VariogramCloud:
             # Update statistics
             statistics[lag] = lag_dict
 
-        return statistics
+        if as_dataframe:
+            return pd.DataFrame(statistics)
+        else:
+            return statistics
+
+    def experimental_semivariances(self) -> ExperimentalVariogram:
+        """
+        Returns experimental semivariogram.
+
+        Returns
+        -------
+        : ExperimentalVariogram
+            Experimental semivariogram object.
+        """
+        return self._experimental_variogram
 
     def plot(self, kind='scatter'):
         """

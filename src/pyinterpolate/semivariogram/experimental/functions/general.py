@@ -12,7 +12,8 @@ from pyinterpolate.semivariogram.weights.experimental.weighting import \
 
 def omnidirectional_semivariogram_cloud(
         points: np.ndarray,
-        lags: Union[List, np.ndarray]
+        lags: Union[List, np.ndarray],
+        raise_when_no_neighbors: bool = False
 ):
     """
     Calculates omnidirectional semivariances cloud.
@@ -24,6 +25,9 @@ def omnidirectional_semivariogram_cloud(
 
     lags : list or numpy array
         The list of lags.
+
+    raise_when_no_neighbors : bool, default = False
+        Raise error when no neighbors are selected for a given lag.
 
     Returns
     -------
@@ -47,7 +51,8 @@ def omnidirectional_semivariogram_cloud(
                 points=points,
                 distances=distances,
                 lags=lags,
-                lag_idx=lag_idx
+                lag_idx=lag_idx,
+                raise_when_no_neighbors=raise_when_no_neighbors
             )
         )
 
@@ -167,7 +172,8 @@ def _clean_cloud_data(ds: List):
 def _calc_omnidirectional_cloud(points: np.ndarray,
                                 distances: np.ndarray,
                                 lags: np.ndarray,
-                                lag_idx: int):
+                                lag_idx: int,
+                                raise_when_no_neighbors: bool = True):
     """
     Function calculates covariance for a given lag, returning lag,
     covariance and number of point pairs in range.
@@ -185,6 +191,9 @@ def _calc_omnidirectional_cloud(points: np.ndarray,
 
     lag_idx : int
         Current lag index.
+
+    raise_when_no_neighbors : bool, default = True
+        Raise error when no neighbors are selected for a given lag.
 
     Returns
     -------
@@ -208,9 +217,12 @@ def _calc_omnidirectional_cloud(points: np.ndarray,
         if lag_idx == 0:
             return current_lag, [], 0
         else:
-            msg = f'There are no neighbors for a lag {current_lag},' \
-                  f'the process has been stopped.'
-            raise RuntimeError(msg)
+            if raise_when_no_neighbors:
+                msg = f'There are no neighbors for a lag {current_lag},' \
+                      f'the process has been stopped.'
+                raise RuntimeError(msg)
+            else:
+                return current_lag, [], 0
     else:
         vals_0 = points[distances_in_range[0], 2]
         vals_h = points[distances_in_range[1], 2]

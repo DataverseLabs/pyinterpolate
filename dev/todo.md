@@ -3,3 +3,4 @@
 - [ ] add cluster detection algo
 - [ ] clean tests
 - [ ] raise exceptions in multithreading
+- [ ] control when exception is raised when calculating semivariances and covariances for each lag
