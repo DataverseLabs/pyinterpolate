@@ -12,6 +12,9 @@ from typing import List, Union, Tuple
 import numpy as np
 from numpy.typing import ArrayLike
 
+from shapely.geometry import Point
+
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.kriging.utils.errors import singular_matrix_error
 # Pyinterpolate
 from pyinterpolate.kriging.utils.point_kriging_solve import (get_predictions,
@@ -79,6 +82,17 @@ def ordinary_kriging(
     RunetimeError
         Singular Matrix in the Kriging system.
     """
+
+    # Check if known locations are in the right format
+    known_locations = VariogramPoints(known_locations).points
+
+    # Check if unknown location is Point
+    if isinstance(unknown_location, Point):
+        unknown_location = (
+            unknown_location.x,
+            unknown_location.y
+        )
+        unknown_location = np.array(unknown_location)
 
     k, predicted, dataset = get_predictions(theoretical_model,
                                             known_locations,
