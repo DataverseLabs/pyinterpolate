@@ -66,7 +66,7 @@ def interpolate_points(
     Returns
     -------
     : numpy array
-        ``[[longitude (x), latitude (y), predicted value, variance error]]``
+        ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
 
     interpolated_results = []
@@ -86,7 +86,7 @@ def interpolate_points(
         )
 
         interpolated_results.append(
-            [res[0], res[1]]
+            res
         )
 
     return np.array(interpolated_results)
@@ -156,7 +156,7 @@ def interpolate_points_dask(
     Returns
     -------
     : numpy array
-        ``[[longitude (x), latitude (y), predicted value, variance error]]``
+        ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
 
     if number_of_workers == -1:
