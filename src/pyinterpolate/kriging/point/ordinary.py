@@ -45,7 +45,7 @@ def ordinary_kriging(
     known_locations : numpy array
         Known locations: ``[x, y, value]``.
 
-    unknown_location : ArrayLike
+    unknown_location : Union[ArrayLike, Point]
         Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
     neighbors_range : float, default=None

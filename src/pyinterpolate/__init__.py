@@ -5,6 +5,8 @@ from pyinterpolate.core.data_models.point_support_distances import (
 )
 from pyinterpolate.core.pipelines.block_filter import (filter_blocks,
                                                        smooth_blocks)
+from pyinterpolate.core.pipelines.interpolate import (interpolate_points,
+                                                      interpolate_points_dask)
 from pyinterpolate.idw.idw import inverse_distance_weighting
 from pyinterpolate.kriging.block.area_to_area_poisson_kriging import area_to_area_pk
 from pyinterpolate.kriging.block.area_to_point_poisson_kriging import area_to_point_pk

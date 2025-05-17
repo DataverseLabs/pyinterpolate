@@ -149,6 +149,10 @@ class VariogramCloud:
 
     Methods
     -------
+    average_semivariance()
+        Returns ``lag, average semivariance, number of point pairs``
+        as a numpy array.
+
     describe()
         The point cloud statistics.
 
@@ -205,6 +209,27 @@ class VariogramCloud:
                              'max',
                              'skewness',
                              'kurtosis']
+
+    def average_semivariance(self):
+        """
+        Returns mean of semivariances for each lag - which is equal to
+        the experimental semivariogram output.
+
+        Returns
+        -------
+        : numpy array
+            Mean of semivariances for each lag.
+        """
+        ds = []
+        for l in self.lags:
+            ds.append(
+                [
+                    l,
+                    np.mean(self.semivariances[l]),
+                    len(self.semivariances[l])
+                ]
+            )
+        return np.array(ds)
 
     def describe(self, as_dataframe=False) -> Union[Dict, pd.DataFrame]:
         """
