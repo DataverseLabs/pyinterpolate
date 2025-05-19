@@ -173,8 +173,8 @@ class PointSupport:
                  verbose=True):
 
         self._default_blocks_index_column_name = 'blocks_index'
-        self._lon_col_name = 'lon_col_name'
-        self._lat_col_name = 'lat_col_name'
+        self._lon_col_name = 'lon'
+        self._lat_col_name = 'lat'
         self._verbose = verbose
 
         self.no_possible_neighbors = no_possible_neighbors

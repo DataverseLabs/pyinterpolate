@@ -84,6 +84,9 @@ class Blocks:
 
     Methods
     -------
+    block_data()
+        Longitude, latitude, and value as numpy array.
+
     block_indexes()
         Block indexes as numpy array.
 
@@ -214,6 +217,20 @@ class Blocks:
             self.angles = self.calculate_angles_between_rep_points(
                 update=False
             )
+
+    @property
+    def block_data(self):
+        """
+        Returns block data.
+
+        Returns
+        -------
+        : numpy array
+            Block data [x, y, value].
+        """
+        return self.ds[
+            [self._lon_col_name, self._lat_col_name, self.value_column_name]
+        ].to_numpy()
 
     @property
     def block_indexes(self):
