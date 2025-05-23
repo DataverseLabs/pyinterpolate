@@ -255,7 +255,7 @@ class AggregatedVariogram:
         )
 
         # Calculate distances between blocks
-        self.point_support_distances = PointSupportDistance()
+        self.point_support_distances = PointSupportDistance(verbose=False)
 
         if self.distances_between_blocks is None:
             self.distances_between_blocks = self.point_support_distances.calculate_weighted_block_to_block_distances(

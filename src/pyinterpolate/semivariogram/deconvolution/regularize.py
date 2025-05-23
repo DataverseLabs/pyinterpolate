@@ -433,7 +433,7 @@ class Deconvolution:
                     direction=self._direction,
                     tolerance=self._tolerance,
                     variogram_weighting_method=self._weighting_method,
-                    verbose=self._verbose,
+                    verbose=not self._verbose,
                     log_process=False
                 )
 
@@ -587,7 +587,7 @@ class Deconvolution:
                        min_deviation_decrease=minimum_deviation_decrease,
                        reps_deviation_decrease=reps_deviation_decrease)
 
-    def export_model(self, fname: str):
+    def export_model_to_json(self, fname: str):
         """
         Function exports final theoretical model.
 
