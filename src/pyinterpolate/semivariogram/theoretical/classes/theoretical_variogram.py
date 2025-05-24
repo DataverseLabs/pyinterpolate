@@ -539,8 +539,11 @@ class TheoreticalVariogram:
             Model is not fitted yet, nothing to plot.
         """
         if self.yhat is None:
-            raise AttributeError('Model has not been trained, '
-                                 'nothing to plot.')
+            if self._params_are_given():
+                self._plot_from_params()
+            else:
+                raise AttributeError('Model has not been trained, '
+                                     'nothing to plot.')
         else:
             legend = ['Theoretical Model']
             plt.figure(figsize=(12, 6))
@@ -729,7 +732,6 @@ class TheoreticalVariogram:
         self._set_model_parameters(json_input)
 
     def __str__(self):
-
         is_model_none = self.model_type is None
         is_rang_0 = self.rang == 0
         is_sill_0 = self.sill == 0
@@ -1250,3 +1252,27 @@ class TheoreticalVariogram:
             msg = (f'Minimum sill ratio is below '
                    f'0 and it is equal to {min_sill}')
             raise ValueError(msg)
+
+    def _params_are_given(self):
+        if (
+                self.model_type is not None
+        ) and (
+                self.nugget is not None
+        ) and (
+                self.sill is not None
+        ) and (
+                self.rang is not None
+        ):
+            return True
+
+    def _plot_from_params(self):
+        legend = ['Theoretical Model']
+        plt.figure(figsize=(12, 6))
+
+        lags = np.linspace(0, self.rang * 5, 50)
+        yhat = self.predict(lags)
+        plt.plot(lags, yhat, '--', color='#fc8d62')
+        plt.legend(legend)
+        plt.xlabel('Distance')
+        plt.ylabel('Variance')
+        plt.show()
