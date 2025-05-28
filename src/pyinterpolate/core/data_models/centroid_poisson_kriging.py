@@ -466,9 +466,8 @@ class CentroidPoissonKrigingInput:
         : DataFrame
             Potential neighbors and distances to them.
         """
-        ds = self.ds.copy(deep=True)
 
-        ds = ds[ds[self.n_distances_column] <= max_range]
+        ds = self.ds[self.ds[self.n_distances_column] <= max_range]
         ds = ds[ds[self.n_distances_column] > 0]
         ds.sort_values(
             by=self.n_distances_column, ascending=True, inplace=True
