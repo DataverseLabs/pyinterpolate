@@ -1,8 +1,5 @@
 from typing import Union, Hashable
 
-import numpy as np
-import pandas as pd
-
 from pyinterpolate.core.data_models.centroid_poisson_kriging import CentroidPoissonKrigingInput
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.core.data_models.poisson_kriging import PoissonKrigingInput
@@ -110,8 +107,7 @@ def select_poisson_kriging_data(block_index: Union[str, Hashable],
     _ = pk_input.select_block_neighbors(
         point_support=point_support,
         max_range=neighbors_range,
-        min_number_of_neighbors=number_of_neighbors,
-        use_all_neighbors_in_range=use_all_neighbors_in_range,
+        no_closest_neighbors=number_of_neighbors,
         max_tick=45,
     )
 

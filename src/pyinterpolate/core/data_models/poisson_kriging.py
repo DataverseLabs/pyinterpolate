@@ -210,6 +210,7 @@ class PoissonKrigingInput:
                  block_id: Union[str, Hashable],
                  point_support: PointSupport,
                  semivariogram_model: TheoreticalVariogram,
+                 no_closest_neighbors: int = 8,
                  blocks_indexes: np.ndarray = None):
 
         # TODO: store Block columns and PointSupport-Neighbors columns
@@ -245,6 +246,7 @@ class PoissonKrigingInput:
         )
         self.angular_tolerance = 1
         self.max_tick = 15
+        self.no_closest_neighbors = no_closest_neighbors
         self.point_support_distances = PointSupportDistance(
             verbose=False
         )  # todo set verbose
@@ -287,8 +289,6 @@ class PoissonKrigingInput:
         self._final_angular_tolerance = None
         self._from_any_point = False
         self._max_range = None
-        self._min_number_of_neighbors = None
-        self._select_all_possible_neighbors = None
 
         # kriging input
         self._neighbors = None
@@ -494,8 +494,7 @@ class PoissonKrigingInput:
     def select_block_neighbors(self,
                                point_support: PointSupport,
                                max_range: float,
-                               min_number_of_neighbors: int,
-                               use_all_neighbors_in_range: bool = True,
+                               no_closest_neighbors: int = 8,
                                angular_tolerance: float = 1,
                                max_tick: float = 10,
                                any_point: bool = True):
@@ -509,12 +508,8 @@ class PoissonKrigingInput:
         max_range : float
             The maximum distance for the neighbors search.
 
-        min_number_of_neighbors : int
+        no_closest_neighbors : int
             The minimum number of neighboring areas.
-
-        use_all_neighbors_in_range : bool, default = True
-            Should select all possible neighbors or only the
-            ``min_number_of_neighbors``?
 
         angular_tolerance : float, default = 1
             How many degrees of difference are allowed for the neighbors
@@ -538,8 +533,7 @@ class PoissonKrigingInput:
         """
         self._update_private_neighbors_search_params(
             max_range=max_range,
-            min_number_of_neighbors=min_number_of_neighbors,
-            select_all_possible_neighbors=use_all_neighbors_in_range,
+            no_closest_neighbors=no_closest_neighbors,
             angular_tolerance=angular_tolerance,
             max_tick=max_tick,
             from_any_point=any_point
@@ -694,7 +688,7 @@ class PoissonKrigingInput:
             ] <= angular_tolerance
             ]
 
-        while len(ads) < self._min_number_of_neighbors:
+        while len(ads) < self.no_closest_neighbors:
             angular_tolerance = angular_tolerance + 1
             ads = neighbors_in_range[
                 neighbors_in_range[
@@ -724,16 +718,10 @@ class PoissonKrigingInput:
         """
         ds = self.block_ds.copy(deep=True)
 
-        ds = ds[ds[self.distances_column] <= self._max_range]
         ds = ds[ds[self.distances_column] > 0]
         ds.sort_values(by=self.distances_column, ascending=True, inplace=True)
 
-        if len(ds) == 0:
-            raise ValueError('For a given distance no neighbors have been '
-                             'found. Consider changing bins width (step'
-                             'size)')
-
-        return ds
+        return ds.iloc[:self.no_closest_neighbors]
 
     @staticmethod
     def _unknown_no_points(block_id, point_support):
@@ -756,14 +744,12 @@ class PoissonKrigingInput:
 
     def _update_private_neighbors_search_params(self,
                                                 max_range,
-                                                min_number_of_neighbors,
-                                                select_all_possible_neighbors,
+                                                no_closest_neighbors,
                                                 angular_tolerance,
                                                 max_tick,
                                                 from_any_point):
         self._max_range = max_range
-        self._select_all_possible_neighbors = select_all_possible_neighbors
-        self._min_number_of_neighbors = min_number_of_neighbors
+        self.no_closest_neighbors = no_closest_neighbors
         self.angular_tolerance = angular_tolerance
         self.max_tick = max_tick
         self._from_any_point = from_any_point
