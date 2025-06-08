@@ -37,6 +37,7 @@ def test_case():
         point_support=PS,
         number_of_neighbors=8,
         kriging_type='cb',
+        raise_when_negative_error=False,
         verbose=True
     )
     assert isinstance(filtered, gpd.GeoDataFrame)

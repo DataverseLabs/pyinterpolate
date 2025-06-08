@@ -38,7 +38,7 @@ THEO.autofit(
 )
 
 
-def test_select_centroid_pk_data():
+def test_select_pk_data():
     indexes = BLOCKS.block_indexes
     idx = random.choice(indexes)
     result = select_poisson_kriging_data(

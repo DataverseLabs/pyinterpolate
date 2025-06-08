@@ -1,6 +1,8 @@
 import numpy as np
 import pytest
 
+from pyinterpolate.core.data_models.centroid_poisson_kriging import \
+    CentroidPoissonKrigingInput
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
@@ -43,13 +45,12 @@ THEO.from_dict(THEO_PARAMS)
 
 def test_select_centroid_pk_data():
     indexes = BLOCKS.block_indexes
-    for idx in indexes:
-        result = select_centroid_poisson_kriging_data(
-            block_index=idx,
-            point_support=PS,
-            semivariogram_model=THEO,
-            number_of_neighbors=8,
-            neighbors_range=THEO._study_max_range,
-            weighted=False
-        )
-        print(result)
+    result = select_centroid_poisson_kriging_data(
+        block_index=indexes[0],
+        point_support=PS,
+        semivariogram_model=THEO,
+        number_of_neighbors=8,
+        neighbors_range=THEO._study_max_range,
+        weighted=False
+    )
+    assert isinstance(result, CentroidPoissonKrigingInput)

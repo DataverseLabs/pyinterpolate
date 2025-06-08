@@ -98,11 +98,15 @@ def block_base_distances(
         Distances from the unknown block to other blocks.
     """
     if point_support_distances.weighted_block_to_block_distances is not None:
-        return point_support_distances.weighted_block_to_block_distances.get(block_id)
+        return point_support_distances.weighted_block_to_block_distances.get(
+            block_id
+        )
     else:
         # Calc from coordinates
         if point_support.blocks_distances is None:
-            dists = point_support.blocks.calculate_distances_between_rep_points(update=True)
+            dists = point_support.blocks.calculate_distances_between_rep_points(
+                update=True
+            )
         else:
             dists = point_support.blocks_distances
 

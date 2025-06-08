@@ -23,7 +23,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
                     unknown_block_index: Union[str, Hashable],
                     number_of_neighbors: int,
                     neighbors_range: float = None,
-                    use_all_neighbors_in_range: bool = False,
                     raise_when_negative_prediction=True,
                     raise_when_negative_error=True) -> dict:
     """
@@ -48,10 +47,6 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     neighbors_range : float, optional
         The maximum range for neighbors search. If not provided then
         it is read from the semivariogram model.
-
-    use_all_neighbors_in_range : bool, default = False
-        Limits number of neighbors to the ``number_of_neighbors`` or takes
-        as many neighbors as possible from the ``neighbors_range``.
 
     raise_when_negative_prediction : bool, default=True
         Raise error when prediction is negative.
@@ -81,8 +76,7 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
         point_support=point_support,
         semivariogram_model=semivariogram_model,
         number_of_neighbors=number_of_neighbors,
-        neighbors_range=neighbors_range,
-        use_all_neighbors_in_range=use_all_neighbors_in_range
+        neighbors_range=neighbors_range
     )
 
     closest_neighbors = kriging_data.neighbors_unique_indexes

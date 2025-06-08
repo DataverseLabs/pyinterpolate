@@ -13,8 +13,7 @@ def select_centroid_poisson_kriging_data(
         semivariogram_model: TheoreticalVariogram,
         number_of_neighbors: int,
         weighted: bool,
-        neighbors_range: float = None,
-        use_all_neighbors_in_range=False
+        neighbors_range: float = None
 ) -> CentroidPoissonKrigingInput:
     """
     Function prepares data for the centroid-based Poisson Kriging Process.
@@ -42,10 +41,6 @@ def select_centroid_poisson_kriging_data(
         The maximum range where other blocks are considered as the neighbors.
         If not provided then function uses semivariogram max range.
 
-    use_all_neighbors_in_range : bool, default = None
-        Should algorithm select all neighbors within a specified range
-        and direction (if provided)?
-
     Returns
     -------
     dataset : numpy array
@@ -69,14 +64,12 @@ def select_centroid_poisson_kriging_data(
     if pk_input.is_directional:
         pk_input.select_neighbors_directional(
             max_range=neighbors_range,
-            min_number_of_neighbors=number_of_neighbors,
-            select_all_possible_neighbors=use_all_neighbors_in_range
+            min_number_of_neighbors=number_of_neighbors
         )
     else:
         pk_input.select_neighbors(
             max_range=neighbors_range,
-            min_number_of_neighbors=number_of_neighbors,
-            select_all_possible_neighbors=use_all_neighbors_in_range
+            min_number_of_neighbors=number_of_neighbors
         )
     return pk_input
 
@@ -85,8 +78,7 @@ def select_poisson_kriging_data(block_index: Union[str, Hashable],
                                 point_support: PointSupport,
                                 semivariogram_model: TheoreticalVariogram,
                                 number_of_neighbors: int,
-                                neighbors_range: float = None,
-                                use_all_neighbors_in_range=False):
+                                neighbors_range: float = None):
     # Prepare Kriging data
     # [unknown x, unknown y, unknown point support value,
     #  other x, other y, other point support value,

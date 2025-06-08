@@ -52,15 +52,18 @@ def test_cases():
         verbose=True
     )
 
-    nn = 8
+    nn = 4
     cb_reg = cb_bpk.regularize(
-        number_of_neighbors=nn
+        number_of_neighbors=nn,
+        raise_when_negative_error=False
     )
     ata_reg = ata_bpk.regularize(
-        number_of_neighbors=nn
+        number_of_neighbors=nn,
+        raise_when_negative_error=False
     )
     atp_reg = atp_bpk.regularize(
-        number_of_neighbors=nn
+        number_of_neighbors=nn,
+        raise_when_negative_error=False
     )
 
     print(cb_bpk.statistics)

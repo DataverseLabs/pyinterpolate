@@ -22,7 +22,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                              unknown_block_index: Union[str, Hashable],
                              number_of_neighbors: int,
                              neighbors_range: float = None,
-                             use_all_neighbors_in_range: bool = False,
                              is_weighted_by_point_support=True,
                              raise_when_negative_prediction=True,
                              raise_when_negative_error=True,
@@ -48,10 +47,6 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
     neighbors_range : float, optional
         The maximum range for neighbors search. If not provided then it is
         read from the semivariogram model.
-
-    use_all_neighbors_in_range : bool, default = False
-        Limits number of neighbors to the ``number_of_neighbors`` or takes
-        as many neighbors as possible from the ``neighbors_range``.
 
     is_weighted_by_point_support : bool, default = True
         Are distances between blocks weighted by the point support?
@@ -86,8 +81,7 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         semivariogram_model=semivariogram_model,
         number_of_neighbors=number_of_neighbors,
         weighted=is_weighted_by_point_support,
-        neighbors_range=neighbors_range,
-        use_all_neighbors_in_range=use_all_neighbors_in_range
+        neighbors_range=neighbors_range
     )
 
     sill = semivariogram_model.sill
@@ -141,8 +135,8 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
 
     zhat = values.dot(output_weights[:-1])
 
-    if raise_when_negative_prediction:
-        if zhat < 0:
+    if zhat < 0:
+        if raise_when_negative_prediction:
             raise ValueError(f'Predicted value is {zhat} and it should not '
                              f'be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or '

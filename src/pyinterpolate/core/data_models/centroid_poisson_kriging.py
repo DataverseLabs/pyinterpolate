@@ -215,16 +215,11 @@ class CentroidPoissonKrigingInput:
         self.is_directional = (
             True if self.semivariogram_model.direction is not None else False
         )
-        self.angular_tolerance = 1
-        self.max_tick = 15
+        self.angular_tolerance = None
+        self.max_tick = None
         self.ps_dists = PointSupportDistance(
             verbose=verbose
         )
-
-        if weighted:
-            self.ps_dists.calculate_weighted_block_to_block_distances(
-                point_support
-            )
 
         self.base_distances = block_base_distances(
             block_id=self.block_id,
@@ -258,7 +253,6 @@ class CentroidPoissonKrigingInput:
         # Neighbors finding parameters
         self._max_range = None
         self._min_number_of_neighbors = None
-        self._select_all_possible_neighbors = None
 
         # kriging input
         self._kriging_input = None
@@ -325,8 +319,7 @@ class CentroidPoissonKrigingInput:
 
     def select_neighbors(self,
                          max_range: float,
-                         min_number_of_neighbors: int,
-                         select_all_possible_neighbors: bool = False):
+                         min_number_of_neighbors: int):
         """
         Function selects the closest neighbors.
 
@@ -337,34 +330,20 @@ class CentroidPoissonKrigingInput:
 
         min_number_of_neighbors : int
             The minimum number of neighboring areas.
-
-        select_all_possible_neighbors : bool, default = False
-            Should select all possible neighbors or only the
-            ``min_number_of_neighbors``?
         """
         self._update_private_neighbors_search_params(
             max_range=max_range,
-            min_number_of_neighbors=min_number_of_neighbors,
-            select_all_possible_neighbors=select_all_possible_neighbors
+            min_number_of_neighbors=min_number_of_neighbors
         )
-        ds = self._select_neighbors_in_range(max_range=max_range)
-
-        if len(ds) == 0:
-            raise ValueError(f'For a given distance: {max_range} '
-                             f'no neighbors have been found.')
-
-        self._kriging_input = self._select_required_number_of_neighbors(
-            df=ds,
-            min_number_of_neighbors=min_number_of_neighbors,
-            select_all_possible_neighbors=select_all_possible_neighbors
+        self._kriging_input = self._select_min_no_neighbors(
+            no_neighbors=min_number_of_neighbors
         )
 
     def select_neighbors_directional(self,
                                      max_range: float,
                                      min_number_of_neighbors: int,
-                                     select_all_possible_neighbors: bool = True,
-                                     angular_tolerance: float = None,
-                                     max_tick: float = None):
+                                     angular_tolerance: float = 1,
+                                     max_tick: float = 15):
         """
         Function selects neighbors to a point using angle
         (direction) between neighbors as additional filtering parameter.
@@ -389,11 +368,9 @@ class CentroidPoissonKrigingInput:
             How wide might the ``angular_tolerance`` (in one direction,
             in reality it is two times greater, up to 180 -> 360 degrees)
         """
-
         self._update_private_neighbors_search_params(
             max_range=max_range,
-            min_number_of_neighbors=min_number_of_neighbors,
-            select_all_possible_neighbors=select_all_possible_neighbors
+            min_number_of_neighbors=min_number_of_neighbors
         )
 
         if self.n_angular_differences_column in self.ds.columns:
@@ -403,7 +380,8 @@ class CentroidPoissonKrigingInput:
             )
 
             # First select only neighbors in a max range
-            ds = self._select_neighbors_in_range(max_range=max_range)
+            ds = self._sort_neighbors()
+            ds = ds[ds[self.n_distances_column] <= self._max_range]
 
             # Next, get points in a specific angle
             ads = self._points_within_angle(ds)
@@ -422,11 +400,7 @@ class CentroidPoissonKrigingInput:
                                  'larger or search for neighbors in '
                                  'the every direction.')
 
-            self._kriging_input = self._select_required_number_of_neighbors(
-                df=ads,
-                min_number_of_neighbors=min_number_of_neighbors,
-                select_all_possible_neighbors=select_all_possible_neighbors
-            )
+            self._kriging_input = ads
 
         else:
             raise AttributeError('Angular differences are not provided, '
@@ -452,14 +426,9 @@ class CentroidPoissonKrigingInput:
 
         return ads
 
-    def _select_neighbors_in_range(self, max_range):
+    def _sort_neighbors(self):
         """
         Selects neighbors within a given range.
-
-        Parameters
-        ----------
-        max_range : float
-            The maximum distance for the neighbors search.
 
         Returns
         -------
@@ -467,43 +436,29 @@ class CentroidPoissonKrigingInput:
             Potential neighbors and distances to them.
         """
 
-        ds = self.ds[self.ds[self.n_distances_column] <= max_range]
-        ds = ds[ds[self.n_distances_column] > 0]
+        ds = self.ds[self.ds[self.n_distances_column] > 0].copy(deep=True)
         ds.sort_values(
             by=self.n_distances_column, ascending=True, inplace=True
         )
         return ds
 
-    def _select_required_number_of_neighbors(self,
-                                             df,
-                                             min_number_of_neighbors,
-                                             select_all_possible_neighbors):
+    def _select_min_no_neighbors(self, no_neighbors):
         """
-        Selects minimum number of neighbors from the DataFrame.
+        Selects neighbors within a given range.
 
         Parameters
         ----------
-        df : DataFrame
-            Potential neighbors and distances to them.
-
-        min_number_of_neighbors : int
-            The minimum number of neighboring areas.
-
-        select_all_possible_neighbors : bool
-            Should select all possible neighbors or only the
-            ``min_number_of_neighbors``?
+        no_neighbors : int
+            Number of Kriging system neighbors.
 
         Returns
         -------
         : DataFrame
-            The minimal set of closest neighbors.
+            Potential neighbors and distances to them.
         """
-        if select_all_possible_neighbors:
-            return df
-        else:
-            return df.sort_values(
-                by=self.n_distances_column, ascending=True
-            ).iloc[:min_number_of_neighbors]
+
+        ds = self._sort_neighbors()
+        return ds.iloc[:no_neighbors]
 
     def _update_neighbors_search_params_directional(self,
                                                     angular_tolerance,
@@ -530,8 +485,7 @@ class CentroidPoissonKrigingInput:
 
     def _update_private_neighbors_search_params(self,
                                                 max_range,
-                                                min_number_of_neighbors,
-                                                select_all_possible_neighbors):
+                                                min_number_of_neighbors):
         """
         Updates private parameters for the neighbors search.
 
@@ -542,13 +496,8 @@ class CentroidPoissonKrigingInput:
 
         min_number_of_neighbors : int
             The minimum number of neighboring areas.
-
-        select_all_possible_neighbors : bool
-            Should select all possible neighbors or only the
-            ``min_number_of_neighbors``?
         """
         self._max_range = max_range
-        self._select_all_possible_neighbors = select_all_possible_neighbors
         self._min_number_of_neighbors = min_number_of_neighbors
 
     def __len__(self):

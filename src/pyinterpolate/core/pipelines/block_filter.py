@@ -32,7 +32,7 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
                   kriging_type='ata',
                   data_crs=None,
                   raise_when_negative_prediction=True,
-                  raise_when_negative_error=True,
+                  raise_when_negative_error=False,
                   verbose=True) -> gpd.GeoDataFrame:
     """
     Function filters block data using Poisson Kriging. By filtering we

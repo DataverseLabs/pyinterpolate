@@ -244,8 +244,8 @@ class PoissonKrigingInput:
         self.is_directional = (
             True if self.semivariogram_model.direction is not None else False
         )
-        self.angular_tolerance = 1
-        self.max_tick = 15
+        self.angular_tolerance = None
+        self.max_tick = None
         self.no_closest_neighbors = no_closest_neighbors
         self.point_support_distances = PointSupportDistance(
             verbose=False
@@ -495,8 +495,8 @@ class PoissonKrigingInput:
                                point_support: PointSupport,
                                max_range: float,
                                no_closest_neighbors: int = 8,
-                               angular_tolerance: float = 1,
-                               max_tick: float = 10,
+                               angular_tolerance: float = None,
+                               max_tick: float = None,
                                any_point: bool = True):
         """
         Function selects the closest neighbors.
@@ -681,7 +681,14 @@ class PoissonKrigingInput:
         return neighbors_in_range
 
     def _select_neighbors_in_direction(self, neighbors_in_range):
+        if self.angular_tolerance is None:
+            self.angular_tolerance = 1.0
+
+        if self.max_tick is None:
+            self.max_tick = 15.0
+
         angular_tolerance = self.angular_tolerance
+
         ads = neighbors_in_range[
             neighbors_in_range[
                 self.angular_differences_column
