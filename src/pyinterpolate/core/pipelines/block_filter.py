@@ -7,7 +7,7 @@ Authors
 
 TODO
 ----
-* impute 0s in ata, atp and cb if val_col_name < 0?
+* impute 0s in ata, atp and cb if val < 0?
 """
 import time
 from typing import Dict, List
