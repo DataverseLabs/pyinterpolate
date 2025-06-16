@@ -164,7 +164,6 @@ def interpolate_raster(data,
             coords = np.array([_x, _y])
             interpolation_points.append(coords)
 
-    # TODO add kriging of multiple points
     k = interpolate_points(
         theoretical_model=ts,
         known_locations=data,

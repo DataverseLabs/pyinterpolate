@@ -230,7 +230,7 @@ def _calculate_block_to_block_distance(ps_block_1: np.ndarray,
 
     TODO
     ----
-    * Add references equation to special part of the documentation.
+    * Add reference equation to the special part of the documentation.
     """
 
     a_shape = ps_block_1.shape[0]

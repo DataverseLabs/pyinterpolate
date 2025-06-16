@@ -341,7 +341,7 @@ class PointSupport:
                 self.dropped_points = not_joined_points
 
         # Clean data
-        # TODO: it shouldn't be dropped if NaN is related to blocks
+        # TODO: test different cases when NaN is block or point support
         joined.dropna(inplace=True)
         # TODO: what if the name is None?
 

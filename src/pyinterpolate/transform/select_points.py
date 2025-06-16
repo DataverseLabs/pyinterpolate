@@ -254,7 +254,6 @@ def select_possible_neighbors_angular(possible_neighbors: np.ndarray,
         if len(prepared_data_with_angles) > 0:
             return prepared_data_with_angles
         else:
-            # TODO: consider warning or error in this case
             return np.array([[np.nan, np.nan, np.nan, np.nan, np.nan]])
 
 

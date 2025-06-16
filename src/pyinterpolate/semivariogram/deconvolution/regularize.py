@@ -22,8 +22,6 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
     TheoreticalVariogram
 
 
-# TODO check line length and underscores
-
 class Deconvolution:
     """
     Class performs deconvolution of semivariogram of areal data. Whole
