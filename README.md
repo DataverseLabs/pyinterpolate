@@ -2,33 +2,28 @@
 
 # Pyinterpolate
 
-**version 1.0** - *TBA*
+**version 1.0**
 
 --
 
-Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
+Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).
 
 If you’re:
 
-- GIS expert,
-- geologist,
-- mining engineer,
-- ecologist,
-- public health specialist,
-- data scientist.
+- GIS expert
+- Geologist
+- Social scientist
 
 Then you might find this package useful. The core functionalities of Pyinterpolate are spatial interpolation and spatial prediction for point and block datasets.
 
-Pyinterpolate has functions for:
+Pyinterpolate performs:
 
-1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
-2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
-3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
-4. *Inverse Distance Weighting*.
-5. *Semivariogram regularization and deconvolution*.
-6. *Semivariogram modeling and analysis*.
-
-[MORE ABOUT SEMIVARIOGRAM MODELING]
+1. *Ordinary Kriging* and *Simple Kriging* - spatial interpolation from points
+2. *Centroid-based Poisson Kriging* of polygons - spatial interpolation from blocks and regions
+3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons - spatial interpolation and data deconvolution from areas to points
+4. *Inverse Distance Weighting* - benchmarking spatial interpolation technique
+5. *Semivariogram regularization and deconvolution* - transforming variogram of areal data in regards to point support data
+6. *Semivariogram modeling and analysis* - is your data spatially correlated? How do neighbors influence each other?
 
 ## How does it work?
 
@@ -46,15 +41,17 @@ point_data = gpd.read_file('dem.gpkg')  # x (lon), y (lat), value
 **[2.]** Pass loaded data to `pyinterpolate`, calculate experimental variogram.
 
 ```python
-from pyinterpolate import calculate_semivariance
+from pyinterpolate import ExperimentalVariogram
 
 
-search_radius = 500
+step_size = 500
 max_range = 40000
 
-experimental_semivariogram = calculate_semivariance(ds=point_data,
-                                                    step_size=search_radius,
-                                                    max_range=max_range)
+experimental_variogram = ExperimentalVariogram(
+    ds=point_data,
+    step_size=step_size,
+    max_range=max_range
+) 
 ```
 
 **[3.]** Fit experimental semivariogram to theoretical model, it is equivalent of the `fit()` method known from machine learning packages.
@@ -63,12 +60,16 @@ experimental_semivariogram = calculate_semivariance(ds=point_data,
 from pyinterpolate import build_theoretical_variogram
 
 
+sill = experimental_variogram.variance
+nugget = 0
+variogram_range = 8000
+
 semivar = build_theoretical_variogram(
-   experimental_variogram=experimental_semivariogram,
-   models_group='spherical',
-   sill=400,
-   rang=20000,
-   nugget=0
+    experimental_variogram=experimental_variogram,
+    models_group='linear',
+    nugget=nugget,
+    rang=variogram_range,
+    sill=sill
 )
 ```
 
@@ -95,7 +96,9 @@ print(prediction)  # [predicted, variance error, lon, lat]
 >> [211.23, 0.89, 20000, 60000]
 ```
 
-With Pyinterpolate you can analyze and transform aggregated data. [TODO: example figure cancer]
+With Pyinterpolate you can analyze and transform aggregated data. Here is the example of spatial disaggregation of areal data into point support using Poisson Kriging:
+
+![Example use case](fig1_example.png)
 
 ## Status
 
@@ -149,6 +152,7 @@ All tests are grouped in the `test` directory. If you would like to contribute, 
 * B2G project related to the large-scale infrastructure maintenance (2020-2021).
 * E-commerce service for reporting and analysis, building spatial / temporal profiles of customers (2022+).
 * The external data augmentation for e-commerce services (2022+).
+* Regional aggregates transformation and preprocessing for location intelligence tasks (2025+).
 
 ## Community
 
@@ -157,7 +161,7 @@ Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg
 
 ## Bibliography
 
-PyInterpolate was created thanks to many resources and all of them are pointed here:
+Pyinterpolate was created thanks to many resources and all of them are pointed here:
 
 - Armstrong M., Basic Linear Geostatistics, Springer 1998,
 - GIS Algorithms by Ningchuan Xiao: https://uk.sagepub.com/en-gb/eur/gis-algorithms/book241284
