@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -422,6 +436,9 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.errors</span> <span class="kn">import</span> <span class="n">singular_matrix_error</span>
 <span class="c1"># Pyinterpolate</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.point_kriging_solve</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_predictions</span><span class="p">,</span>
@@ -454,7 +471,7 @@
 <span class="sd">    known_locations : numpy array</span>
 <span class="sd">        Known locations: ``[x, y, value]``.</span>
 
-<span class="sd">    unknown_location : ArrayLike</span>
+<span class="sd">    unknown_location : Union[ArrayLike, Point]</span>
 <span class="sd">        Points where you want to estimate value ``(x, y) &lt;-&gt; (lon, lat)``.</span>
 
 <span class="sd">    neighbors_range : float, default=None</span>
@@ -491,6 +508,17 @@
 <span class="sd">    RunetimeError</span>
 <span class="sd">        Singular Matrix in the Kriging system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if known locations are in the right format</span>
+    <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+
+    <span class="c1"># Check if unknown location is Point</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>
+        <span class="n">unknown_location</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">unknown_location</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+            <span class="n">unknown_location</span><span class="o">.</span><span class="n">y</span>
+        <span class="p">)</span>
+        <span class="n">unknown_location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">)</span>
 
     <span class="n">k</span><span class="p">,</span> <span class="n">predicted</span><span class="p">,</span> <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_predictions</span><span class="p">(</span><span class="n">theoretical_model</span><span class="p">,</span>
                                             <span class="n">known_locations</span><span class="p">,</span>

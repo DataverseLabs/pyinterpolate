@@ -1,0 +1,1462 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ordinary and Simple Kriging &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/functional/3-1-ordinary-and-simple-kriging';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Ordinary and Simple Kriging</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Ordinary-and-Simple-Kriging">
+<h1>Ordinary and Simple Kriging<a class="headerlink" href="#Ordinary-and-Simple-Kriging" title="Link to this heading">#</a></h1>
+<p>This tutorial will teach us how to perform spatial interpolation with Ordinary and Simple Kriging. We will compare Kriging behavior in relation to a different number of ranges, and finally check how number of neighbors changes the interpolation quality. Ordinary and Simple Kriging are the simplest form of Kriging, but they’re still powerful, thus you should always start from those methods and then move to more sophisticated techniques.</p>
+<section id="Prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#Prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Domain</strong>:</p>
+<ul>
+<li><p>semivariance and covariance functions</p></li>
+<li><p>kriging (basics)</p></li>
+</ul>
+</li>
+<li><p><strong>Package</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Programming</strong>:</p>
+<ul>
+<li><p>Python basics</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#Table-of-contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Set semivariogram model (<strong>fit</strong> data into semivariogram).</p></li>
+<li><p>Create Ordinary and Simple Kriging models.</p></li>
+<li><p>Predict values at unknown locations and evaluate output.</p></li>
+</ol>
+</section>
+<section id="1.-Set-semivariogram-model-(fit)">
+<h2>1. Set semivariogram model (fit)<a class="headerlink" href="#1.-Set-semivariogram-model-(fit)" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">build_experimental_variogram</span><span class="p">,</span>
+    <span class="n">build_theoretical_variogram</span><span class="p">,</span>
+    <span class="n">ordinary_kriging</span><span class="p">,</span>
+    <span class="n">simple_kriging</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load DEM data</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;../data/dem.csv&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Populate geometry column and set CRS</span>
+
+<span class="n">dem_geometry</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">dem_geometry</span><span class="p">)</span>
+
+<span class="c1"># Transform crs to metric values</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2180</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_earth&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_2_0.png" src="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_2_0.png" />
+</div>
+</div>
+<p>In the beginning, we remove 90 % of our points from the dataset, and we will leave them as a test set to calculate interpolation error of Kriging models.</p>
+<blockquote>
+<div><p><strong>Note</strong>: probably you have realized, that we put much more records in test set than in classic machine learning. This simulates real-world problems where we have only few samples and we must deliver a large surface of predicted values.</p>
+</div></blockquote>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">dem</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(689, 6206, 0)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_earth&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">train</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>dem</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3981</th>
+      <td>15.262374</td>
+      <td>52.771562</td>
+      <td>62.305187</td>
+      <td>POINT (247968.154 551653.903)</td>
+    </tr>
+    <tr>
+      <th>6750</th>
+      <td>15.364813</td>
+      <td>52.619216</td>
+      <td>50.144901</td>
+      <td>POINT (254017.537 534367.377)</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>15.123151</td>
+      <td>52.590651</td>
+      <td>36.407681</td>
+      <td>POINT (237500.47 532045.548)</td>
+    </tr>
+    <tr>
+      <th>3789</th>
+      <td>15.254859</td>
+      <td>52.678002</td>
+      <td>18.819578</td>
+      <td>POINT (246919.989 541281.953)</td>
+    </tr>
+    <tr>
+      <th>5541</th>
+      <td>15.319724</td>
+      <td>52.564156</td>
+      <td>58.911324</td>
+      <td>POINT (250654.937 528402.899)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_6_1.png" src="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_6_1.png" />
+</div>
+</div>
+<p>We have removed a subset of points from a dataset to be sure that Kriging is working. In this scenario, 90% of available points are removed, but in real-world cases, you will probably have even fewer points to perform estimations, down to the ~1% of known values.</p>
+<p>We have two variables right now:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">train</span></code>: training set used for semivariogram model derivation,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test</span></code>: test set used for the model error calculation.</p></li>
+</ul>
+<p>The worst idea is to take sample as <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">first</span> <span class="pre">values</span></code> from the list. Let’s imagine we have a sorted list of Digital Elevation Model points. The western part of our measurements covers a mountain, and the eastern part is plain. When we use the part of the west for modeling and the east part for tests, we are going directly into a catastrophe! <strong>Points for each set are chosen randomly</strong> to avoid bias related to the geographical location, but we cannot be sure that the sampled points are not from
+the neighborhood, thus in a fully controlled scenario we perform this experiment multiple times sampling dataset dozens or hundreds of times.</p>
+<p>Having datasets, we can start modeling. Kriging requires fitted theoretical semivariogram.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># meters</span>
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>  <span class="c1"># meters</span>
+
+<span class="n">exp_var</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span><span class="o">.</span><span class="n">plot</span><span class="p">();</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_9_0.png" src="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_9_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">theo_var</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span>
+    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_var</span><span class="p">,</span>
+    <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">theo_var</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_11_0.png" src="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_11_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">theo_var</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 0.0
+* Sill: 438.3491232940861
+* Range: 8906.444877856818
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 25.000860949362576
+* Error-lag weighting method: equal
+
+
++--------+--------------------+--------------------+---------------------+
+|  lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++--------+--------------------+--------------------+---------------------+
+| 500.0  | 24.60853512852859  | 11.659009934605715 | -12.949525193922875 |
+| 1000.0 | 49.21707025705718  | 33.57574792919676  | -15.641322327860422 |
+| 1500.0 | 73.82560538558577  | 43.727912692284356 |  -30.09769269330142 |
+| 2000.0 | 98.43414051411436  | 66.85390951880213  | -31.580230995312235 |
+| 2500.0 | 123.04267564264293 | 88.96538249296198  | -34.077293149680955 |
+| 3000.0 | 147.65121077117155 | 115.07274427357008 |  -32.57846649760147 |
+| 3500.0 | 172.25974589970014 | 140.16197426953403 |  -32.09777163016611 |
+| 4000.0 | 196.86828102822872 | 170.7970611443549  | -26.071219883873823 |
+| 4500.0 | 221.4768161567573  | 202.40500030908063 | -19.071815847676675 |
+| 5000.0 | 246.08535128528587 | 258.9454407598276  |  12.860089474541724 |
+| 5500.0 | 270.6938864138145  | 276.3618624554766  |  5.667976041662143  |
+| 6000.0 | 295.3024215423431  |  310.727163279953  |  15.424741737609907 |
+| 6500.0 | 319.91095667087166 | 330.7550449009331  |  10.844088230061459 |
+| 7000.0 | 344.51949179940027 | 371.04638466313054 |  26.526892863730268 |
+| 7500.0 | 369.12802692792883 | 379.1921343244303  |  10.06410739650147  |
+| 8000.0 | 393.73656205645744 | 420.4791021447186  |  26.742540088261137 |
+| 8500.0 |  418.345097184986  | 444.83403385569056 |  26.48893667070456  |
+| 9000.0 | 438.3491232940861  | 472.8926871102454  |  34.54356381615929  |
+| 9500.0 | 438.3491232940861  | 474.3476590353458  |  35.99853574125973  |
++--------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+</section>
+<section id="2.-Create-Ordinary-and-Simple-Kriging-models">
+<h2>2. Create Ordinary and Simple Kriging models<a class="headerlink" href="#2.-Create-Ordinary-and-Simple-Kriging-models" title="Link to this heading">#</a></h2>
+<p>This is the essential step of our tutorial. We’ve fit semivariances to the model that is utilized by Kriging algorithm. Knowing this model, we can interpolate values in empty locations.</p>
+<p>We will <em>predict</em> a known and arbitrary point in the first run. It is not a real prediction, but test of Kriging. When we perform Kriging, we should get the same exact values as in training data because Kriging is an unbiased linear estimator. Then, we will interpolate values at unknown locations given in the test set, and calculate the Root Mean Squared Error (RMSE) between those predicted and real values.</p>
+<p>Functions <code class="docutils literal notranslate"><span class="pre">ordinary_kriging()</span></code> and <code class="docutils literal notranslate"><span class="pre">simple_kriging()</span></code> are similar, there is only one parameter that is different - <code class="docutils literal notranslate"><span class="pre">process_mean</span></code>, and it is passed only to the <code class="docutils literal notranslate"><span class="pre">simple_kriging()</span></code> function. Kriging parameters are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">theoretical_model</span></code>: fitted <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">known_locations</span></code>: array with known points</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unknown_location</span></code>: location where you want to interpolate a missing value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code>: optional parameter, the maximum distance where we search for point neighbors. If you don’t provide it then it is equal to the range of theoretical variogram model</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code>: number of the closest neighbors used for interpolation, by default it is set to 4, but for datasets with many point samples it is recommended to use more neighbors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_tick</span></code>: If searching for neighbors in a specific direction how large should be tolerance for increasing the search angle (how many degrees more)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_all_neighbors_in_range</span></code>: boolean parameter. <code class="docutils literal notranslate"><span class="pre">True</span></code>: if the number of neighbors within the <code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the <code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code>, then take all of them for modeling. Otherwise, take only n-closest neighbors</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">allow_approx_solutions</span></code>: Allows the approximation of kriging weights based on the OLS algorithm. This is by default set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, and parameter is useful for debugging purposes. Do not ignore errors coming from the Kriging system because usually those errors inform you about data quality (duplicated coordinates, clusters, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">process_mean</span></code>: The mean value of a process over a study area. Should be known before processing. That’s why Simple Kriging has a limited number of applications. You must have multiple samples and well-known area to know this parameter.</p></li>
+</ul>
+<p>We use only the first four parameters and <code class="docutils literal notranslate"><span class="pre">process_mean</span></code> when we run Simple Kriging. Let’s start! The first step is an interpolation of the value known by our model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select one known value</span>
+
+<span class="n">known_value</span> <span class="o">=</span> <span class="n">train</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
+<span class="n">known_value</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>dem</th>
+      <th>geometry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4940</th>
+      <td>15.296388</td>
+      <td>52.682969</td>
+      <td>20.207836</td>
+      <td>POINT (249753.74 541688.861)</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
+
+<span class="n">unknown_location</span> <span class="o">=</span> <span class="p">(</span><span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                    <span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="n">unknown_location</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(249753.73998332422, 541688.8608177528)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ok_interpolation</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span>
+<span class="p">)</span>
+<span class="n">ok_interpolation</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[20.207836151123047,
+ 3.944304526105059e-31,
+ 249753.73998332422,
+ 541688.8608177528]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ok_interpolation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+4940    0.0
+Name: dem, dtype: float64
+</pre></div></div>
+</div>
+<p>The first value is our prediction is precisely the same as the input in the training set! So far, the algorithm has worked well. The second value is prediction variance error, equal, or really close to zero - as it should be.</p>
+<p>Simple Kriging differs from Ordinary Kriging, and we must set the process mean to retrieve valid results. It is rarely the case. That’s why Ordinary Kriging is the first choice for many applications. We know the global mean because we have the whole dataset, but in the real-world scenario, we cannot divide the set into training and test sets and then get the mean from the entire dataset - it is an information leak from the test set into a model!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">simple_kriging</span><span class="p">(</span>
+    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
+    <span class="n">process_mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">])</span>
+<span class="p">)</span>
+<span class="n">sk_interpolation</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[20.207836151123047,
+ 7.888609052210118e-31,
+ 249753.73998332422,
+ 541688.8608177528]
+</pre></div></div>
+</div>
+<p>The Simple Kriging algorithm returns the same output as the Ordinary Kriging: <code class="docutils literal notranslate"><span class="pre">[prediction,</span> <span class="pre">error</span> <span class="pre">variance,</span> <span class="pre">pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y]</span></code>. Simple Kriging has returned the same value as the actual value fed to the algorithm.</p>
+</section>
+<section id="3.-Predict-values-at-unknown-locations-and-evaluate-output">
+<h2>3. Predict values at unknown locations and evaluate output<a class="headerlink" href="#3.-Predict-values-at-unknown-locations-and-evaluate-output" title="Link to this heading">#</a></h2>
+<p>In this part of the tutorial we interpolate values at missing locations. Kriging does it (usually) better than other simple techniques like filling missing data with the averages or inverse distance weighting. Interpolation quality is driven mostly by a good semivariogram model, but we can make better predictions when we scan more neighbors around the missing location. We will test this assumption in the next step, validating output with test dataset, and calculating the root mean squared error
+of prediction.</p>
+<p>We will perform those tests only for ordinary kriging, dividing dataset multiple times to get distribution of errors for each number of neighbors.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+
+<span class="n">neighbors_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]</span>
+<span class="n">number_of_trials</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="k">def</span> <span class="nf">kriging_run</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="p">,</span> <span class="n">known_locations</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function predicts values at location.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    location : Point</span>
+
+<span class="sd">    theoretical_model : TheoreticalVariogram</span>
+
+<span class="sd">    known_locations : numpy array</span>
+
+<span class="sd">    number_of_neighbors : int</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    : float</span>
+<span class="sd">        Interpolated value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unknown_location</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">location</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">location</span><span class="o">.</span><span class="n">y</span>
+    <span class="p">)</span>
+    <span class="n">preds</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+        <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="o">=</span><span class="n">known_locations</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+        <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
+        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_trials</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">neighbors_number</span><span class="p">):</span>
+        <span class="c1"># Divide dataset into train and test set</span>
+        <span class="n">train</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">dem</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">index</span><span class="p">)]</span>
+
+        <span class="c1"># Take sample from test, we don&#39;t need a whole dataset</span>
+        <span class="n">test_sample</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+        <span class="c1"># Fit semivariogram model</span>
+        <span class="n">exp_var</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+            <span class="n">ds</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+            <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+            <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+        <span class="p">)</span>
+        <span class="n">theo_var</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span>
+            <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">exp_var</span><span class="p">,</span>
+            <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Predict new values</span>
+        <span class="n">yhats</span> <span class="o">=</span> <span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">kriging_run</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span>
+                <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+                <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+                <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">avg_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhats</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">avg_rmse</span><span class="p">,</span> <span class="n">nn</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 8/8 [00:05&lt;00:00,  1.38it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.65it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.65it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  2.00it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.99it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.94it/s]
+100%|██████████| 8/8 [00:04&lt;00:00,  1.77it/s]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create dataframe from results</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span> <span class="s1">&#39;nn&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>rmse</th>
+      <th>nn</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4.718654</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3.396656</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.920820</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3.658729</td>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3.958142</td>
+      <td>64</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First plot average rmse per number of neighbors</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;nn&#39;</span><span class="p">)[</span><span class="s1">&#39;rmse&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of neighbors&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;RMSE&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_24_0.png" src="../../../_images/usage_tutorials_functional_3-1-ordinary-and-simple-kriging_24_0.png" />
+</div>
+</div>
+<p>As we see, there could be too many neighbors - interpolations become wildly inaccurate. We can check general statistics for each number of neighbors using <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method on transformed dataframe:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, set number of neighbors as a column</span>
+
+<span class="n">transformed</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;nn&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;rmse&#39;</span><span class="p">)</span>
+<span class="n">transformed</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>nn</th>
+      <th>4</th>
+      <th>8</th>
+      <th>16</th>
+      <th>32</th>
+      <th>64</th>
+      <th>128</th>
+      <th>256</th>
+      <th>512</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4.718654</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>3.396656</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4.92082</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.658729</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>3.958142</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">transformed</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>nn</th>
+      <th>4</th>
+      <th>8</th>
+      <th>16</th>
+      <th>32</th>
+      <th>64</th>
+      <th>128</th>
+      <th>256</th>
+      <th>512</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+      <td>10.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>4.497719</td>
+      <td>4.426904</td>
+      <td>4.541524</td>
+      <td>4.585908</td>
+      <td>4.573719</td>
+      <td>14.016994</td>
+      <td>572.193124</td>
+      <td>548.336303</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>0.702517</td>
+      <td>0.657804</td>
+      <td>0.588124</td>
+      <td>0.695009</td>
+      <td>0.606324</td>
+      <td>11.906249</td>
+      <td>556.973063</td>
+      <td>367.693970</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>3.726959</td>
+      <td>3.396656</td>
+      <td>3.706056</td>
+      <td>3.626789</td>
+      <td>3.771429</td>
+      <td>4.355742</td>
+      <td>147.615233</td>
+      <td>153.057807</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>3.876334</td>
+      <td>4.125214</td>
+      <td>4.300318</td>
+      <td>4.093870</td>
+      <td>4.051510</td>
+      <td>6.590461</td>
+      <td>191.575340</td>
+      <td>251.672267</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>4.511493</td>
+      <td>4.458808</td>
+      <td>4.410529</td>
+      <td>4.683110</td>
+      <td>4.643775</td>
+      <td>9.953469</td>
+      <td>438.572343</td>
+      <td>468.651028</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>4.793332</td>
+      <td>4.655343</td>
+      <td>4.843530</td>
+      <td>4.972404</td>
+      <td>4.937369</td>
+      <td>14.714325</td>
+      <td>603.706742</td>
+      <td>676.775004</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>5.950029</td>
+      <td>5.741397</td>
+      <td>5.824876</td>
+      <td>5.721316</td>
+      <td>5.599397</td>
+      <td>41.472968</td>
+      <td>1973.236450</td>
+      <td>1278.284266</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>In general, too much neighbors might worsen the results; we are assuming, that the closest neighbors are the most important, and introducing more distant neighbors may amplify the noise in the model response.</p>
+<p>The best idea is to look into semivariogram and limit range as much as you can. Then you will be sure, that only the closest neighbors are taken into account.</p>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Changes</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2025-04-30</p></td>
+<td><p>Tutorial has been adapted to the 1.0 release</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-contents">Table of contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Set-semivariogram-model-(fit)">1. Set semivariogram model (fit)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Create-Ordinary-and-Simple-Kriging-models">2. Create Ordinary and Simple Kriging models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Predict-values-at-unknown-locations-and-evaluate-output">3. Predict values at unknown locations and evaluate output</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/usage/tutorials/functional/3-1-ordinary-and-simple-kriging.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

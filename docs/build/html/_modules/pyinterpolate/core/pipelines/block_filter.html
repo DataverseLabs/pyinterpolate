@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -417,7 +431,7 @@
 
 <span class="sd">TODO</span>
 <span class="sd">----</span>
-<span class="sd">* impute 0s in ata, atp and cb if val_col_name &lt; 0?</span>
+<span class="sd">* impute 0s in ata, atp and cb if val &lt; 0?</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
@@ -444,7 +458,7 @@
                   <span class="n">kriging_type</span><span class="o">=</span><span class="s1">&#39;ata&#39;</span><span class="p">,</span>
                   <span class="n">data_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function filters block data using Poisson Kriging. By filtering we</span>

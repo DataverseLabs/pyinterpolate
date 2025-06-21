@@ -194,6 +194,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -332,6 +339,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -375,7 +389,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
 </ul>
 </div>
@@ -1102,8 +1116,6 @@ weighted.</p>
 </dd>
 <dt class="field-even">Attributes<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>experimental_variogram</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>Estimated experimental semivariogram and point cloud.</p>
-</dd>
 <dt><strong>semivariances</strong><span class="classifier">Dict</span></dt><dd><p>Lag - all semivariances between point pairs:
 <code class="docutils literal notranslate"><span class="pre">{lag:</span> <span class="pre">[semivariances],</span> <span class="pre">}</span></code>.</p>
 </dd>
@@ -1119,13 +1131,16 @@ weighted.</p>
 <p class="rubric">Methods</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <tbody>
-<tr class="row-odd"><td><p><strong>describe()</strong></p></td>
+<tr class="row-odd"><td><p><strong>average_semivariance()</strong></p></td>
+<td><p>Returns <code class="docutils literal notranslate"><span class="pre">lag,</span> <span class="pre">average</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs</span></code> as a numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>describe()</strong></p></td>
 <td><p>The point cloud statistics.</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>plot()</strong></p></td>
+<tr class="row-odd"><td><p><strong>plot()</strong></p></td>
 <td><p>Plots scatterplot, boxplot or violinplot of the point cloud.</p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>remove_outliers()</strong></p></td>
+<tr class="row-even"><td><p><strong>remove_outliers()</strong></p></td>
 <td><p>Removes outliers from the semivariance plots.</p></td>
 </tr>
 </tbody>
@@ -1140,7 +1155,22 @@ weighted.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.describe"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">average_semivariance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.average_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Returns mean of semivariances for each lag - which is equal to
+the experimental semivariogram output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>: numpy array</dt><dd><p>Mean of semivariances for each lag.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_dataframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.describe"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Method calculates basic statistics. Includes count (point pairs
 number), average semivariance, standard deviation, minimum,
 1st quartile, median, 3rd quartile, maximum, skewness, and kurtosis.</p>
@@ -1164,6 +1194,20 @@ number), average semivariance, standard deviation, minimum,
 <span class="gp">... </span> <span class="p">}</span>
 </pre></div>
 </div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">experimental_semivariances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExperimentalVariogram</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.experimental_semivariances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Returns experimental semivariogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>: ExperimentalVariogram</dt><dd><p>Experimental semivariogram object.</p>
 </dd>
 </dl>
 </dd>

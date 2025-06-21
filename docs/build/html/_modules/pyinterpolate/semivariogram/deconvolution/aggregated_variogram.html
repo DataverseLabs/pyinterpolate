@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -320,6 +327,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../api/api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
   </a>
 </li>
 
@@ -669,7 +683,7 @@
         <span class="p">)</span>
 
         <span class="c1"># Calculate distances between blocks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_support_distances</span> <span class="o">=</span> <span class="n">PointSupportDistance</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_support_distances</span> <span class="o">=</span> <span class="n">PointSupportDistance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_blocks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">point_support_distances</span><span class="o">.</span><span class="n">calculate_weighted_block_to_block_distances</span><span class="p">(</span>

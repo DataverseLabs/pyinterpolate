@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -320,6 +327,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../api/api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
   </a>
 </li>
 
@@ -496,6 +510,9 @@
 
 <span class="sd">    Methods</span>
 <span class="sd">    -------</span>
+<span class="sd">    block_data()</span>
+<span class="sd">        Longitude, latitude, and value as numpy array.</span>
+
 <span class="sd">    block_indexes()</span>
 <span class="sd">        Block indexes as numpy array.</span>
 
@@ -626,6 +643,20 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
                 <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">block_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns block data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : numpy array</span>
+<span class="sd">            Block data [x, y, value].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lat_col_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">]</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">block_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

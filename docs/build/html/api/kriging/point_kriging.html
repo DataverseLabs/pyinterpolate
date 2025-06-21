@@ -192,6 +192,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -330,6 +337,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -373,7 +387,7 @@
 <li class="toctree-l1"><a class="reference internal" href="block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
 </ul>
 </div>
@@ -451,7 +465,7 @@ technique.</p>
 </dd>
 <dt><strong>known_locations</strong><span class="classifier">numpy array</span></dt><dd><p>Known locations: <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code>.</p>
 </dd>
-<dt><strong>unknown_location</strong><span class="classifier">ArrayLike</span></dt><dd><p>Points where you want to estimate value <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span> <span class="pre">&lt;-&gt;</span> <span class="pre">(lon,</span> <span class="pre">lat)</span></code>.</p>
+<dt><strong>unknown_location</strong><span class="classifier">Union[ArrayLike, Point]</span></dt><dd><p>Points where you want to estimate value <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span> <span class="pre">&lt;-&gt;</span> <span class="pre">(lon,</span> <span class="pre">lat)</span></code>.</p>
 </dd>
 <dt><strong>neighbors_range</strong><span class="classifier">float, default=None</span></dt><dd><p>The maximum distance where we search for neighbors. If <code class="docutils literal notranslate"><span class="pre">None</span></code> is
 given then the range is selected from the Theoretical

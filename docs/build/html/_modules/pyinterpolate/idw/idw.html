@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../contributor/development.html">
     Development
   </a>
@@ -421,14 +435,16 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
 
 
 <div class="viewcode-block" id="inverse_distance_weighting">
 <a class="viewcode-back" href="../../../api/idw/idw.html#pyinterpolate.inverse_distance_weighting">[docs]</a>
-<span class="k">def</span> <span class="nf">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                                <span class="n">unknown_location</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span>
-                               <span class="n">number_of_neighbours</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">no_neighbors</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                                <span class="n">power</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Inverse Distance Weighting with a given set of points and</span>
@@ -436,7 +452,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    known_points : numpy array</span>
+<span class="sd">    known_locations : numpy array</span>
 <span class="sd">        The MxN array, where **M** is a number of rows (points) and **N**</span>
 <span class="sd">        is the number of columns, where the last column represents a value</span>
 <span class="sd">        observed in a known point. (It could be **(N-1)**-dimensional data).</span>
@@ -449,7 +465,7 @@
 <span class="sd">        is added once - vector of points ``[x, y]``</span>
 <span class="sd">        becomes ``[[x, y]]`` for 2-dimensional data.</span>
 
-<span class="sd">    number_of_neighbours : int, default = -1</span>
+<span class="sd">    no_neighbors : int, default = -1</span>
 <span class="sd">        If default value **(-1)** then all known points will be used to</span>
 <span class="sd">        estimate value at the unknown location.</span>
 <span class="sd">        Can be any number within the limits ``[2, len(known_points)]``,</span>
@@ -478,44 +494,48 @@
     <span class="k">if</span> <span class="n">power</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Power cannot be smaller than 0&#39;</span><span class="p">)</span>
 
+    <span class="c1"># Check known points parameter</span>
+    <span class="c1"># Check if known locations are in the right format</span>
+    <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+
     <span class="c1"># Check number of neighbours parameter</span>
-    <span class="n">nn_neighbors_ge_2</span> <span class="o">=</span> <span class="n">number_of_neighbours</span> <span class="o">&gt;=</span> <span class="mi">2</span>
-    <span class="n">nn_neighbors_le_known_points</span> <span class="o">=</span> <span class="n">number_of_neighbours</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_points</span><span class="p">)</span>
+    <span class="n">nn_neighbors_ge_2</span> <span class="o">=</span> <span class="n">no_neighbors</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+    <span class="n">nn_neighbors_le_known_points</span> <span class="o">=</span> <span class="n">no_neighbors</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span>
     <span class="n">n_closest_eq_nn</span> <span class="o">=</span> <span class="n">nn_neighbors_ge_2</span> <span class="ow">and</span> <span class="n">nn_neighbors_le_known_points</span>
 
-    <span class="n">number_of_closest</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_points</span><span class="p">)</span>
+    <span class="n">number_of_closest</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="n">number_of_neighbours</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">no_neighbors</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">pass</span>
     <span class="k">elif</span> <span class="n">n_closest_eq_nn</span><span class="p">:</span>
-        <span class="n">number_of_closest</span> <span class="o">=</span> <span class="n">number_of_neighbours</span>
+        <span class="n">number_of_closest</span> <span class="o">=</span> <span class="n">no_neighbors</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">_idw_value_error_nn</span><span class="p">(</span><span class="n">length_known</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">known_points</span><span class="p">),</span>
-                            <span class="n">nn</span><span class="o">=</span><span class="n">number_of_neighbours</span><span class="p">)</span>
+        <span class="n">_idw_value_error_nn</span><span class="p">(</span><span class="n">length_known</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">known_locations</span><span class="p">),</span>
+                            <span class="n">nn</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">)</span>
 
     <span class="c1"># Pre-process unknown location parameter</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
         <span class="n">unknown_location</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_location</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_points</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">unknown_location</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">known_locations</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
         <span class="n">unknown_location</span> <span class="o">=</span> <span class="n">unknown_location</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
 
     <span class="c1"># Calculate distances</span>
-    <span class="n">distances</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">,</span> <span class="n">known_points</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">point_distance</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">,</span> <span class="n">known_locations</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">distances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
 
     <span class="c1"># Check if any distance is equal to 0 - then return this value</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">distances</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
 
         <span class="n">zer_pos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">distances</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">known_points</span><span class="p">[</span><span class="n">zer_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">known_locations</span><span class="p">[</span><span class="n">zer_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">result</span>
 
     <span class="c1"># Get n closest neighbours...</span>
     <span class="n">sdists</span> <span class="o">=</span> <span class="n">distances</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
     <span class="n">sdists</span> <span class="o">=</span> <span class="n">sdists</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">number_of_closest</span><span class="p">]</span>
     <span class="n">dists</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">sdists</span><span class="p">]</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="n">known_points</span><span class="p">[</span><span class="n">sdists</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="n">known_locations</span><span class="p">[</span><span class="n">sdists</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
     <span class="c1"># Create weights</span>

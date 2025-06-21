@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pipelines (Automated Poisson Kriging) &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>Pipelines &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -192,6 +192,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -330,6 +337,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../contributor/development.html">
     Development
   </a>
@@ -373,7 +387,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pipelines (Automated Poisson Kriging)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Pipelines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
 </ul>
 </div>
@@ -418,7 +432,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Pipelines (Automated Poisson Kriging)</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Pipelines</span></li>
   </ul>
 </nav>
 </div>
@@ -435,11 +449,13 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="pipelines-automated-poisson-kriging">
-<h1>Pipelines (Automated Poisson Kriging)<a class="headerlink" href="#pipelines-automated-poisson-kriging" title="Link to this heading">#</a></h1>
+  <section id="pipelines">
+<h1>Pipelines<a class="headerlink" href="#pipelines" title="Link to this heading">#</a></h1>
+<section id="poisson-kriging-pipelines">
+<h2>Poisson Kriging pipelines<a class="headerlink" href="#poisson-kriging-pipelines" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">filter_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PointSupport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kriging_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/block_filter.html#filter_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">filter_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariogram_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">PointSupport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_neighbors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kriging_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ata'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_prediction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raise_when_negative_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GeoDataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/block_filter.html#filter_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function filters block data using Poisson Kriging. By filtering we
 understand computing aggregated values again using point support data
 for ratios regularization.</p>
@@ -517,6 +533,109 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </dd></dl>
 
 </section>
+<section id="ordinary-kriging-pipelines">
+<h2>Ordinary Kriging pipelines<a class="headerlink" href="#ordinary-kriging-pipelines" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">interpolate_points</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theoretical_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_locations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_locations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approximate_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/interpolate.html#interpolate_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function predicts values at unknown locations with Ordinary
+Kriging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theoretical_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>Fitted theoretical variogram model.</p>
+</dd>
+<dt><strong>known_locations</strong><span class="classifier">numpy array</span></dt><dd><p>The known locations: x, y, value.</p>
+</dd>
+<dt><strong>unknown_locations</strong><span class="classifier">numpy array</span></dt><dd><p>Points where you want to estimate value
+<code class="docutils literal notranslate"><span class="pre">[(x,</span> <span class="pre">y),</span> <span class="pre">...]</span> <span class="pre">&lt;-&gt;</span> <span class="pre">[(lon,</span> <span class="pre">lat),</span> <span class="pre">...]</span></code>.</p>
+</dd>
+<dt><strong>neighbors_range</strong><span class="classifier">float, default=None</span></dt><dd><p>The maximum distance where we search for the neighbors.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> is given then range is selected from
+the theoretical model’s <code class="docutils literal notranslate"><span class="pre">rang</span></code> attribute.</p>
+</dd>
+<dt><strong>no_neighbors</strong><span class="classifier">int, default = 4</span></dt><dd><p>The number of the <strong>n-closest neighbors</strong> used for interpolation.</p>
+</dd>
+<dt><strong>max_tick</strong><span class="classifier">float, default=5.</span></dt><dd><p>Maximum number of degrees for neighbors search angle.</p>
+</dd>
+<dt><strong>use_all_neighbors_in_range</strong><span class="classifier">bool, default = False</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: if the real number of neighbors within the
+<code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code>
+parameter then take all of them anyway.</p>
+</dd>
+<dt><strong>allow_approximate_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on
+the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
+if you don’t know what are you doing. This parameter can be
+useful when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation. But the
+better idea is to get rid of those clusters.</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">bool, default = True</span></dt><dd><p>Shows progress bar</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: numpy array</dt><dd><p><code class="docutils literal notranslate"><span class="pre">[predicted</span> <span class="pre">value,</span> <span class="pre">variance</span> <span class="pre">error,</span> <span class="pre">longitude</span> <span class="pre">(x),</span> <span class="pre">latitude</span> <span class="pre">(y)]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">interpolate_points_dask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theoretical_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TheoreticalVariogram</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">known_locations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown_locations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approximate_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_bar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/pipelines/interpolate.html#interpolate_points_dask"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function predicts values at unknown locations with Ordinary
+Kriging using Dask backend, makes sense when you must interpolate large
+number of points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>theoretical_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>Fitted theoretical variogram model.</p>
+</dd>
+<dt><strong>known_locations</strong><span class="classifier">numpy array</span></dt><dd><p>The known locations: x, y, value.</p>
+</dd>
+<dt><strong>unknown_locations</strong><span class="classifier">numpy array</span></dt><dd><p>Points where you want to estimate value
+<code class="docutils literal notranslate"><span class="pre">[(x,</span> <span class="pre">y),</span> <span class="pre">...]</span> <span class="pre">&lt;-&gt;</span> <span class="pre">[(lon,</span> <span class="pre">lat),</span> <span class="pre">...]</span></code>.</p>
+</dd>
+<dt><strong>neighbors_range</strong><span class="classifier">float, default=None</span></dt><dd><p>The maximum distance where we search for the neighbors.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> is given then range is selected from
+the theoretical model’s <code class="docutils literal notranslate"><span class="pre">rang</span></code> attribute.</p>
+</dd>
+<dt><strong>no_neighbors</strong><span class="classifier">int, default = 4</span></dt><dd><p>The number of the <strong>n-closest neighbors</strong> used for interpolation.</p>
+</dd>
+<dt><strong>max_tick</strong><span class="classifier">float, default=5.</span></dt><dd><p>Maximum number of degrees for neighbors search angle.</p>
+</dd>
+<dt><strong>use_all_neighbors_in_range</strong><span class="classifier">bool, default = False</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: if the real number of neighbors within the
+<code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code>
+parameter then take all of them anyway.</p>
+</dd>
+<dt><strong>allow_approximate_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on
+the OLS algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
+if you don’t know what are you doing. This parameter can be
+useful when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation. But the
+better idea is to get rid of those clusters.</p>
+</dd>
+<dt><strong>number_of_workers</strong><span class="classifier">int, default = 1</span></dt><dd><p>How many processing units can be used for predictions.
+Increase it only for a very large number of
+interpolated points (~10k+).</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">bool, default = True</span></dt><dd><p>Shows progress bar</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: numpy array</dt><dd><p><code class="docutils literal notranslate"><span class="pre">[predicted</span> <span class="pre">value,</span> <span class="pre">variance</span> <span class="pre">error,</span> <span class="pre">longitude</span> <span class="pre">(x),</span> <span class="pre">latitude</span> <span class="pre">(y)]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
 
 
                 </article>
@@ -556,6 +675,19 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#poisson-kriging-pipelines">Poisson Kriging pipelines</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinary-kriging-pipelines">Ordinary Kriging pipelines</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
   <div role="note" aria-label="source link">

@@ -21,6 +21,7 @@ Pyinterpolate performs:
 1. *Ordinary Kriging* and *Simple Kriging* - spatial interpolation from points
 2. *Centroid-based Poisson Kriging* of polygons - spatial interpolation from blocks and regions
 3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons - spatial interpolation and data deconvolution from areas to points
+4. *Indicator Kriging* - kriging based on probabilities
 4. *Inverse Distance Weighting* - benchmarking spatial interpolation technique
 5. *Semivariogram regularization and deconvolution* - transforming variogram of areal data in regards to point support data
 6. *Semivariogram modeling and analysis* - is your data spatially correlated? How do neighbors influence each other?
@@ -204,8 +205,8 @@ High level overview:
     - [x] `semivariogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution, indicator variogram
     - [x] `viz` - interpolation of smooth surfaces from points into rasters.
  - [x] `tutorials`
-   - [x] `step-by-step` - tutorials covering the API
-   - [x] `use-cases` - tutorials covering concrete use cases
+   - [x] `api-examples` - tutorials covering the API
+   - [x] `functional` - tutorials covering concrete use cases
 
 ## Datasets
 

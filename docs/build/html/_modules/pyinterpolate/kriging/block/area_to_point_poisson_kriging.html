@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -436,7 +450,6 @@
                      <span class="n">unknown_block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
                      <span class="n">number_of_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                      <span class="n">neighbors_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                     <span class="n">use_all_neighbors_in_range</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                      <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -462,10 +475,6 @@
 <span class="sd">    neighbors_range : float, optional</span>
 <span class="sd">        The maximum range for neighbors search. If not provided then it is</span>
 <span class="sd">        read from the semivariogram model.</span>
-
-<span class="sd">    use_all_neighbors_in_range : bool, default = False</span>
-<span class="sd">        Limits number of neighbors to the ``number_of_neighbors`` or takes</span>
-<span class="sd">        as many neighbors as possible in the ``neighbors_range``.</span>
 
 <span class="sd">    raise_when_negative_prediction : bool, default=True</span>
 <span class="sd">        Raise error when prediction is negative.</span>
@@ -500,8 +509,7 @@
         <span class="n">point_support</span><span class="o">=</span><span class="n">point_support</span><span class="p">,</span>
         <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">,</span>
         <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
-        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span>
+        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span>
     <span class="p">)</span>
 
     <span class="n">closest_neighbors</span> <span class="o">=</span> <span class="n">kriging_data</span><span class="o">.</span><span class="n">neighbors_unique_indexes</span>

@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -431,8 +445,6 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> \
     <span class="n">TheoreticalVariogram</span>
 
-
-<span class="c1"># TODO check line length and underscores</span>
 
 <div class="viewcode-block" id="Deconvolution">
 <a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution">[docs]</a>
@@ -850,7 +862,7 @@
                     <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">,</span>
                     <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span><span class="p">,</span>
                     <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span><span class="p">,</span>
-                    <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span>
                     <span class="n">log_process</span><span class="o">=</span><span class="kc">False</span>
                 <span class="p">)</span>
 
@@ -1008,9 +1020,9 @@
                        <span class="n">reps_deviation_decrease</span><span class="o">=</span><span class="n">reps_deviation_decrease</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Deconvolution.export_model">
-<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.export_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">export_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<div class="viewcode-block" id="Deconvolution.export_model_to_json">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.export_model_to_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_model_to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function exports final theoretical model.</span>
 

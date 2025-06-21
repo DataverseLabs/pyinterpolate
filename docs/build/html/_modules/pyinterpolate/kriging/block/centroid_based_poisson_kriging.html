@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -325,6 +332,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -434,7 +448,6 @@
                              <span class="n">unknown_block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
                              <span class="n">number_of_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                              <span class="n">neighbors_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                             <span class="n">use_all_neighbors_in_range</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                              <span class="n">is_weighted_by_point_support</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -460,10 +473,6 @@
 <span class="sd">    neighbors_range : float, optional</span>
 <span class="sd">        The maximum range for neighbors search. If not provided then it is</span>
 <span class="sd">        read from the semivariogram model.</span>
-
-<span class="sd">    use_all_neighbors_in_range : bool, default = False</span>
-<span class="sd">        Limits number of neighbors to the ``number_of_neighbors`` or takes</span>
-<span class="sd">        as many neighbors as possible from the ``neighbors_range``.</span>
 
 <span class="sd">    is_weighted_by_point_support : bool, default = True</span>
 <span class="sd">        Are distances between blocks weighted by the point support?</span>
@@ -498,8 +507,7 @@
         <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">semivariogram_model</span><span class="p">,</span>
         <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
         <span class="n">weighted</span><span class="o">=</span><span class="n">is_weighted_by_point_support</span><span class="p">,</span>
-        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
-        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span>
+        <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span>
     <span class="p">)</span>
 
     <span class="n">sill</span> <span class="o">=</span> <span class="n">semivariogram_model</span><span class="o">.</span><span class="n">sill</span>
@@ -553,8 +561,8 @@
 
     <span class="n">zhat</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">output_weights</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">raise_when_negative_prediction</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">zhat</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">zhat</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">raise_when_negative_prediction</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted value is </span><span class="si">{</span><span class="n">zhat</span><span class="si">}</span><span class="s1"> and it should not &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;be lower than 0. Check your sampling &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;grid, samples, number of neighbors or &#39;</span>
