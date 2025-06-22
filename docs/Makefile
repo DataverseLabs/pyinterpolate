@@ -18,3 +18,9 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+
+# Create symlink to tutorials directory
+tutorials:
+	@mkdir $(SOURCEDIR)/usage/tutorials
+	@ln -s "$(CURDIR)/../tutorials/functional" "$(SOURCEDIR)/usage/tutorials"
+	@echo "Created symlink to tutorials directory in build directory."

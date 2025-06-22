@@ -1,135 +1,109 @@
-# TODO: more tests for a different types of input
-import unittest
-
-import numpy as np
-
-from pyinterpolate.kriging.models.block.centroid_based_poisson_kriging import centroid_poisson_kriging
-from pyinterpolate.processing.preprocessing.blocks import Blocks, PointSupport
-from pyinterpolate.variogram import TheoreticalVariogram
-
-DATASET = 'samples/regularization/cancer_data.gpkg'
-VARIOGRAM_MODEL_FILE = 'samples/regularization/regularized_variogram.json'
-POLYGON_LAYER = 'areas'
-POPULATION_LAYER = 'points'
-POP10 = 'POP10'
-GEOMETRY_COL = 'geometry'
-POLYGON_ID = 'FIPS'
-POLYGON_VALUE = 'rate'
-NN = 32
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
+from pyinterpolate.core.data_models.blocks import Blocks
+from pyinterpolate.core.data_models.point_support import PointSupport
+from pyinterpolate.kriging.block.centroid_based_poisson_kriging import centroid_poisson_kriging
+from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
+from tests.test_semivariogram.sample_data.dataprep import CANCER_DATA_WITH_CENTROIDS, POINT_SUPPORT_DATA
 
 
-def select_unknown_blocks_and_ps(areal_input, point_support, block_id):
+BLOCKS = Blocks(**CANCER_DATA_WITH_CENTROIDS)
 
-    ar_x = areal_input.cx
-    ar_y = areal_input.cy
-    ar_val = areal_input.value_column_name
-    ps_val = point_support.value_column
-    ps_x = point_support.x_col
-    ps_y = point_support.y_col
-    idx_col = areal_input.index_column_name
+PS = PointSupport(
+        points=POINT_SUPPORT_DATA['ps'],
+        blocks=BLOCKS,
+        points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+        points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    )
 
-    areal_input = areal_input.data.copy()
-    point_support = point_support.point_support.copy()
+EXPERIMENTAL = ExperimentalVariogram(
+        ds=BLOCKS.representative_points_array(),
+        step_size=40000,
+        max_range=300001
+    )
 
-    sample_key = np.random.choice(list(point_support[block_id].unique()))
-
-    unkn_ps = point_support[point_support[block_id] == sample_key][[ps_x, ps_y, ps_val]].values
-    known_poses = point_support[point_support[block_id] != sample_key]
-    known_poses.rename(columns={
-        ps_x: 'x', ps_y: 'y', ps_val: 'ds', idx_col: 'index'
-    }, inplace=True)
-
-    unkn_area = areal_input[areal_input[block_id] == sample_key][[idx_col, ar_x, ar_y]].values
-    known_areas = areal_input[areal_input[block_id] != sample_key]
-    known_areas.rename(columns={
-        ar_x: 'centroid.x', ar_y: 'centroid.y', ar_val: 'ds', idx_col: 'index'
-    }, inplace=True)
-
-    return known_areas, known_poses, unkn_area, unkn_ps
+THEO = TheoreticalVariogram()
+THEO.autofit(
+    experimental_variogram=EXPERIMENTAL,
+    sill=150
+)
 
 
-AREAL_INPUT = Blocks()
-AREAL_INPUT.from_file(DATASET, value_col=POLYGON_VALUE, index_col=POLYGON_ID, layer_name=POLYGON_LAYER)
-POINT_SUPPORT_INPUT = PointSupport()
-POINT_SUPPORT_INPUT.from_files(point_support_data_file=DATASET,
-                               blocks_file=DATASET,
-                               point_support_geometry_col=GEOMETRY_COL,
-                               point_support_val_col=POP10,
-                               blocks_geometry_col=GEOMETRY_COL,
-                               blocks_index_col=POLYGON_ID,
-                               use_point_support_crs=True,
-                               point_support_layer_name=POPULATION_LAYER,
-                               blocks_layer_name=POLYGON_LAYER)
-
-AREAL_INP, PS_INP, UNKN_AREA, UNKN_PS = select_unknown_blocks_and_ps(AREAL_INPUT, POINT_SUPPORT_INPUT, POLYGON_ID)
-
-THEORETICAL_VARIOGRAM = TheoreticalVariogram()
-THEORETICAL_VARIOGRAM.from_json(VARIOGRAM_MODEL_FILE)
+EXPERIMENTAL_DIR = ExperimentalVariogram(
+    ds=BLOCKS.representative_points_array(),
+    step_size=40000,
+    max_range=300001,
+    direction=15,
+    tolerance=0.2
+)
+THEO_DIR = TheoreticalVariogram()
+THEO_DIR.autofit(
+    experimental_variogram=EXPERIMENTAL_DIR,
+    sill=150,
+    models_group='linear'
+)
 
 
-class TestCentroidPK(unittest.TestCase):
+THEO_PARAMS = {"experimental_variogram": None,
+               "nugget": 0.0,
+               "sill": 176.3272376248095,
+               "rang": 180000,
+               "variogram_model_type": "spherical",
+               "direction": None,
+               "spatial_dependence": None,
+               "spatial_index": None,
+               "yhat": None,
+               "errors": None}
+THEO_FROM_REG = TheoreticalVariogram()
+THEO_FROM_REG.from_dict(THEO_PARAMS)
 
-    def test_flow_1(self):
-        pk_model = centroid_poisson_kriging(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                            blocks=AREAL_INP,
-                                            point_support=PS_INP,
-                                            unknown_block=UNKN_AREA,
-                                            unknown_block_point_support=UNKN_PS,
-                                            number_of_neighbors=NN,
-                                            raise_when_negative_prediction=False,
-                                            raise_when_negative_error=False)
-        self.assertTrue(pk_model)
 
-    def test_flow_2(self):
-        known_blocks = np.array([
-                [1.0, 1, 1, 100],
-                [2.0, 0, 1, 100],
-                [3.0, 1, 0, 200],
-                [4.0, 5, 1, 500],
-                [5.0, 4, 2, 800]
-            ])
+def test_cpk():
+    indexes = BLOCKS.block_indexes
 
-        ps = {
-                1.0: np.array([
-                    [0.9, 1.1, 1000],
-                    [1.1, 0.9, 2000],
-                    [0.8, 1.2, 1000]
-                ]),
-                2.0: np.array([
-                    [-0.1, 1.1, 300],
-                    [0.1, 1, 400]
-                ]),
-                3.0: np.array([
-                    [0.9, -0.2, 100],
-                    [1.1, -0.2, 200],
-                    [1.1, 0.2, 400],
-                    [0.9, 0.2, 200]
-                ]),
-                4.0: np.array([
-                    [4.9, 0.9, 200],
-                    [4.9, 1.1, 1000],
-                    [5.1, 0.9, 8000]
-                ]),
-                5.0: np.array([
-                    [3.8, 2.3, 600],
-                    [4.2, 1.7, 1000]
-                ])
-        }
+    cpk = centroid_poisson_kriging(
+        semivariogram_model=THEO_FROM_REG,
+        point_support=PS,
+        unknown_block_index=indexes[-1],
+        number_of_neighbors=8
+    )
+    assert isinstance(cpk, dict)
+    assert cpk['block_id'] == indexes[-1]
+    assert cpk['zhat'] > 0
+    assert cpk['sig'] > 0
 
-        ublock = np.array([6.0, 2.8, 1])
-        u_ps = np.array([
-            [2.3, 0.9, 800],
-            [3.6, 1.1, 400]
-        ])
 
-        pk_model = centroid_poisson_kriging(semivariogram_model=THEORETICAL_VARIOGRAM,
-                                            blocks=known_blocks,
-                                            point_support=ps,
-                                            unknown_block=ublock,
-                                            unknown_block_point_support=u_ps,
-                                            number_of_neighbors=8,
-                                            raise_when_negative_error=False)
+def test_cpk_non_weighted():
+    indexes = BLOCKS.block_indexes
 
-        arr_eq = np.allclose(np.array([6, 340, 10]), pk_model, rtol=1, atol=1, equal_nan=True)
+    cpk = centroid_poisson_kriging(
+        semivariogram_model=THEO,
+        point_support=PS,
+        unknown_block_index=indexes[-1],
+        number_of_neighbors=8,
+        is_weighted_by_point_support=False
+    )
+    assert isinstance(cpk, dict)
+    assert cpk['block_id'] == indexes[-1]
+    assert cpk['zhat'] > 0
+    assert cpk['sig'] > 0
+    assert True
 
-        self.assertTrue(arr_eq)
+
+def test_cpk_directional_non_weighted():
+    indexes = BLOCKS.block_indexes
+
+    cpk = centroid_poisson_kriging(
+        semivariogram_model=THEO_DIR,
+        point_support=PS,
+        unknown_block_index=indexes[-1],
+        number_of_neighbors=4,
+        is_weighted_by_point_support=False,
+        raise_when_negative_error=False,
+        raise_when_negative_prediction=True
+    )
+
+
+    assert isinstance(cpk, dict)
+    assert cpk['block_id'] == indexes[-1]
+    assert cpk['zhat'] > 0
+    assert True

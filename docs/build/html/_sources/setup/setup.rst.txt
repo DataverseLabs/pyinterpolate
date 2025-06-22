@@ -4,7 +4,7 @@ Setup
 Installation guidelines
 -----------------------
 
-The package can be installed from `conda` and `pip`. `Conda` installation requires Python >= 3.8, `pip` installation requires Python >= 3.7.
+The package can be installed from `conda` and `pip`.
 
 Conda
 .....

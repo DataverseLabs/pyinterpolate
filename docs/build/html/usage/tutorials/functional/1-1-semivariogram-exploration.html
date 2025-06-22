@@ -1,0 +1,1892 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Semivariogram exploration &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/functional/1-1-semivariogram-exploration';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Semivariogram models" href="1-2-semivariogram-models.html" />
+    <link rel="prev" title="Tutorials" href="../../tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Semivariogram exploration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="1-2-semivariogram-models.html">Semivariogram models</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Semivariogram exploration</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Semivariogram-exploration">
+<h1>Semivariogram exploration<a class="headerlink" href="#Semivariogram-exploration" title="Link to this heading">#</a></h1>
+<p>Rushing into Kriging is a bad idea. You can interpolate values automatically but never know if a process is spatially dependent. The kriging model will return something even when there is no spatial dependency, and it is a dangerous situation because the output might look correct, being wildly wrong.</p>
+<p>The easiest way to deal with this problem is to check the variogram before modeling. Feel obligated to do this manual step because it could save you time and money! Variograms will tell you if there is a spatial relation between point pairs and how distance defines it.</p>
+<p>In this exercise, we compute the experimental semivariogram, check it, and apply different theoretical models to find the best fit.</p>
+<section id="Prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#Prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Domain</strong>:</p>
+<ul>
+<li><p>semivariance and covariance functions</p></li>
+</ul>
+</li>
+<li><p><strong>Package</strong>:</p>
+<ul>
+<li><p>installation</p></li>
+</ul>
+</li>
+<li><p><strong>Programming</strong>:</p>
+<ul>
+<li><p>Python basics</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#Table-of-contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Data preparation</p></li>
+<li><p>Create the experimental variogram</p></li>
+<li><p>Set manually different semivariogram models</p></li>
+<li><p>Fit the theoretical model automatically</p></li>
+<li><p>Export model</p></li>
+<li><p>Import model</p></li>
+</ol>
+</section>
+<section id="Dataset">
+<h2>Dataset<a class="headerlink" href="#Dataset" title="Link to this heading">#</a></h2>
+<p>Dataset in this tutorial is the Digital Elevation Model around Gorzów Wielkopolski city in Poland.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">reproject_flat</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Chapter-1:-data-preparation">
+<h2>Chapter 1: data preparation<a class="headerlink" href="#Chapter-1:-data-preparation" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">DEM_FILE</span> <span class="o">=</span> <span class="s1">&#39;../data/dem.csv&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">DEM_FILE</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>longitude</th>
+      <th>latitude</th>
+      <th>dem</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>15.115241</td>
+      <td>52.765146</td>
+      <td>91.275597</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>15.115241</td>
+      <td>52.742790</td>
+      <td>96.548294</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>15.115241</td>
+      <td>52.710706</td>
+      <td>51.254551</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>15.115241</td>
+      <td>52.708844</td>
+      <td>48.958282</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>15.115241</td>
+      <td>52.671378</td>
+      <td>16.817863</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>Data is stored in EPSG:4326 and has geographic coordinates, it must be reprojected to projected coordinate reference system. Polish area can be projected into EPSG:2180 (metric).</p>
+<p>We cannot reproject points easily, first we need to transform <code class="docutils literal notranslate"><span class="pre">longitude</span></code> and <code class="docutils literal notranslate"><span class="pre">latitude</span></code> columns into shapely <code class="docutils literal notranslate"><span class="pre">Point()</span></code> objects, and set <strong>CRS</strong>, and in the next step we can transform those points into EPSG:2180. <code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> has function <code class="docutils literal notranslate"><span class="pre">reproject_flat()</span></code> which takes care of all those steps and returns the same object type as input to it (numpy array or pandas DataFrame).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_df</span> <span class="o">=</span> <span class="n">reproject_flat</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">in_crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">,</span>
+    <span class="n">out_crs</span><span class="o">=</span><span class="mi">2180</span><span class="p">,</span>
+    <span class="n">lon_col</span><span class="o">=</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span>
+    <span class="n">lat_col</span><span class="o">=</span><span class="s1">&#39;latitude&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>dem</th>
+      <th>longitude</th>
+      <th>latitude</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>91.275597</td>
+      <td>238012.301750</td>
+      <td>551466.805222</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>96.548294</td>
+      <td>237878.001294</td>
+      <td>548982.351111</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>51.254551</td>
+      <td>237685.325393</td>
+      <td>545416.708315</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>48.958282</td>
+      <td>237674.140301</td>
+      <td>545209.671315</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>16.817863</td>
+      <td>237449.254870</td>
+      <td>541045.934750</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>We might transform this <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> into <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code> - mostly for plotting purposes, to see what lies behind this dataset.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dem_geometry</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">r_df</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">r_df</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="mi">2180</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">r_df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">dem_geometry</span><span class="p">)</span>
+
+<span class="n">dem</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_earth&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_12_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_12_0.png" />
+</div>
+</div>
+<p>Data covers almost whole area, and this scenario is not realistic, so we will let only 1% of points in a dataset and then proceed to the variogram analysis and modeling.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sample</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.01</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
+<span class="n">sample</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_earth&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_14_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_14_0.png" />
+</div>
+</div>
+</section>
+<section id="Chapter-2:-Experimental-Variogram">
+<h2>Chapter 2: Experimental Variogram<a class="headerlink" href="#Chapter-2:-Experimental-Variogram" title="Link to this heading">#</a></h2>
+<p>To be sure that we can interpolate missing values with Kriging we must check if there is any relation between observation pairs, and how strong is this relation. We use variograms - plots of the dissimilarity between point pairs along the increasing distance. There are two “types” of variograms that we must be aware of:</p>
+<ul class="simple">
+<li><p>The experimental (semi)variogram: directly showing differences between point pairs at specific distances - lags. It could be very messy. We use it to visually check if there is a spatial correlation.</p></li>
+<li><p>Theoretical (semi)variogram: is a function applied to the experimental variogram. It cannot be any function, there are few of those in literature (and implemented in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code>). We can apply those mappings manually or automatically minimizing OLS error between experimental POINTS and theoretical FUNCTION.</p></li>
+</ul>
+<p>We start our analysis by setting up the experimental model. We use class <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> to set up the object (the class has an alias function <code class="docutils literal notranslate"><span class="pre">build_experimental_variogram()</span></code> but we won’t use it). Class takes multiple parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ds</span></code> : numpy array - <code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">step_size</span></code> : float - The fixed distance between lags grouping point neighbors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_range</span></code> : float - The maximum distance at which the semivariance is calculated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">direction</span></code> : float, optional - Direction of semivariogram, values from 0 to 360 degrees.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tolerance</span></code> : float, optional - Controlling the cone within points are treated as neighbors in directional variogram.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dir_neighbors_selection_method</span></code> : str, default = ‘t’ - Directional variogram neighbors selection method.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">custom_bins</span></code> : numpy array, optional - Custom lags (new in Pyinterpolate 1.x).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">custom_weights</span></code> : numpy array, optional - Custom weights assigned to points. Only semivariance values are weighted.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_semivariance</span></code> : bool, default=True - Calculate experimental semivariance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">is_covariance</span></code> : bool, default=True - Calculate experimental coviariance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">as_cloud</span></code> : bool, default=False - Calculate semivariance point-pairs cloud.</p></li>
+</ul>
+<p>We won’t set <code class="docutils literal notranslate"><span class="pre">direction</span></code>, <code class="docutils literal notranslate"><span class="pre">tolerance</span></code>, <code class="docutils literal notranslate"><span class="pre">dir_neighbors_selection_method</span></code>, <code class="docutils literal notranslate"><span class="pre">custom_bins</span></code>, <code class="docutils literal notranslate"><span class="pre">custom_weights</span></code>, and <code class="docutils literal notranslate"><span class="pre">as_cloud</span></code> parameters. Other parameters are set as in the cell below.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># meters - remember, that this parameter is related to projection!</span>
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">20000</span>  <span class="c1"># meters - remember, that this parameter is related to projection!</span>
+
+<span class="n">is_semivariance</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">is_covariance</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">sample</span><span class="p">[[</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">ds</span><span class="p">,</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
+    <span class="n">is_semivariance</span><span class="o">=</span><span class="n">is_semivariance</span><span class="p">,</span>
+    <span class="n">is_covariance</span><span class="o">=</span><span class="n">is_covariance</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> object might represent:</p>
+<ul class="simple">
+<li><p><strong>semivariance</strong>: dissimilarity over a distance, and point cloud semivariances - non-averaged dissimilarities between point pairs,</p></li>
+<li><p><strong>covariance</strong>: similarity over a distance,</p></li>
+<li><p><strong>variance</strong>: non-spatial variance of all points.</p></li>
+<li><p>The class has two useful methods:</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>We can print object statistics with the <code class="docutils literal notranslate"><span class="pre">print()</span></code> function,</p></li>
+<li><p>We can plot semivariance, covariance, and variance and check how they behave with the <code class="docutils literal notranslate"><span class="pre">.plot()</span></code> method.</p></li>
+</ol>
+<p>Let’s check both!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
++---------+--------------------+---------------------+
+|   lag   |    semivariance    |      covariance     |
++---------+--------------------+---------------------+
+|  1000.0 | 66.50350756874842  |  573.8969420596828  |
+|  2000.0 |  95.8495480710881  |  419.32956877520513 |
+|  3000.0 | 216.36902963659804 |  346.8044015563413  |
+|  4000.0 | 200.3351196859388  |  345.7406543587138  |
+|  5000.0 | 328.1104528782418  |  261.58692115765933 |
+|  6000.0 | 360.32608183289074 |  135.3561859868873  |
+|  7000.0 | 499.7581649946207  |  42.906703056558335 |
+|  8000.0 | 494.7692801878459  |  -37.13003621033862 |
+|  9000.0 |  737.895544254725  | -173.04103246328214 |
+| 10000.0 |  549.939216528212  |  -78.5811036652226  |
+| 11000.0 | 813.1542867553994  | -217.55107310356686 |
+| 12000.0 | 653.6083701575303  | -133.11955761301863 |
+| 13000.0 |  800.280913144602  | -249.20324106610195 |
+| 14000.0 | 798.5233842803291  |  -269.8549895665524 |
+| 15000.0 | 672.2006358211872  | -123.40731524633007 |
+| 16000.0 | 706.9017417512093  |  -81.52990402804862 |
+| 17000.0 | 631.6605413612897  | -138.69275424359088 |
+| 18000.0 | 471.7580926503687  |  -79.45175335007325 |
+| 19000.0 | 610.3508257264928  |  -143.6073787035081 |
++---------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<ul class="simple">
+<li><p><strong>Lag</strong> is a column with the lag center,</p></li>
+<li><p><strong>semivariance</strong> is a column with a dissimilarity metric,</p></li>
+<li><p><strong>covariance</strong> is a column with a similarity metric,</p></li>
+</ul>
+<p>We can plot semivariance and covariance to understand their relation.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental_variogram</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">covariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">variance</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_21_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_21_0.png" />
+</div>
+</div>
+<p>Our plot shows three objects:</p>
+<ul class="simple">
+<li><p><strong>Circles</strong> represent semivariance,</p></li>
+<li><p><strong>Plus signs</strong> represent covariance,</p></li>
+<li><p><strong>The dashed line</strong> is a variance.</p></li>
+<li><p>We see here that semivariance and covariance are mirrored. What does it mean? It is normal behavior, and we should expect it - semivariance and covariance have symmetrical trends (they differ in a sign). We can read it as:</p></li>
+<li><p><strong>semivariances</strong> show that the dissimilarity between point pairs over a distance increases,</p></li>
+<li><p><strong>covariances</strong> show that the similarity between point pairs over a distance decreases.</p></li>
+</ul>
+<p>In the best-case scenario (data is stationary, e.g., mean and variance don’t change with a distance), variance and covariance should be equal to semivariance.</p>
+</section>
+<section id="Chapter-3:-Theoretical-Variogram">
+<h2>Chapter 3: Theoretical Variogram<a class="headerlink" href="#Chapter-3:-Theoretical-Variogram" title="Link to this heading">#</a></h2>
+<section id="Manual-setting">
+<h3>Manual setting<a class="headerlink" href="#Manual-setting" title="Link to this heading">#</a></h3>
+<p>We can start modeling theoretical function that optimally describes observed data. Our role is to choose the function type and set three hyperparameters: <em>nugget</em>, <em>sill</em>, and <em>range</em>. You can read more about semivariogram models here: <a class="reference external" href="https://ml-gis-service.com/index.php/2022/04/01/geostatistics-theoretical-variogram-models/">Geostatistics: Theoretical Variogram Models</a>.</p>
+<p>Semivariogram has three basic properties:</p>
+<ul class="simple">
+<li><p><strong>nugget</strong>: the initial value at a zero distance. In most cases, it is zero, but sometimes it represents a bias.</p></li>
+<li><p><strong>sill</strong>: a distance where the semivariogram flattens and reaches approximately 95% of dissimilarity. Sometimes we cannot find a sill; for example, if differences grow exponentially, but in pyinterpolate it is usually set close to the variance of data,</p></li>
+<li><p><strong>range</strong>: is a distance where a variogram reaches its sill. Larger distances are negligible for interpolation.</p></li>
+</ul>
+<p>We are not forced to know all of them at the beginning. The package may easily derive them all with the class <code class="docutils literal notranslate"><span class="pre">TheoriticalVariogram.autofit()</span></code> method.</p>
+<p>We can create a theoretical model in two ways:</p>
+<ol class="arabic simple">
+<li><p>Manually, setting model type, nugget, sill, and range.</p></li>
+<li><p>Semi-automatically, leaving some parameters (from the above) not filled. We will do it in the next chapter.</p></li>
+</ol>
+</section>
+<section id="Models">
+<h3>Models<a class="headerlink" href="#Models" title="Link to this heading">#</a></h3>
+<p>We can choose from a set of predefined models:</p>
+<ul class="simple">
+<li><p>circular</p></li>
+<li><p>cubic</p></li>
+<li><p>exponential</p></li>
+<li><p>gaussian</p></li>
+<li><p>linear</p></li>
+<li><p>power</p></li>
+<li><p>spherical</p></li>
+</ul>
+<p>We will set the following:</p>
+<ul class="simple">
+<li><p><strong>sill</strong> to the experimental variogram variance, (but it might be set to the the last five lags average value of semivariances),</p></li>
+<li><p><strong>nugget</strong> to zero,</p></li>
+<li><p><strong>range</strong> to 8000 (we see in the experimental variogram plot that the semivariance <em>flattens</em> around this range, and it becomes close to the variance).</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sill</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">variance</span>
+<span class="n">nugget</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">variogram_range</span> <span class="o">=</span> <span class="mi">8000</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># circular</span>
+
+<span class="n">circular_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                             <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;circular&#39;</span><span class="p">,</span>
+                                             <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                             <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                             <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">circular_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Circular model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 129.9549217265119
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 89.21926570120685  | 66.50350756874842  | -22.715758132458433 |
+|  2000.0 | 177.0240565312119  |  95.8495480710881  |  -81.1745084601238  |
+|  3000.0 | 261.92881517059374 | 216.36902963659804 | -45.559785533995694 |
+|  4000.0 | 342.2861654512381  | 200.3351196859388  |  -141.9510457652993 |
+|  5000.0 | 416.1421335800296  | 328.1104528782418  |  -88.03168070178782 |
+|  6000.0 | 480.9483172823313  | 360.32608183289074 | -120.62223544944055 |
+|  7000.0 | 532.7961845551719  | 499.7581649946207  |  -33.03801956055116 |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circular_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_27_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_27_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># cubic</span>
+
+<span class="n">cubic_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                          <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span>
+                                          <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                          <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                          <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cubic_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Cubic model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 146.08948321088144
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 51.928547099740086 | 66.50350756874842  |  14.574960469008332 |
+|  2000.0 | 170.94892418737072 |  95.8495480710881  |  -75.09937611628263 |
+|  3000.0 | 308.0711976064423  | 216.36902963659804 |  -91.70216796984425 |
+|  4000.0 | 427.02497532421427 | 200.3351196859388  | -226.68985563827547 |
+|  5000.0 | 508.0865256502935  | 328.1104528782418  | -179.97607277205168 |
+|  6000.0 | 548.8667134434124  | 360.32608183289074 |  -188.5406316105217 |
+|  7000.0 | 561.0466929690614  | 499.7581649946207  |  -61.28852797444068 |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cubic_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_30_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_30_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Exponential model</span>
+
+<span class="n">exponential_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                                <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;exponential&#39;</span><span class="p">,</span>
+                                                <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                                <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                                <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">exponential_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Exponential model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 200.42906080741184
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 66.04241574410776  | 66.50350756874842  | 0.46109182464066123 |
+|  2000.0 | 124.32464307748702 |  95.8495480710881  |  -28.47509500639893 |
+|  3000.0 | 175.75852817492543 | 216.36902963659804 |  40.61050146167261  |
+|  4000.0 | 221.14877246130683 | 200.3351196859388  |  -20.81365277536804 |
+|  5000.0 | 261.20552245159655 | 328.1104528782418  |  66.90493042664525  |
+|  6000.0 | 296.55548024563274 | 360.32608183289074 |   63.770601587258   |
+|  7000.0 | 327.7517085053658  | 499.7581649946207  |  172.0064564892549  |
+|  8000.0 | 355.28228331690235 | 494.7692801878459  |  139.48699687094353 |
+|  9000.0 | 379.57793031445675 |  737.895544254725  |  358.31761394026825 |
+| 10000.0 | 401.01876353608725 |  549.939216528212  |  148.92045299212475 |
+| 11000.0 | 419.9402324430091  | 813.1542867553994  |  393.2140543123903  |
+| 12000.0 | 436.6383701457184  | 653.6083701575303  |  216.97000001181192 |
+| 13000.0 | 451.3744249472903  |  800.280913144602  |  348.90648819731166 |
+| 14000.0 | 464.3789476659944  | 798.5233842803291  |  334.14443661433467 |
+| 15000.0 | 475.8553986848418  | 672.2006358211872  |  196.34523713634542 |
+| 16000.0 | 485.98333116163843 | 706.9017417512093  |  220.9184105895709  |
+| 17000.0 | 494.92120020199735 | 631.6605413612897  |  136.73934115929234 |
+| 18000.0 | 502.8088419458209  | 471.7580926503687  | -31.050749295452192 |
+| 19000.0 | 509.76966135344213 | 610.3508257264928  |  100.58116437305063 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">exponential_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_32_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_32_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gaussian model</span>
+
+<span class="n">gaussian_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                             <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;gaussian&#39;</span><span class="p">,</span>
+                                             <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                             <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                             <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">gaussian_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Gaussian model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 176.05298225928948
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+--------------------+
+|   lag   |    theoretical     |    experimental    |  bias (real-yhat)  |
++---------+--------------------+--------------------+--------------------+
+|  1000.0 | 8.713751171886535  | 66.50350756874842  | 57.78975639686188  |
+|  2000.0 | 34.052784840121205 |  95.8495480710881  | 61.79676323096689  |
+|  3000.0 | 73.73227416319057  | 216.36902963659804 | 142.63675547340748 |
+|  4000.0 | 124.32464307748702 | 200.3351196859388  | 76.01047660845177  |
+|  5000.0 | 181.74739593341536 | 328.1104528782418  | 146.36305694482644 |
+|  6000.0 | 241.80283051543793 | 360.32608183289074 | 118.5232513174528  |
+|  7000.0 | 300.6715648481398  | 499.7581649946207  | 199.08660014648092 |
+|  8000.0 | 355.28228331690235 | 494.7692801878459  | 139.48699687094353 |
+|  9000.0 | 403.5152950454789  |  737.895544254725  | 334.3802492092461  |
+| 10000.0 | 444.23657348059464 |  549.939216528212  | 105.70264304761736 |
+| 11000.0 | 477.1916957069014  | 813.1542867553994  | 335.96259104849804 |
+| 12000.0 | 502.8088419458209  | 653.6083701575303  | 150.7995282117094  |
+| 13000.0 |  521.964876543341  |  800.280913144602  |  278.316036601261  |
+| 14000.0 | 535.7609479302331  | 798.5233842803291  |  262.762436350096  |
+| 15000.0 | 545.3390411424663  | 672.2006358211872  | 126.86159467872096 |
+| 16000.0 | 551.7540229326713  | 706.9017417512093  |  155.147718818538  |
+| 17000.0 |  555.901305021363  | 631.6605413612897  |  75.7592363399267  |
+| 18000.0 | 558.4906907968926  | 471.7580926503687  | -86.73259814652391 |
+| 19000.0 | 560.0526605973689  | 610.3508257264928  | 50.298165129123845 |
++---------+--------------------+--------------------+--------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gaussian_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_34_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_34_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linear model</span>
+
+<span class="n">linear_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                           <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                                           <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                           <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                           <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">linear_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 121.6235188837861
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 70.25603707133602  | 66.50350756874842  |  -3.752529502587606 |
+|  2000.0 | 140.51207414267205 |  95.8495480710881  | -44.662526071583954 |
+|  3000.0 | 210.76811121400806 | 216.36902963659804 |  5.600918422589984  |
+|  4000.0 | 281.0241482853441  | 200.3351196859388  |  -80.6890285994053  |
+|  5000.0 | 351.28018535668014 | 328.1104528782418  | -23.169732478438334 |
+|  6000.0 | 421.5362224280161  | 360.32608183289074 |  -61.21014059512538 |
+|  7000.0 | 491.79225949935216 | 499.7581649946207  |  7.965905495268544  |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_36_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_36_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Power model</span>
+
+<span class="n">power_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                          <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;power&#39;</span><span class="p">,</span>
+                                          <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                          <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                          <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">power_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Power model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 128.99847007753777
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 8.782004633917003  | 66.50350756874842  |  57.72150293483141  |
+|  2000.0 | 35.12801853566801  |  95.8495480710881  |  60.72152953542008  |
+|  3000.0 | 79.03804170525302  | 216.36902963659804 |  137.33098793134502 |
+|  4000.0 | 140.51207414267205 | 200.3351196859388  |  59.823045543266744 |
+|  5000.0 | 219.55011584792507 | 328.1104528782418  |  108.56033703031673 |
+|  6000.0 | 316.1521668210121  | 360.32608183289074 |  44.17391501187865  |
+|  7000.0 | 430.31822706193316 | 499.7581649946207  |  69.43993793268754  |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">power_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_38_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_38_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Spherical model</span>
+
+<span class="n">spherical_model</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+                                              <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;spherical&#39;</span><span class="p">,</span>
+                                              <span class="n">sill</span><span class="o">=</span><span class="n">sill</span><span class="p">,</span>
+                                              <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+                                              <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">spherical_model</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Spherical model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 138.91307581152344
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 104.83518031738423 | 66.50350756874842  |  -38.33167274863581 |
+|  2000.0 | 206.37710889704957 |  95.8495480710881  | -110.52756082596147 |
+|  3000.0 | 301.33253400127717 | 216.36902963659804 |  -84.96350436467912 |
+|  4000.0 | 386.4082038923481  | 200.3351196859388  | -186.07308420640933 |
+|  5000.0 | 458.3108668325436  | 328.1104528782418  | -130.20041395430178 |
+|  6000.0 | 513.7472710841447  | 360.32608183289074 | -153.42118925125396 |
+|  7000.0 | 549.4241649094325  | 499.7581649946207  | -49.665999914811835 |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">spherical_model</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_40_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_40_0.png" />
+</div>
+</div>
+<p>A quick look into Root Mean Squared Errors (RMSE), and we can bet that the best model is <strong>linear</strong>. We can check each table printed with the <code class="docutils literal notranslate"><span class="pre">print()</span></code> manually, but instead, we will automatically select model with the lowest RMSE to be sure that we have chosen the best function.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">models</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">circular_model</span><span class="p">,</span> <span class="n">cubic_model</span><span class="p">,</span> <span class="n">exponential_model</span><span class="p">,</span> <span class="n">gaussian_model</span><span class="p">,</span> <span class="n">linear_model</span><span class="p">,</span> <span class="n">power_model</span><span class="p">,</span> <span class="n">spherical_model</span>
+<span class="p">]</span>
+
+<span class="n">lowest_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+<span class="n">chosen_model</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="k">for</span> <span class="n">_model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+
+    <span class="c1"># Get attrs</span>
+    <span class="n">model_name</span> <span class="o">=</span> <span class="n">_model</span><span class="o">.</span><span class="n">name</span>
+    <span class="n">model_rmse</span> <span class="o">=</span> <span class="n">_model</span><span class="o">.</span><span class="n">rmse</span>
+
+    <span class="c1"># Check error</span>
+    <span class="k">if</span> <span class="n">model_rmse</span> <span class="o">&lt;</span> <span class="n">lowest_rmse</span><span class="p">:</span>
+        <span class="n">lowest_rmse</span> <span class="o">=</span> <span class="n">model_rmse</span>
+        <span class="n">chosen_model</span> <span class="o">=</span> <span class="n">model_name</span>
+
+    <span class="c1"># Print status</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s1">, RMSE: </span><span class="si">{</span><span class="n">model_rmse</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The best model is </span><span class="si">{</span><span class="n">chosen_model</span><span class="si">}</span><span class="s1"> with RMSE </span><span class="si">{</span><span class="n">lowest_rmse</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Model: circular, RMSE: 129.9549217265119
+Model: cubic, RMSE: 146.08948321088144
+Model: exponential, RMSE: 200.42906080741184
+Model: gaussian, RMSE: 176.05298225928948
+Model: linear, RMSE: 121.6235188837861
+Model: power, RMSE: 128.99847007753777
+Model: spherical, RMSE: 138.91307581152344
+
+The best model is linear with RMSE 121.6235188837861
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Chapter-4:-Fit-semivariogram-model-automatically">
+<h2>Chapter 4: Fit semivariogram model automatically<a class="headerlink" href="#Chapter-4:-Fit-semivariogram-model-automatically" title="Link to this heading">#</a></h2>
+<p>We may find the optimal semivariogram model automatically, leaving parameters empty in <code class="docutils literal notranslate"><span class="pre">build_variogram_model()</span></code> function. This function creates the instance of <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> object, and calls <code class="docutils literal notranslate"><span class="pre">.autofit()</span></code> method.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">build_variogram_model()</span></code> function takes multiple parameters. The most important for us are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">experimental_variogram</span></code> - the experimental variogram object (<code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code> type)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">models_group</span></code> - it could be a single model name, list with multiple model types, or special text aliases to test group of models. By default, this parameter is set to <code class="docutils literal notranslate"><span class="pre">safe</span></code> - it compares a list of <em>safe</em> variogram functions that are rather resistant to overfitting. The full list of available options:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">'all'</span></code> - the same as list with all models, - <code class="docutils literal notranslate"><span class="pre">'safe'</span></code> - [‘linear’, ‘power’, ‘spherical’] - as a list: multiple model types to test - as a single model type from: - <code class="docutils literal notranslate"><span class="pre">'circular'</span></code> - <code class="docutils literal notranslate"><span class="pre">'cubic'</span></code> - <code class="docutils literal notranslate"><span class="pre">'exponential'</span></code> - <code class="docutils literal notranslate"><span class="pre">'gaussian'</span></code> - <code class="docutils literal notranslate"><span class="pre">'linear'</span></code> - <code class="docutils literal notranslate"><span class="pre">'power'</span></code> - <code class="docutils literal notranslate"><span class="pre">'spherical'</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nugget</span></code> - nugget (bias) of a variogram. If given, then the nugget is fixed to this value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_nugget</span></code> - default = 0.0 - the minimal fraction of the nugget at a distance 0 to search for the optimal nugget</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_nugget</span></code> - default = 0.5 - the maximum fraction of the nugget at a distance 0 to search for the optimal nugget</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_nuggets</span></code> - default = 16 - how many equally spaced steps between <code class="docutils literal notranslate"><span class="pre">min_nugget</span></code> and <code class="docutils literal notranslate"><span class="pre">max_nugget</span></code> to check</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rang</span></code> - if given, then the range is fixed to this value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_range</span></code> - default = 0.1 - the minimal fraction of a variogram range, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_range</span></code> - default = 0.5 - the maximum fraction of a variogram range, <code class="docutils literal notranslate"><span class="pre">min_range</span> <span class="pre">&lt;=</span> <span class="pre">max_range</span> <span class="pre">&lt;=</span> <span class="pre">1</span></code>. Parameter <code class="docutils literal notranslate"><span class="pre">max_range</span></code> greater than <strong>0.5</strong> raises warning</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_ranges</span></code> - default = 16 - how many equally spaced ranges are tested between <code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sill</span></code> - if given, it is fixed to this value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min_sill</span></code> - default = 0 - the minimal fraction of the variogram variance at lag 0 to find a sill, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">min_sill</span> <span class="pre">&lt;=</span> <span class="pre">max_sill</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_sill</span></code> - default = 1 - the maximum fraction of the variogram variance at lag 0 to find a sill. It <em>should be</em> lower or equal to 1. It is possible to set it above 1, but then warning is printed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">number_of_sills</span></code> - default = 16 - how many equally spaced sill values are tested between <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error_estimator</span></code> - default = <code class="docutils literal notranslate"><span class="pre">'rmse'</span></code> - Error estimation to choose the best model. Available options are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">rmse</span></code>: Root Mean Squared Error</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mae</span></code>: Mean Absolute Error</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bias</span></code>: Forecast Bias</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">smape</span></code>: Symmetric Mean Absolute Percentage Error</p></li>
+</ul>
+</li>
+</ul>
+<p>In the first run, we will set nugget, sill, and range as fixed values, and we will see which model type (name) algorithm chooses from the <code class="docutils literal notranslate"><span class="pre">all</span></code> possible models.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span>
+    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">,</span>
+    <span class="n">models_group</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span>
+    <span class="n">nugget</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">rang</span><span class="o">=</span><span class="n">variogram_range</span><span class="p">,</span>
+    <span class="n">sill</span><span class="o">=</span><span class="n">sill</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fitted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 0
+* Sill: 562.0482965706882
+* Range: 8000
+* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+* Mean Bias: None
+* Mean RMSE: 121.6235188837861
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 70.25603707133602  | 66.50350756874842  |  -3.752529502587606 |
+|  2000.0 | 140.51207414267205 |  95.8495480710881  | -44.662526071583954 |
+|  3000.0 | 210.76811121400806 | 216.36902963659804 |  5.600918422589984  |
+|  4000.0 | 281.0241482853441  | 200.3351196859388  |  -80.6890285994053  |
+|  5000.0 | 351.28018535668014 | 328.1104528782418  | -23.169732478438334 |
+|  6000.0 | 421.5362224280161  | 360.32608183289074 |  -61.21014059512538 |
+|  7000.0 | 491.79225949935216 | 499.7581649946207  |  7.965905495268544  |
+|  8000.0 | 562.0482965706882  | 494.7692801878459  |  -67.27901638284231 |
+|  9000.0 | 562.0482965706882  |  737.895544254725  |  175.8472476840368  |
+| 10000.0 | 562.0482965706882  |  549.939216528212  | -12.109080042476194 |
+| 11000.0 | 562.0482965706882  | 813.1542867553994  |  251.10599018471123 |
+| 12000.0 | 562.0482965706882  | 653.6083701575303  |  91.56007358684212  |
+| 13000.0 | 562.0482965706882  |  800.280913144602  |  238.2326165739138  |
+| 14000.0 | 562.0482965706882  | 798.5233842803291  |  236.4750877096409  |
+| 15000.0 | 562.0482965706882  | 672.2006358211872  |  110.15233925049904 |
+| 16000.0 | 562.0482965706882  | 706.9017417512093  |  144.85344518052113 |
+| 17000.0 | 562.0482965706882  | 631.6605413612897  |   69.6122447906015  |
+| 18000.0 | 562.0482965706882  | 471.7580926503687  |  -90.29020392031947 |
+| 19000.0 | 562.0482965706882  | 610.3508257264928  |  48.302529155804564 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<p>The chosen model is (most likely) <strong>linear</strong>, automatically set as the class parameter. The algorithm performs the same steps as we did before. It has selected a model based on the RMSE. All other parameters were untouched.</p>
+<p>Now, we let the algorithm find the optimal parameters (model type, nugget, sill, range).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fitted</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">experimental_variogram</span><span class="o">=</span><span class="n">experimental_variogram</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">fitted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 33.25175378437421
+* Sill: 618.5743674621095
+* Range: 9909.246544791626
+* Spatial Dependency Strength is strong
+* Mean Bias: None
+* Mean RMSE: 90.26158958300948
+* Error-lag weighting dir_neighbors_selection_method: equal
+
+
++---------+--------------------+--------------------+---------------------+
+|   lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
++---------+--------------------+--------------------+---------------------+
+|  1000.0 | 95.67570949745885  | 66.50350756874842  | -29.172201928710436 |
+|  2000.0 | 158.09966521054352 |  95.8495480710881  | -62.250117139455426 |
+|  3000.0 | 220.52362092362816 | 216.36902963659804 |  -4.154591287030115 |
+|  4000.0 | 282.9475766367128  | 200.3351196859388  |  -82.61245695077403 |
+|  5000.0 | 345.3715323497975  | 328.1104528782418  | -17.261079471555718 |
+|  6000.0 | 407.7954880628821  | 360.32608183289074 | -47.469406229991364 |
+|  7000.0 | 470.2194437759668  | 499.7581649946207  |  29.538721218653905 |
+|  8000.0 | 532.6433994890514  | 494.7692801878459  | -37.874119301205496 |
+|  9000.0 |  595.067355202136  |  737.895544254725  |  142.82818905258898 |
+| 10000.0 | 651.8261212464837  |  549.939216528212  |  -101.8869047182717 |
+| 11000.0 | 651.8261212464837  | 813.1542867553994  |  161.32816550891573 |
+| 12000.0 | 651.8261212464837  | 653.6083701575303  |  1.7822489110466222 |
+| 13000.0 | 651.8261212464837  |  800.280913144602  |  148.4547918981183  |
+| 14000.0 | 651.8261212464837  | 798.5233842803291  |  146.6972630338454  |
+| 15000.0 | 651.8261212464837  | 672.2006358211872  |  20.37451457470354  |
+| 16000.0 | 651.8261212464837  | 706.9017417512093  |  55.075620504725634 |
+| 17000.0 | 651.8261212464837  | 631.6605413612897  | -20.165579885194006 |
+| 18000.0 | 651.8261212464837  | 471.7580926503687  | -180.06802859611497 |
+| 19000.0 | 651.8261212464837  | 610.3508257264928  |  -41.47529551999094 |
++---------+--------------------+--------------------+---------------------+
+</pre></div></div>
+</div>
+<p>As you see, the model is better, but parameters are different than we have set. Still, the best model is <strong>linear</strong>. Let’s compare both those models on a single plot.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">_lags</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
+<span class="n">_experimental</span> <span class="o">=</span> <span class="n">experimental_variogram</span><span class="o">.</span><span class="n">semivariances</span>
+<span class="n">_linear_manual</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">yhat</span>
+<span class="n">_automatic</span> <span class="o">=</span> <span class="n">fitted</span><span class="o">.</span><span class="n">yhat</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_experimental</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#762a83&#39;</span><span class="p">)</span>  <span class="c1"># Experimental</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_linear_manual</span><span class="p">,</span> <span class="s1">&#39;:p&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e7d4e8&#39;</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">_lags</span><span class="p">,</span> <span class="n">_automatic</span><span class="p">,</span> <span class="s1">&#39;:o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#1b7837&#39;</span><span class="p">,</span> <span class="n">mec</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of theoretical semivariance models&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Experimental Semivariances&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Manual - &#39;</span> <span class="o">+</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;Automatic - &#39;</span> <span class="o">+</span> <span class="n">fitted</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_50_0.png" src="../../../_images/usage_tutorials_functional_1-1-semivariogram-exploration_50_0.png" />
+</div>
+</div>
+</section>
+<section id="Chapter-5:-Exporting-model">
+<h2>Chapter 5: Exporting model<a class="headerlink" href="#Chapter-5:-Exporting-model" title="Link to this heading">#</a></h2>
+<p>Models could be exported and used for other purposes. It is vital for the semivariogram regularization. Those calculations are computationally intensive, and in production, it is not a good idea to regularize semivariogram every time when you run the Poisson Kriging pipeline. Moreover, theoretical model parameters should be traced and stored for reproducibility and explainability purposes.</p>
+<p>Model can be exported to dict with <code class="docutils literal notranslate"><span class="pre">.to_dict()</span></code> method or to json with <code class="docutils literal notranslate"><span class="pre">.to_json()</span></code> methods.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dict_representation</span> <span class="o">=</span> <span class="n">fitted</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dict_representation</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;experimental_variogram&#39;: None,
+ &#39;nugget&#39;: 33.25175378437421,
+ &#39;sill&#39;: 618.5743674621095,
+ &#39;rang&#39;: 9909.246544791626,
+ &#39;variogram_model_type&#39;: &#39;linear&#39;,
+ &#39;direction&#39;: None,
+ &#39;spatial_dependence&#39;: None,
+ &#39;spatial_index&#39;: None,
+ &#39;yhat&#39;: None,
+ &#39;errors&#39;: None}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save to json</span>
+
+<span class="n">fitted</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s1">&#39;fitted.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Chapter-6:-Importing-fitted-model">
+<h2>Chapter 6: Importing fitted model<a class="headerlink" href="#Chapter-6:-Importing-fitted-model" title="Link to this heading">#</a></h2>
+<p>We can import a semivariogram model into a <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class instance without passing the experimental semivariogram or actual data points. It is helpful for some applications focused on kriging, where we are sure that our semivariogram model fits data well.</p>
+<p>We can import a model with two methods <code class="docutils literal notranslate"><span class="pre">.from_dict()</span></code> if we have our model parameters in the Python dictionary or <code class="docutils literal notranslate"><span class="pre">.from_json()</span></code> if model parameters are stored in a flat file:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_from_dict</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">model_from_dict</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">dict_representation</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model_from_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 33.25175378437421
+* Sill: 618.5743674621095
+* Range: 9909.246544791626
+* Spatial Dependency Strength is strong
+* Mean Bias: 0.0
+* Mean RMSE: 0.0
+* Error-lag weighting dir_neighbors_selection_method: None
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model_from_json</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="n">model_from_json</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="s1">&#39;fitted.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">model_from_json</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+* Selected model: Linear model
+* Nugget: 33.25175378437421
+* Sill: 618.5743674621095
+* Range: 9909.246544791626
+* Spatial Dependency Strength is strong
+* Mean Bias: 0.0
+* Mean RMSE: 0.0
+* Error-lag weighting dir_neighbors_selection_method: None
+</pre></div></div>
+</div>
+<p>That’s all, well done!</p>
+<hr class="docutils" />
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Changes</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2025-02-15</p></td>
+<td><p>Tutorial has been adapted to the 1.0 release</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../tutorials.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="1-2-semivariogram-models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Semivariogram models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-contents">Table of contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-1:-data-preparation">Chapter 1: data preparation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-2:-Experimental-Variogram">Chapter 2: Experimental Variogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-3:-Theoretical-Variogram">Chapter 3: Theoretical Variogram</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Manual-setting">Manual setting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Models">Models</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-4:-Fit-semivariogram-model-automatically">Chapter 4: Fit semivariogram model automatically</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-5:-Exporting-model">Chapter 5: Exporting model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Chapter-6:-Importing-fitted-model">Chapter 6: Importing fitted model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/usage/tutorials/functional/1-1-semivariogram-exploration.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

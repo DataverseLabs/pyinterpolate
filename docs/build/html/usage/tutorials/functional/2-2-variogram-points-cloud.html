@@ -1,0 +1,1181 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Variogram Points Cloud &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/nbsphinx-code-cells.css?v=2aa19091" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'usage/tutorials/functional/2-2-variogram-points-cloud';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Variogram Points Cloud</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Variogram-Points-Cloud">
+<h1>Variogram Points Cloud<a class="headerlink" href="#Variogram-Points-Cloud" title="Link to this heading">#</a></h1>
+<p>Variogram Point Cloud analysis is an additional, essential data preparation step that may save you a lot of headaches with more sophisticated analysis. Variogram point cloud shows distribution of semivariances along lags, and with this you can easily find outliers or heavily skewed distributions that affect modeling.</p>
+<section id="Prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#Prerequisites" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Domain</strong>:</p>
+<ul>
+<li><p>semivariance and covariance functions</p></li>
+</ul>
+</li>
+<li><p><strong>Package</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code></p></li>
+</ul>
+</li>
+<li><p><strong>Programming</strong>:</p>
+<ul>
+<li><p>Python basics</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="Table-of-contents">
+<h2>Table of contents<a class="headerlink" href="#Table-of-contents" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Create Variogram Point Cloud.</p></li>
+<li><p>Analyze Variogram Point Cloud.</p></li>
+<li><p>Detect and remove outliers.</p></li>
+<li><p>Calculate experimental semivariance from the cloud.</p></li>
+<li><p>Is Variogram Point Cloud a scatterplot?</p></li>
+</ol>
+</section>
+<section id="More-resources">
+<h2>More resources<a class="headerlink" href="#More-resources" title="Link to this heading">#</a></h2>
+<p>See <code class="docutils literal notranslate"><span class="pre">tutorials/api-examples/a-1-5-variogram-point-cloud</span></code> : directional point cloud and variogram cloud API.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import packages</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">VariogramCloud</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load DEM data</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
+    <span class="s1">&#39;../data/dem.csv&#39;</span>
+<span class="p">)</span>
+<span class="c1"># Populate geometry column and set CRS</span>
+
+<span class="n">dem_geometry</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">],</span> <span class="n">crs</span><span class="o">=</span><span class="s1">&#39;epsg:4326&#39;</span><span class="p">)</span>
+<span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">dem_geometry</span><span class="p">)</span>
+
+<span class="c1"># Transform crs to metric values</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">epsg</span><span class="o">=</span><span class="mi">2180</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dem</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="s1">&#39;dem&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gist_earth&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">True</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_2_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_2_0.png" />
+</div>
+</div>
+</section>
+<section id="1.-Create-Variogram-Point-Cloud">
+<h2>1. Create Variogram Point Cloud<a class="headerlink" href="#1.-Create-Variogram-Point-Cloud" title="Link to this heading">#</a></h2>
+<p>We will generate the Variogram Point Cloud. We calculate it for 16 lags and test different cloud variogram visualization methods.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">n_lags</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">max_range</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="n">step_size</span> <span class="o">=</span> <span class="n">max_range</span> <span class="o">/</span> <span class="n">n_lags</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">dem</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="2.-Analyze-Variogram-Point-Cloud">
+<h2>2. Analyze Variogram Point Cloud<a class="headerlink" href="#2.-Analyze-Variogram-Point-Cloud" title="Link to this heading">#</a></h2>
+<section id="Check-points-statistics-for-each-lag">
+<h3>Check points statistics for each lag<a class="headerlink" href="#Check-points-statistics-for-each-lag" title="Link to this heading">#</a></h3>
+<p>We can use method <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> to see general statistics for each lag. It might be useful when you automate your pipelines, to monitor your data drift.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code> : how many point pairs are grouped within lag</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mean</span></code> : average semivariance (we will come back to this indicator later)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std</span></code> : standard deviation of semivariances between point pairs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code> : minimum semivariance between point pairs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code> : maximum semivariance between point pairs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">25%</span></code> : 1st quartile of semivariances</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">median</span></code> : median semivariance, comparing it to mean might tell us how data is distributed, when those values are different then distribution is skewed in one direction</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">75%</span></code> : 3rd quartile of semivariances</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">skewness</span></code> : positive skewness might indicate that the distribution has a long right tail, negative skewness - the distribution has a long left tail, and zero might be a signal that distribution is balanced (<a class="reference external" href="https://en.wikipedia.org/wiki/Skewness">more about skewness</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kurtosis</span></code> : <code class="docutils literal notranslate"><span class="pre">scipy</span></code> representation of kurtosis, the measure that might be useful for comparing distributions with the same mean and variance but different tails, and it might indicate outliers in a distribution (<a class="reference external" href="https://www.youtube.com/watch?v=Pf7awGwzy4k">more about kurtosis</a>)</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>625.0</th>
+      <th>1250.0</th>
+      <th>1875.0</th>
+      <th>2500.0</th>
+      <th>3125.0</th>
+      <th>3750.0</th>
+      <th>4375.0</th>
+      <th>5000.0</th>
+      <th>5625.0</th>
+      <th>6250.0</th>
+      <th>6875.0</th>
+      <th>7500.0</th>
+      <th>8125.0</th>
+      <th>8750.0</th>
+      <th>9375.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>135536.000000</td>
+      <td>386278.000000</td>
+      <td>613496.000000</td>
+      <td>824114.000000</td>
+      <td>1.012348e+06</td>
+      <td>1.186224e+06</td>
+      <td>1.340790e+06</td>
+      <td>1.479106e+06</td>
+      <td>1.599394e+06</td>
+      <td>1.696596e+06</td>
+      <td>1.778474e+06</td>
+      <td>1.847620e+06</td>
+      <td>1.897284e+06</td>
+      <td>1.936610e+06</td>
+      <td>1.959002e+06</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>18.478983</td>
+      <td>43.719468</td>
+      <td>73.489310</td>
+      <td>107.858598</td>
+      <td>1.478527e+02</td>
+      <td>1.875977e+02</td>
+      <td>2.312974e+02</td>
+      <td>2.768622e+02</td>
+      <td>3.205265e+02</td>
+      <td>3.616242e+02</td>
+      <td>4.027444e+02</td>
+      <td>4.367675e+02</td>
+      <td>4.649048e+02</td>
+      <td>4.902991e+02</td>
+      <td>5.148492e+02</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>126.662744</td>
+      <td>275.407396</td>
+      <td>419.778941</td>
+      <td>556.335979</td>
+      <td>6.930238e+02</td>
+      <td>8.128981e+02</td>
+      <td>9.238568e+02</td>
+      <td>1.022283e+03</td>
+      <td>1.107589e+03</td>
+      <td>1.174940e+03</td>
+      <td>1.230325e+03</td>
+      <td>1.264571e+03</td>
+      <td>1.281077e+03</td>
+      <td>1.295998e+03</td>
+      <td>1.316194e+03</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000e+00</td>
+      <td>3.274181e-11</td>
+      <td>1.455192e-11</td>
+      <td>0.000000e+00</td>
+      <td>3.637979e-12</td>
+      <td>1.309672e-10</td>
+      <td>0.000000e+00</td>
+      <td>4.401954e-10</td>
+      <td>0.000000e+00</td>
+      <td>3.637979e-12</td>
+      <td>3.637979e-12</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>3908.897133</td>
+      <td>4883.322511</td>
+      <td>5716.084231</td>
+      <td>5850.409025</td>
+      <td>6.097542e+03</td>
+      <td>6.089071e+03</td>
+      <td>6.443930e+03</td>
+      <td>7.487043e+03</td>
+      <td>8.170291e+03</td>
+      <td>8.217915e+03</td>
+      <td>8.283208e+03</td>
+      <td>8.325632e+03</td>
+      <td>8.447563e+03</td>
+      <td>8.344179e+03</td>
+      <td>8.345417e+03</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>0.479607</td>
+      <td>0.927684</td>
+      <td>1.326242</td>
+      <td>1.796418</td>
+      <td>2.291578e+00</td>
+      <td>2.942269e+00</td>
+      <td>3.957437e+00</td>
+      <td>5.282839e+00</td>
+      <td>7.001901e+00</td>
+      <td>9.187945e+00</td>
+      <td>1.247976e+01</td>
+      <td>1.671459e+01</td>
+      <td>2.250293e+01</td>
+      <td>3.032104e+01</td>
+      <td>4.282639e+01</td>
+    </tr>
+    <tr>
+      <th>median</th>
+      <td>3.245548</td>
+      <td>7.752124</td>
+      <td>13.202538</td>
+      <td>20.709089</td>
+      <td>3.139443e+01</td>
+      <td>4.577791e+01</td>
+      <td>6.744675e+01</td>
+      <td>9.467516e+01</td>
+      <td>1.282328e+02</td>
+      <td>1.712477e+02</td>
+      <td>2.327524e+02</td>
+      <td>3.030020e+02</td>
+      <td>3.885612e+02</td>
+      <td>4.708155e+02</td>
+      <td>5.404376e+02</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>21.981884</td>
+      <td>58.321571</td>
+      <td>102.267010</td>
+      <td>156.939120</td>
+      <td>2.217191e+02</td>
+      <td>2.976144e+02</td>
+      <td>4.071552e+02</td>
+      <td>5.543432e+02</td>
+      <td>7.001038e+02</td>
+      <td>8.333103e+02</td>
+      <td>9.602858e+02</td>
+      <td>1.073569e+03</td>
+      <td>1.181997e+03</td>
+      <td>1.269811e+03</td>
+      <td>1.356085e+03</td>
+    </tr>
+    <tr>
+      <th>skewness</th>
+      <td>9.024150</td>
+      <td>7.024262</td>
+      <td>5.707327</td>
+      <td>4.571970</td>
+      <td>3.780406e+00</td>
+      <td>3.274606e+00</td>
+      <td>2.877575e+00</td>
+      <td>2.561271e+00</td>
+      <td>2.344063e+00</td>
+      <td>2.180223e+00</td>
+      <td>2.018141e+00</td>
+      <td>1.898245e+00</td>
+      <td>1.814415e+00</td>
+      <td>1.746984e+00</td>
+      <td>1.699327e+00</td>
+    </tr>
+    <tr>
+      <th>kurtosis</th>
+      <td>119.290276</td>
+      <td>64.629350</td>
+      <td>40.612849</td>
+      <td>24.571369</td>
+      <td>1.598170e+01</td>
+      <td>1.138748e+01</td>
+      <td>8.427998e+00</td>
+      <td>6.462801e+00</td>
+      <td>5.308429e+00</td>
+      <td>4.580614e+00</td>
+      <td>3.828618e+00</td>
+      <td>3.284539e+00</td>
+      <td>2.974452e+00</td>
+      <td>2.742198e+00</td>
+      <td>2.588314e+00</td>
+    </tr>
+    <tr>
+      <th>lag</th>
+      <td>625.000000</td>
+      <td>1250.000000</td>
+      <td>1875.000000</td>
+      <td>2500.000000</td>
+      <td>3.125000e+03</td>
+      <td>3.750000e+03</td>
+      <td>4.375000e+03</td>
+      <td>5.000000e+03</td>
+      <td>5.625000e+03</td>
+      <td>6.250000e+03</td>
+      <td>6.875000e+03</td>
+      <td>7.500000e+03</td>
+      <td>8.125000e+03</td>
+      <td>8.750000e+03</td>
+      <td>9.375000e+03</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>This representation of data is tricky, and it shouldn’t be the only step of data exploration. We need to look into distribution graphs.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class has three plot types:</p>
+<ul class="simple">
+<li><p><strong>Scatter plot</strong> - shows the general dispersion of semivariances.</p></li>
+<li><p><strong>Box plot</strong> - an excellent tool for outliers detection. It shows dispersion and quartiles of semivariances per lag. We can check distribution differences and their deviation from normality or skewness.</p></li>
+<li><p><strong>Violin plot</strong> - it is a box plot on steroids. We can read all information from the box plot and see kernel density plots.</p></li>
+</ul>
+</section>
+<section id="Scatter-plot">
+<h3>Scatter plot<a class="headerlink" href="#Scatter-plot" title="Link to this heading">#</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;scatter&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_10_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_10_0.png" />
+</div>
+</div>
+<p>The output per lag is dense, and distributions are not visible in this kind of plot. We will show when it is better to use scatterplot in the last part of the tutorial, now we will analyze other distribution plots.</p>
+</section>
+<section id="Box-plot">
+<h3>Box plot<a class="headerlink" href="#Box-plot" title="Link to this heading">#</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_12_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_12_0.png" />
+</div>
+</div>
+<p>The orange line in the middle of each box represents the median (50%) value per lag. Now we can guess how the trend line goes, but, more importantly, we see other properties of semivariances within lags:</p>
+<ol class="arabic simple">
+<li><p>Dispersion of values is greater with a distance, but at the same time, median and the 3rd quartile of semivariance values are rising (3rd quartile is plotted as a horizontal line on a top of a box.</p></li>
+<li><p>The maximum value rises with a distance (it is a horizontal line on a top of a whisker). Data is skewed towards lower values of semivariance. Why? Because the median is closer to the bottom of a box than the center or the top.</p></li>
+<li><p>The 1st quartile (25% of the lowest values) is higher for distant lags.</p></li>
+</ol>
+</section>
+<section id="Violin-plot">
+<h3>Violin plot<a class="headerlink" href="#Violin-plot" title="Link to this heading">#</a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;violin&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_14_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_14_0.png" />
+</div>
+</div>
+<p>The violin plot supports our earlier assumptions, but we can find more insights here. For distant lags, distributions start to be multimodal. We see one mode around very low semivariance values and another close to the 1st quartile. Multimodality may affect our outcomes, and it may tell us that there is more than one level of spatial dependency.</p>
+</section>
+</section>
+<section id="3.-Detect-and-remove-outliers">
+<h2>3. Detect and remove outliers<a class="headerlink" href="#3.-Detect-and-remove-outliers" title="Link to this heading">#</a></h2>
+<p>There is still the elephant in the room - box plot and violin plot show that data is skewed towards large semivariance values (long whiskers). Those outliers may affect later modeling, we should consider cleaning data before Kriging.</p>
+<p>We can remove points with too low | too high DEM values, or we can remove anomalous semivariances from the point cloud.</p>
+<p>Our data is skewed towards large values. Thus, we will remove outliers from the upper part of the distribution. We will use the interquartile range algorithm. It detects outliers as all points below the first quartile of a data plus <code class="docutils literal notranslate"><span class="pre">m</span></code> (positive or zero <code class="docutils literal notranslate"><span class="pre">float</span></code>) standard deviations and all points above the 3rd quartile plus <code class="docutils literal notranslate"><span class="pre">n</span></code> (positive or zero <code class="docutils literal notranslate"><span class="pre">float</span></code>) standard deviations. The important thing is that the absolute values of <code class="docutils literal notranslate"><span class="pre">m</span></code> and <code class="docutils literal notranslate"><span class="pre">n</span></code> can differ. We should fit those values to the
+semivariance distributions.</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> has internal method <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code>. With the parameter <code class="docutils literal notranslate"><span class="pre">inplace</span></code> set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, we can overwrite the variogram point cloud, but if we set it to <code class="docutils literal notranslate"><span class="pre">False</span></code>, it will return the new <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> object with a cleaned variogram point cloud.</p>
+<p>Other parameters that we are going to set of this method are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">method</span></code>: We have two methods, one based on the <strong>z-score</strong> and the second based on the <strong>interquartile range</strong>. Both have upper and lower bounds. The Z-score method is invoked with <code class="docutils literal notranslate"><span class="pre">method='zscore'</span></code>, and arguments for this function are <code class="docutils literal notranslate"><span class="pre">z_lower_limit</span></code> and <code class="docutils literal notranslate"><span class="pre">z_upper_limit</span></code> (number of standard deviations from the mean down and up, or negative and positive).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iqr_lower_limit</span></code>: how many standard deviations should be subtracted from the first quartile to set a limit of valid values,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">iqr_upper_limit</span></code>: how many standard deviations should be added to the 3rd quartile to set a limit of valid values.</p></li>
+</ul>
+<p>he values we will get will be within limits:</p>
+<div class="math notranslate nohighlight">
+\[q1 - (m * std) &lt; V &lt; q3 + (n * std)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(q1\)</span> - 1st quartile</p></li>
+<li><p><span class="math notranslate nohighlight">\(q3\)</span> - 3rd quartile</p></li>
+<li><p><span class="math notranslate nohighlight">\(std\)</span> - standard deviation</p></li>
+<li><p><span class="math notranslate nohighlight">\(m\)</span> - real number greater or equal than 0</p></li>
+<li><p><span class="math notranslate nohighlight">\(n\)</span> - real number greater or equal than 0</p></li>
+<li><p><span class="math notranslate nohighlight">\(V\)</span> - values in range</p></li>
+</ul>
+<p>with the assumption, that <span class="math notranslate nohighlight">\(q1\)</span>, <span class="math notranslate nohighlight">\(q3\)</span>, <span class="math notranslate nohighlight">\(std\)</span>, and <span class="math notranslate nohighlight">\(V\)</span> are lag-specific.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span>
+    <span class="n">method</span><span class="o">=</span><span class="s1">&#39;iqr&#39;</span><span class="p">,</span>
+    <span class="n">iqr_lower_limit</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">iqr_upper_limit</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cvc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_17_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_17_0.png" />
+</div>
+</div>
+<p>When we compare both figures - before and after data cleaning - we see that the y-axis of the second plot is few times smaller than the y-axis of the first plot! We’ve cleaned our data from the extreme values.</p>
+<blockquote>
+<div><p><strong>Note</strong>: removing outliers from semivariance is one way of dealing with non-normal data distributions, but you should proceed with caution when you remove your observations or derivatives from those observations. You should check tutorial <code class="docutils literal notranslate"><span class="pre">tutorials/functional/3-3-outliers-and-kriging</span></code> to understand downsides of outliers removal.</p>
+</div></blockquote>
+</section>
+<section id="4.-Experimental-variogram-from-the-point-cloud">
+<h2>4. Experimental variogram from the point cloud<a class="headerlink" href="#4.-Experimental-variogram-from-the-point-cloud" title="Link to this heading">#</a></h2>
+<p>The last but not least property of the experimental variogram point cloud is that we may calculate the semivariogram directly from it using <code class="docutils literal notranslate"><span class="pre">.calculate_experimental_variogram()</span></code> method.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span> <span class="o">=</span> <span class="n">vc</span><span class="o">.</span><span class="n">experimental_semivariances</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">semivariance</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_21_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_21_0.png" />
+</div>
+</div>
+<p>The same points are under <code class="docutils literal notranslate"><span class="pre">mean</span></code> row in <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">as_dataframe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+625.0      18.478983
+1250.0     43.719468
+1875.0     73.489310
+2500.0    107.858598
+3125.0    147.852660
+3750.0    187.597718
+4375.0    231.297386
+5000.0    276.862155
+5625.0    320.526495
+6250.0    361.624234
+6875.0    402.744376
+7500.0    436.767505
+8125.0    464.904780
+8750.0    490.299066
+9375.0    514.849220
+Name: mean, dtype: float64
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span><span class="o">.</span><span class="n">semivariances</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([ 18.47898266,  43.71946771,  73.48930987, 107.8585979 ,
+       147.85265986, 187.59771789, 231.29738612, 276.86215475,
+       320.52649515, 361.62423403, 402.74437591, 436.76750526,
+       464.90478027, 490.29906598, 514.84922016])
+</pre></div></div>
+</div>
+</section>
+<section id="5.-Is-variogram-point-cloud-a-scatter-plot?">
+<h2>5. Is variogram point cloud a scatter plot?<a class="headerlink" href="#5.-Is-variogram-point-cloud-a-scatter-plot?" title="Link to this heading">#</a></h2>
+<p>Yes, it is. But in <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code>, we aggregated semivariances within bins (lags). If we remove bins (lags) completely then we get a scatter plot of semivariances. To simulate this behavior, we will create variogram cloud with 1000 lags.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="n">max_range</span> <span class="o">/</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc1000</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
+    <span class="n">ds</span><span class="o">=</span><span class="n">dem</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc1000</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;scatter&#39;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_28_0.png" src="../../../_images/usage_tutorials_functional_2-2-variogram-points-cloud_28_0.png" />
+</div>
+</div>
+</section>
+<section id="Changelog">
+<h2>Changelog<a class="headerlink" href="#Changelog" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Changes</p></th>
+<th class="head"><p>Author</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2025-04-26</p></td>
+<td><p>Tutorial has been adapted to the 1.0 release</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Table-of-contents">Table of contents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#More-resources">More resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Create-Variogram-Point-Cloud">1. Create Variogram Point Cloud</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Analyze-Variogram-Point-Cloud">2. Analyze Variogram Point Cloud</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Check-points-statistics-for-each-lag">Check points statistics for each lag</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Scatter-plot">Scatter plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Box-plot">Box plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Violin-plot">Violin plot</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Detect-and-remove-outliers">3. Detect and remove outliers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#4.-Experimental-variogram-from-the-point-cloud">4. Experimental variogram from the point cloud</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#5.-Is-variogram-point-cloud-a-scatter-plot?">5. Is variogram point cloud a scatter plot?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Changelog">Changelog</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../../_sources/usage/tutorials/functional/2-2-variogram-points-cloud.ipynb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

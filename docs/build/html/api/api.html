@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API &#8212; Pyinterpolate 0.5.4 documentation</title>
+    <title>API &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/documentation_options.js?v=8d563738"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,8 +50,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/api';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Core data structures" href="datatypes/core.html" />
-    <link rel="prev" title="How to cite" href="../science/cite.html" />
+    <link rel="next" title="Core data structures" href="core/core.html" />
+    <link rel="prev" title="Use Cases" href="../community/community/use_cases.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -116,7 +116,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
   
 </a></div>
     
@@ -152,15 +152,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#">
-    API
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/citation.html">
+    Citation
   </a>
 </li>
 
@@ -173,8 +173,8 @@
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../developer/dev.html">
-    Development
+  <a class="nav-link dropdown-item nav-internal" href="../science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -186,16 +186,23 @@
 </li>
 
 
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../usage/learning_materials.html">
-    Learning Materials
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#">
+    API
   </a>
 </li>
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../science/biblio.html">
-    Bibliography
+  <a class="nav-link dropdown-item nav-internal" href="changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -297,8 +304,29 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../community/community.html">
+    Community
   </a>
 </li>
 
@@ -311,29 +339,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../developer/dev.html">
+  <a class="nav-link nav-internal" href="changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributor/development.html">
     Development
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../community/community.html">
-    Community
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
-    Learning Materials
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/biblio.html">
-    Bibliography
   </a>
 </li>
 
@@ -365,33 +379,18 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="datatypes/core.html">Core data structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io/io.html">Input / Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="distance/distance.html">Distance calculations</a></li>
-
-<li class="toctree-l1 has-children"><a class="reference internal" href="variogram/variogram.html">Variogram</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="variogram/experimental/experimental.html">Experimental</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/theoretical/theoretical.html">Theoretical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/block/block.html">Block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/indicator/indicator.html">Indicator</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="kriging/kriging.html">Kriging</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="kriging/point/point_kriging.html">Point Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/indicator/indicator_kriging.html">Indicator Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/universal/universal_kriging.html">Indicator Kriging</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pipelines/pipelines.html">Pipelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="pipelines/data/download.html">Data download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipelines/kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="viz/viz.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/core.html">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distance/distance.html">Distance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/experimental.html">Experimental Semivariance and Covariance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/indicator.html">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/deconvolution.html">Semivariogram Deconvolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kriging/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kriging/block_kriging.html">Block and Poisson Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluate/evaluate.html">Models evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="viz/raster.html">Visualization</a></li>
 </ul>
 </div>
 </nav></div>
@@ -453,37 +452,55 @@
 <h1>API<a class="headerlink" href="#api" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="datatypes/core.html">Core data structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io/io.html">Input / Output</a></li>
-<li class="toctree-l1"><a class="reference internal" href="distance/distance.html">Distance calculations</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="distance/distance.html#deprecated">deprecated</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core/core.html">Core data structures</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/core.html#blocks">Blocks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/core.html#point-support">Point Support</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="distance/distance.html#gridding">Gridding</a></li>
-<li class="toctree-l1"><a class="reference internal" href="variogram/variogram.html">Variogram</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="variogram/experimental/experimental.html">Experimental</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/theoretical/theoretical.html">Theoretical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/block/block.html">Block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="variogram/indicator/indicator.html">Indicator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distance/distance.html">Distance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="distance/distance.html#point">Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distance/distance.html#block">Block</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="kriging/kriging.html">Kriging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="kriging/point/point_kriging.html">Point Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/indicator/indicator_kriging.html">Indicator Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="kriging/universal/universal_kriging.html">Indicator Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/experimental.html">Experimental Semivariance and Covariance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/experimental.html#experimental-variogram">Experimental Variogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/experimental.html#directional-variogram">Directional Variogram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/experimental.html#variogram-cloud">Variogram Cloud</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pipelines/pipelines.html">Pipelines</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pipelines/data/download.html">Data download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipelines/kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/indicator.html">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="semivariogram/deconvolution.html">Semivariogram Deconvolution</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/deconvolution.html#deconvolution">Deconvolution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/deconvolution.html#deviation">Deviation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semivariogram/deconvolution.html#aggregated-variogram">Aggregated Variogram</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="viz/viz.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="validation/validation.html">Validation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="validation/validation.html#cross-validation">Cross-validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="kriging/point_kriging.html">Point Kriging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kriging/point_kriging.html#ordinary-kriging">Ordinary Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kriging/point_kriging.html#simple-kriging">Simple Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kriging/point_kriging.html#indicator-kriging">Indicator Kriging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="kriging/block_kriging.html">Block and Poisson Kriging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="kriging/block_kriging.html#centroid-based-poisson-kriging">Centroid-based Poisson Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kriging/block_kriging.html#area-to-area-poisson-kriging">Area-to-area Poisson Kriging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="kriging/block_kriging.html#area-to-point-poisson-kriging">Area-to-point Poisson Kriging</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="evaluate/evaluate.html">Models evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="evaluate/evaluate.html#cross-validation">Cross-validation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="evaluate/evaluate.html#metrics">Metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core/pipelines.html">Pipelines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core/pipelines.html#poisson-kriging-pipelines">Poisson Kriging pipelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core/pipelines.html#ordinary-kriging-pipelines">Ordinary Kriging pipelines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="viz/raster.html">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="viz/raster.html#raster">Raster</a></li>
 </ul>
 </li>
 </ul>
@@ -501,16 +518,16 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../science/cite.html"
+       href="../community/community/use_cases.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">How to cite</p>
+        <p class="prev-next-title">Use Cases</p>
       </div>
     </a>
     <a class="right-next"
-       href="datatypes/core.html"
+       href="core/core.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>

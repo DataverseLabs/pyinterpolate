@@ -1,0 +1,801 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.distance.block &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/distance/block';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.distance.block</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.distance.block</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Distance calculation functions.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Hashable</span>
+
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+
+
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_dataframe</span><span class="p">(</span>
+        <span class="n">ps_blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">],</span>
+        <span class="n">lon_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
+        <span class="n">lat_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
+        <span class="n">val_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
+        <span class="n">block_id_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ps_blocks : Union[pd.DataFrame, gpd.GeoDataFrame]</span>
+<span class="sd">        DataFrame with point supports and block indexes.</span>
+
+<span class="sd">    lon_col_name : Union[str, Hashable]</span>
+<span class="sd">        Longitude or x coordinate.</span>
+
+<span class="sd">    lat_col_name : Union[str, Hashable]</span>
+<span class="sd">        Latitude or y coordinate.</span>
+
+<span class="sd">    val_col_name : Union[str, Hashable]</span>
+<span class="sd">        The point support values column.</span>
+
+<span class="sd">    block_id_col_name : Union[str, Hashable]</span>
+<span class="sd">        Column with block names / indexes.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        Show progress bar.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : DataFrame</span>
+<span class="sd">        Indexes and columns are block indexes, cells are distances.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">calculated_pairs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">unique_blocks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
+
+    <span class="n">col_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">lon_col_name</span><span class="p">,</span> <span class="n">lat_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">block_i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">unique_blocks</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">block_j</span> <span class="ow">in</span> <span class="n">unique_blocks</span><span class="p">:</span>
+            <span class="c1"># Check if it was estimated</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">calculated_pairs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">block_i</span> <span class="o">==</span> <span class="n">block_j</span><span class="p">:</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">i_value</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span>
+                        <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_i</span>
+                    <span class="p">]</span>
+                    <span class="n">j_value</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span>
+                        <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_j</span>
+                    <span class="p">]</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">_calculate_block_to_block_distance</span><span class="p">(</span>
+                        <span class="n">i_value</span><span class="p">[</span><span class="n">col_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                        <span class="n">j_value</span><span class="p">[</span><span class="n">col_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+                    <span class="p">)</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_j</span><span class="p">,</span> <span class="n">block_i</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+                    <span class="n">calculated_pairs</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">))</span>
+                    <span class="n">calculated_pairs</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_j</span><span class="p">,</span> <span class="n">block_i</span><span class="p">))</span>
+
+    <span class="c1"># Create output dataframe</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;block_i&#39;</span><span class="p">,</span> <span class="s1">&#39;block_j&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+        <span class="n">values</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="s1">&#39;block_i&#39;</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;block_j&#39;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># sort</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">unique_blocks</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">unique_blocks</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+
+<span class="c1"># noinspection PyUnresolvedReferences</span>
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">:</span> <span class="s1">&#39;PointSupport&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ps_blocks : PointSupport</span>
+<span class="sd">        PointSupport object with parsed blocks and their respective point</span>
+<span class="sd">        supports.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        Show progress bar.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : DataFrame</span>
+<span class="sd">        Indexes and columns are block indexes, cells are distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dataframe</span><span class="p">(</span>
+        <span class="n">ps_blocks</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">point_support</span><span class="p">,</span>
+        <span class="n">lon_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">lon_col_name</span><span class="p">,</span>
+        <span class="n">lat_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">lat_col_name</span><span class="p">,</span>
+        <span class="n">val_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span>
+        <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">point_support_blocks_index_name</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">block_distances</span>
+
+
+<span class="c1"># noinspection PyUnresolvedReferences</span>
+<div class="viewcode-block" id="calc_block_to_block_distance">
+<a class="viewcode-back" href="../../../api/distance/distance.html#pyinterpolate.distance.block.calc_block_to_block_distance">[docs]</a>
+<span class="k">def</span> <span class="nf">calc_block_to_block_distance</span><span class="p">(</span>
+        <span class="n">ps_blocks</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="s1">&#39;PointSupport&#39;</span><span class="p">],</span>
+        <span class="n">lon_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lat_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">val_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">block_id_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ps_blocks : Union[pd.DataFrame, PointSupport]</span>
+<span class="sd">        The point support of polygons.</span>
+<span class="sd">          * ``DataFrame``, then ``lon_col_name``, ``lat_col_name``,</span>
+<span class="sd">            ``val_col_name``, ``block_id_col_name`` parameters must be</span>
+<span class="sd">            provided,</span>
+<span class="sd">          * ``PointSupport``.</span>
+
+<span class="sd">    lon_col_name : optional</span>
+<span class="sd">        Longitude or x coordinate.</span>
+
+<span class="sd">    lat_col_name : optional</span>
+<span class="sd">        Latitude or y coordinate.</span>
+
+<span class="sd">    val_col_name : optional</span>
+<span class="sd">        The point support values column.</span>
+
+<span class="sd">    block_id_col_name : optional</span>
+<span class="sd">        Column with block names / indexes.</span>
+
+<span class="sd">    verbose : bool, default = False</span>
+<span class="sd">        Show progress bar.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    block_distances : DataFrame</span>
+<span class="sd">        Indexes and columns representing unique blocks, values in cells</span>
+<span class="sd">        are weighted distances between blocks.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    AttributeError</span>
+<span class="sd">        Blocks are provided as DataFrame but column names were not given.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">lon_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">lat_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">val_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">block_id_col_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="s1">&#39;Please provide the required column names &#39;</span>
+                <span class="s1">&#39;if you pass DataFrame into the function&#39;</span>
+            <span class="p">)</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_dataframe</span><span class="p">(</span>
+            <span class="n">ps_blocks</span><span class="p">,</span>
+            <span class="n">lon_col_name</span><span class="o">=</span><span class="n">lon_col_name</span><span class="p">,</span>
+            <span class="n">lat_col_name</span><span class="o">=</span><span class="n">lat_col_name</span><span class="p">,</span>
+            <span class="n">val_col_name</span><span class="o">=</span><span class="n">val_col_name</span><span class="p">,</span>
+            <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">block_id_col_name</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">block_distances</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">ps_block_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                                       <span class="n">ps_block_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function calculates distance between two blocks&#39; point supports.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ps_block_1 : numpy array</span>
+<span class="sd">        Point support of the first block.</span>
+
+<span class="sd">    ps_block_2 : numpy array</span>
+<span class="sd">        Point support of the second block.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    weighted_distances : float</span>
+<span class="sd">        Weighted point-support distance between blocks.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The weighted distance between blocks is derived from the equation given</span>
+<span class="sd">    in publication [1] from References. This distance is weighted by</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the</span>
+<span class="sd">           Presence of Irregular Geographical Units.</span>
+<span class="sd">           Math Geosci 40, 101–128 (2008).</span>
+<span class="sd">           https://doi.org/10.1007/s11004-007-9129-1</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    ----</span>
+<span class="sd">    * Add reference equation to the special part of the documentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">a_shape</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">b_shape</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">bx</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">ax</span> <span class="o">-</span> <span class="n">bx</span>
+    <span class="n">ay</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">by</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">-</span> <span class="n">by</span>
+    <span class="n">aval</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
+    <span class="n">bval</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">aval</span> <span class="o">*</span> <span class="n">bval</span>
+
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;unsafe&#39;</span><span class="p">)</span>
+
+    <span class="n">wdist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">w</span>
+    <span class="n">distances_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wdist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distances_sum</span>
+
+
+<span class="k">def</span> <span class="nf">select_neighbors_in_range</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
+                              <span class="n">current_lag</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                              <span class="n">previous_lag</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function selects the neighbors of each block within a range given by</span>
+<span class="sd">    previous and current lags.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : DataFrame</span>
+<span class="sd">        Distances between blocks, columns and rows are block indexes.</span>
+
+<span class="sd">    current_lag : float</span>
+<span class="sd">        Actual maximum distance.</span>
+
+<span class="sd">    previous_lag : float</span>
+<span class="sd">        Previous maximum distance.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    neighbors : Dict</span>
+<span class="sd">        block id: [list of neighbors within a range</span>
+<span class="sd">        given by previous and current lags]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">names</span><span class="o">=</span><span class="s1">&#39;block_i&#39;</span><span class="p">)</span>
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="s1">&#39;block_i&#39;</span><span class="p">,</span> <span class="n">value_vars</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
+
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="n">neighbors</span><span class="p">[</span>
+        <span class="p">(</span><span class="n">neighbors</span> <span class="o">&gt;</span> <span class="n">previous_lag</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">neighbors</span> <span class="o">&lt;=</span> <span class="n">current_lag</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">dneighbors</span> <span class="o">=</span> <span class="n">neighbors</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">dneighbors</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pneighbors</span> <span class="o">=</span> <span class="n">dneighbors</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        <span class="n">other_neighbors_col</span> <span class="o">=</span> <span class="n">pneighbors</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pneighbors</span> <span class="o">=</span> <span class="n">pneighbors</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;block_i&#39;</span><span class="p">)[</span>
+            <span class="n">other_neighbors_col</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+        <span class="n">output</span> <span class="o">=</span> <span class="n">pneighbors</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">output</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

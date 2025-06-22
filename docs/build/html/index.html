@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pyinterpolate &#8212; Pyinterpolate 0.5.4 documentation</title>
+    <title>Pyinterpolate &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="_static/documentation_options.js?v=8d563738"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -115,7 +115,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
   
 </a></div>
     
@@ -151,15 +151,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api/api.html">
-    API
+  <a class="nav-link nav-internal" href="science/citation.html">
+    Citation
   </a>
 </li>
 
@@ -172,8 +172,8 @@
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="developer/dev.html">
-    Development
+  <a class="nav-link dropdown-item nav-internal" href="science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -186,15 +186,22 @@
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="usage/learning_materials.html">
-    Learning Materials
+  <a class="nav-link dropdown-item nav-internal" href="api/api.html">
+    API
   </a>
 </li>
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="science/biblio.html">
-    Bibliography
+  <a class="nav-link dropdown-item nav-internal" href="api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -298,22 +305,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="api/api.html">
-    API
+  <a class="nav-link nav-internal" href="science/citation.html">
+    Citation
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="developer/dev.html">
-    Development
+  <a class="nav-link nav-internal" href="science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -326,15 +333,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="usage/learning_materials.html">
-    Learning Materials
+  <a class="nav-link nav-internal" href="api/api.html">
+    API
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="science/biblio.html">
-    Bibliography
+  <a class="nav-link nav-internal" href="api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -390,40 +404,38 @@
                   
   <section id="pyinterpolate">
 <h1>Pyinterpolate<a class="headerlink" href="#pyinterpolate" title="Link to this heading">#</a></h1>
-<section id="version-0-5-4-mykolaiv">
-<h2><strong>version 0.5.4</strong> - <em>Mykolaiv</em><a class="headerlink" href="#version-0-5-4-mykolaiv" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="_images/pyinterpolate-banner.png"><img alt="The pyinterpolate logo with the name Mykolaiv and the version of package." src="_images/pyinterpolate-banner.png" style="width: 800px;" />
-</a>
+<section id="version-1-0-0">
+<h2><strong>version 1.0.0</strong><a class="headerlink" href="#version-1-0-0" title="Link to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The last documentation update: <em>2025-01-04</em></p>
+<p>The last documentation update: <em>2025-06-20</em></p>
 </div>
-<p><strong>Pyinterpolate</strong> is the Python library for <strong>geostatistics</strong>. The package provides access to spatial statistics tools used in various studies. This package helps you <strong>interpolate spatial data</strong> with the <em>Kriging</em> technique.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> is the Python library for <strong>spatial statistics</strong>. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).</p>
 <p>If you’re:</p>
 <ul class="simple">
-<li><p>GIS expert,</p></li>
-<li><p>geologist,</p></li>
-<li><p>mining engineer,</p></li>
-<li><p>ecologist,</p></li>
-<li><p>public health specialist,</p></li>
-<li><p>data scientist.</p></li>
+<li><p>GIS expert</p></li>
+<li><p>Geologist</p></li>
+<li><p>Social scientist</p></li>
 </ul>
 <p>Then this package may be useful for you. You could use it for:</p>
 <ul class="simple">
-<li><p>spatial interpolation and spatial prediction,</p></li>
-<li><p>alone or with machine learning libraries,</p></li>
-<li><p>for point observations and aggregated data.</p></li>
+<li><p>spatial interpolation and spatial prediction</p></li>
+<li><p>alone or with machine learning libraries</p></li>
+<li><p>for point observations interpolation</p></li>
+<li><p>and aggregated data disaggregation</p></li>
 </ul>
-<p>Pyinterpolate allows you to perform:</p>
+<p>You can run:</p>
 <ol class="arabic simple">
-<li><p><em>Ordinary Kriging</em> and <em>Simple Kriging</em> (spatial interpolation from points),</p></li>
-<li><p><em>Centroid-based Poisson Kriging</em> of polygons (spatial interpolation from blocks and areas),</p></li>
-<li><p><em>Area-to-area</em> and <em>Area-to-point Poisson Kriging</em> of Polygons (spatial interpolation and data deconvolution from areas to points).</p></li>
-<li><p><em>Inverse Distance Weighting</em>.</p></li>
-<li><p><em>Semivariogram regularization and deconvolution</em>.</p></li>
-<li><p><em>Semivariogram modeling and analysis</em>.</p></li>
+<li><p><strong>Ordinary Kriging</strong> and <strong>Simple Kriging</strong> - spatial interpolation from points</p></li>
+<li><p><strong>Centroid-based Poisson Kriging</strong> of polygons - spatial interpolation from blocks and regions</p></li>
+<li><p><strong>Area-to-area</strong> and <strong>Area-to-point Poisson Kriging</strong> of Polygons - spatial interpolation and data deconvolution from areas to points</p></li>
+<li><p><strong>Indicator Kriging</strong> - kriging based on probabilities</p></li>
+<li><p><strong>Inverse Distance Weighting</strong> - benchmarking spatial interpolation technique</p></li>
+<li><p><strong>Semivariogram regularization and deconvolution</strong> - transforming variogram of areal data in regards to point support data</p></li>
+<li><p><strong>Semivariogram modeling and analysis</strong> - is your data spatially correlated? How do neighbors influence each other?</p></li>
 </ol>
-<p>With <code class="docutils literal notranslate"><span class="pre">pyinterpolate</span></code> we can retrieve the point support model from blocks. The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> you can transform data aggregated on a county-level to better resolution.
+The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:</p>
 <a class="reference internal image-reference" href="_images/deconvoluted_risk_areas.jpg"><img alt="Covid-19 infection risk in Poland for 14th April, 2020." src="_images/deconvoluted_risk_areas.jpg" style="width: 400px;" />
 </a>
 </section>
@@ -434,17 +446,18 @@
 <li class="toctree-l1"><a class="reference internal" href="setup/setup.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="science/cite.html">How to cite</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developer/dev.html">Development</a></li>
-<li class="toctree-l1"><a class="reference internal" href="community/community.html">Community</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usage/learning_materials.html">Learning Materials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="science/biblio.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/citation.html">Citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="science/bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="community/community.html">Community</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/changes.html">Changes between version 0.x and 1.x</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributor/development.html">Development</a></li>
 </ul>
 </div>
 </section>
-<section id="how-to-cite">
-<h2>How to cite<a class="headerlink" href="#how-to-cite" title="Link to this heading">#</a></h2>
+<section id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Link to this heading">#</a></h2>
 <p>Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, <a class="reference external" href="https://doi.org/10.21105/joss.02869">https://doi.org/10.21105/joss.02869</a></p>
 </section>
 </section>
@@ -487,9 +500,9 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-5-4-mykolaiv"><strong>version 0.5.4</strong> - <em>Mykolaiv</em></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0"><strong>version 1.0.0</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite">How to cite</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citation">Citation</a></li>
 </ul>
   </nav></div>
 
