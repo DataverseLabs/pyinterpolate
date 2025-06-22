@@ -7,9 +7,9 @@ version: 2
 
 # Set the version of Python and other tools you might need
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
-    python: "3.10"
+    python: "3"
 
 # Build documentation in the docs_oldies/ directory with Sphinx
 sphinx:
@@ -26,8 +26,8 @@ formats:
 # Optionally set the version of Python and requirements required to build your docs_oldies
 python:
   install:
-    - requirements: docs/requirements.txt
+    - requirements: pyproject.toml
     - method: pip
       path: .
       extra_requirements:
-          - docs
+          - dev
