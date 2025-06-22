@@ -98,6 +98,9 @@ class PointSupportDistance:
             Distances between point supports from two blocks.
         """
 
+        if block_pair in self._calculated_block_pairs:
+            return self.distances_between_point_supports[block_pair]
+
         block_a = block_pair[0]
         block_b = block_pair[1]
 
@@ -109,7 +112,6 @@ class PointSupportDistance:
                                                                points_b)
 
         # Update distances
-
         if update:
             if block_pair not in self._calculated_block_pairs:
                 self.distances_between_point_supports.update(

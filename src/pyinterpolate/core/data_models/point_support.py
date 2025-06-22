@@ -267,7 +267,8 @@ class PointSupport:
         else:
             ps = self.point_support[
                 self.point_support[
-                    self.point_support_blocks_index_name] == block_id
+                    self.point_support_blocks_index_name
+                ] == block_id
             ]
             return ps[
                 [self._lon_col_name,
