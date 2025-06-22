@@ -1,90 +1,93 @@
 ![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-![Pyinterpolate](https://github.com/DataverseLabs/pyinterpolate/blob/main/pyinterpolate-banner.png  "Pyinterpolate logo")
-
 # Pyinterpolate
 
-**version 0.5.4** - *Mykolaiv*
+**version 1.0**
 
----
+--
 
-Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools used in various studies. This package helps you **interpolate spatial data** with the *Kriging* technique.
+Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).
 
 If you’re:
 
-- GIS expert,
-- geologist,
-- mining engineer,
-- ecologist,
-- public health specialist,
-- data scientist.
+- GIS expert
+- Geologist
+- Social scientist
 
-Then this package may be useful for you. You could use it for:
+Then you might find this package useful. The core functionalities of Pyinterpolate are spatial interpolation and spatial prediction for point and block datasets.
 
-- spatial interpolation and spatial prediction,
-- alone or with machine learning libraries,
-- for point and block datasets.
+Pyinterpolate performs:
 
-Pyinterpolate allows you to perform:
+1. *Ordinary Kriging* and *Simple Kriging* - spatial interpolation from points
+2. *Centroid-based Poisson Kriging* of polygons - spatial interpolation from blocks and regions
+3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons - spatial interpolation and data deconvolution from areas to points
+4. *Indicator Kriging* - kriging based on probabilities
+4. *Inverse Distance Weighting* - benchmarking spatial interpolation technique
+5. *Semivariogram regularization and deconvolution* - transforming variogram of areal data in regards to point support data
+6. *Semivariogram modeling and analysis* - is your data spatially correlated? How do neighbors influence each other?
 
-1. *Ordinary Kriging* and *Simple Kriging* (spatial interpolation from points),
-2. *Centroid-based Poisson Kriging* of polygons (spatial interpolation from blocks and areas),
-3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons (spatial interpolation and data deconvolution from areas to points).
-4. *Inverse Distance Weighting*.
-5. *Semivariogram regularization and deconvolution*.
-6. *Semivariogram modeling and analysis*.
-
-## How it works
+## How does it work?
 
 The package has multiple spatial interpolation functions. The flow of analysis is usually the same for each method:
 
-**[1.]** Read and prepare data.
+**[1.]** Load your dataset with `GeoPandas` or `numpy`.
 
 ```python
-from pyinterpolate import read_txt
+import geopandas as gpd
 
-point_data = read_txt('dem.txt')
+
+point_data = gpd.read_file('dem.gpkg')  # x (lon), y (lat), value
 ```
 
-**[2.]** Analyze data, calculate the experimental variogram.
+**[2.]** Pass loaded data to `pyinterpolate`, calculate experimental variogram.
 
 ```python
-from pyinterpolate import build_experimental_variogram
+from pyinterpolate import ExperimentalVariogram
 
-search_radius = 500
+
+step_size = 500
 max_range = 40000
 
-experimental_semivariogram = build_experimental_variogram(input_array=point_data,
-                                                          step_size=search_radius,
-                                                          max_range=max_range)
+experimental_variogram = ExperimentalVariogram(
+    ds=point_data,
+    step_size=step_size,
+    max_range=max_range
+) 
 ```
 
-**[3.]** Data transformation, fit theoretical variogram.
+**[3.]** Fit experimental semivariogram to theoretical model, it is equivalent of the `fit()` method known from machine learning packages.
 
 ```python
 from pyinterpolate import build_theoretical_variogram
 
-semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
-                                      model_name='spherical',
-                                      sill=400,
-                                      rang=20000,
-                                      nugget=0)
+
+sill = experimental_variogram.variance
+nugget = 0
+variogram_range = 8000
+
+semivar = build_theoretical_variogram(
+    experimental_variogram=experimental_variogram,
+    models_group='linear',
+    nugget=nugget,
+    rang=variogram_range,
+    sill=sill
+)
 ```
 
-**[4.]** Interpolation.
+**[4.]** Interpolate values in unknown locations.
 
 ```python
-from pyinterpolate import kriging
+from pyinterpolate import ordinary_kriging
+
 
 unknown_point = (20000, 65000)
-prediction = kriging(observations=point_data,
-                     theoretical_model=semivar,
-                     points=[unknown_point],
-                     how='ok',
-                     no_neighbors=32)
+prediction = ordinary_kriging(theoretical_model=semivar,
+                              known_locations=point_data,
+                              unknown_location=unknown_point,
+                              no_neighbors=32)
 ```
 
-**[5.]** Error and uncertainty analysis.
+**[5.]** Analyze error and uncertainty of predictions.
 
 ```python
 print(prediction)  # [predicted, variance error, lon, lat]
@@ -94,12 +97,13 @@ print(prediction)  # [predicted, variance error, lon, lat]
 >> [211.23, 0.89, 20000, 60000]
 ```
 
-With **pyinterpolate**, we can retrieve the point support model from blocks. Example from _Tick-borne Disease Detector_ study for European Space Agency - COVID-19 population at risk mapping. We did it with the Area-to-Point Poisson Kriging technique from the package. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into new point support semivariogram created from population density blocks. We get the population at risk map:
-![Covid-19 infection risk in Poland for 14th April, 2020.](https://github.com/DataverseLabs/pyinterpolate/blob/main/deconvoluted_risk_areas.jpg?raw=true  "Covid-19 infection risk in Poland for 14th April, 2020.")
+With Pyinterpolate you can analyze and transform aggregated data. Here is the example of spatial disaggregation of areal data into point support using Poisson Kriging:
+
+![Example use case](fig1_example.png)
 
 ## Status
 
-Beta (late) version: the structure will be in most cases stable, new releases will introduce new classes and functions instead of API changes.
+Operational: no API changes in the current release cycle.
 
 
 ## Setup
@@ -114,7 +118,7 @@ You may follow those setup steps to create a *conda* environment with the packag
 
 ### Recommended - conda installation
 
-[1.] Create conda environment with Python >= 3.8. Recommended is Python 3.10.
+[1.] Create conda environment with Python >= 3.10
 
 ```shell
 conda create -n [YOUR ENV NAME] -c conda-forge python=3.10 pyinterpolate
@@ -130,7 +134,7 @@ conda activate [YOUR ENV NAME]
 
 ### pip installation
 
-With **Python>=3.8** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
+With **Python>=3.9** and system ```libspatialindex_c.so``` dependencies you may install package by simple command:
 
 ```
 pip install pyinterpolate
@@ -149,6 +153,7 @@ All tests are grouped in the `test` directory. If you would like to contribute, 
 * B2G project related to the large-scale infrastructure maintenance (2020-2021).
 * E-commerce service for reporting and analysis, building spatial / temporal profiles of customers (2022+).
 * The external data augmentation for e-commerce services (2022+).
+* Regional aggregates transformation and preprocessing for location intelligence tasks (2025+).
 
 ## Community
 
@@ -157,7 +162,7 @@ Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg
 
 ## Bibliography
 
-PyInterpolate was created thanks to many resources and all of them are pointed here:
+Pyinterpolate was created thanks to many resources and all of them are pointed here:
 
 - Armstrong M., Basic Linear Geostatistics, Springer 1998,
 - GIS Algorithms by Ningchuan Xiao: https://uk.sagepub.com/en-gb/eur/gis-algorithms/book241284
@@ -171,44 +176,37 @@ PyInterpolate was created thanks to many resources and all of them are pointed h
 Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 
-## Requirements and dependencies (v 0.5.+)
+## Requirements and dependencies (v 1.x)
 
 Core requirements and dependencies are:
 
-* Python >= 3.8
-* descartes
+* Python >= 3.10
 * geopandas
 * matplotlib
 * numpy
-* tqdm
-* pyproj
-* scipy
-* shapely
-* fiona
-* rtree
 * prettytable
-* pandas
-* dask
-* hdbscan
-* pylibtiff
-* pyarrow
+* pydantic
+* scipy
+* tqdm
 
-You may check a specific version of requirements in the `setup.cfg` file.
+You may check a specific version of requirements in the `setup.cfg` file. Required packages versions are updated in a regular interval.
 
 ## Package structure
 
 High level overview:
 
  - [x] `pyinterpolate`
-    - [x] `distance` - distance calculation,
-    - [x] `idw` - inverse distance weighting interpolation,
-    - [x] `io` - reads and prepares input spatial datasets,
-    - [x] `kriging` - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point,
-    - [x] `pipelines` - a complex functions to smooth a block data, download sample data, compare different kriging techniques, and filter blocks,
-    - [x] `processing` - core data structures of the package: `Blocks` and `PointSupport`, and additional functions used for internal processes,
-    - [x] `variogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution,
+    - [x] `core` - data structures and models, data processing pipelines
+    - [x] `distance` - distance and angles
+    - [x] `evaluate` - cross-validation and modeling metrics
+    - [x] `idw` - inverse distance weighting
+    - [x] `kriging` - Ordinary Kriging, Simple Kriging, Poisson Kriging: centroid based, area-to-area, area-to-point, Indicator Kriging
+    - [x] `transform` - internal data processing functions
+    - [x] `semivariogram` - experimental variogram, theoretical variogram, variogram point cloud, semivariogram regularization & deconvolution, indicator variogram
     - [x] `viz` - interpolation of smooth surfaces from points into rasters.
- - [x] `tutorials` - tutorials (Basic, Intermediate and Advanced).
+ - [x] `tutorials`
+   - [x] `api-examples` - tutorials covering the API
+   - [x] `functional` - tutorials covering concrete use cases
 
 ## Datasets
 

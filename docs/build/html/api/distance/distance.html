@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Distance calculations &#8212; Pyinterpolate 0.5.4 documentation</title>
+    <title>Distance &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -48,8 +48,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/distance/distance';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Variogram" href="../variogram/variogram.html" />
-    <link rel="prev" title="Input / Output" href="../io/io.html" />
+    <link rel="next" title="Experimental Semivariance and Covariance" href="../semivariogram/experimental.html" />
+    <link rel="prev" title="Core data structures" href="../core/core.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
   
 </a></div>
     
@@ -150,15 +150,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../api.html">
-    API
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/citation.html">
+    Citation
   </a>
 </li>
 
@@ -171,8 +171,8 @@
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../developer/dev.html">
-    Development
+  <a class="nav-link dropdown-item nav-internal" href="../../science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -184,16 +184,23 @@
 </li>
 
 
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../usage/learning_materials.html">
-    Learning Materials
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API
   </a>
 </li>
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../../science/biblio.html">
-    Bibliography
+  <a class="nav-link dropdown-item nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -295,8 +302,29 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../community/community.html">
+    Community
   </a>
 </li>
 
@@ -309,29 +337,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../developer/dev.html">
+  <a class="nav-link nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributor/development.html">
     Development
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../community/community.html">
-    Community
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
-    Learning Materials
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../science/biblio.html">
-    Bibliography
   </a>
 </li>
 
@@ -363,33 +377,18 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../datatypes/core.html">Core data structures</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../io/io.html">Input / Output</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Distance calculations</a></li>
-
-<li class="toctree-l1 has-children"><a class="reference internal" href="../variogram/variogram.html">Variogram</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/experimental/experimental.html">Experimental</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/theoretical/theoretical.html">Theoretical</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/block/block.html">Block</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/deconvolution/deconvolution.html">Deconvolution</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../variogram/indicator/indicator.html">Indicator</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../kriging/kriging.html">Kriging</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/point/point_kriging.html">Point Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/block/block_kriging.html">Block - Poisson Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/indicator/indicator_kriging.html">Indicator Kriging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../kriging/universal/universal_kriging.html">Indicator Kriging</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../pipelines/pipelines.html">Pipelines</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../pipelines/data/download.html">Data download</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../pipelines/kriging_based/kriging_based_processes.html">Kriging-based processes</a></li>
-</ul>
-</details></li>
-<li class="toctree-l1"><a class="reference internal" href="../viz/viz.html">Visualization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../validation/validation.html">Validation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/core.html">Core data structures</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Distance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/experimental.html">Experimental Semivariance and Covariance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/indicator.html">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../semivariogram/deconvolution.html">Semivariogram Deconvolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
 </ul>
 </div>
 </nav></div>
@@ -433,7 +432,7 @@
     
     <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Distance calculations</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Distance</span></li>
   </ul>
 </nav>
 </div>
@@ -450,13 +449,15 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="distance-calculations">
-<h1>Distance calculations<a class="headerlink" href="#distance-calculations" title="Link to this heading">#</a></h1>
+  <section id="distance">
+<h1>Distance<a class="headerlink" href="#distance" title="Link to this heading">#</a></h1>
+<section id="point">
+<h2>Point<a class="headerlink" href="#point" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">point_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/point.html#point_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Calculates the euclidean distance from one group of points to another
-group of points.</p>
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.distance.point.</span></span><span class="sig-name descname"><span class="pre">point_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'euclidean'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/distance/point.html#point_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates the Euclidean distance from set of points to
+other set of points.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -471,16 +472,16 @@ See <code class="docutils literal notranslate"><span class="pre">scipy.spatial.d
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>distances</strong><span class="classifier">array</span></dt><dd><p>Distances matrix. Row index = <code class="docutils literal notranslate"><span class="pre">points</span></code> point index, and column
-index = <code class="docutils literal notranslate"><span class="pre">other</span></code> point index.</p>
+<dt><strong>distances</strong><span class="classifier">array</span></dt><dd><p>Distances matrix. Row index = <code class="docutils literal notranslate"><span class="pre">points</span></code> point index,
+and column index = <code class="docutils literal notranslate"><span class="pre">other</span></code> point index.</p>
 </dd>
 </dl>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>The function creates array of size MxN, where M = number of <code class="docutils literal notranslate"><span class="pre">points</span></code>
-and N = number of <code class="docutils literal notranslate"><span class="pre">other</span></code>. Very big array with coordinates may cause
-a memory error.</p>
+<p>The function creates array of size MxN, where M = number of
+<code class="docutils literal notranslate"><span class="pre">points</span></code> and N = number of <code class="docutils literal notranslate"><span class="pre">other</span></code>. Large arrays may cause
+memory errors.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">points</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">other</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
@@ -493,118 +494,55 @@ a memory error.</p>
 </div>
 </dd></dl>
 
+</section>
+<section id="block">
+<h2>Block<a class="headerlink" href="#block" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">calc_block_to_block_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blocks</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/distance.html#calc_block_to_block_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function calculates distances between blocks.</p>
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.distance.block.</span></span><span class="sig-name descname"><span class="pre">calc_block_to_block_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps_blocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PointSupport</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_id_col_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/distance/block.html#calc_block_to_block_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function calculates distances between the blocks’ point supports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>blocks</strong><span class="classifier">Union[Dict, np.ndarray, gpd.GeoDataFrame, pd.DataFrame, PointSupport]</span></dt><dd><dl class="simple">
+<dt><strong>ps_blocks</strong><span class="classifier">Union[pd.DataFrame, PointSupport]</span></dt><dd><dl class="simple">
 <dt>The point support of polygons.</dt><dd><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">Dict</span></code>: <code class="docutils literal notranslate"><span class="pre">{block</span> <span class="pre">id:</span> <span class="pre">[[point</span> <span class="pre">x,</span> <span class="pre">point</span> <span class="pre">y,</span> <span class="pre">value]]}</span></code>,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">array</span></code>: <code class="docutils literal notranslate"><span class="pre">[[block</span> <span class="pre">id,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">value]]</span></code>,</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span></code>: <code class="docutils literal notranslate"><span class="pre">columns={x,</span> <span class="pre">y,</span> <span class="pre">ds,</span> <span class="pre">index}</span></code>,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DataFrame</span></code>, then <code class="docutils literal notranslate"><span class="pre">lon_col_name</span></code>, <code class="docutils literal notranslate"><span class="pre">lat_col_name</span></code>,
+<code class="docutils literal notranslate"><span class="pre">val_col_name</span></code>, <code class="docutils literal notranslate"><span class="pre">block_id_col_name</span></code> parameters must be
+provided,</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PointSupport</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
 </dd>
+<dt><strong>lon_col_name</strong><span class="classifier">optional</span></dt><dd><p>Longitude or x coordinate.</p>
+</dd>
+<dt><strong>lat_col_name</strong><span class="classifier">optional</span></dt><dd><p>Latitude or y coordinate.</p>
+</dd>
+<dt><strong>val_col_name</strong><span class="classifier">optional</span></dt><dd><p>The point support values column.</p>
+</dd>
+<dt><strong>block_id_col_name</strong><span class="classifier">optional</span></dt><dd><p>Column with block names / indexes.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, default = False</span></dt><dd><p>Show progress bar.</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>block_distances</strong><span class="classifier">Dict</span></dt><dd><p>Ordered block ids (the order from the list of distances): {block id : [distances to other]}.</p>
+<dt><strong>block_distances</strong><span class="classifier">DataFrame</span></dt><dd><p>Indexes and columns representing unique blocks, values in cells
+are weighted distances between blocks.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt>TypeError</dt><dd><p>Wrong input’s data type.</p>
+<dt>AttributeError</dt><dd><p>Blocks are provided as DataFrame but column names were not given.</p>
 </dd>
 </dl>
-</dd>
-</dl>
-</dd></dl>
-
-<section id="deprecated">
-<h2>deprecated<a class="headerlink" href="#deprecated" title="Link to this heading">#</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">calc_point_to_point_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points_b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/distance.html#calc_point_to_point_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function calculates distances between two group of points of a single group to itself.</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>points_a</strong><span class="classifier">numpy array</span></dt><dd><p>The point coordinates.</p>
-</dd>
-<dt><strong>points_b</strong><span class="classifier">numpy array, default=None</span></dt><dd><p>Other point coordinates. If provided then algorithm calculates distances between <code class="docutils literal notranslate"><span class="pre">points_a</span></code> against
-<code class="docutils literal notranslate"><span class="pre">points_b</span></code>.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>distances</strong><span class="classifier">numpy array</span></dt><dd><p>The distances from each point from the <code class="docutils literal notranslate"><span class="pre">points_a</span></code> to other point (from the same <code class="docutils literal notranslate"><span class="pre">points_a</span></code> or from the
-other set of points <code class="docutils literal notranslate"><span class="pre">points_b</span></code>).</p>
-</dd>
-</dl>
-<div class="deprecated">
-<p><span class="versionmodified deprecated">Deprecated since version 0.5.1: </span>This will be removed in 1.0. Use <cite>point_distance()</cite> instead</p>
-</div>
 </dd>
 </dl>
 </dd></dl>
 
 </section>
-</section>
-<section id="gridding">
-<h1>Gridding<a class="headerlink" href="#gridding" title="Link to this heading">#</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">create_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_number_of_cells</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'box'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/gridding.html#create_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function creates grid based on a set of points.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>ds</strong><span class="classifier">Union[np.ndarray, List, gpd.GeoSeries]</span></dt><dd><p>Data to be transformed, point coordinates [x, y] &lt;-&gt; [lon, lat] or GeoSeries with Point geometry.</p>
-</dd>
-<dt><strong>min_number_of_cells</strong><span class="classifier">int</span></dt><dd><p>Expected number of cells in the smaller dimension.</p>
-</dd>
-<dt><strong>grid_type</strong><span class="classifier">str, default = “square”</span></dt><dd><p>Available types: <code class="docutils literal notranslate"><span class="pre">box</span></code>, <code class="docutils literal notranslate"><span class="pre">hex</span></code>.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>grid</strong><span class="classifier">gpd.GeoSeries</span></dt><dd><p>Empty grid that can be used to aggregate points. It is GeoSeries of Polygons (squares or hexes).</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">points_to_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillna</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/distance/gridding.html#points_to_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
-<dd><p>Function aggregates points over a specified grid.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>points</strong><span class="classifier">geopandas GeoDataFrame</span></dt><dd></dd>
-<dt><strong>grid</strong><span class="classifier">geopandas GeoSeries</span></dt><dd></dd>
-<dt><strong>fillna</strong><span class="classifier">Any, optional</span></dt><dd><p>The value to fill NaN’s, if None given then this step is skipped.</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
-<dt><strong>aggregated</strong><span class="classifier">geopandas GeoDataFrame</span></dt><dd></dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 
 
@@ -618,20 +556,20 @@ other set of points <code class="docutils literal notranslate"><span class="pre"
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../io/io.html"
+       href="../core/core.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Input / Output</p>
+        <p class="prev-next-title">Core data structures</p>
       </div>
     </a>
     <a class="right-next"
-       href="../variogram/variogram.html"
+       href="../semivariogram/experimental.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Variogram</p>
+        <p class="prev-next-title">Experimental Semivariance and Covariance</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -654,13 +592,9 @@ other set of points <code class="docutils literal notranslate"><span class="pre"
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Distance calculations</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated">deprecated</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#point">Point</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#block">Block</a></li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gridding">Gridding</a></li>
-</ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">

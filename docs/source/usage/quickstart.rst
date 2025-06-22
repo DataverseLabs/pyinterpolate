@@ -20,25 +20,25 @@ The interpolation of missing value from points is the basic case. We use for it 
 
 .. code-block:: python
 
-   from pyinterpolate import read_txt
+   import geopandas as gpd
 
 
-   point_data = read_txt('dem.txt')
+   point_data = gpd.read_file('dem.gpkg')
 
 
 **[2.] Analyze data, calculate the experimental variogram.**
 
 .. code-block:: python
 
-   from pyinterpolate import build_experimental_variogram
+   from pyinterpolate import calculate_semivariance
 
 
    search_radius = 500
    max_range = 40000
 
-   experimental_semivariogram = build_experimental_variogram(input_array=point_data,
-                                                             step_size=search_radius,
-                                                             max_range=max_range)
+   experimental_semivariogram = calculate_semivariance(ds=point_data,
+                                                       step_size=search_radius,
+                                                       max_range=max_range)
 
 **[3.] Data transformation, fit theoretical variogram.**
 
@@ -48,7 +48,7 @@ The interpolation of missing value from points is the basic case. We use for it 
 
 
    semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
-                                         model_type='spherical',
+                                         models_group='spherical',
                                          sill=400,
                                          rang=20000,
                                          nugget=0)
@@ -57,15 +57,14 @@ The interpolation of missing value from points is the basic case. We use for it 
 
 .. code-block:: python
 
-   from pyinterpolate import kriging
+   from pyinterpolate import ordinary_kriging
 
 
    unknown_point = (20000, 65000)
-   prediction = kriging(observations=point_data,
-                        theoretical_model=semivar,
-                        points=[unknown_point],
-                        how='ok',
-                        no_neighbors=32)
+   prediction = ordinary_kriging(theoretical_model=semivar,
+                                 known_locations=point_data,
+                                 unknown_location=unknown_point,
+                                 no_neighbors=32)
 
 **[5.] Error and uncertainty analysis.**
 
@@ -81,28 +80,26 @@ The interpolation of missing value from points is the basic case. We use for it 
 
 .. code-block:: python
 
-    from pyinterpolate import read_txt
-    from pyinterpolate import build_experimental_variogram
+    import geopandas as gpd
+    from pyinterpolate import calculate_semivariance
     from pyinterpolate import build_theoretical_variogram
-    from pyinterpolate import kriging
+    from pyinterpolate import ordinary_kriging
 
 
-    point_data = read_txt('dem.txt')  # x, y, value
+    point_data = gpd.read_file('dem.gpkg')  # x, y, value
     search_radius = 500
     max_range = 40000
 
-    experimental_semivariogram = build_experimental_variogram(input_array=point_data,
-                                                              step_size=search_radius,
-                                                              max_range=max_range)
+    experimental_semivariogram = calculate_semivariance(ds=point_data,
+                                                        step_size=search_radius,
+                                                        max_range=max_range)
     semivar = build_theoretical_variogram(experimental_variogram=experimental_semivariogram,
-                                          model_type='spherical',
+                                          models_group='spherical',
                                           sill=400,
                                           rang=20000,
                                           nugget=0)
     unknown_point = (20000, 65000)
-    prediction = kriging(observations=point_data,
-                         theoretical_model=semivar,
-                         points=[unknown_point],
-                         how='ok',
-                         no_neighbors=32)
-
+    prediction = ordinary_kriging(theoretical_model=semivar,
+                                  known_locations=point_data,
+                                  unknown_location=unknown_point,
+                                  no_neighbors=32)

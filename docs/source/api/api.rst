@@ -4,12 +4,15 @@ API
 .. toctree::
    :maxdepth: 2
 
-   datatypes/core
-   io/io
+   core/core
    distance/distance
-   variogram/variogram
-   kriging/kriging
+   semivariogram/experimental
+   semivariogram/theoretical
+   semivariogram/indicator
+   semivariogram/deconvolution
+   kriging/point_kriging
+   kriging/block_kriging
    idw/idw
-   pipelines/pipelines
-   viz/viz
-   validation/validation
+   evaluate/evaluate
+   core/pipelines
+   viz/raster

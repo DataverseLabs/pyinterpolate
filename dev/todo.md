@@ -1,0 +1,6 @@
+- [ ] keep data for tests on Zenodo, use Pooch, more info here: https://www.pyopensci.org/python-package-guide/package-structure-code/python-package-structure.html#don-t-include-test-suite-datasets-in-your-package
+- [ ] add this process into the pipelines: https://github.com/DataverseLabs/pyinterpolate/blob/main/pyinterpolate/pipelines/multi_kriging.py
+- [ ] add cluster detection algo
+- [ ] clean tests
+- [ ] raise exceptions in multithreading
+- [ ] control when exception is raised when calculating semivariances and covariances for each lag

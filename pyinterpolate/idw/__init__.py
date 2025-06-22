@@ -1,1 +1,0 @@
-from pyinterpolate.idw.idw import inverse_distance_weighting

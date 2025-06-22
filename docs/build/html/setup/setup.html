@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Setup &#8212; Pyinterpolate 0.5.4 documentation</title>
+    <title>Setup &#8212; pyinterpolate 1.0.0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=e1a677a5"></script>
+    <script src="../_static/documentation_options.js?v=8d563738"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -114,7 +114,7 @@
   
   
   
-    <p class="title logo__title">Pyinterpolate 0.5.4 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
   
 </a></div>
     
@@ -150,15 +150,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/api.html">
-    API
+  <a class="nav-link nav-internal" href="../science/citation.html">
+    Citation
   </a>
 </li>
 
@@ -171,8 +171,8 @@
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../developer/dev.html">
-    Development
+  <a class="nav-link dropdown-item nav-internal" href="../science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -185,15 +185,15 @@
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../usage/learning_materials.html">
-    Learning Materials
+  <a class="nav-link dropdown-item nav-internal" href="../api/api.html">
+    API
   </a>
 </li>
 
 
 <li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../science/biblio.html">
-    Bibliography
+  <a class="nav-link dropdown-item nav-internal" href="../contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -295,22 +295,22 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/cite.html">
-    How to cite
+  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
+    Learning Materials
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../api/api.html">
-    API
+  <a class="nav-link nav-internal" href="../science/citation.html">
+    Citation
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../developer/dev.html">
-    Development
+  <a class="nav-link nav-internal" href="../science/bibliography.html">
+    Bibliography
   </a>
 </li>
 
@@ -323,15 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../usage/learning_materials.html">
-    Learning Materials
+  <a class="nav-link nav-internal" href="../api/api.html">
+    API
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../science/biblio.html">
-    Bibliography
+  <a class="nav-link nav-internal" href="../contributor/development.html">
+    Development
   </a>
 </li>
 
@@ -422,7 +422,7 @@
 <h1>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h1>
 <section id="installation-guidelines">
 <h2>Installation guidelines<a class="headerlink" href="#installation-guidelines" title="Link to this heading">#</a></h2>
-<p>The package can be installed from <cite>conda</cite> and <cite>pip</cite>. <cite>Conda</cite> installation requires Python &gt;= 3.8, <cite>pip</cite> installation requires Python &gt;= 3.7.</p>
+<p>The package can be installed from <cite>conda</cite> and <cite>pip</cite>.</p>
 <section id="conda">
 <h3>Conda<a class="headerlink" href="#conda" title="Link to this heading">#</a></h3>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda install -c conda-forge pyinterpolate</span>
@@ -454,6 +454,26 @@
 </pre></div>
 </div>
 <p>Now you are able to run library from a notebook.</p>
+</section>
+<hr class="docutils" />
+<section id="failing-pylibtiff-build-linux">
+<h3>Failing pylibtiff build - Linux<a class="headerlink" href="#failing-pylibtiff-build-linux" title="Link to this heading">#</a></h3>
+<p>With installation on a fresh Linux distribution you might encounter problems with <cite>pylibtiff</cite> which is a dependency of <cite>pyinterpolate</cite>.
+You will get a long error message. The last line of the message is:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">ERROR: ERROR: Failed to build installable wheels for some pyproject.toml based projects (pylibtiff)</span>
+</pre></div>
+</div>
+<p>This means that you haven’t configured required system libraries yet. You should install those three libraries:</p>
+<ul class="simple">
+<li><p><cite>libtiff-dev</cite></p></li>
+<li><p><cite>python3-dev</cite></p></li>
+<li><p><cite>gcc</cite></p></li>
+</ul>
+<p>Install those using command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo apt install gcc python3-dev libtiff-dev</span>
+</pre></div>
+</div>
+<p>and after installation you should be able to install <cite>pyinterpolate</cite> without problems.</p>
 </section>
 <hr class="docutils" />
 <section id="the-libspatialindex-c-so-dependency-error">
@@ -526,6 +546,7 @@ because your operating system does not have <cite>libspatialindex_c.so</cite> fi
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-additional-topics">Installation - additional topics</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#working-with-notebooks">Working with Notebooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#failing-pylibtiff-build-linux">Failing pylibtiff build - Linux</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-libspatialindex-c-so-dependency-error">The libspatialindex_c.so dependency error</a></li>
 </ul>
 </li>

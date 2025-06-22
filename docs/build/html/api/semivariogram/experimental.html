@@ -1,0 +1,1402 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Experimental Semivariance and Covariance &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/semivariogram/experimental';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Theoretical Semivariogram" href="theoretical.html" />
+    <link rel="prev" title="Distance" href="../distance/distance.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../core/core.html">Core data structures</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../distance/distance.html">Distance</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Experimental Semivariance and Covariance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theoretical.html">Theoretical Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indicator.html">Indicator Semivariogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deconvolution.html">Semivariogram Deconvolution</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/point_kriging.html">Point Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../kriging/block_kriging.html">Block and Poisson Kriging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../idw/idw.html">Inverse Distance Weighting (IDW)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../evaluate/evaluate.html">Models evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../core/pipelines.html">Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../viz/raster.html">Visualization</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../api.html" class="nav-link">API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Experimental Semivariance and Covariance</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="experimental-semivariance-and-covariance">
+<h1>Experimental Semivariance and Covariance<a class="headerlink" href="#experimental-semivariance-and-covariance" title="Link to this heading">#</a></h1>
+<section id="experimental-variogram">
+<h2>Experimental Variogram<a class="headerlink" href="#experimental-variogram" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">ExperimentalVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_cloud</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/experimental_variogram.html#ExperimentalVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class calculates Experimental Semivariogram and Experimental
+Covariogram of a given dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the semivariance is calculated.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y-axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = ‘t’</span></dt><dd><p>Neighbors selection in within a given angle. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method, where point neighbors are
+selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, the more accurate method but also the slowest.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for semivariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom weights assigned to points. Only semivariance values are
+weighted.</p>
+</dd>
+<dt><strong>is_semivariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Calculate experimental semivariance.</p>
+</dd>
+<dt><strong>is_covariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Calculate experimental coviariance.</p>
+</dd>
+<dt><strong>as_cloud</strong><span class="classifier">bool</span></dt><dd><p>Calculate semivariance point-pairs cloud.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>semivariances</strong><span class="classifier">numpy array</span></dt><dd><p>1-D array with semivariances ordered by lags.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>plot()</strong></p></td>
+<td><p>Shows experimental variances.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_covariance</span></code></dt><dd><p>function to calculate experimental covariance</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_semivariance</span></code></dt><dd><p>function to calculate experimental semivariance</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">REFERENCE_INPUT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">empirical_smv</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span><span class="n">REFERENCE_INPUT</span><span class="p">,</span>
+<span class="gp">... </span>                                      <span class="n">step_size</span><span class="o">=</span><span class="n">STEP_SIZE</span><span class="p">,</span>
+<span class="gp">... </span>                                      <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">empirical_smv</span><span class="p">)</span>
+<span class="go">+-----+--------------------+---------------------+</span>
+<span class="go">| lag |    semivariance    |      covariance     |</span>
+<span class="go">+-----+--------------------+---------------------+</span>
+<span class="go">| 1.0 |       4.625        | -0.5434027777777798 |</span>
+<span class="go">| 2.0 | 5.2272727272727275 | -0.7954545454545454 |</span>
+<span class="go">| 3.0 |        6.0         | -1.2599999999999958 |</span>
+<span class="go">+-----+--------------------+---------------------+</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/experimental_variogram.html#ExperimentalVariogram.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots semivariance, covariance, and variance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>semivariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show semivariance on a plot. If class attribute
+<code class="docutils literal notranslate"><span class="pre">is_semivariance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then semivariance is
+not plotted and warning is printed.</p>
+</dd>
+<dt><strong>covariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show covariance on a plot. If class attribute
+<code class="docutils literal notranslate"><span class="pre">is_covariance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then covariance
+is not plotted and warning is printed.</p>
+</dd>
+<dt><strong>variance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show variance level on a plot.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Warns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>AttributeSetToFalseWarning</dt><dd><p>Warning invoked when plotting parameter for semivariance,
+covariance or variance is set to <code class="docutils literal notranslate"><span class="pre">True</span></code> but
+class attributes to calculate those indices are set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">build_experimental_variogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_semivariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_covariance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_cloud</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/experimental_variogram.html#build_experimental_variogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function is an alias to <code class="docutils literal notranslate"><span class="pre">ExperimentalVariogram()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the semivariance is calculated.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y-axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = ‘t’</span></dt><dd><p>Neighbors selection in within a given angle. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method, where point neighbors are
+selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, the more accurate method but also the slowest.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for semivariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom weights assigned to points. Only semivariance values are
+weighted.</p>
+</dd>
+<dt><strong>is_semivariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Calculate experimental semivariance.</p>
+</dd>
+<dt><strong>is_covariance</strong><span class="classifier">bool, default=True</span></dt><dd><p>Calculate experimental coviariance.</p>
+</dd>
+<dt><strong>as_cloud</strong><span class="classifier">bool</span></dt><dd><p>Calculate semivariance point-pairs cloud.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: ExperimentalVariogram</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">calculate_semivariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">VariogramPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/experimental_semivariogram.html#calculate_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates experimental semivariance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the semivariance is calculated.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = ‘t’</span></dt><dd><p>Neighbors selection in a given direction. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method where point neighbors are
+selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, more accurate method but also slower.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for semivariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom weights assigned to points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>semivariance</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p># Semivariance</p>
+<p>It is a measure of dissimilarity between points over distance.
+We assume that the close observations tend to be similar (see Tobler’s
+Law). Distant observations are less and less similar up to the distance
+where the influence of one point value on the other is negligible.</p>
+<p>We calculate the empirical semivariance as:</p>
+<div class="math notranslate nohighlight">
+\[g(h) = 0.5 * n(h)^(-1) * (SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(h\)</span>: lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(g(h)\)</span>: empirical semivariance for lag <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(n(h)\)</span>: number of point pairs within a specific lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_i)\)</span>: point a (value of observation at point a),</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_i + h)\)</span>: point b in distance h from point a (value of
+observation at point b).</p></li>
+</ul>
+<p>As an output we get array of lags <span class="math notranslate nohighlight">\(h\)</span>, semivariances <span class="math notranslate nohighlight">\(g\)</span>
+and number of points within each lag <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<p># Weighted Semivariance</p>
+<p>Sometimes, we need to weight each point by a specific factor.
+It is especially important for the semivariogram deconvolution and
+Poisson Kriging. The weighting factor could be the time effort for
+observation at a location (ecology) or population size at a specific
+block (public health). Implementation of the algorithm follows
+publications:</p>
+<blockquote>
+<div><p>1. A. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:
+Comparison of model based geostatistical methods in ecology:
+application to fin whale spatial distribution in northwestern
+Mediterranean Sea. In Geostatistics Banff 2004 Volume 2.
+Edited by: Leuangthong O, Deutsch CV. Dordrecht, The Netherlands,
+Kluwer Academic Publishers; 2005:777-786.</p>
+<p>2. B. Monestiez P, Dubroca L, Bonnin E, Durbec JP, Guinet C:
+Geostatistical modelling of spatial distribution of Balenoptera
+physalus in the northwestern Mediterranean Sea from sparse count data
+and heterogeneous observation efforts. Ecological Modelling 2006.</p>
+</div></blockquote>
+<p>We calculate the weighted empirical semivariance as:</p>
+<div class="math notranslate nohighlight">
+\[g_w(h) = 0.5 * (SUM|i=1, n(h)|: w(h))^(-1) * (SUM|i=1, n(h)|: w(h) * z_w(h))\]</div>
+<div class="math notranslate nohighlight">
+\[w(h) = [n(x_i) * n(x_i + h)] / [n(u_i) + n(u_i + h)]\]</div>
+<div class="math notranslate nohighlight">
+\[z_w(h) = (z(x_i) - z(x_i + h))^2 - m'\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(h\)</span>: lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(g_w(h)\)</span>: weighted empirical semivariance for lag <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(n(h)\)</span>: number of point pairs within a specific lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_i)\)</span>: point a (rate of specific process at point a),</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_i + h)\)</span>: point b in distance <span class="math notranslate nohighlight">\(h\)</span> from point a
+(rate of specific process at point b),</p></li>
+<li><p><span class="math notranslate nohighlight">\(n(x_i)\)</span>: denominator value size at point a (time, population …),</p></li>
+<li><p><span class="math notranslate nohighlight">\(n(x_i + h)\)</span>: denominator value size at point b in distance
+<span class="math notranslate nohighlight">\(h\)</span> from point a,</p></li>
+<li><p><span class="math notranslate nohighlight">\(m'\)</span>: weighted mean of rates.</p></li>
+</ul>
+<p>The output of weighted algorithm is the same as for non-weighted data:
+array of lags <span class="math notranslate nohighlight">\(h\)</span>, semivariances <span class="math notranslate nohighlight">\(g\)</span> and number of
+points within each lag <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<p># Directional Semivariogram</p>
+<p>The assumption that our observations change in the same way in every
+direction is rarely true. Let’s consider temperature. It changes from
+the equator to the poles so in the N-S and S-N axes. The good idea is to
+test the correlation of our observations in a few different directions.
+The main difference between an omnidirectional semivariogram and
+a directional semivariogram is that we take into account a different
+subset of neighbors:</p>
+<ul class="simple">
+<li><p>Omnidirectional semivariogram: we test neighbors in a circle,</p></li>
+<li><p>Directional semivariogram: we test neighbors within an ellipse,
+and one direction is major.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">REFERENCE_INPUT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">semivariances</span> <span class="o">=</span> <span class="n">calculate_semivariance</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">REFERENCE_INPUT</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">step_size</span><span class="o">=</span><span class="n">STEP_SIZE</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">semivariances</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[ 1.     4.625 24.   ]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">calculate_covariance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">VariogramPoints</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/experimental_covariogram.html#calculate_covariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Calculates experimental covariance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the covariance is calculated.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, optional</span></dt><dd><p>Direction of covariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional covariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = ‘t’</span></dt><dd><p>Neighbors selection in a given direction. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method where a point neighbors are
+selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, more accurate method but also slower.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for covariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>covariance</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[lag,</span> <span class="pre">covariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p># Covariance</p>
+<p>It is a measure of similarity between points over different distances.
+We assume that the close observations tend to be similar
+(recall the Tobler’s Law).</p>
+<p>We calculate the empirical covariance as:</p>
+<div class="math notranslate nohighlight">
+\[covariance = 1 / (N) * SUM(i=1, N) [z(x_i + h) * z(x_i)] - u^2\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(N\)</span> - number of observation pairs,</p></li>
+<li><p><span class="math notranslate nohighlight">\(h\)</span> - distance (lag),</p></li>
+<li><p><span class="math notranslate nohighlight">\(z(x_i)\)</span> - value at location <span class="math notranslate nohighlight">\(z_i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\((x_i + h)\)</span> - location at a distance <span class="math notranslate nohighlight">\(h\)</span> from <span class="math notranslate nohighlight">\(x_i\)</span>,</p></li>
+<li><p><span class="math notranslate nohighlight">\(u\)</span> - average value of observations at a given lag distance.</p></li>
+</ul>
+<p>As an output we get array of lags <span class="math notranslate nohighlight">\(h\)</span>, covariances <span class="math notranslate nohighlight">\(c\)</span> and
+number of points within each lag <span class="math notranslate nohighlight">\(n\)</span>.</p>
+<p># Directional Covariogram</p>
+<p>The assumption that our observations change in the same way in every
+direction is rarely true. Let’s consider temperature. It changes from
+the equator to the poles so in the N-S and S-N axes. The good idea is to
+test the correlation of our observations in a few different directions.
+The main difference between an omnidirectional covariogram and
+a directional covariogram is that we take into account a different
+subset of neighbors:</p>
+<ul class="simple">
+<li><p>Omnidirectional covariogram: we test neighbors in a circle,</p></li>
+<li><p>Directional covariogram: we test neighbors within an ellipse,
+and one direction is major.</p></li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">REFERENCE_INPUT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">STEP_SIZE</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MAX_RANGE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">covariances</span> <span class="o">=</span> <span class="n">calculate_covariance</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">REFERENCE_INPUT</span><span class="p">,</span> <span class="n">STEP_SIZE</span><span class="p">,</span> <span class="n">MAX_RANGE</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">covariances</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[ 1.         -0.54340278 24.        ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">covariances</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="go">4.2485207100591715</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="directional-variogram">
+<h2>Directional Variogram<a class="headerlink" href="#directional-variogram" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">DirectionalVariogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/directional_variogram.html#DirectionalVariogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class prepares four directional variograms and isotropic variogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the semivariance is calculated.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y-axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = “t”</span></dt><dd><p>Method used for neighbors selection in a given direction. Available
+methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method where point neighbors
+are selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, more accurate but slower.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for semivariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom weights assigned to points. Only semivariance values are
+weighted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>directional_variograms</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary with five variograms:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ISO</span></code>: isotropic,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NS</span></code>: North-South axis,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">WE</span></code>: West-East axis,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NE-SW</span></code>: Northeastern-Southwestern axis,</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NW-SE</span></code>: Northwestern-Southeastern axis.</p></li>
+</ul>
+</dd>
+<dt><strong>directions</strong><span class="classifier">Dict</span></dt><dd><p>Dictionary where keys are directions: NS, WE, NE-SW, NW-SE, and
+values are angles: 90, 0, 45, 135</p>
+</dd>
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">ds</span></code> parameter.</p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">step_size</span></code> parameter.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">max_range</span></code> parameter.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = triangular</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">dir_neighbors_selection_method</span></code> parameter.</p>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">custom_bins</span></code> parameter.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">custom_weights</span></code> parameter.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>get()</strong></p></td>
+<td><p>Returns copy of calculated directional variograms or single variogram in a specific direction.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>show()</strong></p></td>
+<td><p>Plot all variograms.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">ExperimentalVariogram</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/directional_variogram.html#DirectionalVariogram.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method returns all variograms or a single variogram in a specific
+direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>direction</strong><span class="classifier">str, default = None</span></dt><dd><p>The direction of variogram from a list of <code class="docutils literal notranslate"><span class="pre">possible_variograms</span></code>
+attribute: “ISO”, “NS”, “WE”, “NE-SW”, “NW-SE”.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: Union[Dict, Type[ExperimentalVariogram]]</dt><dd><p>The dictionary with variograms for all possible directions,
+or a single variogram for a specific direction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/directional_variogram.html#DirectionalVariogram.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method shows variograms in all directions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="variogram-cloud">
+<h2>Variogram Cloud<a class="headerlink" href="#variogram-cloud" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">VariogramCloud</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_neighbors_selection_method</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'t'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Collection</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">custom_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Class calculates Variogram Point Cloud and presents it in a scatterplot,
+boxplot or violinplot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ds</strong><span class="classifier">numpy array</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">[x,</span> <span class="pre">y,</span> <span class="pre">value]</span></code></p>
+</dd>
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>The fixed distance between lags grouping point neighbors.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>The maximum distance at which the semivariance is calculated.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float, optional</span></dt><dd><p>Direction of semivariogram, values from 0 to 360 degrees:</p>
+<ul class="simple">
+<li><p>0 or 180: is E-W,</p></li>
+<li><p>90 or 270 is N-S,</p></li>
+<li><p>45 or 225 is NE-SW,</p></li>
+<li><p>135 or 315 is NW-SE.</p></li>
+</ul>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float, optional</span></dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is 0 then points must be placed at a single line with
+the beginning in the origin of the coordinate system and the
+direction given by y-axis and direction parameter.
+If <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> is <code class="docutils literal notranslate"><span class="pre">&gt;</span> <span class="pre">0</span></code> then the bin is selected as an elliptical
+area with major axis pointed in the same direction as the line for
+<code class="docutils literal notranslate"><span class="pre">0</span></code> tolerance.</p>
+<ul class="simple">
+<li><p>The major axis size == <code class="docutils literal notranslate"><span class="pre">step_size</span></code>.</p></li>
+<li><p>The minor axis size is <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">*</span> <span class="pre">step_size</span></code></p></li>
+<li><p>The baseline point is at a center of the ellipse.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tolerance</span> <span class="pre">==</span> <span class="pre">1</span></code> creates an omnidirectional semivariogram.</p></li>
+</ul>
+</dd>
+<dt><strong>dir_neighbors_selection_method</strong><span class="classifier">str, default = ‘t’</span></dt><dd><p>Neighbors selection in within a given angle. Available methods:</p>
+<ul class="simple">
+<li><p>“triangle” or “t”, default method, where point neighbors are
+selected from a triangular area,</p></li>
+<li><p>“ellipse” or “e”, the more accurate method but also the slowest.</p></li>
+</ul>
+</dd>
+<dt><strong>custom_bins</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom bins for semivariance calculation. If provided, then parameter
+<code class="docutils literal notranslate"><span class="pre">step_size</span></code> is ignored and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> is set to the final bin
+distance.</p>
+</dd>
+<dt><strong>custom_weights</strong><span class="classifier">numpy array, optional</span></dt><dd><p>Custom weights assigned to points. Only semivariance values are
+weighted.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>semivariances</strong><span class="classifier">Dict</span></dt><dd><p>Lag - all semivariances between point pairs:
+<code class="docutils literal notranslate"><span class="pre">{lag:</span> <span class="pre">[semivariances],</span> <span class="pre">}</span></code>.</p>
+</dd>
+<dt><strong>lags</strong><span class="classifier">ArrayLike</span></dt><dd><p>Lags.</p>
+</dd>
+<dt><strong>direction</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">direction</span></code> parameter.</p>
+</dd>
+<dt><strong>tolerance</strong><span class="classifier">float</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">tolerance</span></code> parameter.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>average_semivariance()</strong></p></td>
+<td><p>Returns <code class="docutils literal notranslate"><span class="pre">lag,</span> <span class="pre">average</span> <span class="pre">semivariance,</span> <span class="pre">number</span> <span class="pre">of</span> <span class="pre">point</span> <span class="pre">pairs</span></code> as a numpy array.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>describe()</strong></p></td>
+<td><p>The point cloud statistics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot()</strong></p></td>
+<td><p>Plots scatterplot, boxplot or violinplot of the point cloud.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>remove_outliers()</strong></p></td>
+<td><p>Removes outliers from the semivariance plots.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExperimentalVariogram</span></code></dt><dd><p>class that calculates experimental semivariogram, experimental covariogram and data variance.</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">average_semivariance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.average_semivariance"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Returns mean of semivariances for each lag - which is equal to
+the experimental semivariogram output.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>: numpy array</dt><dd><p>Mean of semivariances for each lag.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">describe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">as_dataframe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">DataFrame</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.describe"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method calculates basic statistics. Includes count (point pairs
+number), average semivariance, standard deviation, minimum,
+1st quartile, median, 3rd quartile, maximum, skewness, and kurtosis.</p>
+<dl class="field-list">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>statistics</strong><span class="classifier">Dict</span></dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">statistics</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>     <span class="n">lag_number</span><span class="p">:</span>
+<span class="gp">... </span>     <span class="p">{</span>
+<span class="gp">... </span>         <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">point</span> <span class="n">pairs</span> <span class="n">count</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="n">mean</span> <span class="n">semivariance</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;std&#39;</span><span class="p">:</span> <span class="n">standard</span> <span class="n">deviation</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">minimal</span> <span class="n">variance</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;25%&#39;</span><span class="p">:</span> <span class="n">first</span> <span class="n">quartile</span> <span class="n">of</span> <span class="n">variances</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;median&#39;</span><span class="p">:</span> <span class="n">second</span> <span class="n">quartile</span> <span class="n">of</span> <span class="n">variances</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;75%&#39;</span><span class="p">:</span> <span class="n">third</span> <span class="n">quartile</span> <span class="n">of</span> <span class="n">variances</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="nb">max</span> <span class="n">variance</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;skewness&#39;</span><span class="p">:</span> <span class="n">skewness</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="s1">&#39;kurtosis&#39;</span><span class="p">:</span> <span class="n">kurtosis</span>
+<span class="gp">... </span>     <span class="p">}</span>
+<span class="gp">... </span> <span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">experimental_semivariances</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ExperimentalVariogram</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.experimental_semivariances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Returns experimental semivariogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>: ExperimentalVariogram</dt><dd><p>Experimental semivariogram object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kind</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'scatter'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method plots variogram point cloud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kind</strong><span class="classifier">string, default=’scatter’</span></dt><dd><p>available plot types: ‘scatter’, ‘box’, ‘violin’</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: bool</dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if Figure was plotted.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">remove_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'zscore'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_lower_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_upper_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iqr_lower_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iqr_upper_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/experimental/classes/variogram_cloud.html#VariogramCloud.remove_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Method cleans semivariogram point cloud from outliers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>method</strong><span class="classifier">str, default=’zscore’</span></dt><dd><p>Method used to detect outliers. Can be ‘zscore’ or ‘iqr’.</p>
+</dd>
+<dt><strong>z_lower_limit</strong><span class="classifier">float</span></dt><dd><p>Number of standard deviations from the mean to the left side
+of a distribution. Must be lower than 0.</p>
+</dd>
+<dt><strong>z_upper_limit</strong><span class="classifier">float</span></dt><dd><p>Number of standard deviations from the mean to the right side
+of a distribution. Must be greater than 0.</p>
+</dd>
+<dt><strong>iqr_lower_limit</strong><span class="classifier">float</span></dt><dd><p>Number of standard deviations from the 1st quartile into
+the lowest values. Must be greater or equal to zero.</p>
+</dd>
+<dt><strong>iqr_upper_limit</strong><span class="classifier">float</span></dt><dd><p>Number of standard deviations from the 3rd quartile into
+the largest values. Must be greater or equal to zero.</p>
+</dd>
+<dt><strong>inplace</strong><span class="classifier">bool, default = False</span></dt><dd><p>Overwrite semivariances or return new object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: VariogramCloud</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">inplace</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code> then method returns new
+instance of an object with cleaned semivariances.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>RunetimeError</dt><dd><p>The attribute experimental_point_cloud is not calculated.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../distance/distance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Distance</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="theoretical.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Theoretical Semivariogram</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experimental-variogram">Experimental Variogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directional-variogram">Directional Variogram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variogram-cloud">Variogram Cloud</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/api/semivariogram/experimental.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

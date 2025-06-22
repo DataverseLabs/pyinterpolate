@@ -4,7 +4,7 @@ Setup
 Installation guidelines
 -----------------------
 
-The package can be installed from `conda` and `pip`. `Conda` installation requires Python >= 3.8, `pip` installation requires Python >= 3.7.
+The package can be installed from `conda` and `pip`.
 
 Conda
 .....
@@ -47,6 +47,32 @@ Install `pyinterpolate`  along `notebook` in your conda environment:
     conda install -c conda-forge notebook pyinterpolate
 
 Now you are able to run library from a notebook.
+
+----
+
+Failing pylibtiff build - Linux
+...............................
+
+With installation on a fresh Linux distribution you might encounter problems with `pylibtiff` which is a dependency of `pyinterpolate`.
+You will get a long error message. The last line of the message is:
+
+.. code-block:: console
+
+    ERROR: ERROR: Failed to build installable wheels for some pyproject.toml based projects (pylibtiff)
+
+This means that you haven't configured required system libraries yet. You should install those three libraries:
+
+- `libtiff-dev`
+- `python3-dev`
+- `gcc`
+
+Install those using command:
+
+.. code-block:: console
+
+    sudo apt install gcc python3-dev libtiff-dev
+
+and after installation you should be able to install `pyinterpolate` without problems.
 
 ----
 

@@ -1,0 +1,1353 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyinterpolate.semivariogram.deconvolution.regularize &#8212; pyinterpolate 1.0.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyinterpolate/semivariogram/deconvolution/regularize';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../setup/setup.html">
+    Setup
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/quickstart.html">
+    Quickstart
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../usage/learning_materials.html">
+    Learning Materials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/citation.html">
+    Citation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../science/bibliography.html">
+    Bibliography
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../community/community.html">
+    Community
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/api.html">
+    API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../contributor/development.html">
+    Development
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyinterpolate.semivariogram.deconvolution.regularize</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for pyinterpolate.semivariogram.deconvolution.regularize</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Semivariogram regularization &amp; deconvolution process.</span>
+
+<span class="sd">Authors</span>
+<span class="sd">-------</span>
+<span class="sd">1. Szymon Moliński | @SimonMolinsky</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">trange</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.experimental.classes.experimental_variogram</span> <span class="kn">import</span> <span class="n">ExperimentalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.point_support</span> <span class="kn">import</span> <span class="n">PointSupport</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.validators.common</span> <span class="kn">import</span> <span class="n">check_limits</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.deconvolution.aggregated_variogram</span> <span class="kn">import</span> \
+    <span class="n">regularize</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.deconvolution.deviation</span> <span class="kn">import</span> <span class="n">Deviation</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> \
+    <span class="n">TheoreticalVariogram</span>
+
+
+<div class="viewcode-block" id="Deconvolution">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution">[docs]</a>
+<span class="k">class</span> <span class="nc">Deconvolution</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class performs deconvolution of semivariogram of areal data. Whole</span>
+<span class="sd">    procedure is based on the iterative process described in: [1].</span>
+
+<span class="sd">    Steps to regularize semivariogram:</span>
+
+<span class="sd">    - initialize your object (no parameters),</span>
+<span class="sd">    - use ``fit()`` method to build the initial point support model,</span>
+<span class="sd">    - use ``transform()`` method to perform the semivariogram regularization,</span>
+<span class="sd">    - save deconvoluted semivariogram model with ``export_model()`` method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    verbose : bool, default = True</span>
+<span class="sd">        Print process steps into a terminal.</span>
+
+<span class="sd">    store_models : bool, default = False</span>
+<span class="sd">        Should theoretical and regularized models be stored after each</span>
+<span class="sd">        iteration.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ps : PointSupport</span>
+<span class="sd">        Point support data.</span>
+
+<span class="sd">    blocks : Blocks</span>
+<span class="sd">        Blocks with aggregated data.</span>
+
+<span class="sd">    deviation : Deviation</span>
+<span class="sd">        Deviation object tracking the fit error between the initial model and</span>
+<span class="sd">        regularized model.</span>
+
+<span class="sd">    min_deviation_ratio : float</span>
+<span class="sd">        Minimal ratio of model deviation to initial deviation when algorithm</span>
+<span class="sd">        is stopped. Parameter must be set within the limits ``(0, 1)``. Set</span>
+<span class="sd">        in ``transform()`` method.</span>
+
+<span class="sd">    min_deviation_decrease : float</span>
+<span class="sd">        The minimum ratio of the difference between model deviation and</span>
+<span class="sd">        optimal deviation to the optimal deviation:</span>
+<span class="sd">        ``|dev - opt_dev| / opt_dev``.</span>
+<span class="sd">        Parameter must be set within the limits ``(0, 1)``. Set in</span>
+<span class="sd">        ``transform()`` method.</span>
+
+<span class="sd">    reps_deviation_decrease : int</span>
+<span class="sd">        How many repetitions of small deviation decrease before termination</span>
+<span class="sd">        of the algorithm.</span>
+
+<span class="sd">    weights : List</span>
+<span class="sd">        Weights applied to each lag during each regularization iteration.</span>
+
+<span class="sd">    final_theoretical_model : TheoreticalVariogram</span>
+<span class="sd">        Optimal model with the lowest deviation between this model and initial</span>
+<span class="sd">        theoretical variogram derived from blocks.</span>
+
+<span class="sd">    final_regularized_variogram : numpy array</span>
+<span class="sd">        ``[lag, semivariance]``</span>
+
+<span class="sd">    is_fit : bool, default = False</span>
+<span class="sd">        Was model fitted? (The first step of regularization).</span>
+
+<span class="sd">    is_transformed : bool, default = False</span>
+<span class="sd">        Was model transformed?</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    fit()</span>
+<span class="sd">        Fits areal data and the point support data into a model,</span>
+<span class="sd">        initializes the experimental semivariogram,</span>
+<span class="sd">        the theoretical semivariogram model,</span>
+<span class="sd">        regularized point support model, and deviation.</span>
+
+<span class="sd">    transform()</span>
+<span class="sd">        Performs semivariogram regularization.</span>
+
+<span class="sd">    fit_transform()</span>
+<span class="sd">        Performs fit() and transform() at once.</span>
+
+<span class="sd">    export_model()</span>
+<span class="sd">        Exports regularized (or fitted) model.</span>
+
+<span class="sd">    plot_variograms()</span>
+<span class="sd">        Plots semivariances before and after regularization.</span>
+
+<span class="sd">    plot_deviations()</span>
+<span class="sd">        Plots each deviation divided by the initial deviation.</span>
+
+<span class="sd">    plot_weights()</span>
+<span class="sd">        Plots the mean weight value per lag.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    [1] Goovaerts P., Kriging and Semivariogram Deconvolution in</span>
+<span class="sd">    the Presence of Irregular Geographical Units,</span>
+<span class="sd">    Mathematical Geology 40(1), 101-128, 2008</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; dcv = Deconvolution(verbose=True)</span>
+<span class="sd">    &gt;&gt;&gt; dcv.fit(agg_dataset=...,</span>
+<span class="sd">    ...         point_support_dataset=...,</span>
+<span class="sd">    ...         step_size=...,</span>
+<span class="sd">    ...         max_range=...,</span>
+<span class="sd">    ...         variogram_weighting_method=&#39;closest&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; dcv.transform(_max_iters=5)</span>
+<span class="sd">    &gt;&gt;&gt; dcv.plot_variograms()</span>
+<span class="sd">    &gt;&gt;&gt; dcv.plot_deviations()</span>
+<span class="sd">    &gt;&gt;&gt; dcv.plot_weights()</span>
+<span class="sd">    &gt;&gt;&gt; dcv.export_model(&#39;results.csv&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+        <span class="c1"># Core data structures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ps</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># point support</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># aggregated dataset</span>
+
+        <span class="c1"># Deviation and custom_weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="p">:</span> <span class="n">Deviation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_ratio</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_decrease</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reps_deviation_decrease</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Variograms - final</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_regularized_variogram</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Control</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fit</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_transformed</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_iters</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iters_deviation_decrease</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_w_change</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_store_models</span> <span class="o">=</span> <span class="n">store_models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Variograms - initial</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model_prediction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="p">:</span> <span class="n">ExperimentalVariogram</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Variograms - optimal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s2</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># sill of initial theoretical model squared</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Initial variogram parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_step_size</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_range</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ranges</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models_group</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Debug and stability</span>
+        <span class="c1"># List with theoretical models parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_theoretical_models</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># List with arrays with regularized models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_regularized_models</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Deconvolution.fit">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.fit">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">blocks</span><span class="p">:</span> <span class="n">Blocks</span><span class="p">,</span>
+            <span class="n">point_support</span><span class="p">:</span> <span class="n">PointSupport</span><span class="p">,</span>
+            <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+            <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+            <span class="n">models_group</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits the blocks semivariogram into the point support semivariogram.</span>
+<span class="sd">        The initial step of regularization.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        blocks : Blocks</span>
+<span class="sd">            Aggregated data | choropleth map.</span>
+
+<span class="sd">        point_support : PointSupport</span>
+<span class="sd">            Point support of ``blocks``.</span>
+
+<span class="sd">        step_size : float</span>
+<span class="sd">            Step size between lags - estimated for ``blocks``.</span>
+
+<span class="sd">        max_range : float</span>
+<span class="sd">            Maximal distance of analysis - estimated for ``blocks``.</span>
+
+<span class="sd">        nugget : float, default = 0</span>
+<span class="sd">            The nugget of a data - estimated for ``blocks``.</span>
+
+<span class="sd">        direction : float (in range [0, 360]), optional</span>
+<span class="sd">            Direction of ``blocks`` semivariogram, values from 0 to 360</span>
+<span class="sd">            degrees:</span>
+
+<span class="sd">            - 0 or 180: is E-W,</span>
+<span class="sd">            - 90 or 270 is N-S,</span>
+<span class="sd">            - 45 or 225 is NE-SW,</span>
+<span class="sd">            - 135 or 315 is NW-SE.</span>
+
+<span class="sd">        tolerance : float (in range [0, 1]), optional</span>
+<span class="sd">            If ``tolerance`` is 0 then points must be placed at a single</span>
+<span class="sd">            line with the beginning in the origin of the coordinate system</span>
+<span class="sd">            and the direction given by y axis and direction parameter.</span>
+<span class="sd">            If ``tolerance`` is ``&gt; 0`` then the points are selected in</span>
+<span class="sd">            elliptical area with major axis pointed in the same direction as</span>
+<span class="sd">            the line for ``0`` tolerance.</span>
+
+<span class="sd">            * The major axis size == ``step_size``.</span>
+<span class="sd">            * The minor axis size is ``tolerance * step_size``</span>
+<span class="sd">            * The baseline point is at a center of the ellipse.</span>
+<span class="sd">            * The ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">        variogram_weighting_method : str, default = ``&quot;closest&quot;``</span>
+<span class="sd">            Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">            - equal: no weighting,</span>
+<span class="sd">            - closest: lags at a close range have bigger custom_weights,</span>
+<span class="sd">            - distant: lags that are further away have bigger custom_weights,</span>
+<span class="sd">            - dense: error is weighted by the number of point pairs within lag.</span>
+
+<span class="sd">        models_group : str or list, default=&#39;safe&#39;</span>
+<span class="sd">            Models group to test:</span>
+
+<span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]</span>
+<span class="sd">            - as a list: multiple model types to test</span>
+<span class="sd">            - as a single model type from:</span>
+<span class="sd">                - &#39;circular&#39;,</span>
+<span class="sd">                - &#39;cubic&#39;,</span>
+<span class="sd">                - &#39;exponential&#39;,</span>
+<span class="sd">                - &#39;gaussian&#39;,</span>
+<span class="sd">                - &#39;linear&#39;,</span>
+<span class="sd">                - &#39;power&#39;,</span>
+<span class="sd">                - &#39;spherical&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initial fit of semivariogram&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Update class parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ps</span> <span class="o">=</span> <span class="n">point_support</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_step_size</span> <span class="o">=</span> <span class="n">step_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_range</span> <span class="o">=</span> <span class="n">max_range</span>
+
+        <span class="k">if</span> <span class="n">nugget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span> <span class="o">=</span> <span class="n">nugget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_direction</span> <span class="o">=</span> <span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span> <span class="o">=</span> <span class="n">tolerance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span> <span class="o">=</span> <span class="n">variogram_weighting_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_models_group</span> <span class="o">=</span> <span class="n">models_group</span>
+
+        <span class="c1"># Compute experimental variogram of areal data</span>
+        <span class="n">areal_centroids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+            <span class="n">ds</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span>
+            <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_step_size</span><span class="p">,</span>
+            <span class="n">max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_range</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Compute theoretical variogram of areal data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+            <span class="n">experimental_variogram</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="p">,</span>
+            <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span><span class="p">,</span>
+            <span class="n">models_group</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_models_group</span><span class="p">,</span>
+            <span class="n">deviation_weighting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">sill</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model_prediction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">experimental_semivariances</span>
+
+        <span class="c1"># Regularize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span> <span class="o">=</span> <span class="n">regularize</span><span class="p">(</span>
+            <span class="n">blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">,</span>
+            <span class="n">point_support</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ps</span><span class="p">,</span>
+            <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_step_size</span><span class="p">,</span>
+            <span class="n">max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_range</span><span class="p">,</span>
+            <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span><span class="p">,</span>
+            <span class="n">theoretical_block_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="p">,</span>
+            <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span>
+            <span class="n">log_process</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span> <span class="o">=</span> <span class="n">Deviation</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">yhat</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_fit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Regularization fit process ends&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Deconvolution.transform">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">max_iters</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                  <span class="n">min_deviation_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                  <span class="n">min_deviation_decrease</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                  <span class="n">reps_deviation_decrease</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method performs semivariogram regularization after model fitting.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        max_iters : int, default = 25</span>
+<span class="sd">            Maximum number of iterations.</span>
+
+<span class="sd">        min_deviation_ratio : float, default = 0.1</span>
+<span class="sd">            Minimal ratio of model deviation to initial deviation when</span>
+<span class="sd">            algorithm is stopped. Parameter must be set within the limits</span>
+<span class="sd">            ``(0, 1)``.</span>
+
+<span class="sd">        min_deviation_decrease : float, default = 0.01</span>
+<span class="sd">            The minimum ratio of the difference between model deviation</span>
+<span class="sd">            and optimal deviation to the optimal deviation:</span>
+<span class="sd">            ``|dev - opt_dev| / opt_dev``.</span>
+<span class="sd">            Parameter must be set within the limits ``(0, 1)``.</span>
+
+<span class="sd">        reps_deviation_decrease : int, default = 3</span>
+<span class="sd">            How many repetitions of small deviation decrease before</span>
+<span class="sd">            termination of the algorithm.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            ``initial_regularized_model`` is undefined (user didn&#39;t</span>
+<span class="sd">            perform ``fit()`` method).</span>
+
+<span class="sd">        ValueError</span>
+<span class="sd">            ``limit_deviation_ratio`` or ``minimum_deviation_decrease``</span>
+<span class="sd">            parameters ``&lt;= 0 or &gt;= 1``.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Transform procedure starts&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Check if model was fitted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_fit</span><span class="p">()</span>
+
+        <span class="c1"># Check limits</span>
+        <span class="n">check_limits</span><span class="p">(</span><span class="n">min_deviation_ratio</span><span class="p">)</span>
+        <span class="n">check_limits</span><span class="p">(</span><span class="n">min_deviation_decrease</span><span class="p">)</span>
+
+        <span class="c1"># Update optimal models with initial models -</span>
+        <span class="c1"># make copies to be sure that we didn&#39;t overwrite values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_max_iters</span> <span class="o">=</span> <span class="n">max_iters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_ratio</span> <span class="o">=</span> <span class="n">min_deviation_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_decrease</span> <span class="o">=</span> <span class="n">min_deviation_decrease</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reps_deviation_decrease</span> <span class="o">=</span> <span class="n">reps_deviation_decrease</span>
+
+        <span class="n">initial_model_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Append models if _store_models parameter is set to True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_models</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_theoretical_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">initial_model_params</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_regularized_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span><span class="p">)</span>
+
+        <span class="c1"># Start iterative procedure</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">trange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_iters</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">):</span>
+            <span class="n">deviation_test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_deviation_gains</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">deviation_test</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Process terminated: deviation gain is too small&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Compute new experimental values for</span>
+                <span class="c1"># the new experimental point support model</span>
+                <span class="n">rescaled_experimental_variogram</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rescale_optimal_theoretical_model</span><span class="p">()</span>
+
+                <span class="c1"># Fit rescaled model to the new theoretical fn</span>
+                <span class="n">temp_theoretical_semivariogram_model</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+                <span class="n">temp_theoretical_semivariogram_model</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+                    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">rescaled_experimental_variogram</span><span class="p">,</span>
+                    <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span><span class="p">,</span>
+                    <span class="n">models_group</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_models_group</span><span class="p">,</span>
+                    <span class="n">deviation_weighting</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Regularize model</span>
+                <span class="n">temp_regularized_variogram</span> <span class="o">=</span> <span class="n">regularize</span><span class="p">(</span>
+                    <span class="n">blocks</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">,</span>
+                    <span class="n">step_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_step_size</span><span class="p">,</span>
+                    <span class="n">max_range</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_range</span><span class="p">,</span>
+                    <span class="n">nugget</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_nugget</span><span class="p">,</span>
+                    <span class="n">point_support</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ps</span><span class="p">,</span>
+                    <span class="n">theoretical_block_model</span><span class="o">=</span><span class="n">temp_theoretical_semivariogram_model</span><span class="p">,</span>
+                    <span class="n">experimental_block_semivariances</span><span class="o">=</span><span class="n">rescaled_experimental_variogram</span><span class="p">,</span>
+                    <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_direction</span><span class="p">,</span>
+                    <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_tolerance</span><span class="p">,</span>
+                    <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_weighting_method</span><span class="p">,</span>
+                    <span class="n">verbose</span><span class="o">=</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verbose</span><span class="p">,</span>
+                    <span class="n">log_process</span><span class="o">=</span><span class="kc">False</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Compute diff stats</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">yhat</span><span class="p">,</span>
+                    <span class="n">temp_regularized_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">deviation_direction</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_w_change</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">set_current_as_optimal</span><span class="p">()</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span> <span class="o">=</span> <span class="n">temp_theoretical_semivariogram_model</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span> <span class="o">=</span> <span class="n">temp_regularized_variogram</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_w_change</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># Append models if _store_models parameter is set to True</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_store_models</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_theoretical_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">temp_theoretical_semivariogram_model</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_regularized_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">temp_regularized_variogram</span>
+                    <span class="p">)</span>
+
+        <span class="c1"># Get theoretical model from regularized</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_regularized_variogram</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_transformed</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="Deconvolution.fit_transform">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.fit_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">blocks</span><span class="p">:</span> <span class="n">Blocks</span><span class="p">,</span>
+                      <span class="n">point_support</span><span class="p">:</span> <span class="n">PointSupport</span><span class="p">,</span>
+                      <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                      <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                      <span class="n">nugget</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">variogram_weighting_method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;closest&#39;</span><span class="p">,</span>
+                      <span class="n">models_group</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;safe&#39;</span><span class="p">,</span>
+                      <span class="n">max_iters</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+                      <span class="n">limit_deviation_ratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                      <span class="n">minimum_deviation_decrease</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+                      <span class="n">reps_deviation_decrease</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method performs ``fit()`` and ``transform()`` operations at once.</span>
+
+<span class="sd">        Fits the blocks semivariogram into the point support semivariogram.</span>
+<span class="sd">        The initial step of regularization.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        blocks : Blocks</span>
+<span class="sd">            Aggregated data | choropleth map.</span>
+
+<span class="sd">        point_support : PointSupport</span>
+<span class="sd">            Point support of ``blocks``.</span>
+
+<span class="sd">        step_size : float</span>
+<span class="sd">            Step size between lags - estimated for ``blocks``.</span>
+
+<span class="sd">        max_range : float</span>
+<span class="sd">            Maximal distance of analysis - estimated for ``blocks``.</span>
+
+<span class="sd">        nugget : float, default = 0</span>
+<span class="sd">            The nugget of a data - estimated for ``blocks``.</span>
+
+<span class="sd">        direction : float (in range [0, 360]), optional</span>
+<span class="sd">            Direction of ``blocks`` semivariogram, values from 0 to 360</span>
+<span class="sd">            degrees:</span>
+
+<span class="sd">            - 0 or 180: is E-W,</span>
+<span class="sd">            - 90 or 270 is N-S,</span>
+<span class="sd">            - 45 or 225 is NE-SW,</span>
+<span class="sd">            - 135 or 315 is NW-SE.</span>
+
+<span class="sd">        tolerance : float (in range [0, 1]), optional</span>
+<span class="sd">            If ``tolerance`` is 0 then points must be placed at a single line</span>
+<span class="sd">            with the beginning in the origin of the coordinate system and the</span>
+<span class="sd">            direction given by y axis and direction parameter.</span>
+<span class="sd">            If ``tolerance`` is ``&gt; 0`` then the bin is selected as an</span>
+<span class="sd">            elliptical area with major axis pointed in the same direction</span>
+<span class="sd">            as the line for ``0`` tolerance.</span>
+
+<span class="sd">            * The major axis size == ``step_size``.</span>
+<span class="sd">            * The minor axis size is ``tolerance * step_size``</span>
+<span class="sd">            * The baseline point is at a center of the ellipse.</span>
+<span class="sd">            * The ``tolerance == 1`` creates an omnidirectional semivariogram.</span>
+
+<span class="sd">        variogram_weighting_method : str, default = ``&quot;closest&quot;``</span>
+<span class="sd">            Method used to weight error at a given lags. Available methods:</span>
+
+<span class="sd">            - equal: no weighting,</span>
+<span class="sd">            - closest: lags at a close range have bigger custom_weights,</span>
+<span class="sd">            - distant: lags that are further away have bigger custom_weights,</span>
+<span class="sd">            - dense: error is weighted by the number of point pairs within lag.</span>
+
+<span class="sd">        models_group : str or list, default=&#39;safe&#39;</span>
+<span class="sd">            Models group to test:</span>
+
+<span class="sd">            - &#39;all&#39; - the same as list with all models,</span>
+<span class="sd">            - &#39;safe&#39; - [&#39;linear&#39;, &#39;power&#39;, &#39;spherical&#39;]</span>
+<span class="sd">            - as a list: multiple model types to test</span>
+<span class="sd">            - as a single model type from:</span>
+<span class="sd">                - &#39;circular&#39;,</span>
+<span class="sd">                - &#39;cubic&#39;,</span>
+<span class="sd">                - &#39;exponential&#39;,</span>
+<span class="sd">                - &#39;gaussian&#39;,</span>
+<span class="sd">                - &#39;linear&#39;,</span>
+<span class="sd">                - &#39;power&#39;,</span>
+<span class="sd">                - &#39;spherical&#39;.</span>
+
+<span class="sd">        max_iters : int, default = 25</span>
+<span class="sd">            Maximum number of iterations.</span>
+
+<span class="sd">        limit_deviation_ratio : float, default = 0.01</span>
+<span class="sd">            Minimal ratio of model deviation to initial deviation when</span>
+<span class="sd">            algorithm is stopped. Parameter must be set</span>
+<span class="sd">            within the limits ``(0, 1)``.</span>
+
+<span class="sd">        minimum_deviation_decrease : float, default = 0.001</span>
+<span class="sd">            The minimum ratio of the difference between model deviation</span>
+<span class="sd">            and optimal deviation to the optimal deviation:</span>
+<span class="sd">            ``|dev - opt_dev| / opt_dev``. The parameter must be set within</span>
+<span class="sd">            the limits ``(0, 1)``.</span>
+
+<span class="sd">        reps_deviation_decrease : int, default = 3</span>
+<span class="sd">            How many repetitions of small deviation decrease before</span>
+<span class="sd">            termination of the algorithm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">blocks</span><span class="o">=</span><span class="n">blocks</span><span class="p">,</span>
+                 <span class="n">point_support</span><span class="o">=</span><span class="n">point_support</span><span class="p">,</span>
+                 <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+                 <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
+                 <span class="n">nugget</span><span class="o">=</span><span class="n">nugget</span><span class="p">,</span>
+                 <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>
+                 <span class="n">tolerance</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
+                 <span class="n">variogram_weighting_method</span><span class="o">=</span><span class="n">variogram_weighting_method</span><span class="p">,</span>
+                 <span class="n">models_group</span><span class="o">=</span><span class="n">models_group</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">max_iters</span><span class="o">=</span><span class="n">max_iters</span><span class="p">,</span>
+                       <span class="n">min_deviation_ratio</span><span class="o">=</span><span class="n">limit_deviation_ratio</span><span class="p">,</span>
+                       <span class="n">min_deviation_decrease</span><span class="o">=</span><span class="n">minimum_deviation_decrease</span><span class="p">,</span>
+                       <span class="n">reps_deviation_decrease</span><span class="o">=</span><span class="n">reps_deviation_decrease</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Deconvolution.export_model_to_json">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.export_model_to_json">[docs]</a>
+    <span class="k">def</span> <span class="nf">export_model_to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function exports final theoretical model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : str</span>
+<span class="sd">            File name for model parameters (nugget, sill, range, model type)</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        RunetimeError</span>
+<span class="sd">            A model hasn&#39;t been transformed yet.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;You cannot export any &#39;</span>
+                               <span class="s1">&#39;model if you not transform data.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Deconvolution.plot_variograms">
+<a class="viewcode-back" href="../../../../api/semivariogram/deconvolution.html#pyinterpolate.Deconvolution.plot_variograms">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_variograms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function shows experimental semivariogram, theoretical</span>
+<span class="sd">        semivariogram and regularized semivariogram after</span>
+<span class="sd">        semivariogram regularization (transforming).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">lags</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">semivariances</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">lags</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
+                 <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_regularized_variogram</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">final_regularized_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;go&#39;</span><span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lags</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">final_theoretical_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">lags</span><span class="p">),</span>
+                     <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                     <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dotted&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Experimental semivariogram of areal data&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Initial Semivariogram of areal data&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Regularized data points, iteration </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">),</span>
+                        <span class="s1">&#39;Optimized theoretical point support model&#39;</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span>
+                <span class="s1">&#39;Semivariograms comparison. Deviation value: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">optimal_deviation</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Experimental semivariogram of areal data&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;Initial Semivariogram of areal data&#39;</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Semivariograms comparison&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Distance&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Semivariance&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">plot_deviation_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">normalized</span><span class="o">=</span><span class="n">normalized</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot_weights_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">averaged</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">iter_no</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">averaged</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">iter_no</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Average custom_weights change&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Average weight&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">legend</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">lag</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span><span class="o">.</span><span class="n">lags</span><span class="p">):</span>
+                <span class="n">legend</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Lag: </span><span class="si">{</span><span class="n">lag</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                    <span class="n">iter_no</span><span class="p">,</span>
+                    <span class="p">[</span><span class="n">weight</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">],</span>
+                    <span class="s1">&#39;o:&#39;</span>
+                <span class="p">)</span>
+
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Lag custom_weights change&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Weight&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">legend</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Iteration&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_check_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_regularized_variogram</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The initial regularized model is undefined. Perform fit()&#39;</span>
+                   <span class="s1">&#39; before transformation!&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_deviation_gains</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># Test deviation ratio</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_ratio</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Test deviation decrease</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_decrease</span><span class="p">(</span><span class="n">iter_no</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_deviation_decrease</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        |dev - opt_dev| / opt_dev</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        iter_no : int</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">iter_no</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dev_decrease</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">calculate_deviation_decrease</span><span class="p">()</span>
+
+            <span class="c1"># TODO this condition is very hard to met, have to be changed</span>
+            <span class="k">if</span> <span class="n">dev_decrease</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span>
+                    <span class="n">dev_decrease</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_decrease</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_counter</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_counter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iters_deviation_decrease</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_deviation_counter</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_deviation_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The model deviation to initial deviation.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dev_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviation</span><span class="o">.</span><span class="n">calculate_deviation_ratio</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">dev_ratio</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_deviation_ratio</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_rescale_optimal_theoretical_model</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function rescales points derived from the optimal theoretical model</span>
+<span class="sd">        and creates new experimental values based on the equation:</span>
+
+<span class="sd">        $$\gamma_{res}(h) = \gamma_{opt}(h) \times w(h)$$</span>
+
+<span class="sd">        $$w(h) =</span>
+<span class="sd">          1 + \frac{\gamma_{v}^{exp}(h)-\gamma_{v}^{opt}}{s^{2}\sqrt{_iter}}$$</span>
+
+<span class="sd">        where:</span>
+
+<span class="sd">        - $\gamma_{v}^{exp}(h)$ : theoretical model fitted to blocks</span>
+<span class="sd">            (1st _iter), then point support model that has been derived from</span>
+<span class="sd">            a rescaled values.</span>
+<span class="sd">        - $\gamma_{v}^{opt}$ : optimal point support model (after</span>
+<span class="sd">            regularization),</span>
+<span class="sd">        - $w(h)$ : custom_weights vector (each record is a weight applied</span>
+<span class="sd">            to a specific lag),</span>
+<span class="sd">        - $s$ - sill of the theoretical model fitted to the blocks,</span>
+<span class="sd">        - $_iter$ - iteration number.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        rescaled : numpy array</span>
+<span class="sd">                    Rescalled point support model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">y_opt_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_theoretical_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ranges</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_w_change</span><span class="p">:</span>
+            <span class="n">denom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">)</span>
+            <span class="n">numer</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_theoretical_model_prediction</span> <span class="o">-</span>
+                     <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">numer</span> <span class="o">/</span> <span class="n">denom</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">rescaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span><span class="p">)</span>
+        <span class="n">rescaled</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_optimal_regularized_variogram</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">rescaled</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_opt_h</span> <span class="o">*</span> <span class="n">w</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rescaled</span>
+
+    <span class="k">def</span> <span class="nf">_rescaled_to_exp_variogram</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">rescaled</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExperimentalVariogram</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function sets new experimental variogram based on the rescaled</span>
+<span class="sd">        semivariances; variance of experimental variogram is calculated</span>
+<span class="sd">        as the mean of the last 5 rescaled semivariances.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        rescaled : numpy array</span>
+<span class="sd">            Rescaled semivariances.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        exp_var : ExperimentalVariogram</span>
+<span class="sd">            Experimental variogram of rescaled semivariances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">exp_var</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+            <span class="n">ds</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">ds</span><span class="p">,</span>
+            <span class="n">custom_bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">lags</span><span class="p">,</span>
+            <span class="n">custom_weights</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">custom_weights</span><span class="p">,</span>
+            <span class="n">direction</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span>
+            <span class="n">tolerance</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_experimental_variogram</span><span class="o">.</span><span class="n">tolerance</span><span class="p">)</span>
+
+        <span class="n">exp_var</span><span class="o">.</span><span class="n">semivariances</span> <span class="o">=</span> <span class="n">rescaled</span>
+        <span class="n">variance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">exp_var</span><span class="o">.</span><span class="n">semivariances</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">5</span><span class="p">:])</span>
+        <span class="n">exp_var</span><span class="o">.</span><span class="n">variance</span> <span class="o">=</span> <span class="n">variance</span>
+
+        <span class="k">return</span> <span class="n">exp_var</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Modeling status.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_fit</span><span class="p">:</span>
+            <span class="n">msg_fit</span> <span class="o">=</span> <span class="s1">&#39;* Model has been fitted&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg_fit</span> <span class="o">=</span> <span class="s1">&#39;* Model has not been fitted&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_transformed</span><span class="p">:</span>
+            <span class="n">msg_trans</span> <span class="o">=</span> <span class="s1">&#39;* Model has been transformed&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg_trans</span> <span class="o">=</span> <span class="s1">&#39;* Model has not been transformed&#39;</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">msg_fit</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">msg_trans</span>
+        <span class="k">return</span> <span class="n">msg</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2025, Szymon Moliński.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

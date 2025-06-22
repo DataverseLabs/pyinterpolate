@@ -1,3 +1,51 @@
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyinterpolate"
+version = "1.0.0"
+authors = [
+    {name = "Szymon Moliński", email = "simon@dataverselabs.com"},
+]
+maintainers = [
+    {name = "Szymon Moliński"},
+]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dependencies = [
+    "pydantic",
+    "tqdm",
+    "geopandas",
+    "scipy",
+    "prettytable",
+    "numpy",
+    "matplotlib",
+    "dask"
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "nbsphinx",
+    "numpydoc",
+    "pydata-sphinx-theme",
+    "sphinx-copybutton",
+    "notebook"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = "src"
