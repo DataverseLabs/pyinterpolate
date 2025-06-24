@@ -664,6 +664,170 @@ unknown location.</p>
 </dd></dl>
 
 </section>
+<section id="universal-kriging">
+<h2>Universal Kriging<a class="headerlink" href="#universal-kriging" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyinterpolate.</span></span><span class="sig-name descname"><span class="pre">UniversalKriging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">known_points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitted_regression_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Performs universal kriging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>known_points</strong><span class="classifier">numpy array</span></dt><dd><p>Known points and their values.</p>
+</dd>
+<dt><strong>fitted_regression_model</strong><span class="classifier">optional</span></dt><dd><p>Any kind of regression model with <cite>.predict()</cite> method that could be
+used for trend modeling.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>known_points</strong><span class="classifier">numpy array</span></dt><dd><p>See <code class="docutils literal notranslate"><span class="pre">observations</span></code> parameter.</p>
+</dd>
+<dt><strong>trend_model</strong><span class="classifier">MultivariateRegression or another regression model</span></dt><dd><p>The model responsible for trend prediction. It could be a model from
+the external package, but it must have <cite>.predict()</cite> method which takes
+as an input modeling features (coordinates).</p>
+</dd>
+<dt><strong>trend_values</strong><span class="classifier">numpy array</span></dt><dd><p>Observation values predicted by regression model.</p>
+</dd>
+<dt><strong>bias_values</strong><span class="classifier">numpy array</span></dt><dd><p>The difference between measured observations and <code class="docutils literal notranslate"><span class="pre">trend_values</span></code>.</p>
+</dd>
+<dt><strong>bias_experimental_model</strong><span class="classifier">ExperimentalVariogram</span></dt><dd><p>The experimental semivariogram of bias.</p>
+</dd>
+<dt><strong>bias_model</strong><span class="classifier">TheoreticalVariogram</span></dt><dd><p>Modeled semivariogram of the data bias.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<tbody>
+<tr class="row-odd"><td><p><strong>fit_trend()</strong></p></td>
+<td><p>Fits observations into linear regression model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>detrend()</strong></p></td>
+<td><p>Removes trend from observations (calculates bias).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>fit_bias()</strong></p></td>
+<td><p>Fits bias into semivariogram model.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>predict()</strong></p></td>
+<td><p>Predicts values at unknown locations.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot_experimental_bias_model()</strong></p></td>
+<td><p>Plots experimental semivariogram of bias.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>plot_theoretical_bias_model()</strong></p></td>
+<td><p>Plots theoretical semivariogram of bias.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>plot_trend_surfaces()</strong></p></td>
+<td><p>Visual comparison of observations, trend, and bias.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">detrend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trend_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.detrend"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function removes trend from observations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>trend_values</strong><span class="classifier">optional, numpy array</span></dt><dd><p>Optional array with trend values. It may be an output from the
+external regression model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit_bias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.fit_bias"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function fits bias into variogram models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>step_size</strong><span class="classifier">float</span></dt><dd><p>Bins width.</p>
+</dd>
+<dt><strong>max_range</strong><span class="classifier">float</span></dt><dd><p>Maximum range of analysis.</p>
+</dd>
+<dt><strong>use_all_models</strong><span class="classifier">bool, default = False</span></dt><dd><p>Use all available semivariogram models (<code class="docutils literal notranslate"><span class="pre">True</span></code>), or only
+the selection of models - linear, spherical, and power model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">fit_trend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.fit_trend"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Function fits data into MultivariateRegression model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_experimental_bias_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.plot_experimental_bias_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots experimental variogram of bias.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_theoretical_bias_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.plot_theoretical_bias_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots theoretical semivariogram of bias.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">plot_trend_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.plot_trend_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>Plots initial observations, trend surface, and bias surface.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Buffer</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">_SupportsArray</span><span class="p"><span class="pre">[</span></span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">_NestedSequence</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">complex</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">neighbors_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_all_neighbors_in_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_approx_solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_progress_bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/kriging/point/universal.html#UniversalKriging.predict"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>points</strong><span class="classifier">numpy array</span></dt><dd><p>Coordinates with missing values (to estimate results).</p>
+</dd>
+<dt><strong>neighbors_range</strong><span class="classifier">float, default=None</span></dt><dd><p>The maximum distance where we search for neighbors. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+is given then range is selected from
+the <code class="docutils literal notranslate"><span class="pre">theoretical_model</span></code> <code class="docutils literal notranslate"><span class="pre">rang</span></code> attribute.</p>
+</dd>
+<dt><strong>no_neighbors</strong><span class="classifier">int, default = 4</span></dt><dd><p>The number of the <strong>n-closest neighbors</strong> used for interpolation.</p>
+</dd>
+<dt><strong>use_all_neighbors_in_range</strong><span class="classifier">bool, default = False</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: if the real number of neighbors within the
+<code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code> is greater than the
+<code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> parameter then take all of them anyway.</p>
+</dd>
+<dt><strong>allow_approx_solutions</strong><span class="classifier">bool, default=False</span></dt><dd><p>Allows the approximation of kriging weights based on the OLS
+algorithm. We don’t recommend set it to <code class="docutils literal notranslate"><span class="pre">True</span></code>
+if you don’t know what are you doing. This parameter can be useful
+when you have clusters in your dataset,
+that can lead to singular or near-singular matrix creation.</p>
+</dd>
+<dt><strong>number_of_workers</strong><span class="classifier">int, default=1</span></dt><dd><p>How many processing units can be used for predictions. Increase it
+only for a very large number of
+interpolated points (~10k+).</p>
+</dd>
+<dt><strong>show_progress_bar</strong><span class="classifier">bool, default=True</span></dt><dd><p>Show progress bar of predictions.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>: numpy array</dt><dd><p>Predictions <code class="docutils literal notranslate"><span class="pre">[predicted</span> <span class="pre">value,</span> <span class="pre">longitude</span> <span class="pre">(x),</span> <span class="pre">latitude</span> <span class="pre">(y)]</span></code></p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -716,6 +880,7 @@ unknown location.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ordinary-kriging">Ordinary Kriging</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-kriging">Simple Kriging</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indicator-kriging">Indicator Kriging</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#universal-kriging">Universal Kriging</a></li>
 </ul>
   </nav></div>
 

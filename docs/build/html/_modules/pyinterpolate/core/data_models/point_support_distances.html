@@ -189,6 +189,13 @@
 
 
 <li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
+  </a>
+</li>
+
+
+<li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../contributor/development.html">
     Development
   </a>
@@ -320,6 +327,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../api/api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
   </a>
 </li>
 
@@ -512,6 +526,9 @@
 <span class="sd">            Distances between point supports from two blocks.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">if</span> <span class="n">block_pair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculated_block_pairs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_point_supports</span><span class="p">[</span><span class="n">block_pair</span><span class="p">]</span>
+
         <span class="n">block_a</span> <span class="o">=</span> <span class="n">block_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">block_b</span> <span class="o">=</span> <span class="n">block_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
@@ -523,7 +540,6 @@
                                                                <span class="n">points_b</span><span class="p">)</span>
 
         <span class="c1"># Update distances</span>
-
         <span class="k">if</span> <span class="n">update</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">block_pair</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculated_block_pairs</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">distances_between_point_supports</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
