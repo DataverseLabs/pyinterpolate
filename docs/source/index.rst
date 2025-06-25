@@ -33,9 +33,10 @@ You can run:
 2. **Centroid-based Poisson Kriging** of polygons - spatial interpolation from blocks and regions
 3. **Area-to-area** and **Area-to-point Poisson Kriging** of Polygons - spatial interpolation and data deconvolution from areas to points
 4. **Indicator Kriging** - kriging based on probabilities
-5. **Inverse Distance Weighting** - benchmarking spatial interpolation technique
-6. **Semivariogram regularization and deconvolution** - transforming variogram of areal data in regards to point support data
-7. **Semivariogram modeling and analysis** - is your data spatially correlated? How do neighbors influence each other?
+5. **Universal Kriging** - kriging with trend
+6. **Inverse Distance Weighting** - benchmarking spatial interpolation technique
+7. **Semivariogram regularization and deconvolution** - transforming variogram of areal data in regards to point support data
+8. **Semivariogram modeling and analysis** - is your data spatially correlated? How do neighbors influence each other?
 
 With ``Pyinterpolate`` you can transform data aggregated on a county-level to better resolution.
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:
