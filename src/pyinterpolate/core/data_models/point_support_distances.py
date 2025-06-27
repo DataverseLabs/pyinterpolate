@@ -195,8 +195,7 @@ class PointSupportDistance:
             lon_col_name=point_support.lon_col_name,
             lat_col_name=point_support.lat_col_name,
             val_col_name=point_support.value_column_name,
-            block_id_col_name=point_support.point_support_blocks_index_name,
-            verbose=self.verbose
+            block_id_col_name=point_support.point_support_blocks_index_name
         )
 
         # block_distances : pandas DataFrame
