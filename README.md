@@ -4,6 +4,11 @@
 
 **version 1.0**
 
+## Important notice
+
+The package was updated to version 1.0 in June 2025. There are breaking API changes, so please, refer to the [CHANGELOG](https://github.com/DataverseLabs/pyinterpolate/blob/main/CHANGELOG.rst) to know more about the changes.
+Right now, the package in version 1.0.0 is in the **beta** stage, which means that it is stable but be careful with the production use. There might be some minor bugs, and large swaths of code are not optimized yet. If you find any bugs, please report them in the [issue tracker](https://github.com/DataverseLabs/pyinterpolate/issues).
+
 --
 
 Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).
