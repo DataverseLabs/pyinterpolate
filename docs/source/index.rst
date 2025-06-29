@@ -6,6 +6,10 @@
 Pyinterpolate
 =============
 
+.. image:: imgs/pyinterpolate-banner.png
+  :width: 400
+  :alt: Pyinterpolate Logo
+
 **version 1.0.0**
 -----------------
 
