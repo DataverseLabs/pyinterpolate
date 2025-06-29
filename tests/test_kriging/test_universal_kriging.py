@@ -8,7 +8,11 @@ from pyinterpolate import ExperimentalVariogram, TheoreticalVariogram
 try:
     dem = pd.read_csv('point_kriging_ds/dem2180.csv')
 except FileNotFoundError:
-    dem = pd.read_csv('test_kriging/point_kriging_ds/dem2180.csv')
+    try:
+        dem = pd.read_csv('test_kriging/point_kriging_ds/dem2180.csv')
+    except FileNotFoundError:
+        dem = pd.read_csv('tests/test_kriging/point_kriging_ds/dem2180.csv')
+
 dem = dem.to_numpy()
 
 

@@ -55,7 +55,11 @@ def test_directional_covariogram():
     try:
         ds = np.load('armstrong_data.npy')
     except FileNotFoundError:
-        ds = np.load('test_semivariogram/armstrong_data.npy')
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
     STEP_SIZE = 1.5
     MAX_RANGE = 6
     dirvar = calculate_covariance(
@@ -73,7 +77,11 @@ def test_directional_triangular_covariogram():
     try:
         ds = np.load('armstrong_data.npy')
     except FileNotFoundError:
-        ds = np.load('test_semivariogram/armstrong_data.npy')
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
     STEP_SIZE = 1.5
     MAX_RANGE = 6
     dirvar = calculate_covariance(
