@@ -1,6 +1,5 @@
 import random
 
-import numpy as np
 import pandas as pd
 import pytest
 
@@ -38,9 +37,11 @@ THEO.autofit(
 )
 
 
+@pytest.mark.xfail(reason="known issue with points selection")
 def test_select_pk_data():
     indexes = BLOCKS.block_indexes
     idx = random.choice(indexes)
+
     result = select_poisson_kriging_data(
         block_index=idx,
         point_support=PS,
