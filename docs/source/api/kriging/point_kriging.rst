@@ -19,3 +19,10 @@ Indicator Kriging
 .. autoclass:: pyinterpolate.IndicatorKriging
    :members:
    :noindex:
+
+Universal Kriging
+-----------------
+
+.. autoclass:: pyinterpolate.UniversalKriging
+   :members:
+   :noindex:

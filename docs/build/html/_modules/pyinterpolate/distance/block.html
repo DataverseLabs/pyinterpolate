@@ -434,7 +434,7 @@
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
 
 
 <span class="k">def</span> <span class="nf">_calc_b2b_dist_from_dataframe</span><span class="p">(</span>
@@ -442,84 +442,133 @@
         <span class="n">lon_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
         <span class="n">lat_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
         <span class="n">val_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
-        <span class="n">block_id_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">],</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">block_id_col_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fully vectorized version - fastest approach.&quot;&quot;&quot;</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ps_blocks : Union[pd.DataFrame, gpd.GeoDataFrame]</span>
-<span class="sd">        DataFrame with point supports and block indexes.</span>
+    <span class="n">unique_blocks</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="n">n_blocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_blocks</span><span class="p">)</span>
 
-<span class="sd">    lon_col_name : Union[str, Hashable]</span>
-<span class="sd">        Longitude or x coordinate.</span>
+    <span class="c1"># Pre-compute block data once</span>
+    <span class="n">block_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">block_id</span> <span class="ow">in</span> <span class="n">unique_blocks</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_id</span>
+        <span class="n">coords</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">[</span><span class="n">lon_col_name</span><span class="p">,</span> <span class="n">lat_col_name</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">block_data</span><span class="p">[</span><span class="n">block_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">coords</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
 
-<span class="sd">    lat_col_name : Union[str, Hashable]</span>
-<span class="sd">        Latitude or y coordinate.</span>
+    <span class="c1"># Initialize distance matrix</span>
+    <span class="n">distance_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_blocks</span><span class="p">,</span> <span class="n">n_blocks</span><span class="p">))</span>
 
-<span class="sd">    val_col_name : Union[str, Hashable]</span>
-<span class="sd">        The point support values column.</span>
+    <span class="c1"># Compute distances for upper triangle only</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_blocks</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">n_blocks</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
+                <span class="n">distance_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">coords_i</span><span class="p">,</span> <span class="n">weights_i</span> <span class="o">=</span> <span class="n">block_data</span><span class="p">[</span><span class="n">unique_blocks</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+                <span class="n">coords_j</span><span class="p">,</span> <span class="n">weights_j</span> <span class="o">=</span> <span class="n">block_data</span><span class="p">[</span><span class="n">unique_blocks</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span>
 
-<span class="sd">    block_id_col_name : Union[str, Hashable]</span>
-<span class="sd">        Column with block names / indexes.</span>
+                <span class="c1"># Use scipy&#39;s cdist for pairwise distances</span>
+                <span class="n">dist_matrix</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">coords_i</span><span class="p">,</span> <span class="n">coords_j</span><span class="p">)</span>
+                <span class="n">weight_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">weights_i</span><span class="p">,</span> <span class="n">weights_j</span><span class="p">)</span>
 
-<span class="sd">    verbose : bool, default = False</span>
-<span class="sd">        Show progress bar.</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dist_matrix</span> <span class="o">*</span> <span class="n">weight_matrix</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                    <span class="n">weight_matrix</span><span class="p">)</span>
+                <span class="n">distance_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span>
+                <span class="n">distance_matrix</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span>  <span class="c1"># Symmetric</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    block_distances : DataFrame</span>
-<span class="sd">        Indexes and columns are block indexes, cells are distances.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">calculated_pairs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
-    <span class="n">unique_blocks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-
-    <span class="n">col_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">lon_col_name</span><span class="p">,</span> <span class="n">lat_col_name</span><span class="p">,</span> <span class="n">val_col_name</span><span class="p">]</span>
-
-    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
-
-    <span class="k">for</span> <span class="n">block_i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">unique_blocks</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">verbose</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">block_j</span> <span class="ow">in</span> <span class="n">unique_blocks</span><span class="p">:</span>
-            <span class="c1"># Check if it was estimated</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">)</span> <span class="ow">in</span> <span class="n">calculated_pairs</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">block_i</span> <span class="o">==</span> <span class="n">block_j</span><span class="p">:</span>
-                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">i_value</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span>
-                        <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_i</span>
-                    <span class="p">]</span>
-                    <span class="n">j_value</span> <span class="o">=</span> <span class="n">ps_blocks</span><span class="p">[</span>
-                        <span class="n">ps_blocks</span><span class="p">[</span><span class="n">block_id_col_name</span><span class="p">]</span> <span class="o">==</span> <span class="n">block_j</span>
-                    <span class="p">]</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="n">_calculate_block_to_block_distance</span><span class="p">(</span>
-                        <span class="n">i_value</span><span class="p">[</span><span class="n">col_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
-                        <span class="n">j_value</span><span class="p">[</span><span class="n">col_set</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-                    <span class="p">)</span>
-                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
-                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">block_j</span><span class="p">,</span> <span class="n">block_i</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
-                    <span class="n">calculated_pairs</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_i</span><span class="p">,</span> <span class="n">block_j</span><span class="p">))</span>
-                    <span class="n">calculated_pairs</span><span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">block_j</span><span class="p">,</span> <span class="n">block_i</span><span class="p">))</span>
-
-    <span class="c1"># Create output dataframe</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">results</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;block_i&#39;</span><span class="p">,</span> <span class="s1">&#39;block_j&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">])</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-        <span class="n">values</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">,</span>
-        <span class="n">index</span><span class="o">=</span><span class="s1">&#39;block_i&#39;</span><span class="p">,</span>
-        <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;block_j&#39;</span>
+    <span class="c1"># Create DataFrame</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="n">distance_matrix</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="n">unique_blocks</span><span class="p">,</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">unique_blocks</span>
     <span class="p">)</span>
 
-    <span class="c1"># sort</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="n">unique_blocks</span><span class="p">)</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reindex</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">unique_blocks</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">df</span>
+<span class="c1"># def _calc_b2b_dist_from_dataframe(</span>
+<span class="c1">#         ps_blocks: Union[pd.DataFrame, gpd.GeoDataFrame],</span>
+<span class="c1">#         lon_col_name: Union[str, Hashable],</span>
+<span class="c1">#         lat_col_name: Union[str, Hashable],</span>
+<span class="c1">#         val_col_name: Union[str, Hashable],</span>
+<span class="c1">#         block_id_col_name: Union[str, Hashable],</span>
+<span class="c1">#         verbose=False</span>
+<span class="c1"># ) -&gt; pd.DataFrame:</span>
+<span class="c1">#     r&quot;&quot;&quot;</span>
+<span class="c1">#     Function calculates distances between the blocks&#39; point supports.</span>
+<span class="c1">#</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     ps_blocks : Union[pd.DataFrame, gpd.GeoDataFrame]</span>
+<span class="c1">#         DataFrame with point supports and block indexes.</span>
+<span class="c1">#</span>
+<span class="c1">#     lon_col_name : Union[str, Hashable]</span>
+<span class="c1">#         Longitude or x coordinate.</span>
+<span class="c1">#</span>
+<span class="c1">#     lat_col_name : Union[str, Hashable]</span>
+<span class="c1">#         Latitude or y coordinate.</span>
+<span class="c1">#</span>
+<span class="c1">#     val_col_name : Union[str, Hashable]</span>
+<span class="c1">#         The point support values column.</span>
+<span class="c1">#</span>
+<span class="c1">#     block_id_col_name : Union[str, Hashable]</span>
+<span class="c1">#         Column with block names / indexes.</span>
+<span class="c1">#</span>
+<span class="c1">#     verbose : bool, default = False</span>
+<span class="c1">#         Show progress bar.</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns</span>
+<span class="c1">#     -------</span>
+<span class="c1">#     block_distances : DataFrame</span>
+<span class="c1">#         Indexes and columns are block indexes, cells are distances.</span>
+<span class="c1">#</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     calculated_pairs = set()</span>
+<span class="c1">#     unique_blocks = list(ps_blocks[block_id_col_name].unique())</span>
+<span class="c1">#</span>
+<span class="c1">#     col_set = [lon_col_name, lat_col_name, val_col_name]</span>
+<span class="c1">#</span>
+<span class="c1">#     results = []</span>
+<span class="c1">#</span>
+<span class="c1">#     for block_i in tqdm(unique_blocks, disable=not verbose):</span>
+<span class="c1">#         for block_j in unique_blocks:</span>
+<span class="c1">#             # Check if it was estimated</span>
+<span class="c1">#             if not (block_i, block_j) in calculated_pairs:</span>
+<span class="c1">#                 if block_i == block_j:</span>
+<span class="c1">#                     results.append([block_i, block_j, 0])</span>
+<span class="c1">#                 else:</span>
+<span class="c1">#                     i_value = ps_blocks[</span>
+<span class="c1">#                         ps_blocks[block_id_col_name] == block_i</span>
+<span class="c1">#                     ]</span>
+<span class="c1">#                     j_value = ps_blocks[</span>
+<span class="c1">#                         ps_blocks[block_id_col_name] == block_j</span>
+<span class="c1">#                     ]</span>
+<span class="c1">#                     value = _calculate_block_to_block_distance(</span>
+<span class="c1">#                         i_value[col_set].to_numpy(),</span>
+<span class="c1">#                         j_value[col_set].to_numpy()</span>
+<span class="c1">#                     )</span>
+<span class="c1">#                     results.append([block_i, block_j, value])</span>
+<span class="c1">#                     results.append([block_j, block_i, value])</span>
+<span class="c1">#                     calculated_pairs.add((block_i, block_j))</span>
+<span class="c1">#                     calculated_pairs.add((block_j, block_i))</span>
+<span class="c1">#</span>
+<span class="c1">#     # Create output dataframe</span>
+<span class="c1">#     df = pd.DataFrame(data=results, columns=[&#39;block_i&#39;, &#39;block_j&#39;, &#39;z&#39;])</span>
+<span class="c1">#     df = df.pivot_table(</span>
+<span class="c1">#         values=&#39;z&#39;,</span>
+<span class="c1">#         index=&#39;block_i&#39;,</span>
+<span class="c1">#         columns=&#39;block_j&#39;</span>
+<span class="c1">#     )</span>
+<span class="c1">#</span>
+<span class="c1">#     # sort</span>
+<span class="c1">#     df = df.reindex(columns=unique_blocks)</span>
+<span class="c1">#     df = df.reindex(index=unique_blocks)</span>
+<span class="c1">#</span>
+<span class="c1">#     return df</span>
 
 
 <span class="c1"># noinspection PyUnresolvedReferences</span>
-<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">:</span> <span class="s1">&#39;PointSupport&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">:</span> <span class="s1">&#39;PointSupport&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
 
@@ -528,9 +577,6 @@
 <span class="sd">    ps_blocks : PointSupport</span>
 <span class="sd">        PointSupport object with parsed blocks and their respective point</span>
 <span class="sd">        supports.</span>
-
-<span class="sd">    verbose : bool, default = False</span>
-<span class="sd">        Show progress bar.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -542,8 +588,7 @@
         <span class="n">lon_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">lon_col_name</span><span class="p">,</span>
         <span class="n">lat_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">lat_col_name</span><span class="p">,</span>
         <span class="n">val_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">value_column_name</span><span class="p">,</span>
-        <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">point_support_blocks_index_name</span><span class="p">,</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+        <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">ps_blocks</span><span class="o">.</span><span class="n">point_support_blocks_index_name</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">block_distances</span>
@@ -557,8 +602,7 @@
         <span class="n">lon_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lat_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">val_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">block_id_col_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">block_id_col_name</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates distances between the blocks&#39; point supports.</span>
@@ -583,9 +627,6 @@
 
 <span class="sd">    block_id_col_name : optional</span>
 <span class="sd">        Column with block names / indexes.</span>
-
-<span class="sd">    verbose : bool, default = False</span>
-<span class="sd">        Show progress bar.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -615,68 +656,67 @@
             <span class="n">lon_col_name</span><span class="o">=</span><span class="n">lon_col_name</span><span class="p">,</span>
             <span class="n">lat_col_name</span><span class="o">=</span><span class="n">lat_col_name</span><span class="p">,</span>
             <span class="n">val_col_name</span><span class="o">=</span><span class="n">val_col_name</span><span class="p">,</span>
-            <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">block_id_col_name</span><span class="p">,</span>
-            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
+            <span class="n">block_id_col_name</span><span class="o">=</span><span class="n">block_id_col_name</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+        <span class="n">block_distances</span> <span class="o">=</span> <span class="n">_calc_b2b_dist_from_ps</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">block_distances</span></div>
 
 
 
-<span class="k">def</span> <span class="nf">_calculate_block_to_block_distance</span><span class="p">(</span><span class="n">ps_block_1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                                       <span class="n">ps_block_2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function calculates distance between two blocks&#39; point supports.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ps_block_1 : numpy array</span>
-<span class="sd">        Point support of the first block.</span>
-
-<span class="sd">    ps_block_2 : numpy array</span>
-<span class="sd">        Point support of the second block.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    weighted_distances : float</span>
-<span class="sd">        Weighted point-support distance between blocks.</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The weighted distance between blocks is derived from the equation given</span>
-<span class="sd">    in publication [1] from References. This distance is weighted by</span>
-
-<span class="sd">    References</span>
-<span class="sd">    ----------</span>
-<span class="sd">    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the</span>
-<span class="sd">           Presence of Irregular Geographical Units.</span>
-<span class="sd">           Math Geosci 40, 101–128 (2008).</span>
-<span class="sd">           https://doi.org/10.1007/s11004-007-9129-1</span>
-
-<span class="sd">    TODO</span>
-<span class="sd">    ----</span>
-<span class="sd">    * Add reference equation to the special part of the documentation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">a_shape</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">b_shape</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
-    <span class="n">bx</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">ax</span> <span class="o">-</span> <span class="n">bx</span>
-    <span class="n">ay</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
-    <span class="n">by</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">ay</span> <span class="o">-</span> <span class="n">by</span>
-    <span class="n">aval</span> <span class="o">=</span> <span class="n">ps_block_1</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a_shape</span><span class="p">)</span>
-    <span class="n">bval</span> <span class="o">=</span> <span class="n">ps_block_2</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">b_shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">aval</span> <span class="o">*</span> <span class="n">bval</span>
-
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;unsafe&#39;</span><span class="p">)</span>
-
-    <span class="n">wdist</span> <span class="o">=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">w</span>
-    <span class="n">distances_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wdist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">distances_sum</span>
+<span class="c1"># def _calculate_block_to_block_distance(ps_block_1: np.ndarray,</span>
+<span class="c1">#                                        ps_block_2: np.ndarray) -&gt; float:</span>
+<span class="c1">#     r&quot;&quot;&quot;</span>
+<span class="c1">#     Function calculates distance between two blocks&#39; point supports.</span>
+<span class="c1">#</span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     ps_block_1 : numpy array</span>
+<span class="c1">#         Point support of the first block.</span>
+<span class="c1">#</span>
+<span class="c1">#     ps_block_2 : numpy array</span>
+<span class="c1">#         Point support of the second block.</span>
+<span class="c1">#</span>
+<span class="c1">#     Returns</span>
+<span class="c1">#     -------</span>
+<span class="c1">#     weighted_distances : float</span>
+<span class="c1">#         Weighted point-support distance between blocks.</span>
+<span class="c1">#</span>
+<span class="c1">#     Notes</span>
+<span class="c1">#     -----</span>
+<span class="c1">#     The weighted distance between blocks is derived from the equation given</span>
+<span class="c1">#     in publication [1] from References. This distance is weighted by</span>
+<span class="c1">#</span>
+<span class="c1">#     References</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the</span>
+<span class="c1">#            Presence of Irregular Geographical Units.</span>
+<span class="c1">#            Math Geosci 40, 101–128 (2008).</span>
+<span class="c1">#            https://doi.org/10.1007/s11004-007-9129-1</span>
+<span class="c1">#</span>
+<span class="c1">#     TODO</span>
+<span class="c1">#     ----</span>
+<span class="c1">#     * Add reference equation to the special part of the documentation.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#</span>
+<span class="c1">#     a_shape = ps_block_1.shape[0]</span>
+<span class="c1">#     b_shape = ps_block_2.shape[0]</span>
+<span class="c1">#     ax = ps_block_1[:, 0].reshape(1, a_shape)</span>
+<span class="c1">#     bx = ps_block_2[:, 0].reshape(b_shape, 1)</span>
+<span class="c1">#     dx = ax - bx</span>
+<span class="c1">#     ay = ps_block_1[:, 1].reshape(1, a_shape)</span>
+<span class="c1">#     by = ps_block_2[:, 1].reshape(b_shape, 1)</span>
+<span class="c1">#     dy = ay - by</span>
+<span class="c1">#     aval = ps_block_1[:, -1].reshape(1, a_shape)</span>
+<span class="c1">#     bval = ps_block_2[:, -1].reshape(b_shape, 1)</span>
+<span class="c1">#     w = aval * bval</span>
+<span class="c1">#</span>
+<span class="c1">#     dist = np.sqrt(dx ** 2 + dy ** 2, dtype=float, casting=&#39;unsafe&#39;)</span>
+<span class="c1">#</span>
+<span class="c1">#     wdist = dist * w</span>
+<span class="c1">#     distances_sum = np.sum(wdist) / np.sum(w)</span>
+<span class="c1">#     return distances_sum</span>
 
 
 <span class="k">def</span> <span class="nf">select_neighbors_in_range</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>

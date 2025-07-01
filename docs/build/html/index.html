@@ -404,12 +404,21 @@
                   
   <section id="pyinterpolate">
 <h1>Pyinterpolate<a class="headerlink" href="#pyinterpolate" title="Link to this heading">#</a></h1>
+<a class="reference internal image-reference" href="_images/pyinterpolate-banner.png"><img alt="Pyinterpolate Logo" src="_images/pyinterpolate-banner.png" style="width: 400px;" />
+</a>
 <section id="version-1-0-0">
 <h2><strong>version 1.0.0</strong><a class="headerlink" href="#version-1-0-0" title="Link to this heading">#</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The last documentation update: <em>2025-06-20</em></p>
+<p>The last documentation update: <em>2025-06-28</em></p>
 </div>
+<section id="important-notice">
+<h3>Important notice<a class="headerlink" href="#important-notice" title="Link to this heading">#</a></h3>
+<p>The package was updated to version 1.0 in June 2025. There are breaking API changes, so please, refer to the changelog, to know more about the changes.
+Right now, the package in version 1.0.0 is in the <strong>beta</strong> stage, which means that it is stable but be careful with the production use. There might be some minor bugs, and large swaths of code are not optimized yet. If you find any bugs, please report them in the <a class="reference external" href="https://github.com/DataverseLabs/pyinterpolate/issues">Github issue tracker</a>.</p>
+</section>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Pyinterpolate</span></code> is the Python library for <strong>spatial statistics</strong>. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).</p>
 <p>If you’re:</p>
 <ul class="simple">
@@ -430,6 +439,7 @@
 <li><p><strong>Centroid-based Poisson Kriging</strong> of polygons - spatial interpolation from blocks and regions</p></li>
 <li><p><strong>Area-to-area</strong> and <strong>Area-to-point Poisson Kriging</strong> of Polygons - spatial interpolation and data deconvolution from areas to points</p></li>
 <li><p><strong>Indicator Kriging</strong> - kriging based on probabilities</p></li>
+<li><p><strong>Universal Kriging</strong> - kriging with trend</p></li>
 <li><p><strong>Inverse Distance Weighting</strong> - benchmarking spatial interpolation technique</p></li>
 <li><p><strong>Semivariogram regularization and deconvolution</strong> - transforming variogram of areal data in regards to point support data</p></li>
 <li><p><strong>Semivariogram modeling and analysis</strong> - is your data spatially correlated? How do neighbors influence each other?</p></li>
@@ -438,6 +448,7 @@
 The example is COVID-19 population at risk mapping. Countries worldwide aggregate disease data to protect the privacy of infected people. But this kind of representation introduces bias to the decision-making process. To overcome this bias, you may use Poisson Kriging. Block aggregates of COVID-19 infection rate are transformed into the point support created from population density blocks. We get the population at risk map:</p>
 <a class="reference internal image-reference" href="_images/deconvoluted_risk_areas.jpg"><img alt="Covid-19 infection risk in Poland for 14th April, 2020." src="_images/deconvoluted_risk_areas.jpg" style="width: 400px;" />
 </a>
+</section>
 </section>
 <section id="contents">
 <h2>Contents<a class="headerlink" href="#contents" title="Link to this heading">#</a></h2>
@@ -500,7 +511,11 @@ The example is COVID-19 population at risk mapping. Countries worldwide aggregat
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0"><strong>version 1.0.0</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-0-0"><strong>version 1.0.0</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-notice">Important notice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contents">Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citation">Citation</a></li>
 </ul>

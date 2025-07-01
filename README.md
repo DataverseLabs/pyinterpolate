@@ -4,7 +4,14 @@
 
 **version 1.0**
 
---
+![Logo](pyinterpolate-banner.png)
+
+## Important notice
+
+The package was updated to version 1.0 in June 2025. There are breaking API changes, so please, refer to the [CHANGELOG](https://github.com/DataverseLabs/pyinterpolate/blob/main/CHANGELOG.rst) to know more about the changes.
+Right now, the package in version 1.0.0 is in the **beta** stage, which means that it is stable but be careful with the production use. There might be some minor bugs, and large swaths of code are not optimized yet. If you find any bugs, please report them in the [issue tracker](https://github.com/DataverseLabs/pyinterpolate/issues).
+
+## Introduction
 
 Pyinterpolate is the Python library for **spatial statistics**. The package provides access to spatial statistics tools (variogram analysis, Kriging, Poisson Kriging, Indicator Kriging, Inverse Distance Weighting).
 
@@ -22,9 +29,10 @@ Pyinterpolate performs:
 2. *Centroid-based Poisson Kriging* of polygons - spatial interpolation from blocks and regions
 3. *Area-to-area* and *Area-to-point Poisson Kriging* of Polygons - spatial interpolation and data deconvolution from areas to points
 4. *Indicator Kriging* - kriging based on probabilities
-4. *Inverse Distance Weighting* - benchmarking spatial interpolation technique
-5. *Semivariogram regularization and deconvolution* - transforming variogram of areal data in regards to point support data
-6. *Semivariogram modeling and analysis* - is your data spatially correlated? How do neighbors influence each other?
+5. *Universal Kriging* - kriging with trend
+6. *Inverse Distance Weighting* - benchmarking spatial interpolation technique
+7. *Semivariogram regularization and deconvolution* - transforming variogram of areal data in regards to point support data
+8. *Semivariogram modeling and analysis* - is your data spatially correlated? How do neighbors influence each other?
 
 ## How does it work?
 

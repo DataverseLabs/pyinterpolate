@@ -14,6 +14,7 @@ from pyinterpolate.kriging.block.centroid_based_poisson_kriging import centroid_
 from pyinterpolate.kriging.point.indicator import IndicatorKriging
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
+from pyinterpolate.kriging.point.universal import UniversalKriging
 from pyinterpolate.semivariogram.deconvolution.aggregated_variogram import AggregatedVariogram, regularize
 from pyinterpolate.semivariogram.deconvolution.deviation import Deviation
 from pyinterpolate.semivariogram.deconvolution.regularize import Deconvolution

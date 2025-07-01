@@ -28,4 +28,4 @@ def test_block_to_block_distance():
     for k in distances.index:
         assert k in PS.unique_blocks
     for k, v in distances_from_gdf.items():
-        assert np.sum(v) == np.sum(distances[k])
+        assert np.allclose(np.sum(v), np.sum(distances[k]), rtol=1e-5)

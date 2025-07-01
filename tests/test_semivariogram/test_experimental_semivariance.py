@@ -46,7 +46,11 @@ def test_directional_semivariogram():
     try:
         ds = np.load('armstrong_data.npy')
     except FileNotFoundError:
-        ds = np.load('test_semivariogram/armstrong_data.npy')
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
     STEP_SIZE = 1.5
     MAX_RANGE = 6
     dirvar = calculate_semivariance(
@@ -64,7 +68,11 @@ def test_directional_triangular_semivariogram():
     try:
         ds = np.load('armstrong_data.npy')
     except FileNotFoundError:
-        ds = np.load('test_semivariogram/armstrong_data.npy')
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
     STEP_SIZE = 1.5
     MAX_RANGE = 6
     dirvar = calculate_semivariance(
@@ -82,7 +90,11 @@ def test_directional_weighted_semivariogram():
     try:
         ds = np.load('armstrong_data.npy')
     except FileNotFoundError:
-        ds = np.load('test_semivariogram/armstrong_data.npy')
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
     STEP_SIZE = 1.5
     MAX_RANGE = 6
     REFERENCE_WEIGHTS = np.random.randint(low=1, high=100, size=len(ds))

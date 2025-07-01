@@ -5,6 +5,8 @@ Authors
 -------
 1. Scott Gallacher | @scottgallacher-3
 2. Szymon Moliński | @SimonMolinsky
+
+TODO: Warning when rang is 0 or negative
 """
 import numpy as np
 

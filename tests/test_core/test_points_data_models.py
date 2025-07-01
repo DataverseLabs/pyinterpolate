@@ -27,9 +27,9 @@ REFERENCE_INPUT_LIST = [
 
 REFERENCE_INPUT = np.array(REFERENCE_INPUT_LIST)
 
+GS = gpd.points_from_xy(x=REFERENCE_INPUT[:, 0], y=REFERENCE_INPUT[:, 1])
 GEOPANDAS_INPUT = gpd.GeoDataFrame(data=REFERENCE_INPUT)
-GEOPANDAS_INPUT['geometry'] = gpd.points_from_xy(x=REFERENCE_INPUT[:, 0],
-                                                 y=REFERENCE_INPUT[:, 1])
+GEOPANDAS_INPUT['geometry'] = GS
 GEOPANDAS_INPUT.columns = ['x', 'y', 'val', 'geometry']
 
 PANDAS_INPUT = pd.DataFrame(
