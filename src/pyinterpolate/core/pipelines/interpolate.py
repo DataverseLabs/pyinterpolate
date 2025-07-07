@@ -77,7 +77,7 @@ def interpolate_points(
         res = ordinary_kriging(
             theoretical_model=theoretical_model,
             known_locations=known_locations,
-            unknown_location=upoints,
+            unknown_locations=upoints,
             neighbors_range=neighbors_range,
             no_neighbors=no_neighbors,
             max_tick=max_tick,

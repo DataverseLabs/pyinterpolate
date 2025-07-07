@@ -5,6 +5,7 @@ import pytest
 
 from pydantic import ValidationError
 
+from core.data_models.points import RawInterpolationPoints, InterpolationPoints
 from pyinterpolate.core.data_models.points import RawPoints, VariogramPoints
 
 
@@ -73,3 +74,53 @@ def test_pandas_input():
     kp = VariogramPoints(PANDAS_INPUT)
     assert isinstance(kp.points, np.ndarray)
 
+
+def test_raw_interpolation_points_class():
+    rp = RawInterpolationPoints(
+        **{"points": REFERENCE_INPUT[:, :-1]}
+    )
+    assert isinstance(rp.points, np.ndarray)
+    assert isinstance(rp, RawInterpolationPoints)
+    assert np.array_equal(rp.points, REFERENCE_INPUT[:, :-1])
+
+
+def test_interpolation_points_class():
+    rp = RawInterpolationPoints(**{"points": REFERENCE_INPUT[:, :-1]})
+    kp = InterpolationPoints(REFERENCE_INPUT[:, :-1])
+
+    assert np.array_equal(kp.points, rp.points)
+
+
+def test_pass_wrong_number_of_columns_interpolation():
+    with pytest.raises(ValidationError) as _:
+        _ = RawInterpolationPoints(**{"points": REFERENCE_INPUT})
+
+
+def test_list_interpolation_input():
+    reference_list = [
+        [x[0], x[1]] for x in REFERENCE_INPUT_LIST
+    ]
+    kp = InterpolationPoints(reference_list)
+    assert isinstance(kp.points, np.ndarray)
+
+
+def test_geopandas_interpolation_input():
+    kp = InterpolationPoints(GEOPANDAS_INPUT.geometry)
+    assert isinstance(kp.points, np.ndarray)
+
+
+def test_pandas_interpolation_input():
+    kp = InterpolationPoints(PANDAS_INPUT[['xl', 'yl']])
+    assert isinstance(kp.points, np.ndarray)
+
+
+def test_single_interpolation_point():
+    sp = GEOPANDAS_INPUT.geometry.iloc[0]
+    kp = InterpolationPoints(sp)
+    assert isinstance(kp.points, np.ndarray)
+
+
+def test_single_interpolation_array():
+    pt = np.array([1, 2])
+    kp = InterpolationPoints(pt)
+    assert isinstance(kp.points, np.ndarray)
