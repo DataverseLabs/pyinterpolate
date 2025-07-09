@@ -27,7 +27,7 @@ from pyinterpolate.transform.statistical import sem_to_cov
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 
 
-def _ok(
+def ok_calc(
         theoretical_model: TheoreticalVariogram,
         known_locations: np.ndarray,
         unknown_location: ArrayLike,
@@ -130,6 +130,7 @@ def _ok(
     except np.linalg.LinAlgError as _:
         singular_matrix_error()
 
+
 def ordinary_kriging(
         theoretical_model: TheoreticalVariogram,
         known_locations: ArrayLike,
@@ -153,7 +154,7 @@ def ordinary_kriging(
     known_locations : numpy array
         Known locations: ``[x, y, value]``.
 
-    unknown_location : Union[ArrayLike, Point]
+    unknown_locations : Union[ArrayLike, Point]
         Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
     neighbors_range : float, default=None
@@ -180,6 +181,9 @@ def ordinary_kriging(
         clusters in your dataset, that can lead to singular or near-singular
         matrix creation.
 
+    progress_bar : bool, default=True
+        Show a progress bar during the interpolation process.
+
     Returns
     -------
     : numpy array
@@ -199,7 +203,7 @@ def ordinary_kriging(
     _disable_progress_bar = not progress_bar
 
     for upoints in tqdm(unknown_locations, disable=_disable_progress_bar):
-        res = _ok(
+        res = ok_calc(
             theoretical_model=theoretical_model,
             known_locations=known_locations,
             unknown_location=upoints,

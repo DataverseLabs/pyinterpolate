@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 from dask.diagnostics import ProgressBar
 
-from pyinterpolate.kriging.point.ordinary import ordinary_kriging
+from pyinterpolate.kriging.point.ordinary import ok_calc
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
@@ -74,10 +74,10 @@ def interpolate_points(
     _disable_progress_bar = not progress_bar
 
     for upoints in tqdm(unknown_locations, disable=_disable_progress_bar):
-        res = ordinary_kriging(
+        res = ok_calc(
             theoretical_model=theoretical_model,
             known_locations=known_locations,
-            unknown_locations=upoints,
+            unknown_location=upoints,
             neighbors_range=neighbors_range,
             no_neighbors=no_neighbors,
             max_tick=max_tick,
@@ -185,7 +185,7 @@ def interpolate_points_dask(
 
         results = []
         for upoints in unknown_locations:
-            prediction = dask.delayed(ordinary_kriging)(
+            prediction = dask.delayed(ok_calc)(
                 theoretical_model=theoretical_model,
                 known_locations=known_locations,
                 unknown_location=upoints,
