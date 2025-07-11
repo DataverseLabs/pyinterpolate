@@ -276,12 +276,13 @@ class IndicatorKriging:
 
             predictions = []
 
+            # !!! TODO remove iteration over unknown locations
             for _point in unknown_locations:
                 if kriging_type == 'ok':
                     _pred_arr = ordinary_kriging(
                         theoretical_model=_item,
                         known_locations=indicator_points,
-                        unknown_location=_point,
+                        unknown_locations=_point,
                         neighbors_range=neighbors_range,
                         no_neighbors=no_neighbors,
                         max_tick=max_tick,
@@ -308,7 +309,10 @@ class IndicatorKriging:
                                      '"ok" - ordinary kriging, '
                                      '"sk" - simple kriging.')
 
-                predictions.append(_pred_arr[0])
+                if len(_pred_arr) == 1:
+                    predictions.append(_pred_arr[0][1])
+                else:
+                    predictions.append(_pred_arr[0])
 
             predictions_all.append(predictions)
 

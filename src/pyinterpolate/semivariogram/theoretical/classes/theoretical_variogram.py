@@ -731,7 +731,7 @@ class TheoreticalVariogram:
 
         self._set_model_parameters(json_input)
 
-    def __str__(self):
+    def __printed_results(self):
         is_model_none = self.model_type is None
         is_rang_0 = self.rang == 0
         is_sill_0 = self.sill == 0
@@ -792,6 +792,12 @@ class TheoreticalVariogram:
                 return msg
             else:
                 return header
+
+    def __repr__(self):
+        return self.__printed_results()
+
+    def __str__(self):
+        return self.__printed_results()
 
     def _autofit_grid_search(
             self,

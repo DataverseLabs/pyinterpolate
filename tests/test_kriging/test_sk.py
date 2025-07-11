@@ -15,12 +15,11 @@ def test_armstrong_omnidirectional():
     kriged = simple_kriging(
         theoretical_model=variogram,
         known_locations=ds,
-        unknown_location=unknown_point,
+        unknown_locations=unknown_point,
         process_mean=pmean
     )
-    assert kriged
-    assert isinstance(kriged, list)
-    assert len(kriged) == 4
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4
 
 
 def test_armstrong_directional():
@@ -34,12 +33,11 @@ def test_armstrong_directional():
     kriged = simple_kriging(
         theoretical_model=variogram,
         known_locations=ds,
-        unknown_location=unknown_point,
+        unknown_locations=unknown_point,
         process_mean=pmean
     )
-    assert kriged
-    assert isinstance(kriged, list)
-    assert len(kriged) == 4
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4
 
 
 def test_random_omnidirectional():
@@ -53,12 +51,11 @@ def test_random_omnidirectional():
     kriged = simple_kriging(
         theoretical_model=variogram,
         known_locations=ds,
-        unknown_location=unknown_point,
+        unknown_locations=unknown_point,
         process_mean=pmean
     )
-    assert kriged
-    assert isinstance(kriged, list)
-    assert len(kriged) == 4
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4
 
 
 def test_random_directional():
@@ -72,12 +69,11 @@ def test_random_directional():
     kriged = simple_kriging(
         theoretical_model=variogram,
         known_locations=ds,
-        unknown_location=unknown_point,
+        unknown_locations=unknown_point,
         process_mean=pmean
     )
-    assert kriged
-    assert isinstance(kriged, list)
-    assert len(kriged) == 4
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4
 
 
 def test_zeros_omnidirectional():
@@ -91,9 +87,8 @@ def test_zeros_omnidirectional():
     kriged = simple_kriging(
         theoretical_model=variogram,
         known_locations=ds,
-        unknown_location=unknown_point,
+        unknown_locations=unknown_point,
         process_mean=pmean
     )
-    assert kriged
-    assert isinstance(kriged, list)
-    assert len(kriged) == 4
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4

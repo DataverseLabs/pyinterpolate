@@ -98,7 +98,7 @@ def validate_kriging(
             preds = ordinary_kriging(
                 theoretical_model=theoretical_model,
                 known_locations=data_points,
-                unknown_location=clipped_point,
+                unknown_locations=clipped_point,
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
@@ -109,7 +109,7 @@ def validate_kriging(
                 theoretical_model=theoretical_model,
                 known_locations=data_points,
                 process_mean=sk_mean,
-                unknown_location=clipped_point,
+                unknown_locations=clipped_point,
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
@@ -121,6 +121,9 @@ def validate_kriging(
                 ' "ok" - ordinary kriging,'
                 ' and "sk" - simple kriging.'
             )
+
+        if len(preds) == 1:
+            preds = preds[0]
 
         prediction_error = row[-1] - preds[0]
 
