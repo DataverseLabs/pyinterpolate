@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point.indicator &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.kriging.point.indicator &#8212; pyinterpolate 1.0.1 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
   
 </a></div>
     
@@ -184,6 +184,13 @@
 <li class=" ">
   <a class="nav-link dropdown-item nav-internal" href="../../../../api/api.html">
     API
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
   </a>
 </li>
 
@@ -320,6 +327,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../api/api.html">
     API
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../../api/changes.html">
+    Changes between version 0.x and 1.x
   </a>
 </li>
 
@@ -694,12 +708,13 @@
 
             <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
 
+            <span class="c1"># !!! TODO remove iteration over unknown locations</span>
             <span class="k">for</span> <span class="n">_point</span> <span class="ow">in</span> <span class="n">unknown_locations</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">:</span>
                     <span class="n">_pred_arr</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
                         <span class="n">theoretical_model</span><span class="o">=</span><span class="n">_item</span><span class="p">,</span>
                         <span class="n">known_locations</span><span class="o">=</span><span class="n">indicator_points</span><span class="p">,</span>
-                        <span class="n">unknown_location</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
+                        <span class="n">unknown_locations</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
                         <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
                         <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
                         <span class="n">max_tick</span><span class="o">=</span><span class="n">max_tick</span><span class="p">,</span>
@@ -726,7 +741,10 @@
                                      <span class="s1">&#39;&quot;ok&quot; - ordinary kriging, &#39;</span>
                                      <span class="s1">&#39;&quot;sk&quot; - simple kriging.&#39;</span><span class="p">)</span>
 
-                <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pred_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_pred_arr</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pred_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_pred_arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
             <span class="n">predictions_all</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
 
