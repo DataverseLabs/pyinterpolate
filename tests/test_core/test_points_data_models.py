@@ -5,8 +5,10 @@ import pytest
 
 from pydantic import ValidationError
 
-from core.data_models.points import RawInterpolationPoints, InterpolationPoints
-from pyinterpolate.core.data_models.points import RawPoints, VariogramPoints
+from pyinterpolate.core.data_models.points import (RawInterpolationPoints,
+                                                   InterpolationPoints)
+from pyinterpolate.core.data_models.points import (RawPoints,
+                                                   VariogramPoints)
 
 
 REFERENCE_INPUT_LIST = [
