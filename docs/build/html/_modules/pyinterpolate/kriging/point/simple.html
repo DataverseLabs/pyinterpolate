@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point.simple &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.kriging.point.simple &#8212; pyinterpolate 1.0.1 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
   
 </a></div>
     
@@ -433,18 +433,21 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">geopandas</span> <span class="kn">import</span> <span class="n">GeoSeries</span>
+<span class="kn">from</span> <span class="nn">geopandas.array</span> <span class="kn">import</span> <span class="n">GeometryArray</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 <span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span><span class="p">,</span> \
+    <span class="n">InterpolationPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.errors</span> <span class="kn">import</span> <span class="n">singular_matrix_error</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.utils.point_kriging_solve</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_predictions</span><span class="p">,</span>
                                                              <span class="n">solve_weights</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
 
 
-<div class="viewcode-block" id="simple_kriging">
-<a class="viewcode-back" href="../../../../api/kriging/point_kriging.html#pyinterpolate.simple_kriging">[docs]</a>
-<span class="k">def</span> <span class="nf">simple_kriging</span><span class="p">(</span>
+<span class="k">def</span> <span class="nf">sk_calc</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
         <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
         <span class="n">unknown_location</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
@@ -544,7 +547,106 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">unknown_location</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
 
     <span class="k">except</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">LinAlgError</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span>
-        <span class="n">singular_matrix_error</span><span class="p">()</span></div>
+        <span class="n">singular_matrix_error</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="simple_kriging">
+<a class="viewcode-back" href="../../../../api/kriging/point_kriging.html#pyinterpolate.simple_kriging">[docs]</a>
+<span class="k">def</span> <span class="nf">simple_kriging</span><span class="p">(</span>
+        <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">GeoSeries</span><span class="p">,</span> <span class="n">GeometryArray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">max_tick</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
+        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">progress_bar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function predicts value at unknown location using Simple Kriging.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theoretical_model : TheoreticalVariogram</span>
+<span class="sd">        Fitted theoretical variogram model.</span>
+
+<span class="sd">    known_locations : numpy array</span>
+<span class="sd">        The known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    unknown_locations : Union[np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike]</span>
+<span class="sd">        Point where you want to estimate value ``(x, y) &lt;-&gt; (lon, lat)``.</span>
+
+<span class="sd">    process_mean : float</span>
+<span class="sd">        The mean value of a process over a study area. Should be known</span>
+<span class="sd">        before processing. That&#39;s why Simple Kriging has a limited number</span>
+<span class="sd">        of applications. You must have multiple samples and well-known area</span>
+<span class="sd">        to know this parameter.</span>
+
+<span class="sd">    neighbors_range : float, default=None</span>
+<span class="sd">        The maximum distance where we search for neighbors.  If ``None`` is</span>
+<span class="sd">        given then range is selected from the Theoretical Model.</span>
+
+<span class="sd">    no_neighbors : int, default = 4</span>
+<span class="sd">        The number of the **n-closest neighbors** used for interpolation.</span>
+
+<span class="sd">    max_tick : float, default=5.</span>
+<span class="sd">        If searching for neighbors in a specific direction how large should</span>
+<span class="sd">        be tolerance for increasing the search angle (how many degrees more).</span>
+
+<span class="sd">    use_all_neighbors_in_range : bool, default = False</span>
+<span class="sd">        ``True``: if the real number of neighbors within</span>
+<span class="sd">        the ``neighbors_range`` is greater than the</span>
+<span class="sd">        ``number_of_neighbors`` parameter then take all of them anyway.</span>
+
+<span class="sd">    allow_approximate_solutions : bool, default=False</span>
+<span class="sd">        Allows the approximation of kriging weights based on the OLS</span>
+<span class="sd">        algorithm. We don&#39;t recommend set it to ``True``</span>
+<span class="sd">        if you don&#39;t know what are you doing. This parameter can be useful</span>
+<span class="sd">        when you have clusters in your dataset,</span>
+<span class="sd">        that can lead to singular or near-singular matrix creation.</span>
+
+<span class="sd">    progress_bar : bool, default=True</span>
+<span class="sd">        Show a progress bar during the interpolation process.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    : numpy array</span>
+<span class="sd">        ``[predicted value, variance error, longitude (x), latitude (y)]``</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RunetimeError</span>
+<span class="sd">        Singular matrix in Kriging system.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if known locations are in the right format</span>
+    <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+    <span class="n">unknown_locations</span> <span class="o">=</span> <span class="n">InterpolationPoints</span><span class="p">(</span><span class="n">unknown_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+
+    <span class="n">interpolated_results</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">_disable_progress_bar</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">progress_bar</span>
+
+    <span class="k">for</span> <span class="n">upoints</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">unknown_locations</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="n">_disable_progress_bar</span><span class="p">):</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">sk_calc</span><span class="p">(</span>
+            <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
+            <span class="n">known_locations</span><span class="o">=</span><span class="n">known_locations</span><span class="p">,</span>
+            <span class="n">unknown_location</span><span class="o">=</span><span class="n">upoints</span><span class="p">,</span>
+            <span class="n">process_mean</span><span class="o">=</span><span class="n">process_mean</span><span class="p">,</span>
+            <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
+            <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
+            <span class="n">max_tick</span><span class="o">=</span><span class="n">max_tick</span><span class="p">,</span>
+            <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
+            <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
+        <span class="p">)</span>
+
+        <span class="n">interpolated_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">res</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">interpolated_results</span><span class="p">)</span></div>
 
 </pre></div>
 

@@ -1,10 +1,13 @@
 from typing import Union, List, Tuple, cast
 
 import numpy as np
+from numpy.typing import ArrayLike
 from geopandas import GeoDataFrame, GeoSeries
+from geopandas.array import GeometryArray
 from numpy import ndarray
-from pandas import DataFrame
+from pandas import DataFrame, Series
 from pydantic import field_validator, BaseModel, ConfigDict
+from shapely.geometry import Point
 
 
 class RawPoints(BaseModel):
@@ -48,6 +51,46 @@ class RawPoints(BaseModel):
         return v
 
 
+class RawInterpolationPoints(BaseModel):
+    """
+    Class represents points prepared for Experimental Variogram estimation
+    """
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True
+    )
+
+    points: Union[List, Tuple, ndarray, GeoDataFrame, DataFrame]
+
+    # noinspection PyNestedDecorators
+    @field_validator('points')
+    @classmethod
+    def validate_dimensions(cls, v):
+        if isinstance(v, List):
+            if len(v[0]) != 2:
+                raise ValueError('Points list must contain 2 values: '
+                                 '[x, y]')
+        elif isinstance(v, Tuple):
+            if len(v[0]) != 2:
+                raise ValueError('Points tuple must contain 2 values: '
+                                 '[x, y]')
+        elif isinstance(v, ndarray):
+            if v.shape[1] != 2:
+                raise ValueError('Points array must contain 2 values: '
+                                 '[x, y]')
+        elif isinstance(v, GeoSeries):
+            geom_types = v.geom_type.unique()
+            if len(geom_types) != 1 or geom_types[0] != 'Point':
+                raise ValueError('GeoSeries must contain only Point geometries')
+        elif isinstance(v, DataFrame):
+            if len(v.columns) != 2:
+                raise ValueError('Points DataFrame must contain 2 columns '
+                                 'representing x, y.')
+        else:
+            raise TypeError('Points must be list, tuple, numpy array,'
+                            ' DataFrame, or GeoSeries')
+        return v
+
+
 class VariogramPoints:
     """
     Class represents points prepared for Experimental Variogram estimation
@@ -85,3 +128,41 @@ class VariogramPoints:
             self.points = self.points.values
         else:
             self.points = np.array(self.points)
+
+
+class InterpolationPoints:
+    """
+    Class represents points prepared for interpolation.
+    """
+
+    def __init__(self,
+                 points: Union[List, Tuple, ndarray, GeoSeries, Series, GeometryArray, ArrayLike]
+                 ):
+        # validate
+        self.points = cast(RawInterpolationPoints, points)
+
+        # transform
+        if not isinstance(self.points, ndarray):
+            self.transform()
+        else:
+            if self.points.ndim == 1:
+                self.transform()
+
+    def transform(self):
+        """
+        Method transform points to numpy array.
+        """
+        if isinstance(self.points, GeoSeries):
+            xs = self.points.x
+            ys = self.points.y
+            self.points = np.column_stack((xs, ys))
+        elif isinstance(self.points, DataFrame):
+            self.points = self.points.values
+        elif isinstance(self.points, Point):
+            self.points = np.array([[self.points.x, self.points.y]])
+        else:
+            if np.array(self.points).ndim == 1:
+                # if it's a single point, convert to 2D array
+                self.points = np.array(self.points).reshape(1, -1)
+            else:
+                self.points = np.array(self.points)

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.pipelines.interpolate &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.core.pipelines.interpolate &#8212; pyinterpolate 1.0.1 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=292eb321"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
   
 </a></div>
     
@@ -429,7 +429,7 @@
 <span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
 <span class="kn">from</span> <span class="nn">dask.diagnostics</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
 
-<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.ordinary</span> <span class="kn">import</span> <span class="n">ordinary_kriging</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.ordinary</span> <span class="kn">import</span> <span class="n">ok_calc</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
 
 
@@ -500,7 +500,7 @@
     <span class="n">_disable_progress_bar</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">progress_bar</span>
 
     <span class="k">for</span> <span class="n">upoints</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">unknown_locations</span><span class="p">,</span> <span class="n">disable</span><span class="o">=</span><span class="n">_disable_progress_bar</span><span class="p">):</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">ok_calc</span><span class="p">(</span>
             <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
             <span class="n">known_locations</span><span class="o">=</span><span class="n">known_locations</span><span class="p">,</span>
             <span class="n">unknown_location</span><span class="o">=</span><span class="n">upoints</span><span class="p">,</span>
@@ -614,7 +614,7 @@
 
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">upoints</span> <span class="ow">in</span> <span class="n">unknown_locations</span><span class="p">:</span>
-            <span class="n">prediction</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">ordinary_kriging</span><span class="p">)(</span>
+            <span class="n">prediction</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">ok_calc</span><span class="p">)(</span>
                 <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
                 <span class="n">known_locations</span><span class="o">=</span><span class="n">known_locations</span><span class="p">,</span>
                 <span class="n">unknown_location</span><span class="o">=</span><span class="n">upoints</span><span class="p">,</span>

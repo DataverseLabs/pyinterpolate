@@ -1,6 +1,14 @@
 Changes - from version >= 1.x
 =============================
 
+2025-07-11
+----------
+
+**version 1.0.1**
+
+* [feature] `ordinary_kriging()` and `simple_kriging()` functions allow user to pass array-like object of coordinates as the `unknown_locations` parameter.
+* [enhacement] added `__repr__()` method to `TheoreticalVariogram` class.
+
 
 Changes in transition between 0.x to 1.x
 ========================================
