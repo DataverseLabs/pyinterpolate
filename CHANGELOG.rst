@@ -1,6 +1,13 @@
 Changes - from version >= 1.x
 =============================
 
+2025-07-16
+----------
+
+**version 1.0.2**
+
+* [bug] neighbors selection in `Deconvolution` was falling when `Blocks` index was string, now it works with any index type
+
 2025-07-11
 ----------
 
