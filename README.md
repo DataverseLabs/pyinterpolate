@@ -2,7 +2,7 @@
 
 # Pyinterpolate
 
-**version 1.0.1**
+**version 1.0.2**
 
 ![Logo](pyinterpolate-banner.png)
 

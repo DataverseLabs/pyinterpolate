@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Outliers and Kriging &#8212; pyinterpolate 1.0.1 documentation</title>
+    <title>Outliers and Kriging &#8212; pyinterpolate 1.0.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
   
 </a></div>
     
@@ -502,7 +502,7 @@
 <section id="1.-Prepare-data">
 <h2>1. Prepare data<a class="headerlink" href="#1.-Prepare-data" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -517,7 +517,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load DEM data</span>
@@ -544,7 +544,7 @@
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span> <span class="o">=</span> <span class="n">dem</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="mf">0.5</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">dem</span><span class="p">)))</span>
@@ -557,7 +557,7 @@
 <h2>2. Analyze data distribution and remove potential outliers<a class="headerlink" href="#2.-Analyze-data-distribution-and-remove-potential-outliers" title="Link to this heading">#</a></h2>
 <p>We will inspect all values in the train set to determine if our dataset contains outliers. In the beginning, we plot data distribution using violin plot, this kind of visulization will show the general distribution.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -584,7 +584,7 @@
 </ul>
 <p>Violin plot is suitable for the distribution analysis. Finding outliers in this plot may be challenging because we see mostly distributions. We should change a plot type to understand if outliers exist in a dataset. The excellent choice is the boxplot:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -615,7 +615,7 @@
 </ul>
 <p>We use this knowledge to remove outliers from the dataset. We will manually remove outliers from the data, assuming that outliers are placed one standard deviation from Q1 (down) and Q3 (up).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[101]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create training set without outliers</span>
@@ -630,7 +630,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -638,24 +638,24 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 count    3447.000000
-mean       40.673435
-std        22.148742
-min        14.495489
-25%        19.911645
-50%        37.055336
-75%        54.489574
-max       106.547783
+mean       41.335986
+std        22.165907
+min        14.825253
+25%        20.056290
+50%        39.114426
+75%        56.079584
+max       106.866257
 Name: dem, dtype: float64
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">train_without_outliers</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -663,19 +663,19 @@ Name: dem, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-count    3389.000000
-mean       39.771834
-std        21.219750
-min        14.495489
-25%        19.767307
-50%        36.051571
-75%        53.541000
-max        89.060410
+count    3425.000000
+mean       40.971479
+std        21.760020
+min        14.825253
+25%        20.032963
+50%        38.735107
+75%        55.439457
+max        91.712456
 Name: dem, dtype: float64
 </pre></div></div>
 </div>
@@ -686,7 +686,7 @@ Name: dem, dtype: float64
 <h2>3. Create Variogram Clouds<a class="headerlink" href="#3.-Create-Variogram-Clouds" title="Link to this heading">#</a></h2>
 <p>Now, we are going one step further, and we will transform both datasets with- and without- outliers and calculate variogram point clouds. Then, we compare both clouds.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">1000</span>  <span class="c1"># meters</span>
@@ -695,7 +695,7 @@ Name: dem, dtype: float64
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_with</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
@@ -707,7 +707,7 @@ Name: dem, dtype: float64
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_with</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
@@ -722,7 +722,7 @@ Name: dem, dtype: float64
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -731,7 +731,7 @@ True
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[107]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_without</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
@@ -743,7 +743,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_without</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;box&#39;</span><span class="p">)</span>
@@ -758,7 +758,7 @@ True
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[108]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -770,7 +770,7 @@ True
 <p>The processed dataset has lower semivariances than the raw readings, and both variograms have a similar shape.</p>
 <p>In the next cell, we will check a standard deviation of semivariances for each lag.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">with_stats</span> <span class="o">=</span> <span class="n">cloud_with</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -809,7 +809,7 @@ True
 <h2>4. Remove outliers from the point cloud<a class="headerlink" href="#4.-Remove-outliers-from-the-point-cloud" title="Link to this heading">#</a></h2>
 <p>In this step, we will use <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> method <code class="docutils literal notranslate"><span class="pre">.remove_outliers()</span></code> to build two additional variogram point clouds from the raw and processed datasets.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_with_rem</span> <span class="o">=</span> <span class="n">cloud_with</span><span class="o">.</span><span class="n">remove_outliers</span><span class="p">(</span>
@@ -829,7 +829,7 @@ True
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[111]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">))</span>
@@ -868,7 +868,7 @@ True
 <p><strong>Clarification</strong>: Comparison of multiple variogram clouds could be challenging. We see that the largest semivariances are present in the raw data. Heavily processed data has the lowest number of outliers. The medians in each dataset are distributed over a similar pattern. How is it similar? We can check if we transform the variogram point cloud into the experimental semivariogram. <code class="docutils literal notranslate"><span class="pre">VariogramCloud</span></code> class has a method for it: <code class="docutils literal notranslate"><span class="pre">.average_semivariance()</span></code>. We use it and compare four plots of
 semivariances to gain more insight into the transformations.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[112]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -904,7 +904,7 @@ semivariances to gain more insight into the transformations.</p>
 <section id="5.-Kriging-Models-based-on-different-variograms">
 <h2>5. Kriging Models based on different variograms<a class="headerlink" href="#5.-Kriging-Models-based-on-different-variograms" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[113]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fit different semivariogram models into prepared datasets and variograms</span>
@@ -940,7 +940,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[114]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set Kriging models</span>
@@ -982,14 +982,14 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3448/3448 [00:14&lt;00:00, 238.66it/s]
-100%|██████████| 3448/3448 [00:14&lt;00:00, 242.66it/s]
-100%|██████████| 3448/3448 [00:14&lt;00:00, 245.04it/s]
-100%|██████████| 3448/3448 [00:14&lt;00:00, 233.77it/s]
+100%|██████████| 3448/3448 [00:14&lt;00:00, 243.12it/s]
+100%|██████████| 3448/3448 [00:14&lt;00:00, 245.16it/s]
+100%|██████████| 3448/3448 [00:15&lt;00:00, 227.41it/s]
+100%|██████████| 3448/3448 [00:12&lt;00:00, 271.93it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[115]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># estimate deviations using squared error</span>
@@ -1003,7 +1003,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[116]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;d-raw&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;raw&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
@@ -1014,7 +1014,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[117]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span>
@@ -1029,7 +1029,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[118]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">loc</span><span class="p">[[</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">,</span> <span class="s1">&#39;50%&#39;</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">]]</span>
@@ -1037,7 +1037,7 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[118]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1068,38 +1068,38 @@ semivariances to gain more insight into the transformations.</p>
   <tbody>
     <tr>
       <th>mean</th>
-      <td>9.584068e+00</td>
-      <td>9.584068e+00</td>
-      <td>9.584068e+00</td>
-      <td>9.584068e+00</td>
+      <td>8.278387e+00</td>
+      <td>8.278387e+00</td>
+      <td>8.278387e+00</td>
+      <td>8.278387e+00</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>3.016640e+01</td>
-      <td>3.016640e+01</td>
-      <td>3.016640e+01</td>
-      <td>3.016640e+01</td>
+      <td>2.740584e+01</td>
+      <td>2.740584e+01</td>
+      <td>2.740584e+01</td>
+      <td>2.740584e+01</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>9.422445e-01</td>
-      <td>9.422445e-01</td>
-      <td>9.422445e-01</td>
-      <td>9.422445e-01</td>
+      <td>8.863351e-01</td>
+      <td>8.863351e-01</td>
+      <td>8.863351e-01</td>
+      <td>8.863351e-01</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>2.448797e-08</td>
-      <td>2.448797e-08</td>
-      <td>2.448797e-08</td>
-      <td>2.448797e-08</td>
+      <td>1.372719e-10</td>
+      <td>1.372719e-10</td>
+      <td>1.372719e-10</td>
+      <td>1.372719e-10</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>4.800424e+02</td>
-      <td>4.800424e+02</td>
-      <td>4.800424e+02</td>
-      <td>4.800424e+02</td>
+      <td>6.869088e+02</td>
+      <td>6.869088e+02</td>
+      <td>6.869088e+02</td>
+      <td>6.869088e+02</td>
     </tr>
   </tbody>
 </table>
@@ -1126,6 +1126,14 @@ semivariances to gain more insight into the transformations.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>

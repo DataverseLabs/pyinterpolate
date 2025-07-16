@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Ordinary and Simple Kriging &#8212; pyinterpolate 1.0.1 documentation</title>
+    <title>Ordinary and Simple Kriging &#8212; pyinterpolate 1.0.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
   
 </a></div>
     
@@ -494,7 +494,7 @@
 <section id="1.-Set-semivariogram-model-(fit)">
 <h2>1. Set semivariogram model (fit)<a class="headerlink" href="#1.-Set-semivariogram-model-(fit)" title="Link to this heading">#</a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -608,39 +608,39 @@
   </thead>
   <tbody>
     <tr>
-      <th>3981</th>
-      <td>15.262374</td>
-      <td>52.771562</td>
-      <td>62.305187</td>
-      <td>POINT (247968.154 551653.903)</td>
+      <th>323</th>
+      <td>15.127106</td>
+      <td>52.699529</td>
+      <td>18.121784</td>
+      <td>POINT (238419.308 544131.281)</td>
     </tr>
     <tr>
-      <th>6750</th>
-      <td>15.364813</td>
-      <td>52.619216</td>
-      <td>50.144901</td>
-      <td>POINT (254017.537 534367.377)</td>
+      <th>5477</th>
+      <td>15.317351</td>
+      <td>52.746723</td>
+      <td>78.524330</td>
+      <td>POINT (251532.47 548701.89)</td>
     </tr>
     <tr>
-      <th>226</th>
-      <td>15.123151</td>
-      <td>52.590651</td>
-      <td>36.407681</td>
-      <td>POINT (237500.47 532045.548)</td>
+      <th>2306</th>
+      <td>15.198695</td>
+      <td>52.638052</td>
+      <td>17.546930</td>
+      <td>POINT (242891.64 537041.039)</td>
     </tr>
     <tr>
-      <th>3789</th>
-      <td>15.254859</td>
-      <td>52.678002</td>
-      <td>18.819578</td>
-      <td>POINT (246919.989 541281.953)</td>
+      <th>5719</th>
+      <td>15.326447</td>
+      <td>52.727680</td>
+      <td>17.313000</td>
+      <td>POINT (252037.862 546553.975)</td>
     </tr>
     <tr>
-      <th>5541</th>
-      <td>15.319724</td>
-      <td>52.564156</td>
-      <td>58.911324</td>
-      <td>POINT (250654.937 528402.899)</td>
+      <th>2364</th>
+      <td>15.200673</td>
+      <td>52.661442</td>
+      <td>18.740347</td>
+      <td>POINT (243162.577 539633.499)</td>
     </tr>
   </tbody>
 </table>
@@ -733,36 +733,36 @@ the neighborhood, thus in a fully controlled scenario we perform this experiment
 <div class="highlight"><pre>
 * Selected model: Linear model
 * Nugget: 0.0
-* Sill: 438.3491232940861
-* Range: 8906.444877856818
+* Sill: 489.7399812761576
+* Range: 8898.981414538699
 * Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
 * Mean Bias: None
-* Mean RMSE: 25.000860949362576
+* Mean RMSE: 25.709962770143306
 * Error-lag weighting method: equal
 
 
 +--------+--------------------+--------------------+---------------------+
 |  lag   |    theoretical     |    experimental    |   bias (real-yhat)  |
 +--------+--------------------+--------------------+---------------------+
-| 500.0  | 24.60853512852859  | 11.659009934605715 | -12.949525193922875 |
-| 1000.0 | 49.21707025705718  | 33.57574792919676  | -15.641322327860422 |
-| 1500.0 | 73.82560538558577  | 43.727912692284356 |  -30.09769269330142 |
-| 2000.0 | 98.43414051411436  | 66.85390951880213  | -31.580230995312235 |
-| 2500.0 | 123.04267564264293 | 88.96538249296198  | -34.077293149680955 |
-| 3000.0 | 147.65121077117155 | 115.07274427357008 |  -32.57846649760147 |
-| 3500.0 | 172.25974589970014 | 140.16197426953403 |  -32.09777163016611 |
-| 4000.0 | 196.86828102822872 | 170.7970611443549  | -26.071219883873823 |
-| 4500.0 | 221.4768161567573  | 202.40500030908063 | -19.071815847676675 |
-| 5000.0 | 246.08535128528587 | 258.9454407598276  |  12.860089474541724 |
-| 5500.0 | 270.6938864138145  | 276.3618624554766  |  5.667976041662143  |
-| 6000.0 | 295.3024215423431  |  310.727163279953  |  15.424741737609907 |
-| 6500.0 | 319.91095667087166 | 330.7550449009331  |  10.844088230061459 |
-| 7000.0 | 344.51949179940027 | 371.04638466313054 |  26.526892863730268 |
-| 7500.0 | 369.12802692792883 | 379.1921343244303  |  10.06410739650147  |
-| 8000.0 | 393.73656205645744 | 420.4791021447186  |  26.742540088261137 |
-| 8500.0 |  418.345097184986  | 444.83403385569056 |  26.48893667070456  |
-| 9000.0 | 438.3491232940861  | 472.8926871102454  |  34.54356381615929  |
-| 9500.0 | 438.3491232940861  | 474.3476590353458  |  35.99853574125973  |
+| 500.0  | 27.516631312210944 | 12.548872479116914 |  -14.96775883309403 |
+| 1000.0 | 55.03326262442189  | 29.346216563217126 |  -25.68704606120476 |
+| 1500.0 | 82.54989393663284  | 53.26039701343071  |  -29.28949692320213 |
+| 2000.0 | 110.06652524884377 | 84.50844531675361  | -25.558079932090166 |
+| 2500.0 | 137.5831565610547  | 108.53561182896007 |  -29.04754473209462 |
+| 3000.0 | 165.09978787326568 | 131.69875148762813 |  -33.40103638563755 |
+| 3500.0 | 192.61641918547662 | 159.39614083991057 | -33.220278345566044 |
+| 4000.0 | 220.13305049768755 | 195.22394168598046 | -24.909108811707085 |
+| 4500.0 | 247.64968180989848 | 231.89394987189036 | -15.755731938008125 |
+| 5000.0 | 275.1663131221094  | 264.68872474483254 | -10.477588377276845 |
+| 5500.0 | 302.6829444343204  | 295.3235398024696  | -7.3594046318507935 |
+| 6000.0 | 330.19957574653137 | 327.9352055777114  |  -2.264370168819994 |
+| 6500.0 | 357.71620705874227 | 364.2204635031941  |  6.504256444451812  |
+| 7000.0 | 385.23283837095323 |  411.847133389599  |  26.61429501864575  |
+| 7500.0 | 412.74946968316414 | 429.8653795520153  |  17.11590986885119  |
+| 8000.0 | 440.2661009953751  | 470.6546695631294  |  30.388568567754305 |
+| 8500.0 | 467.78273230758606 | 482.8575410251533  |  15.074808717567237 |
+| 9000.0 | 489.7399812761576  | 523.0540709659597  |  33.314089689802074 |
+| 9500.0 | 489.7399812761576  | 542.2682452745304  |  52.52826399837278  |
 +--------+--------------------+--------------------+---------------------+
 </pre></div></div>
 </div>
@@ -775,7 +775,7 @@ the neighborhood, thus in a fully controlled scenario we perform this experiment
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">theoretical_model</span></code>: fitted <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> model</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">known_locations</span></code>: array with known points</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">unknown_location</span></code>: location where you want to interpolate a missing value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">unknown_locations</span></code>: locations where you want to interpolate a missing value (or a single location)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">neighbors_range</span></code>: optional parameter, the maximum distance where we search for point neighbors. If you don’t provide it then it is equal to the range of theoretical variogram model</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">no_neighbors</span></code>: number of the closest neighbors used for interpolation, by default it is set to 4, but for datasets with many point samples it is recommended to use more neighbors</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">max_tick</span></code>: If searching for neighbors in a specific direction how large should be tolerance for increasing the search angle (how many degrees more)</p></li>
@@ -826,67 +826,24 @@ the neighborhood, thus in a fully controlled scenario we perform this experiment
   </thead>
   <tbody>
     <tr>
-      <th>4940</th>
-      <td>15.296388</td>
-      <td>52.682969</td>
-      <td>20.207836</td>
-      <td>POINT (249753.74 541688.861)</td>
+      <th>42</th>
+      <td>15.116427</td>
+      <td>52.675932</td>
+      <td>16.002563</td>
+      <td>POINT (237556.735 541547.696)</td>
     </tr>
   </tbody>
 </table>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Predict with Ordinary Kriging</span>
 
-<span class="n">unknown_location</span> <span class="o">=</span> <span class="p">(</span><span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
-                    <span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-<span class="n">unknown_location</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-(249753.73998332422, 541688.8608177528)
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ok_interpolation</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
-    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
-    <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span>
-<span class="p">)</span>
-<span class="n">ok_interpolation</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
-</pre></div>
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-[20.207836151123047,
- 3.944304526105059e-31,
- 249753.73998332422,
- 541688.8608177528]
-</pre></div></div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ok_interpolation</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">unknown_location</span> <span class="o">=</span> <span class="n">known_value</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -895,36 +852,86 @@ the neighborhood, thus in a fully controlled scenario we perform this experiment
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-4940    0.0
+POINT (237556.73506526498 541547.6959364694)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">ok_interpolation</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
+    <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ok_interpolation</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[[1.60025635e+01            nan 2.37556735e+05 5.41547696e+05]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">known_value</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ok_interpolation</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+42    0.0
 Name: dem, dtype: float64
 </pre></div></div>
 </div>
 <p>The first value is our prediction is precisely the same as the input in the training set! So far, the algorithm has worked well. The second value is prediction variance error, equal, or really close to zero - as it should be.</p>
 <p>Simple Kriging differs from Ordinary Kriging, and we must set the process mean to retrieve valid results. It is rarely the case. That’s why Ordinary Kriging is the first choice for many applications. We know the global mean because we have the whole dataset, but in the real-world scenario, we cannot divide the set into training and test sets and then get the mean from the entire dataset - it is an information leak from the test set into a model!</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">sk_interpolation</span> <span class="o">=</span> <span class="n">simple_kriging</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
     <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
-    <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
+    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
     <span class="n">process_mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">])</span>
 <span class="p">)</span>
-<span class="n">sk_interpolation</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sk_interpolation</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
-</pre></div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 1/1 [00:00&lt;00:00, 1117.29it/s]
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[20.207836151123047,
- 7.888609052210118e-31,
- 249753.73998332422,
- 541688.8608177528]
+[[1.60025635e+01            nan 2.37556735e+05 5.41547696e+05]]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
 </pre></div></div>
 </div>
 <p>The Simple Kriging algorithm returns the same output as the Ordinary Kriging: <code class="docutils literal notranslate"><span class="pre">[prediction,</span> <span class="pre">error</span> <span class="pre">variance,</span> <span class="pre">pt</span> <span class="pre">x,</span> <span class="pre">pt</span> <span class="pre">y]</span></code>. Simple Kriging has returned the same value as the actual value fed to the algorithm.</p>
@@ -935,7 +942,7 @@ Name: dem, dtype: float64
 of prediction.</p>
 <p>We will perform those tests only for ordinary kriging, dividing dataset multiple times to get distribution of errors for each number of neighbors.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
@@ -944,39 +951,8 @@ of prediction.</p>
 <span class="n">neighbors_number</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">512</span><span class="p">]</span>
 <span class="n">number_of_trials</span> <span class="o">=</span> <span class="mi">10</span>
 
-<span class="k">def</span> <span class="nf">kriging_run</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="n">theoretical_model</span><span class="p">,</span> <span class="n">known_locations</span><span class="p">,</span> <span class="n">number_of_neighbors</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Function predicts values at location.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    location : Point</span>
-
-<span class="sd">    theoretical_model : TheoreticalVariogram</span>
-
-<span class="sd">    known_locations : numpy array</span>
-
-<span class="sd">    number_of_neighbors : int</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    : float</span>
-<span class="sd">        Interpolated value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">unknown_location</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">location</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">location</span><span class="o">.</span><span class="n">y</span>
-    <span class="p">)</span>
-    <span class="n">preds</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
-        <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_model</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="o">=</span><span class="n">known_locations</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
-        <span class="n">unknown_location</span><span class="o">=</span><span class="n">unknown_location</span><span class="p">,</span>
-        <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-        <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-
 <span class="n">outputs</span> <span class="o">=</span> <span class="p">[]</span>
+
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_trials</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">nn</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">neighbors_number</span><span class="p">):</span>
         <span class="c1"># Divide dataset into train and test set</span>
@@ -998,14 +974,15 @@ of prediction.</p>
         <span class="p">)</span>
 
         <span class="c1"># Predict new values</span>
-        <span class="n">yhats</span> <span class="o">=</span> <span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">kriging_run</span><span class="p">(</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
-                <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
-                <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">nn</span>
-            <span class="p">)</span>
+        <span class="n">yhats</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+            <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+            <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+            <span class="n">unknown_locations</span><span class="o">=</span><span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+            <span class="n">no_neighbors</span><span class="o">=</span><span class="n">nn</span><span class="p">,</span>
+            <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="n">yhats</span> <span class="o">=</span> <span class="n">yhats</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
         <span class="n">avg_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">test_sample</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">yhats</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
         <span class="n">outputs</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">avg_rmse</span><span class="p">,</span> <span class="n">nn</span><span class="p">])</span>
 </pre></div>
@@ -1016,20 +993,20 @@ of prediction.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 8/8 [00:05&lt;00:00,  1.38it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.65it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.65it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.98it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  2.00it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.99it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.94it/s]
-100%|██████████| 8/8 [00:04&lt;00:00,  1.77it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.24it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.29it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.21it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.14it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.16it/s]
+100%|██████████| 8/8 [00:02&lt;00:00,  3.63it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.13it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.29it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.32it/s]
+100%|██████████| 8/8 [00:01&lt;00:00,  4.27it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create dataframe from results</span>
@@ -1040,7 +1017,7 @@ of prediction.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1069,27 +1046,27 @@ of prediction.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>4.718654</td>
+      <td>5.101683</td>
       <td>4</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>3.396656</td>
+      <td>5.606411</td>
       <td>8</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>4.920820</td>
+      <td>4.393895</td>
       <td>16</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>3.658729</td>
+      <td>5.314496</td>
       <td>32</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>3.958142</td>
+      <td>3.708283</td>
       <td>64</td>
     </tr>
   </tbody>
@@ -1097,7 +1074,7 @@ of prediction.</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First plot average rmse per number of neighbors</span>
@@ -1119,7 +1096,7 @@ of prediction.</p>
 </div>
 <p>As we see, there could be too many neighbors - interpolations become wildly inaccurate. We can check general statistics for each number of neighbors using <code class="docutils literal notranslate"><span class="pre">.describe()</span></code> method on transformed dataframe:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First, set number of neighbors as a column</span>
@@ -1130,7 +1107,7 @@ of prediction.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1165,7 +1142,7 @@ of prediction.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>4.718654</td>
+      <td>5.101683</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1177,7 +1154,7 @@ of prediction.</p>
     <tr>
       <th>1</th>
       <td>NaN</td>
-      <td>3.396656</td>
+      <td>5.606411</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1189,7 +1166,7 @@ of prediction.</p>
       <th>2</th>
       <td>NaN</td>
       <td>NaN</td>
-      <td>4.92082</td>
+      <td>4.393895</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1201,7 +1178,7 @@ of prediction.</p>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>3.658729</td>
+      <td>5.314496</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1213,7 +1190,7 @@ of prediction.</p>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
-      <td>3.958142</td>
+      <td>3.708283</td>
       <td>NaN</td>
       <td>NaN</td>
       <td>NaN</td>
@@ -1223,7 +1200,7 @@ of prediction.</p>
 </div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">transformed</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -1231,7 +1208,7 @@ of prediction.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="output_area rendered_html docutils container">
@@ -1277,80 +1254,80 @@ of prediction.</p>
     </tr>
     <tr>
       <th>mean</th>
-      <td>4.497719</td>
-      <td>4.426904</td>
-      <td>4.541524</td>
-      <td>4.585908</td>
-      <td>4.573719</td>
-      <td>14.016994</td>
-      <td>572.193124</td>
-      <td>548.336303</td>
+      <td>5.092391</td>
+      <td>4.359564</td>
+      <td>4.204688</td>
+      <td>4.736211</td>
+      <td>3.967083</td>
+      <td>7.702323</td>
+      <td>358.541137</td>
+      <td>8054.270265</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>0.702517</td>
-      <td>0.657804</td>
-      <td>0.588124</td>
-      <td>0.695009</td>
-      <td>0.606324</td>
-      <td>11.906249</td>
-      <td>556.973063</td>
-      <td>367.693970</td>
+      <td>0.772718</td>
+      <td>1.068681</td>
+      <td>0.571504</td>
+      <td>1.030644</td>
+      <td>0.352372</td>
+      <td>3.217012</td>
+      <td>310.411182</td>
+      <td>23070.277757</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>3.726959</td>
-      <td>3.396656</td>
-      <td>3.706056</td>
-      <td>3.626789</td>
-      <td>3.771429</td>
-      <td>4.355742</td>
-      <td>147.615233</td>
-      <td>153.057807</td>
+      <td>3.596085</td>
+      <td>3.521794</td>
+      <td>3.605129</td>
+      <td>3.563863</td>
+      <td>3.528472</td>
+      <td>3.848001</td>
+      <td>52.951256</td>
+      <td>207.031608</td>
     </tr>
     <tr>
       <th>25%</th>
-      <td>3.876334</td>
-      <td>4.125214</td>
-      <td>4.300318</td>
-      <td>4.093870</td>
-      <td>4.051510</td>
-      <td>6.590461</td>
-      <td>191.575340</td>
-      <td>251.672267</td>
+      <td>5.033615</td>
+      <td>3.650415</td>
+      <td>3.839407</td>
+      <td>4.358459</td>
+      <td>3.716043</td>
+      <td>5.764558</td>
+      <td>176.471335</td>
+      <td>278.778854</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>4.511493</td>
-      <td>4.458808</td>
-      <td>4.410529</td>
-      <td>4.683110</td>
-      <td>4.643775</td>
-      <td>9.953469</td>
-      <td>438.572343</td>
-      <td>468.651028</td>
+      <td>5.226161</td>
+      <td>4.037435</td>
+      <td>4.092138</td>
+      <td>4.510533</td>
+      <td>3.878133</td>
+      <td>6.801887</td>
+      <td>237.905790</td>
+      <td>471.083003</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>4.793332</td>
-      <td>4.655343</td>
-      <td>4.843530</td>
-      <td>4.972404</td>
-      <td>4.937369</td>
-      <td>14.714325</td>
-      <td>603.706742</td>
-      <td>676.775004</td>
+      <td>5.616208</td>
+      <td>4.402573</td>
+      <td>4.363393</td>
+      <td>4.751882</td>
+      <td>4.205904</td>
+      <td>9.274566</td>
+      <td>465.388009</td>
+      <td>1486.446827</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>5.950029</td>
-      <td>5.741397</td>
-      <td>5.824876</td>
-      <td>5.721316</td>
-      <td>5.599397</td>
-      <td>41.472968</td>
-      <td>1973.236450</td>
-      <td>1278.284266</td>
+      <td>5.836839</td>
+      <td>6.842599</td>
+      <td>5.558488</td>
+      <td>7.348466</td>
+      <td>4.540467</td>
+      <td>15.034987</td>
+      <td>1021.542076</td>
+      <td>73672.777449</td>
     </tr>
   </tbody>
 </table>
@@ -1371,6 +1348,10 @@ of prediction.</p>
 <tbody>
 <tr class="row-even"><td><p>2025-04-30</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-07-10</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">ordinary_kriging</span></code> and simplified tutorial</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
 </tbody>

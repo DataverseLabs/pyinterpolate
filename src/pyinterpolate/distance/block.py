@@ -293,8 +293,8 @@ def calc_block_to_block_distance(
 
 
 def select_neighbors_in_range(data: pd.DataFrame,
-                              current_lag: float,
-                              previous_lag: float):
+                             current_lag: float,
+                             previous_lag: float):
     """
     Function selects the neighbors of each block within a range given by
     previous and current lags.
@@ -313,16 +313,15 @@ def select_neighbors_in_range(data: pd.DataFrame,
     Returns
     -------
     neighbors : Dict
-        block id: [list of neighbors within a range
+        block index: [list of neighbor indexes within a range
         given by previous and current lags]
     """
 
-    cols = list(data.columns)
-    neighbors = data.reset_index(names='block_i')
-    neighbors = neighbors.melt(id_vars='block_i', value_vars=cols)
+    neighbors = data.reset_index()
+    neighbors = neighbors.melt(id_vars=neighbors.columns[0], value_vars=neighbors.columns[1:])
 
     neighbors = neighbors[
-        (neighbors > previous_lag) & (neighbors <= current_lag)
+        (neighbors['value'] > previous_lag) & (neighbors['value'] <= current_lag)
     ]
     dneighbors = neighbors.dropna()
 
@@ -331,7 +330,7 @@ def select_neighbors_in_range(data: pd.DataFrame,
     else:
         pneighbors = dneighbors.drop(columns='value')
         other_neighbors_col = pneighbors.columns[-1]
-        pneighbors = pneighbors.groupby('block_i')[
+        pneighbors = pneighbors.groupby(pneighbors.columns[0])[
             other_neighbors_col
         ].apply(list)
 

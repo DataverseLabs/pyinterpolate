@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Area-to-Point Poisson Kriging &#8212; pyinterpolate 1.0.1 documentation</title>
+    <title>Area-to-Point Poisson Kriging &#8212; pyinterpolate 1.0.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
   
 </a></div>
     
@@ -610,7 +610,7 @@
 <h2>3. Smooth blocks<a class="headerlink" href="#3.-Smooth-blocks" title="Link to this heading">#</a></h2>
 <p>The process of map smoothing is straightforward. We use the <code class="docutils literal notranslate"><span class="pre">smooth_blocks()</span></code> function and pass theoretical variogram and point support objects into it. Other important parameter is <code class="docutils literal notranslate"><span class="pre">number_of_neighbors</span></code> because the final results might be affected by the number of regions that we include as the closest neighbors of a transformed area.</p>
 <p>The method returns GeoDataFrame with points and predicted values. It iteratively re-calculates each area risk and produces predictions per point. In Area-to-Area Kriging, those predictions are aggregated. We leave them and get the smooth risk map.</p>
-<div class="nbinput docutils container">
+<div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
@@ -623,31 +623,6 @@
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-100%|██████████| 217/217 [02:10&lt;00:00,  1.66it/s]
-</pre></div></div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Processing time: 130.38515441300115 seconds
-Average RMSE (valid only for area-to-area and centroid-based Poisson Kriging: nan
-</pre></div></div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-
-</pre></div></div>
 </div>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
