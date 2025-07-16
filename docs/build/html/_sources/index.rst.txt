@@ -10,11 +10,11 @@ Pyinterpolate
   :width: 400
   :alt: Pyinterpolate Logo
 
-**version 1.0.1**
+**version 1.0.2**
 -----------------
 
 .. note::
-   The last documentation update: *2025-06-29*
+   The last documentation update: *2025-07-16*
 
 Important notice
 ................

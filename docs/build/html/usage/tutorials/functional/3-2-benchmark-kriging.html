@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Benchmarking Kriging &#8212; pyinterpolate 1.0.1 documentation</title>
+    <title>Benchmarking Kriging &#8212; pyinterpolate 1.0.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=292eb321"></script>
+    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -117,7 +117,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.1 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
   
 </a></div>
     
@@ -520,7 +520,7 @@
 <hr class="docutils" />
 <p><strong>IDW</strong> is a simple yet powerful technique. Unfortunately, it has a significant drawback: we must set <span class="math notranslate nohighlight">\(p\)</span> - power - manually, and it is constant across all distances. That’s why Kriging - in most cases - performs much better than IDW, weights are related to the distance to a neighbor, and are estimated when we build semivariogram model.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
@@ -665,7 +665,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW is 4.26318444803915
+Root Mean Squared Error of prediction with IDW is 5.036257725481412
 </pre></div></div>
 </div>
 <p><strong>Clarification</strong>: Obtained Root Mean Squared Error could serve as a baseline for further model development. To build a better reference, we create four IDW models of powers:</p>
@@ -676,7 +676,7 @@ Root Mean Squared Error of prediction with IDW is 4.26318444803915
 <li><p><code class="docutils literal notranslate"><span class="pre">4</span></code></p></li>
 </ol>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">IDW_POWERS</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>  <span class="c1"># we have 2 already</span>
@@ -707,11 +707,11 @@ Root Mean Squared Error of prediction with IDW is 4.26318444803915
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3/3 [00:43&lt;00:00, 14.56s/it]
+100%|██████████| 3/3 [01:00&lt;00:00, 20.02s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">pw</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">idws</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -724,10 +724,10 @@ Root Mean Squared Error of prediction with IDW is 4.26318444803915
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW of power 2 is 4.2632
-Root Mean Squared Error of prediction with IDW of power 0.5 is 5.3416
-Root Mean Squared Error of prediction with IDW of power 1 is 4.8539
-Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
+Root Mean Squared Error of prediction with IDW of power 2 is 5.0363
+Root Mean Squared Error of prediction with IDW of power 0.5 is 6.0553
+Root Mean Squared Error of prediction with IDW of power 1 is 5.6235
+Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
 </pre></div></div>
 </div>
 </section>
@@ -735,7 +735,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 <h2>3. Perform Kriging and validate outputs<a class="headerlink" href="#3.-Perform-Kriging-and-validate-outputs" title="Link to this heading">#</a></h2>
 <p>Now, we are going to compare IDW results to Kriging output.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
@@ -747,7 +747,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">theo_var</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span>
@@ -758,7 +758,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">theo_var</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
@@ -772,24 +772,31 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 <img alt="../../../_images/usage_tutorials_functional_3-2-benchmark-kriging_17_0.png" src="../../../_images/usage_tutorials_functional_3-2-benchmark-kriging_17_0.png" />
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">kriging_preds</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-            <span class="k">lambda</span> <span class="n">loc</span><span class="p">:</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
-                <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
-                <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
-                <span class="n">unknown_location</span><span class="o">=</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
-                <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
-                <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="p">)</span>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">kriging_preds</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
+    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">test</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+    <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
+    <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">kriging_preds</span> <span class="o">=</span> <span class="n">kriging_preds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+100%|██████████| 6758/6758 [00:01&lt;00:00, 5196.73it/s]
+</pre></div></div>
+</div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">kriging_rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
@@ -801,7 +808,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Root Mean Squared Error of prediction with Kriging is </span><span class="si">{</span><span class="n">kriging_rmse</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -813,7 +820,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.0798
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with Kriging is 4.164396486557602
+Root Mean Squared Error of prediction with Kriging is 4.46215413444605
 </pre></div></div>
 </div>
 <p>Your results may be different (if your train and test sets are divided in a different way), but in most cases, Kriging will be better than IDW or very close to the best results from IDW. Even more important is that for the single data source with a low number of samples, we don’t have the opportunity to perform the validation step, and we’re unable to guess how big the power parameter should be. With Kriging, we model variogram, and <em>voila!</em> - model works.</p>
@@ -832,8 +839,20 @@ Root Mean Squared Error of prediction with Kriging is 4.164396486557602
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
+<tr class="row-odd"><td><p>2025-07-11</p></td>
+<td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">ordinary_kriging</span></code> and simplified tutorial</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>
