@@ -1,6 +1,13 @@
 Changes - from version >= 1.x
 =============================
 
+2025-07-17
+----------
+
+**version 1.0.3**
+
+* [bug] `TheoreticalVariogram().__repr__()` method bug when optional `custom_weights` are not given
+
 2025-07-16
 ----------
 

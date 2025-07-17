@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariogram.experimental.classes.experimental_variogram &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.semivariogram.experimental.classes.experimental_variogram &#8212; pyinterpolate 1.0.3 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../../_static/documentation_options.js?v=baaebd52"></script>
     <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.0.3 documentation</p>
   
 </a></div>
     
@@ -766,6 +766,11 @@
 
         <span class="n">cname</span> <span class="o">=</span> <span class="s1">&#39;ExperimentalVariogram&#39;</span>
 
+        <span class="c1"># NoneType has no tolist()</span>
+        <span class="n">custom_weights</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">custom_weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">custom_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;None&quot;</span>
+        <span class="p">)</span>
+
         <span class="n">input_params</span> <span class="o">=</span> <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ds=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;step_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">step_size</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;max_range=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_range</span><span class="si">}</span><span class="s1">,&#39;</span>
@@ -773,7 +778,7 @@
                         <span class="sa">f</span><span class="s1">&#39;tolerance=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;dir_neighbors_selection_method=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;custom_bins=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">lags</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s1">,&#39;</span>
-                        <span class="sa">f</span><span class="s1">&#39;custom_weights=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">custom_weights</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s1">,&#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;custom_weights=</span><span class="si">{</span><span class="n">custom_weights</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;is_semivariance=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_sem</span><span class="si">}</span><span class="s1">,&#39;</span>
                         <span class="sa">f</span><span class="s1">&#39;is_covariance=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">__c_cov</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 

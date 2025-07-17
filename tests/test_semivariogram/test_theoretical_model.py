@@ -127,3 +127,23 @@ def test_nugget_autofit():
     variogram = TheoreticalVariogram()
     variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, models_group='all')
     assert variogram.nugget > 0
+
+
+def test__str__():
+    variogram = TheoreticalVariogram()
+    empty_str = "Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model or import model with from_dict() or from_json() methods."
+    assert variogram.__str__() == empty_str
+    variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM,
+                      models_group='linear')
+    text = "* Selected model: Linear model"
+    assert variogram.__str__().startswith(text)
+
+
+def test__repr__():
+    variogram = TheoreticalVariogram()
+    empty_str = "Theoretical model is not calculated yet. Use fit() or autofit() methods to build or find a model or import model with from_dict() or from_json() methods."
+    assert variogram.__repr__() == empty_str
+    variogram.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM,
+                      models_group='linear')
+    text = "* Selected model: Linear model"
+    assert variogram.__repr__().startswith(text)
