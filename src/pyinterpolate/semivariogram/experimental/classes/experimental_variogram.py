@@ -337,6 +337,11 @@ class ExperimentalVariogram:
 
         cname = 'ExperimentalVariogram'
 
+        # NoneType has no tolist()
+        custom_weights = (
+            self.custom_weights.tolist() if self.custom_weights is not None else "None"
+        )
+
         input_params = (f'ds={self.ds.tolist()},'
                         f'step_size={self.step_size},'
                         f'max_range={self.max_range},'
@@ -344,7 +349,7 @@ class ExperimentalVariogram:
                         f'tolerance={self.tolerance},'
                         f'dir_neighbors_selection_method={self.method},'
                         f'custom_bins={self.lags.tolist()},'
-                        f'custom_weights={self.custom_weights.tolist()},'
+                        f'custom_weights={custom_weights},'
                         f'is_semivariance={self.__c_sem},'
                         f'is_covariance={self.__c_cov}')
 
