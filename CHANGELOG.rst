@@ -1,6 +1,13 @@
 Changes - from version >= 1.x
 =============================
 
+2025-0
+------
+
+**version 1.0.4**
+
+* [enhancement] new parameter - `buffer` - has been added to `interpolate_raster` when `dimension` is set, it is float, by default equal to 0, must be equal or greater than 1. It creates buffer of size (buffer * step_size) around the interpolated grid.
+
 2025-07-17
 ----------
 
@@ -21,7 +28,7 @@ Changes - from version >= 1.x
 **version 1.0.1**
 
 * [feature] `ordinary_kriging()` and `simple_kriging()` functions allow user to pass array-like object of coordinates as the `unknown_locations` parameter.
-* [enhacement] added `__repr__()` method to `TheoreticalVariogram` class.
+* [enhancement] added `__repr__()` method to `TheoreticalVariogram` class.
 
 
 Changes in transition between 0.x to 1.x
