@@ -160,13 +160,6 @@ class ExperimentalIndicatorVariogram:
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = triangular
-        Neighbors selection in a given distance. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
-
     fit : bool, default = True
         Should models be fitted in the class initialization?
 
@@ -189,9 +182,6 @@ class ExperimentalIndicatorVariogram:
 
     tolerance : float
         Derived from the ``tolerance`` parameter.
-
-    dir_neighbors_selection_method : str
-        Derived from the ``dir_neighbors_selection_method`` parameter.
 
     experimental_models : List
         The ``[threshold, experimental_variogram]`` pairs.
@@ -220,7 +210,6 @@ class ExperimentalIndicatorVariogram:
                  custom_bins=None,
                  direction: float = None,
                  tolerance: float = None,
-                 dir_neighbors_selection_method='t',
                  fit=True):
 
         self.ds = IndicatorVariogramData(
@@ -234,7 +223,6 @@ class ExperimentalIndicatorVariogram:
         self.custom_bins = custom_bins
         self.direction = direction
         self.tolerance = tolerance
-        self.dir_neighbors_selection_method = dir_neighbors_selection_method
 
         self.experimental_models = {}
 
@@ -255,7 +243,6 @@ class ExperimentalIndicatorVariogram:
                 custom_bins=self.custom_bins,
                 direction=self.direction,
                 tolerance=self.tolerance,
-                dir_neighbors_selection_method=self.dir_neighbors_selection_method,
                 is_semivariance=True,
                 is_covariance=True
             )

@@ -7,8 +7,7 @@ from pyinterpolate.core.validators.experimental_semivariance import \
     validate_semivariance_weights, validate_direction_and_tolerance, \
     validate_bins
 from pyinterpolate.semivariogram.experimental.functions.directional import \
-    directional_weighted_semivariance, from_ellipse, from_triangle, \
-    from_ellipse_cloud, from_triangle_cloud
+    directional_weighted_semivariance, from_ellipse, from_ellipse_cloud
 from pyinterpolate.semivariogram.experimental.functions.general import \
     omnidirectional_variogram, omnidirectional_semivariogram_cloud
 from pyinterpolate.semivariogram.experimental.functions.semivariance import \
@@ -21,7 +20,6 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
                            max_range: float = None,
                            direction: float = None,
                            tolerance: float = None,
-                           dir_neighbors_selection_method: str = 't',
                            custom_bins: Union[np.ndarray, Any] = None,
                            custom_weights: np.ndarray = None) -> np.ndarray:
     """
@@ -58,13 +56,6 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
         * The minor axis size is ``tolerance * step_size``
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
-
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in a given direction. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -217,9 +208,7 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
             lags,
             direction,
             tolerance,
-            dir_neighbors_selection_method,
-            custom_weights,
-            # as_point_cloud=False
+            custom_weights
         )
     else:
         experimental_semivariances = omnidirectional_semivariance(
@@ -232,8 +221,7 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
 def directional_semivariance_cloud(points: np.ndarray,
                                    lags: Union[List, np.ndarray],
                                    direction: float,
-                                   tolerance: float,
-                                   method: str) -> Dict:
+                                   tolerance: float) -> Dict:
     """
     Function calculates directional semivariances.
 
@@ -265,33 +253,17 @@ def directional_semivariance_cloud(points: np.ndarray,
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    method : str
-        Neighbors selection in a given direction. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
-
     Returns
     -------
     : Dict
         ``{lag: [semivariances]}``
     """
-    output_semivariances = dict()
 
-    if method == "e" or method == "ellipse":
-        output_semivariances = from_ellipse_cloud(
-            points,
-            lags,
-            direction,
-            tolerance)
-    elif method == "t" or method == "triangle":
-        output_semivariances = from_triangle_cloud(
-            points=points,
-            lags=lags,
-            direction=direction,
-            tolerance=tolerance
-        )
+    output_semivariances = from_ellipse_cloud(
+        points,
+        lags,
+        direction,
+        tolerance)
 
     return output_semivariances
 
@@ -300,7 +272,6 @@ def directional_semivariance(points: np.ndarray,
                              lags: Union[List, np.ndarray],
                              direction: float,
                              tolerance: float,
-                             dir_neighbor_selection_method: str,
                              custom_weights: np.ndarray = None):
     """
     Function calculates directional semivariances.
@@ -333,13 +304,6 @@ def directional_semivariance(points: np.ndarray,
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbor_selection_method : str
-        Neighbors selection in a given direction. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
-
     custom_weights : optional, Iterable
         Custom weights assigned to points.
 
@@ -348,29 +312,21 @@ def directional_semivariance(points: np.ndarray,
     : (numpy array)
       ``[lag, semivariance, number of point pairs]``
     """
-    output_semivariances = np.array([])
 
     if custom_weights is None:
-        if (dir_neighbor_selection_method == "e" or
-            dir_neighbor_selection_method == "ellipse"):
-            output_semivariances = from_ellipse(
-                semivariance_fn,
-                points,
-                lags,
-                direction,
-                tolerance)
-        elif (dir_neighbor_selection_method == "t" or
-              dir_neighbor_selection_method == "triangle"):
-            output_semivariances = from_triangle(
-                fn=semivariance_fn,
-                points=points,
-                lags=lags,
-                direction=direction,
-                tolerance=tolerance
-            )
+        output_semivariances = from_ellipse(
+            semivariance_fn,
+            points,
+            lags,
+            direction,
+            tolerance)
     else:
         output_semivariances = directional_weighted_semivariance(
-            points, lags, custom_weights, direction, tolerance
+            points,
+            lags,
+            custom_weights,
+            direction,
+            tolerance
         )
 
     return output_semivariances
@@ -424,7 +380,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
                              max_range: float = None,
                              direction: float = None,
                              tolerance: float = None,
-                             dir_neighbors_selection_method: str = 't',
                              custom_bins: Union[np.ndarray, Any] = None,
                              custom_weights: np.ndarray = None) -> Dict:
     """
@@ -461,13 +416,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
         * The minor axis size is ``tolerance * step_size``
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
-
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in a given direction. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
@@ -599,8 +547,7 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
             ds.points,
             lags,
             direction,
-            tolerance,
-            dir_neighbors_selection_method
+            tolerance
         )
     else:
         experimental_semivariances = omnidirectional_semivariance(

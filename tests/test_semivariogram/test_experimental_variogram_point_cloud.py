@@ -131,8 +131,7 @@ def test_directional_semivariogram():
         step_size=_STEP_SIZE,
         max_range=_MAX_RANGE,
         direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='e'
+        tolerance=0.25
     )
 
     cloud_semivariance = point_cloud_semivariance(
@@ -140,30 +139,10 @@ def test_directional_semivariogram():
         step_size=_STEP_SIZE,
         max_range=_MAX_RANGE,
         direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='e'
+        tolerance=0.25
     )
 
     for idx, _lag in enumerate(list(cloud_semivariance.keys())):
         arr_len = len(cloud_semivariance[_lag])
         assert arr_len == dirvar[idx][-1]
         assert np.mean(cloud_semivariance[_lag] / 2) == dirvar[idx, 1]
-
-
-# def test_directional_triangular_semivariogram():
-#     try:
-#         ds = np.load('armstrong_data.npy')
-#     except FileNotFoundError:
-#         ds = np.load('test_semivariogram/armstrong_data.npy')
-#     STEP_SIZE = 1.5
-#     MAX_RANGE = 6
-#     dirvar = calculate_semivariance(
-#         ds=ds,
-#         step_size=STEP_SIZE,
-#         max_range=MAX_RANGE,
-#         direction=15,
-#         tolerance=0.25,
-#         dir_neighbors_selection_method='t'
-#     )
-#
-#     assert isinstance(dirvar, np.ndarray)

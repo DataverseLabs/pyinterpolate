@@ -24,10 +24,10 @@ ARMSTRONG_VARIOGRAM = ExperimentalVariogram(ARMSTRONG_DATA,
                                             max_range=6)
 
 ARMSTRONG_VARIOGRAM_DIRECTIONAL = ExperimentalVariogram(ARMSTRONG_DATA,
-                                                        step_size=1.2,
+                                                        step_size=1.5,
                                                         max_range=6,
                                                         direction=135,
-                                                        tolerance=0.02)
+                                                        tolerance=0.4)
 
 
 def test_zero_case():
