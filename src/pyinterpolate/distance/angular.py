@@ -5,64 +5,6 @@ from numpy.typing import ArrayLike
 from scipy.linalg import fractional_matrix_power
 
 
-# def build_mask_indices(coordinates: np.ndarray, vertices: List):
-#     """
-#     Function builds masks for points within edges forming triangles.
-#
-#     Parameters
-#     ----------
-#     coordinates : numpy array
-#         Masked points.
-#
-#     vertices : List
-#         Triangle edges.
-#
-#     Returns
-#     -------
-#     : List
-#         List of length ``edges`` with point-indices.
-#     """
-#
-#     # Create boolean mask for each lag and coordinate and get True indices
-#     indices = []
-#
-#     def _get(lag_idx):
-#
-#         point_masks = []
-#
-#         trs = vertices[lag_idx]
-#         for tr in trs:
-#             mask = triangle_mask(
-#                 triangle_1=tr[0],
-#                 triangle_2=tr[1],
-#                 coordinates=coordinates
-#             )
-#             point_masks.append(mask)
-#
-#         indices.append([lag_idx, point_masks])
-#
-#     with concurrent.futures.ThreadPoolExecutor() as executor:
-#         futures = []
-#         for idx in range(len(vertices)):
-#             futures.append(
-#                 executor.submit(
-#                     _get, idx
-#                 )
-#             )
-#         for future in concurrent.futures.as_completed(futures):
-#             try:
-#                 future.result()
-#             except Exception as e:
-#                 raise e
-#
-#     indices = sorted(
-#         indices,
-#         key=lambda x: x[0]
-#     )
-#
-#     return indices
-
-
 def calc_angles_between_points(vec1: np.ndarray,
                                vec2: np.ndarray,
                                flatten_output: bool = True) -> np.ndarray:
@@ -294,44 +236,6 @@ def select_points_within_ellipse(ellipse_center: np.array,
                                                 step_size)
 
     return current_ellipse
-
-
-# def triangle_mask(triangle_1: Tuple,
-#                   triangle_2: Tuple,
-#                   coordinates: np.ndarray) -> np.ndarray:
-#     """
-#     Function selects points in the given areas.
-#
-#     Parameters
-#     ----------
-#     triangle_1 : Tuple
-#         Set of coordinates making triangle: ``([x1, y1], [x2, y2], [x3, y3])``
-#
-#     triangle_2 : Tuple
-#         Inverted set of coordinates from ``triangle_1``.
-#
-#     coordinates : numpy array
-#         List of coordinates of size Mx2.
-#
-#     Returns
-#     -------
-#     mask : numpy array
-#         Boolean mask of size Mx2.
-#     """
-#
-#     points_in_triangle_a = select_points_within_triangle(
-#         triangle_1,
-#         coordinates
-#     )
-#     points_in_triangle_b = select_points_within_triangle(
-#         triangle_2,
-#         coordinates
-#     )
-#
-#     mask = np.logical_or(points_in_triangle_a,
-#                          points_in_triangle_b)
-#
-#     return mask
 
 
 def _calc_angle_between_points(coor1: ArrayLike,
