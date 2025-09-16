@@ -292,7 +292,6 @@ def _calc_omnidirectional_values(fn: Callable,
         if custom_weights is None:
             value = fn(vals_0, vals_h)
         else:
-            # TODO: the same for covariance
             value = weight_experimental_semivariance(
                 weights=custom_weights,
                 distances_in_range=distances_in_range,
