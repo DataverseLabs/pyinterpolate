@@ -9,6 +9,7 @@ Changes - from version >= 1.x
 * [tests] removed `create_model_validation_sets()` function from `tests.test_kriging.point_kriging_ds.dataprep.py` because it is not used anywhere
 * [enhancement] new parameter - `buffer` - has been added to `interpolate_raster` when `dimension` is set, it is float, by default equal to 0, must be equal or greater than 1. It creates buffer of size (buffer * step_size) around the interpolated grid.
 * [enhancement] from now on it is not possible to select neighbors using `triangle` method (in directional variogram cases)
+* [docs] updated missing DOI in Indicator Variogram
 
 2025-07-17
 ----------

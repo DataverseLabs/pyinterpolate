@@ -198,7 +198,7 @@ class ExperimentalIndicatorVariogram:
     ----------
     Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
     non-parametric modeling of local uncertainty
-    in earth sciences. DOI: TODO
+    in earth sciences. DOI: https://doi.org/10.1016/j.cageo.2008.08.014
     """
 
     def __init__(self,
