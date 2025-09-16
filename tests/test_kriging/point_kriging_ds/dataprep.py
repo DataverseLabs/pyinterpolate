@@ -15,7 +15,7 @@ def build_armstrong_ds():
 
     armstrong_variogram_directional = ExperimentalVariogram(
         ds,
-        step_size=1.2,
+        step_size=1.5,
         max_range=6,
         direction=135,
         tolerance=0.02

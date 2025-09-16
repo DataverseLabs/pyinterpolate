@@ -33,14 +33,6 @@ class DirectionalVariogram:
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = "t"
-        Method used for neighbors selection in a given direction. Available
-        methods:
-
-        * "triangle" or "t", default method where point neighbors
-          are selected from a triangular area,
-        * "ellipse" or "e", more accurate but slower.
-
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
@@ -77,9 +69,6 @@ class DirectionalVariogram:
     tolerance : float
         See ``tolerance`` parameter.
 
-    dir_neighbors_selection_method : str, default = triangular
-        See ``dir_neighbors_selection_method`` parameter.
-
     custom_bins : numpy array, optional
         See ``custom_bins`` parameter.
 
@@ -101,7 +90,6 @@ class DirectionalVariogram:
                  step_size: float,
                  max_range: float,
                  tolerance: float = 0.2,
-                 dir_neighbors_selection_method='t',
                  custom_weights=None,
                  custom_bins=None):
 
@@ -111,7 +99,6 @@ class DirectionalVariogram:
         self.max_range = max_range
         self.tolerance = tolerance
         self.custom_weights = custom_weights
-        self.dir_neighbors_selection_method = dir_neighbors_selection_method
         self.possible_variograms = ['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE']
         self.directions = {
             'NS': 90,
@@ -140,8 +127,7 @@ class DirectionalVariogram:
                 custom_bins=self.custom_bins,
                 custom_weights=self.custom_weights,
                 direction=val,
-                tolerance=self.tolerance,
-                dir_neighbors_selection_method=self.dir_neighbors_selection_method)
+                tolerance=self.tolerance)
 
             self.directional_variograms[idx] = variogram
 

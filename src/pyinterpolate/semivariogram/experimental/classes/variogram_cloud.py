@@ -116,13 +116,6 @@ class VariogramCloud:
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in within a given angle. Available methods:
-
-        * "triangle" or "t", default method, where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the more accurate method but also the slowest.
-
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
@@ -174,7 +167,6 @@ class VariogramCloud:
                  max_range: float = None,
                  direction: float = None,
                  tolerance: float = None,
-                 dir_neighbors_selection_method: str = 't',
                  custom_bins: Union[np.ndarray, Collection] = None,
                  custom_weights: np.ndarray = None):
 
@@ -184,7 +176,6 @@ class VariogramCloud:
             max_range=max_range,
             direction=direction,
             tolerance=tolerance,
-            dir_neighbors_selection_method=dir_neighbors_selection_method,
             custom_bins=custom_bins,
             custom_weights=custom_weights,
             is_semivariance=True,
@@ -384,6 +375,7 @@ class VariogramCloud:
                 z_upper_limit=z_upper_limit,
                 iqr_lower_limit=iqr_lower_limit,
                 iqr_upper_limit=iqr_upper_limit)
+            return None
         else:
             new_instance = copy.deepcopy(self)
             new_instance.semivariances = remove_outliers(

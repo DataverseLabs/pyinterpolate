@@ -8,7 +8,7 @@ from pyinterpolate.core.validators.experimental_semivariance import \
 from pyinterpolate.semivariogram.experimental.functions.covariance import \
     covariance_fn
 from pyinterpolate.semivariogram.experimental.functions.directional import \
-    from_ellipse, from_triangle
+    from_ellipse
 from pyinterpolate.semivariogram.experimental.functions.general import \
     omnidirectional_variogram
 from pyinterpolate.semivariogram.lags.lags import get_lags
@@ -19,7 +19,6 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
                          max_range: float = None,
                          direction: float = None,
                          tolerance: float = None,
-                         dir_neighbors_selection_method: str = 't',
                          custom_bins: Union[Any, np.ndarray] = None
                          ) -> np.ndarray:
     """
@@ -56,13 +55,6 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
         * The minor axis size is ``tolerance * step_size``
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional covariogram.
-
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in a given direction. Available methods:
-
-        * "triangle" or "t", default method where a point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
 
     custom_bins : numpy array, optional
         Custom bins for covariance calculation. If provided, then parameter
@@ -161,8 +153,7 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
             ds.points,
             lags,
             direction,
-            tolerance,
-            dir_neighbors_selection_method
+            tolerance
         )
     else:
         experimental_covariances = omnidirectional_covariance(
@@ -175,8 +166,7 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
 def directional_covariance(points: np.ndarray,
                            lags: Union[List, np.ndarray],
                            direction: float,
-                           tolerance: float,
-                           dir_neighbors_selection_method: str):
+                           tolerance: float):
     """
     Function calculates directional covariances.
 
@@ -208,35 +198,17 @@ def directional_covariance(points: np.ndarray,
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in a given direction. Available methods:
-
-          * "triangle" or "t", default method where a point neighbors are
-            selected from a triangular area,
-          * "ellipse" or "e", more accurate method but also slower.
-
     Returns
     -------
     : (numpy array)
       ``[lag, covariance, number of point pairs]``
     """
 
-    output_covariances = np.array([])
-
-    if (dir_neighbors_selection_method == "e" or
-        dir_neighbors_selection_method == "ellipse"):
-        output_covariances = from_ellipse(covariance_fn,
-                                          points,
-                                          lags,
-                                          direction,
-                                          tolerance)
-    elif (dir_neighbors_selection_method == "t" or
-          dir_neighbors_selection_method == "triangle"):
-        output_covariances = from_triangle(covariance_fn,
-                                           points,
-                                           lags,
-                                           direction,
-                                           tolerance)
+    output_covariances = from_ellipse(covariance_fn,
+                                      points,
+                                      lags,
+                                      direction,
+                                      tolerance)
 
     return output_covariances
 
