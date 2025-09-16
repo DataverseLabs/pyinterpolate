@@ -1,3 +1,4 @@
+import warnings
 from typing import Union, List, Any, Dict
 
 import numpy as np
@@ -335,7 +336,8 @@ def directional_semivariance(points: np.ndarray,
 def omnidirectional_semivariance(points: np.ndarray,
                                  lags: Union[List, np.ndarray],
                                  custom_weights: np.ndarray,
-                                 as_point_cloud: bool = False):
+                                 as_point_cloud: bool = False,
+                                 weights_cloud_warning=True):
     """
     Function calculates the omnidirectional semivariances.
 
@@ -349,6 +351,10 @@ def omnidirectional_semivariance(points: np.ndarray,
 
     as_point_cloud : bool
         Return semivariances as a point cloud.
+
+    weights_cloud_warning : bool, default = True
+        Inform about skipping custom weights when semivariogram cloud
+        is estimated (``as_point_cloud`` is ``True``).
 
     Returns
     -------
@@ -364,8 +370,11 @@ def omnidirectional_semivariance(points: np.ndarray,
     else:
 
         if custom_weights is not None:
-            # todo warning message - custom_weights not included
-            pass
+            if weights_cloud_warning:
+                warnings.warn(
+                    'You have provided custom weights but chosen point cloud '
+                    'as the output, thus weights will be ignored.'
+                )
 
         sorted_semivariances = omnidirectional_semivariogram_cloud(
             points=points,
@@ -380,8 +389,8 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
                              max_range: float = None,
                              direction: float = None,
                              tolerance: float = None,
-                             custom_bins: Union[np.ndarray, Any] = None,
-                             custom_weights: np.ndarray = None) -> Dict:
+                             custom_bins: Union[np.ndarray, Any] = None
+                             ) -> Dict:
     """
     Calculates experimental semivariance.
 
@@ -421,9 +430,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
         distance.
-
-    custom_weights : numpy array, optional
-        Custom weights assigned to points.
 
     Returns
     -------
@@ -526,9 +532,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
     # Validate bins
     validate_bins(step_size, max_range, custom_bins)
 
-    # Validate custom_weights
-    validate_semivariance_weights(ds.points, custom_weights)
-
     # Validate direction and tolerance
     validate_direction_and_tolerance(direction, tolerance)
 
@@ -538,11 +541,6 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
 
     # Get semivariances
     if direction is not None and tolerance is not None:
-
-        if custom_weights is not None:
-            # todo warning message - custom_weights not included
-            pass
-
         experimental_semivariances = directional_semivariance_cloud(
             ds.points,
             lags,
@@ -551,7 +549,11 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
         )
     else:
         experimental_semivariances = omnidirectional_semivariance(
-            ds.points, lags, custom_weights, as_point_cloud=True
+            ds.points,
+            lags,
+            custom_weights=None,
+            as_point_cloud=True,
+            weights_cloud_warning=True
         )
 
     return experimental_semivariances

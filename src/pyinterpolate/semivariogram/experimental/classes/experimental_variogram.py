@@ -264,8 +264,7 @@ class ExperimentalVariogram:
             max_range=self.max_range,
             direction=self.direction,
             tolerance=self.tolerance,
-            custom_bins=self.lags,
-            custom_weights=self.custom_weights
+            custom_bins=self.lags
         )
 
         self.point_cloud_semivariances = experimental_cloud
