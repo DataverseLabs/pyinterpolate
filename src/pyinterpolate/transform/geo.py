@@ -4,6 +4,35 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
+from shapely.geometry import Polygon, MultiPolygon
+
+
+def largest_geometry(geometry: MultiPolygon) -> Polygon:
+    """
+    Samples largest polygon from multiple polygons.
+
+    Parameters
+    ----------
+    geometry : MultiPolygon
+
+    Returns
+    -------
+    : Polygon
+    """
+
+    areas = [p.area for p in geometry.geoms]
+
+    idx = 0
+    mx = areas[idx]
+    for i in range(len(areas)):
+        ar = areas[i]
+        if ar > mx:
+            mx = ar
+            idx = i
+
+    poly = geometry.geoms[idx]
+    return poly
+
 
 def points_to_lon_lat(points: gpd.GeoSeries) -> Tuple:
     """
@@ -90,3 +119,15 @@ def reproject_flat(ds: Union[pd.DataFrame, np.ndarray],
         ds_t[:, 1] = latitudes
 
     return ds_t
+
+
+if __name__ == '__main__':
+    from shapely.geometry import Polygon
+    pol1 = Polygon([[0, 0], [1, 1], [1, 0], [0, 0]])
+    pol2 = Polygon([[1, 2], [4, 6], [2, 0], [1, 2]])
+
+    mpol = MultiPolygon([pol1, pol2])
+
+    assert largest_geometry(mpol) == pol2
+
+

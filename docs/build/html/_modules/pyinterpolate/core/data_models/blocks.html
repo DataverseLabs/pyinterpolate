@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.data_models.blocks &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.core.data_models.blocks &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -441,9 +441,11 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
+
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.angular</span> <span class="kn">import</span> <span class="n">calc_angles</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span><span class="p">,</span> <span class="n">largest_geometry</span>
 
 
 <span class="c1"># TODO: if multipolygon then get coordinates /</span>
@@ -476,6 +478,10 @@
 <span class="sd">    representative_points_from_random_sample : bool, default = False</span>
 <span class="sd">        Calculate representative points from the point sampled from block</span>
 <span class="sd">        geometry.</span>
+
+<span class="sd">    representative_points_from_largest_area : bool, default = True</span>
+<span class="sd">        When MultiPolygon is passed sample representative points</span>
+<span class="sd">        from the largest area.</span>
 
 <span class="sd">    distances_between_representative_points : bool, default = True</span>
 <span class="sd">        Calculate distances between representative points during class</span>
@@ -603,6 +609,7 @@
                  <span class="n">representative_points_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">representative_points_from_centroid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">representative_points_from_random_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">representative_points_from_largest_area</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">distances_between_representative_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">angles_between_representative_points</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
@@ -618,6 +625,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_centroid</span> <span class="o">=</span> <span class="n">representative_points_from_centroid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span> <span class="o">=</span> <span class="n">representative_points_from_random_sample</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_largest_area</span> <span class="o">=</span> <span class="n">representative_points_from_largest_area</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="n">value_column_name</span>
@@ -1010,9 +1018,17 @@
 <span class="sd">        Method estimates representative points as a point guaranteed to be</span>
 <span class="sd">        within the object, cheaply.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">representative_point</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_largest_area</span><span class="p">:</span>
+            <span class="n">_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_larges_geometries</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">_geom</span><span class="o">.</span><span class="n">representative_point</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span>
 
@@ -1030,9 +1046,15 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Estimates representative points as centroids.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">centroid</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_largest_area</span><span class="p">:</span>
+            <span class="n">_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sample_larges_geometries</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_geom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_geom</span><span class="o">.</span><span class="n">centroid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rep_points_column_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_representative_column_name</span>
 
     <span class="k">def</span> <span class="nf">_points_to_floats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1084,7 +1106,28 @@
                 <span class="s1">&#39;Please set only one parameter from &#39;</span>
                 <span class="s1">&#39;``representative_points_from_centroid`` or &#39;</span>
                 <span class="s1">&#39;``representative_points_from_random_sample`` to True.&#39;</span>
-            <span class="p">)</span></div>
+            <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_sample_larges_geometries</span><span class="p">(</span><span class="n">geometries</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoSeries</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Samples largest geometries from MultiPolygons</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        geometries : gpd.GeoSeries</span>
+<span class="sd">            Base geometries (Polygons or MultiPolygons)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        : gpd.GeoSeries</span>
+<span class="sd">            Sampled largest geometries when ``MultiPolygon`` records are</span>
+<span class="sd">            present.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">geometries</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Polygon</span><span class="p">)</span> <span class="k">else</span> <span class="n">largest_geometry</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">ds</span></div>
 
 </pre></div>
 

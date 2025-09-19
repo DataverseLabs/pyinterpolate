@@ -17,9 +17,11 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
+from shapely.geometry import Polygon
+
 from pyinterpolate.distance.angular import calc_angles
 from pyinterpolate.distance.point import point_distance
-from pyinterpolate.transform.geo import points_to_lon_lat
+from pyinterpolate.transform.geo import points_to_lon_lat, largest_geometry
 
 
 # TODO: if multipolygon then get coordinates /
@@ -50,6 +52,10 @@ class Blocks:
     representative_points_from_random_sample : bool, default = False
         Calculate representative points from the point sampled from block
         geometry.
+
+    representative_points_from_largest_area : bool, default = True
+        When MultiPolygon is passed sample representative points
+        from the largest area.
 
     distances_between_representative_points : bool, default = True
         Calculate distances between representative points during class
@@ -177,6 +183,7 @@ class Blocks:
                  representative_points_column_name=None,
                  representative_points_from_centroid=False,
                  representative_points_from_random_sample=False,
+                 representative_points_from_largest_area=True,
                  distances_between_representative_points=True,
                  angles_between_representative_points=False):
 
@@ -192,6 +199,7 @@ class Blocks:
 
         self._rep_ps_centroid = representative_points_from_centroid
         self._rep_ps_sample = representative_points_from_random_sample
+        self._rep_ps_largest_area = representative_points_from_largest_area
 
         self.ds = ds.copy(deep=True)
         self.value_column_name = value_column_name
@@ -557,9 +565,17 @@ class Blocks:
         Method estimates representative points as a point guaranteed to be
         within the object, cheaply.
         """
-        self.ds[self._default_representative_column_name] = self.ds[
-            self.geometry_column_name
-        ].representative_point()
+
+        if self._rep_ps_largest_area:
+            _geom = self._sample_larges_geometries(
+                self.ds[self.geometry_column_name]
+            )
+        else:
+            _geom = self.ds[self.geometry_column_name]
+
+        self.ds[
+            self._default_representative_column_name
+        ] = _geom.representative_point()
 
         self.rep_points_column_name = self._default_representative_column_name
 
@@ -577,9 +593,15 @@ class Blocks:
         """
         Estimates representative points as centroids.
         """
-        self.ds[self._default_representative_column_name] = self.ds[
-            self.geometry_column_name
-        ].centroid
+
+        if self._rep_ps_largest_area:
+            _geom = self._sample_larges_geometries(
+                self.ds[self.geometry_column_name]
+            )
+        else:
+            _geom = self.ds[self.geometry_column_name]
+
+        self.ds[self._default_representative_column_name] = _geom.centroid
         self.rep_points_column_name = self._default_representative_column_name
 
     def _points_to_floats(self):
@@ -632,3 +654,24 @@ class Blocks:
                 '``representative_points_from_centroid`` or '
                 '``representative_points_from_random_sample`` to True.'
             )
+
+    @staticmethod
+    def _sample_larges_geometries(geometries: gpd.GeoSeries) -> gpd.GeoSeries:
+        """
+        Samples largest geometries from MultiPolygons
+
+        Parameters
+        ----------
+        geometries : gpd.GeoSeries
+            Base geometries (Polygons or MultiPolygons)
+
+        Returns
+        -------
+        : gpd.GeoSeries
+            Sampled largest geometries when ``MultiPolygon`` records are
+            present.
+        """
+        ds = geometries.apply(
+            lambda x: x if isinstance(x, Polygon) else largest_geometry(x)
+        )
+        return ds
