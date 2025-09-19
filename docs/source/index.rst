@@ -14,7 +14,7 @@ Pyinterpolate
 -----------------
 
 .. note::
-   The last documentation update: *2025-07-17*
+   The last documentation update: *2025-09-19*
 
 Important notice
 ................
