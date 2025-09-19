@@ -10,6 +10,7 @@ Changes - from version >= 1.x
 * [enhancement] new parameter - `buffer` - has been added to `interpolate_raster` when `dimension` is set, it is float, by default equal to 0, must be equal or greater than 1. It creates buffer of size (buffer * step_size) around the interpolated grid.
 * [enhancement] from now on it is not possible to select neighbors using `triangle` method (in directional variogram cases)
 * [docs] updated missing DOI in Indicator Variogram
+* [enhancement] representative point in `Blocks` is sampled from the largest `Polygon` when `MultiPolygon` is passed
 
 2025-07-17
 ----------
