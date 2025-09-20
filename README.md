@@ -1,5 +1,11 @@
 ![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
+[![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql)
+
+[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml)
+
+
+
 # Pyinterpolate
 
 **version 1.0.3**
