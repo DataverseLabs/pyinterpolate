@@ -478,7 +478,7 @@ class Blocks:
                 return df.loc[block_id, other_blocks]
 
     # TODO manage copying and inplace transformations
-    def transform_crs(self, target_crs):
+    def transform_crs(self, target_crs, inplace=True):
         """Function transforms Blocks CRS
 
         Parameters
@@ -488,6 +488,11 @@ class Blocks:
             :meth:`pyproj.CRS.from_user_input()
             <pyproj.crs.CRS.from_user_input>`,
             such as an authority string (eg "EPSG:4326") or a WKT string.
+
+        inplace : bool, default = True
+            When set to `True` then transform object's instance on the fly,
+            otherwise return modified object and do leave the old instance
+            unchanged.
         """
         # Transform core dataset
         self.ds.to_crs(target_crs, inplace=True)
