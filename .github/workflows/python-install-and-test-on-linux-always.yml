@@ -5,9 +5,19 @@ on: [push]
 jobs:
   build:
     permissions:
-      id-token: read
-      contents: write
       actions: read
+      attestations: read
+      checks: read
+      contents: write
+      deployments: read
+      id-token: none
+      issues: none
+      discussions: none
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: read
 
     runs-on: ubuntu-latest
     strategy:
