@@ -4,8 +4,10 @@ on: [push]
 
 jobs:
   build:
-
-    permissions: read-all
+    permissions:
+      id-token: read
+      contents: write
+      actions: read
 
     runs-on: ubuntu-latest
     strategy:
