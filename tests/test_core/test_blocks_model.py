@@ -130,7 +130,7 @@ def test_select_distances_between_blocks_method():
     assert isinstance(dist, np.ndarray)
 
 
-def test_transform_crs():
+def test_transform_inplace_crs():
     block = Blocks(
         **CANCER_DATA,
         angles_between_representative_points=True
@@ -142,7 +142,7 @@ def test_transform_crs():
 
     ks = list(sample_base_angles.keys())[0]
 
-    block.transform_crs('EPSG:2180')
+    block.transform_crs('EPSG:2180', inplace=True)
 
     sample_transformed = block.ds.iloc[0]
     sample_transformed_dists = block.distances.copy(deep=True).iloc[0, 1]
@@ -154,6 +154,43 @@ def test_transform_crs():
     assert sample_base[block._lon_col_name] != sample_transformed[block._lon_col_name]
     assert sample_transformed_dists != sample_base_dists
     assert sb_angles[1] != st_angles[1]
+
+
+def test_transform_crs():
+    block = Blocks(
+        **CANCER_DATA,
+        angles_between_representative_points=True
+    )
+
+    sample_base_pre = block.ds.iloc[0]
+    sample_base_dists_pre = block.distances.copy(deep=True).iloc[0, 1]
+    sample_base_angles_pre = deepcopy(block.angles)
+
+    ks_pre = list(sample_base_angles_pre.keys())[0]
+    sb_angles_pre = sample_base_angles_pre[ks_pre]
+
+    new_block = block.transform_crs('EPSG:2180',
+                                    inplace=False)
+
+    sample_base_post = block.ds.iloc[0]
+    sample_base_dists_post = block.distances.copy(deep=True).iloc[0, 1]
+    sample_base_angles_post = deepcopy(block.angles)
+
+    sb_angles_post = sample_base_angles_post[ks_pre]
+
+    assert sample_base_pre[block._lon_col_name] == sample_base_post[block._lon_col_name]
+    assert sample_base_dists_post == sample_base_dists_pre
+    assert sb_angles_pre[1] == sb_angles_post[1]
+
+    sample_transformed = new_block.ds.iloc[0]
+    sample_transformed_dists = new_block.distances.copy(deep=True).iloc[0, 1]
+    sample_transformed_angles = deepcopy(new_block.angles)
+
+    st_angles = sample_transformed_angles[ks_pre]
+
+    assert sample_base_pre[block._lon_col_name] != sample_transformed[block._lon_col_name]
+    assert sample_transformed_dists != sample_base_dists_pre
+    assert sb_angles_pre[1] != st_angles[1]
 
 
 def test_block_index_outputs():

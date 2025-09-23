@@ -10,6 +10,7 @@ Changes in version 1.0
 - Package doesn't read data files, data must be loaded into DataFrame and
   then passed into the Blocks object.
 """
+import copy
 from typing import Union, Hashable, Dict
 from numpy.typing import ArrayLike
 
@@ -477,7 +478,6 @@ class Blocks:
             except AttributeError:
                 return df.loc[block_id, other_blocks]
 
-    # TODO manage copying and inplace transformations
     def transform_crs(self, target_crs, inplace=True):
         """Function transforms Blocks CRS
 
@@ -495,21 +495,39 @@ class Blocks:
             unchanged.
         """
         # Transform core dataset
-        self.ds.to_crs(target_crs, inplace=True)
+        if inplace:
+            self.ds.to_crs(target_crs, inplace=True)
 
-        # representative points
-        self._get_representative_points()
-        self._points_to_floats()
+            # representative points
+            self._get_representative_points()
+            self._points_to_floats()
 
-        # distances
-        self.distances = self.calculate_distances_between_rep_points(
-            update=False
-        )
+            # distances
+            self.distances = self.calculate_distances_between_rep_points(
+                update=False
+            )
 
-        # angles
-        self.angles = self.calculate_angles_between_rep_points(
-            update=False
-        )
+            # angles
+            self.angles = self.calculate_angles_between_rep_points(
+                update=False
+            )
+            return None
+        else:
+            new_object = copy.deepcopy(self)
+
+            new_object.ds.to_crs(target_crs, inplace=True)
+            new_object._get_representative_points()
+            new_object._points_to_floats()
+
+            new_object.distances = new_object.calculate_distances_between_rep_points(
+                update=False
+            )
+
+            new_object.angles = new_object.calculate_angles_between_rep_points(
+                update=False
+            )
+
+            return new_object
 
     def _delete(self, block_index: Union[str, Hashable]):
         """
