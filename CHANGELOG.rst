@@ -11,6 +11,7 @@ Changes - from version >= 1.x
 * [enhancement] from now on it is not possible to select neighbors using `triangle` method (in directional variogram cases)
 * [docs] updated missing DOI in Indicator Variogram
 * [enhancement] representative point in `Blocks` is sampled from the largest `Polygon` when `MultiPolygon` is passed
+* [enhancement] `Blocks` object might be altered during CRS transformation or new object might be created (`inplace` parameter and copying mechanism)
 
 2025-07-17
 ----------
