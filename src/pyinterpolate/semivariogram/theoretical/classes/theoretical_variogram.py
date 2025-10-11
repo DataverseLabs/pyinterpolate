@@ -52,8 +52,9 @@ class TheoreticalVariogram:
         The nugget parameter (bias at the zero distance).
 
     sill : float, default=0
-        A value at which dissimilarity is close to its maximum if model is
-        bounded. Otherwise, it is usually close to the observations variance.
+       Partial sill, or sill when nugget is set to zero. Total sill is
+       a sum of partial sill and nugget. If given, then partial sill
+       is fixed to this value.
 
     rang : float, default=0
         The semivariogram range is a distance at which spatial correlation
@@ -221,8 +222,9 @@ class TheoreticalVariogram:
             - 'spherical'.
 
         sill : float, default=0
-            A value at which dissimilarity is close to its maximum if model is
-            bounded. Otherwise, it is usually close to observations variance.
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         rang : float, default=0
             The semivariogram range is a distance at which spatial correlation
@@ -357,7 +359,9 @@ class TheoreticalVariogram:
             ``min_range`` and ``max_range``.
 
         sill : float, default = None
-            If given, then sill is fixed to this value.
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         n_sill_values : int, default = 5
             The last n experimental semivariance records for sill estimation.
@@ -366,13 +370,13 @@ class TheoreticalVariogram:
         sill_from_variance : bool, default = False
             Estimate sill from the variance (semivariance at distance 0).
 
-        min_sill : float, default = 1
+        min_sill : float, default = 0.5
             The minimal fraction of the value chosen with the sill estimation
             method. The value is: for ``sill_from_values`` - the mean of
             the last ``n_sill_values`` number of experimental semivariances,
             for ``sill_from_variance`` - the experimental variogram variance.
 
-        max_sill : float, default = 5
+        max_sill : float, default = 2
             The maximum fraction of the value chosen with the sill estimation
             method. The value is: for ``sill_from_values`` - the mean of
             the last ``n_sill_values`` number of experimental semivariances,
@@ -917,6 +921,9 @@ class TheoreticalVariogram:
         nugget : float
 
         sill : float
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         rang : float
 
@@ -1015,7 +1022,9 @@ class TheoreticalVariogram:
         Parameters
         ----------
         sill : float, optional
-            Baseline sill.
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         n_sill_values : int, default=5
             Number of the last N experimental semivariances to use for sill

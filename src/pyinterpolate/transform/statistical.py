@@ -123,6 +123,9 @@ def sem_to_cov(semivariances: ArrayLike, sill: float) -> np.ndarray:
     semivariances : ArrayLike
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     Returns
     -------

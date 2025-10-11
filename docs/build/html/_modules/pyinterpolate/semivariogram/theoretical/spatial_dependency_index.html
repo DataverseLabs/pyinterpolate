@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariogram.theoretical.spatial_dependency_index &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.semivariogram.theoretical.spatial_dependency_index &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -437,7 +437,8 @@
 <span class="sd">        Semivariogram nugget.</span>
 
 <span class="sd">    sill : float</span>
-<span class="sd">        Semivariogram sill.</span>
+<span class="sd">        Partial sill, difference between total sill and nugget. If given,</span>
+<span class="sd">        then partial sill is fixed to this value.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -461,7 +462,9 @@
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Nugget cannot be set to 0 to &#39;</span>
                          <span class="s1">&#39;calculate spatial dependence index&#39;</span><span class="p">)</span>
 
-    <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">nugget</span> <span class="o">/</span> <span class="n">sill</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+    <span class="n">total_sill</span> <span class="o">=</span> <span class="n">sill</span> <span class="o">+</span> <span class="n">nugget</span>
+
+    <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">nugget</span> <span class="o">/</span> <span class="n">total_sill</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
 
     <span class="k">if</span> <span class="n">ratio</span> <span class="o">&lt;</span> <span class="mi">25</span><span class="p">:</span>
         <span class="n">spatial_dependency</span> <span class="o">=</span> <span class="s1">&#39;strong&#39;</span>

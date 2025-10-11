@@ -373,7 +373,9 @@ class TheoreticalIndicatorVariogram:
             ``min_range`` and ``max_range``.
 
         sill : float, default = None
-            If given, then sill is fixed to this value.
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         n_sill_values : int, default = 5
             The last n experimental semivariance records for sill estimation.
@@ -382,17 +384,13 @@ class TheoreticalIndicatorVariogram:
         sill_from_variance : bool, default = False
             Estimate sill from the variance (semivariance at distance 0).
 
-        min_sill : float, default = 1
-            The minimal fraction of the value chosen with the sill estimation
-            method. The value is: for ``sill_from_values`` - the mean of
-            the last ``n_sill_values`` number of experimental semivariances,
-            for ``sill_from_variance`` - the experimental variogram variance.
+        min_sill : float, default = 0.5
+            The minimal fraction of the variogram variance at lag 0 to
+            find partial sill, ``0 <= min_sill <= max_sill``.
 
-        max_sill : float, default = 5
-            The maximum fraction of the value chosen with the sill estimation
-            method. The value is: for ``sill_from_values`` - the mean of
-            the last ``n_sill_values`` number of experimental semivariances,
-            for ``sill_from_variance`` - the experimental variogram variance.
+        max_sill : float, default = 2
+            The maximum fraction of the variogram variance at lag 0 to find
+            partial sill.
 
         number_of_sills : int, default = 16
             How many equally spaced sill values are tested between

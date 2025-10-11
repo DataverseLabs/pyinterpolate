@@ -627,22 +627,20 @@ than <strong>0.5</strong> raises warning.</p>
 <dt><strong>number_of_ranges</strong><span class="classifier">int, default = 16</span></dt><dd><p>How many bins are tested between
 <code class="docutils literal notranslate"><span class="pre">min_range</span></code> and <code class="docutils literal notranslate"><span class="pre">max_range</span></code>.</p>
 </dd>
-<dt><strong>sill</strong><span class="classifier">float, default = None</span></dt><dd><p>If given, then sill is fixed to this value.</p>
+<dt><strong>sill</strong><span class="classifier">float, default = None</span></dt><dd><p>Partial sill, or sill when nugget is set to zero. Total sill is
+a sum of partial sill and nugget. If given, then partial sill
+is fixed to this value.</p>
 </dd>
 <dt><strong>n_sill_values</strong><span class="classifier">int, default = 5</span></dt><dd><p>The last n experimental semivariance records for sill estimation.
 (Used only when <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
 </dd>
 <dt><strong>sill_from_variance</strong><span class="classifier">bool, default = False</span></dt><dd><p>Estimate sill from the variance (semivariance at distance 0).</p>
 </dd>
-<dt><strong>min_sill</strong><span class="classifier">float, default = 1</span></dt><dd><p>The minimal fraction of the value chosen with the sill estimation
-method. The value is: for <code class="docutils literal notranslate"><span class="pre">sill_from_values</span></code> - the mean of
-the last <code class="docutils literal notranslate"><span class="pre">n_sill_values</span></code> number of experimental semivariances,
-for <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> - the experimental variogram variance.</p>
+<dt><strong>min_sill</strong><span class="classifier">float, default = 0.5</span></dt><dd><p>The minimal fraction of the variogram variance at lag 0 to
+find partial sill, <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">min_sill</span> <span class="pre">&lt;=</span> <span class="pre">max_sill</span></code>.</p>
 </dd>
-<dt><strong>max_sill</strong><span class="classifier">float, default = 5</span></dt><dd><p>The maximum fraction of the value chosen with the sill estimation
-method. The value is: for <code class="docutils literal notranslate"><span class="pre">sill_from_values</span></code> - the mean of
-the last <code class="docutils literal notranslate"><span class="pre">n_sill_values</span></code> number of experimental semivariances,
-for <code class="docutils literal notranslate"><span class="pre">sill_from_variance</span></code> - the experimental variogram variance.</p>
+<dt><strong>max_sill</strong><span class="classifier">float, default = 2</span></dt><dd><p>The maximum fraction of the variogram variance at lag 0 to find
+partial sill.</p>
 </dd>
 <dt><strong>number_of_sills</strong><span class="classifier">int, default = 16</span></dt><dd><p>How many equally spaced sill values are tested between
 <code class="docutils literal notranslate"><span class="pre">min_sill</span></code> and <code class="docutils literal notranslate"><span class="pre">max_sill</span></code>.</p>

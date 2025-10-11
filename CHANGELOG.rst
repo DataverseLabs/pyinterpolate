@@ -1,8 +1,8 @@
 Changes - from version >= 1.x
 =============================
 
-2025-0
-------
+2025-10-11
+----------
 
 **version 1.1.0**
 
@@ -12,6 +12,7 @@ Changes - from version >= 1.x
 * [docs] updated missing DOI in Indicator Variogram
 * [enhancement] representative point in `Blocks` is sampled from the largest `Polygon` when `MultiPolygon` is passed
 * [enhancement] `Blocks` object might be altered during CRS transformation or new object might be created (`inplace` parameter and copying mechanism)
+* [bug] incosistent documenation - `sill` represents *partial sill*, not *total sill*, and documentation might be misleading
 
 2025-07-17
 ----------

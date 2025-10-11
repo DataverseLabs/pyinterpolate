@@ -238,7 +238,7 @@ def ordinary_kriging_from_cov(
     Parameters
     ----------
     theoretical_model : TheoreticalVariogram
-        A trained theoretical variogram model.
+        Fitted theoretical variogram model.
 
     known_locations : numpy array
         The known locations: ``[x, y, value]``.
@@ -247,7 +247,9 @@ def ordinary_kriging_from_cov(
         Point where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
     sill : float
-        The sill (``c(0)``) of a dataset.
+        Partial sill, or sill when nugget is set to zero. Total sill is a sum
+        of partial sill and nugget. If given, then partial sill is fixed to
+        this value.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors. If ``None`` is

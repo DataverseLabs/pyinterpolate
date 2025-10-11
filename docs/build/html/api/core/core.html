@@ -807,7 +807,7 @@ all other blocks are returned.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">transform_crs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_crs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/blocks.html#Blocks.transform_crs"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">transform_crs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target_crs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/blocks.html#Blocks.transform_crs"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Function transforms Blocks CRS</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -815,6 +815,10 @@ all other blocks are returned.</p>
 <dt><strong>target_crs</strong><span class="classifier">pyproj.CRS or EPSG code</span></dt><dd><p>The value can be anything accepted by
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">pyproj.CRS.from_user_input()</span></code>,
 such as an authority string (eg “EPSG:4326”) or a WKT string.</p>
+</dd>
+<dt><strong>inplace</strong><span class="classifier">bool, default = True</span></dt><dd><p>When set to <cite>True</cite> then transform object’s instance on the fly,
+otherwise return modified object and do leave the old instance
+unchanged.</p>
 </dd>
 </dl>
 </dd>

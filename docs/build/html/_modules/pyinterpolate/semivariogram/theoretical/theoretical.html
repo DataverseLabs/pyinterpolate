@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariogram.theoretical.theoretical &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.semivariogram.theoretical.theoretical &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -505,15 +505,17 @@
 <span class="sd">        ``min_range`` and ``max_range``.</span>
 
 <span class="sd">    sill : float, default = None</span>
-<span class="sd">        If given, then sill is fixed to this value.</span>
+<span class="sd">        Partial sill, or sill when nugget is set to zero. Total sill is</span>
+<span class="sd">        a sum of partial sill and nugget. If given, then partial sill</span>
+<span class="sd">        is fixed to this value.</span>
 
 <span class="sd">    min_sill : float, default = 0</span>
 <span class="sd">        The minimal fraction of the variogram variance at lag 0 to</span>
-<span class="sd">        find a sill, ``0 &lt;= min_sill &lt;= max_sill``.</span>
+<span class="sd">        find partial sill, ``0 &lt;= min_sill &lt;= max_sill``.</span>
 
 <span class="sd">    max_sill : float, default = 1</span>
 <span class="sd">        The maximum fraction of the variogram variance at lag 0 to find</span>
-<span class="sd">        a sill. It *should be* lower or equal to 1.</span>
+<span class="sd">        partial sill. It *should be* lower or equal to 1.</span>
 <span class="sd">        It is possible to set it above 1, but then warning is printed.</span>
 
 <span class="sd">    number_of_sills : int, default = 16</span>

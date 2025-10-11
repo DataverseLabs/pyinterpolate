@@ -27,7 +27,9 @@ class TheoreticalModelFunction:
         Semivariogram Nugget.
 
     sill : float
-        Semivariogram Sill.
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
         Semivariogram Range.
@@ -41,7 +43,9 @@ class TheoreticalModelFunction:
         Semivariogram Nugget.
 
     sill : float
-        Semivariogram Sill.
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
         Semivariogram Range.
