@@ -1,4 +1,10 @@
-![status](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) ![License](https://img.shields.io/github/license/szymon-datalions/pyinterpolate) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
+![JOSS](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) [![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
+
+[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://github.com/DataverseLabs/pyinterpolate/blob/main/coverage.svg) 
+
+
+
+
 
 # Pyinterpolate
 
@@ -154,19 +160,12 @@ A world of advice, you should **always** use Virtual Environment for the install
 
 All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)
 
-## Commercial and scientific projects where library has been used
+## Use cases
 
-* Tick-Borne Disease Detector (Data Lions company) for the European Space Agency (2019-2020).
-* B2C project related to the prediction of demand for specific flu medications (2020).
-* B2G project related to the large-scale infrastructure maintenance (2020-2021).
-* E-commerce service for reporting and analysis, building spatial / temporal profiles of customers (2022+).
-* The external data augmentation for e-commerce services (2022+).
-* Regional aggregates transformation and preprocessing for location intelligence tasks (2025+).
-
-## Community
-
-Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
-
+* [Lyme Disease Risk Assessment Based on the Earth Observation Data and Spatial Processing Technique. ESA Φ-week 2021](https://phiweek.esa.int/detailed-programme)
+* [Disaggregation of socio-economic data](https://ml-gis-service.com/index.php/2022/12/09/get-more-from-crime-rate-data-and-other-socio-economic-indicators-with-pyinterpolate/)
+* [Interpolation of air pollution](https://ml-gis-service.com/index.php/2021/10/31/data-science-interpolate-air-quality-measurements-with-python/)
+* [Educational - Spatial Data Science for Social Geography Course - Interpolation](https://github.com/martinfleis/sds?tab=readme-ov-file#spatial-data-science-for-social-geography)
 
 ## Bibliography
 
@@ -178,6 +177,9 @@ Pyinterpolate was created thanks to many resources and all of them are pointed h
 - Goovaerts P., Kriging and Semivariogram Deconvolution in the Presence of Irregular Geographical Units, Mathematical Geology 40(1), 101-128, 2008
 - Deutsch C.V., Correcting for Negative Weights in Ordinary Kriging, Computers & Geosciences Vol.22, No.7, pp. 765-773, 1996
 
+## Community
+
+Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
 
 ## How to cite
 
