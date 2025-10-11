@@ -79,15 +79,17 @@ def build_theoretical_variogram(
         ``min_range`` and ``max_range``.
 
     sill : float, default = None
-        If given, then sill is fixed to this value.
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     min_sill : float, default = 0
         The minimal fraction of the variogram variance at lag 0 to
-        find a sill, ``0 <= min_sill <= max_sill``.
+        find partial sill, ``0 <= min_sill <= max_sill``.
 
     max_sill : float, default = 1
         The maximum fraction of the variogram variance at lag 0 to find
-        a sill. It *should be* lower or equal to 1.
+        partial sill. It *should be* lower or equal to 1.
         It is possible to set it above 1, but then warning is printed.
 
     number_of_sills : int, default = 16

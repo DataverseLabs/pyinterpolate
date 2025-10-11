@@ -11,7 +11,8 @@ def calculate_spatial_dependence_index(nugget: float, sill: float) -> Tuple:
         Semivariogram nugget.
 
     sill : float
-        Semivariogram sill.
+        Partial sill, difference between total sill and nugget. If given,
+        then partial sill is fixed to this value.
 
     Returns
     -------
@@ -35,7 +36,9 @@ def calculate_spatial_dependence_index(nugget: float, sill: float) -> Tuple:
         raise ValueError('Nugget cannot be set to 0 to '
                          'calculate spatial dependence index')
 
-    ratio = (nugget / sill) * 100
+    total_sill = sill + nugget
+
+    ratio = (nugget / total_sill) * 100
 
     if ratio < 25:
         spatial_dependency = 'strong'

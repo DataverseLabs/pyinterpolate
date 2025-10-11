@@ -52,6 +52,9 @@ def circular_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
 
@@ -113,6 +116,9 @@ def cubic_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.
@@ -186,6 +192,9 @@ def exponential_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.
@@ -235,6 +244,9 @@ def gaussian_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.
@@ -286,6 +298,9 @@ def linear_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.
@@ -341,6 +356,9 @@ def power_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.
@@ -397,6 +415,9 @@ def spherical_model(lags: np.ndarray,
     nugget : float
 
     sill : float
+        Partial sill, or sill when nugget is set to zero. Total sill is
+        a sum of partial sill and nugget. If given, then partial sill
+        is fixed to this value.
 
     rang : float
            Semivariogram Range.

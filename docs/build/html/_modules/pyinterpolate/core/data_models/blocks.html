@@ -434,6 +434,7 @@
 <span class="sd">- Package doesn&#39;t read data files, data must be loaded into DataFrame and</span>
 <span class="sd">  then passed into the Blocks object.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">Dict</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
@@ -927,10 +928,9 @@
                 <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">block_id</span><span class="p">,</span> <span class="n">other_blocks</span><span class="p">]</span></div>
 
 
-    <span class="c1"># TODO manage copying and inplace transformations</span>
 <div class="viewcode-block" id="Blocks.transform_crs">
 <a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks.transform_crs">[docs]</a>
-    <span class="k">def</span> <span class="nf">transform_crs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform_crs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function transforms Blocks CRS</span>
 
 <span class="sd">        Parameters</span>
@@ -940,23 +940,46 @@
 <span class="sd">            :meth:`pyproj.CRS.from_user_input()</span>
 <span class="sd">            &lt;pyproj.crs.CRS.from_user_input&gt;`,</span>
 <span class="sd">            such as an authority string (eg &quot;EPSG:4326&quot;) or a WKT string.</span>
+
+<span class="sd">        inplace : bool, default = True</span>
+<span class="sd">            When set to `True` then transform object&#39;s instance on the fly,</span>
+<span class="sd">            otherwise return modified object and do leave the old instance</span>
+<span class="sd">            unchanged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Transform core dataset</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># representative points</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_get_representative_points</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_points_to_floats</span><span class="p">()</span>
+            <span class="c1"># representative points</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_get_representative_points</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_points_to_floats</span><span class="p">()</span>
 
-        <span class="c1"># distances</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances_between_rep_points</span><span class="p">(</span>
-            <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span>
+            <span class="c1"># distances</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_distances_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
 
-        <span class="c1"># angles</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
-            <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
-        <span class="p">)</span></div>
+            <span class="c1"># angles</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">new_object</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="n">new_object</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">target_crs</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">new_object</span><span class="o">.</span><span class="n">_get_representative_points</span><span class="p">()</span>
+            <span class="n">new_object</span><span class="o">.</span><span class="n">_points_to_floats</span><span class="p">()</span>
+
+            <span class="n">new_object</span><span class="o">.</span><span class="n">distances</span> <span class="o">=</span> <span class="n">new_object</span><span class="o">.</span><span class="n">calculate_distances_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="n">new_object</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">new_object</span><span class="o">.</span><span class="n">calculate_angles_between_rep_points</span><span class="p">(</span>
+                <span class="n">update</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">new_object</span></div>
 
 
     <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_index</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Hashable</span><span class="p">]):</span>
