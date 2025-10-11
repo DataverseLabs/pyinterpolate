@@ -15,7 +15,7 @@ def build_armstrong_ds():
 
     armstrong_variogram_directional = ExperimentalVariogram(
         ds,
-        step_size=1.2,
+        step_size=1.5,
         max_range=6,
         direction=135,
         tolerance=0.02
@@ -76,14 +76,6 @@ def build_zeros_ds():
         'theo_omni': variogram_omni
     }
     return output
-
-
-# TODO is this function used?
-def create_model_validation_sets(dataset: np.array, frac=0.1):
-    indexes_of_training_set = np.random.choice(range(len(dataset) - 1), int(frac * len(dataset)), replace=False)
-    training_set = dataset[indexes_of_training_set]
-    validation_set = np.delete(dataset, indexes_of_training_set, 0)
-    return training_set, validation_set
 
 
 def get_armstrong_data():

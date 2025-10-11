@@ -58,30 +58,7 @@ def test_directional_semivariogram():
         step_size=STEP_SIZE,
         max_range=MAX_RANGE,
         direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='e'
-    )
-    assert isinstance(dirvar, np.ndarray)
-
-
-def test_directional_triangular_semivariogram():
-    try:
-        ds = np.load('armstrong_data.npy')
-    except FileNotFoundError:
-        try:
-            ds = np.load('test_semivariogram/armstrong_data.npy')
-        except FileNotFoundError:
-            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
-
-    STEP_SIZE = 1.5
-    MAX_RANGE = 6
-    dirvar = calculate_semivariance(
-        ds=ds,
-        step_size=STEP_SIZE,
-        max_range=MAX_RANGE,
-        direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='t'
+        tolerance=0.25
     )
     assert isinstance(dirvar, np.ndarray)
 
@@ -166,3 +143,28 @@ def test_weighted_omnidirectional_semivariogram():
             max_range=MAX_RANGE,
             custom_weights=REFERENCE_WEIGHTS_ZEROS
         )
+
+
+def test_weighted_directional_semivariogram():
+    try:
+        ds = np.load('armstrong_data.npy')
+    except FileNotFoundError:
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
+    STEP_SIZE = 1.5
+    MAX_RANGE = 6
+    WEIGHTS = np.random.random(size=len(ds))
+
+    semivariance = calculate_semivariance(
+        ds,
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE,
+        direction=15,
+        tolerance=0.25,
+        custom_weights=WEIGHTS
+    )
+
+    assert isinstance(semivariance, np.ndarray)

@@ -50,13 +50,6 @@ class ExperimentalVariogram:
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in within a given angle. Available methods:
-
-        * "triangle" or "t", default method, where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the more accurate method but also the slowest.
-
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
@@ -130,7 +123,6 @@ class ExperimentalVariogram:
                  max_range: float = None,
                  direction: float = None,
                  tolerance: float = None,
-                 dir_neighbors_selection_method: str = 't',
                  custom_bins: Union[np.ndarray, Collection] = None,
                  custom_weights: np.ndarray = None,
                  is_semivariance=True,
@@ -159,7 +151,6 @@ class ExperimentalVariogram:
         self.custom_weights = custom_weights
         self.direction = direction
         self.tolerance = tolerance
-        self.method = dir_neighbors_selection_method
         self.as_cloud = as_cloud
         self.__c_sem = is_semivariance
         self.__c_cov = is_covariance
@@ -249,7 +240,6 @@ class ExperimentalVariogram:
             max_range=self.max_range,
             direction=self.direction,
             tolerance=self.tolerance,
-            dir_neighbors_selection_method=self.method,
             custom_bins=self.lags
         )
 
@@ -274,9 +264,7 @@ class ExperimentalVariogram:
             max_range=self.max_range,
             direction=self.direction,
             tolerance=self.tolerance,
-            dir_neighbors_selection_method=self.method,
-            custom_bins=self.lags,
-            custom_weights=self.custom_weights
+            custom_bins=self.lags
         )
 
         self.point_cloud_semivariances = experimental_cloud
@@ -293,7 +281,6 @@ class ExperimentalVariogram:
             max_range=self.max_range,
             direction=self.direction,
             tolerance=self.tolerance,
-            dir_neighbors_selection_method=self.method,
             custom_bins=self.lags,
             custom_weights=self.custom_weights
         )
@@ -347,7 +334,6 @@ class ExperimentalVariogram:
                         f'max_range={self.max_range},'
                         f'direction={self.direction},'
                         f'tolerance={self.tolerance},'
-                        f'dir_neighbors_selection_method={self.method},'
                         f'custom_bins={self.lags.tolist()},'
                         f'custom_weights={custom_weights},'
                         f'is_semivariance={self.__c_sem},'
@@ -407,7 +393,6 @@ def build_experimental_variogram(ds: np.ndarray,
                                  max_range: float = None,
                                  direction: float = None,
                                  tolerance: float = None,
-                                 dir_neighbors_selection_method: str = 't',
                                  custom_bins: Union[
                                      np.ndarray, Collection
                                  ] = None,
@@ -450,13 +435,6 @@ def build_experimental_variogram(ds: np.ndarray,
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = 't'
-        Neighbors selection in within a given angle. Available methods:
-
-        * "triangle" or "t", default method, where point neighbors are
-          selected from a triangular area,
-        * "ellipse" or "e", the more accurate method but also the slowest.
-
     custom_bins : numpy array, optional
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
@@ -486,7 +464,6 @@ def build_experimental_variogram(ds: np.ndarray,
         max_range=max_range,
         direction=direction,
         tolerance=tolerance,
-        dir_neighbors_selection_method=dir_neighbors_selection_method,
         custom_bins=custom_bins,
         custom_weights=custom_weights,
         is_semivariance=is_semivariance,

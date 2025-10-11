@@ -15,20 +15,24 @@ from pyinterpolate.semivariogram.experimental.experimental_semivariogram import 
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 
 
-def set_dimensions(xs, ys, dmax):
+def set_dimensions(xs, ys, dmax, buffer=0.0):
     """
     Function sets dimensions of the output array.
 
     Parameters
     ----------
     xs : numpy array
-         X coordinates.
+        X coordinates.
 
     ys : numpy array
-         Y coordinates.
+        Y coordinates.
 
     dmax : int
-           How many points between max dimensions.
+        How many points between max dimensions.
+
+    buffer : float, default = 0
+        Buffer around interpolated area. Must be equal or greater than one,
+        otherwise it is not created.
 
     Returns
     -------
@@ -47,12 +51,21 @@ def set_dimensions(xs, ys, dmax):
 
     if x_abs > y_abs:
         step = x_abs / dmax
-        x_dim_coords = np.arange(xmin + step, xmax + step, step)
-        y_dim_coords = np.arange(ymin + step, ymax + step, step)
     else:
         step = y_abs / dmax
-        y_dim_coords = np.arange(ymin + step, ymax + step, step)
-        x_dim_coords = np.arange(xmin + step, xmax + step, step)
+
+    if buffer >= 1:
+        bb = buffer
+    else:
+        bb = 0.01
+
+    initial_x_position = xmin - (bb * step)
+    initial_y_position = ymin - (bb * step)
+    end_x_position = xmax + (bb * step)
+    end_y_position = ymax + (bb * step)
+
+    y_dim_coords = np.arange(initial_y_position, end_y_position, step)
+    x_dim_coords = np.arange(initial_x_position, end_x_position, step)
 
     # y_dim_coords must be flipped
     y_dim_coords = y_dim_coords[::-1]
@@ -61,6 +74,7 @@ def set_dimensions(xs, ys, dmax):
 
 def interpolate_raster(data,
                        dim=1000,
+                       buffer=0.0,
                        number_of_neighbors=4,
                        semivariogram_model=None,
                        direction=None,
@@ -77,6 +91,11 @@ def interpolate_raster(data,
     dim : int
         Number of pixels (points) of a larger dimension (it could be width
         or height). Ratio is preserved.
+
+    buffer : float, default = 0
+        Buffer around interpolated area. Must be equal or greater than one,
+        otherwise it is not created.
+
 
     number_of_neighbors : int, default=16
         Number of points used to interpolate data.
@@ -134,7 +153,10 @@ def interpolate_raster(data,
     if isinstance(data, list):
         data = np.array(data)
 
-    x_coords, y_coords, props = set_dimensions(data[:, 0], data[:, 1], dim)
+    x_coords, y_coords, props = set_dimensions(data[:, 0],
+                                               data[:, 1],
+                                               dim,
+                                               buffer)
 
     # Calculate semivariance if not provided
 

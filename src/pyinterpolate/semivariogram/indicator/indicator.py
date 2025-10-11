@@ -160,13 +160,6 @@ class ExperimentalIndicatorVariogram:
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    dir_neighbors_selection_method : str, default = triangular
-        Neighbors selection in a given distance. Available methods:
-
-        * "triangle" or "t", default method where point neighbors are
-          selected from triangular area,
-        * "ellipse" or "e", more accurate method but also slower.
-
     fit : bool, default = True
         Should models be fitted in the class initialization?
 
@@ -190,9 +183,6 @@ class ExperimentalIndicatorVariogram:
     tolerance : float
         Derived from the ``tolerance`` parameter.
 
-    dir_neighbors_selection_method : str
-        Derived from the ``dir_neighbors_selection_method`` parameter.
-
     experimental_models : List
         The ``[threshold, experimental_variogram]`` pairs.
 
@@ -208,7 +198,7 @@ class ExperimentalIndicatorVariogram:
     ----------
     Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
     non-parametric modeling of local uncertainty
-    in earth sciences. DOI: TODO
+    in earth sciences. DOI: https://doi.org/10.1016/j.cageo.2008.08.014
     """
 
     def __init__(self,
@@ -220,7 +210,6 @@ class ExperimentalIndicatorVariogram:
                  custom_bins=None,
                  direction: float = None,
                  tolerance: float = None,
-                 dir_neighbors_selection_method='t',
                  fit=True):
 
         self.ds = IndicatorVariogramData(
@@ -234,7 +223,6 @@ class ExperimentalIndicatorVariogram:
         self.custom_bins = custom_bins
         self.direction = direction
         self.tolerance = tolerance
-        self.dir_neighbors_selection_method = dir_neighbors_selection_method
 
         self.experimental_models = {}
 
@@ -255,7 +243,6 @@ class ExperimentalIndicatorVariogram:
                 custom_bins=self.custom_bins,
                 direction=self.direction,
                 tolerance=self.tolerance,
-                dir_neighbors_selection_method=self.dir_neighbors_selection_method,
                 is_semivariance=True,
                 is_covariance=True
             )
@@ -386,7 +373,9 @@ class TheoreticalIndicatorVariogram:
             ``min_range`` and ``max_range``.
 
         sill : float, default = None
-            If given, then sill is fixed to this value.
+            Partial sill, or sill when nugget is set to zero. Total sill is
+            a sum of partial sill and nugget. If given, then partial sill
+            is fixed to this value.
 
         n_sill_values : int, default = 5
             The last n experimental semivariance records for sill estimation.
@@ -395,17 +384,13 @@ class TheoreticalIndicatorVariogram:
         sill_from_variance : bool, default = False
             Estimate sill from the variance (semivariance at distance 0).
 
-        min_sill : float, default = 1
-            The minimal fraction of the value chosen with the sill estimation
-            method. The value is: for ``sill_from_values`` - the mean of
-            the last ``n_sill_values`` number of experimental semivariances,
-            for ``sill_from_variance`` - the experimental variogram variance.
+        min_sill : float, default = 0.5
+            The minimal fraction of the variogram variance at lag 0 to
+            find partial sill, ``0 <= min_sill <= max_sill``.
 
-        max_sill : float, default = 5
-            The maximum fraction of the value chosen with the sill estimation
-            method. The value is: for ``sill_from_values`` - the mean of
-            the last ``n_sill_values`` number of experimental semivariances,
-            for ``sill_from_variance`` - the experimental variogram variance.
+        max_sill : float, default = 2
+            The maximum fraction of the variogram variance at lag 0 to find
+            partial sill.
 
         number_of_sills : int, default = 16
             How many equally spaced sill values are tested between

@@ -3,8 +3,7 @@ from typing import Union, List, Callable, Tuple
 import numpy as np
 
 from pyinterpolate.distance.angular import select_points_within_ellipse, \
-    define_whitening_matrix, get_triangles_vertices, \
-    build_mask_indices, clean_mask_indices
+    define_whitening_matrix
 from pyinterpolate.semivariogram.lags.lags import get_current_and_previous_lag
 
 
@@ -134,151 +133,12 @@ def from_ellipse_cloud(
     return point_cloud
 
 
-def from_triangle(
-        fn: Callable,
-        points: np.ndarray,
-        lags: Union[List, np.ndarray],
+def directional_weighted_semivariance(
+        points: np.array,
+        lags: np.array,
+        custom_weights: np.array,
         direction: float,
-        tolerance: float
-):
-    """
-
-    Function selects semivariances or covariances per lag from
-    the triangular area.
-
-    Parameters
-    ----------
-    fn : Callable
-        Semivariance or covariance function.
-
-    points : numpy array
-        ``[x, y, value]``
-
-    lags : list or numpy array
-        The list of lags.
-
-    direction : float
-        Direction of semivariogram, values from 0 to 360 degrees:
-
-        - 0 or 180: is E-W,
-        - 90 or 270 is N-S,
-        - 45 or 225 is NE-SW,
-        - 135 or 315 is NW-SE.
-
-    tolerance : float
-        The parameter to control the ratio of triangle base to its height.
-    """
-    coordinates = points[:, :-1]
-    values_and_lags = []
-
-    # Get all triangles instantly
-    tr_edges = get_triangles_vertices(
-        coordinates=coordinates,
-        lags=lags,
-        direction=direction,
-        tolerance=tolerance
-    )
-
-    # Build masks for every lag
-    mask_indices = build_mask_indices(
-        coordinates=coordinates,
-        vertices=tr_edges
-    )
-
-    # Clean indices
-    mask_indices = clean_mask_indices(
-        mask_indices
-    )
-
-    for hidx, h in enumerate(lags):
-        value, point_pairs = _get_values_triangle(
-            fn=fn,
-            points=points,
-            masks=mask_indices[hidx]
-        )
-
-        if point_pairs == 0:
-            if hidx == 0:
-                values_and_lags.append([h, 0, 0])
-            else:
-                msg = f'There are no neighbors for a lag {h}, the process ' \
-                      f'has been stopped.'
-                raise RuntimeError(msg)
-        else:
-            values_and_lags.append([h, value, point_pairs])
-
-    return np.array(values_and_lags)
-
-
-def from_triangle_cloud(
-        points: np.ndarray,
-        lags: Union[List, np.ndarray],
-        direction: float,
-        tolerance: float
-):
-    """
-
-    Function selects semivariances per lag from
-    the triangular area.
-
-    Parameters
-    ----------
-    points : numpy array
-        ``[x, y, value]``
-
-    lags : list or numpy array
-        The list of lags.
-
-    direction : float
-        Direction of semivariogram, values from 0 to 360 degrees:
-
-        - 0 or 180: is E-W,
-        - 90 or 270 is N-S,
-        - 45 or 225 is NE-SW,
-        - 135 or 315 is NW-SE.
-
-    tolerance : float
-        The parameter to control the ratio of triangle base to its height.
-    """
-    coordinates = points[:, :-1]
-    point_cloud = dict()
-
-    # Get all triangles instantly
-    tr_edges = get_triangles_vertices(
-        coordinates=coordinates,
-        lags=lags,
-        direction=direction,
-        tolerance=tolerance
-    )
-
-    # Build masks for every lag
-    mask_indices = build_mask_indices(
-        coordinates=coordinates,
-        vertices=tr_edges
-    )
-
-    # Clean indices
-    mask_indices = clean_mask_indices(
-        mask_indices
-    )
-
-    for hidx, h in enumerate(lags):
-        values = _get_values_triangle_cloud(
-            points=points,
-            masks=mask_indices[hidx]
-        )
-
-        point_cloud[h] = values
-
-    return point_cloud
-
-
-def directional_weighted_semivariance(points: np.array,
-                                      lags: np.array,
-                                      custom_weights: np.array,
-                                      direction: float,
-                                      tolerance: float
-                                      ) -> np.array:
+        tolerance: float) -> np.array:
     """
     Function calculates weighted directional semivariogram.
 
@@ -320,11 +180,9 @@ def directional_weighted_semivariance(points: np.array,
     """
 
     semivariances_and_lags = list()
-
+    other_points = points[:, :-1]
     w_matrix = define_whitening_matrix(theta=direction,
                                        minor_axis_size=tolerance)
-
-    other_points = points[:, :-1]
 
     for lag_idx in range(len(lags)):
         weighted_nominator_terms = []
@@ -520,95 +378,6 @@ def _get_values_ellipse_cloud(
         # Extend list for calculations
         if len(points_in_range) > 0:
             _pts = [x for x in points_in_range]
-            _coo = [point[-1] for _ in range(0, len(_pts))]
-            lag_neighbors.extend(_pts)
-            lag_points.extend(_coo)
-
-    if len(lag_points) > 0:
-        values = np.square(
-            np.array(lag_points) - np.array(lag_neighbors)
-        )
-        return values
-
-    return np.array([])
-
-
-def _get_values_triangle(
-        fn: Callable,
-        points: np.ndarray,
-        masks: np.ndarray) -> Tuple[float, int]:
-    """
-    Function selects semivariances or covariances per lag in the triangle.
-
-    Parameters
-    ----------
-    fn : Callable
-        Semivariance or covariance function.
-
-    points : numpy array
-        ``[x, y, value]``
-
-    masks : numpy array
-        Masks for each point and its neighbors.
-
-    Returns
-    -------
-    value, point_pairs : [float, int]
-        Function value and number of point pairs for a given lag.
-    """
-    lag_points = []
-    lag_neighbors = []
-
-    for idx, point in enumerate(points):
-        mask = masks[idx]
-        points_in_range = points[mask]
-
-        # Calculate semivariances
-        if len(points_in_range) > 0:
-            _pts = [x[-1] for x in points_in_range]
-            _coo = [point[-1] for _ in range(0, len(_pts))]
-            lag_neighbors.extend(_pts)
-            lag_points.extend(_coo)
-
-    if len(lag_points) > 0:
-        value = fn(
-            np.array(lag_points),
-            np.array(lag_neighbors)
-        )
-        return value, len(lag_points)
-
-    return 0.0, 0
-
-
-def _get_values_triangle_cloud(
-        points: np.ndarray,
-        masks: np.ndarray) -> np.ndarray:
-    """
-    Function selects semivariances or covariances per lag in the triangle.
-
-    Parameters
-    ----------
-    points : numpy array
-        ``[x, y, value]``
-
-    masks : numpy array
-        Masks for each point and its neighbors.
-
-    Returns
-    -------
-    value, point_pairs : [float, int]
-        Function value and number of point pairs for a given lag.
-    """
-    lag_points = []
-    lag_neighbors = []
-
-    for idx, point in enumerate(points):
-        mask = masks[idx]
-        points_in_range = points[mask]
-
-        # Calculate semivariances
-        if len(points_in_range) > 0:
-            _pts = [x[-1] for x in points_in_range]
             _coo = [point[-1] for _ in range(0, len(_pts))]
             lag_neighbors.extend(_pts)
             lag_points.extend(_coo)

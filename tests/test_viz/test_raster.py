@@ -36,4 +36,4 @@ def test_interpolate_raster():
     assert isinstance(interpolated['result'], np.ndarray)
     assert isinstance(interpolated['error'], np.ndarray)
     assert isinstance(interpolated['params'], dict)
-    assert interpolated['result'].shape == (50, 50)
+    assert interpolated['result'].shape == (51, 51)

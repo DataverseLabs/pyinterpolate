@@ -4,11 +4,12 @@ from pyinterpolate.semivariogram.theoretical.spatial_dependency_index import cal
 
 def test_1():
     nugget = 10
-    sill = 100
+    partial_sill = 90
+    sill = partial_sill + nugget
     eratio = (nugget / sill) * 100
     ename = 'strong'
 
-    ratio, name = calculate_spatial_dependence_index(nugget, sill)
+    ratio, name = calculate_spatial_dependence_index(nugget, partial_sill)
     assert eratio == ratio
     assert ename == name
 

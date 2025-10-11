@@ -67,29 +67,6 @@ def test_directional_covariogram():
         step_size=STEP_SIZE,
         max_range=MAX_RANGE,
         direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='e'
-    )
-    assert isinstance(dirvar, np.ndarray)
-
-
-def test_directional_triangular_covariogram():
-    try:
-        ds = np.load('armstrong_data.npy')
-    except FileNotFoundError:
-        try:
-            ds = np.load('test_semivariogram/armstrong_data.npy')
-        except FileNotFoundError:
-            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
-
-    STEP_SIZE = 1.5
-    MAX_RANGE = 6
-    dirvar = calculate_covariance(
-        ds=ds,
-        step_size=STEP_SIZE,
-        max_range=MAX_RANGE,
-        direction=15,
-        tolerance=0.25,
-        dir_neighbors_selection_method='t'
+        tolerance=0.25
     )
     assert isinstance(dirvar, np.ndarray)

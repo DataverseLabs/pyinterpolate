@@ -1,6 +1,19 @@
 Changes - from version >= 1.x
 =============================
 
+2025-10-11
+----------
+
+**version 1.1.0**
+
+* [tests] removed `create_model_validation_sets()` function from `tests.test_kriging.point_kriging_ds.dataprep.py` because it is not used anywhere
+* [enhancement] new parameter - `buffer` - has been added to `interpolate_raster` when `dimension` is set, it is float, by default equal to 0, must be equal or greater than 1. It creates buffer of size (buffer * step_size) around the interpolated grid.
+* [enhancement] from now on it is not possible to select neighbors using `triangle` method (in directional variogram cases)
+* [docs] updated missing DOI in Indicator Variogram
+* [enhancement] representative point in `Blocks` is sampled from the largest `Polygon` when `MultiPolygon` is passed
+* [enhancement] `Blocks` object might be altered during CRS transformation or new object might be created (`inplace` parameter and copying mechanism)
+* [bug] incosistent documenation - `sill` represents *partial sill*, not *total sill*, and documentation might be misleading
+
 2025-07-17
 ----------
 
@@ -21,7 +34,7 @@ Changes - from version >= 1.x
 **version 1.0.1**
 
 * [feature] `ordinary_kriging()` and `simple_kriging()` functions allow user to pass array-like object of coordinates as the `unknown_locations` parameter.
-* [enhacement] added `__repr__()` method to `TheoreticalVariogram` class.
+* [enhancement] added `__repr__()` method to `TheoreticalVariogram` class.
 
 
 Changes in transition between 0.x to 1.x
