@@ -1,6 +1,6 @@
 ![JOSS](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) [![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://github.com/DataverseLabs/pyinterpolate/blob/main/coverage.svg) 
+[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/6a18f86ab3927e48009107e7eda7d6c833a4a610/coverage.svg) 
 
 
 
@@ -10,7 +10,7 @@
 
 **version 1.0.3**
 
-![Logo](pyinterpolate-banner.png)
+![Logo](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/refs/heads/main/pyinterpolate-banner.png)
 
 ## Important notice
 
@@ -113,7 +113,7 @@ print(prediction)  # [predicted, variance error, lon, lat]
 
 With Pyinterpolate you can analyze and transform aggregated data. Here is the example of spatial disaggregation of areal data into point support using Poisson Kriging:
 
-![Example use case](fig1_example.png)
+![Example use case](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/refs/heads/main/fig1_example.png)
 
 ## Status
 
