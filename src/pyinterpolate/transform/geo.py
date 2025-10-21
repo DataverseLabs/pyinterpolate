@@ -1,4 +1,5 @@
 from typing import Tuple, Union
+from numpy.typing import ArrayLike
 
 import geopandas as gpd
 import numpy as np
@@ -32,6 +33,55 @@ def largest_geometry(geometry: MultiPolygon) -> Polygon:
 
     poly = geometry.geoms[idx]
     return poly
+
+
+def join_geometry_and_values(geometry,
+                             values,
+                             geometry_column_name: str = 'geometry',
+                             values_column_name: str = 'values') -> gpd.GeoDataFrame:
+    """
+    Function creates single object from geometries and aggregated values.
+
+    Parameters
+    ----------
+    geometry : ArrayLike
+
+    values : ArrayLike
+
+    geometry_column_name : str, default = 'geometry'
+
+    values_column_name : str, default = 'value'
+
+    Returns
+    -------
+    : gpd.GeoDataFrame
+    """
+
+    if len(geometry) != len(values):
+        raise ValueError(
+            'Number of geometries must be equal to number of values'
+        )
+
+    if isinstance(values, pd.Series):
+        values = values.values
+    elif isinstance(values, pd.DataFrame):
+        val_column_name = values.columns[0]
+        values = values[val_column_name].values
+
+    if isinstance(geometry, pd.DataFrame):
+        geom_column_name = geometry.columns[0]
+        geometry = geometry[geom_column_name].values
+
+    if isinstance(geometry, gpd.GeoDataFrame):
+        gdf = geometry.copy(deep=True)
+        gdf[values_column_name] = values
+    else:
+        gdf = gpd.GeoDataFrame(
+            values, columns=[values_column_name], geometry=geometry
+        )
+        gdf.columns = [values_column_name, geometry_column_name]
+
+    return gdf
 
 
 def points_to_lon_lat(points: gpd.GeoSeries) -> Tuple:
