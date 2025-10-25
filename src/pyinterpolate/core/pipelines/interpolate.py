@@ -23,7 +23,7 @@ def interpolate_points(
         use_all_neighbors_in_range=False,
         allow_approximate_solutions=False,
         progress_bar=True
-):
+) -> np.ndarray:
     """
     Function predicts values at unknown locations with Ordinary
     Kriging.
@@ -124,7 +124,7 @@ def interpolate_points_dask(
         allow_approximate_solutions=False,
         number_of_workers=1,
         progress_bar=True
-):
+) -> np.ndarray:
     """
     Function predicts values at unknown locations with Ordinary
     Kriging using Dask backend, makes sense when you must interpolate large
@@ -229,8 +229,7 @@ def interpolate_points_dask(
                 no_neighbors=no_neighbors,
                 max_tick=max_tick,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions,
-                progress_bar=False
+                allow_approximate_solutions=allow_approximate_solutions
             )
 
             results.append(prediction)
