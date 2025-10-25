@@ -1,4 +1,5 @@
 from typing import Tuple, Union
+from numpy.typing import ArrayLike
 
 import numpy as np
 from tqdm import tqdm
@@ -6,11 +7,14 @@ from tqdm import tqdm
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
+from transform.geo import geometry_and_values_array
 
 
 def validate_kriging(
-        points: np.ndarray,
         theoretical_model: TheoreticalVariogram,
+        points: ArrayLike = None,
+        values: ArrayLike = None,
+        geometries: ArrayLike = None,
         how: str = 'ok',
         neighbors_range: Union[float, None] = None,
         no_neighbors: int = 4,
@@ -23,11 +27,20 @@ def validate_kriging(
 
     Parameters
     ----------
-    points : numpy array
-        Known points and their values.
-
     theoretical_model : TheoreticalVariogram
         Fitted variogram model.
+
+    points : ArrayLike, optional
+        Known points and their values ``[x, y, value]``.
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``points`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then
+        ``points`` must be provided. Point type geometry.
 
     how : str, default='ok'
         Select what kind of kriging you want to perform
@@ -88,6 +101,12 @@ def validate_kriging(
     # Areal kriging validation
     # Initialize array for coordinates and errors
     coordinates_and_errors = []
+
+    if points is None:
+        points = geometry_and_values_array(
+            geometry=geometries,
+            values=values
+        )
 
     # Divide observations
     for idx, row in enumerate(tqdm(points)):
