@@ -1,6 +1,15 @@
 Changes - from version >= 1.x
 =============================
 
+2025-11-0
+----------
+
+**version 1.2.0**
+
+* [enhancement] `Blocks` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `calculate_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `interpolate_points()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+
 2025-10-11
 ----------
 

@@ -1,5 +1,6 @@
 import warnings
 from typing import Union, List, Any, Dict
+from numpy.typing import ArrayLike
 
 import numpy as np
 
@@ -16,20 +17,31 @@ from pyinterpolate.semivariogram.experimental.functions.semivariance import \
 from pyinterpolate.semivariogram.lags.lags import get_lags
 
 
-def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
+def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
+                           values: ArrayLike = None,
+                           geometries: ArrayLike = None,
                            step_size: float = None,
                            max_range: float = None,
                            direction: float = None,
                            tolerance: float = None,
-                           custom_bins: Union[np.ndarray, Any] = None,
-                           custom_weights: np.ndarray = None) -> np.ndarray:
+                           custom_bins: Union[ArrayLike, Any] = None,
+                           custom_weights: ArrayLike = None) -> np.ndarray:
     """
     Calculates experimental semivariance.
 
     Parameters
     ----------
-    ds : numpy array
+    ds : ArrayLike, optional
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Aggregated values of each block. Optional parameter, if not
+        given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Those must be point geometries!
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -58,17 +70,17 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
         * The baseline point is at a center of the ellipse.
         * The ``tolerance == 1`` creates an omnidirectional semivariogram.
 
-    custom_bins : numpy array, optional
+    custom_bins : ArrayLike, optional
         Custom bins for semivariance calculation. If provided, then parameter
         ``step_size`` is ignored and ``max_range`` is set to the final bin
         distance.
 
-    custom_weights : numpy array, optional
+    custom_weights : ArrayLike, optional
         Custom weights assigned to points.
 
     Returns
     -------
-    semivariance : numpy array
+    semivariance : ArrayLike
         ``[lag, semivariance, number of point pairs]``
 
     Notes
@@ -184,10 +196,11 @@ def calculate_semivariance(ds: Union[np.ndarray, VariogramPoints],
     [ 1.     4.625 24.   ]
     """
 
-    # Validation
     # Validate points
     if not isinstance(ds, VariogramPoints):
-        ds = VariogramPoints(points=ds)
+        ds = VariogramPoints(points=ds,
+                             geometries=geometries,
+                             values=values)
 
     # Validate bins
     validate_bins(step_size, max_range, custom_bins)

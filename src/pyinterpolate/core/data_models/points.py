@@ -9,6 +9,8 @@ from pandas import DataFrame, Series
 from pydantic import field_validator, BaseModel, ConfigDict
 from shapely.geometry import Point
 
+from transform.geo import join_geometry_and_values
+
 
 class RawPoints(BaseModel):
     """
@@ -100,8 +102,18 @@ class VariogramPoints:
     def __init__(self,
                  points: Union[
                      List, Tuple, ndarray, GeoDataFrame, GeoSeries, DataFrame
-                 ]
+                 ] = None,
+                 geometries: Union[
+                     List, Tuple, ndarray, GeoDataFrame, GeoSeries, DataFrame
+                 ] = None,
+                 values: Union[
+                     List, Tuple, ndarray, DataFrame, Series
+                 ] = None
                  ):
+
+        if points is None:
+            # Try to create points
+            points = join_geometry_and_values(geometries, values)
 
         # validate
         self.points = cast(RawPoints, points)
@@ -119,9 +131,14 @@ class VariogramPoints:
             if len(cols) == 2:
                 ds = self.points.copy()
                 # geometry | values
-                ds['x'] = ds[cols[0]].x
-                ds['y'] = ds[cols[0]].y
-                self.points = ds[['x', 'y', cols[1]]].values
+                try:
+                    ds['x'] = ds[cols[0]].x
+                    ds['y'] = ds[cols[0]].y
+                    self.points = ds[['x', 'y', cols[1]]].values
+                except AttributeError:
+                    ds['x'] = ds[cols[1]].x
+                    ds['y'] = ds[cols[1]].y
+                    self.points = ds[['x', 'y', cols[0]]].values
             elif len(cols) == 3:
                 self.points = self.points.values
         elif isinstance(self.points, DataFrame):
