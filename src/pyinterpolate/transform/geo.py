@@ -5,7 +5,45 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from shapely.geometry import Polygon, MultiPolygon
+from shapely.geometry import Polygon, MultiPolygon, Point
+
+
+def geometry_and_values_array(geometry,
+                              values) -> ArrayLike:
+    """
+    Function creates single object from geometries and aggregated values.
+
+    Parameters
+    ----------
+    geometry : ArrayLike
+
+    values : ArrayLike
+
+    Returns
+    -------
+    : numpy array
+    """
+
+    if len(geometry) != len(values):
+        raise ValueError(
+            'Number of geometries must be equal to number of values'
+        )
+
+    arr = []
+
+    is_point = isinstance(geometry[0], Point)
+
+    if is_point:
+        for idx, rec in enumerate(geometry):
+            arr.append(
+                [rec.x, rec.y, values[idx]]
+            )
+    else:
+        for idx, rec in enumerate(geometry):
+            arr.append(
+                [rec[0], rec[1], values[idx]]
+            )
+    return np.array(arr)
 
 
 def largest_geometry(geometry: MultiPolygon) -> Polygon:

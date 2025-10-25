@@ -35,13 +35,13 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
         ``[x, y, value]``
 
     values : ArrayLike, optional
-        Aggregated values of each block. Optional parameter, if not
-        given then ``ds`` must be provided.
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
 
     geometries : ArrayLike, optional
         Array or similar structure with geometries. It must have the same
         length as ``values``. Optional parameter, if not given then ``ds``
-        must be provided. Those must be point geometries!
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.

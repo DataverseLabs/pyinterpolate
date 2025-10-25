@@ -1,3 +1,4 @@
+from numpy.typing import ArrayLike
 import os
 
 import dask
@@ -7,12 +8,15 @@ from dask.diagnostics import ProgressBar
 
 from pyinterpolate.kriging.point.ordinary import ok_calc
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
+from transform.geo import geometry_and_values_array
 
 
 def interpolate_points(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
-        unknown_locations: np.ndarray,
+        unknown_locations: ArrayLike,
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -29,12 +33,21 @@ def interpolate_points(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
-    known_locations : numpy array
-        The known locations: x, y, value.
-
     unknown_locations : numpy array
         Points where you want to estimate value
         ``[(x, y), ...] <-> [(lon, lat), ...]``.
+
+    known_locations : numpy array, optional
+        The known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for the neighbors.
@@ -69,6 +82,12 @@ def interpolate_points(
         ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
 
+    if known_locations is None:
+        known_locations = geometry_and_values_array(
+            geometry=known_geometries,
+            values=known_values
+        )
+
     interpolated_results = []
 
     _disable_progress_bar = not progress_bar
@@ -94,8 +113,10 @@ def interpolate_points(
 
 def interpolate_points_dask(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
-        unknown_locations: np.ndarray,
+        unknown_locations: ArrayLike,
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -114,12 +135,21 @@ def interpolate_points_dask(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
-    known_locations : numpy array
-        The known locations: x, y, value.
-
     unknown_locations : numpy array
         Points where you want to estimate value
         ``[(x, y), ...] <-> [(lon, lat), ...]``.
+
+    known_locations : numpy array, optional
+        The known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for the neighbors.
@@ -158,6 +188,12 @@ def interpolate_points_dask(
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
     """
+
+    if known_locations is None:
+        known_locations = geometry_and_values_array(
+            geometry=known_geometries,
+            values=known_values
+        )
 
     if number_of_workers == -1:
         core_num = os.cpu_count()
