@@ -8,10 +8,10 @@ Changes - from version >= 1.x
 
 * [enhancement] `Blocks` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [enhancement] `calculate_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
-* [enhancement] `interpolate_points()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
-* [enhancement] `validate_kriging()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `interpolate_points()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `validate_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 * [enhancement] `validate_kriging()` has new parameter: `progress_bar` that controls `tqdm` progress bar
-* 
+* [enhancement] `inverse_distance_weighting()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 
 2025-10-11
 ----------

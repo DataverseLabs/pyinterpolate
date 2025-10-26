@@ -8,17 +8,18 @@ def test_idw_2d():
     pos1 = [[11, 1, 1], [23, 2, 2], [33, 3, 3], [14, 44, 4], [13, 10, 9], [12, 55, 35], [11, 9, 7]]
     pos2 = [[11, 1, 1], [23, 2, 2], [33, 3, 3], [14, 44, 4], [10, 10, 999], [12, 55, 35], [11, 9, 7]]
 
-    u_val1 = inverse_distance_weighting(np.array(pos1),
-                                        unknown_pos,
-                                        -1, 0.5)
+    u_val1 = inverse_distance_weighting(unknown_pos,
+                                        known_locations=np.array(pos1),
+                                        no_neighbors=-1,
+                                        power=0.5)
 
-    u_val2 = inverse_distance_weighting(np.array(pos1),
-                                        np.array(unknown_pos),
-                                        3)
+    u_val2 = inverse_distance_weighting(np.array(unknown_pos),
+                                        known_locations=np.array(pos1),
+                                        no_neighbors=3)
 
-    u_val3 = inverse_distance_weighting(np.array(pos2),
-                                        np.array(unknown_pos),
-                                        3)
+    u_val3 = inverse_distance_weighting(np.array(unknown_pos),
+                                        known_locations=np.array(pos2),
+                                        no_neighbors=3)
 
     # Test case 1: u_val1 > u_val2 > 7
 
@@ -39,6 +40,27 @@ def test_multidimensional_idw():
     coords = np.array(coords)
     u_coords = [[0, 1, 2]]
 
-    res = inverse_distance_weighting(coords, u_coords, 2, 10)
+    res = inverse_distance_weighting(u_coords,
+                                     known_locations=coords,
+                                     no_neighbors=2,
+                                     power=10)
+
+    assert res == 1
+
+
+def test_separate_geometry_idw():
+    coords = [[0, 0, 0, 1],
+              [1, 1, 1, 1],
+              [2, 2, 2, 1],
+              [5, 5, 5, 1]]
+
+    coords = np.array(coords)
+    u_coords = [[0, 1, 2]]
+
+    res = inverse_distance_weighting(u_coords,
+                                     known_values=coords[:, -1],
+                                     known_geometries=coords[:, :-1],
+                                     no_neighbors=2,
+                                     power=10)
 
     assert res == 1

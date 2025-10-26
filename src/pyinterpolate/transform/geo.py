@@ -32,17 +32,25 @@ def geometry_and_values_array(geometry,
     arr = []
 
     is_point = isinstance(geometry[0], Point)
+    greater_than_2_dims = len(geometry[0]) > 2
 
-    if is_point:
+    if greater_than_2_dims:
         for idx, rec in enumerate(geometry):
-            arr.append(
-                [rec.x, rec.y, values[idx]]
-            )
+            rlist = rec.tolist()
+            rlist.append(values[idx])
+            arr.append(rlist)
     else:
-        for idx, rec in enumerate(geometry):
-            arr.append(
-                [rec[0], rec[1], values[idx]]
-            )
+        if is_point:
+            for idx, rec in enumerate(geometry):
+                arr.append(
+                    [rec.x, rec.y, values[idx]]
+                )
+        else:
+            for idx, rec in enumerate(geometry):
+                arr.append(
+                    [rec[0], rec[1], values[idx]]
+                )
+
     return np.array(arr)
 
 
@@ -217,5 +225,3 @@ if __name__ == '__main__':
     mpol = MultiPolygon([pol1, pol2])
 
     assert largest_geometry(mpol) == pol2
-
-
