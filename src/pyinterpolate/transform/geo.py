@@ -32,19 +32,19 @@ def geometry_and_values_array(geometry,
     arr = []
 
     is_point = isinstance(geometry[0], Point)
-    greater_than_2_dims = len(geometry[0]) > 2
 
-    if greater_than_2_dims:
+    if is_point:
         for idx, rec in enumerate(geometry):
-            rlist = rec.tolist()
-            rlist.append(values[idx])
-            arr.append(rlist)
+            arr.append(
+                [rec.x, rec.y, values[idx]]
+            )
     else:
-        if is_point:
+        greater_than_2_dims = len(geometry[0]) > 2
+        if greater_than_2_dims:
             for idx, rec in enumerate(geometry):
-                arr.append(
-                    [rec.x, rec.y, values[idx]]
-                )
+                rlist = rec.tolist()
+                rlist.append(values[idx])
+                arr.append(rlist)
         else:
             for idx, rec in enumerate(geometry):
                 arr.append(

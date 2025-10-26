@@ -32,6 +32,7 @@ from scipy.interpolate import UnivariateSpline
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
 from pyinterpolate.semivariogram.indicator.indicator import TheoreticalIndicatorVariogram
+from transform.geo import geometry_and_values_array
 
 
 class IndicatorKriging:
@@ -40,14 +41,23 @@ class IndicatorKriging:
 
     Parameters
     ----------
-    known_locations : numpy ndarray
-        The known locations ``[x, y, value]``.
-
     indicator_variograms : IndicatorVariograms
         Modeled variograms for each threshold.
 
     unknown_locations : numpy ndarray
         Points where we want to estimate value ``(x, y) <-or-> (lon, lat)``.
+
+    known_locations : numpy array, optional
+        The known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     kriging_type : str, default = 'ok'
         Type of kriging to perform. Possible values: 'ok' - ordinary kriging,
@@ -115,8 +125,10 @@ class IndicatorKriging:
 
     def __init__(self,
                  indicator_variograms: TheoreticalIndicatorVariogram,
-                 known_locations: np.ndarray,
                  unknown_locations: ArrayLike,
+                 known_locations: ArrayLike = None,
+                 known_values: ArrayLike = None,
+                 known_geometries: ArrayLike = None,
                  kriging_type: str = 'ok',
                  process_mean: float = None,
                  neighbors_range=None,
@@ -125,6 +137,12 @@ class IndicatorKriging:
                  use_all_neighbors_in_range=False,
                  allow_approximate_solutions=False,
                  get_expected_values=True):
+
+        if known_locations is None:
+            known_locations = geometry_and_values_array(
+                geometry=known_geometries,
+                values=known_values
+            )
 
         self.thresholds = np.array(
             list(
@@ -287,20 +305,22 @@ class IndicatorKriging:
                         no_neighbors=no_neighbors,
                         max_tick=max_tick,
                         use_all_neighbors_in_range=use_all_neighbors_in_range,
-                        allow_approximate_solutions=allow_approximate_solutions
+                        allow_approximate_solutions=allow_approximate_solutions,
+                        progress_bar=False
                     )
 
                 elif kriging_type == 'sk':
                     _pred_arr = simple_kriging(
                         theoretical_model=_item,
                         known_locations=indicator_points,
-                        unknown_location=_point,
+                        unknown_locations=_point,
                         process_mean=process_mean,
                         neighbors_range=neighbors_range,
                         no_neighbors=no_neighbors,
                         max_tick=max_tick,
                         use_all_neighbors_in_range=use_all_neighbors_in_range,
-                        allow_approximate_solutions=allow_approximate_solutions
+                        allow_approximate_solutions=allow_approximate_solutions,
+                        progress_bar=False
                     )
 
                 else:
