@@ -20,7 +20,8 @@ def validate_kriging(
         no_neighbors: int = 4,
         use_all_neighbors_in_range=False,
         sk_mean: Union[float, None] = None,
-        allow_approximate_solutions=False
+        allow_approximate_solutions=False,
+        progress_bar: bool = True
 ) -> Tuple[float, float, np.ndarray]:
     """
     Function performs cross-validation of kriging models.
@@ -76,6 +77,9 @@ def validate_kriging(
         when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
+    progress_bar : bool, default=True
+        Show process status.
+
     Returns
     -------
     : Tuple
@@ -109,7 +113,7 @@ def validate_kriging(
         )
 
     # Divide observations
-    for idx, row in enumerate(tqdm(points)):
+    for idx, row in enumerate(tqdm(points, disable=not progress_bar)):
         clipped_point = row[:-1]
         data_points = np.delete(points, idx, 0)
 
@@ -121,7 +125,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         elif how == 'sk':
             preds = simple_kriging(
@@ -132,7 +137,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         else:
             raise KeyError(

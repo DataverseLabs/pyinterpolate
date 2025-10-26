@@ -13,12 +13,17 @@ ARMSTRONG_VARIOGRAM = ExperimentalVariogram(ARMSTRONG_DATA,
                                             step_size=1,
                                             max_range=6)
 THEORETICAL_MODEL = TheoreticalVariogram()
-THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM, models_group='linear', nugget=0.0)
+THEORETICAL_MODEL.autofit(experimental_variogram=ARMSTRONG_VARIOGRAM,
+                          models_group='linear',
+                          nugget=0.0)
 
 
 def test_with_ordinary():
     validation_results = validate_kriging(
-        ARMSTRONG_DATA, theoretical_model=THEORETICAL_MODEL, no_neighbors=4
+        theoretical_model=THEORETICAL_MODEL,
+        points=ARMSTRONG_DATA,
+        no_neighbors=4,
+        progress_bar=False
     )
 
     # Number of points is the same as in input data
@@ -31,13 +36,15 @@ def test_with_ordinary():
     assert validation_results[1] > 1.60
     assert validation_results[1] < 1.65
 
+
 def test_with_simple():
     validation_results = validate_kriging(
-        ARMSTRONG_DATA,
         theoretical_model=THEORETICAL_MODEL,
+        points=ARMSTRONG_DATA,
         no_neighbors=4,
         how='sk',
-        sk_mean=SIMPLE_MEAN
+        sk_mean=SIMPLE_MEAN,
+        progress_bar=False
     )
 
     # Number of points is the same as in input data
@@ -49,3 +56,23 @@ def test_with_simple():
     # Average variance error ~ 1.58
     assert validation_results[1] > 1.55
     assert validation_results[1] < 1.60
+
+
+def test_with_separate_geometry():
+    validation_results_sep = validate_kriging(
+        theoretical_model=THEORETICAL_MODEL,
+        values=ARMSTRONG_DATA[:, -1],
+        geometries=ARMSTRONG_DATA[:, :-1],
+        no_neighbors=4,
+        progress_bar=False
+    )
+
+    validation_results = validate_kriging(
+        theoretical_model=THEORETICAL_MODEL,
+        points=ARMSTRONG_DATA,
+        no_neighbors=4,
+        progress_bar=False
+    )
+
+    assert validation_results_sep[0] == validation_results[0]
+    assert validation_results_sep[1] == validation_results[1]
