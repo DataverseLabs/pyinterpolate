@@ -9,7 +9,7 @@ from pandas import DataFrame, Series
 from pydantic import field_validator, BaseModel, ConfigDict
 from shapely.geometry import Point
 
-from transform.geo import join_geometry_and_values
+from transform.geo import join_point_geometry_and_values
 
 
 class RawPoints(BaseModel):
@@ -113,7 +113,7 @@ class VariogramPoints:
 
         if points is None:
             # Try to create points
-            points = join_geometry_and_values(geometries, values)
+            points = join_point_geometry_and_values(geometries, values)
 
         # validate
         self.points = cast(RawPoints, points)

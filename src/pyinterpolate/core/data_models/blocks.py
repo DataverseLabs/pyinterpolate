@@ -23,7 +23,7 @@ from shapely.geometry import Polygon
 from pyinterpolate.distance.angular import calc_angles
 from pyinterpolate.distance.point import point_distance
 from pyinterpolate.transform.geo import points_to_lon_lat, largest_geometry, \
-    join_geometry_and_values
+    join_any_geometry_and_values
 
 
 class Blocks:
@@ -220,9 +220,9 @@ class Blocks:
         else:
             if value_column_name is None:
                 value_column_name = 'values'
-            self.ds = join_geometry_and_values(geometry=geometries,
-                                               values=values,
-                                               values_column_name=value_column_name)
+            self.ds = join_any_geometry_and_values(geometry=geometries,
+                                                   values=values,
+                                                   values_column_name=value_column_name)
 
         self.value_column_name = value_column_name
         self.index_column_name = index_column_name

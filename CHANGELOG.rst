@@ -13,6 +13,7 @@ Changes - from version >= 1.x
 * [enhancement] `validate_kriging()` has new parameter: `progress_bar` that controls `tqdm` progress bar
 * [enhancement] `inverse_distance_weighting()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 * [enhancement] `IndicatorKriging` class has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `ordinary_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 
 2025-10-11
 ----------
