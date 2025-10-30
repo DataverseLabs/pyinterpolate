@@ -25,9 +25,11 @@ from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram impor
 
 def sk_calc(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
-        unknown_location: Union[List, Tuple, np.ndarray],
+        unknown_location: ArrayLike,
         process_mean: float,
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -42,9 +44,6 @@ def sk_calc(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
-    known_locations : numpy array
-        The known locations: ``[x, y, value]``.
-
     unknown_location : Union[List, Tuple, numpy array]
         Point where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
@@ -53,6 +52,18 @@ def sk_calc(
         before processing. That's why Simple Kriging has a limited number
         of applications. You must have multiple samples and well-known area
         to know this parameter.
+
+    known_locations : numpy array
+        Known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors.  If ``None`` is
@@ -89,7 +100,12 @@ def sk_calc(
     """
 
     # Check if known locations are in the right format
-    known_locations = VariogramPoints(known_locations).points
+    # Validate points
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
 
     # Check if unknown location is Point
     if isinstance(unknown_location, Point):
@@ -128,9 +144,12 @@ def sk_calc(
 
 def simple_kriging(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
-        unknown_locations: Union[np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike],
+        unknown_locations: Union[
+            np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike],
         process_mean: float,
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -146,10 +165,7 @@ def simple_kriging(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
-    known_locations : numpy array
-        The known locations: ``[x, y, value]``.
-
-    unknown_locations : Union[np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike]
+    unknown_locations : Union[List, Tuple, numpy array]
         Point where you want to estimate value ``(x, y) <-> (lon, lat)``.
 
     process_mean : float
@@ -157,6 +173,18 @@ def simple_kriging(
         before processing. That's why Simple Kriging has a limited number
         of applications. You must have multiple samples and well-known area
         to know this parameter.
+
+    known_locations : numpy array
+        Known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors.  If ``None`` is
@@ -196,7 +224,11 @@ def simple_kriging(
     """
 
     # Check if known locations are in the right format
-    known_locations = VariogramPoints(known_locations).points
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
     unknown_locations = InterpolationPoints(unknown_locations).points
 
     interpolated_results = []
