@@ -3,6 +3,8 @@ from typing import Union, Any
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
+
+from core.data_models.points import VariogramPoints
 from pyinterpolate.core.pipelines.interpolate import interpolate_points, \
     interpolate_points_dask
 
@@ -91,8 +93,17 @@ class UniversalKriging:
 
     Parameters
     ----------
-    known_points : numpy array
-        Known points and their values.
+    known_points : ArrayLike, optional
+        Known points and their values ``[lon, lat, value]``
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     fitted_regression_model : optional
         Any kind of regression model with `.predict()` method that could be
@@ -145,9 +156,15 @@ class UniversalKriging:
     """
 
     def __init__(self,
-                 known_points: np.ndarray,
+                 known_points: ArrayLike = None,
+                 known_values: ArrayLike = None,
+                 known_geometries: ArrayLike = None,
                  fitted_regression_model: Any = None):
         # Core
+        known_points = VariogramPoints(points=known_points,
+                                       geometries=known_geometries,
+                                       values=known_values)
+        known_points = known_points.points
         self.known_points = known_points
         # Trend
         self.trend_model = None
