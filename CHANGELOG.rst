@@ -17,7 +17,9 @@ Changes - from version >= 1.x
 * [enhancement] `simple_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 * [enhancement] `UniversalKriging` class has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
 * [api change] `inblock_semivariance()` function is now private: `_inblock_semivariance()`
-* 
+* [enhancement] `DirectionalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `DirectionalVariogram()` class
+
 
 2025-10-11
 ----------

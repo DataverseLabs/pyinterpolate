@@ -1,7 +1,7 @@
 from typing import Union, Dict, Type
+from numpy.typing import ArrayLike
 
-import numpy as np
-
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 
 
@@ -11,8 +11,17 @@ class DirectionalVariogram:
 
     Parameters
     ----------
-    ds : numpy array
+    ds : ArrayLike, optional
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -86,17 +95,28 @@ class DirectionalVariogram:
     """
 
     def __init__(self,
-                 ds: np.ndarray,
                  step_size: float,
                  max_range: float,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  tolerance: float = 0.2,
                  custom_weights=None,
                  custom_bins=None):
 
+        # Validate points
+        if not isinstance(ds, VariogramPoints):
+            ds = VariogramPoints(points=ds,
+                                 geometries=geometries,
+                                 values=values)
+            ds = ds.points
+
         self.ds = ds
         self.custom_bins = custom_bins
+
         self.step_size = step_size
         self.max_range = max_range
+
         self.tolerance = tolerance
         self.custom_weights = custom_weights
         self.possible_variograms = ['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE']
