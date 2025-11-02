@@ -21,6 +21,8 @@ Changes - from version >= 1.x
 * [tests] Added basic tests for `DirectionalVariogram()` class
 * [enhancement] `ExperimentalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [tests] Added basic tests for `ExperimentalVariogram()` class
+* [enhancement] `build_experimental_variogram()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `build_experimental_variogram()` function
 
 
 2025-10-11

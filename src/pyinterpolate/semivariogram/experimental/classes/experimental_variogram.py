@@ -407,7 +407,9 @@ class ExperimentalVariogram:
         return rows
 
 
-def build_experimental_variogram(ds: np.ndarray,
+def build_experimental_variogram(ds: Union[ArrayLike, VariogramPoints] = None,
+                                 values: ArrayLike = None,
+                                 geometries: ArrayLike = None,
                                  step_size: float = None,
                                  max_range: float = None,
                                  direction: float = None,
@@ -426,6 +428,15 @@ def build_experimental_variogram(ds: np.ndarray,
     ----------
     ds : numpy array
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -479,6 +490,8 @@ def build_experimental_variogram(ds: np.ndarray,
 
     exp_var = ExperimentalVariogram(
         ds=ds,
+        values=values,
+        geometries=geometries,
         step_size=step_size,
         max_range=max_range,
         direction=direction,
