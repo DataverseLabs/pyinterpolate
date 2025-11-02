@@ -9,7 +9,7 @@ from pyinterpolate.core.validators.experimental_semivariance import \
     validate_semivariance_weights, validate_direction_and_tolerance, \
     validate_bins
 from pyinterpolate.semivariogram.experimental.functions.directional import \
-    directional_weighted_semivariance, from_ellipse, from_ellipse_cloud
+    _directional_weighted_semivariance, from_ellipse, from_ellipse_cloud
 from pyinterpolate.semivariogram.experimental.functions.general import \
     omnidirectional_variogram, omnidirectional_semivariogram_cloud
 from pyinterpolate.semivariogram.experimental.functions.semivariance import \
@@ -335,7 +335,7 @@ def directional_semivariance(points: np.ndarray,
             direction,
             tolerance)
     else:
-        output_semivariances = directional_weighted_semivariance(
+        output_semivariances = _directional_weighted_semivariance(
             points,
             lags,
             custom_weights,

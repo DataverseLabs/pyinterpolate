@@ -24,6 +24,7 @@ Changes - from version >= 1.x
 * [enhancement] `build_experimental_variogram()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [tests] Added basic tests for `build_experimental_variogram()` function
 * [enhancement] `VariogramCloud()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [api change] `directional_weighted_semivariance()` function is now private: `_directional_weighted_semivariance()`
 
 
 2025-10-11
