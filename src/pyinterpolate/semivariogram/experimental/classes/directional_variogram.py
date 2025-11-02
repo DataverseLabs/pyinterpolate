@@ -131,9 +131,9 @@ class DirectionalVariogram:
 
     def _build_experimental_variograms(self):
         isotropic = ExperimentalVariogram(
-            self.ds,
-            self.step_size,
-            self.max_range,
+            ds=self.ds,
+            step_size=self.step_size,
+            max_range=self.max_range,
             custom_bins=self.custom_bins,
             custom_weights=self.custom_weights)
 
@@ -141,9 +141,9 @@ class DirectionalVariogram:
 
         for idx, val in self.directions.items():
             variogram = ExperimentalVariogram(
-                self.ds,
-                self.step_size,
-                self.max_range,
+                ds=self.ds,
+                step_size=self.step_size,
+                max_range=self.max_range,
                 custom_bins=self.custom_bins,
                 custom_weights=self.custom_weights,
                 direction=val,

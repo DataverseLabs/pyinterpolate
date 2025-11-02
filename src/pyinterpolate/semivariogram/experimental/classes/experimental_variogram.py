@@ -1,4 +1,5 @@
 from typing import Union, Collection
+from numpy.typing import ArrayLike
 
 import numpy as np
 from prettytable import PrettyTable
@@ -22,6 +23,15 @@ class ExperimentalVariogram:
     ----------
     ds : numpy array
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -118,7 +128,9 @@ class ExperimentalVariogram:
     """
 
     def __init__(self,
-                 ds: np.ndarray,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  step_size: float = None,
                  max_range: float = None,
                  direction: float = None,
@@ -129,9 +141,16 @@ class ExperimentalVariogram:
                  is_covariance=True,
                  as_cloud=False):
 
-        ds = VariogramPoints(ds)
+        # Validate points
+        if not isinstance(ds, VariogramPoints):
+            ds = VariogramPoints(points=ds,
+                                 geometries=geometries,
+                                 values=values)
+            ds = ds.points
+        else:
+            ds = ds.points
 
-        self.ds = ds.points  # core structure
+        self.ds = ds  # core structure
         # Object main attributes
         if custom_bins is None:
             self.lags = None

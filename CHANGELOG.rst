@@ -19,6 +19,8 @@ Changes - from version >= 1.x
 * [api change] `inblock_semivariance()` function is now private: `_inblock_semivariance()`
 * [enhancement] `DirectionalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [tests] Added basic tests for `DirectionalVariogram()` class
+* [enhancement] `ExperimentalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `ExperimentalVariogram()` class
 
 
 2025-10-11
