@@ -76,6 +76,19 @@ def test_variogram_cloud_class():
     assert isinstance(vc, VariogramCloud)
 
 
+def test_variogram_cloud_class_sep_geom():
+    vc = VariogramCloud(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+    stats = vc.describe()
+    assert stats[1]['count'] == 24
+    assert stats[2]['median'] == 9
+    assert isinstance(vc, VariogramCloud)
+
+
 def test_outliers_removal():
     vc1 = VariogramCloud(
         ds=REFERENCE_INPUT,
