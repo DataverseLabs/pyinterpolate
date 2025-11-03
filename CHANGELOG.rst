@@ -25,7 +25,15 @@ Changes - from version >= 1.x
 * [tests] Added basic tests for `build_experimental_variogram()` function
 * [enhancement] `VariogramCloud()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [api change] `directional_weighted_semivariance()` function is now private: `_directional_weighted_semivariance()`
-
+* [api change] `omnidirectional_variogram()` function is now private: `_omnidirectional_variogram()`
+* [api change] `omnidirectional_semivariogram_cloud()` function is now private: `_omnidirectional_semivariogram_cloud()`
+* [enhancement] `calculate_covariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [api change] `directional_covariance()` function is now private: `_directional_covariance()`
+* [api change] `omnidirectional_covariance()` function is now private: `_omnidirectional_covariance()`
+* [api change] `directional_semivariance()` function is now private: `_directional_semivariance()`
+* [api change] `directional_semivariance_cloud()` function is now private: `_directional_semivariance_cloud()`
+* [api change] `omnidirectional_semivariance()` function is now private: `_omnidirectional_semivariance()`
+* [enhancement] `point_cloud_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 
 2025-10-11
 ----------

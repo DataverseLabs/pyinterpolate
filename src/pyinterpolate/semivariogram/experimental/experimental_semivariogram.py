@@ -11,7 +11,7 @@ from pyinterpolate.core.validators.experimental_semivariance import \
 from pyinterpolate.semivariogram.experimental.functions.directional import \
     _directional_weighted_semivariance, from_ellipse, from_ellipse_cloud
 from pyinterpolate.semivariogram.experimental.functions.general import \
-    omnidirectional_variogram, omnidirectional_semivariogram_cloud
+    _omnidirectional_variogram, _omnidirectional_semivariogram_cloud
 from pyinterpolate.semivariogram.experimental.functions.semivariance import \
     semivariance_fn
 from pyinterpolate.semivariogram.lags.lags import get_lags
@@ -217,7 +217,7 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
 
     # Get semivariances
     if direction is not None and tolerance is not None:
-        experimental_semivariances = directional_semivariance(
+        experimental_semivariances = _directional_semivariance(
             ds.points,
             lags,
             direction,
@@ -225,17 +225,17 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
             custom_weights
         )
     else:
-        experimental_semivariances = omnidirectional_semivariance(
+        experimental_semivariances = _omnidirectional_semivariance(
             ds.points, lags, custom_weights, as_point_cloud=False
         )
 
     return experimental_semivariances
 
 
-def directional_semivariance_cloud(points: np.ndarray,
-                                   lags: Union[List, np.ndarray],
-                                   direction: float,
-                                   tolerance: float) -> Dict:
+def _directional_semivariance_cloud(points: np.ndarray,
+                                    lags: Union[List, np.ndarray],
+                                    direction: float,
+                                    tolerance: float) -> Dict:
     """
     Function calculates directional semivariances.
 
@@ -282,11 +282,11 @@ def directional_semivariance_cloud(points: np.ndarray,
     return output_semivariances
 
 
-def directional_semivariance(points: np.ndarray,
-                             lags: Union[List, np.ndarray],
-                             direction: float,
-                             tolerance: float,
-                             custom_weights: np.ndarray = None):
+def _directional_semivariance(points: np.ndarray,
+                              lags: Union[List, np.ndarray],
+                              direction: float,
+                              tolerance: float,
+                              custom_weights: np.ndarray = None):
     """
     Function calculates directional semivariances.
 
@@ -346,11 +346,11 @@ def directional_semivariance(points: np.ndarray,
     return output_semivariances
 
 
-def omnidirectional_semivariance(points: np.ndarray,
-                                 lags: Union[List, np.ndarray],
-                                 custom_weights: np.ndarray,
-                                 as_point_cloud: bool = False,
-                                 weights_cloud_warning=True):
+def _omnidirectional_semivariance(points: np.ndarray,
+                                  lags: Union[List, np.ndarray],
+                                  custom_weights: np.ndarray,
+                                  as_point_cloud: bool = False,
+                                  weights_cloud_warning=True):
     """
     Function calculates the omnidirectional semivariances.
 
@@ -374,7 +374,7 @@ def omnidirectional_semivariance(points: np.ndarray,
     semivariances : Union[numpy array, dict]
     """
     if not as_point_cloud:
-        sorted_semivariances = omnidirectional_variogram(
+        sorted_semivariances = _omnidirectional_variogram(
             fn=semivariance_fn,
             points=points,
             lags=lags,
@@ -389,7 +389,7 @@ def omnidirectional_semivariance(points: np.ndarray,
                     'as the output, thus weights will be ignored.'
                 )
 
-        sorted_semivariances = omnidirectional_semivariogram_cloud(
+        sorted_semivariances = _omnidirectional_semivariogram_cloud(
             points=points,
             lags=lags
         )
@@ -397,7 +397,9 @@ def omnidirectional_semivariance(points: np.ndarray,
     return sorted_semivariances
 
 
-def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
+def point_cloud_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
+                             values: ArrayLike = None,
+                             geometries: ArrayLike = None,
                              step_size: float = None,
                              max_range: float = None,
                              direction: float = None,
@@ -409,8 +411,17 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
 
     Parameters
     ----------
-    ds : numpy array
+    ds : ArrayLike, optional
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -537,10 +548,11 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
     --------
     """
 
-    # Validation
     # Validate points
     if not isinstance(ds, VariogramPoints):
-        ds = VariogramPoints(points=ds)
+        ds = VariogramPoints(points=ds,
+                             geometries=geometries,
+                             values=values)
 
     # Validate bins
     validate_bins(step_size, max_range, custom_bins)
@@ -554,14 +566,14 @@ def point_cloud_semivariance(ds: Union[np.ndarray, VariogramPoints],
 
     # Get semivariances
     if direction is not None and tolerance is not None:
-        experimental_semivariances = directional_semivariance_cloud(
+        experimental_semivariances = _directional_semivariance_cloud(
             ds.points,
             lags,
             direction,
             tolerance
         )
     else:
-        experimental_semivariances = omnidirectional_semivariance(
+        experimental_semivariances = _omnidirectional_semivariance(
             ds.points,
             lags,
             custom_weights=None,

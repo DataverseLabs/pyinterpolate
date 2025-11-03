@@ -10,7 +10,7 @@ from pyinterpolate.semivariogram.weights.experimental.weighting import \
     weight_experimental_semivariance
 
 
-def omnidirectional_semivariogram_cloud(
+def _omnidirectional_semivariogram_cloud(
         points: np.ndarray,
         lags: Union[List, np.ndarray],
         raise_when_no_neighbors: bool = False
@@ -75,7 +75,7 @@ def omnidirectional_semivariogram_cloud(
     return sorted_omnidirectional_values
 
 
-def omnidirectional_variogram(
+def _omnidirectional_variogram(
         fn: Callable,
         points: np.ndarray,
         lags: Union[List, np.ndarray],
