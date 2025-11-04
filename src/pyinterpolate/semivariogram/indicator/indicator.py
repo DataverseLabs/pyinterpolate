@@ -97,11 +97,20 @@ class IndicatorVariogramData:
 
     Parameters
     ----------
-    ds : numpy array, list, tuple
-        Coordinates and their values: ``(pt x, pt y, value)``
-
     number_of_thresholds: int
         The number of thresholds to model data.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     Attributes
     ----------
@@ -126,10 +135,18 @@ class IndicatorVariogramData:
     """
 
     def __init__(self,
-                 ds: Union[np.ndarray, list, tuple],
-                 number_of_thresholds: int):
-        if not isinstance(ds, np.ndarray):
-            ds = np.array(ds)
+                 number_of_thresholds: int,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None):
+
+        if not isinstance(ds, VariogramPoints):
+            ds = VariogramPoints(points=ds,
+                                 geometries=geometries,
+                                 values=values)
+            ds = ds.points
+        else:
+            ds = ds.points
 
         self.input_array = ds
         self.n_thresholds = number_of_thresholds
@@ -144,9 +161,6 @@ class ExperimentalIndicatorVariogram:
 
     Parameters
     ----------
-    ds : numpy array, list, tuple
-        Coordinates and their values: ``(pt x, pt y, value)``
-
     number_of_thresholds: int
         The number of thresholds to model data.
 
@@ -156,6 +170,18 @@ class ExperimentalIndicatorVariogram:
 
     max_range : float
         The maximum range of analysis.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     custom_weights : numpy array, default=None
         Weights assigned to points, index of weight must be the same
@@ -223,10 +249,12 @@ class ExperimentalIndicatorVariogram:
     """
 
     def __init__(self,
-                 ds: Union[np.ndarray, list, tuple],
                  number_of_thresholds: int,
                  step_size: float,
                  max_range: float,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  custom_weights=None,
                  custom_bins=None,
                  direction: float = None,
@@ -235,6 +263,8 @@ class ExperimentalIndicatorVariogram:
 
         self.ds = IndicatorVariogramData(
             ds=ds,
+            values=values,
+            geometries=geometries,
             number_of_thresholds=number_of_thresholds
         )
 
