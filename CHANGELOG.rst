@@ -34,6 +34,7 @@ Changes - from version >= 1.x
 * [api change] `directional_semivariance_cloud()` function is now private: `_directional_semivariance_cloud()`
 * [api change] `omnidirectional_semivariance()` function is now private: `_omnidirectional_semivariance()`
 * [enhancement] `point_cloud_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `code_indicator()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 
 2025-10-11
 ----------

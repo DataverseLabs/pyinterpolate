@@ -7,21 +7,34 @@ from matplotlib import pyplot as plt
 from matplotlib import markers
 from tqdm import tqdm
 
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
-def code_indicators(ds: np.ndarray, thresholds: ArrayLike) -> np.ndarray:
+def code_indicators(thresholds: ArrayLike,
+                    ds: Union[ArrayLike, VariogramPoints] = None,
+                    values: ArrayLike = None,
+                    geometries: ArrayLike = None) -> np.ndarray:
     """
     Function transforms kriging values into a vector of their indicators.
 
     Parameters
     ----------
-    ds : numpy array
-        Kriging dataset [lon, lat, value]
-
     thresholds : List
         The list of possible thresholds.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     Returns
     -------
@@ -32,6 +45,13 @@ def code_indicators(ds: np.ndarray, thresholds: ArrayLike) -> np.ndarray:
 
     ids = []
     thresh_arr = np.array(thresholds)
+
+    # Validate points
+    if not isinstance(ds, VariogramPoints):
+        ds = VariogramPoints(points=ds,
+                             geometries=geometries,
+                             values=values)
+        ds = ds.points
 
     for row in ds:
         _r = [row[0], row[1]]
@@ -113,8 +133,9 @@ class IndicatorVariogramData:
 
         self.input_array = ds
         self.n_thresholds = number_of_thresholds
-        self.thresholds = select_variogram_thresholds(ds[:, -1], self.n_thresholds)
-        self.ids = code_indicators(ds, self.thresholds)
+        self.thresholds = select_variogram_thresholds(ds[:, -1],
+                                                      self.n_thresholds)
+        self.ids = code_indicators(self.thresholds, ds=ds)
 
 
 class ExperimentalIndicatorVariogram:
