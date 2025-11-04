@@ -22,7 +22,27 @@ def test_set_dimensions():
 
 def test_interpolate_raster():
     interpolated = interpolate_raster(
-        data=DS,
+        known_locations=DS,
+        dim=50,
+        number_of_neighbors=4,
+        semivariogram_model=VARIOGRAM,
+        allow_approx_solutions=False,
+    )
+
+    assert isinstance(interpolated, dict)
+    assert 'result' in interpolated
+    assert 'error' in interpolated
+    assert 'params' in interpolated
+    assert isinstance(interpolated['result'], np.ndarray)
+    assert isinstance(interpolated['error'], np.ndarray)
+    assert isinstance(interpolated['params'], dict)
+    assert interpolated['result'].shape == (51, 51)
+
+
+def test_interpolate_raster_sep_geom():
+    interpolated = interpolate_raster(
+        known_values=DS[:, -1],
+        known_geometries=DS[:, :-1],
         dim=50,
         number_of_neighbors=4,
         semivariogram_model=VARIOGRAM,
