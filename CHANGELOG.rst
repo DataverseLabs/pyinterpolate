@@ -36,6 +36,7 @@ Changes - from version >= 1.x
 * [enhancement] `point_cloud_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [enhancement] `code_indicator()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [enhancement] `ExperimentalIndicatorVariogram` and `IndicatorVariogramData` classes have the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `PointSupport` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 
 2025-10-11
 ----------
