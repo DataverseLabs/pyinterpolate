@@ -35,6 +35,9 @@ def geometry_and_values_array(geometry,
     if isinstance(geometry, pd.Series):
         geometry = geometry.values
 
+    if isinstance(geometry, pd.DataFrame):
+        geometry = geometry.values
+
     if isinstance(values, pd.Series):
         values = values.values
 

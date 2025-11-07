@@ -8,7 +8,7 @@ from dask.diagnostics import ProgressBar
 
 from pyinterpolate.kriging.point.ordinary import ok_calc
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
-from transform.geo import geometry_and_values_array
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 def interpolate_points(
