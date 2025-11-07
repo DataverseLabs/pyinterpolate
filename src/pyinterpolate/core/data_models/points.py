@@ -9,7 +9,7 @@ from pandas import DataFrame, Series
 from pydantic import field_validator, BaseModel, ConfigDict
 from shapely.geometry import Point
 
-from transform.geo import join_point_geometry_and_values
+from pyinterpolate.transform.geo import join_point_geometry_and_values
 
 
 class RawPoints(BaseModel):

@@ -3,8 +3,6 @@ from typing import Dict
 import numpy as np
 import pandas as pd
 
-import geopandas as gpd
-
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance

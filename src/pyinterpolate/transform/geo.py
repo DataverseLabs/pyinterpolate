@@ -32,6 +32,12 @@ def geometry_and_values_array(geometry,
 
     arr = []
 
+    if isinstance(geometry, pd.Series):
+        geometry = geometry.values
+
+    if isinstance(values, pd.Series):
+        values = values.values
+
     is_point = isinstance(geometry[0], Point)
 
     if is_point:
@@ -172,8 +178,7 @@ def join_point_geometry_and_values(geometry,
         values = values[val_column_name].values
 
     if isinstance(geometry, pd.DataFrame):
-        geom_column_name = geometry.columns[0]
-        geometry = geometry[geom_column_name].values
+        geometry = geometry.values
 
     if isinstance(geometry, gpd.GeoDataFrame):
         gdf = geometry.copy(deep=True)
