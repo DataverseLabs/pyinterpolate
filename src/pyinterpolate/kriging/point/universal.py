@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
 
-from core.data_models.points import VariogramPoints
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.core.pipelines.interpolate import interpolate_points, \
     interpolate_points_dask
 
