@@ -32,7 +32,7 @@ from scipy.interpolate import UnivariateSpline
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
 from pyinterpolate.semivariogram.indicator.indicator import TheoreticalIndicatorVariogram
-from transform.geo import geometry_and_values_array
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 class IndicatorKriging:

@@ -14,7 +14,7 @@ import numpy as np
 
 from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.distance.point import point_distance
-from transform.geo import geometry_and_values_array
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 def inverse_distance_weighting(unknown_location: ArrayLike,
