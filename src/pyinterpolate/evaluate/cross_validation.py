@@ -7,7 +7,7 @@ from tqdm import tqdm
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
-from transform.geo import geometry_and_values_array
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 def validate_kriging(

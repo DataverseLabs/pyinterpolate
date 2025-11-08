@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point.simple &#8212; pyinterpolate 1.0.2 documentation</title>
+    <title>pyinterpolate.kriging.point.simple &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -449,9 +449,11 @@
 
 <span class="k">def</span> <span class="nf">sk_calc</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">unknown_location</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+        <span class="n">unknown_location</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
         <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">max_tick</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
@@ -466,9 +468,6 @@
 <span class="sd">    theoretical_model : TheoreticalVariogram</span>
 <span class="sd">        Fitted theoretical variogram model.</span>
 
-<span class="sd">    known_locations : numpy array</span>
-<span class="sd">        The known locations: ``[x, y, value]``.</span>
-
 <span class="sd">    unknown_location : Union[List, Tuple, numpy array]</span>
 <span class="sd">        Point where you want to estimate value ``(x, y) &lt;-&gt; (lon, lat)``.</span>
 
@@ -477,6 +476,18 @@
 <span class="sd">        before processing. That&#39;s why Simple Kriging has a limited number</span>
 <span class="sd">        of applications. You must have multiple samples and well-known area</span>
 <span class="sd">        to know this parameter.</span>
+
+<span class="sd">    known_locations : numpy array</span>
+<span class="sd">        Known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    neighbors_range : float, default=None</span>
 <span class="sd">        The maximum distance where we search for neighbors.  If ``None`` is</span>
@@ -513,7 +524,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check if known locations are in the right format</span>
-    <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+    <span class="c1"># Validate points</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">known_locations</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">):</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">known_locations</span><span class="p">,</span>
+                                          <span class="n">geometries</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+                                          <span class="n">values</span><span class="o">=</span><span class="n">known_values</span><span class="p">)</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">known_locations</span><span class="o">.</span><span class="n">points</span>
 
     <span class="c1"># Check if unknown location is Point</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">,</span> <span class="n">Point</span><span class="p">):</span>
@@ -554,9 +570,12 @@
 <a class="viewcode-back" href="../../../../api/kriging/point_kriging.html#pyinterpolate.simple_kriging">[docs]</a>
 <span class="k">def</span> <span class="nf">simple_kriging</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">GeoSeries</span><span class="p">,</span> <span class="n">GeometryArray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
+        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">Point</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">GeoSeries</span><span class="p">,</span> <span class="n">GeometryArray</span><span class="p">,</span> <span class="n">ArrayLike</span><span class="p">],</span>
         <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">max_tick</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
@@ -572,10 +591,7 @@
 <span class="sd">    theoretical_model : TheoreticalVariogram</span>
 <span class="sd">        Fitted theoretical variogram model.</span>
 
-<span class="sd">    known_locations : numpy array</span>
-<span class="sd">        The known locations: ``[x, y, value]``.</span>
-
-<span class="sd">    unknown_locations : Union[np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike]</span>
+<span class="sd">    unknown_locations : Union[List, Tuple, numpy array]</span>
 <span class="sd">        Point where you want to estimate value ``(x, y) &lt;-&gt; (lon, lat)``.</span>
 
 <span class="sd">    process_mean : float</span>
@@ -583,6 +599,18 @@
 <span class="sd">        before processing. That&#39;s why Simple Kriging has a limited number</span>
 <span class="sd">        of applications. You must have multiple samples and well-known area</span>
 <span class="sd">        to know this parameter.</span>
+
+<span class="sd">    known_locations : numpy array</span>
+<span class="sd">        Known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    neighbors_range : float, default=None</span>
 <span class="sd">        The maximum distance where we search for neighbors.  If ``None`` is</span>
@@ -622,7 +650,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check if known locations are in the right format</span>
-    <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">known_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">known_locations</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">):</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">known_locations</span><span class="p">,</span>
+                                          <span class="n">geometries</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+                                          <span class="n">values</span><span class="o">=</span><span class="n">known_values</span><span class="p">)</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">known_locations</span><span class="o">.</span><span class="n">points</span>
     <span class="n">unknown_locations</span> <span class="o">=</span> <span class="n">InterpolationPoints</span><span class="p">(</span><span class="n">unknown_locations</span><span class="p">)</span><span class="o">.</span><span class="n">points</span>
 
     <span class="n">interpolated_results</span> <span class="o">=</span> <span class="p">[]</span>

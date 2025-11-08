@@ -552,7 +552,8 @@
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
-    <span class="n">ds</span><span class="o">=</span><span class="n">dem</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
 <span class="p">)</span>
@@ -1050,11 +1051,12 @@ array([ 18.47898266,  43.71946771,  73.48930987, 107.8585979 ,
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">vc1000</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
-    <span class="n">ds</span><span class="o">=</span><span class="n">dem</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
 <span class="p">)</span>
@@ -1087,12 +1089,24 @@ array([ 18.47898266,  43.71946771,  73.48930987, 107.8585979 ,
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-04-26</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-04-26</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 </section>
 </section>

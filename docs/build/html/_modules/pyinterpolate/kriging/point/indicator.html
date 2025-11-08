@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point.indicator &#8212; pyinterpolate 1.0.2 documentation</title>
+    <title>pyinterpolate.kriging.point.indicator &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -456,6 +456,7 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.ordinary</span> <span class="kn">import</span> <span class="n">ordinary_kriging</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.simple</span> <span class="kn">import</span> <span class="n">simple_kriging</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.indicator.indicator</span> <span class="kn">import</span> <span class="n">TheoreticalIndicatorVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">geometry_and_values_array</span>
 
 
 <div class="viewcode-block" id="IndicatorKriging">
@@ -466,14 +467,23 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    known_locations : numpy ndarray</span>
-<span class="sd">        The known locations ``[x, y, value]``.</span>
-
 <span class="sd">    indicator_variograms : IndicatorVariograms</span>
 <span class="sd">        Modeled variograms for each threshold.</span>
 
 <span class="sd">    unknown_locations : numpy ndarray</span>
 <span class="sd">        Points where we want to estimate value ``(x, y) &lt;-or-&gt; (lon, lat)``.</span>
+
+<span class="sd">    known_locations : numpy array, optional</span>
+<span class="sd">        The known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    kriging_type : str, default = &#39;ok&#39;</span>
 <span class="sd">        Type of kriging to perform. Possible values: &#39;ok&#39; - ordinary kriging,</span>
@@ -541,8 +551,10 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">indicator_variograms</span><span class="p">:</span> <span class="n">TheoreticalIndicatorVariogram</span><span class="p">,</span>
-                 <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                  <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                 <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">kriging_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ok&#39;</span><span class="p">,</span>
                  <span class="n">process_mean</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -551,6 +563,12 @@
                  <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                  <span class="n">get_expected_values</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">known_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">known_locations</span> <span class="o">=</span> <span class="n">geometry_and_values_array</span><span class="p">(</span>
+                <span class="n">geometry</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+                <span class="n">values</span><span class="o">=</span><span class="n">known_values</span>
+            <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">thresholds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
             <span class="nb">list</span><span class="p">(</span>
@@ -719,20 +737,22 @@
                         <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
                         <span class="n">max_tick</span><span class="o">=</span><span class="n">max_tick</span><span class="p">,</span>
                         <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
-                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span><span class="p">,</span>
+                        <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
 
                 <span class="k">elif</span> <span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;sk&#39;</span><span class="p">:</span>
                     <span class="n">_pred_arr</span> <span class="o">=</span> <span class="n">simple_kriging</span><span class="p">(</span>
                         <span class="n">theoretical_model</span><span class="o">=</span><span class="n">_item</span><span class="p">,</span>
                         <span class="n">known_locations</span><span class="o">=</span><span class="n">indicator_points</span><span class="p">,</span>
-                        <span class="n">unknown_location</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
+                        <span class="n">unknown_locations</span><span class="o">=</span><span class="n">_point</span><span class="p">,</span>
                         <span class="n">process_mean</span><span class="o">=</span><span class="n">process_mean</span><span class="p">,</span>
                         <span class="n">neighbors_range</span><span class="o">=</span><span class="n">neighbors_range</span><span class="p">,</span>
                         <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
                         <span class="n">max_tick</span><span class="o">=</span><span class="n">max_tick</span><span class="p">,</span>
                         <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
-                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
+                        <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span><span class="p">,</span>
+                        <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>

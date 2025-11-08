@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.data_models.point_support &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.core.data_models.point_support &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -423,13 +423,15 @@
                   
   <h1>Source code for pyinterpolate.core.data_models.point_support</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Hashable</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span><span class="p">,</span> \
+    <span class="n">join_any_geometry_and_values</span>
 
 
 <div class="viewcode-block" id="PointSupport">
@@ -440,18 +442,28 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    points: gpd.GeoDataFrame</span>
-<span class="sd">        Point support data, it should have geometry (Point)</span>
-<span class="sd">        column and value column.</span>
-
 <span class="sd">    blocks: Blocks</span>
 <span class="sd">        ``Blocks`` object with polygons data.</span>
 
-<span class="sd">    points_value_column: str</span>
+<span class="sd">    points: gpd.GeoDataFrame, optional</span>
+<span class="sd">        Point support data, it should have geometry (Point)</span>
+<span class="sd">        column and value column. Must be provided if ``values`` and</span>
+<span class="sd">        ``geometry`` parameters are not given.</span>
+
+<span class="sd">    values : ArrayLike, optional</span>
+<span class="sd">        Aggregated values of each block. Optional parameter, if not</span>
+<span class="sd">        given then ``ds`` must be provided.</span>
+
+<span class="sd">    geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``values``. Optional parameter, if not given then ``ds``</span>
+<span class="sd">        must be provided.</span>
+
+<span class="sd">    points_value_column: str, optional</span>
 <span class="sd">        The name of the point-support column with points</span>
 <span class="sd">        values (e.g. population).</span>
 
-<span class="sd">    points_geometry_column: str</span>
+<span class="sd">    points_geometry_column: str, optional</span>
 <span class="sd">        The name of the point-support column with a</span>
 <span class="sd">        geometry.</span>
 
@@ -589,14 +601,41 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">points</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
                  <span class="n">blocks</span><span class="p">:</span> <span class="n">Blocks</span><span class="p">,</span>
-                 <span class="n">points_value_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                 <span class="n">points_geometry_column</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">points</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">points_value_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">points_geometry_column</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">store_dropped_points</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">use_point_support_crs</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                  <span class="n">no_possible_neighbors</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_geometry_column_points</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_values_column_points</span> <span class="o">=</span> <span class="s1">&#39;values&#39;</span>
+
+        <span class="k">if</span> <span class="n">points</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">points</span> <span class="o">=</span> <span class="n">join_any_geometry_and_values</span><span class="p">(</span>
+                <span class="n">geometry</span><span class="o">=</span><span class="n">geometries</span><span class="p">,</span>
+                <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+                <span class="n">values_column_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_default_values_column_points</span>
+            <span class="p">)</span>
+            <span class="n">points_geometry_column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_geometry_column_points</span>
+            <span class="n">points_value_column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_values_column_points</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Check if user has provided column names</span>
+            <span class="k">if</span> <span class="n">points_value_column</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                    <span class="s1">&#39;You must provide points_value_column name if &#39;</span>
+                    <span class="s1">&#39;you pass points as GeoDataFrame&#39;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">points_geometry_column</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                    <span class="s1">&#39;You must provide points_geometry_column name if &#39;</span>
+                    <span class="s1">&#39;you pass points as GeoDataFrame&#39;</span>
+                <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_blocks_index_column_name</span> <span class="o">=</span> <span class="s1">&#39;blocks_index&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span> <span class="o">=</span> <span class="s1">&#39;lon&#39;</span>
