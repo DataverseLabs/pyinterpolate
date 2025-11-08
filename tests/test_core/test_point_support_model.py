@@ -29,6 +29,33 @@ def test_simple_case():
     assert (len(indexes) == len(points))
 
 
+def test_simple_case_sep_geoms():
+    blocks = Blocks(**CANCER_DATA_WITH_CENTROIDS)
+
+    values = POINT_SUPPORT_DATA['ps'][
+        POINT_SUPPORT_DATA['value_column_name']
+    ].values
+    geometries = POINT_SUPPORT_DATA['ps'][
+        POINT_SUPPORT_DATA['geometry_column_name']
+    ]
+
+    ps = PointSupport(
+        blocks=blocks,
+        values=values,
+        geometries=geometries
+    )
+
+    assert isinstance(ps, PointSupport)
+    assert isinstance(ps.point_support, gpd.GeoDataFrame)
+
+    points = ps.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = ps.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
+
+
 def test_different_crs_case_1():
     blocks = Blocks(**CANCER_DATA_WITH_CENTROIDS)
     blocks.ds = blocks.ds.to_crs(epsg=3395)

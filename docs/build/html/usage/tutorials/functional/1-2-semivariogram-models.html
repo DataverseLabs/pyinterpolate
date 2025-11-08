@@ -496,7 +496,7 @@
 <li><p>Compare variogram models</p></li>
 </ol>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -529,7 +529,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">initial_ratio</span></code>: initial <code class="docutils literal notranslate"><span class="pre">x</span></code> value between 0 and 1. We set it to <strong>0.33</strong>.</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create logistic map</span>
@@ -545,7 +545,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">values</span> <span class="o">=</span> <span class="n">generate_logistic_map</span><span class="p">(</span><span class="mf">3.9</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">)</span>
@@ -553,7 +553,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># At this point, our data is a 1-dimensional array and we can represent it as a signal</span>
@@ -573,7 +573,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 <p>Let’s reshape this signal into <strong>2-D matrix</strong>. This way, we create baseline surface for experiments.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">surface</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
@@ -581,7 +581,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
@@ -599,7 +599,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 <p>The spatial correlation of this structure is very weak. We can change it with a simple blur filter. Its size will be close to the <strong>range</strong> parameter! Blur filter averages pixel values within its range. In other words, it areas with correlated values. I set the filter size to seven (7) units, but you can set it smaller or larger for your experiments. You can apply it multiple times to get smoother areas, where values will be even more similar within the filter range.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Slightly blur image with simple mean filter</span>
@@ -611,7 +611,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># And here we are! We have our artificial surface for testing purposes!</span>
@@ -642,7 +642,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 <p>The path to transform a 2D surface into pixel coordinates has two steps. In the first step, we use <code class="docutils literal notranslate"><span class="pre">scipy</span></code> to make a sparse representation of the surface, and in the second step, we use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> to transform the sparse representation into an array.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transform data into x, y, val array</span>
@@ -652,7 +652,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># data, col, row == value, x, y</span>
@@ -664,17 +664,20 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <p>We know the data - the effective range of correlation is set to seven units, because we set the mean filter to this size.</p>
 <p>With this knowledge, we will set <code class="docutils literal notranslate"><span class="pre">step_size</span></code> into 2 units and <code class="docutils literal notranslate"><span class="pre">max_range</span></code> into 20 (way above the actual maximum range, which is 7, but we show in this way how variograms behave at a large distance where there is no spatial correlation).</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get experimental variogram</span>
 
-<span class="n">experimental</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">xyval</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">experimental</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">xyval</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">geometries</span><span class="o">=</span><span class="n">xyval</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                            <span class="n">step_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                            <span class="n">max_range</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experimental</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">covariance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">variance</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -696,7 +699,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </ul>
 <p>We can create the theoretical variogram from scratch without calling the <code class="docutils literal notranslate"><span class="pre">build_theoretical_variogram()</span></code> function or the <code class="docutils literal notranslate"><span class="pre">TheoreticalVariogram</span></code> class. Those three parameters are all that we need for modeling.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set nugget, sill and range</span>
@@ -721,7 +724,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 <li><p>spherical</p></li>
 </ul>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Crete different models: circular, cubic, exponential, gaussian, linear, power, spherical</span>
@@ -779,7 +782,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 <p>With all models calculated, let’s take a look at their output. Before we jump into the last step, which model works optimally with the experimental variogram? (It is tricky question!)</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Circular</span>
@@ -796,7 +799,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cubic</span>
@@ -813,7 +816,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># exponential</span>
@@ -830,7 +833,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Gaussian</span>
@@ -847,7 +850,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># linear</span>
@@ -864,7 +867,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># power</span>
@@ -881,7 +884,7 @@ the polynomial mapping that, for some parameters, presents chaotic behavior.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># spherical</span>
@@ -906,7 +909,7 @@ weighting (weight is constant from some distance).</p>
 <h2>Chapter 4: Compare variogram models<a class="headerlink" href="#Chapter-4:-Compare-variogram-models" title="Link to this heading">#</a></h2>
 <p>The last part is a comparison of variogram models. We will still use our “own eyes” to decide which model is the best, but this time we will plot all of them in a single plot.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot ALL models</span>
@@ -957,7 +960,11 @@ weighting (weight is constant from some distance).</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-02-28</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-02-28</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>

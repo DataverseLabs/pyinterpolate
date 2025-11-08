@@ -677,11 +677,11 @@
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">dirvar</span> <span class="o">=</span> <span class="n">DirectionalVariogram</span><span class="p">(</span><span class="n">ds</span><span class="o">=</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;log-zinc&#39;</span><span class="p">]],</span>
+<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">dirvar</span> <span class="o">=</span> <span class="n">DirectionalVariogram</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;log-zinc&#39;</span><span class="p">],</span>
+                              <span class="n">geometries</span><span class="o">=</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]],</span>
                               <span class="n">step_size</span><span class="o">=</span><span class="n">STEP_SIZE</span><span class="p">,</span>
                               <span class="n">max_range</span><span class="o">=</span><span class="n">MAX_RANGE</span><span class="p">,</span>
-                              <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                              <span class="n">dir_neighbors_selection_method</span><span class="o">=</span><span class="s1">&#39;e&#39;</span><span class="p">)</span>
+                              <span class="n">tolerance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="n">dirvar</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -798,7 +798,8 @@
 <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">DIRECTIONS</span><span class="p">:</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theoretical_models</span><span class="p">[</span><span class="n">direction</span><span class="p">],</span>
-        <span class="n">known_locations</span><span class="o">=</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;log-zinc&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+        <span class="n">known_values</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;log-zinc&#39;</span><span class="p">],</span>
+        <span class="n">known_geometries</span><span class="o">=</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]],</span>
         <span class="n">unknown_locations</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
         <span class="n">max_tick</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
@@ -818,11 +819,11 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3103/3103 [00:02&lt;00:00, 1081.21it/s]
-100%|██████████| 3103/3103 [00:04&lt;00:00, 721.62it/s]
-100%|██████████| 3103/3103 [00:05&lt;00:00, 607.49it/s]
-100%|██████████| 3103/3103 [00:04&lt;00:00, 723.72it/s]
-100%|██████████| 3103/3103 [00:02&lt;00:00, 1053.16it/s]
+100%|██████████| 3103/3103 [00:00&lt;00:00, 5268.71it/s]
+100%|██████████| 3103/3103 [00:01&lt;00:00, 2714.99it/s]
+100%|██████████| 3103/3103 [00:01&lt;00:00, 2933.21it/s]
+100%|██████████| 3103/3103 [00:01&lt;00:00, 3026.47it/s]
+100%|██████████| 3103/3103 [00:01&lt;00:00, 2954.24it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -956,7 +957,7 @@
 </div>
 <p>Directional Kriging clearly shows the leading direction and is even more pronounced in the variance error maps. At the end, let’s compare the mean of directional interpolations to the isotropic interpolation result:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">mean_directional_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
@@ -975,12 +976,12 @@
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-/var/folders/vv/zx11_2ts7tjfsny482gs54s80000gr/T/ipykernel_75618/81901919.py:1: RuntimeWarning: Mean of empty slice
+/var/folders/vv/zx11_2ts7tjfsny482gs54s80000gr/T/ipykernel_5986/81901919.py:1: RuntimeWarning: Mean of empty slice
   mean_directional_results = np.nanmean(
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">kriged_results</span><span class="p">[</span><span class="s1">&#39;ISO&#39;</span><span class="p">][</span><span class="s1">&#39;mean_dir_pred&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_directional_results</span>
@@ -988,7 +989,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">_</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
@@ -1019,20 +1020,20 @@
 </tr>
 </thead>
 <tbody>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization, and <strong>known_values</strong> and <strong>known_geometries</strong> for kriging process (instead of <strong>known_locations</strong> parameter)</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-09-16</p></td>
+<td><p>Removed <code class="docutils literal notranslate"><span class="pre">dir_neighbors_selection_method</span></code> parameter</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
 <tr class="row-even"><td><p>2025-05-17</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

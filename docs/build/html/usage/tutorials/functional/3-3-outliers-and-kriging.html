@@ -644,13 +644,13 @@
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 count    3447.000000
-mean       41.335986
-std        22.165907
-min        14.825253
-25%        20.056290
-50%        39.114426
-75%        56.079584
-max       106.866257
+mean       40.508033
+std        21.854770
+min        14.495489
+25%        19.928435
+50%        36.851810
+75%        54.452948
+max       103.775902
 Name: dem, dtype: float64
 </pre></div></div>
 </div>
@@ -668,14 +668,14 @@ Name: dem, dtype: float64
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-count    3425.000000
-mean       40.971479
-std        21.760020
-min        14.825253
-25%        20.032963
-50%        38.735107
-75%        55.439457
-max        91.712456
+count    3402.000000
+mean       39.821603
+std        21.158383
+min        14.495489
+25%        19.848926
+50%        36.278767
+75%        53.841612
+max        88.714569
 Name: dem, dtype: float64
 </pre></div></div>
 </div>
@@ -699,7 +699,8 @@ Name: dem, dtype: float64
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_with</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
-    <span class="n">ds</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
 <span class="p">)</span>
@@ -735,7 +736,8 @@ True
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">cloud_without</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span>
-    <span class="n">ds</span><span class="o">=</span><span class="n">train_without_outliers</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">train_without_outliers</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">geometries</span><span class="o">=</span><span class="n">train_without_outliers</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
 <span class="p">)</span>
@@ -949,28 +951,32 @@ semivariances to gain more insight into the transformations.</p>
 
 <span class="n">raw_interpolated</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">raw_theo</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locs</span><span class="p">,</span>
     <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">raw_no_interpolated</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">raw_theo_no_out</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locs</span><span class="p">,</span>
     <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">proc_raw_interpolated</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">prep_theo</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locs</span><span class="p">,</span>
     <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">proc_no_interpolated</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">prep_theo_no_out</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locs</span><span class="p">,</span>
     <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
@@ -982,10 +988,10 @@ semivariances to gain more insight into the transformations.</p>
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3448/3448 [00:14&lt;00:00, 243.12it/s]
-100%|██████████| 3448/3448 [00:14&lt;00:00, 245.16it/s]
-100%|██████████| 3448/3448 [00:15&lt;00:00, 227.41it/s]
-100%|██████████| 3448/3448 [00:12&lt;00:00, 271.93it/s]
+100%|██████████| 3448/3448 [00:01&lt;00:00, 2073.26it/s]
+100%|██████████| 3448/3448 [00:01&lt;00:00, 2080.99it/s]
+100%|██████████| 3448/3448 [00:01&lt;00:00, 2095.44it/s]
+100%|██████████| 3448/3448 [00:01&lt;00:00, 2089.63it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -1068,38 +1074,38 @@ semivariances to gain more insight into the transformations.</p>
   <tbody>
     <tr>
       <th>mean</th>
-      <td>8.278387e+00</td>
-      <td>8.278387e+00</td>
-      <td>8.278387e+00</td>
-      <td>8.278387e+00</td>
+      <td>8.772916e+00</td>
+      <td>8.772916e+00</td>
+      <td>8.772916e+00</td>
+      <td>8.772916e+00</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>2.740584e+01</td>
-      <td>2.740584e+01</td>
-      <td>2.740584e+01</td>
-      <td>2.740584e+01</td>
+      <td>2.774954e+01</td>
+      <td>2.774954e+01</td>
+      <td>2.774954e+01</td>
+      <td>2.774954e+01</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>8.863351e-01</td>
-      <td>8.863351e-01</td>
-      <td>8.863351e-01</td>
-      <td>8.863351e-01</td>
+      <td>9.336923e-01</td>
+      <td>9.336923e-01</td>
+      <td>9.336923e-01</td>
+      <td>9.336923e-01</td>
     </tr>
     <tr>
       <th>min</th>
-      <td>1.372719e-10</td>
-      <td>1.372719e-10</td>
-      <td>1.372719e-10</td>
-      <td>1.372719e-10</td>
+      <td>6.497421e-07</td>
+      <td>6.497421e-07</td>
+      <td>6.497421e-07</td>
+      <td>6.497421e-07</td>
     </tr>
     <tr>
       <th>max</th>
-      <td>6.869088e+02</td>
-      <td>6.869088e+02</td>
-      <td>6.869088e+02</td>
-      <td>6.869088e+02</td>
+      <td>6.072592e+02</td>
+      <td>6.072592e+02</td>
+      <td>6.072592e+02</td>
+      <td>6.072592e+02</td>
     </tr>
   </tbody>
 </table>
@@ -1120,7 +1126,11 @@ semivariances to gain more insight into the transformations.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-05-17</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization, and <strong>known_values</strong> and <strong>known_geometries</strong> for kriging process (instead of <strong>known_locations</strong> parameter)</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-05-17</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>

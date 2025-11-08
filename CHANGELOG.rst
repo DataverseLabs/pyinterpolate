@@ -1,6 +1,45 @@
 Changes - from version >= 1.x
 =============================
 
+2025-11-0
+----------
+
+**version 1.2.0**
+
+* [enhancement] `Blocks` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `calculate_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `interpolate_points()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `validate_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `validate_kriging()` has new parameter: `progress_bar` that controls `tqdm` progress bar
+* [enhancement] `inverse_distance_weighting()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `IndicatorKriging` class has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `ordinary_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `simple_kriging()` function has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [enhancement] `UniversalKriging` class has the new parameters `known_values` and `known_geometries`, that might be provided instead of the `known_locations` parameter
+* [api change] `inblock_semivariance()` function is now private: `_inblock_semivariance()`
+* [enhancement] `DirectionalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `DirectionalVariogram()` class
+* [enhancement] `ExperimentalVariogram()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `ExperimentalVariogram()` class
+* [enhancement] `build_experimental_variogram()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [tests] Added basic tests for `build_experimental_variogram()` function
+* [enhancement] `VariogramCloud()` class has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [api change] `directional_weighted_semivariance()` function is now private: `_directional_weighted_semivariance()`
+* [api change] `omnidirectional_variogram()` function is now private: `_omnidirectional_variogram()`
+* [api change] `omnidirectional_semivariogram_cloud()` function is now private: `_omnidirectional_semivariogram_cloud()`
+* [enhancement] `calculate_covariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [api change] `directional_covariance()` function is now private: `_directional_covariance()`
+* [api change] `omnidirectional_covariance()` function is now private: `_omnidirectional_covariance()`
+* [api change] `directional_semivariance()` function is now private: `_directional_semivariance()`
+* [api change] `directional_semivariance_cloud()` function is now private: `_directional_semivariance_cloud()`
+* [api change] `omnidirectional_semivariance()` function is now private: `_omnidirectional_semivariance()`
+* [enhancement] `point_cloud_semivariance()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `code_indicator()` function has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `ExperimentalIndicatorVariogram` and `IndicatorVariogramData` classes have the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [enhancement] `PointSupport` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
+* [docs] updated tutorials - new parameters are used in kriging operations, and when experimental variogram is computed
+* # todo [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
+
 2025-10-11
 ----------
 

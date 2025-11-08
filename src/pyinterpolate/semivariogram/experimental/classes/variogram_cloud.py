@@ -1,11 +1,13 @@
 import copy
 from typing import Collection, Dict, Union
+from numpy.typing import ArrayLike
 
 import numpy as np
 import pandas as pd
 from prettytable import PrettyTable
 from scipy.stats import skew, kurtosis
 
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import (
     ExperimentalVariogram)
 from pyinterpolate.transform.statistical import remove_outliers
@@ -89,6 +91,15 @@ class VariogramCloud:
     ds : numpy array
         ``[x, y, value]``
 
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
+
     step_size : float
         The fixed distance between lags grouping point neighbors.
 
@@ -162,7 +173,9 @@ class VariogramCloud:
     """
 
     def __init__(self,
-                 ds: np.ndarray,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  step_size: float = None,
                  max_range: float = None,
                  direction: float = None,
@@ -172,6 +185,8 @@ class VariogramCloud:
 
         self._experimental_variogram = ExperimentalVariogram(
             ds=ds,
+            values=values,
+            geometries=geometries,
             step_size=step_size,
             max_range=max_range,
             direction=direction,

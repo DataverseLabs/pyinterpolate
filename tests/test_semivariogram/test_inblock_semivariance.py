@@ -30,6 +30,7 @@ THEO.autofit(
     return_params=False
 )
 
+
 def test_inblock_semivariance():
     inblock_semivariances = calculate_inblock_semivariance(
         point_support=PS,

@@ -39,7 +39,7 @@ def test_omnidirectional_covariogram():
     MAX_RANGE = 4
 
     covariance = calculate_covariance(
-        REFERENCE_INPUT,
+        ds=REFERENCE_INPUT,
         step_size=STEP_SIZE,
         max_range=MAX_RANGE
     )
@@ -64,6 +64,61 @@ def test_directional_covariogram():
     MAX_RANGE = 6
     dirvar = calculate_covariance(
         ds=ds,
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE,
+        direction=15,
+        tolerance=0.25
+    )
+    assert isinstance(dirvar, np.ndarray)
+
+
+def test_omnidirectional_covariogram_sep_geom():
+    REFERENCE_INPUT = np.array([
+        [0, 0, 8],
+        [1, 0, 6],
+        [2, 0, 4],
+        [3, 0, 3],
+        [4, 0, 6],
+        [5, 0, 5],
+        [6, 0, 7],
+        [7, 0, 2],
+        [8, 0, 8],
+        [9, 0, 9],
+        [10, 0, 5],
+        [11, 0, 6],
+        [12, 0, 3]
+    ])
+    STEP_SIZE = 1
+    MAX_RANGE = 4
+
+    covariance = calculate_covariance(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+
+    expected_output = EmpiricalCovarianceData.output_we_omni
+
+    assert isinstance(covariance, np.ndarray)
+    assert covariance.shape == (3, 3)
+    assert np.allclose(covariance, expected_output, rtol=3)
+
+
+def test_directional_covariogram_sep_geom():
+    try:
+        ds = np.load('armstrong_data.npy')
+    except FileNotFoundError:
+        try:
+            ds = np.load('test_semivariogram/armstrong_data.npy')
+        except FileNotFoundError:
+            ds = np.load('tests/test_semivariogram/armstrong_data.npy')
+
+    STEP_SIZE = 1.5
+    MAX_RANGE = 6
+    dirvar = calculate_covariance(
+        values=ds[:, -1],
+        geometries=ds[:, :-1],
         step_size=STEP_SIZE,
         max_range=MAX_RANGE,
         direction=15,

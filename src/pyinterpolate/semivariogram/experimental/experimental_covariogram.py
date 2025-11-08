@@ -1,4 +1,5 @@
 from typing import Union, List, Any
+from numpy.typing import ArrayLike
 
 import numpy as np
 
@@ -10,11 +11,13 @@ from pyinterpolate.semivariogram.experimental.functions.covariance import \
 from pyinterpolate.semivariogram.experimental.functions.directional import \
     from_ellipse
 from pyinterpolate.semivariogram.experimental.functions.general import \
-    omnidirectional_variogram
+    _omnidirectional_variogram
 from pyinterpolate.semivariogram.lags.lags import get_lags
 
 
-def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
+def calculate_covariance(ds: Union[ArrayLike, VariogramPoints] = None,
+                         values: ArrayLike = None,
+                         geometries: ArrayLike = None,
                          step_size: float = None,
                          max_range: float = None,
                          direction: float = None,
@@ -26,8 +29,17 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
 
     Parameters
     ----------
-    ds : numpy array
+    ds : ArrayLike, optional
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -132,6 +144,12 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
     4.2485207100591715
     """
 
+    # Validate points
+    if not isinstance(ds, VariogramPoints):
+        ds = VariogramPoints(points=ds,
+                             geometries=geometries,
+                             values=values)
+
     # Validation
     # Validate points
     if not isinstance(ds, VariogramPoints):
@@ -149,24 +167,24 @@ def calculate_covariance(ds: Union[np.ndarray, VariogramPoints],
 
     # Get covariances
     if direction is not None and tolerance is not None:
-        experimental_covariances = directional_covariance(
+        experimental_covariances = _directional_covariance(
             ds.points,
             lags,
             direction,
             tolerance
         )
     else:
-        experimental_covariances = omnidirectional_covariance(
+        experimental_covariances = _omnidirectional_covariance(
             ds.points, lags
         )
 
     return experimental_covariances
 
 
-def directional_covariance(points: np.ndarray,
-                           lags: Union[List, np.ndarray],
-                           direction: float,
-                           tolerance: float):
+def _directional_covariance(points: np.ndarray,
+                            lags: Union[List, np.ndarray],
+                            direction: float,
+                            tolerance: float):
     """
     Function calculates directional covariances.
 
@@ -213,7 +231,7 @@ def directional_covariance(points: np.ndarray,
     return output_covariances
 
 
-def omnidirectional_covariance(points: np.array, lags: np.array) -> np.array:
+def _omnidirectional_covariance(points: np.array, lags: np.array) -> np.array:
     """Function calculates covariance from given points.
 
     Parameters
@@ -227,7 +245,7 @@ def omnidirectional_covariance(points: np.array, lags: np.array) -> np.array:
     covariances : numpy array
     """
 
-    sorted_covariances = omnidirectional_variogram(
+    sorted_covariances = _omnidirectional_variogram(
         fn=covariance_fn,
         points=points,
         lags=lags,

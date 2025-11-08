@@ -1,4 +1,5 @@
 from typing import Tuple, Union
+from numpy.typing import ArrayLike
 
 import numpy as np
 from tqdm import tqdm
@@ -6,28 +7,41 @@ from tqdm import tqdm
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 def validate_kriging(
-        points: np.ndarray,
         theoretical_model: TheoreticalVariogram,
+        points: ArrayLike = None,
+        values: ArrayLike = None,
+        geometries: ArrayLike = None,
         how: str = 'ok',
         neighbors_range: Union[float, None] = None,
         no_neighbors: int = 4,
         use_all_neighbors_in_range=False,
         sk_mean: Union[float, None] = None,
-        allow_approximate_solutions=False
+        allow_approximate_solutions=False,
+        progress_bar: bool = True
 ) -> Tuple[float, float, np.ndarray]:
     """
     Function performs cross-validation of kriging models.
 
     Parameters
     ----------
-    points : numpy array
-        Known points and their values.
-
     theoretical_model : TheoreticalVariogram
         Fitted variogram model.
+
+    points : ArrayLike, optional
+        Known points and their values ``[x, y, value]``.
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``points`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then
+        ``points`` must be provided. Point type geometry.
 
     how : str, default='ok'
         Select what kind of kriging you want to perform
@@ -63,6 +77,9 @@ def validate_kriging(
         when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
+    progress_bar : bool, default=True
+        Show process status.
+
     Returns
     -------
     : Tuple
@@ -89,8 +106,14 @@ def validate_kriging(
     # Initialize array for coordinates and errors
     coordinates_and_errors = []
 
+    if points is None:
+        points = geometry_and_values_array(
+            geometry=geometries,
+            values=values
+        )
+
     # Divide observations
-    for idx, row in enumerate(tqdm(points)):
+    for idx, row in enumerate(tqdm(points, disable=not progress_bar)):
         clipped_point = row[:-1]
         data_points = np.delete(points, idx, 0)
 
@@ -102,7 +125,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         elif how == 'sk':
             preds = simple_kriging(
@@ -113,7 +137,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         else:
             raise KeyError(

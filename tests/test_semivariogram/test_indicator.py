@@ -66,3 +66,33 @@ def test_theoretical_indicator_variogram():
     assert isinstance(vrgs, TheoreticalIndicatorVariogram)
     assert isinstance(vrgs.theoretical_indicator_variograms, Dict)
     assert len(vrgs.theoretical_indicator_variograms) == 5
+
+
+def test_experimental_indicator_variogram_sep_geom():
+    evar = ExperimentalIndicatorVariogram(values=TRAIN[:, -1],
+                                          geometries=TRAIN[:, :-1],
+                                          number_of_thresholds=5,
+                                          step_size=STEP_R,
+                                          max_range=MX_RNG)
+
+    # evar.show()
+
+    assert isinstance(evar, ExperimentalIndicatorVariogram)
+    assert isinstance(evar.experimental_models, Dict)
+    assert isinstance(evar.ds, IndicatorVariogramData)
+
+
+def test_theoretical_indicator_variogram_sep_geom():
+    evar = ExperimentalIndicatorVariogram(values=TRAIN[:, -1],
+                                          geometries=TRAIN[:, :-1],
+                                          number_of_thresholds=5,
+                                          step_size=STEP_R,
+                                          max_range=MX_RNG)
+    vrgs = TheoreticalIndicatorVariogram(
+        experimental_indicator_variogram=evar
+    )
+    vrgs.fit()
+    # vrgs.show()
+    assert isinstance(vrgs, TheoreticalIndicatorVariogram)
+    assert isinstance(vrgs.theoretical_indicator_variograms, Dict)
+    assert len(vrgs.theoretical_indicator_variograms) == 5

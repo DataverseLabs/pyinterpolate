@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.point.universal &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.kriging.point.universal &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -427,6 +427,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.core.pipelines.interpolate</span> <span class="kn">import</span> <span class="n">interpolate_points</span><span class="p">,</span> \
     <span class="n">interpolate_points_dask</span>
 
@@ -517,8 +519,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    known_points : numpy array</span>
-<span class="sd">        Known points and their values.</span>
+<span class="sd">    known_points : ArrayLike, optional</span>
+<span class="sd">        Known points and their values ``[lon, lat, value]``</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    fitted_regression_model : optional</span>
 <span class="sd">        Any kind of regression model with `.predict()` method that could be</span>
@@ -571,9 +582,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">known_points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">known_points</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">fitted_regression_model</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Core</span>
+        <span class="n">known_points</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">known_points</span><span class="p">,</span>
+                                       <span class="n">geometries</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+                                       <span class="n">values</span><span class="o">=</span><span class="n">known_values</span><span class="p">)</span>
+        <span class="n">known_points</span> <span class="o">=</span> <span class="n">known_points</span><span class="o">.</span><span class="n">points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">known_points</span> <span class="o">=</span> <span class="n">known_points</span>
         <span class="c1"># Trend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trend_model</span> <span class="o">=</span> <span class="kc">None</span>

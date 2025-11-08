@@ -424,12 +424,14 @@
   <h1>Source code for pyinterpolate.semivariogram.experimental.classes.variogram_cloud</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Collection</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">prettytable</span> <span class="kn">import</span> <span class="n">PrettyTable</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurtosis</span>
 
+<span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.experimental.classes.experimental_variogram</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ExperimentalVariogram</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.transform.statistical</span> <span class="kn">import</span> <span class="n">remove_outliers</span>
@@ -515,6 +517,15 @@
 <span class="sd">    ds : numpy array</span>
 <span class="sd">        ``[x, y, value]``</span>
 
+<span class="sd">    values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``ds`` must be provided.</span>
+
+<span class="sd">    geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``values``. Optional parameter, if not given then ``ds``</span>
+<span class="sd">        must be provided. Point type geometry.</span>
+
 <span class="sd">    step_size : float</span>
 <span class="sd">        The fixed distance between lags grouping point neighbors.</span>
 
@@ -588,7 +599,9 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">ds</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">ds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                  <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -598,6 +611,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_experimental_variogram</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
             <span class="n">ds</span><span class="o">=</span><span class="n">ds</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">geometries</span><span class="o">=</span><span class="n">geometries</span><span class="p">,</span>
             <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
             <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">,</span>
             <span class="n">direction</span><span class="o">=</span><span class="n">direction</span><span class="p">,</span>

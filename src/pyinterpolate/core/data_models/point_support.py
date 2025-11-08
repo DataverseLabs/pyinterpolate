@@ -1,11 +1,13 @@
 from typing import Tuple, Union, List, Iterable, Hashable
+from numpy.typing import ArrayLike
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 
 from pyinterpolate.core.data_models.blocks import Blocks
-from pyinterpolate.transform.geo import points_to_lon_lat
+from pyinterpolate.transform.geo import points_to_lon_lat, \
+    join_any_geometry_and_values
 
 
 class PointSupport:
@@ -14,18 +16,28 @@ class PointSupport:
 
     Parameters
     ----------
-    points: gpd.GeoDataFrame
-        Point support data, it should have geometry (Point)
-        column and value column.
-
     blocks: Blocks
         ``Blocks`` object with polygons data.
 
-    points_value_column: str
+    points: gpd.GeoDataFrame, optional
+        Point support data, it should have geometry (Point)
+        column and value column. Must be provided if ``values`` and
+        ``geometry`` parameters are not given.
+
+    values : ArrayLike, optional
+        Aggregated values of each block. Optional parameter, if not
+        given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided.
+
+    points_value_column: str, optional
         The name of the point-support column with points
         values (e.g. population).
 
-    points_geometry_column: str
+    points_geometry_column: str, optional
         The name of the point-support column with a
         geometry.
 
@@ -163,14 +175,41 @@ class PointSupport:
     """
 
     def __init__(self,
-                 points: gpd.GeoDataFrame,
                  blocks: Blocks,
-                 points_value_column: str,
-                 points_geometry_column: str,
+                 points: gpd.GeoDataFrame = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
+                 points_value_column: str = None,
+                 points_geometry_column: str = None,
                  store_dropped_points: bool = False,
                  use_point_support_crs: bool = False,
                  no_possible_neighbors=0,
                  verbose=True):
+
+        self._default_geometry_column_points = 'geometry'
+        self._default_values_column_points = 'values'
+
+        if points is None:
+            points = join_any_geometry_and_values(
+                geometry=geometries,
+                values=values,
+                values_column_name=self._default_values_column_points
+            )
+            points_geometry_column = self._default_geometry_column_points
+            points_value_column = self._default_values_column_points
+        else:
+            # Check if user has provided column names
+            if points_value_column is None:
+                raise AttributeError(
+                    'You must provide points_value_column name if '
+                    'you pass points as GeoDataFrame'
+                )
+
+            if points_geometry_column is None:
+                raise AttributeError(
+                    'You must provide points_geometry_column name if '
+                    'you pass points as GeoDataFrame'
+                )
 
         self._default_blocks_index_column_name = 'blocks_index'
         self._lon_col_name = 'lon'

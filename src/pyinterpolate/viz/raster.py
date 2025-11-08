@@ -6,8 +6,10 @@ Authors
 1. Szymon Moliński | @SimonMolinsky
 """
 from typing import Dict
+from numpy.typing import ArrayLike
 
 import numpy as np
+from pyinterpolate.core.data_models.points import VariogramPoints
 
 from pyinterpolate.core.pipelines.interpolate import interpolate_points
 from pyinterpolate.distance.point import point_distance
@@ -72,7 +74,9 @@ def set_dimensions(xs, ys, dmax, buffer=0.0):
     return x_dim_coords, y_dim_coords, [step, xmin, xmax, ymin, ymax]
 
 
-def interpolate_raster(data,
+def interpolate_raster(known_locations: ArrayLike = None,
+                       known_values: ArrayLike = None,
+                       known_geometries: ArrayLike = None,
                        dim=1000,
                        buffer=0.0,
                        number_of_neighbors=4,
@@ -85,8 +89,17 @@ def interpolate_raster(data,
 
     Parameters
     ----------
-    data : numpy array
-        ``[coordinate x, coordinate y, value]``.
+    known_locations : numpy array
+        Known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     dim : int
         Number of pixels (points) of a larger dimension (it could be width
@@ -150,24 +163,29 @@ def interpolate_raster(data,
 
     # Set dimension
 
-    if isinstance(data, list):
-        data = np.array(data)
+    # Check if known locations are in the right format
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
 
-    x_coords, y_coords, props = set_dimensions(data[:, 0],
-                                               data[:, 1],
+    x_coords, y_coords, props = set_dimensions(known_locations[:, 0],
+                                               known_locations[:, 1],
                                                dim,
                                                buffer)
 
     # Calculate semivariance if not provided
 
     if semivariogram_model is None:
-        distances = point_distance(data[:, :-1], data[:, :-1])
+        distances = point_distance(known_locations[:, :-1],
+                                   known_locations[:, :-1])
 
         maximum_range = np.max(distances)
         number_of_divisions = 100
         step_size = maximum_range / number_of_divisions
 
-        evariogram = calculate_semivariance(ds=data,
+        evariogram = calculate_semivariance(ds=known_locations,
                                             step_size=step_size,
                                             max_range=maximum_range,
                                             direction=direction,
@@ -188,7 +206,7 @@ def interpolate_raster(data,
 
     k = interpolate_points(
         theoretical_model=ts,
-        known_locations=data,
+        known_locations=known_locations,
         unknown_locations=interpolation_points,
         no_neighbors=number_of_neighbors,
         allow_approximate_solutions=allow_approx_solutions)

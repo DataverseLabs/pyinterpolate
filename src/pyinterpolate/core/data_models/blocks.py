@@ -22,21 +22,32 @@ from shapely.geometry import Polygon
 
 from pyinterpolate.distance.angular import calc_angles
 from pyinterpolate.distance.point import point_distance
-from pyinterpolate.transform.geo import points_to_lon_lat, largest_geometry
+from pyinterpolate.transform.geo import points_to_lon_lat, largest_geometry, \
+    join_any_geometry_and_values
 
 
-# TODO: if multipolygon then get coordinates /
-#       representative points from the largest block - as an option
 class Blocks:
     """Class represents aggregated blocks data.
 
     Parameters
     ----------
-    ds : gpd.GeoDataFrame
-        Dataset with block values.
+    ds : gpd.GeoDataFrame, optional
+        Dataset with block values. Must be provided if ``values`` and
+        ``geometry`` parameters are not given.
 
-    value_column_name : Any
-        Name of the column with block rates.
+    values : ArrayLike, optional
+        Aggregated values of each block. Optional parameter, if not
+        given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided.
+
+    value_column_name : Any, optional
+        Name of the column with block rates. Must be provided when
+        the ``ds`` parameter is given, otherwise it is set to 'values' if
+        not provided.
 
     geometry_column_name : Any, default = 'geometry'
         Name of the column with a block geometry.
@@ -177,16 +188,18 @@ class Blocks:
     """
 
     def __init__(self,
-                 ds: gpd.GeoDataFrame,
-                 value_column_name,
-                 geometry_column_name='geometry',
-                 index_column_name=None,
-                 representative_points_column_name=None,
-                 representative_points_from_centroid=False,
-                 representative_points_from_random_sample=False,
-                 representative_points_from_largest_area=True,
-                 distances_between_representative_points=True,
-                 angles_between_representative_points=False):
+                 ds: gpd.GeoDataFrame = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
+                 value_column_name: str = None,
+                 geometry_column_name = 'geometry',
+                 index_column_name = None,
+                 representative_points_column_name = None,
+                 representative_points_from_centroid = False,
+                 representative_points_from_random_sample = False,
+                 representative_points_from_largest_area = True,
+                 distances_between_representative_points = True,
+                 angles_between_representative_points = False):
 
         # Helper params
         self._lon_col_name = 'lon'
@@ -202,7 +215,15 @@ class Blocks:
         self._rep_ps_sample = representative_points_from_random_sample
         self._rep_ps_largest_area = representative_points_from_largest_area
 
-        self.ds = ds.copy(deep=True)
+        if ds is not None:
+            self.ds = ds.copy(deep=True)
+        else:
+            if value_column_name is None:
+                value_column_name = 'values'
+            self.ds = join_any_geometry_and_values(geometry=geometries,
+                                                   values=values,
+                                                   values_column_name=value_column_name)
+
         self.value_column_name = value_column_name
         self.index_column_name = index_column_name
         self.geometry_column_name = geometry_column_name

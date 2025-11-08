@@ -168,3 +168,50 @@ def test_weighted_directional_semivariogram():
     )
 
     assert isinstance(semivariance, np.ndarray)
+
+
+def test_omnidirectional_semivariogram_values_geometry_inputs():
+    import geopandas as gpd
+
+
+    REFERENCE_INPUT = np.array([
+        [0, 0, 8],
+        [1, 0, 6],
+        [2, 0, 4],
+        [3, 0, 3],
+        [4, 0, 6],
+        [5, 0, 5],
+        [6, 0, 7],
+        [7, 0, 2],
+        [8, 0, 8],
+        [9, 0, 9],
+        [10, 0, 5],
+        [11, 0, 6],
+        [12, 0, 3]
+    ])
+    STEP_SIZE = 1
+    MAX_RANGE = 4
+
+    GEOMETRY = gpd.points_from_xy(
+        x=REFERENCE_INPUT[:, 0], y=REFERENCE_INPUT[:, 1]
+    )
+
+    semivariance = calculate_semivariance(
+        ds=None,
+        values=REFERENCE_INPUT[:, -1],
+        geometries=GEOMETRY,
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+
+    expected_output = np.array(
+        [
+            [1., 4.625, 24.],
+            [2., 5.22727273, 22.],
+            [3., 6., 20.]
+        ]
+    )
+
+    assert isinstance(semivariance, np.ndarray)
+    assert semivariance.shape == (3, 3)
+    assert np.allclose(semivariance, expected_output)

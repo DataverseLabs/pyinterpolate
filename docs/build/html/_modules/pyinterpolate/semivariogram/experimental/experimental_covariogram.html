@@ -423,6 +423,7 @@
                   
   <h1>Source code for pyinterpolate.semivariogram.experimental.experimental_covariogram</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -434,13 +435,15 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.experimental.functions.directional</span> <span class="kn">import</span> \
     <span class="n">from_ellipse</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.experimental.functions.general</span> <span class="kn">import</span> \
-    <span class="n">omnidirectional_variogram</span>
+    <span class="n">_omnidirectional_variogram</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.lags.lags</span> <span class="kn">import</span> <span class="n">get_lags</span>
 
 
 <div class="viewcode-block" id="calculate_covariance">
 <a class="viewcode-back" href="../../../../api/semivariogram/experimental.html#pyinterpolate.calculate_covariance">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_covariance</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">],</span>
+<span class="k">def</span> <span class="nf">calculate_covariance</span><span class="p">(</span><span class="n">ds</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                         <span class="n">geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="n">step_size</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="n">max_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                          <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -452,8 +455,17 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    ds : numpy array</span>
+<span class="sd">    ds : ArrayLike, optional</span>
 <span class="sd">        ``[x, y, value]``</span>
+
+<span class="sd">    values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``ds`` must be provided.</span>
+
+<span class="sd">    geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``values``. Optional parameter, if not given then ``ds``</span>
+<span class="sd">        must be provided. Point type geometry.</span>
 
 <span class="sd">    step_size : float</span>
 <span class="sd">        The fixed distance between lags grouping point neighbors.</span>
@@ -558,6 +570,12 @@
 <span class="sd">    4.2485207100591715</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># Validate points</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">):</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">VariogramPoints</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">ds</span><span class="p">,</span>
+                             <span class="n">geometries</span><span class="o">=</span><span class="n">geometries</span><span class="p">,</span>
+                             <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">)</span>
+
     <span class="c1"># Validation</span>
     <span class="c1"># Validate points</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">):</span>
@@ -575,14 +593,14 @@
 
     <span class="c1"># Get covariances</span>
     <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tolerance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">experimental_covariances</span> <span class="o">=</span> <span class="n">directional_covariance</span><span class="p">(</span>
+        <span class="n">experimental_covariances</span> <span class="o">=</span> <span class="n">_directional_covariance</span><span class="p">(</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">points</span><span class="p">,</span>
             <span class="n">lags</span><span class="p">,</span>
             <span class="n">direction</span><span class="p">,</span>
             <span class="n">tolerance</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">experimental_covariances</span> <span class="o">=</span> <span class="n">omnidirectional_covariance</span><span class="p">(</span>
+        <span class="n">experimental_covariances</span> <span class="o">=</span> <span class="n">_omnidirectional_covariance</span><span class="p">(</span>
             <span class="n">ds</span><span class="o">.</span><span class="n">points</span><span class="p">,</span> <span class="n">lags</span>
         <span class="p">)</span>
 
@@ -590,10 +608,10 @@
 
 
 
-<span class="k">def</span> <span class="nf">directional_covariance</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                           <span class="n">lags</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
-                           <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-                           <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_directional_covariance</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                            <span class="n">lags</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span>
+                            <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                            <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates directional covariances.</span>
 
@@ -640,7 +658,7 @@
     <span class="k">return</span> <span class="n">output_covariances</span>
 
 
-<span class="k">def</span> <span class="nf">omnidirectional_covariance</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">lags</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_omnidirectional_covariance</span><span class="p">(</span><span class="n">points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">lags</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Function calculates covariance from given points.</span>
 
 <span class="sd">    Parameters</span>
@@ -654,7 +672,7 @@
 <span class="sd">    covariances : numpy array</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">sorted_covariances</span> <span class="o">=</span> <span class="n">omnidirectional_variogram</span><span class="p">(</span>
+    <span class="n">sorted_covariances</span> <span class="o">=</span> <span class="n">_omnidirectional_variogram</span><span class="p">(</span>
         <span class="n">fn</span><span class="o">=</span><span class="n">covariance_fn</span><span class="p">,</span>
         <span class="n">points</span><span class="o">=</span><span class="n">points</span><span class="p">,</span>
         <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span>
