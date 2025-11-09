@@ -1,10 +1,9 @@
+![PyPI - Version](https://img.shields.io/pypi/v/pyinterpolate)  ![Conda Version](https://img.shields.io/conda/v/conda-forge/pyinterpolate)
+ ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyinterpolate)
+
 ![JOSS](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) [![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/6a18f86ab3927e48009107e7eda7d6c833a4a610/coverage.svg) 
-
-
-
-
+[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/6a18f86ab3927e48009107e7eda7d6c833a4a610/coverage.svg)
 
 # Pyinterpolate
 
