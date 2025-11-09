@@ -38,6 +38,7 @@ Changes - from version >= 1.x
 * [enhancement] `ExperimentalIndicatorVariogram` and `IndicatorVariogramData` classes have the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [enhancement] `PointSupport` has the new parameters `values` and `geometries`, that might be provided instead of `ds` parameter
 * [docs] updated tutorials - new parameters are used in kriging operations, and when experimental variogram is computed
+* [docs] added missing badges (Python version and package version)
 * # todo [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
 
 2025-10-11
