@@ -40,6 +40,7 @@ Changes - from version >= 1.x
 * [docs] updated tutorials - new parameters are used in kriging operations, and when experimental variogram is computed
 * [docs] added missing badges (Python version and package version)
 * [docs] `CITATION.cff`, citation section in readme has been moved up, bibtex citation has been added
+* [docs] corrected broken links to `CONTRIBUTING.md` file in readme and docs
 * # todo [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
 
 2025-10-11

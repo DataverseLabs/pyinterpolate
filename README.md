@@ -178,7 +178,7 @@ A world of advice, you should **always** use Virtual Environment for the install
 
 ## Tests and contribution
 
-All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)
+All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTING.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTING.md)
 
 ## Use cases
 
