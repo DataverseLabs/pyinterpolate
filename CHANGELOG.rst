@@ -1,7 +1,7 @@
 Changes - from version >= 1.x
 =============================
 
-2025-11-0
+2025-11-1
 ----------
 
 **version 1.2.0**
@@ -42,7 +42,9 @@ Changes - from version >= 1.x
 * [docs] `CITATION.cff`, citation section in readme has been moved up, bibtex citation has been added
 * [docs] corrected broken links to `CONTRIBUTING.md` file in readme and docs
 * [setup] links to documentation have been added to `pyproject.toml`
-* # todo [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
+* [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
+* [docs] updated docstring (example) - `PointSupportDistance`
+* [docs]
 
 2025-10-11
 ----------
