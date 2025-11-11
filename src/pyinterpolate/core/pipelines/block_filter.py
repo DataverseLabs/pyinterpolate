@@ -74,6 +74,73 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
     : GeoPandas GeoDataFrame
         Regularized set of ps_blocks:
         ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     filter_blocks,
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> filtered = filter_blocks(
+    ...     semivariogram_model=THEO,
+    ...     point_support=PS,
+    ...     number_of_neighbors=8,
+    ...     kriging_type='cb',
+    ...     raise_when_negative_error=False,
+    ...     verbose=False
+    ... )
+    >>> print(filtered.columns)
+    Index(['id', 'geometry', 'reg.est', 'reg.err', 'rmse'], dtype='object')
     """
 
     block_k = BlockPoissonKriging(
@@ -131,6 +198,71 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
     -------
     : GeoPandas GeoDataFrame
         columns = ``['id', 'geometry', 'reg.est', 'reg.err', 'rmse']``
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     filter_blocks,
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> smoothed = smooth_blocks(
+    ...     semivariogram_model=THEO,
+    ...     point_support=PS,
+    ...     number_of_neighbors=8,
+    ...     verbose=True
+    ... )
+    >>> print(smoothed.columns)
+    Index(['id', 'geometry', 'reg.est', 'reg.err', 'rmse'], dtype='object')
     """
 
     block_k = BlockPoissonKriging(
@@ -196,6 +328,71 @@ class BlockPoissonKriging:
         Regularize ps_blocks (you should use it for data deconvolution -
         with Area-to-Point Poisson Kriging, or for data filtering -
         with Area-to-Area Poisson Kriging, or Centroid-based Poisson Kriging).
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     filter_blocks,
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> block_pk = BlockPoissonKriging(
+    ...     semivariogram_model=THEO,
+    ...     point_support=PS,
+    ...     kriging_type='ata'
+    ... )
+    >>> ata_filtered = block_pk.regularize(number_of_neighbors=8)
+    >>> print(ata_filtered.columns)
+    Index(['id', 'geometry', 'reg.est', 'reg.err', 'rmse'], dtype='object')
     """
 
     def __init__(self,

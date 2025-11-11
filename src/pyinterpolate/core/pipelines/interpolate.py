@@ -80,6 +80,8 @@ def interpolate_points(
     -------
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
+
+    
     """
 
     if known_locations is None:

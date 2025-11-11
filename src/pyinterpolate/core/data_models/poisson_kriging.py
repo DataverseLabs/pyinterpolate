@@ -141,11 +141,11 @@ class PoissonKrigingInput:
     >>> import os
     >>> import geopandas as gpd
     >>> from pyinterpolate import (
-    >>>     Blocks,
-    >>>     ExperimentalVariogram,
-    >>>     PointSupport,
-    >>>     TheoreticalVariogram
-    >>> )
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
     >>> from pyinterpolate.core.data_models.poisson_kriging import PoissonKrigingInput
     >>>
     >>>
