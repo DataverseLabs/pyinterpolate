@@ -81,7 +81,35 @@ def interpolate_points(
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
 
-    
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>>
+    >>> from pyinterpolate import (build_experimental_variogram,
+    ...     build_theoretical_variogram)
+    >>> from pyinterpolate.core.pipelines.interpolate import interpolate_points
+    >>>
+    >>> dem = gpd.read_file('dem.gpkg')
+    >>> unknown_locations = gpd.read_file('unknown_locations.gpkg')
+    >>> step_size = 500
+    >>> max_range = 10000
+    >>> exp_variogram = build_experimental_variogram(
+    ...     values=dem['dem'],
+    ...     geometries=dem['geometry'],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theo_variogram = build_theoretical_variogram(exp_variogram)
+    >>> interp = interpolate_points(
+    ...     theoretical_model=theo_variogram,
+    ...     unknown_locations=unknown_locations['geometry'],
+    ...     known_values=dem['dem'],
+    ...     known_geometries=dem['geometry']
+    ... )
+    >>> print(interp[0])
+    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]
     """
 
     if known_locations is None:
@@ -189,6 +217,36 @@ def interpolate_points_dask(
     -------
     : numpy array
         ``[predicted value, variance error, longitude (x), latitude (y)]``
+
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>>
+    >>> from pyinterpolate import (build_experimental_variogram,
+    ...     build_theoretical_variogram)
+    >>> from pyinterpolate.core.pipelines.interpolate import interpolate_points_dask
+    >>>
+    >>> dem = gpd.read_file('dem.gpkg')
+    >>> unknown_locations = gpd.read_file('unknown_locations.gpkg')
+    >>> step_size = 500
+    >>> max_range = 10000
+    >>> exp_variogram = build_experimental_variogram(
+    ...     values=dem['dem'],
+    ...     geometries=dem['geometry'],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theo_variogram = build_theoretical_variogram(exp_variogram)
+    >>> interp = interpolate_points_dask(
+    ...     theoretical_model=theo_variogram,
+    ...     unknown_locations=unknown_locations['geometry'],
+    ...     known_values=dem['dem'],
+    ...     known_geometries=dem['geometry']
+    ... )
+    >>> print(interp[0])
+    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]
     """
 
     if known_locations is None:

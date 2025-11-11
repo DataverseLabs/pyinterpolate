@@ -51,6 +51,7 @@ def test_interpolate_points():
         known_values=train[:, -1],
         known_geometries=geometries
     )
+    print(interp[0])
     assert isinstance(interp, np.ndarray)
 
 
