@@ -24,6 +24,7 @@ def test_block_to_block_distance():
                                                       lat_col_name=PS.lat_col_name,
                                                       val_col_name=PS.value_column_name,
                                                       block_id_col_name=PS.point_support_blocks_index_name)
+    print(distances.head())
     assert isinstance(distances, pd.DataFrame)
     for k in distances.index:
         assert k in PS.unique_blocks

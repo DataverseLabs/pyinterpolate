@@ -72,6 +72,18 @@ def forecast_bias(predicted_array: np.ndarray,
         - :math:`y_{i}` - i-th observation,
         - :math:`\bar{y_{i}}` - i-th prediction,
         - :math:`N` - number of observations.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.evaluate.metrics import forecast_bias
+    >>>
+    >>>
+    >>> arr = np.array([1, 2, 3, 4, 5])
+    >>> preds = np.array([1, 2, 2, 5, 6])
+    >>> bias = forecast_bias(preds, arr)
+    >>> print(bias)
+    -0.2
     """
 
     fb = float(np.mean(real_array - predicted_array))
@@ -105,6 +117,18 @@ def mean_absolute_error(predicted_array: np.ndarray,
         * :math:`y_{i}` - i-th observation,
         * :math:`\bar{y_{i}}` - i-th prediction,
         * :math:`N` - number of observations.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.evaluate.metrics import mean_absolute_error
+    >>>
+    >>>
+    >>> arr = np.array([1, 2, 3, 4, 5])
+    >>> preds = np.array([1, 2, 2, 5, 6])
+    >>> err = mean_absolute_error(preds, arr)
+    >>> print(err)
+    0.6
     """
     mae = float(
         np.mean(
@@ -144,6 +168,17 @@ def root_mean_squared_error(predicted_array: np.ndarray,
         * :math:`\bar{y_{i}}` - i-th prediction,
         * :math:`N` - number of observations.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.evaluate.metrics import root_mean_squared_error
+    >>>
+    >>>
+    >>> arr = np.array([1, 2, 3, 4, 5])
+    >>> preds = np.array([1, 2, 2, 5, 6])
+    >>> rmse = root_mean_squared_error(preds, arr)
+    >>> print(rmse)
+    0.7745966692414834
     """
     rmse = np.sqrt(
         np.mean(
@@ -155,7 +190,7 @@ def root_mean_squared_error(predicted_array: np.ndarray,
 
 def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
                                              real_array: np.ndarray,
-                                             test_undefined=True) -> float:
+                                             check_undefined=True) -> float:
     r"""
     Function calculates Symmetric Mean Absolute Percentage Error (SMAPE) of
     predictions, allowing researcher to compare different models.
@@ -168,7 +203,7 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
     real_array : numpy array
         Observations
 
-    test_undefined : bool, default = True
+    check_undefined : bool, default = True
         Check if there are cases when prediction and observation are
         equal to 0.
 
@@ -206,10 +241,21 @@ def symmetric_mean_absolute_percentage_error(predicted_array: np.ndarray,
         * :math:`\bar{y_{i}}` - i-th prediction,
         * :math:`N` - number of observations.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.evaluate.metrics import symmetric_mean_absolute_percentage_error
+    >>>
+    >>>
+    >>> arr = np.array([1, 2, 3, 4, 5])
+    >>> preds = np.array([1, 2, 2, 5, 6])
+    >>> smape = symmetric_mean_absolute_percentage_error(preds, arr)
+    >>> print(smape)
+    8.040404040404042
     """
     smape = 100
 
-    if test_undefined:
+    if check_undefined:
         psmapes = []
         for idx, val in enumerate(real_array):
             if val == 0 and predicted_array[idx] == 0:
@@ -311,6 +357,23 @@ def weighted_root_mean_squared_error(predicted_array: np.ndarray,
         * :math:`P` - number of all points,
         * :math:`N` - number of observations.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.evaluate.metrics import weighted_root_mean_squared_error
+    >>>
+    >>>
+    >>> arr = np.array([1, 2, 3, 4, 5])
+    >>> preds = np.array([1, 2, 2, 5, 6])
+    >>> lag_dist = np.array([2, 4, 8, 16, 32])
+    >>> wrmse_closest = weighted_root_mean_squared_error(preds, arr, 'closest')
+    >>> wrmse_distant = weighted_root_mean_squared_error(preds, arr, 'distant')
+    >>> wrmse_dense = weighted_root_mean_squared_error(preds,
+    ...                                                arr,
+    ...                                                'dense',
+    ...                                                lag_dist)
+    >>> print(wrmse_closest, wrmse_distant, wrmse_dense)
+    0.3464101615137755 0.6928203230275509 0.4250237185032414
     """
     error = (real_array - predicted_array) ** 2
     arr_length = len(error)

@@ -96,6 +96,35 @@ def validate_kriging(
        Applications
     2. Clark I., (1979), Does Geostatistics Work, Proc. 16th APCOM,
        pp.213.-225.
+
+    Examples
+    --------
+    >>> from pyinterpolate import (
+    ...     ExperimentalVariogram,
+    ...     validate_kriging,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> POINTS_DATA = ...  # load dataset
+    >>> POINTS_VARIOGRAM = ExperimentalVariogram(POINTS_DATA,
+    ...                                          step_size=1,
+    ...                                          max_range=6)
+    >>> THEORETICAL_MODEL = TheoreticalVariogram()
+    >>> THEORETICAL_MODEL.autofit(experimental_variogram=POINTS_VARIOGRAM,
+    ...                           models_group='linear',
+    ...                           nugget=0.0)
+    >>> validation_results = validate_kriging(
+    ...     theoretical_model=THEORETICAL_MODEL,
+    ...     values=POINTS_DATA[:, -1],
+    ...     geometries=POINTS_DATA[:, :-1],
+    ...     no_neighbors=4,
+    ...     progress_bar=False
+    ... )
+    >>> print(validation_results[0])  # mean prediction error
+    -0.01613441673494531
+    >>> print(validation_results[1])  # mean kriging error
+    1.6386630811210166
     """
     # TODO:
     # Use (2) to calc Z-score
