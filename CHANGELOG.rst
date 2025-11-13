@@ -43,7 +43,7 @@ Changes - from version >= 1.x
 * [docs] corrected broken links to `CONTRIBUTING.md` file in readme and docs
 * [setup] links to documentation have been added to `pyproject.toml`
 * [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
-* [docs] updated docstrings (examples) in: `PointSupportDistance`, `core.block_filter`, `pipelines.interpolate`, `pyinterpolate.distance.block.calc_block_to_block_distance`, `validate_kriging`, `metrics` module functions, 
+* [docs] updated docstrings (examples) in: `PointSupportDistance`, `core.block_filter`, `pipelines.interpolate`, `pyinterpolate.distance.block.calc_block_to_block_distance`, `validate_kriging`, `metrics` module functions, `inverse_distance_weighting`, `centroid_poisson_kriging`,
 
 2025-10-11
 ----------
