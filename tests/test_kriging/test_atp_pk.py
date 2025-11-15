@@ -65,7 +65,7 @@ def test_atp():
         semivariogram_model=THEO_FROM_REG,
         point_support=PS,
         unknown_block_index=indexes[-1],
-        number_of_neighbors=16
+        number_of_neighbors=8
     )
     assert isinstance(atp_pk, Dict)
 

@@ -60,11 +60,15 @@ def test_omni():
         allow_approximate_solutions=True
     )
     assert isinstance(ikriging, IndicatorKriging)
+    print(ikriging.indicator_predictions[0])
     assert isinstance(ikriging.indicator_predictions, np.ndarray)
+    print(ikriging.expected_values[:3])
     assert isinstance(ikriging.expected_values, np.ndarray)
+    print(ikriging.variances[:3])
     assert isinstance(ikriging.variances, np.ndarray)
 
     imaps = ikriging.get_indicator_maps()
+    print(imaps.keys())
     assert isinstance(imaps, Dict)
 
 

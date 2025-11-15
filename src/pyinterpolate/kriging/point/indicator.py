@@ -121,6 +121,46 @@ class IndicatorKriging:
     get_expected_values()
         Returns two arrays: one array with coordinates and expected values,
         and the second with coordinates and variances.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate.kriging.point.indicator import IndicatorKriging
+    >>> from pyinterpolate.semivariogram.indicator.indicator import (
+    ...     ExperimentalIndicatorVariogram,
+    ...     TheoreticalIndicatorVariogram
+    ... )
+    >>>
+    >>>
+    >>> dem = np.random.random(size=(1000, 3))
+    >>> exp_variogram = ExperimentalIndicatorVariogram(
+    ...     values=dem[:, -1],
+    ...     geometries=dem[:, :-1],
+    ...     number_of_thresholds=3,
+    ...     step_size=0.1,
+    ...     max_range=0.6
+    ... )
+    >>> theo_variograms = TheoreticalIndicatorVariogram(
+    ...     experimental_indicator_variogram=exp_variogram
+    ... )
+    >>> theo_variogram.fit()
+    >>> ikriging = IndicatorKriging(
+    ...     known_values=dem[:, -1],
+    ...     known_geometries=dem[:, :-1],
+    ...     indicator_variograms=theo_variograms,
+    ...     unknown_locations=np.random.random(size=(100, 2)),
+    ...     kriging_type='ok',
+    ...     no_neighbors=16
+    ... )
+    >>> print(ikriging.indicator_predictions[0])
+    [0.12942075 0.13930802 0.        ]
+    >>> print(ikriging.expected_values[:3])
+    [0.64983095 0.64983095 0.64983095]
+    >>> print(ikriging.variances[:3])
+    [0.28827397 0.28539667 0.30135499]
+    >>> imaps = ikriging.get_indicator_maps()
+    >>> print(imaps.keys())
+    dict_keys([0.35200453863293624, 0.6783974224309782, 0.9929787628823334])
     """
 
     def __init__(self,
