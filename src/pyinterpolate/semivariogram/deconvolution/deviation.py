@@ -2,7 +2,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from pyinterpolate.evaluate.metrics import root_mean_squared_error
-from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
 def calculate_deviation(theoretical: np.ndarray,
@@ -117,10 +116,10 @@ class Deviation:
 
     Parameters
     ----------
-    theoretical_model : TheoreticalVariogram
-        Fitted model.
+    theoretical_semivariances : numpy array
+        Fitted model - ``[lag, semivariance]``
 
-    regularized_variances : numpy array
+    regularized_semivariances : numpy array
         ``[lag, semivariance]``
 
     method : str, default=`'mrd'`
@@ -176,18 +175,21 @@ class Deviation:
     ------
     KeyError : User provides unsupported deviation method name.
 
+    Examples
+    --------
+
     """
 
     def __init__(self,
-                 theoretical_model: np.ndarray,
-                 regularized_variances: np.ndarray,
+                 theoretical_semivariances: np.ndarray,
+                 regularized_semivariances: np.ndarray,
                  method: str = 'mrd'):
 
         self._allowed_methods = {'mrd', 'smrd', 'rmse'}
         self.method = self._check_deviation_method(method)
 
-        self.initial_deviation = calculate_deviation(theoretical_model,
-                                                     regularized_variances)
+        self.initial_deviation = calculate_deviation(theoretical_semivariances,
+                                                     regularized_semivariances)
         self.deviations = [self.initial_deviation]
 
         self.optimal_deviation = self.initial_deviation

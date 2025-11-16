@@ -121,17 +121,83 @@ class Deconvolution:
 
     Examples
     --------
-    >>> dcv = Deconvolution(verbose=True)
-    >>> dcv.fit(agg_dataset=...,
-    ...         point_support_dataset=...,
-    ...         step_size=...,
-    ...         max_range=...,
-    ...         variogram_weighting_method='closest')
-    >>> dcv.transform(_max_iters=5)
-    >>> dcv.plot_variograms()
-    >>> dcv.plot_deviations()
-    >>> dcv.plot_weights()
-    >>> dcv.export_model('results.csv')
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     Blocks,
+    ...     Deconvolution,
+    ...     PointSupport,
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>> dcv = Deconvolution(verbose=False)
+    >>> dcv.fit(
+    ...     blocks=BLOCKS,
+    ...     point_support=PS,
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>> dcv.transform(max_iters=5)
+    >>> print(dcv.final_theoretical_model)
+    * Selected model: Spherical model
+    * Nugget: 0.0
+    * Sill: 157.72180532432975
+    * Range: 28000.0
+    * Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+    * Mean Bias: None
+    * Mean RMSE: 16.524700893642784
+    * Error-lag weighting method: closest
+
+
+    +----------+--------------------+--------------------+---------------------+
+    |   lag    |    theoretical     |    experimental    |   bias (real-yhat)  |
+    +----------+--------------------+--------------------+---------------------+
+    | 20000.0  | 140.2482525478734  | 193.16205582305136 |  52.91380327517797  |
+    | 40000.0  | 157.72180532432975 | 138.25751906267658 |  -19.46428626165317 |
+    | 60000.0  | 157.72180532432975 |  149.997349965762  |  -7.724455358567752 |
+    | 80000.0  | 157.72180532432975 | 142.84364743170343 |  -14.87815789262632 |
+    | 100000.0 | 157.72180532432975 | 142.4222925698438  |  -15.29951275448596 |
+    | 120000.0 | 157.72180532432975 | 154.47000840562424 | -3.2517969187055087 |
+    | 140000.0 | 157.72180532432975 | 145.67546701766707 | -12.046338306662676 |
+    | 160000.0 | 157.72180532432975 | 161.2524338627573  |  3.5306285384275498 |
+    | 180000.0 | 157.72180532432975 | 144.86386526565153 | -12.857940058678224 |
+    | 200000.0 | 157.72180532432975 | 141.46845881256164 | -16.253346511768115 |
+    | 220000.0 | 157.72180532432975 | 126.10100191843915 | -31.620803405890598 |
+    | 240000.0 | 157.72180532432975 | 142.37493167303575 | -15.346873651294004 |
+    | 260000.0 | 157.72180532432975 | 125.00372185725449 |  -32.71808346707526 |
+    | 280000.0 | 157.72180532432975 | 122.2260745900828  |  -35.49573073424695 |
+    +----------+--------------------+--------------------+---------------------+
+    >>> dcv.export_model_to_json('results.csv')
     """
 
     def __init__(self, verbose=True, store_models=False):

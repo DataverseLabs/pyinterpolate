@@ -187,6 +187,14 @@ class TheoreticalVariogram:
         }
 
     @property
+    def lag_yhat_array(self):
+        if self.yhat is None:
+            raise AttributeError('Semivariogram model has not been fitted!')
+
+        ls_array = np.vstack((self.lags, self.yhat)).T
+        return ls_array
+
+    @property
     def name(self):
         """
         Returns theoretical model name.

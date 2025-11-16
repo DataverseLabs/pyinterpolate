@@ -184,6 +184,11 @@ class ExperimentalVariogram:
         # update base model
         self.model = self.get_model_params()
 
+    @property
+    def lag_semivariance_array(self):
+        ls_array = np.vstack((self.lags, self.semivariances)).T
+        return ls_array
+
     def plot(self,
              semivariance=True,
              covariance=True,
