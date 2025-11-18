@@ -96,6 +96,9 @@ class ExperimentalVariogram:
     Examples
     --------
     >>> import numpy as np
+    >>> from pyinterpolate import ExperimentalVariogram
+    >>>
+    >>>
     >>> REFERENCE_INPUT = np.array([
     ...    [0, 0, 8],
     ...    [1, 0, 6],
@@ -113,9 +116,12 @@ class ExperimentalVariogram:
     ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
-    >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT,
-    ...                                       step_size=STEP_SIZE,
-    ...                                       max_range=MAX_RANGE)
+    >>> empirical_smv = ExperimentalVariogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1]
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
     >>> print(empirical_smv)
     +-----+--------------------+---------------------+
     | lag |    semivariance    |      covariance     |
@@ -491,6 +497,44 @@ def build_experimental_variogram(ds: Union[ArrayLike, VariogramPoints] = None,
     Returns
     -------
     : ExperimentalVariogram
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import build_experimental_variogram
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> empirical_smv = build_experimental_variogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1]
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> print(empirical_smv)
+    +-----+--------------------+---------------------+
+    | lag |    semivariance    |      covariance     |
+    +-----+--------------------+---------------------+
+    | 1.0 |       4.625        | -0.5434027777777798 |
+    | 2.0 | 5.2272727272727275 | -0.7954545454545454 |
+    | 3.0 |        6.0         | -1.2599999999999958 |
+    +-----+--------------------+---------------------+
     """
 
     exp_var = ExperimentalVariogram(
