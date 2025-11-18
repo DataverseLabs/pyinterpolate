@@ -117,10 +117,10 @@ class Deviation:
     Parameters
     ----------
     theoretical_semivariances : numpy array
-        Fitted model - ``[lag, semivariance]``
+        Predicted semivariances
 
     regularized_semivariances : numpy array
-        ``[lag, semivariance]``
+        Regualrized semivariances
 
     method : str, default=`'mrd'`
         Deviation monitoring method, available options:
@@ -185,11 +185,14 @@ class Deviation:
                  regularized_semivariances: np.ndarray,
                  method: str = 'mrd'):
 
-        self._allowed_methods = {'mrd', 'smrd', 'rmse'}
+        self._allowed_methods = {'mrd',
+                                 'smrd',
+                                 'rmse'}
         self.method = self._check_deviation_method(method)
 
         self.initial_deviation = calculate_deviation(theoretical_semivariances,
-                                                     regularized_semivariances)
+                                                     regularized_semivariances,
+                                                     self.method)
         self.deviations = [self.initial_deviation]
 
         self.optimal_deviation = self.initial_deviation
@@ -312,7 +315,8 @@ class Deviation:
             Regularized semivariances.
         """
         deviation = calculate_deviation(theoretical_model,
-                                        regularized_variances)
+                                        regularized_variances,
+                                        self.method)
         self.deviations.append(deviation)
 
     def _check_deviation_method(self, method: str):

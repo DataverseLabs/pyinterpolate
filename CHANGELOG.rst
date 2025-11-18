@@ -47,7 +47,8 @@ Changes - from version >= 1.x
 * [enhancement] `ExperimentalVariogram` has new property - `lag_semivariance_array` that returns numpy array with lags and semivariances
 * [enhancement] `TheoreticalVariogram` has new property - `lag_yhat_array` that returns numpy array with lags and predicted semivariances
 * [api change] `Deviation` class parameters have been renamed to clearly point what is passed as the input
-* [tests] `Deviation` class has its own tests
+* [tests] `Deviation` class tests and debug (method selection)
+* [docs]
 
 2025-10-11
 ----------

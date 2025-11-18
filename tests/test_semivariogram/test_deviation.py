@@ -45,8 +45,8 @@ THEORETICAL = build_theoretical_variogram(
 
 def test_deviation_mrd():
     dv = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='mrd'
     )
     assert isinstance(dv, Deviation)
@@ -57,8 +57,8 @@ def test_deviation_mrd():
 
 def test_deviation_smrd():
     dv = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='smrd'
     )
     assert isinstance(dv, Deviation)
@@ -69,8 +69,8 @@ def test_deviation_smrd():
 
 def test_deviation_rmse():
     dv = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='rmse'
     )
     assert isinstance(dv, Deviation)
@@ -81,20 +81,22 @@ def test_deviation_rmse():
 
 def test_deviation_methods():
     dv_rmse = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='rmse'
     )
     rmse = dv_rmse.deviations[0]
+
     dv_smrd = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='smrd'
     )
     smrd = dv_smrd.deviations[0]
+
     dv_mrd = Deviation(
-        theoretical_semivariances=THEORETICAL.lag_yhat_array,
-        regularized_semivariances=REGULARIZED_EXPERIMENTAL.lag_semivariance_array,
+        theoretical_semivariances=THEORETICAL.yhat,
+        regularized_semivariances=REGULARIZED_EXPERIMENTAL.semivariances,
         method='mrd'
     )
     mrd = dv_mrd.deviations[0]
