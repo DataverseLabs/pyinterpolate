@@ -50,7 +50,7 @@ Changes - from version >= 1.x
 * [tests] `Deviation` class tests and debug (method selection)
 * [docs] docstring example for `Deviation`
 * [docs] docstring examples for `AggregatedVariogram` and `regularize()`
-* [docs] docstring examples for `ExperimentalVariogram` and `build_experimental_variogram()`, used parameters `values` and `geometries`
+* [docs] docstring examples for `ExperimentalVariogram` and `build_experimental_variogram()`, `calculate_semivariance()`, used parameters `values` and `geometries`
 * [docs]
 
 2025-10-11
