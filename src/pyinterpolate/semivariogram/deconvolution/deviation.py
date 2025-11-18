@@ -177,7 +177,52 @@ class Deviation:
 
     Examples
     --------
-
+    >>> import numpy as np
+    >>> from pyinterpolate import (
+    ...     build_experimental_variogram,
+    ...     build_theoretical_variogram
+    ... )
+    >>> from pyinterpolate.semivariogram.deconvolution.deviation import Deviation
+    >>>
+    >>>
+    >>> ref_input = np.array([
+    ...         [0, 0, 8],
+    ...         [1, 0, 6],
+    ...         [2, 0, 4],
+    ...         [3, 0, 3],
+    ...         [4, 0, 6],
+    ...         [5, 0, 5],
+    ...         [6, 0, 7],
+    ...         [7, 0, 2],
+    ...         [8, 0, 8],
+    ...         [9, 0, 9],
+    ...         [10, 0, 5],
+    ...         [11, 0, 6],
+    ...         [12, 0, 3]
+    ...     ])
+    >>> step_size = 1
+    >>> max_range = 4
+    >>>
+    >>> experimental = build_experimental_variogram(
+    ...     values=ref_input[:, -1],
+    ...     geometries=ref_input[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>>
+    >>> regularized = build_experimental_variogram(
+    ...     values=ref_input[:, -1] + 2,
+    ...     geometries=ref_input[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>>
+    >>> dv = Deviation(
+    ...     theoretical_semivariances=theoretical.yhat,
+    ...     regularized_semivariances=regularized.semivariances
+    ... )
+    >>> print(dv.optimal_deviation)
+    0.05754045538774986
     """
 
     def __init__(self,
