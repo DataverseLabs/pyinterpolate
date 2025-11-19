@@ -246,6 +246,26 @@ class ExperimentalIndicatorVariogram:
     Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
     non-parametric modeling of local uncertainty
     in earth sciences. DOI: https://doi.org/10.1016/j.cageo.2008.08.014
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import ExperimentalIndicatorVariogram
+    >>>
+    >>>
+    >>> dem = np.random.random(size=(1000, 3))
+    >>> step_size = 0.1
+    >>> max_range = 0.6
+    >>> exp_indicator = ExperimentalIndicatorVariogram(
+    ...     values=dem[:, -1],
+    ...     geometries=dem[:, :-1],
+    ...     number_of_thresholds=5,
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> print(len(exp_indicator.experimental_models))
+    5
+    >>> exp_indicator.show()  # plots variogram for each threshold
     """
 
     def __init__(self,
@@ -342,6 +362,32 @@ class TheoreticalIndicatorVariogram:
     show()
         Shows experimental and theoretical variograms for each threshold.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import (
+    ...     ExperimentalIndicatorVariogram,
+    ...     TheoreticalIndicatorVariogram
+    ... )
+    >>>
+    >>>
+    >>> dem = np.random.random(size=(1000, 3))
+    >>> step_size = 0.1
+    >>> max_range = 0.6
+    >>> exp_indicator = ExperimentalIndicatorVariogram(
+    ...     values=dem[:, -1],
+    ...     geometries=dem[:, :-1],
+    ...     number_of_thresholds=5,
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theo_indicator = TheoreticalIndicatorVariogram(
+    ...     experimental_indicator_variogram=exp_indicator
+    ... )
+    >>> theo_indicator.fit()
+    >>> print(len(theo_indicator.theoretical_indicator_variograms))
+    5
+    >>> theo_indicator.show()  # plots theoretical models' curves
     """
 
     def __init__(

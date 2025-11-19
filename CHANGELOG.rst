@@ -54,6 +54,8 @@ Changes - from version >= 1.x
 * [docs] docstring example for `calculate_covariance()`, used parameters `values` and `geometries`
 * [docs] docstring example for `DirectionalVariogram`, used parameters `values` and `geometries`
 * [docs] docstring example for `VariogramCloud`, used parameters `values` and `geometries`
+* [docs] `ExperimentalIndicatorVariogram` and `TheoreticalIndicatorVariogram` - updated examples in docstrings
+
 
 2025-10-11
 ----------
