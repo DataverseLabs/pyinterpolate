@@ -53,7 +53,7 @@ Changes - from version >= 1.x
 * [docs] docstring example for `ExperimentalVariogram` and `build_experimental_variogram()`, `calculate_semivariance()`, used parameters `values` and `geometries`
 * [docs] docstring example for `calculate_covariance()`, used parameters `values` and `geometries`
 * [docs] docstring example for `DirectionalVariogram`, used parameters `values` and `geometries`
-* [docs] 
+* [docs] docstring example for `VariogramCloud`, used parameters `values` and `geometries`
 
 2025-10-11
 ----------

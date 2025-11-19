@@ -170,6 +170,41 @@ class VariogramCloud:
     --------
     ExperimentalVariogram : class that calculates experimental semivariogram,
         experimental covariogram and data variance.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import VariogramCloud
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> vc = VariogramCloud(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> stats = vc.describe()
+    >>> print(stats[1]['count'])
+    24
+    >>> print(stats[2]['median'])
+    9
     """
 
     def __init__(self,
