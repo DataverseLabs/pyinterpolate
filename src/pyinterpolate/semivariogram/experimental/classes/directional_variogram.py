@@ -92,6 +92,26 @@ class DirectionalVariogram:
 
     show()
         Plot all variograms.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import DirectionalVariogram
+    >>>
+    >>>
+    >>> ds = np.load('armstrong_data.npy')
+    >>> step_size = 1.5
+    >>> max_range = 6
+    >>> directional_variogram = DirectionalVariogram(
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE,
+    ...     values=ds[:, -1],
+    ...     geometries=ds[:, :-1]
+    ... )
+    >>> variograms = directional_variogram.get()
+    >>> print(variograms.keys())
+    dict_keys(['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE'])
+    >>> directional_variogram.show()  # shows variograms in all directions
     """
 
     def __init__(self,
