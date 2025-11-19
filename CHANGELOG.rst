@@ -51,7 +51,7 @@ Changes - from version >= 1.x
 * [docs] docstring example for `Deviation`
 * [docs] docstring examples for `AggregatedVariogram` and `regularize()`
 * [docs] docstring examples for `ExperimentalVariogram` and `build_experimental_variogram()`, `calculate_semivariance()`, used parameters `values` and `geometries`
-* [docs]
+* [docs] docstring examples for `calculate_covariance()`, used parameters `values` and `geometries`
 
 2025-10-11
 ----------
