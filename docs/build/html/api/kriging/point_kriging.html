@@ -510,6 +510,35 @@ matrix creation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span><span class="n">build_experimental_variogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">ordinary_kriging</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;dem.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown_locations</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;unknown_locations.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theo_variogram</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">exp_variogram</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interp</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_variogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locations</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -575,6 +604,40 @@ that can lead to singular or near-singular matrix creation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span><span class="n">build_experimental_variogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">build_theoretical_variogram</span><span class="p">,</span> <span class="n">simple_kriging</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;dem.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown_locations</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;unknown_locations.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_range</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_variogram</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theo_variogram</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span><span class="n">exp_variogram</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">process_mean</span> <span class="o">=</span> <span class="mf">20.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interp</span> <span class="o">=</span> <span class="n">simple_kriging</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_variogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_locations</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">process_mean</span><span class="o">=</span><span class="n">process_mean</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_values</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">interp</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]</span>
+</pre></div>
+</div>
+</section>
 </dd></dl>
 
 </section>
@@ -657,6 +720,46 @@ unknown location.</p>
 </tr>
 </tbody>
 </table>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.indicator</span> <span class="kn">import</span> <span class="n">IndicatorKriging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.indicator.indicator</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ExperimentalIndicatorVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">TheoreticalIndicatorVariogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exp_variogram</span> <span class="o">=</span> <span class="n">ExperimentalIndicatorVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">number_of_thresholds</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="mf">0.6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theo_variograms</span> <span class="o">=</span> <span class="n">TheoreticalIndicatorVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_indicator_variogram</span><span class="o">=</span><span class="n">exp_variogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theo_variogram</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ikriging</span> <span class="o">=</span> <span class="n">IndicatorKriging</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">known_values</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">indicator_variograms</span><span class="o">=</span><span class="n">theo_variograms</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+<span class="gp">... </span>    <span class="n">kriging_type</span><span class="o">=</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">16</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ikriging</span><span class="o">.</span><span class="n">indicator_predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="go">[0.12942075 0.13930802 0.        ]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ikriging</span><span class="o">.</span><span class="n">expected_values</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">[0.64983095 0.64983095 0.64983095]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ikriging</span><span class="o">.</span><span class="n">variances</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+<span class="go">[0.28827397 0.28539667 0.30135499]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">imaps</span> <span class="o">=</span> <span class="n">ikriging</span><span class="o">.</span><span class="n">get_indicator_maps</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">imaps</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="go">dict_keys([0.35200453863293624, 0.6783974224309782, 0.9929787628823334])</span>
+</pre></div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py">
@@ -757,6 +860,30 @@ as an input modeling features (coordinates).</p>
 </tr>
 </tbody>
 </table>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.universal</span> <span class="kn">import</span> <span class="n">UniversalKriging</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dem</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;dem.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">unknown_points</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;unknown_locations.gpkg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uk</span> <span class="o">=</span> <span class="n">UniversalKriging</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">known_values</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_geometries</span><span class="o">=</span><span class="n">dem</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uk</span><span class="o">.</span><span class="n">fit_trend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uk</span><span class="o">.</span><span class="n">detrend</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uk</span><span class="o">.</span><span class="n">fit_bias</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="mi">10000</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predictions</span> <span class="o">=</span> <span class="n">uk</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="n">unknown_points</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">predictions</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># z_hat, x, y</span>
+<span class="go">[9.72916006e+01 2.38012302e+05 5.51466805e+05]</span>
+</pre></div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py">

@@ -522,6 +522,35 @@
 <span class="sd">       Applications</span>
 <span class="sd">    2. Clark I., (1979), Does Geostatistics Work, Proc. 16th APCOM,</span>
 <span class="sd">       pp.213.-225.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     ExperimentalVariogram,</span>
+<span class="sd">    ...     validate_kriging,</span>
+<span class="sd">    ...     TheoreticalVariogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; POINTS_DATA = ...  # load dataset</span>
+<span class="sd">    &gt;&gt;&gt; POINTS_VARIOGRAM = ExperimentalVariogram(POINTS_DATA,</span>
+<span class="sd">    ...                                          step_size=1,</span>
+<span class="sd">    ...                                          max_range=6)</span>
+<span class="sd">    &gt;&gt;&gt; THEORETICAL_MODEL = TheoreticalVariogram()</span>
+<span class="sd">    &gt;&gt;&gt; THEORETICAL_MODEL.autofit(experimental_variogram=POINTS_VARIOGRAM,</span>
+<span class="sd">    ...                           models_group=&#39;linear&#39;,</span>
+<span class="sd">    ...                           nugget=0.0)</span>
+<span class="sd">    &gt;&gt;&gt; validation_results = validate_kriging(</span>
+<span class="sd">    ...     theoretical_model=THEORETICAL_MODEL,</span>
+<span class="sd">    ...     values=POINTS_DATA[:, -1],</span>
+<span class="sd">    ...     geometries=POINTS_DATA[:, :-1],</span>
+<span class="sd">    ...     no_neighbors=4,</span>
+<span class="sd">    ...     progress_bar=False</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(validation_results[0])  # mean prediction error</span>
+<span class="sd">    -0.01613441673494531</span>
+<span class="sd">    &gt;&gt;&gt; print(validation_results[1])  # mean kriging error</span>
+<span class="sd">    1.6386630811210166</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># TODO:</span>
     <span class="c1"># Use (2) to calc Z-score</span>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.data_models.point_support_distances &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.core.data_models.point_support_distances &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -484,6 +484,58 @@
 <span class="sd">        wants to find closest neighbors (using</span>
 <span class="sd">        ``calculate_point_support_distances()`` method with</span>
 <span class="sd">        ``no_closest_neighbors`` &gt; 0).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    &gt;&gt;&gt; Blocks, ExperimentalVariogram, PointSupport, PointSupportDistance,</span>
+<span class="sd">    &gt;&gt;&gt; TheoreticalVariogram,</span>
+<span class="sd">    &gt;&gt;&gt; )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; FILENAME = &#39;cancer_data.gpkg&#39;</span>
+<span class="sd">    &gt;&gt;&gt; LAYER_NAME = &#39;areas&#39;</span>
+<span class="sd">    &gt;&gt;&gt; DS = gpd.read_file(FILENAME, layer=LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt; AREA_VALUES = &#39;rate&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_INDEX = &#39;FIPS&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_LAYER_NAME = &#39;points&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_VALUES = &#39;POP10&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; CANCER_DATA = {</span>
+<span class="sd">    ...    &#39;ds&#39;: DS,</span>
+<span class="sd">    ...    &#39;index_column_name&#39;: AREA_INDEX,</span>
+<span class="sd">    ...    &#39;value_column_name&#39;: AREA_VALUES,</span>
+<span class="sd">    ...    &#39;geometry_column_name&#39;: AREA_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; POINT_SUPPORT_DATA = {</span>
+<span class="sd">    ...     &#39;ps&#39;: PS,</span>
+<span class="sd">    ...     &#39;value_column_name&#39;: PS_VALUES,</span>
+<span class="sd">    ...     &#39;geometry_column_name&#39;: PS_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; block = Blocks(**CANCER_DATA)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; ps = PointSupport(</span>
+<span class="sd">    ...     points=POINT_SUPPORT_DATA[&#39;ps&#39;],</span>
+<span class="sd">    ...     ps_blocks=BLOCKS,</span>
+<span class="sd">    ...     points_value_column=POINT_SUPPORT_DATA[&#39;value_column_name&#39;],</span>
+<span class="sd">    ...     points_geometry_column=POINT_SUPPORT_DATA[&#39;geometry_column_name&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; pds = PointSupportDistance(verbose=False)</span>
+<span class="sd">    &gt;&gt;&gt; distances_between_neighbors = pds.calculate_point_support_distances(</span>
+<span class="sd">    ...     point_support=ps,</span>
+<span class="sd">    ...     block_id=36033,</span>
+<span class="sd">    ...     number_of_neighbors=2</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(distances_between_neighbors.keys())  # dict[tuple: array]</span>
+<span class="sd">    dict_keys([(36033, 36019), (36019, 36033), (36033, 36089), (36089, 36033)])</span>
+<span class="sd">    &gt;&gt;&gt; print(pds.closest_neighbors)</span>
+<span class="sd">    {36033: [36019, 36089]}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -504,7 +556,7 @@
     <span class="k">def</span> <span class="nf">calc_pair_distances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                             <span class="n">point_support</span><span class="p">,</span>
                             <span class="n">block_pair</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
-                            <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                            <span class="n">update</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns distances between point supports from two blocks and</span>
 <span class="sd">        updates distances dictionary.</span>
@@ -559,7 +611,7 @@
     <span class="k">def</span> <span class="nf">calculate_point_support_distances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                                           <span class="n">point_support</span><span class="p">,</span>
                                           <span class="n">block_id</span><span class="p">,</span>
-                                          <span class="n">no_closest_neighbors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">):</span>
+                                          <span class="n">no_closest_neighbors</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates distances between point supports.</span>
 

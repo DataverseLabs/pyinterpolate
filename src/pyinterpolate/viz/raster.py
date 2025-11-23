@@ -9,11 +9,11 @@ from typing import Dict
 from numpy.typing import ArrayLike
 
 import numpy as np
-from pyinterpolate.core.data_models.points import VariogramPoints
 
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.core.pipelines.interpolate import interpolate_points
 from pyinterpolate.distance.point import point_distance
-from pyinterpolate.semivariogram.experimental.experimental_semivariogram import calculate_semivariance
+from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 
 
@@ -159,6 +159,45 @@ def interpolate_raster(known_locations: ArrayLike = None,
             * 'min y',
             * 'max y'
 
+    Examples
+    --------
+    >>> import json  # printing purposes
+    >>> import numpy as np
+    >>> from pyinterpolate import interpolate_raster
+    >>>
+    >>>
+    >>> input_data = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> raster_data = interpolate_raster(
+    ...     known_values=input_data[:, -1],
+    ...     known_geometries=input_data[:, :-1],
+    ...     dim=20
+    ... )
+    >>> print(json.dumps(raster_data, intend=2, default=str))
+    {
+      "result": "[[7.96961847 6.47028231 5.60333362 ...]]",
+      "error": "[[0.08611248 2.6949744  1.69602854 ...]]",
+      "params": {
+        "pixel size": 0.6,
+        "min x": 0.0,
+        "max x": 12.0,
+        "min y": 0.0,
+        "max y": 0.0
+      }
+    }
     """
 
     # Set dimension
@@ -185,11 +224,11 @@ def interpolate_raster(known_locations: ArrayLike = None,
         number_of_divisions = 100
         step_size = maximum_range / number_of_divisions
 
-        evariogram = calculate_semivariance(ds=known_locations,
-                                            step_size=step_size,
-                                            max_range=maximum_range,
-                                            direction=direction,
-                                            tolerance=tolerance)
+        evariogram = ExperimentalVariogram(ds=known_locations,
+                                           step_size=step_size,
+                                           max_range=maximum_range,
+                                           direction=direction,
+                                           tolerance=tolerance)
 
         ts = TheoreticalVariogram()
         ts.autofit(experimental_variogram=evariogram)

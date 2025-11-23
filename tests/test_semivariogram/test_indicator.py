@@ -47,7 +47,6 @@ def test_experimental_indicator_variogram():
                                           max_range=MX_RNG)
 
     # evar.show()
-
     assert isinstance(evar, ExperimentalIndicatorVariogram)
     assert isinstance(evar.experimental_models, Dict)
     assert isinstance(evar.ds, IndicatorVariogramData)

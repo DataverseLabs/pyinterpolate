@@ -666,7 +666,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW is 4.9223812332435655
+Root Mean Squared Error of prediction with IDW is 5.239230087765165
 </pre></div></div>
 </div>
 <p><strong>Clarification</strong>: Obtained Root Mean Squared Error could serve as a baseline for further model development. To build a better reference, we create four IDW models of powers:</p>
@@ -709,7 +709,7 @@ Root Mean Squared Error of prediction with IDW is 4.9223812332435655
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3/3 [00:44&lt;00:00, 14.99s/it]
+100%|██████████| 3/3 [00:39&lt;00:00, 13.26s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -726,10 +726,10 @@ Root Mean Squared Error of prediction with IDW is 4.9223812332435655
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW of power 2 is 4.9224
-Root Mean Squared Error of prediction with IDW of power 0.5 is 5.5516
-Root Mean Squared Error of prediction with IDW of power 1 is 5.2328
-Root Mean Squared Error of prediction with IDW of power 4 is 4.9406
+Root Mean Squared Error of prediction with IDW of power 2 is 5.2392
+Root Mean Squared Error of prediction with IDW of power 0.5 is 5.9270
+Root Mean Squared Error of prediction with IDW of power 1 is 5.5847
+Root Mean Squared Error of prediction with IDW of power 4 is 5.2546
 </pre></div></div>
 </div>
 </section>
@@ -796,7 +796,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.9406
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 6758/6758 [00:01&lt;00:00, 6586.69it/s]
+100%|██████████| 6758/6758 [00:01&lt;00:00, 6749.87it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -824,7 +824,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.9406
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with Kriging is 4.607933261210231
+Root Mean Squared Error of prediction with Kriging is 4.911138570395592
 </pre></div></div>
 </div>
 <p>Your results may be different (if your train and test sets are divided in a different way), but in most cases, Kriging will be better than IDW or very close to the best results from IDW. Even more important is that for the single data source with a low number of samples, we don’t have the opportunity to perform the validation step, and we’re unable to guess how big the power parameter should be. With Kriging, we model variogram, and <em>voila!</em> - model works.</p>

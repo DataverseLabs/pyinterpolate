@@ -579,6 +579,30 @@
 
 <span class="sd">    plot_trend_surfaces()</span>
 <span class="sd">        Visual comparison of observations, trend, and bias.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.kriging.point.universal import UniversalKriging</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = gpd.read_file(&#39;dem.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; unknown_points = gpd.read_file(&#39;unknown_locations.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; uk = UniversalKriging(</span>
+<span class="sd">    ...     known_values=dem[:, -1],</span>
+<span class="sd">    ...     known_geometries=dem[:, :-1]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; uk.fit_trend()</span>
+<span class="sd">    &gt;&gt;&gt; uk.detrend()</span>
+<span class="sd">    &gt;&gt;&gt; uk.fit_bias(</span>
+<span class="sd">    ...     step_size=500, max_range=10000</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; predictions = uk.predict(points=unknown_points)</span>
+<span class="sd">    &gt;&gt;&gt; print(predictions[0])  # z_hat, x, y</span>
+<span class="sd">    [9.72916006e+01 2.38012302e+05 5.51466805e+05]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

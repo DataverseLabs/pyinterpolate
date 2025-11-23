@@ -37,6 +37,7 @@ def test_get_trend():
         known_points=dem
     )
     uk.fit_trend()
+    print(uk.trend_values)
     assert isinstance(uk.trend_model, MultivariateRegression)
     assert isinstance(uk.trend_values, np.ndarray)
 
@@ -108,6 +109,7 @@ def test_predict_separate_values_and_geometries():
     predictions = uk.predict(
         points=unknown_points[:, :-1]
     )
+    print(predictions[0])
     rmse = np.sqrt(
         np.mean(
             (unknown_points[:, -1] - predictions[:, 0]) ** 2

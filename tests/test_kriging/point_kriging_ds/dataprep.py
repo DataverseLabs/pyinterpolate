@@ -22,10 +22,14 @@ def build_armstrong_ds():
     )
 
     variogram_omni = TheoreticalVariogram()
-    variogram_omni.autofit(experimental_variogram=armstrong_variogram_omnidirectional)
+    variogram_omni.autofit(
+        experimental_variogram=armstrong_variogram_omnidirectional
+    )
 
     variogram_dir = TheoreticalVariogram()
-    variogram_dir.autofit(experimental_variogram=armstrong_variogram_directional)
+    variogram_dir.autofit(
+        experimental_variogram=armstrong_variogram_directional
+    )
 
     output = {
         'ds': ds,

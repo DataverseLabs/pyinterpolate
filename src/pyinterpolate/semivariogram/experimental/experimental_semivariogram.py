@@ -25,7 +25,8 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
                            direction: float = None,
                            tolerance: float = None,
                            custom_bins: Union[ArrayLike, Any] = None,
-                           custom_weights: ArrayLike = None) -> np.ndarray:
+                           custom_weights: ArrayLike = None,
+                           ) -> np.ndarray:
     """
     Calculates experimental semivariance.
 
@@ -171,6 +172,9 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
     Examples
     --------
     >>> import numpy as np
+    >>> from pyinterpolate import calculate_semivariance
+    >>>
+    >>>
     >>> REFERENCE_INPUT = np.array([
     ...    [0, 0, 8],
     ...    [1, 0, 6],
@@ -189,7 +193,8 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
     >>> semivariances = calculate_semivariance(
-    ...    REFERENCE_INPUT,
+    ...    values=REFERENCE_INPUT[:, -1],
+    ...    geometries=REFERENCE_INPUT[:, :-1],
     ...    step_size=STEP_SIZE,
     ...    max_range=MAX_RANGE)
     >>> print(semivariances[0])

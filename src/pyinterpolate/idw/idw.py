@@ -72,6 +72,27 @@ def inverse_distance_weighting(unknown_location: ArrayLike,
     ValueError
         Less than 2 neighbours or more than the number of ``known_points``
         neighbours are given in the ``number_of_neighbours`` parameter.
+
+    Examples
+    --------
+    >>> unknown_pos = (10, 10)
+    >>> locs = np.array([
+    ...     [11, 1, 1],
+    ...     [23, 2, 2],
+    ...     [33, 3, 3],
+    ...     [14, 44, 4],
+    ...     [13, 10, 9],
+    ...     [12, 55, 35],
+    ...     [11, 9, 7]
+    ... ])
+    >>> pred = inverse_distance_weighting(
+    ...     unknown_locations=unknown_pos,
+    ...     known_values=locs[:, -1],
+    ...     known_geometries=locs[:, :-1],
+    ...     no_neighbors=2
+    ... )
+    >>> print(pred)
+    7.286311587314138
     """
 
     # Check power parameter

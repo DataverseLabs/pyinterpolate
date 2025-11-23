@@ -41,6 +41,7 @@ INBLOCK_SEMIVARS = calculate_inblock_semivariance(
 
 BLOCK_TO_BLOCK_DISTS = calc_block_to_block_distance(PS)
 
+
 def test_avg_semi():
     avg_semi = calculate_average_semivariance(
         block_to_block_distances=BLOCK_TO_BLOCK_DISTS,

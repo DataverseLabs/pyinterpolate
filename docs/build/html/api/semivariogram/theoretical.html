@@ -563,7 +563,60 @@ the process is considered to be not spatially-depended.</p>
 </dl>
 </div>
 <p class="rubric">Examples</p>
-<p>TODO</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">REFERENCE_INPUT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_range</span> <span class="o">=</span> <span class="mf">4.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">empirical_smv</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">REFERENCE_INPUT</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geometries</span><span class="o">=</span><span class="n">REFERENCE_INPUT</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theoretical_var</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theoretical_var</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">empirical_smv</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">model_type</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sill</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">REFERENCE_INPUT</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+<span class="gp">... </span>    <span class="n">rang</span><span class="o">=</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">theoretical_var</span><span class="p">)</span>
+<span class="go">* Selected model: Linear model</span>
+<span class="go">* Nugget: 0.0</span>
+<span class="go">* Sill: 4.2485207100591715</span>
+<span class="go">* Range: 5</span>
+<span class="go">* Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate</span>
+<span class="go">* Mean Bias: 2.949918937899707</span>
+<span class="go">* Mean RMSE: 3.150422552980984</span>
+<span class="go">* Error-lag weighting method: None</span>
+<span class="go">+-----+--------------------+--------------------+--------------------+</span>
+<span class="go">| lag |    theoretical     |    experimental    |  bias (real-yhat)  |</span>
+<span class="go">+-----+--------------------+--------------------+--------------------+</span>
+<span class="go">| 1.0 | 0.8497041420118343 |       4.625        | 3.7752958579881657 |</span>
+<span class="go">| 2.0 | 1.6994082840236686 | 5.2272727272727275 | 3.527864443249059  |</span>
+<span class="go">| 3.0 | 2.549112426035503  |        6.0         | 3.450887573964497  |</span>
+<span class="go">| 4.0 | 3.3988165680473372 | 4.444444444444445  | 1.0456278763971074 |</span>
+<span class="go">+-----+--------------------+--------------------+--------------------+</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py">
 <span class="sig-name descname"><span class="pre">autofit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experimental_variogram</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ExperimentalVariogram</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_group</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'safe'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_nugget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_nuggets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rang</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_sill_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sill_from_variance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_sill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number_of_sills</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rmse'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deviation_weighting</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'equal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TheoreticalVariogramModel</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/semivariogram/theoretical/classes/theoretical_variogram.html#TheoreticalVariogram.autofit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
@@ -748,11 +801,11 @@ a lag.</p></li>
 <li><p>‘spherical’.</p></li>
 </ul>
 </dd>
-<dt><strong>sill</strong><span class="classifier">float, default=0</span></dt><dd><p>Partial sill, or sill when nugget is set to zero. Total sill is
+<dt><strong>sill</strong><span class="classifier">float</span></dt><dd><p>Partial sill, or sill when nugget is set to zero. Total sill is
 a sum of partial sill and nugget. If given, then partial sill
 is fixed to this value.</p>
 </dd>
-<dt><strong>rang</strong><span class="classifier">float, default=0</span></dt><dd><p>The semivariogram range is a distance at which spatial correlation
+<dt><strong>rang</strong><span class="classifier">float</span></dt><dd><p>The semivariogram range is a distance at which spatial correlation
 exists. It shouldn’t be set at a distance larger than a half
 of a study extent.</p>
 </dd>
@@ -988,6 +1041,59 @@ only with RMSE. Available methods:</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">build_theoretical_variogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">REFERENCE_INPUT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="gp">... </span>   <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">step_size</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">max_range</span> <span class="o">=</span> <span class="mf">4.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">empirical_smv</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">values</span><span class="o">=</span><span class="n">REFERENCE_INPUT</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">geometries</span><span class="o">=</span><span class="n">REFERENCE_INPUT</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">theoretical_var</span> <span class="o">=</span> <span class="n">build_theoretical_variogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">empirical_smv</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">theoretical_var</span><span class="p">)</span>
+<span class="go">* Selected model: Linear model</span>
+<span class="go">* Nugget: 1.85</span>
+<span class="go">* Sill: 3.3827861952861946</span>
+<span class="go">* Range: 1.2000000000000002</span>
+<span class="go">* Spatial Dependency Strength is moderate</span>
+<span class="go">* Mean Bias: None</span>
+<span class="go">* Mean RMSE: 0.5504691463605988</span>
+<span class="go">* Error-lag weighting method: equal</span>
+<span class="go">+-----+-------------------+--------------------+-----------------------+</span>
+<span class="go">| lag |    theoretical    |    experimental    |    bias (real-yhat)   |</span>
+<span class="go">+-----+-------------------+--------------------+-----------------------+</span>
+<span class="go">| 1.0 | 4.668988496071829 |       4.625        |  -0.04398849607182864 |</span>
+<span class="go">| 2.0 | 5.232786195286195 | 5.2272727272727275 | -0.005513468013467637 |</span>
+<span class="go">| 3.0 | 5.232786195286195 |        6.0         |   0.7672138047138048  |</span>
+<span class="go">| 4.0 | 5.232786195286195 | 4.444444444444445  |  -0.7883417508417505  |</span>
+<span class="go">+-----+-------------------+--------------------+-----------------------+</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -1022,6 +1128,18 @@ then partial sill is fixed to this value.</p>
 J.M.; TURCO, R.F.; KONOPKA, A.E. Field-scale variability of soil
 properties in central Iowa soils.
 Soil Science Society of America Journal, v. 58, n. 5, p. 1501-1511, 1994.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="n">calculate_spatial_dependence_index</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ratio_percent</span><span class="p">,</span> <span class="n">strength</span> <span class="o">=</span> <span class="n">calculate_spatial_dependence_index</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">nugget</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sill</span><span class="o">=</span><span class="mf">0.9</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">((</span><span class="n">ratio_percent</span><span class="p">,</span> <span class="n">strength</span><span class="p">))</span>
+<span class="go">(10.0, &#39;strong&#39;)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

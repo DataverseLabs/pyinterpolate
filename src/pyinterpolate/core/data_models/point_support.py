@@ -114,9 +114,6 @@ class PointSupport:
     >>> from pyinterpolate import (
     >>> Blocks, ExperimentalVariogram, PointSupport, TheoreticalVariogram
     >>> )
-    >>> from pyinterpolate.core.data_models.centroid_poisson_kriging import (
-    >>> CentroidPoissonKrigingInput
-    >>> )
     >>>
     >>>
     >>> FILENAME = 'cancer_data.gpkg'

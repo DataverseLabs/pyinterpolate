@@ -538,6 +538,59 @@ are weighted distances between blocks.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">calc_block_to_block_distance</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Blocks</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">PointSupport</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">TheoreticalVariogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_VALUES</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_INDEX</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_VALUES</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">PS_LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CANCER_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>   <span class="s1">&#39;ds&#39;</span><span class="p">:</span> <span class="n">DS</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;index_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_INDEX</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">POINT_SUPPORT_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;ps&#39;</span><span class="p">:</span> <span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">PS_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">PS_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLOCKS</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span><span class="o">**</span><span class="n">CANCER_DATA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indexes</span> <span class="o">=</span> <span class="n">BLOCKS</span><span class="o">.</span><span class="n">block_indexes</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ps_blocks</span><span class="o">=</span><span class="n">BLOCKS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">points_value_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;value_column_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">points_geometry_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;geometry_column_name&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances</span> <span class="o">=</span> <span class="n">calc_block_to_block_distance</span><span class="p">(</span><span class="n">PS</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">distances</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="go">               42049.0        42039.0  ...       23009.0       23029.0</span>
+<span class="go">42049.0       0.000000   48885.422652  ...  9.780781e+05  1.061496e+06</span>
+<span class="go">42039.0   48885.422652       0.000000  ...  9.952927e+05  1.079528e+06</span>
+<span class="go">42085.0   91350.566468   52240.566481  ...  1.030860e+06  1.115642e+06</span>
+<span class="go">42073.0  120259.614440   78853.981609  ...  1.042438e+06  1.127643e+06</span>
+<span class="go">42007.0  152110.979345  109955.408914  ...  1.055898e+06  1.141472e+06</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

@@ -562,7 +562,10 @@
 <span class="sd">    &gt;&gt;&gt; STEP_SIZE = 1</span>
 <span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
 <span class="sd">    &gt;&gt;&gt; covariances = calculate_covariance(</span>
-<span class="sd">    ...     REFERENCE_INPUT, STEP_SIZE, MAX_RANGE</span>
+<span class="sd">    ...     values=REFERENCE_INPUT[:, -1],</span>
+<span class="sd">    ...     geometries=REFERENCE_INPUT[:, :-1],</span>
+<span class="sd">    ...     step_size=STEP_SIZE,</span>
+<span class="sd">    ...     max_range=MAX_RANGE</span>
 <span class="sd">    ... )</span>
 <span class="sd">    &gt;&gt;&gt; print(covariances[0][0])</span>
 <span class="sd">    [ 1.         -0.54340278 24.        ]</span>

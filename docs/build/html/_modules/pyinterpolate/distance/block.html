@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.distance.block &#8212; pyinterpolate 1.0.2 documentation</title>
+    <title>pyinterpolate.distance.block &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -638,6 +638,59 @@
 <span class="sd">    ------</span>
 <span class="sd">    AttributeError</span>
 <span class="sd">        Blocks are provided as DataFrame but column names were not given.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     calc_block_to_block_distance,</span>
+<span class="sd">    ...     Blocks,</span>
+<span class="sd">    ...     ExperimentalVariogram,</span>
+<span class="sd">    ...     PointSupport,</span>
+<span class="sd">    ...     TheoreticalVariogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; FILENAME = &#39;cancer_data.gpkg&#39;</span>
+<span class="sd">    &gt;&gt;&gt; LAYER_NAME = &#39;areas&#39;</span>
+<span class="sd">    &gt;&gt;&gt; DS = gpd.read_file(FILENAME, layer=LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt; AREA_VALUES = &#39;rate&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_INDEX = &#39;FIPS&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_LAYER_NAME = &#39;points&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_VALUES = &#39;POP10&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; CANCER_DATA = {</span>
+<span class="sd">    ...    &#39;ds&#39;: DS,</span>
+<span class="sd">    ...    &#39;index_column_name&#39;: AREA_INDEX,</span>
+<span class="sd">    ...    &#39;value_column_name&#39;: AREA_VALUES,</span>
+<span class="sd">    ...    &#39;geometry_column_name&#39;: AREA_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; POINT_SUPPORT_DATA = {</span>
+<span class="sd">    ...     &#39;ps&#39;: PS,</span>
+<span class="sd">    ...     &#39;value_column_name&#39;: PS_VALUES,</span>
+<span class="sd">    ...     &#39;geometry_column_name&#39;: PS_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; BLOCKS = Blocks(**CANCER_DATA)</span>
+<span class="sd">    &gt;&gt;&gt; indexes = BLOCKS.block_indexes</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; PS = PointSupport(</span>
+<span class="sd">    ...     points=POINT_SUPPORT_DATA[&#39;ps&#39;],</span>
+<span class="sd">    ...     ps_blocks=BLOCKS,</span>
+<span class="sd">    ...     points_value_column=POINT_SUPPORT_DATA[&#39;value_column_name&#39;],</span>
+<span class="sd">    ...     points_geometry_column=POINT_SUPPORT_DATA[&#39;geometry_column_name&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; distances = calc_block_to_block_distance(PS)</span>
+<span class="sd">    &gt;&gt;&gt; print(distances.head())</span>
+<span class="sd">                   42049.0        42039.0  ...       23009.0       23029.0</span>
+<span class="sd">    42049.0       0.000000   48885.422652  ...  9.780781e+05  1.061496e+06</span>
+<span class="sd">    42039.0   48885.422652       0.000000  ...  9.952927e+05  1.079528e+06</span>
+<span class="sd">    42085.0   91350.566468   52240.566481  ...  1.030860e+06  1.115642e+06</span>
+<span class="sd">    42073.0  120259.614440   78853.981609  ...  1.042438e+06  1.127643e+06</span>
+<span class="sd">    42007.0  152110.979345  109955.408914  ...  1.055898e+06  1.141472e+06</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ps_blocks</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>

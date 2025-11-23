@@ -69,6 +69,9 @@ class ExperimentalVariogram:
         Custom weights assigned to points. Only semivariance values are
         weighted.
 
+    drop_lags_without_pairs : bool, default=True
+        Drops lags when there are no point pairs within.
+
     is_semivariance : bool, default=True
         Calculate experimental semivariance.
 
@@ -96,6 +99,9 @@ class ExperimentalVariogram:
     Examples
     --------
     >>> import numpy as np
+    >>> from pyinterpolate import ExperimentalVariogram
+    >>>
+    >>>
     >>> REFERENCE_INPUT = np.array([
     ...    [0, 0, 8],
     ...    [1, 0, 6],
@@ -113,9 +119,12 @@ class ExperimentalVariogram:
     ...    ])
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
-    >>> empirical_smv = ExperimentalVariogram(REFERENCE_INPUT,
-    ...                                       step_size=STEP_SIZE,
-    ...                                       max_range=MAX_RANGE)
+    >>> empirical_smv = ExperimentalVariogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
     >>> print(empirical_smv)
     +-----+--------------------+---------------------+
     | lag |    semivariance    |      covariance     |
@@ -137,9 +146,10 @@ class ExperimentalVariogram:
                  tolerance: float = None,
                  custom_bins: Union[np.ndarray, Collection] = None,
                  custom_weights: np.ndarray = None,
-                 is_semivariance=True,
-                 is_covariance=True,
-                 as_cloud=False):
+                 drop_lags_without_pairs: bool = True,
+                 is_semivariance: bool = True,
+                 is_covariance: bool = True,
+                 as_cloud: bool = False):
 
         # Validate points
         if not isinstance(ds, VariogramPoints):
@@ -171,6 +181,7 @@ class ExperimentalVariogram:
         self.direction = direction
         self.tolerance = tolerance
         self.as_cloud = as_cloud
+        self.__drop_lags = drop_lags_without_pairs
         self.__c_sem = is_semivariance
         self.__c_cov = is_covariance
 
@@ -181,8 +192,31 @@ class ExperimentalVariogram:
         if as_cloud:
             self._calculate_semivariance_point_cloud()
 
+        if drop_lags_without_pairs:
+            self._drop_lags_without_point_pairs()
+
         # update base model
         self.model = self.get_model_params()
+
+    @property
+    def lag_semivariance_array(self):
+        ls_array = np.vstack((self.lags, self.semivariances)).T
+        return ls_array
+
+    def get_model_params(self):
+        model_parameters = {
+            "lags": self.lags,
+            "points_per_lag": self.points_per_lag,
+            "semivariances": self.semivariances,
+            "covariances": self.covariances,
+            "variance": self.variance,
+            "direction": self.direction,
+            "tolerance": self.tolerance,
+            "max_range": self.max_range,
+            "step_size": self.step_size,
+            "custom_weights": self.custom_weights
+        }
+        return ExperimentalVariogramModel(**model_parameters)
 
     def plot(self,
              semivariance=True,
@@ -312,20 +346,38 @@ class ExperimentalVariogram:
 
         self.semivariances = experimental_semivariance_array[:, 1]
 
-    def get_model_params(self):
-        model_parameters = {
-            "lags": self.lags,
-            "points_per_lag": self.points_per_lag,
-            "semivariances": self.semivariances,
-            "covariances": self.covariances,
-            "variance": self.variance,
-            "direction": self.direction,
-            "tolerance": self.tolerance,
-            "max_range": self.max_range,
-            "step_size": self.step_size,
-            "custom_weights": self.custom_weights
-        }
-        return ExperimentalVariogramModel(**model_parameters)
+    def _drop_lags_without_point_pairs(self):
+        """
+        Method removes all semivariances, covariances, and number of points
+        in each lag if value at the specific lag is None or NaN (no point
+        pairs for that lag).
+        """
+        if self.lags is None:
+            pass
+        else:
+            sem_not_nan = None
+            cov_not_nan = None
+            lags_trimmed = False
+
+            if self.__c_sem:
+                sem_not_nan = ~np.isnan(self.semivariances)
+
+            if self.__c_cov:
+                cov_not_nan = ~np.isnan(self.covariances)
+
+            if sem_not_nan is not None:
+                self.semivariances = self.semivariances[sem_not_nan]
+
+                self.lags = self.lags[sem_not_nan]
+                self.points_per_lag = self.points_per_lag[sem_not_nan]
+                lags_trimmed = True
+
+            if cov_not_nan is not None:
+                self.covariances = self.covariances[cov_not_nan]
+
+                if not lags_trimmed:
+                    self.lags = self.lags[cov_not_nan]
+                    self.points_per_lag = self.points_per_lag[cov_not_nan]
 
     def __repr__(self):
         """
@@ -486,6 +538,44 @@ def build_experimental_variogram(ds: Union[ArrayLike, VariogramPoints] = None,
     Returns
     -------
     : ExperimentalVariogram
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import build_experimental_variogram
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> empirical_smv = build_experimental_variogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1]
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> print(empirical_smv)
+    +-----+--------------------+---------------------+
+    | lag |    semivariance    |      covariance     |
+    +-----+--------------------+---------------------+
+    | 1.0 |       4.625        | -0.5434027777777798 |
+    | 2.0 | 5.2272727272727275 | -0.7954545454545454 |
+    | 3.0 |        6.0         | -1.2599999999999958 |
+    +-----+--------------------+---------------------+
     """
 
     exp_var = ExperimentalVariogram(

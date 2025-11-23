@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariogram.deconvolution.regularize &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.semivariogram.deconvolution.regularize &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -547,17 +547,82 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; dcv = Deconvolution(verbose=True)</span>
-<span class="sd">    &gt;&gt;&gt; dcv.fit(agg_dataset=...,</span>
-<span class="sd">    ...         point_support_dataset=...,</span>
-<span class="sd">    ...         step_size=...,</span>
-<span class="sd">    ...         max_range=...,</span>
-<span class="sd">    ...         variogram_weighting_method=&#39;closest&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; dcv.transform(_max_iters=5)</span>
-<span class="sd">    &gt;&gt;&gt; dcv.plot_variograms()</span>
-<span class="sd">    &gt;&gt;&gt; dcv.plot_deviations()</span>
-<span class="sd">    &gt;&gt;&gt; dcv.plot_weights()</span>
-<span class="sd">    &gt;&gt;&gt; dcv.export_model(&#39;results.csv&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     Blocks,</span>
+<span class="sd">    ...     Deconvolution,</span>
+<span class="sd">    ...     PointSupport,</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; FILENAME = &#39;cancer_data.gpkg&#39;</span>
+<span class="sd">    &gt;&gt;&gt; LAYER_NAME = &#39;areas&#39;</span>
+<span class="sd">    &gt;&gt;&gt; DS = gpd.read_file(FILENAME, layer=LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt; AREA_VALUES = &#39;rate&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_INDEX = &#39;FIPS&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_LAYER_NAME = &#39;points&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_VALUES = &#39;POP10&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; CANCER_DATA = {</span>
+<span class="sd">    ...    &#39;ds&#39;: DS,</span>
+<span class="sd">    ...    &#39;index_column_name&#39;: AREA_INDEX,</span>
+<span class="sd">    ...    &#39;value_column_name&#39;: AREA_VALUES,</span>
+<span class="sd">    ...    &#39;geometry_column_name&#39;: AREA_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; POINT_SUPPORT_DATA = {</span>
+<span class="sd">    ...     &#39;ps&#39;: PS,</span>
+<span class="sd">    ...     &#39;value_column_name&#39;: PS_VALUES,</span>
+<span class="sd">    ...     &#39;geometry_column_name&#39;: PS_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; BLOCKS = Blocks(**CANCER_DATA)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; PS = PointSupport(</span>
+<span class="sd">    ...     points=POINT_SUPPORT_DATA[&#39;ps&#39;],</span>
+<span class="sd">    ...     ps_blocks=BLOCKS,</span>
+<span class="sd">    ...     points_value_column=POINT_SUPPORT_DATA[&#39;value_column_name&#39;],</span>
+<span class="sd">    ...     points_geometry_column=POINT_SUPPORT_DATA[&#39;geometry_column_name&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; dcv = Deconvolution(verbose=False)</span>
+<span class="sd">    &gt;&gt;&gt; dcv.fit(</span>
+<span class="sd">    ...     blocks=BLOCKS,</span>
+<span class="sd">    ...     point_support=PS,</span>
+<span class="sd">    ...     step_size=40000,</span>
+<span class="sd">    ...     max_range=300001</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; dcv.transform(max_iters=5)</span>
+<span class="sd">    &gt;&gt;&gt; print(dcv.final_theoretical_model)</span>
+<span class="sd">    * Selected model: Spherical model</span>
+<span class="sd">    * Nugget: 0.0</span>
+<span class="sd">    * Sill: 157.72180532432975</span>
+<span class="sd">    * Range: 28000.0</span>
+<span class="sd">    * Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate</span>
+<span class="sd">    * Mean Bias: None</span>
+<span class="sd">    * Mean RMSE: 16.524700893642784</span>
+<span class="sd">    * Error-lag weighting method: closest</span>
+<span class="sd">    +----------+--------------------+--------------------+---------------------+</span>
+<span class="sd">    |   lag    |    theoretical     |    experimental    |   bias (real-yhat)  |</span>
+<span class="sd">    +----------+--------------------+--------------------+---------------------+</span>
+<span class="sd">    | 20000.0  | 140.2482525478734  | 193.16205582305136 |  52.91380327517797  |</span>
+<span class="sd">    | 40000.0  | 157.72180532432975 | 138.25751906267658 |  -19.46428626165317 |</span>
+<span class="sd">    | 60000.0  | 157.72180532432975 |  149.997349965762  |  -7.724455358567752 |</span>
+<span class="sd">    | 80000.0  | 157.72180532432975 | 142.84364743170343 |  -14.87815789262632 |</span>
+<span class="sd">    | 100000.0 | 157.72180532432975 | 142.4222925698438  |  -15.29951275448596 |</span>
+<span class="sd">    | 120000.0 | 157.72180532432975 | 154.47000840562424 | -3.2517969187055087 |</span>
+<span class="sd">    | 140000.0 | 157.72180532432975 | 145.67546701766707 | -12.046338306662676 |</span>
+<span class="sd">    | 160000.0 | 157.72180532432975 | 161.2524338627573  |  3.5306285384275498 |</span>
+<span class="sd">    | 180000.0 | 157.72180532432975 | 144.86386526565153 | -12.857940058678224 |</span>
+<span class="sd">    | 200000.0 | 157.72180532432975 | 141.46845881256164 | -16.253346511768115 |</span>
+<span class="sd">    | 220000.0 | 157.72180532432975 | 126.10100191843915 | -31.620803405890598 |</span>
+<span class="sd">    | 240000.0 | 157.72180532432975 | 142.37493167303575 | -15.346873651294004 |</span>
+<span class="sd">    | 260000.0 | 157.72180532432975 | 125.00372185725449 |  -32.71808346707526 |</span>
+<span class="sd">    | 280000.0 | 157.72180532432975 | 122.2260745900828  |  -35.49573073424695 |</span>
+<span class="sd">    +----------+--------------------+--------------------+---------------------+</span>
+
+<span class="sd">    &gt;&gt;&gt; dcv.export_model_to_json(&#39;results.csv&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">store_models</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>

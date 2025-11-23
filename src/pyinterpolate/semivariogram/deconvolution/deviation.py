@@ -2,7 +2,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 from pyinterpolate.evaluate.metrics import root_mean_squared_error
-from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
 def calculate_deviation(theoretical: np.ndarray,
@@ -117,11 +116,11 @@ class Deviation:
 
     Parameters
     ----------
-    theoretical_model : TheoreticalVariogram
-        Fitted model.
+    theoretical_semivariances : numpy array
+        Predicted semivariances
 
-    regularized_variances : numpy array
-        ``[lag, semivariance]``
+    regularized_semivariances : numpy array
+        Regualrized semivariances
 
     method : str, default=`'mrd'`
         Deviation monitoring method, available options:
@@ -176,18 +175,69 @@ class Deviation:
     ------
     KeyError : User provides unsupported deviation method name.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import (
+    ...     build_experimental_variogram,
+    ...     build_theoretical_variogram
+    ... )
+    >>> from pyinterpolate.semivariogram.deconvolution.deviation import Deviation
+    >>>
+    >>>
+    >>> ref_input = np.array([
+    ...         [0, 0, 8],
+    ...         [1, 0, 6],
+    ...         [2, 0, 4],
+    ...         [3, 0, 3],
+    ...         [4, 0, 6],
+    ...         [5, 0, 5],
+    ...         [6, 0, 7],
+    ...         [7, 0, 2],
+    ...         [8, 0, 8],
+    ...         [9, 0, 9],
+    ...         [10, 0, 5],
+    ...         [11, 0, 6],
+    ...         [12, 0, 3]
+    ...     ])
+    >>> step_size = 1
+    >>> max_range = 4
+    >>>
+    >>> experimental = build_experimental_variogram(
+    ...     values=ref_input[:, -1],
+    ...     geometries=ref_input[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>>
+    >>> regularized = build_experimental_variogram(
+    ...     values=ref_input[:, -1] + 2,
+    ...     geometries=ref_input[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>>
+    >>> dv = Deviation(
+    ...     theoretical_semivariances=theoretical.yhat,
+    ...     regularized_semivariances=regularized.semivariances
+    ... )
+    >>> print(dv.optimal_deviation)
+    0.05754045538774986
     """
 
     def __init__(self,
-                 theoretical_model: np.ndarray,
-                 regularized_variances: np.ndarray,
+                 theoretical_semivariances: np.ndarray,
+                 regularized_semivariances: np.ndarray,
                  method: str = 'mrd'):
 
-        self._allowed_methods = {'mrd', 'smrd', 'rmse'}
+        self._allowed_methods = {'mrd',
+                                 'smrd',
+                                 'rmse'}
         self.method = self._check_deviation_method(method)
 
-        self.initial_deviation = calculate_deviation(theoretical_model,
-                                                     regularized_variances)
+        self.initial_deviation = calculate_deviation(theoretical_semivariances,
+                                                     regularized_semivariances,
+                                                     self.method)
         self.deviations = [self.initial_deviation]
 
         self.optimal_deviation = self.initial_deviation
@@ -310,7 +360,8 @@ class Deviation:
             Regularized semivariances.
         """
         deviation = calculate_deviation(theoretical_model,
-                                        regularized_variances)
+                                        regularized_variances,
+                                        self.method)
         self.deviations.append(deviation)
 
     def _check_deviation_method(self, method: str):

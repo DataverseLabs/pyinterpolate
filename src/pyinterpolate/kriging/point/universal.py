@@ -153,6 +153,30 @@ class UniversalKriging:
 
     plot_trend_surfaces()
         Visual comparison of observations, trend, and bias.
+
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>>
+    >>> from pyinterpolate.kriging.point.universal import UniversalKriging
+    >>>
+    >>>
+    >>> dem = gpd.read_file('dem.gpkg')
+    >>> unknown_points = gpd.read_file('unknown_locations.gpkg')
+    >>> uk = UniversalKriging(
+    ...     known_values=dem[:, -1],
+    ...     known_geometries=dem[:, :-1]
+    ... )
+    >>> uk.fit_trend()
+    >>> uk.detrend()
+    >>> uk.fit_bias(
+    ...     step_size=500, max_range=10000
+    ... )
+    >>> predictions = uk.predict(points=unknown_points)
+    >>> print(predictions[0])  # z_hat, x, y
+    [9.72916006e+01 2.38012302e+05 5.51466805e+05]
     """
 
     def __init__(self,

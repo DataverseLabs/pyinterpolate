@@ -672,6 +672,26 @@
 <span class="sd">    Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated</span>
 <span class="sd">    non-parametric modeling of local uncertainty</span>
 <span class="sd">    in earth sciences. DOI: https://doi.org/10.1016/j.cageo.2008.08.014</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import ExperimentalIndicatorVariogram</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = np.random.random(size=(1000, 3))</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 0.1</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 0.6</span>
+<span class="sd">    &gt;&gt;&gt; exp_indicator = ExperimentalIndicatorVariogram(</span>
+<span class="sd">    ...     values=dem[:, -1],</span>
+<span class="sd">    ...     geometries=dem[:, :-1],</span>
+<span class="sd">    ...     number_of_thresholds=5,</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(len(exp_indicator.experimental_models))</span>
+<span class="sd">    5</span>
+<span class="sd">    &gt;&gt;&gt; exp_indicator.show()  # plots variogram for each threshold</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
@@ -777,6 +797,32 @@
 <span class="sd">    show()</span>
 <span class="sd">        Shows experimental and theoretical variograms for each threshold.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     ExperimentalIndicatorVariogram,</span>
+<span class="sd">    ...     TheoreticalIndicatorVariogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = np.random.random(size=(1000, 3))</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 0.1</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 0.6</span>
+<span class="sd">    &gt;&gt;&gt; exp_indicator = ExperimentalIndicatorVariogram(</span>
+<span class="sd">    ...     values=dem[:, -1],</span>
+<span class="sd">    ...     geometries=dem[:, :-1],</span>
+<span class="sd">    ...     number_of_thresholds=5,</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_indicator = TheoreticalIndicatorVariogram(</span>
+<span class="sd">    ...     experimental_indicator_variogram=exp_indicator</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_indicator.fit()</span>
+<span class="sd">    &gt;&gt;&gt; print(len(theo_indicator.theoretical_indicator_variograms))</span>
+<span class="sd">    5</span>
+<span class="sd">    &gt;&gt;&gt; theo_indicator.show()  # plots theoretical models&#39; curves</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>

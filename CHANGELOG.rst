@@ -1,7 +1,7 @@
 Changes - from version >= 1.x
 =============================
 
-2025-11-0
+2025-11-1
 ----------
 
 **version 1.2.0**
@@ -42,7 +42,24 @@ Changes - from version >= 1.x
 * [docs] `CITATION.cff`, citation section in readme has been moved up, bibtex citation has been added
 * [docs] corrected broken links to `CONTRIBUTING.md` file in readme and docs
 * [setup] links to documentation have been added to `pyproject.toml`
-* # todo [docs] docstring examples - all user-facing API endpoints has examples in docstrings, using new input types (values | geometries)
+* [docs] docstring examples - all user-facing API endpoints have examples in docstrings, using new input types (values | geometries)
+* [docs] updated docstrings (examples) in: `PointSupportDistance`, `core.block_filter`, `pipelines.interpolate`, `pyinterpolate.distance.block.calc_block_to_block_distance`, `validate_kriging`, `metrics` module functions, `inverse_distance_weighting`, `centroid_poisson_kriging`, `area_to_area_pk`, `area_to_point_pk`, `area_to_point_pk`, `area_to_point_pk`, `ordinary_kriging`, `simple_kriging`, `IndicatorKriging`, `UniversalKriging`, `Deconvolution`,
+* [enhancement] `ExperimentalVariogram` has new property - `lag_semivariance_array` that returns numpy array with lags and semivariances
+* [enhancement] `TheoreticalVariogram` has new property - `lag_yhat_array` that returns numpy array with lags and predicted semivariances
+* [api change] `Deviation` class parameters have been renamed to clearly point what is passed as the input
+* [tests] `Deviation` class tests and debug (method selection)
+* [docs] docstring example for `Deviation`
+* [docs] docstring example for `AggregatedVariogram` and `regularize()`
+* [docs] docstring example for `ExperimentalVariogram` and `build_experimental_variogram()`, `calculate_semivariance()`, used parameters `values` and `geometries`
+* [docs] docstring example for `calculate_covariance()`, used parameters `values` and `geometries`
+* [docs] docstring example for `DirectionalVariogram`, used parameters `values` and `geometries`
+* [docs] docstring example for `VariogramCloud`, used parameters `values` and `geometries`
+* [docs] `ExperimentalIndicatorVariogram` and `TheoreticalIndicatorVariogram` - updated examples in docstrings
+* [docs] `TheoreticalVariogram`, and `build_theoretical_variogram()` examples
+* [docs] `calculate_spatial_dependence_index()` example
+* [bug/feature] `ExperimentalVariogram` class removes lags with NaN values (in covariance and semivariance)
+* [docs] Example in `interpolate_raster()` function
+
 
 2025-10-11
 ----------

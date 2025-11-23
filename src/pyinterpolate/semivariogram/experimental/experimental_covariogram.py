@@ -136,7 +136,10 @@ def calculate_covariance(ds: Union[ArrayLike, VariogramPoints] = None,
     >>> STEP_SIZE = 1
     >>> MAX_RANGE = 4
     >>> covariances = calculate_covariance(
-    ...     REFERENCE_INPUT, STEP_SIZE, MAX_RANGE
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
     ... )
     >>> print(covariances[0][0])
     [ 1.         -0.54340278 24.        ]

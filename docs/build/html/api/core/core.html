@@ -953,9 +953,6 @@ values.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Blocks</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">,</span> <span class="n">TheoreticalVariogram</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.centroid_poisson_kriging</span> <span class="kn">import</span> <span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">CentroidPoissonKrigingInput</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
@@ -1126,9 +1123,61 @@ wants to find closest neighbors (using
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Blocks</span><span class="p">,</span> <span class="n">ExperimentalVariogram</span><span class="p">,</span> <span class="n">PointSupport</span><span class="p">,</span> <span class="n">PointSupportDistance</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TheoreticalVariogram</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_VALUES</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_INDEX</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_VALUES</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">PS_LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CANCER_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>   <span class="s1">&#39;ds&#39;</span><span class="p">:</span> <span class="n">DS</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;index_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_INDEX</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">POINT_SUPPORT_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;ps&#39;</span><span class="p">:</span> <span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">PS_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">PS_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">block</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span><span class="o">**</span><span class="n">CANCER_DATA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ps</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ps_blocks</span><span class="o">=</span><span class="n">BLOCKS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">points_value_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;value_column_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">points_geometry_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;geometry_column_name&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pds</span> <span class="o">=</span> <span class="n">PointSupportDistance</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">distances_between_neighbors</span> <span class="o">=</span> <span class="n">pds</span><span class="o">.</span><span class="n">calculate_point_support_distances</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">point_support</span><span class="o">=</span><span class="n">ps</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">block_id</span><span class="o">=</span><span class="mi">36033</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">distances_between_neighbors</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c1"># dict[tuple: array]</span>
+<span class="go">dict_keys([(36033, 36019), (36019, 36033), (36033, 36089), (36089, 36033)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pds</span><span class="o">.</span><span class="n">closest_neighbors</span><span class="p">)</span>
+<span class="go">{36033: [36019, 36089]}</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">calc_pair_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_pair</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support_distances.html#PointSupportDistance.calc_pair_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">calc_pair_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_pair</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support_distances.html#PointSupportDistance.calc_pair_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Returns distances between point supports from two blocks and
 updates distances dictionary.</p>
 <dl class="field-list simple">
@@ -1153,7 +1202,7 @@ updates distances dictionary.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">calculate_point_support_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_closest_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support_distances.html#PointSupportDistance.calculate_point_support_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<span class="sig-name descname"><span class="pre">calculate_point_support_distances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point_support</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_closest_neighbors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="../../_modules/pyinterpolate/core/data_models/point_support_distances.html#PointSupportDistance.calculate_point_support_distances"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Calculates distances between point supports.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

@@ -596,6 +596,41 @@
 <span class="sd">    --------</span>
 <span class="sd">    ExperimentalVariogram : class that calculates experimental semivariogram,</span>
 <span class="sd">        experimental covariogram and data variance.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import VariogramCloud</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; REFERENCE_INPUT = np.array([</span>
+<span class="sd">    ...    [0, 0, 8],</span>
+<span class="sd">    ...    [1, 0, 6],</span>
+<span class="sd">    ...    [2, 0, 4],</span>
+<span class="sd">    ...    [3, 0, 3],</span>
+<span class="sd">    ...    [4, 0, 6],</span>
+<span class="sd">    ...    [5, 0, 5],</span>
+<span class="sd">    ...    [6, 0, 7],</span>
+<span class="sd">    ...    [7, 0, 2],</span>
+<span class="sd">    ...    [8, 0, 8],</span>
+<span class="sd">    ...    [9, 0, 9],</span>
+<span class="sd">    ...    [10, 0, 5],</span>
+<span class="sd">    ...    [11, 0, 6],</span>
+<span class="sd">    ...    [12, 0, 3]</span>
+<span class="sd">    ...    ])</span>
+<span class="sd">    &gt;&gt;&gt; STEP_SIZE = 1</span>
+<span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
+<span class="sd">    &gt;&gt;&gt; vc = VariogramCloud(</span>
+<span class="sd">    ...     values=REFERENCE_INPUT[:, -1],</span>
+<span class="sd">    ...     geometries=REFERENCE_INPUT[:, :-1],</span>
+<span class="sd">    ...     step_size=STEP_SIZE,</span>
+<span class="sd">    ...     max_range=MAX_RANGE</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; stats = vc.describe()</span>
+<span class="sd">    &gt;&gt;&gt; print(stats[1][&#39;count&#39;])</span>
+<span class="sd">    24</span>
+<span class="sd">    &gt;&gt;&gt; print(stats[2][&#39;median&#39;])</span>
+<span class="sd">    9</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

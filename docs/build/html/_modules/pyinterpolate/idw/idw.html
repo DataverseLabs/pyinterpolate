@@ -498,6 +498,27 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        Less than 2 neighbours or more than the number of ``known_points``</span>
 <span class="sd">        neighbours are given in the ``number_of_neighbours`` parameter.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; unknown_pos = (10, 10)</span>
+<span class="sd">    &gt;&gt;&gt; locs = np.array([</span>
+<span class="sd">    ...     [11, 1, 1],</span>
+<span class="sd">    ...     [23, 2, 2],</span>
+<span class="sd">    ...     [33, 3, 3],</span>
+<span class="sd">    ...     [14, 44, 4],</span>
+<span class="sd">    ...     [13, 10, 9],</span>
+<span class="sd">    ...     [12, 55, 35],</span>
+<span class="sd">    ...     [11, 9, 7]</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; pred = inverse_distance_weighting(</span>
+<span class="sd">    ...     unknown_locations=unknown_pos,</span>
+<span class="sd">    ...     known_values=locs[:, -1],</span>
+<span class="sd">    ...     known_geometries=locs[:, :-1],</span>
+<span class="sd">    ...     no_neighbors=2</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(pred)</span>
+<span class="sd">    7.286311587314138</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check power parameter</span>

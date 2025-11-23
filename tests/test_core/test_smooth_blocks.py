@@ -38,6 +38,7 @@ def test_smooth_blocks():
         number_of_neighbors=8,
         verbose=True
     )
+    print(smoothed.columns)
     assert isinstance(smoothed, gpd.GeoDataFrame)
 
     # get block values

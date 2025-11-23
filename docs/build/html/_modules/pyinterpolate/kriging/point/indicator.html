@@ -547,6 +547,46 @@
 <span class="sd">    get_expected_values()</span>
 <span class="sd">        Returns two arrays: one array with coordinates and expected values,</span>
 <span class="sd">        and the second with coordinates and variances.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.kriging.point.indicator import IndicatorKriging</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.semivariogram.indicator.indicator import (</span>
+<span class="sd">    ...     ExperimentalIndicatorVariogram,</span>
+<span class="sd">    ...     TheoreticalIndicatorVariogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = np.random.random(size=(1000, 3))</span>
+<span class="sd">    &gt;&gt;&gt; exp_variogram = ExperimentalIndicatorVariogram(</span>
+<span class="sd">    ...     values=dem[:, -1],</span>
+<span class="sd">    ...     geometries=dem[:, :-1],</span>
+<span class="sd">    ...     number_of_thresholds=3,</span>
+<span class="sd">    ...     step_size=0.1,</span>
+<span class="sd">    ...     max_range=0.6</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_variograms = TheoreticalIndicatorVariogram(</span>
+<span class="sd">    ...     experimental_indicator_variogram=exp_variogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_variogram.fit()</span>
+<span class="sd">    &gt;&gt;&gt; ikriging = IndicatorKriging(</span>
+<span class="sd">    ...     known_values=dem[:, -1],</span>
+<span class="sd">    ...     known_geometries=dem[:, :-1],</span>
+<span class="sd">    ...     indicator_variograms=theo_variograms,</span>
+<span class="sd">    ...     unknown_locations=np.random.random(size=(100, 2)),</span>
+<span class="sd">    ...     kriging_type=&#39;ok&#39;,</span>
+<span class="sd">    ...     no_neighbors=16</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(ikriging.indicator_predictions[0])</span>
+<span class="sd">    [0.12942075 0.13930802 0.        ]</span>
+<span class="sd">    &gt;&gt;&gt; print(ikriging.expected_values[:3])</span>
+<span class="sd">    [0.64983095 0.64983095 0.64983095]</span>
+<span class="sd">    &gt;&gt;&gt; print(ikriging.variances[:3])</span>
+<span class="sd">    [0.28827397 0.28539667 0.30135499]</span>
+<span class="sd">    &gt;&gt;&gt; imaps = ikriging.get_indicator_maps()</span>
+<span class="sd">    &gt;&gt;&gt; print(imaps.keys())</span>
+<span class="sd">    dict_keys([0.35200453863293624, 0.6783974224309782, 0.9929787628823334])</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

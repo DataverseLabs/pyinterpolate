@@ -57,3 +57,33 @@ def test_interpolate_raster_sep_geom():
     assert isinstance(interpolated['error'], np.ndarray)
     assert isinstance(interpolated['params'], dict)
     assert interpolated['result'].shape == (51, 51)
+
+
+def test_simple_examples_dataset():
+    input_data = np.array([
+        [0, 0, 8],
+        [1, 0, 6],
+        [2, 0, 4],
+        [3, 0, 3],
+        [4, 0, 6],
+        [5, 0, 5],
+        [6, 0, 7],
+        [7, 0, 2],
+        [8, 0, 8],
+        [9, 0, 9],
+        [10, 0, 5],
+        [11, 0, 6],
+        [12, 0, 3]
+    ])
+    results = interpolate_raster(
+        known_values=input_data[:, -1],
+        known_geometries=input_data[:, :-1],
+        dim=20
+    )
+
+    # import json
+    # print(json.dumps(results, indent=2, default=str))
+    assert isinstance(results, dict)
+    assert 'result' in results
+    assert 'params' in results
+    assert 'error' in results
