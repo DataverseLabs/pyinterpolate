@@ -7,7 +7,7 @@
 
 # Pyinterpolate
 
-**version 1.1.0**
+**version 1.2.0**
 
 ![Logo](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/refs/heads/main/pyinterpolate-banner.png)
 
