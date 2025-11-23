@@ -1,6 +1,6 @@
 import numpy as np
 from pyinterpolate.semivariogram.experimental.functions.directional import \
-    directional_weighted_semivariance
+    _directional_weighted_semivariance
 
 
 def profile_select_in_ellipse():
@@ -9,7 +9,7 @@ def profile_select_in_ellipse():
     step_size = 0.05
     max_range = 0.6
 
-    _ = directional_weighted_semivariance(
+    _ = _directional_weighted_semivariance(
         points=points,
         lags=np.linspace(step_size, max_range, 10),
         custom_weights=weights,

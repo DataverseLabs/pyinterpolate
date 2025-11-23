@@ -589,9 +589,9 @@
       <td>25019</td>
       <td>192.2</td>
       <td>MULTIPOLYGON (((2115688.816 556471.24, 2115699...</td>
-      <td>POINT (2132629.599 557971.156)</td>
-      <td>2.132630e+06</td>
-      <td>557971.155949</td>
+      <td>POINT (2133348.745 558025.221)</td>
+      <td>2.133349e+06</td>
+      <td>558025.221156</td>
     </tr>
     <tr>
       <th>1</th>
@@ -607,27 +607,27 @@
       <td>33001</td>
       <td>157.4</td>
       <td>MULTIPOLYGON (((1937530.728 779787.978, 193751...</td>
-      <td>POINT (1958207.02 766008.383)</td>
+      <td>POINT (1958207.252 766008.62)</td>
       <td>1.958207e+06</td>
-      <td>766008.383446</td>
+      <td>766008.620010</td>
     </tr>
     <tr>
       <th>3</th>
       <td>25007</td>
       <td>156.7</td>
       <td>MULTIPOLYGON (((2074073.532 539159.504, 207411...</td>
-      <td>POINT (2082188.457 556830.822)</td>
-      <td>2.082188e+06</td>
-      <td>556830.822367</td>
+      <td>POINT (2084187.905 556436.412)</td>
+      <td>2.084188e+06</td>
+      <td>556436.412055</td>
     </tr>
     <tr>
       <th>4</th>
       <td>25001</td>
       <td>155.3</td>
       <td>MULTIPOLYGON (((2095343.207 637424.961, 209528...</td>
-      <td>POINT (2100746.85 600235.846)</td>
-      <td>2.100747e+06</td>
-      <td>600235.845891</td>
+      <td>POINT (2101100.939 600344.125)</td>
+      <td>2.101101e+06</td>
+      <td>600344.124709</td>
     </tr>
   </tbody>
 </table>
@@ -648,7 +648,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
+array([2.13334874e+06, 5.58025221e+05, 1.92200000e+02])
 </pre></div></div>
 </div>
 </section>
@@ -670,7 +670,10 @@ array([2.13262960e+06, 5.57971156e+05, 1.92200000e+02])
 
 <span class="k">for</span> <span class="n">step_size</span> <span class="ow">in</span> <span class="n">step_sizes</span><span class="p">:</span>
     <span class="n">max_range</span> <span class="o">=</span> <span class="n">maximum_range</span> <span class="o">+</span> <span class="n">step_size</span>
-    <span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">ds</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
+    <span class="n">vc</span> <span class="o">=</span> <span class="n">VariogramCloud</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">geometries</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+                        <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span><span class="p">)</span>
     <span class="n">variogram_clouds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vc</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -902,20 +905,20 @@ Semivariance calculated for 4 lags.
 
 Model parameters:
 Model type: spherical
-Nugget: 36.532706465067776
-Sill: 114.18779541265431
-Range: 130648.4129328959
-Model error: 6.30055407864868
+Nugget: 36.47814412070759
+Sill: 113.9843806262891
+Range: 130635.90676540829
+Model error: 6.013657676895086
 
 
 Semivariance calculated for 8 lags.
 
 Model parameters:
 Model type: spherical
-Nugget: 56.31636235955056
-Sill: 91.36955242757186
-Range: 130648.4129328959
-Model error: 9.444656398462776
+Nugget: 56.468678977272724
+Sill: 91.20165827269054
+Range: 130635.90676540829
+Model error: 9.285171141696564
 
 
 Semivariance calculated for 16 lags.
@@ -923,9 +926,9 @@ Semivariance calculated for 16 lags.
 Model parameters:
 Model type: spherical
 Nugget: 75.54535714285717
-Sill: 78.4234809204555
-Range: 165487.98971500146
-Model error: 17.503272408247557
+Sill: 78.23809400314832
+Range: 165472.14856951716
+Model error: 17.306288625624866
 
 
 </pre></div></div>
@@ -1049,7 +1052,8 @@ True
 <span class="k">for</span> <span class="n">semi_model</span> <span class="ow">in</span> <span class="n">theoretical_semivariograms</span><span class="p">:</span>
     <span class="n">kriged</span> <span class="o">=</span> <span class="n">interpolate_points</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="o">=</span><span class="n">semi_model</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">,</span>
+        <span class="n">known_values</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">known_geometries</span><span class="o">=</span><span class="n">areal_centroids</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
         <span class="n">unknown_locations</span><span class="o">=</span><span class="n">gdf_pts</span><span class="p">[[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
         <span class="n">neighbors_range</span><span class="o">=</span><span class="mi">200000</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
@@ -1071,9 +1075,9 @@ True
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5419/5419 [00:03&lt;00:00, 1745.52it/s]
-100%|██████████| 5419/5419 [00:02&lt;00:00, 2058.17it/s]
-100%|██████████| 5419/5419 [00:02&lt;00:00, 2032.34it/s]
+100%|██████████| 5419/5419 [00:01&lt;00:00, 3207.48it/s]
+100%|██████████| 5419/5419 [00:01&lt;00:00, 3019.13it/s]
+100%|██████████| 5419/5419 [00:01&lt;00:00, 2981.97it/s]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1136,60 +1140,60 @@ True
       <td>POINT (1277277.671 441124.507)</td>
       <td>1.277278e+06</td>
       <td>441124.5068</td>
-      <td>131.303271</td>
-      <td>102.344082</td>
-      <td>131.303271</td>
-      <td>108.976595</td>
-      <td>133.188693</td>
-      <td>112.406723</td>
+      <td>131.300950</td>
+      <td>102.178639</td>
+      <td>131.300950</td>
+      <td>109.037233</td>
+      <td>133.190048</td>
+      <td>112.323151</td>
     </tr>
     <tr>
       <th>82.0</th>
       <td>POINT (1277277.671 431124.507)</td>
       <td>1.277278e+06</td>
       <td>431124.5068</td>
-      <td>129.941316</td>
-      <td>100.671723</td>
-      <td>129.941316</td>
-      <td>107.638425</td>
-      <td>130.825540</td>
-      <td>111.300443</td>
+      <td>129.939483</td>
+      <td>100.512382</td>
+      <td>129.939483</td>
+      <td>107.704020</td>
+      <td>130.831391</td>
+      <td>111.218534</td>
     </tr>
     <tr>
       <th>83.0</th>
       <td>POINT (1277277.671 421124.507)</td>
       <td>1.277278e+06</td>
       <td>421124.5068</td>
-      <td>129.054839</td>
-      <td>99.691185</td>
-      <td>129.054839</td>
-      <td>106.853829</td>
-      <td>129.958924</td>
-      <td>110.550631</td>
+      <td>129.052488</td>
+      <td>99.533481</td>
+      <td>129.052488</td>
+      <td>106.920779</td>
+      <td>129.964626</td>
+      <td>110.470425</td>
     </tr>
     <tr>
       <th>84.0</th>
       <td>POINT (1277277.671 411124.507)</td>
       <td>1.277278e+06</td>
       <td>411124.5068</td>
-      <td>128.399447</td>
-      <td>99.077242</td>
-      <td>128.399447</td>
-      <td>106.362571</td>
-      <td>129.278133</td>
-      <td>110.092456</td>
+      <td>128.396747</td>
+      <td>98.920356</td>
+      <td>128.396747</td>
+      <td>106.430202</td>
+      <td>129.282825</td>
+      <td>110.013474</td>
     </tr>
     <tr>
       <th>85.0</th>
       <td>POINT (1277277.671 401124.507)</td>
       <td>1.277278e+06</td>
       <td>401124.5068</td>
-      <td>128.291411</td>
-      <td>98.673959</td>
-      <td>128.291411</td>
-      <td>106.039877</td>
-      <td>129.212348</td>
-      <td>109.651128</td>
+      <td>128.288679</td>
+      <td>98.517309</td>
+      <td>128.288679</td>
+      <td>106.107714</td>
+      <td>129.215478</td>
+      <td>109.573660</td>
     </tr>
   </tbody>
 </table>
@@ -1271,15 +1275,15 @@ True
 <div class="highlight"><pre>
 Column: p sph 4
 Mean Absolute Difference with p sph 8 is 0.000000000
-Mean Absolute Difference with p sph 16 is 0.006794571
+Mean Absolute Difference with p sph 16 is 0.020515483
 
 Column: p sph 8
 Mean Absolute Difference with p sph 4 is 0.000000000
-Mean Absolute Difference with p sph 16 is 0.006794571
+Mean Absolute Difference with p sph 16 is 0.020515483
 
 Column: p sph 16
-Mean Absolute Difference with p sph 4 is 0.006794571
-Mean Absolute Difference with p sph 8 is 0.006794571
+Mean Absolute Difference with p sph 4 is 0.020515483
+Mean Absolute Difference with p sph 8 is 0.020515483
 
 </pre></div></div>
 </div>
@@ -1295,20 +1299,16 @@ Mean Absolute Difference with p sph 8 is 0.006794571
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-05-18</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization, and <strong>known_values</strong> and <strong>known_geometries</strong> for kriging process (instead of <strong>known_locations</strong> parameter)</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-05-18</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

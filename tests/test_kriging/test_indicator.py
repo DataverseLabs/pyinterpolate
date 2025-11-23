@@ -60,6 +60,29 @@ def test_omni():
         allow_approximate_solutions=True
     )
     assert isinstance(ikriging, IndicatorKriging)
+    print(ikriging.indicator_predictions[0])
+    assert isinstance(ikriging.indicator_predictions, np.ndarray)
+    print(ikriging.expected_values[:3])
+    assert isinstance(ikriging.expected_values, np.ndarray)
+    print(ikriging.variances[:3])
+    assert isinstance(ikriging.variances, np.ndarray)
+
+    imaps = ikriging.get_indicator_maps()
+    print(imaps.keys())
+    assert isinstance(imaps, Dict)
+
+
+def test_omni_separate_values_and_geometry():
+    ikriging = IndicatorKriging(
+        indicator_variograms=VARIOGRAMS,
+        unknown_locations=TEST[:, :-1],
+        known_values=TRAIN[:, -1],
+        known_geometries=TRAIN[:, :-1],
+        kriging_type='ok',
+        no_neighbors=16,
+        allow_approximate_solutions=True
+    )
+    assert isinstance(ikriging, IndicatorKriging)
     assert isinstance(ikriging.indicator_predictions, np.ndarray)
     assert isinstance(ikriging.expected_values, np.ndarray)
     assert isinstance(ikriging.variances, np.ndarray)

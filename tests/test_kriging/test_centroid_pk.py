@@ -66,6 +66,7 @@ def test_cpk():
         unknown_block_index=indexes[-1],
         number_of_neighbors=8
     )
+    print(cpk)
     assert isinstance(cpk, dict)
     assert cpk['block_id'] == indexes[-1]
     assert cpk['zhat'] > 0

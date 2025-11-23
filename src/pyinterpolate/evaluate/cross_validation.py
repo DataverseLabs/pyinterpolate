@@ -1,4 +1,5 @@
 from typing import Tuple, Union
+from numpy.typing import ArrayLike
 
 import numpy as np
 from tqdm import tqdm
@@ -6,28 +7,41 @@ from tqdm import tqdm
 from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVariogram
 from pyinterpolate.kriging.point.ordinary import ordinary_kriging
 from pyinterpolate.kriging.point.simple import simple_kriging
+from pyinterpolate.transform.geo import geometry_and_values_array
 
 
 def validate_kriging(
-        points: np.ndarray,
         theoretical_model: TheoreticalVariogram,
+        points: ArrayLike = None,
+        values: ArrayLike = None,
+        geometries: ArrayLike = None,
         how: str = 'ok',
         neighbors_range: Union[float, None] = None,
         no_neighbors: int = 4,
         use_all_neighbors_in_range=False,
         sk_mean: Union[float, None] = None,
-        allow_approximate_solutions=False
+        allow_approximate_solutions=False,
+        progress_bar: bool = True
 ) -> Tuple[float, float, np.ndarray]:
     """
     Function performs cross-validation of kriging models.
 
     Parameters
     ----------
-    points : numpy array
-        Known points and their values.
-
     theoretical_model : TheoreticalVariogram
         Fitted variogram model.
+
+    points : ArrayLike, optional
+        Known points and their values ``[x, y, value]``.
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``points`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then
+        ``points`` must be provided. Point type geometry.
 
     how : str, default='ok'
         Select what kind of kriging you want to perform
@@ -63,6 +77,9 @@ def validate_kriging(
         when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
 
+    progress_bar : bool, default=True
+        Show process status.
+
     Returns
     -------
     : Tuple
@@ -79,6 +96,35 @@ def validate_kriging(
        Applications
     2. Clark I., (1979), Does Geostatistics Work, Proc. 16th APCOM,
        pp.213.-225.
+
+    Examples
+    --------
+    >>> from pyinterpolate import (
+    ...     ExperimentalVariogram,
+    ...     validate_kriging,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> POINTS_DATA = ...  # load dataset
+    >>> POINTS_VARIOGRAM = ExperimentalVariogram(POINTS_DATA,
+    ...                                          step_size=1,
+    ...                                          max_range=6)
+    >>> THEORETICAL_MODEL = TheoreticalVariogram()
+    >>> THEORETICAL_MODEL.autofit(experimental_variogram=POINTS_VARIOGRAM,
+    ...                           models_group='linear',
+    ...                           nugget=0.0)
+    >>> validation_results = validate_kriging(
+    ...     theoretical_model=THEORETICAL_MODEL,
+    ...     values=POINTS_DATA[:, -1],
+    ...     geometries=POINTS_DATA[:, :-1],
+    ...     no_neighbors=4,
+    ...     progress_bar=False
+    ... )
+    >>> print(validation_results[0])  # mean prediction error
+    -0.01613441673494531
+    >>> print(validation_results[1])  # mean kriging error
+    1.6386630811210166
     """
     # TODO:
     # Use (2) to calc Z-score
@@ -89,8 +135,14 @@ def validate_kriging(
     # Initialize array for coordinates and errors
     coordinates_and_errors = []
 
+    if points is None:
+        points = geometry_and_values_array(
+            geometry=geometries,
+            values=values
+        )
+
     # Divide observations
-    for idx, row in enumerate(tqdm(points)):
+    for idx, row in enumerate(tqdm(points, disable=not progress_bar)):
         clipped_point = row[:-1]
         data_points = np.delete(points, idx, 0)
 
@@ -102,7 +154,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         elif how == 'sk':
             preds = simple_kriging(
@@ -113,7 +166,8 @@ def validate_kriging(
                 neighbors_range=neighbors_range,
                 no_neighbors=no_neighbors,
                 use_all_neighbors_in_range=use_all_neighbors_in_range,
-                allow_approximate_solutions=allow_approximate_solutions
+                allow_approximate_solutions=allow_approximate_solutions,
+                progress_bar=False
             )
         else:
             raise KeyError(

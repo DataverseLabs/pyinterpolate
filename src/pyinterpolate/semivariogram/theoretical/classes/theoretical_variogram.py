@@ -136,7 +136,59 @@ class TheoreticalVariogram:
 
     Examples
     --------
-    TODO
+    >>> import numpy as np
+    >>> from pyinterpolate import ExperimentalVariogram, TheoreticalVariogram
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> step_size = 1
+    >>> max_range = 4.1
+    >>> empirical_smv = ExperimentalVariogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theoretical_var = TheoreticalVariogram()
+    >>> theoretical_var.fit(
+    ...     experimental_variogram=empirical_smv,
+    ...     model_type='linear',
+    ...     sill=np.var(REFERENCE_INPUT[:, -1]),
+    ...     rang=5
+    ... )
+    ... )
+    >>> print(theoretical_var)
+    * Selected model: Linear model
+    * Nugget: 0.0
+    * Sill: 4.2485207100591715
+    * Range: 5
+    * Spatial Dependency Strength is Undefined: nugget equal to 0, cannot estimate
+    * Mean Bias: 2.949918937899707
+    * Mean RMSE: 3.150422552980984
+    * Error-lag weighting method: None
+    +-----+--------------------+--------------------+--------------------+
+    | lag |    theoretical     |    experimental    |  bias (real-yhat)  |
+    +-----+--------------------+--------------------+--------------------+
+    | 1.0 | 0.8497041420118343 |       4.625        | 3.7752958579881657 |
+    | 2.0 | 1.6994082840236686 | 5.2272727272727275 | 3.527864443249059  |
+    | 3.0 | 2.549112426035503  |        6.0         | 3.450887573964497  |
+    | 4.0 | 3.3988165680473372 | 4.444444444444445  | 1.0456278763971074 |
+    +-----+--------------------+--------------------+--------------------+
+
     """
 
     def __init__(self,
@@ -187,6 +239,14 @@ class TheoreticalVariogram:
         }
 
     @property
+    def lag_yhat_array(self):
+        if self.yhat is None:
+            raise AttributeError('Semivariogram model has not been fitted!')
+
+        ls_array = np.vstack((self.lags, self.yhat)).T
+        return ls_array
+
+    @property
     def name(self):
         """
         Returns theoretical model name.
@@ -221,12 +281,12 @@ class TheoreticalVariogram:
             - 'power',
             - 'spherical'.
 
-        sill : float, default=0
+        sill : float
             Partial sill, or sill when nugget is set to zero. Total sill is
             a sum of partial sill and nugget. If given, then partial sill
             is fixed to this value.
 
-        rang : float, default=0
+        rang : float
             The semivariogram range is a distance at which spatial correlation
             exists. It shouldn't be set at a distance larger than a half
             of a study extent.
@@ -497,6 +557,8 @@ class TheoreticalVariogram:
 
         if return_params:
             return theoretical_variogram_model
+        else:
+            return None
 
     def predict(self, distances: np.ndarray) -> np.ndarray:
         """
@@ -1279,6 +1341,8 @@ class TheoreticalVariogram:
                 self.rang is not None
         ):
             return True
+
+        return False
 
     def _plot_from_params(self):
         legend = ['Theoretical Model']

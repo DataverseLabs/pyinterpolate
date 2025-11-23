@@ -10,17 +10,21 @@ Pyinterpolate
   :width: 400
   :alt: Pyinterpolate Logo
 
-**version 1.1.0**
+**version 1.2.0**
 -----------------
 
 .. note::
-   The last documentation update: *2025-10-11*
+   The last documentation update: *2025-11-23*
 
 Important notice
 ................
 
 The package was updated to version 1.0 in June 2025. There are breaking API changes, so please, refer to the changelog, to know more about the changes.
 Right now, the package in version 1.0.0 is in the **beta** stage, which means that it is stable but be careful with the production use. There might be some minor bugs, and large swaths of code are not optimized yet. If you find any bugs, please report them in the `Github issue tracker <https://github.com/DataverseLabs/pyinterpolate/issues>`_.
+
+Citation
+--------
+Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
 
 Introduction
 ............
@@ -74,7 +78,3 @@ Contents
    api/api
    api/changes
    contributor/development
-
-Citation
---------
-Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869

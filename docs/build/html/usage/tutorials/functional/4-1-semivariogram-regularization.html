@@ -590,9 +590,9 @@
       <td>25019</td>
       <td>192.2</td>
       <td>MULTIPOLYGON (((2115688.816 556471.24, 2115699...</td>
-      <td>POINT (2132629.599 557971.156)</td>
-      <td>2.132630e+06</td>
-      <td>557971.155949</td>
+      <td>POINT (2133348.745 558025.221)</td>
+      <td>2.133349e+06</td>
+      <td>558025.221156</td>
     </tr>
     <tr>
       <th>1</th>
@@ -608,27 +608,27 @@
       <td>33001</td>
       <td>157.4</td>
       <td>MULTIPOLYGON (((1937530.728 779787.978, 193751...</td>
-      <td>POINT (1958207.02 766008.383)</td>
+      <td>POINT (1958207.252 766008.62)</td>
       <td>1.958207e+06</td>
-      <td>766008.383446</td>
+      <td>766008.620010</td>
     </tr>
     <tr>
       <th>3</th>
       <td>25007</td>
       <td>156.7</td>
       <td>MULTIPOLYGON (((2074073.532 539159.504, 207411...</td>
-      <td>POINT (2082188.457 556830.822)</td>
-      <td>2.082188e+06</td>
-      <td>556830.822367</td>
+      <td>POINT (2084187.905 556436.412)</td>
+      <td>2.084188e+06</td>
+      <td>556436.412055</td>
     </tr>
     <tr>
       <th>4</th>
       <td>25001</td>
       <td>155.3</td>
       <td>MULTIPOLYGON (((2095343.207 637424.961, 209528...</td>
-      <td>POINT (2100746.85 600235.846)</td>
-      <td>2.100747e+06</td>
-      <td>600235.845891</td>
+      <td>POINT (2101100.939 600344.125)</td>
+      <td>2.101101e+06</td>
+      <td>600344.124709</td>
     </tr>
   </tbody>
 </table>
@@ -753,7 +753,12 @@
 <span class="n">step_size</span> <span class="o">=</span> <span class="mi">40000</span>
 
 <span class="n">dt</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">block_data</span>  <span class="c1"># x, y, val</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">ds</span><span class="o">=</span><span class="n">dt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+<span class="n">b_values</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">block_values</span>
+<span class="n">b_coordinates</span> <span class="o">=</span> <span class="n">blocks</span><span class="o">.</span><span class="n">block_representative_points</span>
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">b_values</span><span class="p">,</span>
+                                           <span class="n">geometries</span><span class="o">=</span><span class="n">b_coordinates</span><span class="p">,</span>
+                                           <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
+                                           <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
 
 <span class="c1"># Plot experimental semivariogram</span>
 
@@ -780,7 +785,11 @@
 
 
 <span class="n">pt</span> <span class="o">=</span> <span class="n">point_support</span><span class="o">.</span><span class="n">get_points_array</span><span class="p">()</span>
-<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">ds</span><span class="o">=</span><span class="n">pt</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span> <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
+
+<span class="n">exp_semivar</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">pt</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                           <span class="n">geometries</span><span class="o">=</span><span class="n">pt</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                           <span class="n">step_size</span><span class="o">=</span><span class="n">step_size_points</span><span class="p">,</span>
+                                           <span class="n">max_range</span><span class="o">=</span><span class="n">maximum_range</span><span class="p">)</span>
 
 <span class="c1"># Plot experimental semivariogram</span>
 
@@ -890,7 +899,7 @@ Transform procedure starts
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5/5 [05:22&lt;00:00, 64.59s/it]
+100%|██████████| 5/5 [04:35&lt;00:00, 55.16s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -986,20 +995,16 @@ Transform procedure starts
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-05-21</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization</p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-05-21</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 </section>
 </section>

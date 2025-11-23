@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.idw.idw &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.idw.idw &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -432,18 +432,21 @@
 <span class="sd">TODO</span>
 <span class="sd">- eval with IDW</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.core.data_models.points</span> <span class="kn">import</span> <span class="n">VariogramPoints</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">geometry_and_values_array</span>
 
 
 <div class="viewcode-block" id="inverse_distance_weighting">
 <a class="viewcode-back" href="../../../api/idw/idw.html#pyinterpolate.inverse_distance_weighting">[docs]</a>
-<span class="k">def</span> <span class="nf">inverse_distance_weighting</span><span class="p">(</span><span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                               <span class="n">unknown_location</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">inverse_distance_weighting</span><span class="p">(</span><span class="n">unknown_location</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+                               <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                               <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                               <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                                <span class="n">no_neighbors</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
                                <span class="n">power</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -452,11 +455,6 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    known_locations : numpy array</span>
-<span class="sd">        The MxN array, where **M** is a number of rows (points) and **N**</span>
-<span class="sd">        is the number of columns, where the last column represents a value</span>
-<span class="sd">        observed in a known point. (It could be **(N-1)**-dimensional data).</span>
-
 <span class="sd">    unknown_location : Iterable</span>
 <span class="sd">        Array or list with coordinates of the unknown point.</span>
 <span class="sd">        Its length is N-1 (number of dimensions). The unknown</span>
@@ -464,6 +462,18 @@
 <span class="sd">        parameter `shape`, if not, then new dimension</span>
 <span class="sd">        is added once - vector of points ``[x, y]``</span>
 <span class="sd">        becomes ``[[x, y]]`` for 2-dimensional data.</span>
+
+<span class="sd">    known_locations : numpy array, optional</span>
+<span class="sd">        The known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    no_neighbors : int, default = -1</span>
 <span class="sd">        If default value **(-1)** then all known points will be used to</span>
@@ -488,11 +498,39 @@
 <span class="sd">    ValueError</span>
 <span class="sd">        Less than 2 neighbours or more than the number of ``known_points``</span>
 <span class="sd">        neighbours are given in the ``number_of_neighbours`` parameter.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; unknown_pos = (10, 10)</span>
+<span class="sd">    &gt;&gt;&gt; locs = np.array([</span>
+<span class="sd">    ...     [11, 1, 1],</span>
+<span class="sd">    ...     [23, 2, 2],</span>
+<span class="sd">    ...     [33, 3, 3],</span>
+<span class="sd">    ...     [14, 44, 4],</span>
+<span class="sd">    ...     [13, 10, 9],</span>
+<span class="sd">    ...     [12, 55, 35],</span>
+<span class="sd">    ...     [11, 9, 7]</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; pred = inverse_distance_weighting(</span>
+<span class="sd">    ...     unknown_locations=unknown_pos,</span>
+<span class="sd">    ...     known_values=locs[:, -1],</span>
+<span class="sd">    ...     known_geometries=locs[:, :-1],</span>
+<span class="sd">    ...     no_neighbors=2</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(pred)</span>
+<span class="sd">    7.286311587314138</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Check power parameter</span>
     <span class="k">if</span> <span class="n">power</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Power cannot be smaller than 0&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Get known locations</span>
+    <span class="k">if</span> <span class="n">known_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">geometry_and_values_array</span><span class="p">(</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">known_values</span>
+        <span class="p">)</span>
 
     <span class="c1"># Check known points parameter</span>
     <span class="c1"># Check if known locations are in the right format</span>

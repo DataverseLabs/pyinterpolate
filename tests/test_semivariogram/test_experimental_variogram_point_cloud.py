@@ -31,7 +31,7 @@ def test_zeros():
     zeros_input = REFERENCE_INPUT.copy()
     zeros_input[:, -1] = 0
     cloud_semivariance = point_cloud_semivariance(
-        zeros_input,
+        ds=zeros_input,
         step_size=STEP_SIZE,
         max_range=MAX_RANGE
     )
@@ -41,7 +41,7 @@ def test_zeros():
 
 def test_calculate_semivariance_fn():
     cloud_semivariance = point_cloud_semivariance(
-        REFERENCE_INPUT,
+        ds=REFERENCE_INPUT,
         step_size=STEP_SIZE,
         max_range=MAX_RANGE
     )
@@ -50,7 +50,46 @@ def test_calculate_semivariance_fn():
     expected_array_lengths = [24, 22, 20]
 
     semivariance = calculate_semivariance(
-        REFERENCE_INPUT,
+        ds=REFERENCE_INPUT,
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+
+    for idx, value in enumerate(expected_keys):
+        arr_len = expected_array_lengths[idx]
+
+        assert value in cloud_semivariance.keys()
+        assert arr_len == len(cloud_semivariance[value])
+        assert np.mean(cloud_semivariance[value] / 2) == semivariance[idx, 1]
+        assert len(cloud_semivariance[value]) == semivariance[idx, 2]
+
+
+def test_zeros_sep_geom():
+    zeros_input = REFERENCE_INPUT.copy()
+    zeros_input[:, -1] = 0
+    cloud_semivariance = point_cloud_semivariance(
+        values=zeros_input[:, -1],
+        geometries=zeros_input[:, :-1],
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+    for lag, semivars in cloud_semivariance.items():
+        assert np.sum(semivars) == 0
+
+
+def test_calculate_semivariance_fn_sep_geom():
+    cloud_semivariance = point_cloud_semivariance(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+
+    expected_keys = [1., 2., 3.]
+    expected_array_lengths = [24, 22, 20]
+
+    semivariance = calculate_semivariance(
+        ds=REFERENCE_INPUT,
         step_size=STEP_SIZE,
         max_range=MAX_RANGE
     )
@@ -67,6 +106,19 @@ def test_calculate_semivariance_fn():
 def test_variogram_cloud_class():
     vc = VariogramCloud(
         ds=REFERENCE_INPUT,
+        step_size=STEP_SIZE,
+        max_range=MAX_RANGE
+    )
+    stats = vc.describe()
+    assert stats[1]['count'] == 24
+    assert stats[2]['median'] == 9
+    assert isinstance(vc, VariogramCloud)
+
+
+def test_variogram_cloud_class_sep_geom():
+    vc = VariogramCloud(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
         step_size=STEP_SIZE,
         max_range=MAX_RANGE
     )

@@ -1,14 +1,13 @@
+![PyPI - Version](https://img.shields.io/pypi/v/pyinterpolate)  ![Conda Version](https://img.shields.io/conda/v/conda-forge/pyinterpolate)
+ ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyinterpolate)
+
 ![JOSS](https://joss.theoj.org/papers/3f87f562264c4e5174d9e6ed6d8812aa/status.svg) [![License](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause) ![Documentation Status](https://readthedocs.org/projects/pyinterpolate/badge/?version=latest) [![CodeFactor](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate/badge)](https://www.codefactor.io/repository/github/dataverselabs/pyinterpolate)
 
-[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/6a18f86ab3927e48009107e7eda7d6c833a4a610/coverage.svg) 
-
-
-
-
+[![Run Unit Test via Pytest](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/python-install-and-test-on-linux-always.yml) [![CodeQL](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/DataverseLabs/pyinterpolate/actions/workflows/github-code-scanning/codeql) ![Tests Coverage](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/6a18f86ab3927e48009107e7eda7d6c833a4a610/coverage.svg)
 
 # Pyinterpolate
 
-**version 1.1.0**
+**version 1.2.0**
 
 ![Logo](https://raw.githubusercontent.com/DataverseLabs/pyinterpolate/refs/heads/main/pyinterpolate-banner.png)
 
@@ -16,6 +15,27 @@
 
 The package was updated to version 1.0 in June 2025. There are breaking API changes, so please, refer to the [CHANGELOG](https://github.com/DataverseLabs/pyinterpolate/blob/main/CHANGELOG.rst) to know more about the changes.
 Right now, the package in version 1.0.0 is in the **beta** stage, which means that it is stable but be careful with the production use. There might be some minor bugs, and large swaths of code are not optimized yet. If you find any bugs, please report them in the [issue tracker](https://github.com/DataverseLabs/pyinterpolate/issues).
+
+## Citation
+
+Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
+
+### Bibtex
+
+```text
+@article{Moliński2022,
+  doi = {10.21105/joss.02869},
+  url = {https://doi.org/10.21105/joss.02869},
+  year = {2022},
+  publisher = {The Open Journal},
+  volume = {7},
+  number = {70},
+  pages = {2869},
+  author = {Moliński, Szymon},
+  title = {Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets},
+  journal = {Journal of Open Source Software} }
+
+```
 
 ## Introduction
 
@@ -158,7 +178,7 @@ A world of advice, you should **always** use Virtual Environment for the install
 
 ## Tests and contribution
 
-All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTION.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTION.md)
+All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTING.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTING.md)
 
 ## Use cases
 
@@ -180,11 +200,6 @@ Pyinterpolate was created thanks to many resources and all of them are pointed h
 ## Community
 
 Join our community in Discord: [Discord Server Pyinterpolate](https://discord.gg/3EMuRkj)
-
-## How to cite
-
-Moliński, S., (2022). Pyinterpolate: Spatial interpolation in Python for point measurements and aggregated datasets. Journal of Open Source Software, 7(70), 2869, https://doi.org/10.21105/joss.02869
-
 
 ## Requirements and dependencies (v 1.x)
 

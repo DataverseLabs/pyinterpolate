@@ -212,6 +212,59 @@ def calc_block_to_block_distance(
     ------
     AttributeError
         Blocks are provided as DataFrame but column names were not given.
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     calc_block_to_block_distance,
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>> distances = calc_block_to_block_distance(PS)
+    >>> print(distances.head())
+                   42049.0        42039.0  ...       23009.0       23029.0
+    42049.0       0.000000   48885.422652  ...  9.780781e+05  1.061496e+06
+    42039.0   48885.422652       0.000000  ...  9.952927e+05  1.079528e+06
+    42085.0   91350.566468   52240.566481  ...  1.030860e+06  1.115642e+06
+    42073.0  120259.614440   78853.981609  ...  1.042438e+06  1.127643e+06
+    42007.0  152110.979345  109955.408914  ...  1.055898e+06  1.141472e+06
     """
 
     if isinstance(ps_blocks, pd.DataFrame):

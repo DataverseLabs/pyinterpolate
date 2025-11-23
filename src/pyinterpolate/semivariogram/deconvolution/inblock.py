@@ -18,43 +18,6 @@ from pyinterpolate.distance.point import point_distance
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
-def inblock_semivariance(points_of_block: np.ndarray,
-                         variogram_model: TheoreticalVariogram) -> float:
-    """
-    Function calculates inblock semivariance.
-
-    Parameters
-    ----------
-    points_of_block : numpy array
-        ``[x, y, value]``
-
-    variogram_model : TheoreticalVariogram
-        Fitted variogram model.
-
-    Returns
-    -------
-    average : float
-        Average inblock semivariance.
-    """
-    number_of_points_within_block = len(points_of_block)  # P
-    p = number_of_points_within_block * number_of_points_within_block  # P^2
-
-    distances_between_points: np.ndarray
-
-    # Matrix of size PxP
-    distances_between_points = point_distance(
-        points_of_block[:, :-1],
-        points_of_block[:, :-1]
-    )
-
-    flattened_distances = distances_between_points.flatten()
-
-    semivariances = variogram_model.predict(flattened_distances)
-
-    average = np.sum(semivariances) / p
-    return average
-
-
 def calculate_inblock_semivariance(
         point_support: PointSupport,
         variogram_model: TheoreticalVariogram
@@ -122,7 +85,44 @@ def _calculate_inblock_semivariance_from_ps(
 
     for unique_area in point_support.unique_blocks:
         ds = point_support.get_points_array(block_id=unique_area)
-        inblock = inblock_semivariance(ds, variogram_model)
+        inblock = _inblock_semivariance(ds, variogram_model)
         inblock_semivariances[unique_area] = inblock
 
     return inblock_semivariances
+
+
+def _inblock_semivariance(points_of_block: np.ndarray,
+                          variogram_model: TheoreticalVariogram) -> float:
+    """
+    Function calculates inblock semivariance.
+
+    Parameters
+    ----------
+    points_of_block : numpy array
+        ``[x, y, value]``
+
+    variogram_model : TheoreticalVariogram
+        Fitted variogram model.
+
+    Returns
+    -------
+    average : float
+        Average inblock semivariance.
+    """
+    number_of_points_within_block = len(points_of_block)  # P
+    p = number_of_points_within_block * number_of_points_within_block  # P^2
+
+    distances_between_points: np.ndarray
+
+    # Matrix of size PxP
+    distances_between_points = point_distance(
+        points_of_block[:, :-1],
+        points_of_block[:, :-1]
+    )
+
+    flattened_distances = distances_between_points.flatten()
+
+    semivariances = variogram_model.predict(flattened_distances)
+
+    average = np.sum(semivariances) / p
+    return average

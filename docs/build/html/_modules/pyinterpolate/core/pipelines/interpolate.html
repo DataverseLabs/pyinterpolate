@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.pipelines.interpolate &#8212; pyinterpolate 1.0.2 documentation</title>
+    <title>pyinterpolate.core.pipelines.interpolate &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=1ed6394b"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.2 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -422,7 +422,8 @@
                 <article class="bd-article">
                   
   <h1>Source code for pyinterpolate.core.pipelines.interpolate</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="kn">import</span> <span class="nn">dask</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -431,21 +432,24 @@
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.point.ordinary</span> <span class="kn">import</span> <span class="n">ok_calc</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">geometry_and_values_array</span>
 
 
 <div class="viewcode-block" id="interpolate_points">
 <a class="viewcode-back" href="../../../../api/core/pipelines.html#pyinterpolate.interpolate_points">[docs]</a>
 <span class="k">def</span> <span class="nf">interpolate_points</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">max_tick</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
         <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts values at unknown locations with Ordinary</span>
 <span class="sd">    Kriging.</span>
@@ -455,12 +459,21 @@
 <span class="sd">    theoretical_model : TheoreticalVariogram</span>
 <span class="sd">        Fitted theoretical variogram model.</span>
 
-<span class="sd">    known_locations : numpy array</span>
-<span class="sd">        The known locations: x, y, value.</span>
-
 <span class="sd">    unknown_locations : numpy array</span>
 <span class="sd">        Points where you want to estimate value</span>
 <span class="sd">        ``[(x, y), ...] &lt;-&gt; [(lon, lat), ...]``.</span>
+
+<span class="sd">    known_locations : numpy array, optional</span>
+<span class="sd">        The known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    neighbors_range : float, default=None</span>
 <span class="sd">        The maximum distance where we search for the neighbors.</span>
@@ -493,7 +506,43 @@
 <span class="sd">    -------</span>
 <span class="sd">    : numpy array</span>
 <span class="sd">        ``[predicted value, variance error, longitude (x), latitude (y)]``</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (build_experimental_variogram,</span>
+<span class="sd">    ...     build_theoretical_variogram)</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.core.pipelines.interpolate import interpolate_points</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = gpd.read_file(&#39;dem.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; unknown_locations = gpd.read_file(&#39;unknown_locations.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 500</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 10000</span>
+<span class="sd">    &gt;&gt;&gt; exp_variogram = build_experimental_variogram(</span>
+<span class="sd">    ...     values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     geometries=dem[&#39;geometry&#39;],</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_variogram = build_theoretical_variogram(exp_variogram)</span>
+<span class="sd">    &gt;&gt;&gt; interp = interpolate_points(</span>
+<span class="sd">    ...     theoretical_model=theo_variogram,</span>
+<span class="sd">    ...     unknown_locations=unknown_locations[&#39;geometry&#39;],</span>
+<span class="sd">    ...     known_values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     known_geometries=dem[&#39;geometry&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(interp[0])</span>
+<span class="sd">    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">known_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">geometry_and_values_array</span><span class="p">(</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">known_values</span>
+        <span class="p">)</span>
 
     <span class="n">interpolated_results</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -523,8 +572,10 @@
 <a class="viewcode-back" href="../../../../api/core/pipelines.html#pyinterpolate.interpolate_points_dask">[docs]</a>
 <span class="k">def</span> <span class="nf">interpolate_points_dask</span><span class="p">(</span>
         <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">TheoreticalVariogram</span><span class="p">,</span>
-        <span class="n">known_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">unknown_locations</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">,</span>
+        <span class="n">known_locations</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">known_geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">neighbors_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">max_tick</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span>
@@ -532,7 +583,7 @@
         <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">number_of_workers</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
         <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">):</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts values at unknown locations with Ordinary</span>
 <span class="sd">    Kriging using Dask backend, makes sense when you must interpolate large</span>
@@ -543,12 +594,21 @@
 <span class="sd">    theoretical_model : TheoreticalVariogram</span>
 <span class="sd">        Fitted theoretical variogram model.</span>
 
-<span class="sd">    known_locations : numpy array</span>
-<span class="sd">        The known locations: x, y, value.</span>
-
 <span class="sd">    unknown_locations : numpy array</span>
 <span class="sd">        Points where you want to estimate value</span>
 <span class="sd">        ``[(x, y), ...] &lt;-&gt; [(lon, lat), ...]``.</span>
+
+<span class="sd">    known_locations : numpy array, optional</span>
+<span class="sd">        The known locations: ``[x, y, value]``.</span>
+
+<span class="sd">    known_values : ArrayLike, optional</span>
+<span class="sd">        Observation in the i-th geometry (from ``known_geometries``). Optional</span>
+<span class="sd">        parameter, if not given then ``known_locations`` must be provided.</span>
+
+<span class="sd">    known_geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``known_values``. Optional parameter, if not given then</span>
+<span class="sd">        ``known_locations`` must be provided. Point type geometry.</span>
 
 <span class="sd">    neighbors_range : float, default=None</span>
 <span class="sd">        The maximum distance where we search for the neighbors.</span>
@@ -586,7 +646,43 @@
 <span class="sd">    -------</span>
 <span class="sd">    : numpy array</span>
 <span class="sd">        ``[predicted value, variance error, longitude (x), latitude (y)]``</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (build_experimental_variogram,</span>
+<span class="sd">    ...     build_theoretical_variogram)</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.core.pipelines.interpolate import interpolate_points_dask</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = gpd.read_file(&#39;dem.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; unknown_locations = gpd.read_file(&#39;unknown_locations.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 500</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 10000</span>
+<span class="sd">    &gt;&gt;&gt; exp_variogram = build_experimental_variogram(</span>
+<span class="sd">    ...     values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     geometries=dem[&#39;geometry&#39;],</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_variogram = build_theoretical_variogram(exp_variogram)</span>
+<span class="sd">    &gt;&gt;&gt; interp = interpolate_points_dask(</span>
+<span class="sd">    ...     theoretical_model=theo_variogram,</span>
+<span class="sd">    ...     unknown_locations=unknown_locations[&#39;geometry&#39;],</span>
+<span class="sd">    ...     known_values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     known_geometries=dem[&#39;geometry&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(interp[0])</span>
+<span class="sd">    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">known_locations</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">known_locations</span> <span class="o">=</span> <span class="n">geometry_and_values_array</span><span class="p">(</span>
+            <span class="n">geometry</span><span class="o">=</span><span class="n">known_geometries</span><span class="p">,</span>
+            <span class="n">values</span><span class="o">=</span><span class="n">known_values</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">number_of_workers</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="n">core_num</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
@@ -622,8 +718,7 @@
                 <span class="n">no_neighbors</span><span class="o">=</span><span class="n">no_neighbors</span><span class="p">,</span>
                 <span class="n">max_tick</span><span class="o">=</span><span class="n">max_tick</span><span class="p">,</span>
                 <span class="n">use_all_neighbors_in_range</span><span class="o">=</span><span class="n">use_all_neighbors_in_range</span><span class="p">,</span>
-                <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span><span class="p">,</span>
-                <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span>
+                <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="n">allow_approximate_solutions</span>
             <span class="p">)</span>
 
             <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>

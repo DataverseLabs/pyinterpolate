@@ -37,6 +37,7 @@ def test_get_trend():
         known_points=dem
     )
     uk.fit_trend()
+    print(uk.trend_values)
     assert isinstance(uk.trend_model, MultivariateRegression)
     assert isinstance(uk.trend_values, np.ndarray)
 
@@ -76,6 +77,39 @@ def test_predict():
     predictions = uk.predict(
         points=unknown_points[:, :-1]
     )
+    rmse = np.sqrt(
+        np.mean(
+            (unknown_points[:, -1] - predictions[:, 0]) ** 2
+        )
+    )
+
+    # uk.plot_trend_surfaces()
+
+    assert isinstance(
+        predictions, np.ndarray
+    )
+    assert rmse > 0
+
+
+def test_predict_separate_values_and_geometries():
+    known_values, unknown_points = create_model_validation_sets(dem)
+    dem_values = known_values[:, -1]
+    dem_coordinates = known_values[:, :-1]
+
+    uk = UniversalKriging(
+        known_values=dem_values,
+        known_geometries=dem_coordinates
+    )
+    uk.fit_trend()
+    uk.detrend()
+    uk.fit_bias(
+        step_size=500,
+        max_range=10000
+    )
+    predictions = uk.predict(
+        points=unknown_points[:, :-1]
+    )
+    print(predictions[0])
     rmse = np.sqrt(
         np.mean(
             (unknown_points[:, -1] - predictions[:, 0]) ** 2

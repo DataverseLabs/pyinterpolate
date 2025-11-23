@@ -1,7 +1,7 @@
 from typing import Union, Dict, Type
+from numpy.typing import ArrayLike
 
-import numpy as np
-
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 
 
@@ -11,8 +11,17 @@ class DirectionalVariogram:
 
     Parameters
     ----------
-    ds : numpy array
+    ds : ArrayLike, optional
         ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     step_size : float
         The fixed distance between lags grouping point neighbors.
@@ -83,20 +92,51 @@ class DirectionalVariogram:
 
     show()
         Plot all variograms.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import DirectionalVariogram
+    >>>
+    >>>
+    >>> ds = np.load('armstrong_data.npy')
+    >>> step_size = 1.5
+    >>> max_range = 6
+    >>> directional_variogram = DirectionalVariogram(
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE,
+    ...     values=ds[:, -1],
+    ...     geometries=ds[:, :-1]
+    ... )
+    >>> variograms = directional_variogram.get()
+    >>> print(variograms.keys())
+    dict_keys(['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE'])
+    >>> directional_variogram.show()  # shows variograms in all directions
     """
 
     def __init__(self,
-                 ds: np.ndarray,
                  step_size: float,
                  max_range: float,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  tolerance: float = 0.2,
                  custom_weights=None,
                  custom_bins=None):
 
+        # Validate points
+        if not isinstance(ds, VariogramPoints):
+            ds = VariogramPoints(points=ds,
+                                 geometries=geometries,
+                                 values=values)
+            ds = ds.points
+
         self.ds = ds
         self.custom_bins = custom_bins
+
         self.step_size = step_size
         self.max_range = max_range
+
         self.tolerance = tolerance
         self.custom_weights = custom_weights
         self.possible_variograms = ['ISO', 'NS', 'WE', 'NE-SW', 'NW-SE']
@@ -111,9 +151,9 @@ class DirectionalVariogram:
 
     def _build_experimental_variograms(self):
         isotropic = ExperimentalVariogram(
-            self.ds,
-            self.step_size,
-            self.max_range,
+            ds=self.ds,
+            step_size=self.step_size,
+            max_range=self.max_range,
             custom_bins=self.custom_bins,
             custom_weights=self.custom_weights)
 
@@ -121,9 +161,9 @@ class DirectionalVariogram:
 
         for idx, val in self.directions.items():
             variogram = ExperimentalVariogram(
-                self.ds,
-                self.step_size,
-                self.max_range,
+                ds=self.ds,
+                step_size=self.step_size,
+                max_range=self.max_range,
                 custom_bins=self.custom_bins,
                 custom_weights=self.custom_weights,
                 direction=val,

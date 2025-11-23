@@ -3,8 +3,6 @@ from typing import Dict
 import numpy as np
 import pandas as pd
 
-import geopandas as gpd
-
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
@@ -34,14 +32,15 @@ def test_simple_case():
 
     indexes = ps.blocks.block_indexes
     idx = np.random.choice(indexes)
-    psd.calculate_point_support_distances(point_support=ps,
-                                          block_id=idx,
-                                          no_closest_neighbors=3)
-    assert psd.no_closest_neighbors == 3
+    distances = psd.calculate_point_support_distances(
+        point_support=ps,
+        block_id=idx,
+        no_closest_neighbors=2
+    )
+    assert psd.no_closest_neighbors == 2
+    assert isinstance(distances, dict)
+    print(distances.keys())
     print(psd.closest_neighbors)
-    print(psd.distances_between_point_supports)
-    print(psd._block_indexes)
-    print(psd._calculated_block_pairs)
     assert isinstance(psd.closest_neighbors, Dict)
 
     weighted_distace = psd.get_weighted_distance(idx)

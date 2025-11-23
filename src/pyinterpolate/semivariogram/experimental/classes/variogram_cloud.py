@@ -1,11 +1,13 @@
 import copy
 from typing import Collection, Dict, Union
+from numpy.typing import ArrayLike
 
 import numpy as np
 import pandas as pd
 from prettytable import PrettyTable
 from scipy.stats import skew, kurtosis
 
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import (
     ExperimentalVariogram)
 from pyinterpolate.transform.statistical import remove_outliers
@@ -89,6 +91,15 @@ class VariogramCloud:
     ds : numpy array
         ``[x, y, value]``
 
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
+
     step_size : float
         The fixed distance between lags grouping point neighbors.
 
@@ -159,10 +170,47 @@ class VariogramCloud:
     --------
     ExperimentalVariogram : class that calculates experimental semivariogram,
         experimental covariogram and data variance.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import VariogramCloud
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> STEP_SIZE = 1
+    >>> MAX_RANGE = 4
+    >>> vc = VariogramCloud(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> stats = vc.describe()
+    >>> print(stats[1]['count'])
+    24
+    >>> print(stats[2]['median'])
+    9
     """
 
     def __init__(self,
-                 ds: np.ndarray,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  step_size: float = None,
                  max_range: float = None,
                  direction: float = None,
@@ -172,6 +220,8 @@ class VariogramCloud:
 
         self._experimental_variogram = ExperimentalVariogram(
             ds=ds,
+            values=values,
+            geometries=geometries,
             step_size=step_size,
             max_range=max_range,
             direction=direction,

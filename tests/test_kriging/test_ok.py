@@ -80,3 +80,20 @@ def test_zeros_omnidirectional():
     )
     assert len(kriged) == 1
     assert len(kriged[0]) == 4
+
+
+def test_armstrong_omnidirectional_separated_values_geometries():
+    dataset = build_armstrong_ds()
+    ds = dataset['ds']
+    variogram = dataset['theo_omni']
+
+    unknown_point = [ds[:, 0].std(), ds[:, 1].std()]
+
+    kriged = ordinary_kriging(
+        theoretical_model=variogram,
+        unknown_locations=unknown_point,
+        known_values=ds[:, -1],
+        known_geometries=ds[:, :-1],
+    )
+    assert len(kriged) == 1
+    assert len(kriged[0]) == 4

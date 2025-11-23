@@ -133,7 +133,7 @@ def from_ellipse_cloud(
     return point_cloud
 
 
-def directional_weighted_semivariance(
+def _directional_weighted_semivariance(
         points: np.array,
         lags: np.array,
         custom_weights: np.array,

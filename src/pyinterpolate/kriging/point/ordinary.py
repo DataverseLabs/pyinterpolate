@@ -29,8 +29,10 @@ from pyinterpolate.semivariogram.theoretical.theoretical import TheoreticalVario
 
 def ok_calc(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
         unknown_location: ArrayLike,
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -46,11 +48,20 @@ def ok_calc(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
+    unknown_location : Union[ArrayLike, Point]
+        Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
+
     known_locations : numpy array
         Known locations: ``[x, y, value]``.
 
-    unknown_location : Union[ArrayLike, Point]
-        Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors. If ``None`` is
@@ -87,7 +98,12 @@ def ok_calc(
         Singular Matrix in the Kriging system.
     """
     # Check if known locations are in the right format
-    known_locations = VariogramPoints(known_locations).points
+    # Validate points
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
 
     # Check if unknown location is Point
     if isinstance(unknown_location, Point):
@@ -133,8 +149,10 @@ def ok_calc(
 
 def ordinary_kriging(
         theoretical_model: TheoreticalVariogram,
-        known_locations: ArrayLike,
         unknown_locations: Union[np.ndarray, Point, List, Tuple, GeoSeries, GeometryArray, ArrayLike],
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         neighbors_range=None,
         no_neighbors=4,
         max_tick=5.,
@@ -151,11 +169,20 @@ def ordinary_kriging(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
+    unknown_locations : Union[ArrayLike, Point]
+        Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
+
     known_locations : numpy array
         Known locations: ``[x, y, value]``.
 
-    unknown_locations : Union[ArrayLike, Point]
-        Points where you want to estimate value ``(x, y) <-> (lon, lat)``.
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     neighbors_range : float, default=None
         The maximum distance where we search for neighbors. If ``None`` is
@@ -193,9 +220,43 @@ def ordinary_kriging(
     ------
     RunetimeError
         Singular Matrix in the Kriging system.
+
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>>
+    >>> from pyinterpolate import (build_experimental_variogram,
+    ...     build_theoretical_variogram, ordinary_kriging)
+    >>>
+    >>> dem = gpd.read_file('dem.gpkg')
+    >>> unknown_locations = gpd.read_file('unknown_locations.gpkg')
+    >>> step_size = 500
+    >>> max_range = 10000
+    >>> exp_variogram = build_experimental_variogram(
+    ...     values=dem['dem'],
+    ...     geometries=dem['geometry'],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theo_variogram = build_theoretical_variogram(exp_variogram)
+    >>> interp = ordinary_kriging(
+    ...     theoretical_model=theo_variogram,
+    ...     unknown_locations=unknown_locations['geometry'],
+    ...     known_values=dem['dem'],
+    ...     known_geometries=dem['geometry']
+    ... )
+    >>> print(interp[0])
+    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]
     """
     # Check if known locations are in the right format
-    known_locations = VariogramPoints(known_locations).points
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
+
     unknown_locations = InterpolationPoints(unknown_locations).points
 
     interpolated_results = []
@@ -223,8 +284,10 @@ def ordinary_kriging(
 
 def ordinary_kriging_from_cov(
         theoretical_model: TheoreticalVariogram,
-        known_locations: np.ndarray,
         unknown_location: Union[List, Tuple, np.ndarray],
+        known_locations: ArrayLike = None,
+        known_values: ArrayLike = None,
+        known_geometries: ArrayLike = None,
         sill=None,
         neighbors_range=None,
         no_neighbors=4,
@@ -240,11 +303,20 @@ def ordinary_kriging_from_cov(
     theoretical_model : TheoreticalVariogram
         Fitted theoretical variogram model.
 
-    known_locations : numpy array
-        The known locations: ``[x, y, value]``.
-
     unknown_location : Union[List, Tuple, numpy array]
         Point where you want to estimate value ``(x, y) <-> (lon, lat)``.
+
+    known_locations : numpy array
+        Known locations: ``[x, y, value]``.
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     sill : float
         Partial sill, or sill when nugget is set to zero. Total sill is a sum
@@ -285,6 +357,12 @@ def ordinary_kriging_from_cov(
     RunetimeError
         Singularity matrix in a Kriging system.
     """
+
+    if not isinstance(known_locations, VariogramPoints):
+        known_locations = VariogramPoints(points=known_locations,
+                                          geometries=known_geometries,
+                                          values=known_values)
+        known_locations = known_locations.points
 
     k, predicted, dataset = get_predictions(theoretical_model,
                                             known_locations,

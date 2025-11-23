@@ -58,6 +58,58 @@ class PointSupportDistance:
         wants to find closest neighbors (using
         ``calculate_point_support_distances()`` method with
         ``no_closest_neighbors`` > 0).
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    >>> Blocks, ExperimentalVariogram, PointSupport, PointSupportDistance,
+    >>> TheoreticalVariogram,
+    >>> )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> block = Blocks(**CANCER_DATA)
+    >>>
+    >>> ps = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> pds = PointSupportDistance(verbose=False)
+    >>> distances_between_neighbors = pds.calculate_point_support_distances(
+    ...     point_support=ps,
+    ...     block_id=36033,
+    ...     number_of_neighbors=2
+    ... )
+    >>> print(distances_between_neighbors.keys())  # dict[tuple: array]
+    dict_keys([(36033, 36019), (36019, 36033), (36033, 36089), (36089, 36033)])
+    >>> print(pds.closest_neighbors)
+    {36033: [36019, 36089]}
     """
 
     def __init__(self, verbose=True):
@@ -76,7 +128,7 @@ class PointSupportDistance:
     def calc_pair_distances(self,
                             point_support,
                             block_pair: Tuple,
-                            update=True):
+                            update=True) -> np.ndarray:
         """
         Returns distances between point supports from two blocks and
         updates distances dictionary.
@@ -128,7 +180,7 @@ class PointSupportDistance:
     def calculate_point_support_distances(self,
                                           point_support,
                                           block_id,
-                                          no_closest_neighbors: int = 0):
+                                          no_closest_neighbors: int = 0) -> dict:
         """
         Calculates distances between point supports.
 

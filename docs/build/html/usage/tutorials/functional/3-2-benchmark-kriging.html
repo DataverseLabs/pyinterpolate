@@ -637,8 +637,9 @@
 
 <span class="n">idw_preds</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">loc</span><span class="p">:</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span>
-                <span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
                 <span class="n">unknown_location</span><span class="o">=</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+                <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+                <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
                 <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
                 <span class="n">power</span><span class="o">=</span><span class="n">idw_power</span>
             <span class="p">)</span>
@@ -665,7 +666,7 @@
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW is 5.036257725481412
+Root Mean Squared Error of prediction with IDW is 5.239230087765165
 </pre></div></div>
 </div>
 <p><strong>Clarification</strong>: Obtained Root Mean Squared Error could serve as a baseline for further model development. To build a better reference, we create four IDW models of powers:</p>
@@ -687,8 +688,9 @@ Root Mean Squared Error of prediction with IDW is 5.036257725481412
 <span class="k">for</span> <span class="n">pw</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">IDW_POWERS</span><span class="p">):</span>
     <span class="n">idw_preds</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
             <span class="k">lambda</span> <span class="n">loc</span><span class="p">:</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span>
-                <span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
                 <span class="n">unknown_location</span><span class="o">=</span><span class="p">(</span><span class="n">loc</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">loc</span><span class="o">.</span><span class="n">y</span><span class="p">),</span>
+                <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+                <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
                 <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
                 <span class="n">power</span><span class="o">=</span><span class="n">pw</span>
             <span class="p">)</span>
@@ -707,7 +709,7 @@ Root Mean Squared Error of prediction with IDW is 5.036257725481412
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 3/3 [01:00&lt;00:00, 20.02s/it]
+100%|██████████| 3/3 [00:39&lt;00:00, 13.26s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -724,10 +726,10 @@ Root Mean Squared Error of prediction with IDW is 5.036257725481412
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with IDW of power 2 is 5.0363
-Root Mean Squared Error of prediction with IDW of power 0.5 is 6.0553
-Root Mean Squared Error of prediction with IDW of power 1 is 5.6235
-Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
+Root Mean Squared Error of prediction with IDW of power 2 is 5.2392
+Root Mean Squared Error of prediction with IDW of power 0.5 is 5.9270
+Root Mean Squared Error of prediction with IDW of power 1 is 5.5847
+Root Mean Squared Error of prediction with IDW of power 4 is 5.2546
 </pre></div></div>
 </div>
 </section>
@@ -739,7 +741,8 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">exp_var</span> <span class="o">=</span> <span class="n">build_experimental_variogram</span><span class="p">(</span>
-    <span class="n">ds</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">step_size</span><span class="o">=</span><span class="n">step_size</span><span class="p">,</span>
     <span class="n">max_range</span><span class="o">=</span><span class="n">max_range</span>
 <span class="p">)</span>
@@ -778,7 +781,8 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">kriging_preds</span> <span class="o">=</span> <span class="n">ordinary_kriging</span><span class="p">(</span>
     <span class="n">theoretical_model</span><span class="o">=</span><span class="n">theo_var</span><span class="p">,</span>
-    <span class="n">known_locations</span><span class="o">=</span><span class="n">train</span><span class="p">[[</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;dem&#39;</span><span class="p">]],</span>
+    <span class="n">known_values</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;dem&#39;</span><span class="p">],</span>
+    <span class="n">known_geometries</span><span class="o">=</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">unknown_locations</span><span class="o">=</span><span class="n">test</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">],</span>
     <span class="n">no_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
     <span class="n">allow_approximate_solutions</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -792,7 +796,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 6758/6758 [00:01&lt;00:00, 5196.73it/s]
+100%|██████████| 6758/6758 [00:01&lt;00:00, 6749.87it/s]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
@@ -820,7 +824,7 @@ Root Mean Squared Error of prediction with IDW of power 4 is 4.7735
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Root Mean Squared Error of prediction with Kriging is 4.46215413444605
+Root Mean Squared Error of prediction with Kriging is 4.911138570395592
 </pre></div></div>
 </div>
 <p>Your results may be different (if your train and test sets are divided in a different way), but in most cases, Kriging will be better than IDW or very close to the best results from IDW. Even more important is that for the single data source with a low number of samples, we don’t have the opportunity to perform the validation step, and we’re unable to guess how big the power parameter should be. With Kriging, we model variogram, and <em>voila!</em> - model works.</p>
@@ -835,11 +839,15 @@ Root Mean Squared Error of prediction with Kriging is 4.46215413444605
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>2025-05-02</p></td>
+<tr class="row-even"><td><p>2025-11-07</p></td>
+<td><p>Used <strong>values</strong> and <strong>geometries</strong> parameters instead of <strong>ds</strong> in the experimental variogram initialization, and <strong>known_values</strong> and <strong>known_geometries</strong> for kriging process (instead of <strong>known_locations</strong> parameter), the same for <code class="docutils literal notranslate"><span class="pre">inverse_distance_weighting()</span></code></p></td>
+<td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025-05-02</p></td>
 <td><p>Tutorial has been adapted to the 1.0 release</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>
-<tr class="row-odd"><td><p>2025-07-11</p></td>
+<tr class="row-even"><td><p>2025-07-11</p></td>
 <td><p>Changed behavior of <code class="docutils literal notranslate"><span class="pre">ordinary_kriging</span></code> and simplified tutorial</p></td>
 <td><p>&#64;SimonMolinsky (Szymon Moliński)</p></td>
 </tr>

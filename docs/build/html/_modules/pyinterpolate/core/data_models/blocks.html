@@ -446,11 +446,10 @@
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.angular</span> <span class="kn">import</span> <span class="n">calc_angles</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.distance.point</span> <span class="kn">import</span> <span class="n">point_distance</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span><span class="p">,</span> <span class="n">largest_geometry</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.geo</span> <span class="kn">import</span> <span class="n">points_to_lon_lat</span><span class="p">,</span> <span class="n">largest_geometry</span><span class="p">,</span> \
+    <span class="n">join_any_geometry_and_values</span>
 
 
-<span class="c1"># TODO: if multipolygon then get coordinates /</span>
-<span class="c1">#       representative points from the largest block - as an option</span>
 <div class="viewcode-block" id="Blocks">
 <a class="viewcode-back" href="../../../../api/core/core.html#pyinterpolate.Blocks">[docs]</a>
 <span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
@@ -458,11 +457,23 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    ds : gpd.GeoDataFrame</span>
-<span class="sd">        Dataset with block values.</span>
+<span class="sd">    ds : gpd.GeoDataFrame, optional</span>
+<span class="sd">        Dataset with block values. Must be provided if ``values`` and</span>
+<span class="sd">        ``geometry`` parameters are not given.</span>
 
-<span class="sd">    value_column_name : Any</span>
-<span class="sd">        Name of the column with block rates.</span>
+<span class="sd">    values : ArrayLike, optional</span>
+<span class="sd">        Aggregated values of each block. Optional parameter, if not</span>
+<span class="sd">        given then ``ds`` must be provided.</span>
+
+<span class="sd">    geometries : ArrayLike, optional</span>
+<span class="sd">        Array or similar structure with geometries. It must have the same</span>
+<span class="sd">        length as ``values``. Optional parameter, if not given then ``ds``</span>
+<span class="sd">        must be provided.</span>
+
+<span class="sd">    value_column_name : Any, optional</span>
+<span class="sd">        Name of the column with block rates. Must be provided when</span>
+<span class="sd">        the ``ds`` parameter is given, otherwise it is set to &#39;values&#39; if</span>
+<span class="sd">        not provided.</span>
 
 <span class="sd">    geometry_column_name : Any, default = &#39;geometry&#39;</span>
 <span class="sd">        Name of the column with a block geometry.</span>
@@ -603,16 +614,18 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">ds</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">,</span>
-                 <span class="n">value_column_name</span><span class="p">,</span>
-                 <span class="n">geometry_column_name</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
-                 <span class="n">index_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">representative_points_column_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">representative_points_from_centroid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">representative_points_from_random_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">representative_points_from_largest_area</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">distances_between_representative_points</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">angles_between_representative_points</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                 <span class="n">ds</span><span class="p">:</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">values</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">geometries</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">value_column_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">geometry_column_name</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span><span class="p">,</span>
+                 <span class="n">index_column_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">representative_points_column_name</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">representative_points_from_centroid</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">representative_points_from_random_sample</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">representative_points_from_largest_area</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">distances_between_representative_points</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">angles_between_representative_points</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 
         <span class="c1"># Helper params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lon_col_name</span> <span class="o">=</span> <span class="s1">&#39;lon&#39;</span>
@@ -628,7 +641,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_sample</span> <span class="o">=</span> <span class="n">representative_points_from_random_sample</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rep_ps_largest_area</span> <span class="o">=</span> <span class="n">representative_points_from_largest_area</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value_column_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">value_column_name</span> <span class="o">=</span> <span class="s1">&#39;values&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">join_any_geometry_and_values</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">geometries</span><span class="p">,</span>
+                                                   <span class="n">values</span><span class="o">=</span><span class="n">values</span><span class="p">,</span>
+                                                   <span class="n">values_column_name</span><span class="o">=</span><span class="n">value_column_name</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">value_column_name</span> <span class="o">=</span> <span class="n">value_column_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">index_column_name</span> <span class="o">=</span> <span class="n">index_column_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">geometry_column_name</span> <span class="o">=</span> <span class="n">geometry_column_name</span>

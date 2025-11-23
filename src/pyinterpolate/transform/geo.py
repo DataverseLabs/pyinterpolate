@@ -1,10 +1,67 @@
 from typing import Tuple, Union
+from numpy.typing import ArrayLike
 
 import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-from shapely.geometry import Polygon, MultiPolygon
+from shapely.geometry import Polygon, MultiPolygon, Point
+from shapely.geometry.base import BaseGeometry
+
+
+def geometry_and_values_array(geometry,
+                              values) -> ArrayLike:
+    """
+    Function creates single object from geometries and aggregated values.
+
+    Parameters
+    ----------
+    geometry : ArrayLike
+
+    values : ArrayLike
+
+    Returns
+    -------
+    : numpy array
+    """
+
+    if len(geometry) != len(values):
+        raise ValueError(
+            'Number of geometries must be equal to number of values'
+        )
+
+    arr = []
+
+    if isinstance(geometry, pd.Series):
+        geometry = geometry.values
+
+    if isinstance(geometry, pd.DataFrame):
+        geometry = geometry.values
+
+    if isinstance(values, pd.Series):
+        values = values.values
+
+    is_point = isinstance(geometry[0], Point)
+
+    if is_point:
+        for idx, rec in enumerate(geometry):
+            arr.append(
+                [rec.x, rec.y, values[idx]]
+            )
+    else:
+        greater_than_2_dims = len(geometry[0]) > 2
+        if greater_than_2_dims:
+            for idx, rec in enumerate(geometry):
+                rlist = rec.tolist()
+                rlist.append(values[idx])
+                arr.append(rlist)
+        else:
+            for idx, rec in enumerate(geometry):
+                arr.append(
+                    [rec[0], rec[1], values[idx]]
+                )
+
+    return np.array(arr)
 
 
 def largest_geometry(geometry: MultiPolygon) -> Polygon:
@@ -32,6 +89,111 @@ def largest_geometry(geometry: MultiPolygon) -> Polygon:
 
     poly = geometry.geoms[idx]
     return poly
+
+
+def join_any_geometry_and_values(geometry,
+                                 values,
+                                 geometry_column_name: str = 'geometry',
+                                 values_column_name: str = 'values') -> gpd.GeoDataFrame:
+    """
+    Function creates single object from geometries and aggregated values.
+
+    Parameters
+    ----------
+    geometry : ArrayLike
+
+    values : ArrayLike
+
+    geometry_column_name : str, default = 'geometry'
+
+    values_column_name : str, default = 'value'
+
+    Returns
+    -------
+    : gpd.GeoDataFrame
+    """
+
+    if len(geometry) != len(values):
+        raise ValueError(
+            'Number of geometries must be equal to number of values'
+        )
+
+    if isinstance(values, pd.Series):
+        values = values.values
+    elif isinstance(values, pd.DataFrame):
+        val_column_name = values.columns[0]
+        values = values[val_column_name].values
+
+    if isinstance(geometry, pd.DataFrame):
+        geom_column_name = geometry.columns[0]
+        geometry = geometry[geom_column_name].values
+
+    if isinstance(geometry, gpd.GeoDataFrame):
+        gdf = geometry.copy(deep=True)
+        gdf[values_column_name] = values
+    else:
+        g0 = geometry[0]
+        if isinstance(g0, BaseGeometry):
+            gdf = gpd.GeoDataFrame(
+                values, columns=[values_column_name], geometry=geometry
+            )
+            gdf.columns = [values_column_name, geometry_column_name]
+        else:
+            raise TypeError('Passed geometry must be basic geometry types'
+                            ' supported by shapely (Point, MultiPoint,'
+                            'LineString, MultiLineString, Polygon, '
+                            'MultiPolygon)')
+
+    return gdf
+
+
+def join_point_geometry_and_values(geometry,
+                                   values,
+                                   geometry_column_name: str = 'geometry',
+                                   values_column_name: str = 'values') -> gpd.GeoDataFrame:
+    """
+    Function creates single object from geometries and aggregated values.
+
+    Parameters
+    ----------
+    geometry : ArrayLike
+
+    values : ArrayLike
+
+    geometry_column_name : str, default = 'geometry'
+
+    values_column_name : str, default = 'value'
+
+    Returns
+    -------
+    : gpd.GeoDataFrame
+    """
+
+    if len(geometry) != len(values):
+        raise ValueError(
+            'Number of geometries must be equal to number of values'
+        )
+
+    if isinstance(values, pd.Series):
+        values = values.values
+    elif isinstance(values, pd.DataFrame):
+        val_column_name = values.columns[0]
+        values = values[val_column_name].values
+
+    if isinstance(geometry, pd.DataFrame):
+        geometry = geometry.values
+
+    if isinstance(geometry, gpd.GeoDataFrame):
+        gdf = geometry.copy(deep=True)
+        gdf[values_column_name] = values
+    else:
+        points = [Point(p) for p in geometry]
+        gdf = gpd.GeoDataFrame(
+            values, columns=[values_column_name], geometry=points
+        )
+        gdf.columns = [values_column_name, geometry_column_name]
+
+    return gdf
 
 
 def points_to_lon_lat(points: gpd.GeoSeries) -> Tuple:
@@ -129,5 +291,3 @@ if __name__ == '__main__':
     mpol = MultiPolygon([pol1, pol2])
 
     assert largest_geometry(mpol) == pol2
-
-

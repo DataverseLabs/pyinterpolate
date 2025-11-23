@@ -63,6 +63,71 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
     ------
     ValueError
         Raised when prediction or prediction error are negative.
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     area_to_area_pk,
+    ...     Blocks,
+    ...     ExperimentalVariogram,
+    ...     PointSupport,
+    ...     TheoreticalVariogram
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>>
+    >>> EXPERIMENTAL = ExperimentalVariogram(
+    ...     ds=BLOCKS.representative_points_array(),
+    ...     step_size=40000,
+    ...     max_range=300001
+    ... )
+    >>>
+    >>> THEO = TheoreticalVariogram()
+    >>> THEO.autofit(
+    ...     experimental_variogram=EXPERIMENTAL,
+    ...     sill=150
+    ... )
+    >>> ata_pk = area_to_area_pk(
+    ...     semivariogram_model=THEO,
+    ...     point_support=PS,
+    ...     unknown_block_index=34017,
+    ...     number_of_neighbors=8
+    ... )
+    >>> print(ata_pk)
+    {'block_id': 34017, 'zhat': 133.89984110553695, 'sig': 5.9614557671535335}
     """
     # Prepare Kriging Data
     # {known block id: [

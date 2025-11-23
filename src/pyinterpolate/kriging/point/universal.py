@@ -3,6 +3,8 @@ from typing import Union, Any
 import matplotlib.pyplot as plt
 import numpy as np
 from numpy.typing import ArrayLike
+
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.core.pipelines.interpolate import interpolate_points, \
     interpolate_points_dask
 
@@ -91,8 +93,17 @@ class UniversalKriging:
 
     Parameters
     ----------
-    known_points : numpy array
-        Known points and their values.
+    known_points : ArrayLike, optional
+        Known points and their values ``[lon, lat, value]``
+
+    known_values : ArrayLike, optional
+        Observation in the i-th geometry (from ``known_geometries``). Optional
+        parameter, if not given then ``known_locations`` must be provided.
+
+    known_geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``known_values``. Optional parameter, if not given then
+        ``known_locations`` must be provided. Point type geometry.
 
     fitted_regression_model : optional
         Any kind of regression model with `.predict()` method that could be
@@ -142,12 +153,42 @@ class UniversalKriging:
 
     plot_trend_surfaces()
         Visual comparison of observations, trend, and bias.
+
+    Examples
+    --------
+    >>> import geopandas as gpd
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>>
+    >>> from pyinterpolate.kriging.point.universal import UniversalKriging
+    >>>
+    >>>
+    >>> dem = gpd.read_file('dem.gpkg')
+    >>> unknown_points = gpd.read_file('unknown_locations.gpkg')
+    >>> uk = UniversalKriging(
+    ...     known_values=dem[:, -1],
+    ...     known_geometries=dem[:, :-1]
+    ... )
+    >>> uk.fit_trend()
+    >>> uk.detrend()
+    >>> uk.fit_bias(
+    ...     step_size=500, max_range=10000
+    ... )
+    >>> predictions = uk.predict(points=unknown_points)
+    >>> print(predictions[0])  # z_hat, x, y
+    [9.72916006e+01 2.38012302e+05 5.51466805e+05]
     """
 
     def __init__(self,
-                 known_points: np.ndarray,
+                 known_points: ArrayLike = None,
+                 known_values: ArrayLike = None,
+                 known_geometries: ArrayLike = None,
                  fitted_regression_model: Any = None):
         # Core
+        known_points = VariogramPoints(points=known_points,
+                                       geometries=known_geometries,
+                                       values=known_values)
+        known_points = known_points.points
         self.known_points = known_points
         # Trend
         self.trend_model = None

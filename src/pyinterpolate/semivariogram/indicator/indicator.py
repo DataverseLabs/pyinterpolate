@@ -7,21 +7,34 @@ from matplotlib import pyplot as plt
 from matplotlib import markers
 from tqdm import tqdm
 
+from pyinterpolate.core.data_models.points import VariogramPoints
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
 from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
 
 
-def code_indicators(ds: np.ndarray, thresholds: ArrayLike) -> np.ndarray:
+def code_indicators(thresholds: ArrayLike,
+                    ds: Union[ArrayLike, VariogramPoints] = None,
+                    values: ArrayLike = None,
+                    geometries: ArrayLike = None) -> np.ndarray:
     """
     Function transforms kriging values into a vector of their indicators.
 
     Parameters
     ----------
-    ds : numpy array
-        Kriging dataset [lon, lat, value]
-
     thresholds : List
         The list of possible thresholds.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     Returns
     -------
@@ -32,6 +45,13 @@ def code_indicators(ds: np.ndarray, thresholds: ArrayLike) -> np.ndarray:
 
     ids = []
     thresh_arr = np.array(thresholds)
+
+    # Validate points
+    if not isinstance(ds, VariogramPoints):
+        ds = VariogramPoints(points=ds,
+                             geometries=geometries,
+                             values=values)
+        ds = ds.points
 
     for row in ds:
         _r = [row[0], row[1]]
@@ -77,11 +97,20 @@ class IndicatorVariogramData:
 
     Parameters
     ----------
-    ds : numpy array, list, tuple
-        Coordinates and their values: ``(pt x, pt y, value)``
-
     number_of_thresholds: int
         The number of thresholds to model data.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     Attributes
     ----------
@@ -106,15 +135,24 @@ class IndicatorVariogramData:
     """
 
     def __init__(self,
-                 ds: Union[np.ndarray, list, tuple],
-                 number_of_thresholds: int):
-        if not isinstance(ds, np.ndarray):
-            ds = np.array(ds)
+                 number_of_thresholds: int,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None):
+
+        if not isinstance(ds, VariogramPoints):
+            ds = VariogramPoints(points=ds,
+                                 geometries=geometries,
+                                 values=values)
+            ds = ds.points
+        else:
+            ds = ds.points
 
         self.input_array = ds
         self.n_thresholds = number_of_thresholds
-        self.thresholds = select_variogram_thresholds(ds[:, -1], self.n_thresholds)
-        self.ids = code_indicators(ds, self.thresholds)
+        self.thresholds = select_variogram_thresholds(ds[:, -1],
+                                                      self.n_thresholds)
+        self.ids = code_indicators(self.thresholds, ds=ds)
 
 
 class ExperimentalIndicatorVariogram:
@@ -123,9 +161,6 @@ class ExperimentalIndicatorVariogram:
 
     Parameters
     ----------
-    ds : numpy array, list, tuple
-        Coordinates and their values: ``(pt x, pt y, value)``
-
     number_of_thresholds: int
         The number of thresholds to model data.
 
@@ -135,6 +170,18 @@ class ExperimentalIndicatorVariogram:
 
     max_range : float
         The maximum range of analysis.
+
+    ds : ArrayLike, optional
+        ``[x, y, value]``
+
+    values : ArrayLike, optional
+        Observation in the i-th geometry (from ``geometries``). Optional
+        parameter, if not given then ``ds`` must be provided.
+
+    geometries : ArrayLike, optional
+        Array or similar structure with geometries. It must have the same
+        length as ``values``. Optional parameter, if not given then ``ds``
+        must be provided. Point type geometry.
 
     custom_weights : numpy array, default=None
         Weights assigned to points, index of weight must be the same
@@ -199,13 +246,35 @@ class ExperimentalIndicatorVariogram:
     Goovaerts P. AUTO-IK: a 2D indicator kriging program for automated
     non-parametric modeling of local uncertainty
     in earth sciences. DOI: https://doi.org/10.1016/j.cageo.2008.08.014
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import ExperimentalIndicatorVariogram
+    >>>
+    >>>
+    >>> dem = np.random.random(size=(1000, 3))
+    >>> step_size = 0.1
+    >>> max_range = 0.6
+    >>> exp_indicator = ExperimentalIndicatorVariogram(
+    ...     values=dem[:, -1],
+    ...     geometries=dem[:, :-1],
+    ...     number_of_thresholds=5,
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> print(len(exp_indicator.experimental_models))
+    5
+    >>> exp_indicator.show()  # plots variogram for each threshold
     """
 
     def __init__(self,
-                 ds: Union[np.ndarray, list, tuple],
                  number_of_thresholds: int,
                  step_size: float,
                  max_range: float,
+                 ds: Union[ArrayLike, VariogramPoints] = None,
+                 values: ArrayLike = None,
+                 geometries: ArrayLike = None,
                  custom_weights=None,
                  custom_bins=None,
                  direction: float = None,
@@ -214,6 +283,8 @@ class ExperimentalIndicatorVariogram:
 
         self.ds = IndicatorVariogramData(
             ds=ds,
+            values=values,
+            geometries=geometries,
             number_of_thresholds=number_of_thresholds
         )
 
@@ -291,6 +362,32 @@ class TheoreticalIndicatorVariogram:
     show()
         Shows experimental and theoretical variograms for each threshold.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import (
+    ...     ExperimentalIndicatorVariogram,
+    ...     TheoreticalIndicatorVariogram
+    ... )
+    >>>
+    >>>
+    >>> dem = np.random.random(size=(1000, 3))
+    >>> step_size = 0.1
+    >>> max_range = 0.6
+    >>> exp_indicator = ExperimentalIndicatorVariogram(
+    ...     values=dem[:, -1],
+    ...     geometries=dem[:, :-1],
+    ...     number_of_thresholds=5,
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theo_indicator = TheoreticalIndicatorVariogram(
+    ...     experimental_indicator_variogram=exp_indicator
+    ... )
+    >>> theo_indicator.fit()
+    >>> print(len(theo_indicator.theoretical_indicator_variograms))
+    5
+    >>> theo_indicator.show()  # plots theoretical models' curves
     """
 
     def __init__(

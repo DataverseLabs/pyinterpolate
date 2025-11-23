@@ -48,8 +48,8 @@
    "metadata": {
     "collapsed": true,
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:16.570609Z",
-     "start_time": "2025-07-11T06:04:12.950227Z"
+     "end_time": "2025-11-23T09:05:29.296187Z",
+     "start_time": "2025-11-23T09:05:26.417031Z"
     }
    },
    "source": [
@@ -68,8 +68,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:16.579363Z",
-     "start_time": "2025-07-11T06:04:16.576380Z"
+     "end_time": "2025-11-23T09:05:29.424872Z",
+     "start_time": "2025-11-23T09:05:29.422176Z"
     }
    },
    "cell_type": "code",
@@ -84,8 +84,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:16.803717Z",
-     "start_time": "2025-07-11T06:04:16.800126Z"
+     "end_time": "2025-11-23T09:05:29.446461Z",
+     "start_time": "2025-11-23T09:05:29.443353Z"
     }
    },
    "cell_type": "code",
@@ -101,8 +101,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:16.826839Z",
-     "start_time": "2025-07-11T06:04:16.817885Z"
+     "end_time": "2025-11-23T09:05:29.472648Z",
+     "start_time": "2025-11-23T09:05:29.465154Z"
     }
    },
    "cell_type": "code",
@@ -114,8 +114,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:16.865764Z",
-     "start_time": "2025-07-11T06:04:16.847223Z"
+     "end_time": "2025-11-23T09:05:29.500634Z",
+     "start_time": "2025-11-23T09:05:29.488873Z"
     }
    },
    "cell_type": "code",
@@ -202,8 +202,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:17.383906Z",
-     "start_time": "2025-07-11T06:04:16.942481Z"
+     "end_time": "2025-11-23T09:05:29.855229Z",
+     "start_time": "2025-11-23T09:05:29.632369Z"
     }
    },
    "cell_type": "code",
@@ -240,8 +240,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-07-11T06:04:17.548853Z",
-     "start_time": "2025-07-11T06:04:17.539633Z"
+     "end_time": "2025-11-23T09:05:29.917377Z",
+     "start_time": "2025-11-23T09:05:29.913192Z"
     }
    },
    "cell_type": "code",
@@ -253,8 +253,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:19.983373Z",
-     "start_time": "2025-05-18T07:51:19.522480Z"
+     "end_time": "2025-11-23T09:05:30.200268Z",
+     "start_time": "2025-11-23T09:05:30.002354Z"
     }
    },
    "cell_type": "code",
@@ -299,17 +299,17 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:22.141125Z",
-     "start_time": "2025-05-18T07:51:20.030174Z"
+     "end_time": "2025-11-23T09:05:31.196646Z",
+     "start_time": "2025-11-23T09:05:30.218205Z"
     }
    },
    "cell_type": "code",
    "source": [
-    "dirvar = DirectionalVariogram(ds=df[['x', 'y', 'log-zinc']],\n",
+    "dirvar = DirectionalVariogram(values=df['log-zinc'],\n",
+    "                              geometries=df[['x', 'y']],\n",
     "                              step_size=STEP_SIZE,\n",
     "                              max_range=MAX_RANGE,\n",
-    "                              tolerance=0.5,\n",
-    "                              dir_neighbors_selection_method='e')\n",
+    "                              tolerance=0.5)\n",
     "dirvar.show()"
    ],
    "id": "c698674bd48e980",
@@ -336,8 +336,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:22.173442Z",
-     "start_time": "2025-05-18T07:51:22.168740Z"
+     "end_time": "2025-11-23T09:05:31.218946Z",
+     "start_time": "2025-11-23T09:05:31.215Z"
     }
    },
    "cell_type": "code",
@@ -352,8 +352,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:22.420254Z",
-     "start_time": "2025-05-18T07:51:22.185588Z"
+     "end_time": "2025-11-23T09:05:31.309490Z",
+     "start_time": "2025-11-23T09:05:31.237152Z"
     }
    },
    "cell_type": "code",
@@ -385,8 +385,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:22.525978Z",
-     "start_time": "2025-05-18T07:51:22.503641Z"
+     "end_time": "2025-11-23T09:05:31.353922Z",
+     "start_time": "2025-11-23T09:05:31.342488Z"
     }
    },
    "cell_type": "code",
@@ -470,8 +470,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:42.420221Z",
-     "start_time": "2025-05-18T07:51:22.663977Z"
+     "end_time": "2025-11-23T09:05:36.330955Z",
+     "start_time": "2025-11-23T09:05:31.427413Z"
     }
    },
    "cell_type": "code",
@@ -481,7 +481,8 @@
     "for direction in DIRECTIONS:\n",
     "    result = interpolate_points(\n",
     "        theoretical_model=theoretical_models[direction],\n",
-    "        known_locations=df[['x', 'y', 'log-zinc']].to_numpy(),\n",
+    "        known_values=df['log-zinc'],\n",
+    "        known_geometries=df[['x', 'y']],\n",
     "        unknown_locations=grid.to_numpy(),\n",
     "        no_neighbors=16,\n",
     "        max_tick=30,\n",
@@ -500,11 +501,11 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "100%|██████████| 3103/3103 [00:02<00:00, 1081.21it/s]\n",
-      "100%|██████████| 3103/3103 [00:04<00:00, 721.62it/s]\n",
-      "100%|██████████| 3103/3103 [00:05<00:00, 607.49it/s]\n",
-      "100%|██████████| 3103/3103 [00:04<00:00, 723.72it/s]\n",
-      "100%|██████████| 3103/3103 [00:02<00:00, 1053.16it/s]\n"
+      "100%|██████████| 3103/3103 [00:00<00:00, 4605.60it/s]\n",
+      "100%|██████████| 3103/3103 [00:01<00:00, 2913.83it/s]\n",
+      "100%|██████████| 3103/3103 [00:01<00:00, 2983.60it/s]\n",
+      "100%|██████████| 3103/3103 [00:01<00:00, 3034.34it/s]\n",
+      "100%|██████████| 3103/3103 [00:01<00:00, 2988.59it/s]\n"
      ]
     }
    ],
@@ -513,8 +514,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:42.548347Z",
-     "start_time": "2025-05-18T07:51:42.516670Z"
+     "end_time": "2025-11-23T09:05:36.403897Z",
+     "start_time": "2025-11-23T09:05:36.395145Z"
     }
    },
    "cell_type": "code",
@@ -623,8 +624,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:51:53.003840Z",
-     "start_time": "2025-05-18T07:51:42.757930Z"
+     "end_time": "2025-11-23T09:05:42.110120Z",
+     "start_time": "2025-11-23T09:05:36.511859Z"
     }
    },
    "cell_type": "code",
@@ -682,8 +683,8 @@
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:53:59.550656Z",
-     "start_time": "2025-05-18T07:53:59.545541Z"
+     "end_time": "2025-11-23T09:05:42.188940Z",
+     "start_time": "2025-11-23T09:05:42.184158Z"
     }
    },
    "cell_type": "code",
@@ -703,31 +704,31 @@
      "name": "stderr",
      "output_type": "stream",
      "text": [
-      "/var/folders/vv/zx11_2ts7tjfsny482gs54s80000gr/T/ipykernel_75618/81901919.py:1: RuntimeWarning: Mean of empty slice\n",
+      "/var/folders/vv/zx11_2ts7tjfsny482gs54s80000gr/T/ipykernel_21822/81901919.py:1: RuntimeWarning: Mean of empty slice\n",
       "  mean_directional_results = np.nanmean(\n"
      ]
     }
    ],
-   "execution_count": 23
+   "execution_count": 16
   },
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:54:03.634902Z",
-     "start_time": "2025-05-18T07:54:03.630332Z"
+     "end_time": "2025-11-23T09:05:42.333102Z",
+     "start_time": "2025-11-23T09:05:42.329877Z"
     }
    },
    "cell_type": "code",
    "source": "kriged_results['ISO']['mean_dir_pred'] = mean_directional_results",
    "id": "ef7b324c8ff9b2c7",
    "outputs": [],
-   "execution_count": 24
+   "execution_count": 17
   },
   {
    "metadata": {
     "ExecuteTime": {
-     "end_time": "2025-05-18T07:54:06.901666Z",
-     "start_time": "2025-05-18T07:54:04.648072Z"
+     "end_time": "2025-11-23T09:05:43.043666Z",
+     "start_time": "2025-11-23T09:05:42.372974Z"
     }
    },
    "cell_type": "code",
@@ -753,7 +754,7 @@
      "output_type": "display_data"
     }
    ],
-   "execution_count": 25
+   "execution_count": 18
   },
   {
    "metadata": {},
@@ -763,17 +764,11 @@
     "\n",
     "| Date       | Changes                                      | Author                           |\n",
     "|------------|----------------------------------------------|----------------------------------|\n",
+    "| 2025-11-07 | Used **values** and **geometries** parameters instead of **ds** in the experimental variogram initialization, and **known_values** and **known_geometries** for kriging process (instead of **known_locations** parameter) | @SimonMolinsky (Szymon Moliński) |\n",
+    "| 2025-09-16 | Removed `dir_neighbors_selection_method` parameter | @SimonMolinsky (Szymon Moliński) |\n",
     "| 2025-05-17 | Tutorial has been adapted to the 1.0 release | @SimonMolinsky (Szymon Moliński) |"
    ],
    "id": "203e09a55131cf63"
-  },
-  {
-   "metadata": {},
-   "cell_type": "code",
-   "outputs": [],
-   "execution_count": null,
-   "source": "",
-   "id": "514a2462f6731ef1"
   }
  ],
  "metadata": {

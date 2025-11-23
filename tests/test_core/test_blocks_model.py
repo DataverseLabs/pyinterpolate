@@ -206,3 +206,39 @@ def test_block_index_outputs():
 
     real_value = block.block_real_value(block_id=block_id)
     assert isinstance(real_value, float)
+
+
+def test_geometry_values_separated():
+
+    # Pass as two Series
+    geometries = CANCER_DATA['ds'][CANCER_DATA['geometry_column_name']]
+    values = CANCER_DATA['ds'][CANCER_DATA['value_column_name']]
+    block = Blocks(
+        geometries=geometries,
+        values=values
+    )
+    assert isinstance(block.block_data, np.ndarray)
+    assert block.block_data.shape[0] == len(values)
+    assert block.block_data.shape[1] == 3
+
+    # Pass as two DataFrames
+    geometries = pd.DataFrame(CANCER_DATA['ds'][CANCER_DATA['geometry_column_name']])
+    values = pd.DataFrame(CANCER_DATA['ds'][CANCER_DATA['value_column_name']])
+    block = Blocks(
+        geometries=geometries,
+        values=values
+    )
+    assert isinstance(block.block_data, np.ndarray)
+    assert block.block_data.shape[0] == len(values)
+    assert block.block_data.shape[1] == 3
+
+    # Pass as two arrays
+    geometries = CANCER_DATA['ds'][CANCER_DATA['geometry_column_name']].values
+    values = CANCER_DATA['ds'][CANCER_DATA['value_column_name']].values
+    block = Blocks(
+        geometries=geometries,
+        values=values
+    )
+    assert isinstance(block.block_data, np.ndarray)
+    assert block.block_data.shape[0] == len(values)
+    assert block.block_data.shape[1] == 3

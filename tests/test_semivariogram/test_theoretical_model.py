@@ -51,7 +51,9 @@ def test_zero_autofit_case():
 
 def test_we_direction_case():
     variogram = TheoreticalVariogram()
-    variogram.autofit(experimental_variogram=WE_VARIOGRAM, models_group='all', nugget=0)
+    variogram.autofit(experimental_variogram=WE_VARIOGRAM,
+                      models_group='all',
+                      nugget=0)
 
     expected_nugget = 0
     expected_sill = 4.25
@@ -147,3 +149,73 @@ def test__repr__():
                       models_group='linear')
     text = "* Selected model: Linear model"
     assert variogram.__repr__().startswith(text)
+
+
+def test_docstring_example():
+
+    REFERENCE_INPUT = np.array([
+        [0, 0, 8],
+        [1, 0, 6],
+        [2, 0, 4],
+        [3, 0, 3],
+        [4, 0, 6],
+        [5, 0, 5],
+        [6, 0, 7],
+        [7, 0, 2],
+        [8, 0, 8],
+        [9, 0, 9],
+        [10, 0, 5],
+        [11, 0, 6],
+        [12, 0, 3]
+    ])
+    step_size = 1
+    max_range = 4.1
+    empirical_smv = ExperimentalVariogram(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
+        step_size=step_size,
+        max_range=max_range
+    )
+    theoretical_var = TheoreticalVariogram()
+    theoretical_var.fit(
+        experimental_variogram=empirical_smv,
+        model_type='linear',
+        sill=np.var(REFERENCE_INPUT[:, -1]),
+        rang=5
+    )
+    # print('')
+    # print(theoretical_var)
+    assert theoretical_var.sill == np.var(REFERENCE_INPUT[:, -1])
+
+
+def test_docstring_example_build_function():
+    REFERENCE_INPUT = np.array([
+        [0, 0, 8],
+        [1, 0, 6],
+        [2, 0, 4],
+        [3, 0, 3],
+        [4, 0, 6],
+        [5, 0, 5],
+        [6, 0, 7],
+        [7, 0, 2],
+        [8, 0, 8],
+        [9, 0, 9],
+        [10, 0, 5],
+        [11, 0, 6],
+        [12, 0, 3]
+    ])
+    step_size = 1
+    max_range = 4.1
+    empirical_smv = ExperimentalVariogram(
+        values=REFERENCE_INPUT[:, -1],
+        geometries=REFERENCE_INPUT[:, :-1],
+        step_size=step_size,
+        max_range=max_range
+    )
+    theoretical_var = build_theoretical_variogram(
+        experimental_variogram=empirical_smv
+    )
+    # print('')
+    # print(theoretical_var)
+    assert theoretical_var.sill <= np.var(REFERENCE_INPUT[:, -1])
+    assert isinstance(theoretical_var, TheoreticalVariogram)

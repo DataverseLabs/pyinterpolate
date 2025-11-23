@@ -159,7 +159,6 @@ class AggregatedVariogram:
         Weighted distances between all blocks:
         ``{block id : [distances to other blocks]}``
 
-
     Methods
     -------
     regularize()
@@ -176,6 +175,59 @@ class AggregatedVariogram:
     the Presence of Irregular Geographical Units, Mathematical Geology 40(1),
     101-128, 2008
 
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     AggregatedVariogram,
+    ...     Blocks,
+    ...     PointSupport
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>> STEP_SIZE = 20000
+    >>> MAX_RANGE = 300000
+    >>> ag = AggregatedVariogram(
+    ...     blocks=BLOCKS,
+    ...     point_support=PS,
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> reg_variogram = ag.regularize()
+    >>> print(reg_variogram[0])
+    [20000.            53.13549729]
     """
 
     def __init__(self,
@@ -368,7 +420,7 @@ class AggregatedVariogram:
         Returns
         -------
         regularized_model : numpy array
-            ``[lag, semivariance, number of point pairs, number of blocks included]``
+            ``[lag, semivariance]``
 
         Notes
         -----
@@ -673,6 +725,59 @@ def regularize(blocks: Blocks,
     [1] Goovaerts P., Kriging and Semivariogram Deconvolution in
     the Presence of Irregular Geographical
     Units, Mathematical Geology 40(1), 101-128, 2008
+
+    Examples
+    --------
+    >>> import os
+    >>> import geopandas as gpd
+    >>> from pyinterpolate import (
+    ...     regularize,
+    ...     Blocks,
+    ...     PointSupport,
+    ... )
+    >>>
+    >>>
+    >>> FILENAME = 'cancer_data.gpkg'
+    >>> LAYER_NAME = 'areas'
+    >>> DS = gpd.read_file(FILENAME, layer=LAYER_NAME)
+    >>> AREA_VALUES = 'rate'
+    >>> AREA_INDEX = 'FIPS'
+    >>> AREA_GEOMETRY = 'geometry'
+    >>> PS_LAYER_NAME = 'points'
+    >>> PS_VALUES = 'POP10'
+    >>> PS_GEOMETRY = 'geometry'
+    >>> PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)
+    >>>
+    >>> CANCER_DATA = {
+    ...    'ds': DS,
+    ...    'index_column_name': AREA_INDEX,
+    ...    'value_column_name': AREA_VALUES,
+    ...    'geometry_column_name': AREA_GEOMETRY
+    ... }
+    >>> POINT_SUPPORT_DATA = {
+    ...     'ps': PS,
+    ...     'value_column_name': PS_VALUES,
+    ...     'geometry_column_name': PS_GEOMETRY
+    ... }
+    >>> BLOCKS = Blocks(**CANCER_DATA)
+    >>> indexes = BLOCKS.block_indexes
+    >>>
+    >>> PS = PointSupport(
+    ...     points=POINT_SUPPORT_DATA['ps'],
+    ...     ps_blocks=BLOCKS,
+    ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
+    ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
+    ... )
+    >>> STEP_SIZE = 20000
+    >>> MAX_RANGE = 300000
+    >>> reg_variogram = regularize(
+    ...     blocks=BLOCKS,
+    ...     point_support=PS,
+    ...     step_size=STEP_SIZE,
+    ...     max_range=MAX_RANGE
+    ... )
+    >>> print(reg_variogram[0])
+    [20000.            53.13549729]
     """
 
     agg_var = AggregatedVariogram(
