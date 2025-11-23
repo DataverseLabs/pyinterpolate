@@ -55,6 +55,10 @@ Changes - from version >= 1.x
 * [docs] docstring example for `DirectionalVariogram`, used parameters `values` and `geometries`
 * [docs] docstring example for `VariogramCloud`, used parameters `values` and `geometries`
 * [docs] `ExperimentalIndicatorVariogram` and `TheoreticalIndicatorVariogram` - updated examples in docstrings
+* [docs] `TheoreticalVariogram`, and `build_theoretical_variogram()` examples
+* [docs] `calculate_spatial_dependence_index()` example
+* [bug/feature] `ExperimentalVariogram` class removes lags with NaN values (in covariance and semivariance)
+* [docs] Example in `interpolate_raster()` function
 
 
 2025-10-11

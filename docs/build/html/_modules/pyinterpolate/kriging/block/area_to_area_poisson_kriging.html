@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.block.area_to_area_poisson_kriging &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.kriging.block.area_to_area_poisson_kriging &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -489,6 +489,71 @@
 <span class="sd">    ------</span>
 <span class="sd">    ValueError</span>
 <span class="sd">        Raised when prediction or prediction error are negative.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import os</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     area_to_area_pk,</span>
+<span class="sd">    ...     Blocks,</span>
+<span class="sd">    ...     ExperimentalVariogram,</span>
+<span class="sd">    ...     PointSupport,</span>
+<span class="sd">    ...     TheoreticalVariogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; FILENAME = &#39;cancer_data.gpkg&#39;</span>
+<span class="sd">    &gt;&gt;&gt; LAYER_NAME = &#39;areas&#39;</span>
+<span class="sd">    &gt;&gt;&gt; DS = gpd.read_file(FILENAME, layer=LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt; AREA_VALUES = &#39;rate&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_INDEX = &#39;FIPS&#39;</span>
+<span class="sd">    &gt;&gt;&gt; AREA_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_LAYER_NAME = &#39;points&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_VALUES = &#39;POP10&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS_GEOMETRY = &#39;geometry&#39;</span>
+<span class="sd">    &gt;&gt;&gt; PS = gpd.read_file(FILENAME, layer=PS_LAYER_NAME)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; CANCER_DATA = {</span>
+<span class="sd">    ...    &#39;ds&#39;: DS,</span>
+<span class="sd">    ...    &#39;index_column_name&#39;: AREA_INDEX,</span>
+<span class="sd">    ...    &#39;value_column_name&#39;: AREA_VALUES,</span>
+<span class="sd">    ...    &#39;geometry_column_name&#39;: AREA_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; POINT_SUPPORT_DATA = {</span>
+<span class="sd">    ...     &#39;ps&#39;: PS,</span>
+<span class="sd">    ...     &#39;value_column_name&#39;: PS_VALUES,</span>
+<span class="sd">    ...     &#39;geometry_column_name&#39;: PS_GEOMETRY</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; BLOCKS = Blocks(**CANCER_DATA)</span>
+<span class="sd">    &gt;&gt;&gt; indexes = BLOCKS.block_indexes</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; PS = PointSupport(</span>
+<span class="sd">    ...     points=POINT_SUPPORT_DATA[&#39;ps&#39;],</span>
+<span class="sd">    ...     ps_blocks=BLOCKS,</span>
+<span class="sd">    ...     points_value_column=POINT_SUPPORT_DATA[&#39;value_column_name&#39;],</span>
+<span class="sd">    ...     points_geometry_column=POINT_SUPPORT_DATA[&#39;geometry_column_name&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; EXPERIMENTAL = ExperimentalVariogram(</span>
+<span class="sd">    ...     ds=BLOCKS.representative_points_array(),</span>
+<span class="sd">    ...     step_size=40000,</span>
+<span class="sd">    ...     max_range=300001</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; THEO = TheoreticalVariogram()</span>
+<span class="sd">    &gt;&gt;&gt; THEO.autofit(</span>
+<span class="sd">    ...     experimental_variogram=EXPERIMENTAL,</span>
+<span class="sd">    ...     sill=150</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; ata_pk = area_to_area_pk(</span>
+<span class="sd">    ...     semivariogram_model=THEO,</span>
+<span class="sd">    ...     point_support=PS,</span>
+<span class="sd">    ...     unknown_block_index=34017,</span>
+<span class="sd">    ...     number_of_neighbors=8</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(ata_pk)</span>
+<span class="sd">    {&#39;block_id&#39;: 34017, &#39;zhat&#39;: 133.89984110553695, &#39;sig&#39;: 5.9614557671535335}</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Prepare Kriging Data</span>
     <span class="c1"># {known block id: [</span>

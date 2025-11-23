@@ -69,6 +69,9 @@ class ExperimentalVariogram:
         Custom weights assigned to points. Only semivariance values are
         weighted.
 
+    drop_lags_without_pairs : bool, default=True
+        Drops lags when there are no point pairs within.
+
     is_semivariance : bool, default=True
         Calculate experimental semivariance.
 
@@ -118,7 +121,7 @@ class ExperimentalVariogram:
     >>> MAX_RANGE = 4
     >>> empirical_smv = ExperimentalVariogram(
     ...     values=REFERENCE_INPUT[:, -1],
-    ...     geometries=REFERENCE_INPUT[:, :-1]
+    ...     geometries=REFERENCE_INPUT[:, :-1],
     ...     step_size=STEP_SIZE,
     ...     max_range=MAX_RANGE
     ... )
@@ -143,9 +146,10 @@ class ExperimentalVariogram:
                  tolerance: float = None,
                  custom_bins: Union[np.ndarray, Collection] = None,
                  custom_weights: np.ndarray = None,
-                 is_semivariance=True,
-                 is_covariance=True,
-                 as_cloud=False):
+                 drop_lags_without_pairs: bool = True,
+                 is_semivariance: bool = True,
+                 is_covariance: bool = True,
+                 as_cloud: bool = False):
 
         # Validate points
         if not isinstance(ds, VariogramPoints):
@@ -177,6 +181,7 @@ class ExperimentalVariogram:
         self.direction = direction
         self.tolerance = tolerance
         self.as_cloud = as_cloud
+        self.__drop_lags = drop_lags_without_pairs
         self.__c_sem = is_semivariance
         self.__c_cov = is_covariance
 
@@ -187,6 +192,9 @@ class ExperimentalVariogram:
         if as_cloud:
             self._calculate_semivariance_point_cloud()
 
+        if drop_lags_without_pairs:
+            self._drop_lags_without_point_pairs()
+
         # update base model
         self.model = self.get_model_params()
 
@@ -194,6 +202,21 @@ class ExperimentalVariogram:
     def lag_semivariance_array(self):
         ls_array = np.vstack((self.lags, self.semivariances)).T
         return ls_array
+
+    def get_model_params(self):
+        model_parameters = {
+            "lags": self.lags,
+            "points_per_lag": self.points_per_lag,
+            "semivariances": self.semivariances,
+            "covariances": self.covariances,
+            "variance": self.variance,
+            "direction": self.direction,
+            "tolerance": self.tolerance,
+            "max_range": self.max_range,
+            "step_size": self.step_size,
+            "custom_weights": self.custom_weights
+        }
+        return ExperimentalVariogramModel(**model_parameters)
 
     def plot(self,
              semivariance=True,
@@ -323,20 +346,38 @@ class ExperimentalVariogram:
 
         self.semivariances = experimental_semivariance_array[:, 1]
 
-    def get_model_params(self):
-        model_parameters = {
-            "lags": self.lags,
-            "points_per_lag": self.points_per_lag,
-            "semivariances": self.semivariances,
-            "covariances": self.covariances,
-            "variance": self.variance,
-            "direction": self.direction,
-            "tolerance": self.tolerance,
-            "max_range": self.max_range,
-            "step_size": self.step_size,
-            "custom_weights": self.custom_weights
-        }
-        return ExperimentalVariogramModel(**model_parameters)
+    def _drop_lags_without_point_pairs(self):
+        """
+        Method removes all semivariances, covariances, and number of points
+        in each lag if value at the specific lag is None or NaN (no point
+        pairs for that lag).
+        """
+        if self.lags is None:
+            pass
+        else:
+            sem_not_nan = None
+            cov_not_nan = None
+            lags_trimmed = False
+
+            if self.__c_sem:
+                sem_not_nan = ~np.isnan(self.semivariances)
+
+            if self.__c_cov:
+                cov_not_nan = ~np.isnan(self.covariances)
+
+            if sem_not_nan is not None:
+                self.semivariances = self.semivariances[sem_not_nan]
+
+                self.lags = self.lags[sem_not_nan]
+                self.points_per_lag = self.points_per_lag[sem_not_nan]
+                lags_trimmed = True
+
+            if cov_not_nan is not None:
+                self.covariances = self.covariances[cov_not_nan]
+
+                if not lags_trimmed:
+                    self.lags = self.lags[cov_not_nan]
+                    self.points_per_lag = self.points_per_lag[cov_not_nan]
 
     def __repr__(self):
         """

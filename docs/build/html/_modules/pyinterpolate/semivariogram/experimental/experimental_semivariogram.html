@@ -451,7 +451,8 @@
                            <span class="n">direction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                            <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                            <span class="n">custom_bins</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ArrayLike</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-                           <span class="n">custom_weights</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+                           <span class="n">custom_weights</span><span class="p">:</span> <span class="n">ArrayLike</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates experimental semivariance.</span>
 
@@ -597,6 +598,9 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import calculate_semivariance</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
 <span class="sd">    &gt;&gt;&gt; REFERENCE_INPUT = np.array([</span>
 <span class="sd">    ...    [0, 0, 8],</span>
 <span class="sd">    ...    [1, 0, 6],</span>
@@ -615,7 +619,8 @@
 <span class="sd">    &gt;&gt;&gt; STEP_SIZE = 1</span>
 <span class="sd">    &gt;&gt;&gt; MAX_RANGE = 4</span>
 <span class="sd">    &gt;&gt;&gt; semivariances = calculate_semivariance(</span>
-<span class="sd">    ...    REFERENCE_INPUT,</span>
+<span class="sd">    ...    values=REFERENCE_INPUT[:, -1],</span>
+<span class="sd">    ...    geometries=REFERENCE_INPUT[:, :-1],</span>
 <span class="sd">    ...    step_size=STEP_SIZE,</span>
 <span class="sd">    ...    max_range=MAX_RANGE)</span>
 <span class="sd">    &gt;&gt;&gt; print(semivariances[0])</span>

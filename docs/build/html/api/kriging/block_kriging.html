@@ -499,6 +499,71 @@ that can lead to singular or near-singular matrix creation.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">centroid_poisson_kriging</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Blocks</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">PointSupport</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">TheoreticalVariogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_VALUES</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_INDEX</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_VALUES</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">PS_LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CANCER_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>   <span class="s1">&#39;ds&#39;</span><span class="p">:</span> <span class="n">DS</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;index_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_INDEX</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">POINT_SUPPORT_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;ps&#39;</span><span class="p">:</span> <span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">PS_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">PS_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLOCKS</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span><span class="o">**</span><span class="n">CANCER_DATA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indexes</span> <span class="o">=</span> <span class="n">BLOCKS</span><span class="o">.</span><span class="n">block_indexes</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ps_blocks</span><span class="o">=</span><span class="n">BLOCKS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">points_value_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;value_column_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">points_geometry_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;geometry_column_name&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EXPERIMENTAL</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ds</span><span class="o">=</span><span class="n">BLOCKS</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="mi">300001</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">EXPERIMENTAL</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sill</span><span class="o">=</span><span class="mi">150</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">centroid_pk</span> <span class="o">=</span> <span class="n">centroid_poisson_kriging</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">THEO</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">point_support</span><span class="o">=</span><span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_block_index</span><span class="o">=</span><span class="mi">34017</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">8</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">centroid_pk</span><span class="p">)</span>
+<span class="go">{&#39;block_id&#39;: 34017, &#39;zhat&#39;: 134.13113195517153, &#39;sig&#39;: 11.795520367595483}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -543,6 +608,71 @@ it is read from the semivariogram model.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">area_to_area_pk</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Blocks</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">PointSupport</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">TheoreticalVariogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_VALUES</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_INDEX</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_VALUES</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">PS_LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CANCER_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>   <span class="s1">&#39;ds&#39;</span><span class="p">:</span> <span class="n">DS</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;index_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_INDEX</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">POINT_SUPPORT_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;ps&#39;</span><span class="p">:</span> <span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">PS_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">PS_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLOCKS</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span><span class="o">**</span><span class="n">CANCER_DATA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indexes</span> <span class="o">=</span> <span class="n">BLOCKS</span><span class="o">.</span><span class="n">block_indexes</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ps_blocks</span><span class="o">=</span><span class="n">BLOCKS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">points_value_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;value_column_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">points_geometry_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;geometry_column_name&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EXPERIMENTAL</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ds</span><span class="o">=</span><span class="n">BLOCKS</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="mi">300001</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">EXPERIMENTAL</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sill</span><span class="o">=</span><span class="mi">150</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ata_pk</span> <span class="o">=</span> <span class="n">area_to_area_pk</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">THEO</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">point_support</span><span class="o">=</span><span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_block_index</span><span class="o">=</span><span class="mi">34017</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">8</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">ata_pk</span><span class="p">)</span>
+<span class="go">{&#39;block_id&#39;: 34017, &#39;zhat&#39;: 133.89984110553695, &#39;sig&#39;: 5.9614557671535335}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -590,6 +720,71 @@ or variance error to <code class="docutils literal notranslate"><span class="pre
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pyinterpolate</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="gp">... </span>    <span class="n">area_to_point_pk</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">Blocks</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">ExperimentalVariogram</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">PointSupport</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">TheoreticalVariogram</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FILENAME</span> <span class="o">=</span> <span class="s1">&#39;cancer_data.gpkg&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;areas&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">DS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_VALUES</span> <span class="o">=</span> <span class="s1">&#39;rate&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_INDEX</span> <span class="o">=</span> <span class="s1">&#39;FIPS&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AREA_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_LAYER_NAME</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_VALUES</span> <span class="o">=</span> <span class="s1">&#39;POP10&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS_GEOMETRY</span> <span class="o">=</span> <span class="s1">&#39;geometry&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span> <span class="n">layer</span><span class="o">=</span><span class="n">PS_LAYER_NAME</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CANCER_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>   <span class="s1">&#39;ds&#39;</span><span class="p">:</span> <span class="n">DS</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;index_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_INDEX</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">AREA_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">POINT_SUPPORT_DATA</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;ps&#39;</span><span class="p">:</span> <span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;value_column_name&#39;</span><span class="p">:</span> <span class="n">PS_VALUES</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;geometry_column_name&#39;</span><span class="p">:</span> <span class="n">PS_GEOMETRY</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BLOCKS</span> <span class="o">=</span> <span class="n">Blocks</span><span class="p">(</span><span class="o">**</span><span class="n">CANCER_DATA</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">indexes</span> <span class="o">=</span> <span class="n">BLOCKS</span><span class="o">.</span><span class="n">block_indexes</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PS</span> <span class="o">=</span> <span class="n">PointSupport</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">points</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;ps&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">ps_blocks</span><span class="o">=</span><span class="n">BLOCKS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">points_value_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;value_column_name&#39;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">points_geometry_column</span><span class="o">=</span><span class="n">POINT_SUPPORT_DATA</span><span class="p">[</span><span class="s1">&#39;geometry_column_name&#39;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">EXPERIMENTAL</span> <span class="o">=</span> <span class="n">ExperimentalVariogram</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ds</span><span class="o">=</span><span class="n">BLOCKS</span><span class="o">.</span><span class="n">representative_points_array</span><span class="p">(),</span>
+<span class="gp">... </span>    <span class="n">step_size</span><span class="o">=</span><span class="mi">40000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">max_range</span><span class="o">=</span><span class="mi">300001</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span> <span class="o">=</span> <span class="n">TheoreticalVariogram</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">THEO</span><span class="o">.</span><span class="n">autofit</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">experimental_variogram</span><span class="o">=</span><span class="n">EXPERIMENTAL</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">sill</span><span class="o">=</span><span class="mi">150</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">atp_pk</span> <span class="o">=</span> <span class="n">area_to_point_pk</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">semivariogram_model</span><span class="o">=</span><span class="n">THEO</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">point_support</span><span class="o">=</span><span class="n">PS</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">unknown_block_index</span><span class="o">=</span><span class="mi">34017</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">number_of_neighbors</span><span class="o">=</span><span class="mi">8</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">atp_pk</span><span class="p">)</span>
+<span class="go">{34017: array([[1.82287362e+06, 4.06124500e+05, 1.34010668e+02, 5.47866897e+00]])}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

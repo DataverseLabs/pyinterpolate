@@ -743,7 +743,7 @@
 <p>Now, we must set parameters for the areal semivariogram AND point support semivariogram. It is essential to understand data, especially experimental semivariances.</p>
 <p>The <em>step size</em> and the <em>maximum search radius</em> parameters depend on the block data. But we should check the point’s semivariogram too, just in case. We won’t create meaningful results if point support data is spatially independent.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of areal data - this cell may be run multiple times</span>
@@ -774,7 +774,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check experimental semivariogram of point data - this cell may be run multiple times</span>
@@ -810,7 +810,7 @@
 <h2>3. Regularize semivariogram<a class="headerlink" href="#3.-Regularize-semivariogram" title="Link to this heading">#</a></h2>
 <p>We can move to the next step - deconvolution. We must create the <code class="docutils literal notranslate"><span class="pre">Deconvolution</span></code> object. It iteratively transforms aggregated variogram using point support information. The process is slow, and it is divided into two steps: the initial <code class="docutils literal notranslate"><span class="pre">fit()</span></code> and iterative <code class="docutils literal notranslate"><span class="pre">transform()</span></code>. If you know what you’re doing you can perform both steps using method <code class="docutils literal notranslate"><span class="pre">fit_transform()</span></code>.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span> <span class="o">=</span> <span class="n">Deconvolution</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -834,7 +834,7 @@
 </li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
@@ -859,7 +859,7 @@ Regularization fit process ends
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check initial experimental, theoretical and regularized semivariograms</span>
@@ -877,7 +877,7 @@ Regularization fit process ends
 <p>After fitting, when we check how initial semivariogram behaves, we can perform <code class="docutils literal notranslate"><span class="pre">transform()</span></code> operation. This function has few parameters to control the regularization process, but we leave them as default with one exception: we set the <code class="docutils literal notranslate"><span class="pre">max_iters</span></code> parameter to 5.</p>
 <p>This process of fitting and transforming takes some time, so it’s a good idea to run it and go for lunch…</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
@@ -899,11 +899,11 @@ Transform procedure starts
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-100%|██████████| 5/5 [05:09&lt;00:00, 61.93s/it]
+100%|██████████| 5/5 [04:35&lt;00:00, 55.16s/it]
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
@@ -922,7 +922,7 @@ Transform procedure starts
 <h2>4. Visualize process<a class="headerlink" href="#4.-Visualize-process" title="Link to this heading">#</a></h2>
 <p>The process is automatic, but we can check how it behaved through each iteration. We can analyze deviation change (the most important variable, the mean absolute difference between regularized and theoretical models) with the built-in method. Still, if we are more interested in the algorithm stability, we can analyze weight changes during each iteration.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_deviation_change</span><span class="p">(</span><span class="n">normalized</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -938,7 +938,7 @@ Transform procedure starts
 </div>
 <p><strong>Clarification</strong>: The deviation between a regularized semivariogram and a theoretical model decreases with each iteration. However, a significant improvement can be seen after the first step, and then it slows down. That’s why semivariogram regularization usually does not require many steps. However, if there are many lags, optimization may require more steps to achieve a meaningful result.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_weights_change</span><span class="p">()</span>
@@ -957,7 +957,7 @@ Transform procedure starts
 <p>The most important part is to compare semivariograms! We have plotted those before, but now we do it again.</p>
 <p>Regularized Model is different from the initial semivariogram. It is the result of regularization, where the areal aggregates are distributed along population point support blocks.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">plot_variograms</span><span class="p">()</span>
@@ -977,7 +977,7 @@ Transform procedure starts
 <h2>5. Export semivariogram<a class="headerlink" href="#5.-Export-semivariogram" title="Link to this heading">#</a></h2>
 <p>After so long process we shouldn’t forget about saving modeling results! Thus, we will export regularized semivariogram and store it for Poisson Kriging.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython2 notranslate"><div class="highlight"><pre><span></span><span class="n">reg_mod</span><span class="o">.</span><span class="n">export_model_to_json</span><span class="p">(</span><span class="n">OUTPUT</span><span class="p">)</span>

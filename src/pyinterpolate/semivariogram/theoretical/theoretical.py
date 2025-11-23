@@ -122,6 +122,60 @@ def build_theoretical_variogram(
     -------
     theo_var : TheoreticalVariogram
         Fitted theoretical semivariogram.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyinterpolate import (
+    ...     ExperimentalVariogram,
+    ...     build_theoretical_variogram
+    ... )
+    >>>
+    >>>
+    >>> REFERENCE_INPUT = np.array([
+    ...    [0, 0, 8],
+    ...    [1, 0, 6],
+    ...    [2, 0, 4],
+    ...    [3, 0, 3],
+    ...    [4, 0, 6],
+    ...    [5, 0, 5],
+    ...    [6, 0, 7],
+    ...    [7, 0, 2],
+    ...    [8, 0, 8],
+    ...    [9, 0, 9],
+    ...    [10, 0, 5],
+    ...    [11, 0, 6],
+    ...    [12, 0, 3]
+    ...    ])
+    >>> step_size = 1
+    >>> max_range = 4.1
+    >>> empirical_smv = ExperimentalVariogram(
+    ...     values=REFERENCE_INPUT[:, -1],
+    ...     geometries=REFERENCE_INPUT[:, :-1],
+    ...     step_size=step_size,
+    ...     max_range=max_range
+    ... )
+    >>> theoretical_var = build_theoretical_variogram(
+    ...     experimental_variogram=empirical_smv
+    ... )
+    >>> print(theoretical_var)
+    * Selected model: Linear model
+    * Nugget: 1.85
+    * Sill: 3.3827861952861946
+    * Range: 1.2000000000000002
+    * Spatial Dependency Strength is moderate
+    * Mean Bias: None
+    * Mean RMSE: 0.5504691463605988
+    * Error-lag weighting method: equal
+    +-----+-------------------+--------------------+-----------------------+
+    | lag |    theoretical    |    experimental    |    bias (real-yhat)   |
+    +-----+-------------------+--------------------+-----------------------+
+    | 1.0 | 4.668988496071829 |       4.625        |  -0.04398849607182864 |
+    | 2.0 | 5.232786195286195 | 5.2272727272727275 | -0.005513468013467637 |
+    | 3.0 | 5.232786195286195 |        6.0         |   0.7672138047138048  |
+    | 4.0 | 5.232786195286195 | 4.444444444444445  |  -0.7883417508417505  |
+    +-----+-------------------+--------------------+-----------------------+
+
     """
     theo_var = TheoreticalVariogram()
     theo_var.autofit(

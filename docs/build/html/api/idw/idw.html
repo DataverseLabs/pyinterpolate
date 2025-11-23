@@ -501,6 +501,27 @@ neighbours are given in the <code class="docutils literal notranslate"><span cla
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">unknown_pos</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">locs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">33</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">14</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">35</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pred</span> <span class="o">=</span> <span class="n">inverse_distance_weighting</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">unknown_locations</span><span class="o">=</span><span class="n">unknown_pos</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">known_values</span><span class="o">=</span><span class="n">locs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">known_geometries</span><span class="o">=</span><span class="n">locs</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">no_neighbors</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pred</span><span class="p">)</span>
+<span class="go">7.286311587314138</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>

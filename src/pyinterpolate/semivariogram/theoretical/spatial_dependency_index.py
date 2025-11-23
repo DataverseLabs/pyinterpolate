@@ -30,6 +30,18 @@ def calculate_spatial_dependence_index(nugget: float, sill: float) -> Tuple:
     J.M.; TURCO, R.F.; KONOPKA, A.E. Field-scale variability of soil
     properties in central Iowa soils.
     Soil Science Society of America Journal, v. 58, n. 5, p. 1501-1511, 1994.
+
+    Examples
+    --------
+    >>> from pyinterpolate import calculate_spatial_dependence_index
+    >>>
+    >>>
+    >>> ratio_percent, strength = calculate_spatial_dependence_index(
+    ...     nugget=0.1,
+    ...     sill=0.9
+    ... )
+    >>> print((ratio_percent, strength))
+    (10.0, 'strong')
     """
 
     if nugget == 0:

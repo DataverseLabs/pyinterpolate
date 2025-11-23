@@ -518,6 +518,26 @@
 
 <span class="sd">    show()</span>
 <span class="sd">        Plot all variograms.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import DirectionalVariogram</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; ds = np.load(&#39;armstrong_data.npy&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 1.5</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 6</span>
+<span class="sd">    &gt;&gt;&gt; directional_variogram = DirectionalVariogram(</span>
+<span class="sd">    ...     step_size=STEP_SIZE,</span>
+<span class="sd">    ...     max_range=MAX_RANGE,</span>
+<span class="sd">    ...     values=ds[:, -1],</span>
+<span class="sd">    ...     geometries=ds[:, :-1]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; variograms = directional_variogram.get()</span>
+<span class="sd">    &gt;&gt;&gt; print(variograms.keys())</span>
+<span class="sd">    dict_keys([&#39;ISO&#39;, &#39;NS&#39;, &#39;WE&#39;, &#39;NE-SW&#39;, &#39;NW-SE&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; directional_variogram.show()  # shows variograms in all directions</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

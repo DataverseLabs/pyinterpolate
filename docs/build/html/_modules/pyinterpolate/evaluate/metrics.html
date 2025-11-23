@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.evaluate.metrics &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.evaluate.metrics &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -498,6 +498,18 @@
 <span class="sd">        - :math:`y_{i}` - i-th observation,</span>
 <span class="sd">        - :math:`\bar{y_{i}}` - i-th prediction,</span>
 <span class="sd">        - :math:`N` - number of observations.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.evaluate.metrics import forecast_bias</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; preds = np.array([1, 2, 2, 5, 6])</span>
+<span class="sd">    &gt;&gt;&gt; bias = forecast_bias(preds, arr)</span>
+<span class="sd">    &gt;&gt;&gt; print(bias)</span>
+<span class="sd">    -0.2</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">fb</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">predicted_array</span><span class="p">))</span>
@@ -534,6 +546,18 @@
 <span class="sd">        * :math:`y_{i}` - i-th observation,</span>
 <span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
 <span class="sd">        * :math:`N` - number of observations.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.evaluate.metrics import mean_absolute_error</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; preds = np.array([1, 2, 2, 5, 6])</span>
+<span class="sd">    &gt;&gt;&gt; err = mean_absolute_error(preds, arr)</span>
+<span class="sd">    &gt;&gt;&gt; print(err)</span>
+<span class="sd">    0.6</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">mae</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
@@ -576,6 +600,17 @@
 <span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
 <span class="sd">        * :math:`N` - number of observations.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.evaluate.metrics import root_mean_squared_error</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; preds = np.array([1, 2, 2, 5, 6])</span>
+<span class="sd">    &gt;&gt;&gt; rmse = root_mean_squared_error(preds, arr)</span>
+<span class="sd">    &gt;&gt;&gt; print(rmse)</span>
+<span class="sd">    0.7745966692414834</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
@@ -590,7 +625,7 @@
 <a class="viewcode-back" href="../../../api/evaluate/evaluate.html#pyinterpolate.evaluate.metrics.symmetric_mean_absolute_percentage_error">[docs]</a>
 <span class="k">def</span> <span class="nf">symmetric_mean_absolute_percentage_error</span><span class="p">(</span><span class="n">predicted_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                                              <span class="n">real_array</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                                             <span class="n">test_undefined</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+                                             <span class="n">check_undefined</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function calculates Symmetric Mean Absolute Percentage Error (SMAPE) of</span>
 <span class="sd">    predictions, allowing researcher to compare different models.</span>
@@ -603,7 +638,7 @@
 <span class="sd">    real_array : numpy array</span>
 <span class="sd">        Observations</span>
 
-<span class="sd">    test_undefined : bool, default = True</span>
+<span class="sd">    check_undefined : bool, default = True</span>
 <span class="sd">        Check if there are cases when prediction and observation are</span>
 <span class="sd">        equal to 0.</span>
 
@@ -641,10 +676,21 @@
 <span class="sd">        * :math:`\bar{y_{i}}` - i-th prediction,</span>
 <span class="sd">        * :math:`N` - number of observations.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.evaluate.metrics import symmetric_mean_absolute_percentage_error</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; preds = np.array([1, 2, 2, 5, 6])</span>
+<span class="sd">    &gt;&gt;&gt; smape = symmetric_mean_absolute_percentage_error(preds, arr)</span>
+<span class="sd">    &gt;&gt;&gt; print(smape)</span>
+<span class="sd">    8.040404040404042</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">smape</span> <span class="o">=</span> <span class="mi">100</span>
 
-    <span class="k">if</span> <span class="n">test_undefined</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">check_undefined</span><span class="p">:</span>
         <span class="n">psmapes</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">real_array</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">predicted_array</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -749,6 +795,23 @@
 <span class="sd">        * :math:`P` - number of all points,</span>
 <span class="sd">        * :math:`N` - number of observations.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.evaluate.metrics import weighted_root_mean_squared_error</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; arr = np.array([1, 2, 3, 4, 5])</span>
+<span class="sd">    &gt;&gt;&gt; preds = np.array([1, 2, 2, 5, 6])</span>
+<span class="sd">    &gt;&gt;&gt; lag_dist = np.array([2, 4, 8, 16, 32])</span>
+<span class="sd">    &gt;&gt;&gt; wrmse_closest = weighted_root_mean_squared_error(preds, arr, &#39;closest&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; wrmse_distant = weighted_root_mean_squared_error(preds, arr, &#39;distant&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; wrmse_dense = weighted_root_mean_squared_error(preds,</span>
+<span class="sd">    ...                                                arr,</span>
+<span class="sd">    ...                                                &#39;dense&#39;,</span>
+<span class="sd">    ...                                                lag_dist)</span>
+<span class="sd">    &gt;&gt;&gt; print(wrmse_closest, wrmse_distant, wrmse_dense)</span>
+<span class="sd">    0.3464101615137755 0.6928203230275509 0.4250237185032414</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">error</span> <span class="o">=</span> <span class="p">(</span><span class="n">real_array</span> <span class="o">-</span> <span class="n">predicted_array</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
     <span class="n">arr_length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>

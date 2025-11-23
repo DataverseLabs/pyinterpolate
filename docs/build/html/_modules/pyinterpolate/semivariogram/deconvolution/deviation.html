@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.semivariogram.deconvolution.deviation &#8212; pyinterpolate 1.0.0 documentation</title>
+    <title>pyinterpolate.semivariogram.deconvolution.deviation &#8212; pyinterpolate 1.1.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.0.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
   
 </a></div>
     
@@ -426,7 +426,6 @@
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 
 <span class="kn">from</span> <span class="nn">pyinterpolate.evaluate.metrics</span> <span class="kn">import</span> <span class="n">root_mean_squared_error</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
 
 
 <span class="k">def</span> <span class="nf">calculate_deviation</span><span class="p">(</span><span class="n">theoretical</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
@@ -543,11 +542,11 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    theoretical_model : TheoreticalVariogram</span>
-<span class="sd">        Fitted model.</span>
+<span class="sd">    theoretical_semivariances : numpy array</span>
+<span class="sd">        Predicted semivariances</span>
 
-<span class="sd">    regularized_variances : numpy array</span>
-<span class="sd">        ``[lag, semivariance]``</span>
+<span class="sd">    regularized_semivariances : numpy array</span>
+<span class="sd">        Regualrized semivariances</span>
 
 <span class="sd">    method : str, default=`&#39;mrd&#39;`</span>
 <span class="sd">        Deviation monitoring method, available options:</span>
@@ -602,18 +601,69 @@
 <span class="sd">    ------</span>
 <span class="sd">    KeyError : User provides unsupported deviation method name.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (</span>
+<span class="sd">    ...     build_experimental_variogram,</span>
+<span class="sd">    ...     build_theoretical_variogram</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate.semivariogram.deconvolution.deviation import Deviation</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; ref_input = np.array([</span>
+<span class="sd">    ...         [0, 0, 8],</span>
+<span class="sd">    ...         [1, 0, 6],</span>
+<span class="sd">    ...         [2, 0, 4],</span>
+<span class="sd">    ...         [3, 0, 3],</span>
+<span class="sd">    ...         [4, 0, 6],</span>
+<span class="sd">    ...         [5, 0, 5],</span>
+<span class="sd">    ...         [6, 0, 7],</span>
+<span class="sd">    ...         [7, 0, 2],</span>
+<span class="sd">    ...         [8, 0, 8],</span>
+<span class="sd">    ...         [9, 0, 9],</span>
+<span class="sd">    ...         [10, 0, 5],</span>
+<span class="sd">    ...         [11, 0, 6],</span>
+<span class="sd">    ...         [12, 0, 3]</span>
+<span class="sd">    ...     ])</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 1</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 4</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; experimental = build_experimental_variogram(</span>
+<span class="sd">    ...     values=ref_input[:, -1],</span>
+<span class="sd">    ...     geometries=ref_input[:, :-1],</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; regularized = build_experimental_variogram(</span>
+<span class="sd">    ...     values=ref_input[:, -1] + 2,</span>
+<span class="sd">    ...     geometries=ref_input[:, :-1],</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dv = Deviation(</span>
+<span class="sd">    ...     theoretical_semivariances=theoretical.yhat,</span>
+<span class="sd">    ...     regularized_semivariances=regularized.semivariances</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(dv.optimal_deviation)</span>
+<span class="sd">    0.05754045538774986</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">theoretical_model</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
-                 <span class="n">regularized_variances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">theoretical_semivariances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                 <span class="n">regularized_semivariances</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
                  <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mrd&#39;</span><span class="p">):</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_methods</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mrd&#39;</span><span class="p">,</span> <span class="s1">&#39;smrd&#39;</span><span class="p">,</span> <span class="s1">&#39;rmse&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_allowed_methods</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mrd&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;smrd&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;rmse&#39;</span><span class="p">}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_deviation_method</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">initial_deviation</span> <span class="o">=</span> <span class="n">calculate_deviation</span><span class="p">(</span><span class="n">theoretical_model</span><span class="p">,</span>
-                                                     <span class="n">regularized_variances</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_deviation</span> <span class="o">=</span> <span class="n">calculate_deviation</span><span class="p">(</span><span class="n">theoretical_semivariances</span><span class="p">,</span>
+                                                     <span class="n">regularized_semivariances</span><span class="p">,</span>
+                                                     <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deviations</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_deviation</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">optimal_deviation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_deviation</span>
@@ -753,7 +803,8 @@
 <span class="sd">            Regularized semivariances.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">deviation</span> <span class="o">=</span> <span class="n">calculate_deviation</span><span class="p">(</span><span class="n">theoretical_model</span><span class="p">,</span>
-                                        <span class="n">regularized_variances</span><span class="p">)</span>
+                                        <span class="n">regularized_variances</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">deviations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">deviation</span><span class="p">)</span></div>
 
 

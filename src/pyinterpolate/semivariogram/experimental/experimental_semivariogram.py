@@ -25,7 +25,8 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
                            direction: float = None,
                            tolerance: float = None,
                            custom_bins: Union[ArrayLike, Any] = None,
-                           custom_weights: ArrayLike = None) -> np.ndarray:
+                           custom_weights: ArrayLike = None,
+                           ) -> np.ndarray:
     """
     Calculates experimental semivariance.
 

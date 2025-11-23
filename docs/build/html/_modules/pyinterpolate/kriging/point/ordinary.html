@@ -646,6 +646,35 @@
 <span class="sd">    ------</span>
 <span class="sd">    RunetimeError</span>
 <span class="sd">        Singular Matrix in the Kriging system.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import geopandas as gpd</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; from pyinterpolate import (build_experimental_variogram,</span>
+<span class="sd">    ...     build_theoretical_variogram, ordinary_kriging)</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; dem = gpd.read_file(&#39;dem.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; unknown_locations = gpd.read_file(&#39;unknown_locations.gpkg&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; step_size = 500</span>
+<span class="sd">    &gt;&gt;&gt; max_range = 10000</span>
+<span class="sd">    &gt;&gt;&gt; exp_variogram = build_experimental_variogram(</span>
+<span class="sd">    ...     values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     geometries=dem[&#39;geometry&#39;],</span>
+<span class="sd">    ...     step_size=step_size,</span>
+<span class="sd">    ...     max_range=max_range</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; theo_variogram = build_theoretical_variogram(exp_variogram)</span>
+<span class="sd">    &gt;&gt;&gt; interp = ordinary_kriging(</span>
+<span class="sd">    ...     theoretical_model=theo_variogram,</span>
+<span class="sd">    ...     unknown_locations=unknown_locations[&#39;geometry&#39;],</span>
+<span class="sd">    ...     known_values=dem[&#39;dem&#39;],</span>
+<span class="sd">    ...     known_geometries=dem[&#39;geometry&#39;]</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(interp[0])</span>
+<span class="sd">    [7.91222896e+01 9.72740449e+01 2.38012302e+05 5.51466805e+05]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check if known locations are in the right format</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">known_locations</span><span class="p">,</span> <span class="n">VariogramPoints</span><span class="p">):</span>
