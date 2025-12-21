@@ -17,8 +17,7 @@ from numpy.typing import ArrayLike
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-
-from shapely.geometry import Polygon
+from shapely import MultiPolygon
 
 from pyinterpolate.distance.angular import calc_angles
 from pyinterpolate.distance.point import point_distance
@@ -219,10 +218,17 @@ class Blocks:
             self.ds = ds.copy(deep=True)
         else:
             if value_column_name is None:
-                value_column_name = 'values'
-            self.ds = join_any_geometry_and_values(geometry=geometries,
-                                                   values=values,
-                                                   values_column_name=value_column_name)
+                value_column_name = 'block_value'
+            self.ds = join_any_geometry_and_values(
+                geometry=geometries,
+                values=values,
+                values_column_name=value_column_name
+            )
+            if index_column_name is None:
+                index_column_name = 'block_index'
+
+            self.ds.index.name = index_column_name
+            self.ds.reset_index(inplace=True)
 
         self.value_column_name = value_column_name
         self.index_column_name = index_column_name
@@ -716,6 +722,6 @@ class Blocks:
             present.
         """
         ds = geometries.apply(
-            lambda x: x if isinstance(x, Polygon) else largest_geometry(x)
+            lambda x: largest_geometry(x) if isinstance(x, MultiPolygon) else x
         )
         return ds
