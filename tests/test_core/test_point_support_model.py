@@ -3,6 +3,8 @@ import pandas as pd
 
 import geopandas as gpd
 
+from shapely.geometry import Point, Polygon
+
 from pyinterpolate.core.data_models.blocks import Blocks
 from pyinterpolate.core.data_models.point_support import PointSupport
 from .sample_data.dataprep import CANCER_DATA_WITH_CENTROIDS, POINT_SUPPORT_DATA
@@ -115,3 +117,88 @@ def test_unique_blocks():
     )
 
     assert len(ps.unique_blocks) == len(blocks.ds.index)
+
+
+def test_missing_block_values():
+    block_values = [10, np.nan, 11]
+
+    block_geoms = [
+        Polygon(
+            [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        ),
+        Polygon(
+            [(10, 0), (20, 0), (20, 10), (10, 10), (10, 0)]
+        ),
+        Polygon(
+            [(10, 10), (20, 10), (20, 20), (10, 20), (10, 10)]
+        )
+    ]
+
+    blocks = Blocks(
+        values=block_values,
+        geometries=block_geoms
+    )
+
+    points_values = [1, 2, 1, 3, 1, 5, 1, 6, 7, 7]
+    points_geoms = [
+        Point(2, 2),
+        Point(3, 3),
+        Point(4, 4),
+        Point(15, 15),
+        Point(16, 16),
+        Point(17, 17),
+        Point(18, 8),
+        Point(19, 9),
+        Point(10, 10),
+        Point(12, 12)
+    ]
+
+    point_support = PointSupport(
+        blocks=blocks,
+        values=points_values,
+        geometries=points_geoms
+    )
+
+    assert isinstance(point_support, PointSupport)
+
+
+def test_missing_block_geometries():
+    block_values = [10, 10, 11]
+
+    block_geoms = [
+        Polygon(
+            [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        ),
+        None,
+        Polygon(
+            [(10, 10), (20, 10), (20, 20), (10, 20), (10, 10)]
+        )
+    ]
+
+    blocks = Blocks(
+        values=block_values,
+        geometries=block_geoms
+    )
+
+    points_values = [1, 2, 1, 3, 1, 5, 1, 6, 7, 7]
+    points_geoms = [
+        Point(2, 2),
+        Point(3, 3),
+        Point(4, 4),
+        Point(15, 15),
+        Point(16, 16),
+        Point(17, 17),
+        Point(18, 8),
+        Point(19, 9),
+        Point(10, 10),
+        Point(12, 12)
+    ]
+
+    point_support = PointSupport(
+        blocks=blocks,
+        values=points_values,
+        geometries=points_geoms
+    )
+
+    assert isinstance(point_support, PointSupport)
+
