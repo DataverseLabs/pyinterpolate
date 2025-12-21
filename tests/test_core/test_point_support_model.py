@@ -160,9 +160,17 @@ def test_missing_block_values():
     )
 
     assert isinstance(point_support, PointSupport)
+    assert isinstance(point_support.point_support, gpd.GeoDataFrame)
+
+    points = point_support.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = point_support.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
 
 
-def test_missing_block_geometries():
+def test_missing_block_geometries_none():
     block_values = [10, 10, 11]
 
     block_geoms = [
@@ -201,4 +209,163 @@ def test_missing_block_geometries():
     )
 
     assert isinstance(point_support, PointSupport)
+    assert isinstance(point_support.point_support, gpd.GeoDataFrame)
+
+    points = point_support.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = point_support.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
+
+
+def test_missing_block_geometries_nan():
+    block_values = [10, 10, 11]
+
+    block_geoms = [
+        Polygon(
+            [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        ),
+        np.nan,
+        Polygon(
+            [(10, 10), (20, 10), (20, 20), (10, 20), (10, 10)]
+        )
+    ]
+
+    blocks = Blocks(
+        values=block_values,
+        geometries=block_geoms
+    )
+
+    points_values = [1, 2, 1, 3, 1, 5, 1, 6, 7, 7]
+    points_geoms = [
+        Point(2, 2),
+        Point(3, 3),
+        Point(4, 4),
+        Point(15, 15),
+        Point(16, 16),
+        Point(17, 17),
+        Point(18, 8),
+        Point(19, 9),
+        Point(10, 10),
+        Point(12, 12)
+    ]
+
+    point_support = PointSupport(
+        blocks=blocks,
+        values=points_values,
+        geometries=points_geoms
+    )
+
+    assert isinstance(point_support, PointSupport)
+    assert isinstance(point_support.point_support, gpd.GeoDataFrame)
+
+    points = point_support.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = point_support.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
+
+
+def test_missing_point_support_values():
+    block_values = [10, 9, 11]
+
+    block_geoms = [
+        Polygon(
+            [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        ),
+        Polygon(
+            [(10, 0), (20, 0), (20, 10), (10, 10), (10, 0)]
+        ),
+        Polygon(
+            [(10, 10), (20, 10), (20, 20), (10, 20), (10, 10)]
+        )
+    ]
+
+    blocks = Blocks(
+        values=block_values,
+        geometries=block_geoms
+    )
+
+    points_values = [1, 2, 1, np.nan, 1, 5, None, 6, 7, 7]
+    points_geoms = [
+        Point(2, 2),
+        Point(3, 3),
+        Point(4, 4),
+        Point(15, 15),
+        Point(16, 16),
+        Point(17, 17),
+        Point(18, 8),
+        Point(19, 9),
+        Point(10, 10),
+        Point(12, 12)
+    ]
+
+    point_support = PointSupport(
+        blocks=blocks,
+        values=points_values,
+        geometries=points_geoms
+    )
+
+    assert isinstance(point_support, PointSupport)
+    assert isinstance(point_support.point_support, gpd.GeoDataFrame)
+
+    points = point_support.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = point_support.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
+
+
+def test_missing_point_support_geometries():
+    block_values = [10, 9, 11]
+
+    block_geoms = [
+        Polygon(
+            [(0, 0), (10, 0), (10, 10), (0, 10), (0, 0)]
+        ),
+        Polygon(
+            [(10, 0), (20, 0), (20, 10), (10, 10), (10, 0)]
+        ),
+        Polygon(
+            [(10, 10), (20, 10), (20, 20), (10, 20), (10, 10)]
+        )
+    ]
+
+    blocks = Blocks(
+        values=block_values,
+        geometries=block_geoms
+    )
+
+    points_values = [1, 2, 1, 3, 1, 5, 1, 6, 7, 7]
+    points_geoms = [
+        Point(2, 2),
+        Point(3, 3),
+        Point(4, 4),
+        None,
+        Point(16, 16),
+        Point(17, 17),
+        np.nan,
+        Point(19, 9),
+        Point(10, 10),
+        Point(12, 12)
+    ]
+
+    point_support = PointSupport(
+        blocks=blocks,
+        values=points_values,
+        geometries=points_geoms
+    )
+
+    assert isinstance(point_support, PointSupport)
+    assert isinstance(point_support.point_support, gpd.GeoDataFrame)
+
+    points = point_support.get_points_array()
+    assert isinstance(points, np.ndarray)
+
+    indexes = point_support.get_point_to_block_indexes()
+    assert isinstance(indexes, pd.Series)
+    assert (len(indexes) == len(points))
 

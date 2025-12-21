@@ -219,9 +219,16 @@ class Blocks:
         else:
             if value_column_name is None:
                 value_column_name = 'block_value'
-            self.ds = join_any_geometry_and_values(geometry=geometries,
-                                                   values=values,
-                                                   values_column_name=value_column_name)
+            self.ds = join_any_geometry_and_values(
+                geometry=geometries,
+                values=values,
+                values_column_name=value_column_name
+            )
+            if index_column_name is None:
+                index_column_name = 'block_index'
+
+            self.ds.index.name = index_column_name
+            self.ds.reset_index(inplace=True)
 
         self.value_column_name = value_column_name
         self.index_column_name = index_column_name

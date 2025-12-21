@@ -211,8 +211,8 @@ def points_to_lon_lat(points: gpd.GeoSeries) -> Tuple:
         Longitude, latitude (x, y)
     """
 
-    lon = points.apply(lambda pt: pt.x if pt is not None else None)
-    lat = points.apply(lambda pt: pt.y if pt is not None else None)
+    lon = points.apply(lambda pt: pt.x if isinstance(pt, Point) else None)
+    lat = points.apply(lambda pt: pt.y if isinstance(pt, Point) else None)
     return lon, lat
 
 
