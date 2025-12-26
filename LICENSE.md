@@ -1,4 +1,4 @@
-Copyright (c) 2018-2025 Pyinterpolate Maintainers
+Copyright (c) 2018-2026 Pyinterpolate Maintainers
 -------------------------------------------------
 
 All rights reserved to Pyinterpolate Maintainers: Szymon Moliński (@SimonMolinsky), 
