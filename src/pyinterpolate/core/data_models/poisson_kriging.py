@@ -3,6 +3,8 @@ from typing import Hashable, Union
 import numpy as np
 import pandas as pd
 
+from tqdm import tqdm
+
 from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.core.data_models.point_support_distances import PointSupportDistance
 from pyinterpolate.distance.angular import calc_angles_between_points
@@ -32,6 +34,9 @@ class PoissonKrigingInput:
 
     blocks_indexes : np.ndarray, optional
         The list of the known ps_blocks names.
+
+    verbose : bool, default = False
+        Show progress bar or print status when performing calculations.
 
     Attributes
     ----------
@@ -211,7 +216,8 @@ class PoissonKrigingInput:
                  point_support: PointSupport,
                  semivariogram_model: TheoreticalVariogram,
                  no_closest_neighbors: int = 8,
-                 blocks_indexes: np.ndarray = None):
+                 blocks_indexes: np.ndarray = None,
+                 verbose: bool = False):
 
         # TODO: store Block columns and PointSupport-Neighbors columns
         #  in separate dataclasses
@@ -294,6 +300,9 @@ class PoissonKrigingInput:
         self._neighbors = None
         self._kriging_input = None
 
+        # control parameters
+        self.verbose = verbose
+
     @property
     def neighbors_coordinates(self):
         if self._kriging_input is None:
@@ -361,7 +370,7 @@ class PoissonKrigingInput:
         ds = []
         nset = set()
 
-        for neighbor_a in neighbors:
+        for neighbor_a in tqdm(neighbors, disable=not self.verbose):
             for neighbor_b in neighbors:
 
                 nn = (neighbor_a, neighbor_b)

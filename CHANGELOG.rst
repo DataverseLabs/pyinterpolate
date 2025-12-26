@@ -1,6 +1,16 @@
 Changes - from version >= 1.x
 =============================
 
+2025-12-26
+----------
+
+**version 1.2.1**
+
+* [enhancement] `Blocks` can handle missing geometries (geometry as `None` or `NaN`)
+* [debug] `Blocks` default value column is `block_values`, and `PointSupport` default value column is `values` (to avoiding naming collisions during the join operation)
+* [debug] `Blocks` object default index is created when it is not provided by the user
+* [enhancement] `verbose` parameter for `PoissonKrigingInput` class that controls progress bar when calculating point support distances between neighbors
+
 2025-11-23
 ----------
 
