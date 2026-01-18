@@ -147,3 +147,37 @@ def solve_weights(weights: np.ndarray,
                 raise linalgerr
 
     return solved
+
+
+def __experimental_solve_weights_lsa_only(weights: np.ndarray,
+                                          k: np.ndarray) -> np.ndarray:
+    """
+    Solves Kriging System.
+
+    Parameters
+    ----------
+    weights : numpy array
+        Array of weights of size m:m.
+
+    k : numpy array
+        Array of semivariances of size m:n.
+
+    Returns
+    -------
+    solved : numpy array
+        Final weights to estimate predicted value.
+
+    Warns
+    -----
+    ZerosMatrixWarning :
+        Weights or k matrices are zero-matrices.
+    """
+
+    if np.mean(weights) == 0 or np.mean(k) == 0:
+        warnings.warn(ZerosMatrixWarning().__str__())
+        solved = np.zeros(len(k))
+    else:
+        solved = np.linalg.lstsq(weights, k, rcond=None)
+        solved = solved[0]
+    return solved
+
