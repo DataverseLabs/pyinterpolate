@@ -1,6 +1,13 @@
 Changes - from version >= 1.x
 =============================
 
+2026-02-21
+----------
+
+**version 1.2.2**
+
+* [experimental] LSA-method Ordinary Kriging tests and experiments
+
 2025-12-26
 ----------
 
