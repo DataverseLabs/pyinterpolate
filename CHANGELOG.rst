@@ -1,12 +1,14 @@
 Changes - from version >= 1.x
 =============================
 
-2026-02-21
+2026-02-2
 ----------
 
 **version 1.2.2**
 
 * [experimental] LSA-method Ordinary Kriging tests and experiments
+* [enhancement] Users can set negative predictions to zero in Area-to-Area, Area-to-Point, and Centroid-based Poisson Kriging
+
 
 2025-12-26
 ----------

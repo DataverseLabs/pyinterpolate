@@ -36,8 +36,12 @@ def test_smooth_blocks():
         semivariogram_model=THEO,
         point_support=PS,
         number_of_neighbors=8,
+        raise_when_negative_prediction=True,
+        raise_when_negative_error=False,
+        negative_prediction_to_zero=False,
         verbose=True
     )
+    smoothed: gpd.GeoDataFrame
     print(smoothed.columns)
     assert isinstance(smoothed, gpd.GeoDataFrame)
 

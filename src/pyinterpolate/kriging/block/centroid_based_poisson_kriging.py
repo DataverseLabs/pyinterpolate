@@ -25,7 +25,8 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                              is_weighted_by_point_support=True,
                              raise_when_negative_prediction=True,
                              raise_when_negative_error=True,
-                             allow_lsa=False) -> Dict:
+                             allow_lsa=False,
+                             negative_prediction_to_zero=False) -> Dict:
     """
     Function performs centroid-based Poisson Kriging of blocks (areal) data.
 
@@ -63,6 +64,9 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
         if you don't know what are you doing. This parameter can be useful
         when you have clusters in your dataset,
         that can lead to singular or near-singular matrix creation.
+
+    negative_prediction_to_zero : bool, default=False
+        While prediction is negative, then set it to 0.
 
     Returns
     -------
@@ -206,6 +210,9 @@ def centroid_poisson_kriging(semivariogram_model: TheoreticalVariogram,
                              f'be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or '
                              f'semivariogram model type.')
+
+        if negative_prediction_to_zero:
+            zhat = 0
 
     sigmasq = np.matmul(output_weights.T, covars)
 
