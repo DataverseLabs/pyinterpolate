@@ -13,8 +13,10 @@ from pyinterpolate.core.data_models.point_support import PointSupport
 from pyinterpolate.kriging.block.weights import pk_weights_array
 from pyinterpolate.semivariogram.deconvolution.block_to_block_semivariance import \
     weighted_avg_point_support_semivariances
-from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import TheoreticalVariogram
-from pyinterpolate.transform.select_poisson_kriging_data import select_poisson_kriging_data
+from pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram import \
+    TheoreticalVariogram
+from pyinterpolate.transform.select_poisson_kriging_data import \
+    select_poisson_kriging_data
 from pyinterpolate.transform.statistical import sem_to_cov
 from pyinterpolate.transform.transform import add_ones
 
@@ -26,7 +28,8 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
                      neighbors_range: float = None,
                      raise_when_negative_prediction=True,
                      raise_when_negative_error=True,
-                     err_to_nan=True):
+                     err_to_nan=True,
+                     negative_prediction_to_zero=False):
     """
     Function predicts point-support value in the unknown location based on
     the area-to-point Poisson Kriging
@@ -59,6 +62,9 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
     err_to_nan : bool, default=True
         When point interpolation returns ``ValueError`` then set prediction
         or variance error to ``NaN``.
+
+    negative_prediction_to_zero : bool, default=False
+        While prediction is negative, then set it to 0.
 
     Returns
     -------
@@ -261,16 +267,21 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         if zhat < 0:
             if raise_when_negative_prediction:
-                if err_to_nan:
-                    predicted_points.append(
-                        [upoint[0], upoint[1], np.nan, np.nan]
-                    )
-                    continue
-                else:
-                    raise ValueError(f'Predicted value is {zhat} and it '
-                                     f'should not be lower than 0. Check your '
-                                     f'sampling grid, samples, number of '
-                                     f'neighbors or semivariogram model type.')
+                raise ValueError(f'Predicted value is {zhat} and it '
+                                 f'should not be lower than 0. Check your '
+                                 f'sampling grid, samples, number of '
+                                 f'neighbors or semivariogram model type.')
+            if err_to_nan:
+                predicted_points.append(
+                    [upoint[0], upoint[1], np.nan, np.nan]
+                )
+                continue
+
+            if negative_prediction_to_zero:
+                predicted_points.append(
+                    [upoint[0], upoint[1], 0, np.nan]
+                )
+                continue
 
         point_pop = upoint[2]
         zhat = (zhat * point_pop) / tot_unknown_value
@@ -282,17 +293,16 @@ def area_to_point_pk(semivariogram_model: TheoreticalVariogram,
 
         if sigmasq < 0:
             if raise_when_negative_error:
-                if err_to_nan:
-                    predicted_points.append(
-                        [upoint[0], upoint[1], zhat, np.nan]
-                    )
-                    continue
-                else:
-                    raise ValueError(f'Predicted error value is {sigmasq} and '
-                                     f'it should not be lower than 0. '
-                                     f'Check your sampling grid, samples, '
-                                     f'number of neighbors or semivariogram '
-                                     f'model type.')
+                raise ValueError(f'Predicted error value is {sigmasq} and '
+                                 f'it should not be lower than 0. '
+                                 f'Check your sampling grid, samples, '
+                                 f'number of neighbors or semivariogram '
+                                 f'model type.')
+            if err_to_nan:
+                predicted_points.append(
+                    [upoint[0], upoint[1], zhat, np.nan]
+                )
+                continue
             else:
                 sigma = 0
         else:

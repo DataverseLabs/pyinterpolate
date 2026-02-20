@@ -24,7 +24,8 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
                     number_of_neighbors: int,
                     neighbors_range: float = None,
                     raise_when_negative_prediction=True,
-                    raise_when_negative_error=True) -> dict:
+                    raise_when_negative_error=True,
+                    negative_prediction_to_zero=False) -> dict:
     """
     Function predicts areal value in an unknown location based on
     the area-to-area Poisson Kriging
@@ -53,6 +54,9 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
 
     raise_when_negative_error : bool, default=True
         Raise error when prediction error is negative.
+
+    negative_prediction_to_zero : bool, default=False
+        While prediction is negative, then set it to 0.
 
     Returns
     -------
@@ -213,6 +217,8 @@ def area_to_area_pk(semivariogram_model: TheoreticalVariogram,
                              f'not be lower than 0. Check your sampling '
                              f'grid, samples, number of neighbors or '
                              f'semivariogram model type.')
+        if negative_prediction_to_zero:
+            zhat = 0
 
     sigmasq = np.matmul(w.T, covars)
 

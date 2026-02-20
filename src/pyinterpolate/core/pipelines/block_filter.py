@@ -33,6 +33,7 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
                   data_crs=None,
                   raise_when_negative_prediction=True,
                   raise_when_negative_error=False,
+                  negative_prediction_to_zero=False,
                   verbose=True) -> gpd.GeoDataFrame:
     """
     Function filters block data using Poisson Kriging. By filtering we
@@ -65,6 +66,9 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
 
     raise_when_negative_error : bool, default=True
         Raise error when prediction error is negative.
+
+    negative_prediction_to_zero : bool, default=False
+        When predicted value is below zero then set it to zero.
 
     verbose : bool, default=True
         Show progress bar
@@ -154,7 +158,8 @@ def filter_blocks(semivariogram_model: TheoreticalVariogram,
         number_of_neighbors=number_of_neighbors,
         data_crs=data_crs,
         raise_when_negative_prediction=raise_when_negative_prediction,
-        raise_when_negative_error=raise_when_negative_error
+        raise_when_negative_error=raise_when_negative_error,
+        negative_prediction_to_zero=negative_prediction_to_zero
     )
     return parsed
 
@@ -165,6 +170,7 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
                   data_crs=None,
                   raise_when_negative_prediction=True,
                   raise_when_negative_error=True,
+                  negative_prediction_to_zero=False,
                   verbose=True) -> gpd.GeoDataFrame:
     """
     Function smooths aggregated block values, and transform those into
@@ -190,6 +196,9 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
 
     raise_when_negative_error : bool, default=True
         Raise error when prediction error is negative.
+
+    negative_prediction_to_zero : bool, default=False
+        When predicted value is below zero then set it to zero.
 
     verbose : bool, default=True
         Show progress bar
@@ -276,7 +285,8 @@ def smooth_blocks(semivariogram_model: TheoreticalVariogram,
         number_of_neighbors=number_of_neighbors,
         data_crs=data_crs,
         raise_when_negative_prediction=raise_when_negative_prediction,
-        raise_when_negative_error=raise_when_negative_error
+        raise_when_negative_error=raise_when_negative_error,
+        negative_prediction_to_zero=negative_prediction_to_zero
     )
     return parsed
 
@@ -423,7 +433,8 @@ class BlockPoissonKriging:
                    number_of_neighbors,
                    data_crs=None,
                    raise_when_negative_prediction=True,
-                   raise_when_negative_error=True) -> gpd.GeoDataFrame:
+                   raise_when_negative_error=True,
+                   negative_prediction_to_zero: bool = False) -> gpd.GeoDataFrame:
         """
         Function regularizes whole dataset and creates new values and error
         maps based on the kriging type. Function does not predict unknown
@@ -444,6 +455,9 @@ class BlockPoissonKriging:
         raise_when_negative_error : bool, default=True
             Raise error when prediction error is negative.
 
+        negative_prediction_to_zero : bool, default=False
+            When predicted value is below zero then set it to zero.
+
         Returns
         -------
         regularized : gpd.GeoDataFrame
@@ -460,7 +474,8 @@ class BlockPoissonKriging:
                 uid=block_id,
                 n_neighbours=number_of_neighbors,
                 pred_raise=raise_when_negative_prediction,
-                err_raise=raise_when_negative_error
+                err_raise=raise_when_negative_error,
+                negative_prediction_to_zero=negative_prediction_to_zero
             )
 
             interpolation_results.extend(
@@ -502,7 +517,12 @@ class BlockPoissonKriging:
 
         return k_type
 
-    def _interpolate(self, uid, n_neighbours, pred_raise, err_raise) -> Dict:
+    def _interpolate(self,
+                     uid,
+                     n_neighbours,
+                     pred_raise,
+                     err_raise,
+                     negative_prediction_to_zero) -> Dict:
         """
         Function interpolates block values using one of Poisson Kriging types.
 
@@ -519,6 +539,9 @@ class BlockPoissonKriging:
 
         err_raise : bool
             Raise error when prediction error is negative.
+
+        negative_prediction_to_zero : bool
+            When predicted value is below zero then set it to zero.
 
         Returns
         -------
@@ -539,7 +562,8 @@ class BlockPoissonKriging:
                                            unknown_block_index=uid,
                                            number_of_neighbors=n_neighbours,
                                            raise_when_negative_error=err_raise,
-                                           raise_when_negative_prediction=pred_raise)
+                                           raise_when_negative_prediction=pred_raise,
+                                           negative_prediction_to_zero=negative_prediction_to_zero)
 
         elif self.kriging_type == 'atp':
             model_output = area_to_point_pk(semivariogram_model=self.semivariogram_model,
@@ -547,14 +571,16 @@ class BlockPoissonKriging:
                                             unknown_block_index=uid,
                                             number_of_neighbors=n_neighbours,
                                             raise_when_negative_prediction=pred_raise,
-                                            raise_when_negative_error=err_raise)
+                                            raise_when_negative_error=err_raise,
+                                            negative_prediction_to_zero=negative_prediction_to_zero)
         elif self.kriging_type == 'cb':
             model_output = centroid_poisson_kriging(semivariogram_model=self.semivariogram_model,
                                                     point_support=self.point_support,
                                                     unknown_block_index=uid,
                                                     number_of_neighbors=n_neighbours,
                                                     raise_when_negative_prediction=pred_raise,
-                                                    raise_when_negative_error=err_raise)
+                                                    raise_when_negative_error=err_raise,
+                                                    negative_prediction_to_zero=negative_prediction_to_zero)
         else:
             self._raise_wrong_kriging_type_error()
 
