@@ -775,10 +775,11 @@ Law). Distant observations are less and less similar up to the distance
 where the influence of one point value on the other is negligible.</p>
 <p>We calculate the empirical semivariance as:</p>
 <div class="math notranslate nohighlight">
-\[g(h) = 0.5 * n(h)^(-1) * (SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2)\]</div>
+\[g(h) = 0.5 * \frac{1}{n(h)} * \sum_{i=1}^{n(h)}{[z(x_i + h) - z(x_i)]^2}\]</div>
 <p>where:</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(h\)</span>: lag,</p></li>
+<li><p><span class="math notranslate nohighlight">\(n(h)\)</span>: number of point pairs within the lag <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
 <li><p><span class="math notranslate nohighlight">\(g(h)\)</span>: empirical semivariance for lag <span class="math notranslate nohighlight">\(h\)</span>,</p></li>
 <li><p><span class="math notranslate nohighlight">\(n(h)\)</span>: number of point pairs within a specific lag,</p></li>
 <li><p><span class="math notranslate nohighlight">\(z(x_i)\)</span>: point a (value of observation at point a),</p></li>

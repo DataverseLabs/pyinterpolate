@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.core.pipelines.block_filter &#8212; pyinterpolate 1.1.0 documentation</title>
+    <title>pyinterpolate.core.pipelines.block_filter &#8212; pyinterpolate 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.2.0 documentation</p>
   
 </a></div>
     
@@ -459,6 +459,7 @@
                   <span class="n">data_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                  <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function filters block data using Poisson Kriging. By filtering we</span>
@@ -491,6 +492,9 @@
 
 <span class="sd">    raise_when_negative_error : bool, default=True</span>
 <span class="sd">        Raise error when prediction error is negative.</span>
+
+<span class="sd">    negative_prediction_to_zero : bool, default=False</span>
+<span class="sd">        When predicted value is below zero then set it to zero.</span>
 
 <span class="sd">    verbose : bool, default=True</span>
 <span class="sd">        Show progress bar</span>
@@ -580,7 +584,8 @@
         <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
         <span class="n">data_crs</span><span class="o">=</span><span class="n">data_crs</span><span class="p">,</span>
         <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">raise_when_negative_prediction</span><span class="p">,</span>
-        <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">raise_when_negative_error</span>
+        <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">raise_when_negative_error</span><span class="p">,</span>
+        <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">parsed</span></div>
 
@@ -594,6 +599,7 @@
                   <span class="n">data_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                   <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function smooths aggregated block values, and transform those into</span>
@@ -619,6 +625,9 @@
 
 <span class="sd">    raise_when_negative_error : bool, default=True</span>
 <span class="sd">        Raise error when prediction error is negative.</span>
+
+<span class="sd">    negative_prediction_to_zero : bool, default=False</span>
+<span class="sd">        When predicted value is below zero then set it to zero.</span>
 
 <span class="sd">    verbose : bool, default=True</span>
 <span class="sd">        Show progress bar</span>
@@ -705,7 +714,8 @@
         <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
         <span class="n">data_crs</span><span class="o">=</span><span class="n">data_crs</span><span class="p">,</span>
         <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">raise_when_negative_prediction</span><span class="p">,</span>
-        <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">raise_when_negative_error</span>
+        <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">raise_when_negative_error</span><span class="p">,</span>
+        <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">parsed</span></div>
 
@@ -853,7 +863,8 @@
                    <span class="n">number_of_neighbors</span><span class="p">,</span>
                    <span class="n">data_crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                   <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
+                   <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                   <span class="n">negative_prediction_to_zero</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function regularizes whole dataset and creates new values and error</span>
 <span class="sd">        maps based on the kriging type. Function does not predict unknown</span>
@@ -874,6 +885,9 @@
 <span class="sd">        raise_when_negative_error : bool, default=True</span>
 <span class="sd">            Raise error when prediction error is negative.</span>
 
+<span class="sd">        negative_prediction_to_zero : bool, default=False</span>
+<span class="sd">            When predicted value is below zero then set it to zero.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        regularized : gpd.GeoDataFrame</span>
@@ -890,7 +904,8 @@
                 <span class="n">uid</span><span class="o">=</span><span class="n">block_id</span><span class="p">,</span>
                 <span class="n">n_neighbours</span><span class="o">=</span><span class="n">number_of_neighbors</span><span class="p">,</span>
                 <span class="n">pred_raise</span><span class="o">=</span><span class="n">raise_when_negative_prediction</span><span class="p">,</span>
-                <span class="n">err_raise</span><span class="o">=</span><span class="n">raise_when_negative_error</span>
+                <span class="n">err_raise</span><span class="o">=</span><span class="n">raise_when_negative_error</span><span class="p">,</span>
+                <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span>
             <span class="p">)</span>
 
             <span class="n">interpolation_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
@@ -932,7 +947,12 @@
 
         <span class="k">return</span> <span class="n">k_type</span>
 
-    <span class="k">def</span> <span class="nf">_interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">n_neighbours</span><span class="p">,</span> <span class="n">pred_raise</span><span class="p">,</span> <span class="n">err_raise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_interpolate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                     <span class="n">uid</span><span class="p">,</span>
+                     <span class="n">n_neighbours</span><span class="p">,</span>
+                     <span class="n">pred_raise</span><span class="p">,</span>
+                     <span class="n">err_raise</span><span class="p">,</span>
+                     <span class="n">negative_prediction_to_zero</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Function interpolates block values using one of Poisson Kriging types.</span>
 
@@ -949,6 +969,9 @@
 
 <span class="sd">        err_raise : bool</span>
 <span class="sd">            Raise error when prediction error is negative.</span>
+
+<span class="sd">        negative_prediction_to_zero : bool</span>
+<span class="sd">            When predicted value is below zero then set it to zero.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -969,7 +992,8 @@
                                            <span class="n">unknown_block_index</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
                                            <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">n_neighbours</span><span class="p">,</span>
                                            <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">err_raise</span><span class="p">,</span>
-                                           <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">pred_raise</span><span class="p">)</span>
+                                           <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">pred_raise</span><span class="p">,</span>
+                                           <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;atp&#39;</span><span class="p">:</span>
             <span class="n">model_output</span> <span class="o">=</span> <span class="n">area_to_point_pk</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">semivariogram_model</span><span class="p">,</span>
@@ -977,14 +1001,16 @@
                                             <span class="n">unknown_block_index</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
                                             <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">n_neighbours</span><span class="p">,</span>
                                             <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">pred_raise</span><span class="p">,</span>
-                                            <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">err_raise</span><span class="p">)</span>
+                                            <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">err_raise</span><span class="p">,</span>
+                                            <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kriging_type</span> <span class="o">==</span> <span class="s1">&#39;cb&#39;</span><span class="p">:</span>
             <span class="n">model_output</span> <span class="o">=</span> <span class="n">centroid_poisson_kriging</span><span class="p">(</span><span class="n">semivariogram_model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">semivariogram_model</span><span class="p">,</span>
                                                     <span class="n">point_support</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">point_support</span><span class="p">,</span>
                                                     <span class="n">unknown_block_index</span><span class="o">=</span><span class="n">uid</span><span class="p">,</span>
                                                     <span class="n">number_of_neighbors</span><span class="o">=</span><span class="n">n_neighbours</span><span class="p">,</span>
                                                     <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="n">pred_raise</span><span class="p">,</span>
-                                                    <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">err_raise</span><span class="p">)</span>
+                                                    <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="n">err_raise</span><span class="p">,</span>
+                                                    <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="n">negative_prediction_to_zero</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_raise_wrong_kriging_type_error</span><span class="p">()</span>
 

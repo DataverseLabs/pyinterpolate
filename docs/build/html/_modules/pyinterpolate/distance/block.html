@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.distance.block &#8212; pyinterpolate 1.1.0 documentation</title>
+    <title>pyinterpolate.distance.block &#8212; pyinterpolate 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.2.0 documentation</p>
   
 </a></div>
     
@@ -638,6 +638,27 @@
 <span class="sd">    ------</span>
 <span class="sd">    AttributeError</span>
 <span class="sd">        Blocks are provided as DataFrame but column names were not given.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The weighted distance between blocks is derived from the equation 3 given</span>
+<span class="sd">    in publication [1] from References.</span>
+
+<span class="sd">    .. math:: d(v_{a}, v_{b})=\frac{1}{\sum_{s=1}^{P_{a}} \sum_{s&#39;=1}^{P_{b}} n(u_{s}) n(u_{s&#39;})} * \sum_{s=1}^{P_{a}} \sum_{s&#39;=1}^{P_{b}} n(u_{s})n(u_{s&#39;})||u_{s}-u_{s&#39;}||</span>
+
+<span class="sd">    where:</span>
+<span class="sd">      * :math:`P_{a}` and :math:`P_{b}`: number of points :math:`u_{s}`</span>
+<span class="sd">        and :math:`u_{s&#39;}` used to discretize the two units :math:`v_{a}`</span>
+<span class="sd">        and :math:`v_{b}`</span>
+<span class="sd">      * :math:`n(u_{s})` and :math:`n(u_{s&#39;})` - population size in</span>
+<span class="sd">        the cells :math:`u_{s}` and :math:`u_{s&#39;}`</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the</span>
+<span class="sd">           Presence of Irregular Geographical Units.</span>
+<span class="sd">           Math Geosci 40, 101–128 (2008).</span>
+<span class="sd">           https://doi.org/10.1007/s11004-007-9129-1</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>

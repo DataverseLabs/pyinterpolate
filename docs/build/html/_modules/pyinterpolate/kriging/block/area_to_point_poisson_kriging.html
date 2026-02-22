@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.block.area_to_point_poisson_kriging &#8212; pyinterpolate 1.1.0 documentation</title>
+    <title>pyinterpolate.kriging.block.area_to_point_poisson_kriging &#8212; pyinterpolate 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.2.0 documentation</p>
   
 </a></div>
     
@@ -437,8 +437,10 @@
 <span class="kn">from</span> <span class="nn">pyinterpolate.kriging.block.weights</span> <span class="kn">import</span> <span class="n">pk_weights_array</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.deconvolution.block_to_block_semivariance</span> <span class="kn">import</span> \
     <span class="n">weighted_avg_point_support_semivariances</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> <span class="n">TheoreticalVariogram</span>
-<span class="kn">from</span> <span class="nn">pyinterpolate.transform.select_poisson_kriging_data</span> <span class="kn">import</span> <span class="n">select_poisson_kriging_data</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.semivariogram.theoretical.classes.theoretical_variogram</span> <span class="kn">import</span> \
+    <span class="n">TheoreticalVariogram</span>
+<span class="kn">from</span> <span class="nn">pyinterpolate.transform.select_poisson_kriging_data</span> <span class="kn">import</span> \
+    <span class="n">select_poisson_kriging_data</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.transform.statistical</span> <span class="kn">import</span> <span class="n">sem_to_cov</span>
 <span class="kn">from</span> <span class="nn">pyinterpolate.transform.transform</span> <span class="kn">import</span> <span class="n">add_ones</span>
 
@@ -452,7 +454,8 @@
                      <span class="n">neighbors_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                      <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                     <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+                     <span class="n">err_to_nan</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                     <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts point-support value in the unknown location based on</span>
 <span class="sd">    the area-to-point Poisson Kriging</span>
@@ -485,6 +488,9 @@
 <span class="sd">    err_to_nan : bool, default=True</span>
 <span class="sd">        When point interpolation returns ``ValueError`` then set prediction</span>
 <span class="sd">        or variance error to ``NaN``.</span>
+
+<span class="sd">    negative_prediction_to_zero : bool, default=False</span>
+<span class="sd">        While prediction is negative, then set it to 0.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -687,16 +693,21 @@
 
         <span class="k">if</span> <span class="n">zhat</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">raise_when_negative_prediction</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
-                    <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="p">[</span><span class="n">upoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted value is </span><span class="si">{</span><span class="n">zhat</span><span class="si">}</span><span class="s1"> and it &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;should not be lower than 0. Check your &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;sampling grid, samples, number of &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;neighbors or semivariogram model type.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted value is </span><span class="si">{</span><span class="n">zhat</span><span class="si">}</span><span class="s1"> and it &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;should not be lower than 0. Check your &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;sampling grid, samples, number of &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;neighbors or semivariogram model type.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
+                <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">upoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">negative_prediction_to_zero</span><span class="p">:</span>
+                <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">upoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
 
         <span class="n">point_pop</span> <span class="o">=</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">zhat</span> <span class="o">=</span> <span class="p">(</span><span class="n">zhat</span> <span class="o">*</span> <span class="n">point_pop</span><span class="p">)</span> <span class="o">/</span> <span class="n">tot_unknown_value</span>
@@ -708,17 +719,16 @@
 
         <span class="k">if</span> <span class="n">sigmasq</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">raise_when_negative_error</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
-                    <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="p">[</span><span class="n">upoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">zhat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
-                    <span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted error value is </span><span class="si">{</span><span class="n">sigmasq</span><span class="si">}</span><span class="s1"> and &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;it should not be lower than 0. &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;Check your sampling grid, samples, &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;number of neighbors or semivariogram &#39;</span>
-                                     <span class="sa">f</span><span class="s1">&#39;model type.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Predicted error value is </span><span class="si">{</span><span class="n">sigmasq</span><span class="si">}</span><span class="s1"> and &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;it should not be lower than 0. &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;Check your sampling grid, samples, &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;number of neighbors or semivariogram &#39;</span>
+                                 <span class="sa">f</span><span class="s1">&#39;model type.&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">err_to_nan</span><span class="p">:</span>
+                <span class="n">predicted_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">upoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">zhat</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+                <span class="p">)</span>
+                <span class="k">continue</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sigma</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>

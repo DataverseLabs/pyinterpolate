@@ -8,7 +8,7 @@ Changes - from version >= 1.x
 
 * [experimental] LSA-method Ordinary Kriging tests and experiments
 * [enhancement] Users can set negative predictions to zero in Area-to-Area, Area-to-Point, and Centroid-based Poisson Kriging
-
+* [docs] Added block-to-block distance equation, and corrected semivariance equation in functions docstrings
 
 2025-12-26
 ----------
