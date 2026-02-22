@@ -27,7 +27,7 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
                            custom_bins: Union[ArrayLike, Any] = None,
                            custom_weights: ArrayLike = None,
                            ) -> np.ndarray:
-    """
+    r"""
     Calculates experimental semivariance.
 
     Parameters
@@ -95,11 +95,12 @@ def calculate_semivariance(ds: Union[ArrayLike, VariogramPoints] = None,
 
     We calculate the empirical semivariance as:
 
-    .. math:: g(h) = 0.5 * n(h)^(-1) * (SUM|i=1, n(h)|: [z(x_i + h) - z(x_i)]^2)
+    .. math:: g(h) = 0.5 * \frac{1}{n(h)} * \sum_{i=1}^{n(h)}{[z(x_i + h) - z(x_i)]^2}
 
     where:
 
     - :math:`h`: lag,
+    - :math:`n(h)`: number of point pairs within the lag :math:`h`,
     - :math:`g(h)`: empirical semivariance for lag :math:`h`,
     - :math:`n(h)`: number of point pairs within a specific lag,
     - :math:`z(x_i)`: point a (value of observation at point a),

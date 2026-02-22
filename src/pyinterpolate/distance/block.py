@@ -213,6 +213,27 @@ def calc_block_to_block_distance(
     AttributeError
         Blocks are provided as DataFrame but column names were not given.
 
+    Notes
+    -----
+    The weighted distance between blocks is derived from the equation 3 given
+    in publication [1] from References.
+
+    .. math:: d(v_{a}, v_{b})=\frac{1}{\sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s}) n(u_{s'})} * \sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s})n(u_{s'})||u_{s}-u_{s'}||
+
+    where:
+      * :math:`P_{a}` and :math:`P_{b}`: number of points :math:`u_{s}`
+        and :math:`u_{s'}` used to discretize the two units :math:`v_{a}`
+        and :math:`v_{b}`
+      * :math:`n(u_{s})` and :math:`n(u_{s'})` - population size in
+        the cells :math:`u_{s}` and :math:`u_{s'}`
+
+    References
+    ----------
+    .. [1] Goovaerts, P. Kriging and Semivariogram Deconvolution in the
+           Presence of Irregular Geographical Units.
+           Math Geosci 40, 101–128 (2008).
+           https://doi.org/10.1007/s11004-007-9129-1
+
     Examples
     --------
     >>> import os

@@ -45,6 +45,8 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/distance/distance';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -538,6 +540,31 @@ are weighted distances between blocks.</p>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>The weighted distance between blocks is derived from the equation 3 given
+in publication [1] from References.</p>
+<div class="math notranslate nohighlight">
+\[d(v_{a}, v_{b})=\frac{1}{\sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s}) n(u_{s'})} * \sum_{s=1}^{P_{a}} \sum_{s'=1}^{P_{b}} n(u_{s})n(u_{s'})||u_{s}-u_{s'}||\]</div>
+<dl class="simple">
+<dt>where:</dt><dd><ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_{a}\)</span> and <span class="math notranslate nohighlight">\(P_{b}\)</span>: number of points <span class="math notranslate nohighlight">\(u_{s}\)</span>
+and <span class="math notranslate nohighlight">\(u_{s'}\)</span> used to discretize the two units <span class="math notranslate nohighlight">\(v_{a}\)</span>
+and <span class="math notranslate nohighlight">\(v_{b}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(n(u_{s})\)</span> and <span class="math notranslate nohighlight">\(n(u_{s'})\)</span> - population size in
+the cells <span class="math notranslate nohighlight">\(u_{s}\)</span> and <span class="math notranslate nohighlight">\(u_{s'}\)</span></p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r20dcadb20f27-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Goovaerts, P. Kriging and Semivariogram Deconvolution in the
+Presence of Irregular Geographical Units.
+Math Geosci 40, 101–128 (2008).
+<a class="reference external" href="https://doi.org/10.1007/s11004-007-9129-1">https://doi.org/10.1007/s11004-007-9129-1</a></p>
+</div>
+</div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>

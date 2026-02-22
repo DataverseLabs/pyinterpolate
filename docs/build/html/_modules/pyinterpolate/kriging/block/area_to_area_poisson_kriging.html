@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyinterpolate.kriging.block.area_to_area_poisson_kriging &#8212; pyinterpolate 1.1.0 documentation</title>
+    <title>pyinterpolate.kriging.block.area_to_area_poisson_kriging &#8212; pyinterpolate 1.2.0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../../../../_static/documentation_options.js?v=6efca38a"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -111,7 +111,7 @@
   
   
   
-    <p class="title logo__title">pyinterpolate 1.1.0 documentation</p>
+    <p class="title logo__title">pyinterpolate 1.2.0 documentation</p>
   
 </a></div>
     
@@ -450,7 +450,8 @@
                     <span class="n">number_of_neighbors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
                     <span class="n">neighbors_range</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">raise_when_negative_prediction</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+                    <span class="n">raise_when_negative_error</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">negative_prediction_to_zero</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function predicts areal value in an unknown location based on</span>
 <span class="sd">    the area-to-area Poisson Kriging</span>
@@ -479,6 +480,9 @@
 
 <span class="sd">    raise_when_negative_error : bool, default=True</span>
 <span class="sd">        Raise error when prediction error is negative.</span>
+
+<span class="sd">    negative_prediction_to_zero : bool, default=False</span>
+<span class="sd">        While prediction is negative, then set it to 0.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -639,6 +643,8 @@
                              <span class="sa">f</span><span class="s1">&#39;not be lower than 0. Check your sampling &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;grid, samples, number of neighbors or &#39;</span>
                              <span class="sa">f</span><span class="s1">&#39;semivariogram model type.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">negative_prediction_to_zero</span><span class="p">:</span>
+            <span class="n">zhat</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">sigmasq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">covars</span><span class="p">)</span>
 
