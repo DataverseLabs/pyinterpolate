@@ -88,7 +88,7 @@ def validate_kriging(
           * Mean Prediction Error,
           * Mean Kriging Error: ratio of variance of prediction errors to
             the average variance error of kriging,
-          * array with: ``[coordinate x, coordinate y, prediction error, kriging estimate error]``
+          * array with: ``[coordinate x, coordinate y, prediction error, kriging estimate error, z-value, z-ci-min, z-ci-max]``
 
     References
     ----------
@@ -126,8 +126,6 @@ def validate_kriging(
     >>> print(validation_results[1])  # mean kriging error
     1.6386630811210166
     """
-    # TODO:
-    # Use (2) to calc Z-score
     # TODO:
     # Validation tutorials
     # TODO:
@@ -180,9 +178,20 @@ def validate_kriging(
             preds = preds[0]
 
         prediction_error = row[-1] - preds[0]
+        p1 = np.sqrt(preds[1])
+
+        z = prediction_error / (p1 * preds[0])
+        z_ci_min = z - 2*p1
+        z_ci_max = z + 2*p1
 
         coordinates_and_errors.append(
-            [preds[2], preds[3], prediction_error, preds[1]]
+            [preds[2],
+             preds[3],
+             prediction_error,
+             preds[1],
+             z,
+             z_ci_min,
+             z_ci_max]
         )
 
     output_arr = np.array(coordinates_and_errors)

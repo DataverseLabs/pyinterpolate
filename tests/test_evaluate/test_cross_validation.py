@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 
 from pyinterpolate.semivariogram.experimental.classes.experimental_variogram import ExperimentalVariogram
@@ -76,3 +78,18 @@ def test_with_separate_geometry():
 
     assert validation_results_sep[0] == validation_results[0]
     assert validation_results_sep[1] == validation_results[1]
+
+
+def test_z_scores():
+    validation_results = validate_kriging(
+        theoretical_model=THEORETICAL_MODEL,
+        points=ARMSTRONG_DATA,
+        no_neighbors=4,
+        progress_bar=False
+    )
+    validation_arr = validation_results[-1]
+
+    m = np.mean(validation_arr[:, 4])
+
+    assert math.isclose(m, 0, abs_tol=0.01)
+
