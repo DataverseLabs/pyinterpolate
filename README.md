@@ -116,18 +116,14 @@ from pyinterpolate import ordinary_kriging
 unknown_point = (20000, 65000)
 prediction = ordinary_kriging(theoretical_model=semivar,
                               known_locations=point_data,
-                              unknown_location=unknown_point,
+                              unknown_locations=unknown_point,
                               no_neighbors=32)
 ```
 
 **[5.]** Analyze error and uncertainty of predictions.
 
 ```python
-print(prediction)  # [predicted, variance error, lon, lat]
-```
-
-```bash
->> [211.23, 0.89, 20000, 60000]
+print(prediction[0])  # [predicted, variance error, lon, lat]
 ```
 
 With Pyinterpolate you can analyze and transform aggregated data. Here is the example of spatial disaggregation of areal data into point support using Poisson Kriging:
@@ -145,7 +141,7 @@ Setup with *conda*: `conda install -c conda-forge pyinterpolate`
 
 Setup with *pip*: `pip install pyinterpolate`
 
-Detailed instructions on how to install the package are presented in the file [SETUP.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/SETUP.md). We pointed out there most common problems related to third-party packages.
+The package dependencies are listed in [pyproject.toml](https://github.com/DataverseLabs/pyinterpolate/blob/main/pyproject.toml).
 
 You may follow those setup steps to create a *conda* environment with the package for your work:
 
@@ -177,7 +173,7 @@ A world of advice, you should **always** use Virtual Environment for the install
 
 ## Tests and contribution
 
-All tests are grouped in the `test` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTING.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTING.md)
+All tests are grouped in the `tests` directory. If you would like to contribute, then you won't avoid testing, but it is described step-by-step here: [CONTRIBUTING.md](https://github.com/DataverseLabs/pyinterpolate/blob/main/CONTRIBUTING.md)
 
 ## Use cases
 
@@ -213,7 +209,7 @@ Core requirements and dependencies are:
 * scipy
 * tqdm
 
-You may check a specific version of requirements in the `setup.cfg` file. Required packages versions are updated in a regular interval.
+The package dependencies are declared in `pyproject.toml`.
 
 ## Package structure
 
