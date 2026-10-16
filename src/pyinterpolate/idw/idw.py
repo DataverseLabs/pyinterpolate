@@ -86,7 +86,7 @@ def inverse_distance_weighting(unknown_location: ArrayLike,
     ...     [11, 9, 7]
     ... ])
     >>> pred = inverse_distance_weighting(
-    ...     unknown_locations=unknown_pos,
+    ...     unknown_location=unknown_pos,
     ...     known_values=locs[:, -1],
     ...     known_geometries=locs[:, :-1],
     ...     no_neighbors=2

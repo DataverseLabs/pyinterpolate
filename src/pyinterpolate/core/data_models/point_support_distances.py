@@ -95,7 +95,7 @@ class PointSupportDistance:
     >>>
     >>> ps = PointSupport(
     ...     points=POINT_SUPPORT_DATA['ps'],
-    ...     ps_blocks=BLOCKS,
+    ...     blocks=BLOCKS,
     ...     points_value_column=POINT_SUPPORT_DATA['value_column_name'],
     ...     points_geometry_column=POINT_SUPPORT_DATA['geometry_column_name']
     ... )
